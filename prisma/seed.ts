@@ -5,11 +5,16 @@ const prisma = new PrismaClient();
 
 async function main() {
     let posts = []
-    // create two dummy articles
+    // create 10 dummy users
     for (let i = 0; i < 10; i++) {
         posts.push(await prisma.user.create({
             data: {
-                email: 'jaliss'+i+'@gmail.com'
+                email: 'jaliss' + i + '@gmail.com',
+                fullNameAr: `jalyss${i}`,
+                fullNameEn: `jalyss${i}`,
+                address: "sfax",
+                tel: "123456789",
+                password: "1234"
             }
         }))
     }

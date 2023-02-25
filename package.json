@@ -24,11 +24,12 @@
     "migrate:dev:create": "prisma migrate dev --create-only --preview-feature",
     "migrate:reset": "prisma migrate reset --preview-feature",
     "migrate:dev": "prisma migrate dev --preview-feature",
-    "seed":"npx prisma db seed",
+    "seed": "npx prisma db seed",
     "prisma:build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.0.0",
@@ -76,7 +77,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }, "prisma": {
+  },
+  "prisma": {
     "seed": "ts-node prisma/seed.ts"
   }
 }
