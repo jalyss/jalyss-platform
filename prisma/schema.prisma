@@ -57,16 +57,16 @@ model JobTitle {
 }
 
 model User {
-  id                   String         @id @default(uuid())
+  id                   String          @id @default(uuid())
   fullNameEn           String
   fullNameAr           String
-  email                String         @unique
+  email                String          @unique
   address              String
   picture              String?
   tel                  String
   password             String
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
   accountBalance       Float?
   category             UserCategory?   @relation(fields: [categoryId], references: [id])
   categoryId           String?
@@ -74,11 +74,11 @@ model User {
   educationLevelId     String?
   functionalArea       FunctionalArea? @relation(fields: [functionalAreaId], references: [id])
   functionalAreaId     String?
-  jobTitle             JobTitle ?      @relation(fields: [jobTitleId], references: [id])
+  jobTitle             JobTitle?       @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
   Rating               Rating[]
-  IntermediateCommands Command[]      @relation("intermediate")
-  clientCommands       Command[]      @relation("clientCommand")
+  IntermediateCommands Command[]       @relation("intermediate")
+  clientCommands       Command[]       @relation("clientCommand")
   Command              Command[]
 }
 
@@ -175,8 +175,9 @@ model CommandLine {
 model Branch {
   id               String             @id @default(uuid())
   name             String
+  identifier       String             @unique
   address          String
-  mainBranch       Boolean
+  mainBranch       Boolean            @default(false)
   articlesByBranch ArticlesByBranch[]
   commands         Command[]
 }
