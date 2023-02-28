@@ -79,7 +79,6 @@ model User {
   Rating               Rating[]
   IntermediateCommands Command[]       @relation("intermediate")
   clientCommands       Command[]       @relation("clientCommand")
-  Command              Command[]
 }
 
 model UserCategory {
@@ -184,21 +183,21 @@ model Branch {
 
 model Command {
   id             String        @id @default(uuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
   client         User?         @relation(name: "clientCommand", fields: [clientId], references: [id])
-  clientId       String?
-  intermediate   User?         @relation(name: "intermediate", fields: [intermediateId], references: [id])
-  intermediateId String?
-  clientName     String
-  clientAddress  String
-  clientTel      String
-  delivered      Boolean
-  paid           Boolean
-  hasDelivery    Boolean
+  clientId       String?       @map("client_id")
+  clientName     String        @map("client_name")
+  clientAddress  String        @map("client_address")
+  clientTel      String        @map("client_tel")
+  delivered      Boolean       @default(false)
+  paid           Boolean       @default(false)
+  hasDelivery    Boolean       @default(false) @map("has_delivery")
   branch         Branch        @relation(fields: [branchId], references: [id])
-  branchId       String
-  CommandLine    CommandLine[]
-  User           User?         @relation(fields: [userId], references: [id])
-  userId         String?
+  branchId       String        @map("branch_id")
+  intermediate   User?         @relation(name: "intermediate", fields: [intermediateId], references: [id])
+  intermediateId String?       @map("intermediate_id")
+  commandLine    CommandLine[]
 }
 
 model Supply {
