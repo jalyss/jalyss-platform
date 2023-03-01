@@ -11,7 +11,7 @@ export class ArticleService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly branchService: BranchesService,
-  ) {}
+  ) { }
 
   async create(dto: CreateArticleDto, branchId: string) {
     return await this.prisma.article.create({
@@ -80,11 +80,21 @@ export class ArticleService {
         ...insideWhere,
         branchId,
       },
+      include: {
+        article: true
+      }
     });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} article`;
+  async findOne(id: string) {
+    return await this.prisma.articlesByBranch.findFirst({
+      where: {
+        id
+      },
+      include: {
+        article: true
+      }
+    });
   }
 
   update(id: string, updateArticleDto: UpdateArticleDto) {

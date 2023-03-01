@@ -15,7 +15,7 @@ export class CommandsService {
   async create(dto: CreateCommandDto, branchId: string) {
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
-    );
+    ); 
     return await this.prisma.command.create({
       data: {
         ...dto,

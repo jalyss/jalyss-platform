@@ -19,7 +19,10 @@ export class CreateCommandDto {
     @ApiProperty({required:true})
     hasDelivery:boolean
     @ApiProperty({required:true})
-    commandLine:any[]
-  
-
+    commandLine:CreateCommandLineDto[]
+}
+class CreateCommandLineDto {
+    commandId:string;
+    articleByBranchId:string;
+    quantity:number
 }
