@@ -27,10 +27,10 @@ export class BranchesService {
   remove(id: number) {
     return `This action removes a #${id} branch`;
   }
-  async findBranchByIdOrIdentifier(id: string) {
+  async findBranchByIdOrIdentifier(x: string) {
     return await this.prisma.branch.findFirstOrThrow({
       where: {
-        OR: [{ identifier: String(id) }, { id: String(id) }],
+        OR: [{ identifier: String(x) }, { id: String(x) }],
       },
     });
   }
