@@ -1,0 +1,27 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [
+    "infrastructure/.env.local"
+  ],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**"]
+    },
+    "start": {
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "deploy": {
+      "dependsOn": ["build", "test", "lint"],
+      "outputs": []
+    }
+  }
+}
