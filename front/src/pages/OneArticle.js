@@ -6,12 +6,13 @@ function OneArticle() {
   const { articleId } = useParams()
   const [article, setArticle] = useState({})
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/v1/article/one/${articleId}`).then(res =>
+    axios.get(`http://localhost:3001/api/v1/articles/one/${articleId}`).then(res =>
       setArticle(res.data))
         // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   return (
-    <div>
+    <div >
       <div>
         <p>
           {article?.article?.name}
