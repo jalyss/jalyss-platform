@@ -1,0 +1,14 @@
+{
+    "navbar": {
+        "cart": "your cart",
+        "account": {
+            "profile": "My Profile",
+            "login": "Login",
+            "signup": "Signup"
+        },
+        "searchInput":"Search",
+        "searchButton":"Searching",
+        "articles":"Articles"        ,
+        "home":"Home"
+    }
+}

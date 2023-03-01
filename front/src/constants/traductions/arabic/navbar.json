@@ -1,0 +1,14 @@
+{
+    "navbar": {
+        "cart": "سلة المشتريات",
+        "account": {
+            "profile": "حسابي",
+            "login": "الدخول",
+            "signup": "تسجيل"
+        },
+        "searchInput":"ابحث",
+        "searchButton":"بحث",
+        "articles":"المنتجات",
+        "home":"الصفحة الرئيسية"
+    }
+}
