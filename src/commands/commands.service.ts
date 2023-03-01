@@ -18,7 +18,7 @@ export class CommandsService {
       data: {
         ...dto,
         branchId: branch.id,
-        commandLine: { create: dto.commandLine },
+        CommandLine: { create: dto.commandLine },
       },
     });
   }
@@ -26,7 +26,7 @@ export class CommandsService {
   async findAll() {
     return await this.prisma.command.findMany({
       include: {
-        commandLine: true,
+        CommandLine: true,
       },
     });
   }
@@ -39,7 +39,7 @@ export class CommandsService {
         },
       },
       include: {
-        commandLine: true,
+        CommandLine: true,
       },
     });
   }
