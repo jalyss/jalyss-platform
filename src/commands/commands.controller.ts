@@ -1,0 +1,51 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { CommandsService } from './commands.service';
+import { CreateCommandDto } from './dto/create-command.dto';
+import { UpdateCommandDto } from './dto/update-command.dto';
+
+@ApiTags('commands')
+@Controller('commands')
+export class CommandsController {
+  constructor(private readonly commandsService: CommandsService) {}
+
+  @Post(':branchId')
+  create(
+    @Body() createCommandDto: CreateCommandDto,
+    @Param('branchId') branchId: string,
+  ) {
+    return this.commandsService.create(createCommandDto, branchId);
+  }
+
+  @Get()
+  findAll() {
+    return this.commandsService.findAll();
+  }
+  @Get(':branchId')
+  findAllByBranchId(@Param('branchId') branchId: string) {
+    return this.commandsService.findAllByBranchIdentifier(branchId);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.commandsService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateCommandDto: UpdateCommandDto) {
+    return this.commandsService.update(id, updateCommandDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.commandsService.remove(id);
+  }
+}
