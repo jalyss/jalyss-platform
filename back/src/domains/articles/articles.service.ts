@@ -12,27 +12,14 @@ export class ArticleService {
     private readonly prisma: PrismaService,
     private readonly branchService: BranchesService,
   ) {}
-  
-    async create(dto: CreateArticleDto, categoryId: string, publishingHouseId: string) {
 
-      const category = await this.branchService.findBranchByIdOrIdentifier(
-        categoryId,
-      );
-      const publishingHouse = await this.branchService.findBranchByIdOrIdentifier(
-        publishingHouseId,
-  
-      );
-      return await this.prisma.article.create({
-        data: {
-          ...dto,
-          categoryId : dto.categoryId,
-          publishingHouseId: dto.publishingHouseId,
-          ArticlesByBranch: { create: dto.ArticleByBranch },
-          Supply: { create: dto.Supply }
-        },
-      });
-    }
-  
+  async create(dto: CreateArticleDto, branchId: string) {
+    return await this.prisma.article.create({
+      data: {
+        ...dto,
+      },
+    });
+  }
 
   findAll() {
     return this.prisma.article.findMany({
@@ -43,9 +30,8 @@ export class ArticleService {
   }
 
   async findAllByBranch(branchId: string, filters: FilterArticle) {
-    branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
-      .id;
-      let insideWhere = {};
+    branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!.id;
+    let insideWhere = {};
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
       console.log('=======> filter', filters);

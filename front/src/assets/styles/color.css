@@ -1,3 +1,23 @@
-.bg-darkPurple{
-    background-color: #6F0091;
+.bg-darkPurple {
+  background-color: #48184c;
+}
+
+.bg-yellow {
+  background-color: #edcc3f;
+}
+
+.rtl {
+  direction: rtl;
+}
+
+.text-color-grey {
+  color: #bfbfbf;
+}
+
+.text-color-white {
+  color: #ffffff;
+}
+
+ul {
+  list-style-type: none;
 }

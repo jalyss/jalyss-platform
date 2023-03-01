@@ -2,6 +2,9 @@ import i18n from "i18next";
 import {  initReactI18next } from "react-i18next";
 import navbarAr from '../constants/traductions/arabic/navbar.json'
 import navbarEn from '../constants/traductions/english/navbar.json'
+import footerAr from '../constants/traductions/arabic/footer.json'
+import footerEn from '../constants/traductions/english/footer.json'
+
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -11,11 +14,11 @@ i18n
     // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
     resources: {
       en: {
-        translation:{...navbarEn}
+        translation:{...navbarEn,...footerEn}
       },
       ar:{
         translation: 
-            {...navbarAr}
+            {...navbarAr,...footerAr}
           
       }
     },

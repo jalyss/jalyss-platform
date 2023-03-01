@@ -23,10 +23,9 @@ export class ArticleController {
   create(
     @Body() createArticleDto: CreateArticleDto,
     @Param('branchId') branchId: string,
-    @Param('categoryId') categoryId: string,
-    @Param('publishingHouseId') publishingHouseId: string, 
+
    ) {
-    return this.articleService.create(createArticleDto, branchId, categoryId, publishingHouseId);
+    return this.articleService.create(createArticleDto, branchId);
   }
 
   @Get()
