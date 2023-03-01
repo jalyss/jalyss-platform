@@ -15,13 +15,19 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { Filter } from './types';
 
 @ApiTags('articles')
-@Controller('articles')
+@Controller('articles') 
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
-  @Post()
-  create(@Body() createArticleDto: CreateArticleDto) {
-    return this.articleService.create(createArticleDto);
+
+  @Post(':branchId')
+  create(
+    @Body() createArticleDto: CreateArticleDto,
+    @Param('branchId') branchId: string,
+    @Param('categoryId') categoryId: string,
+    @Param('publishingHouseId') publishingHouseId: string, 
+   ) {
+    return this.articleService.create(createArticleDto, branchId, categoryId, publishingHouseId);
   }
 
   @Get()
