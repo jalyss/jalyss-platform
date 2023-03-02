@@ -1,8 +1,8 @@
 {
   "footer": {
     "support": "24/7 Customer Support",
-    "secure": "secure payment methods",
-    "shipping": "shipping worldwide"
+    "secure": "Secure payment methods",
+    "shipping": "Shipping worldwide"
   },
 
   "account": {
@@ -14,9 +14,9 @@
   },
 
   "products": {
-    "product": "products",
-    "reduction": "reductions",
-    "recentlyArrived": "recently arrived",
+    "product": "Products",
+    "reduction": "Reductions",
+    "recentlyArrived": "Recently arrived",
     "bestSeller": "Best seller"
   },
   "ourcompany": {
@@ -28,10 +28,11 @@
     "stor": "Stores"
   },
   "storeInfo": {
-    "storeInfo": "informations about the store",
+    "infoStore": "Info store",
     "jalyss": "Jalysscom ",
-    "adress": "   Anbara1 Building next to Jammousi Cultural Complex , Sfax3000"
+    "adress": "Anbara 1 Building next to Jammousi Cultural Complex , Sfax3000"
+    
   },
 
-  "join": " join Mailing List "
+  "joinMailingList": " Join Mailing List "
 }
