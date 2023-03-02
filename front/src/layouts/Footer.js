@@ -27,13 +27,15 @@ function Footer() {
             <p className="text-color-grey">{t('footer.shipping')}</p>
           </MDBCol>
           <MDBCol>
-           
+
           </MDBCol>
         </MDBRow>
 
         <MDBRow className="mt-3 mb-4">
           <MDBCol>
-            <h5 className="mb-3 text-color-white">{t('account.myAccount')}</h5>
+            <h5 className="mb-3 text-color-white">
+              {t('account.myAccount')}
+            </h5>
             <ul class="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
@@ -41,7 +43,9 @@ function Footer() {
                   href="/"
                   title="المعلومات الشخصية"
                 >
-                  المعلومات الشخصية
+                  {t('account.personalInfo')}
+
+
                 </a>
               </li>
               <li className="mb-2">
@@ -50,25 +54,17 @@ function Footer() {
                   href="/"
                   title="الطلبات"
                 >
-                  الطلبات
+                  {t('account.order')}
                 </a>
               </li>
-              <li className="mb-2">
-                <a
-                  className="text-decoration-none text-color-grey"
-                  href="/"
-                  title="إيصال الإتمانية"
-                >
-                  إيصال الإتمانية
-                </a>
-              </li>
+              
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
                   href="/"
                   title="العناوين"
                 >
-                  العناوين
+                  {t('account.headline')}
                 </a>
               </li>
               <li className="mb-2">
@@ -77,7 +73,7 @@ function Footer() {
                   href="/"
                   title="القسائم"
                 >
-                  القسائم
+                  {t('account.coup')}
                 </a>
               </li>
             </ul>
@@ -91,7 +87,7 @@ function Footer() {
                   href="/"
                   title="التخفيضات"
                 >
-                  التخفيضات
+                  {t('products.product')}
                 </a>
               </li>
               <li className="mb-2">
@@ -100,7 +96,7 @@ function Footer() {
                   href="/"
                   title="وصل حديثاً"
                 >
-                  وصل حديثاً
+                 {t('products.recentlyArrived')}
                 </a>
               </li>
               <li className="mb-2">
@@ -109,13 +105,15 @@ function Footer() {
                   href="/"
                   title="الأكثر مبيعاً"
                 >
-                  الأكثر مبيعاً
+                  {t('products.bestSeller')}
                 </a>
               </li>
             </ul>
           </MDBCol>
           <MDBCol>
-            <h5 className="mb-3 text-color-white">شركتنا</h5>
+            <h5 className="mb-3 text-color-white">
+              شركتنا
+              </h5>
             <ul class="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
@@ -123,7 +121,7 @@ function Footer() {
                   href="/"
                   title="خدمه توصيل"
                 >
-                  خدمه توصيل
+                   {t('ourcompany.ourCompany')}
                 </a>
               </li>
               <li className="mb-2">
@@ -132,7 +130,7 @@ function Footer() {
                   href="/"
                   title="من نحن"
                 >
-                  من نحن
+                  {t('ourcompany.whoWeAre')} 
                 </a>
               </li>
               <li className="mb-2">
@@ -141,7 +139,7 @@ function Footer() {
                   href="/"
                   title="اتصل بنا"
                 >
-                  اتصل بنا
+                  {t('ourcompany.callUs')}
                 </a>
               </li>
               <li className="mb-2">
@@ -150,7 +148,7 @@ function Footer() {
                   href="/"
                   title="خريطة الموقع"
                 >
-                  خريطة الموقع
+                 {t('ourcompany.map')}
                 </a>
               </li>
               <li className="mb-2">
@@ -159,7 +157,7 @@ function Footer() {
                   href="/"
                   title="المتاجر"
                 >
-                  المتاجر
+                  {t('ourcompany.stor')}
                 </a>
               </li>
             </ul>
@@ -214,9 +212,9 @@ function Footer() {
               </li>
             </ul>
             <input
-            className="w-100 p-2 border-0 "
-            placeholder='بريدك الإلكتروني'
-          />
+              className="w-100 p-2 border-0 "
+              placeholder='بريدك الإلكتروني'
+            />
           </MDBCol>
         </MDBRow>
 

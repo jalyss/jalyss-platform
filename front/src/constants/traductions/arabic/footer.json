@@ -6,31 +6,32 @@
   },
 
   "account": {
-    "my account": "حسابي",
-    "personal informations": "المعلومات الشخصية",
-    "orders": "الطلبات",
-    "headlines": "العناوين",
-    "coupons": "القسائم"
+    "myAccount": "حسابي",
+    "personalInfo": "المعلومات الشخصية",
+    "order": "الطلبات",
+    "headline": "العناوين",
+    "coup": "القسائم"
   },
 
   "products": {
-    "products": "المنتجات",
-    "reductions": "التخفيضات",
-    "recently arrived": "وصل حديثاً",
-    "best seller": "الأكثر مبيعاً"
+    
+    "product": "المنتجات",
+    "reduction": "التخفيضات",
+    "recentlyArrived": "وصل حديثاً",
+    "bestSeller": "الأكثر مبيعاً"
   },
-  "our company": {
-    "our company": "شركتنا",
-    "delivery service": "خدمه توصيل",
-    "who we are": "من نحن",
-    "call us": "اتصل بنا",
-    "location map": "خريطة الموقع",
-    "stores": "المتاجر"
+  "ourcompany": {
+    "ourCompany": "شركتنا",
+    "deliv": "خدمه توصيل",
+    "whoWeAre": "من نحن",
+    "callUs": "اتصل بنا",
+    "map": "خريطة الموقع",
+    "stor": "المتاجر"
   },
   "store informations": {
-    "store informations": "معلومات عن المتجر",
-    "Jalysscom": "جليس كوم",
-    "Anbara building, Next to Mohamed jamousi cultural Complex, Sfax 3000": "عمارة العنبرة، بجانب مركب الجموسي"
+    "storeInfo": "معلومات عن المتجر",
+    "jalyss": "جليس كوم",
+    "adress": "عمارة العنبرة، بجانب مركب الجموسي"
   },
 
   "join the mailing list": "إنضم إلى القائمة البريدية"
