@@ -57,7 +57,7 @@ function Footer() {
                   {t('account.order')}
                 </a>
               </li>
-              
+
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
@@ -79,7 +79,8 @@ function Footer() {
             </ul>
           </MDBCol>
           <MDBCol>
-            <h5 className="mb-3 text-color-white">المنتجات</h5>
+            <h5 className="mb-3 text-color-white">
+              {t('products.product')}</h5>
             <ul class="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
@@ -87,7 +88,7 @@ function Footer() {
                   href="/"
                   title="التخفيضات"
                 >
-                  {t('products.product')}
+                  {t('products.reduction')}
                 </a>
               </li>
               <li className="mb-2">
@@ -96,7 +97,7 @@ function Footer() {
                   href="/"
                   title="وصل حديثاً"
                 >
-                 {t('products.recentlyArrived')}
+                  {t('products.recentlyArrived')}
                 </a>
               </li>
               <li className="mb-2">
@@ -112,8 +113,8 @@ function Footer() {
           </MDBCol>
           <MDBCol>
             <h5 className="mb-3 text-color-white">
-              شركتنا
-              </h5>
+              {t('ourcompany.ourCompany')}
+            </h5>
             <ul class="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
@@ -121,7 +122,7 @@ function Footer() {
                   href="/"
                   title="خدمه توصيل"
                 >
-                   {t('ourcompany.ourCompany')}
+                  {t('ourcompany.deliv')}
                 </a>
               </li>
               <li className="mb-2">
@@ -130,7 +131,7 @@ function Footer() {
                   href="/"
                   title="من نحن"
                 >
-                  {t('ourcompany.whoWeAre')} 
+                  {t('ourcompany.whoWeAre')}
                 </a>
               </li>
               <li className="mb-2">
@@ -148,7 +149,7 @@ function Footer() {
                   href="/"
                   title="خريطة الموقع"
                 >
-                 {t('ourcompany.map')}
+                  {t('ourcompany.map')}
                 </a>
               </li>
               <li className="mb-2">
@@ -163,16 +164,18 @@ function Footer() {
             </ul>
           </MDBCol>
           <MDBCol>
-            <h5 className="mb-3 text-color-white">معلومات المتجر</h5>
+            <h5 className="mb-3 text-color-white">
+              {t('storeInfo.infoStore')}
+            </h5>
             <ul class="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey  m-0">
-                  جليس كوم
+                  {t('storeInfo.jalyss')}
                 </p>
               </li>
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey  m-0">
-                  عمارة العنبرة، بجانب مركب
+                  {t('storeInfo.adress')}
                 </p>
               </li>
               <li className="mb-2">
@@ -207,7 +210,7 @@ function Footer() {
             <ul class="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey">
-                  انضم إلى النشرة الإخبارية لتلقي جميع أخبارنا.
+                  {t('joinMailingList')}
                 </p>
               </li>
             </ul>
