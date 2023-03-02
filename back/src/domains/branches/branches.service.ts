@@ -5,32 +5,38 @@ import { UpdateBranchDto } from './dto/update-branch.dto';
 
 @Injectable()
 export class BranchesService {
-  constructor(private readonly prisma:PrismaService){
-
-  }
-  create(createBranchDto: CreateBranchDto) {
-    return 'This action adds a new branch';
-  }
-
-  findAll() {
-    return `This action returns all branches`;
+  constructor(private readonly prisma: PrismaService) {}
+  async create(dto: CreateBranchDto) {
+    return await this.prisma.branch.create({
+      data: dto,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} branch`;
+  async findAll() {
+    return await this.prisma.branch.findMany();
   }
 
-  update(id: number, updateBranchDto: UpdateBranchDto) {
-    return `This action updates a #${id} branch`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} branch`;
-  }
   async findBranchByIdOrIdentifier(x: string) {
     return await this.prisma.branch.findFirstOrThrow({
       where: {
         OR: [{ identifier: String(x) }, { id: String(x) }],
+      },
+    });
+  }
+
+  async update(id: string, dto: UpdateBranchDto) {
+    return await this.prisma.branch.update({
+      where: {
+        id,
+      },
+      data: dto,
+    });
+  }
+
+  async remove(id: string) {
+    return await this.prisma.branch.delete({
+      where: {
+        id,
       },
     });
   }

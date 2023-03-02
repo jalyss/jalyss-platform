@@ -58,6 +58,7 @@ export class ArticleService {
     }
     //
     if (filters.bestSaller) {
+      delete insideWhere['bestSaller']
       return await this.prisma.commandLine.groupBy({
         by: ['articleByBranchId'],
         _count: {
