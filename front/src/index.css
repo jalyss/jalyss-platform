@@ -13,3 +13,6 @@ code {
 }
 @import url('./assets/styles/color.css');
 
+.article-card {
+  width: 250px;
+}
