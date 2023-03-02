@@ -6,26 +6,26 @@
   },
 
   "account": {
-    "myAccount": "my account",
-    "personalInfo": "pesonal informations ",
+    "myAccount": "My Account",
+    "personalInfo": "Personal informations ",
     "order": "Orders",
-    "headline": "headlines",
-    "coup": "coupons"
+    "headline": "Headlines",
+    "coup": "Coupons"
   },
 
   "products": {
     "product": "products",
     "reduction": "reductions",
     "recentlyArrived": "recently arrived",
-    "bestSeller": "الأكثر مبيعاً"
+    "bestSeller": "Best seller"
   },
-  "our company": {
-    "ourCompany": "شركتنا",
-    "deliv": "delivery",
-    "whoWeAre": "who we are",
-    "callUs": "call us",
-    "map": "location map",
-    "stor": "stores"
+  "ourcompany": {
+    "ourCompany": "Our company",
+    "deliv": "Delivery",
+    "whoWeAre": "Who we are",
+    "callUs": "Call us",
+    "map": "Location map",
+    "stor": "Stores"
   },
   "storeInfo": {
     "storeInfo": "informations about the store",

@@ -58,7 +58,9 @@ function Header() {
         <div className={`d-flex align-items-center`}>
           <RxAvatar size="30px" color="white" />
           <div className="text-white mx-2">
-            <p className="m-0 text-right">حسابي</p>
+            <p className="m-0 text-right">
+              {t('navbar.account.profile')}
+            </p>
             <p className="m-0">تسجيل الدخول - تسجيل</p>
           </div>
         </div>
