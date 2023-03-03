@@ -1,26 +1,33 @@
-import React, { useMemo, useState } from 'react'
-
-import { useTranslation } from 'react-i18next'
-import { RxAvatar } from 'react-icons/rx'
-import { RiShoppingCart2Line } from 'react-icons/ri'
-import { Dropdown } from 'react-bootstrap'
+import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { RxAvatar } from "react-icons/rx";
+import { RiShoppingCart2Line } from "react-icons/ri";
+import { Dropdown } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategories } from "../store/category";
 
 function Header() {
-  const { t, i18n } = useTranslation()
-  const [showArticleMenu, setShowArticleMenu] = useState(false)
-  const currentLanguage = useMemo(() => i18n?.languages[0], [i18n?.languages])
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const categoryStore = useSelector((state) => state.category);
+  const [showArticleMenu, setShowArticleMenu] = useState(false);
+  const currentLanguage = useMemo(() => i18n?.languages[0], [i18n?.languages]);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, []);
 
   const onChangeLanguage = (lng) => {
-    i18n.changeLanguage(lng)
-    localStorage.setItem('lg', lng)
-  }
+    i18n.changeLanguage(lng);
+    localStorage.setItem("lg", lng);
+  };
 
   const onChangeDevise = (devise) => {
-    localStorage.setItem('devise', devise)
-  }
+    localStorage.setItem("devise", devise);
+  };
 
-  const currentDevise = localStorage.getItem('devise')
-  console.log(showArticleMenu)
+  const currentDevise = localStorage.getItem("devise");
+  console.log(showArticleMenu);
   return (
     <>
       <div className="d-flex  px-5 py-4  bg-darkPurple">
@@ -33,10 +40,10 @@ function Header() {
           <div className="d-flex w-50 mx-2">
             <input
               className="w-100 p-2 border-0 "
-              placeholder={t('navbar.searchInput')}
+              placeholder={t("navbar.searchInput")}
             />
             <button className="bg-yellow px-4 m-0 border-0">
-              {t('navbar.searchButton')}
+              {t("navbar.searchButton")}
             </button>
           </div>
 
@@ -63,7 +70,7 @@ function Header() {
           <div className={`d-flex align-items-center`}>
             <RxAvatar size="30px" color="white" />
             <div className="text-white mx-2">
-              <p className="m-0 text-right">{t('navbar.account.profile')}</p>
+              <p className="m-0 text-right">{t("navbar.account.profile")}</p>
               <p className="m-0">تسجيل الدخول - تسجيل</p>
             </div>
           </div>
@@ -82,22 +89,32 @@ function Header() {
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-evenly mt-3">
-        <a href="/" className='text-decoration-none text-color-black'>Home</a>
-        <p class="dropdown">
-        Products
-          <div class="dropdown-content">
-            <a href="/" >تطوير ذات</a>
-            <a href="/">ادارة اعمال</a>
-            <a href="/"> الطفل والاسرة</a>
+      <div className="d-flex justify-content-evenly align-content-center m-3">
+        <a href="/" className="text-decoration-none text-color-black">
+          Home
+        </a>
+        <div className="dropdown">
+          <a href="/articles" className="text-decoration-none text-color-black">
+            Products
+          </a>
+          <div class="dropdown-content bg-white">
+            {categoryStore.categories.items.map((elem,i)=>(
+              <a href={`/articles/cat/${elem.id}`}>{currentLanguage==='en'?elem.nameEn:elem.nameAr}</a>
+            ))}     
           </div>
-        </p>
-        <a href="/" className='text-decoration-none text-color-black'>Space</a>
-        <a href="/" className='text-decoration-none text-color-black'>Training</a>
-        <a href="/" className='text-decoration-none text-color-black'>Blogs</a>
+        </div>
+        <a href="/*" className="text-decoration-none text-color-black">
+          Space
+        </a>
+        <a href="/*" className="text-decoration-none text-color-black">
+          Training
+        </a>
+        <a href="/*" className="text-decoration-none text-color-black">
+          Blogs
+        </a>
       </div>
     </>
-  )
+  );
 }
 
-export default Header
+export default Header;

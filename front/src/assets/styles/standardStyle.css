@@ -1,3 +1,9 @@
 .pointer {
     cursor: pointer;
 }
+.rtl {
+    direction: rtl;
+  }
+  ul {
+    list-style-type: none;
+  }

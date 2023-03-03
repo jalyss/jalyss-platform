@@ -40,7 +40,7 @@ export const articleSlice = createSlice({
     error: null,
     deleteError: null,
     saveError: null,
-    createUserError: null,
+    createArticleError: null,
   },
   reducers: {},
   extraReducers(builder) {

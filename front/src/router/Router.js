@@ -19,6 +19,7 @@ function Router() {
                     <Route path="/" element={<Client />}>
                         <Route index element={<Home />} />
                         <Route path="articles" element={<Articles />} />
+                        <Route path="articles/cat/:categoryId" element={<Articles />} />
                         <Route path="one-article/:articleId" element={<OneArticle />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="login" element={<Login />} />

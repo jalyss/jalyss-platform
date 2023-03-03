@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import Rating from '../components/Rating'
+
 import { identifier } from '../constants/identifier/identifier'
 import { fetchArticleByBranch } from '../store/article'
-import "../book.css"
+import "../assets/styles/book.css"
 
 function OneArticle() {
   const dispatch = useDispatch()
@@ -25,15 +25,14 @@ function OneArticle() {
 
     <div className='book' >
       <div className='book-content'>
-        <img src={article?.article?.cover} alt={article?.article?.title} className='book-content-img'>
+        <img src={article?.article?.cover} alt={article?.article?.title} className='book-content-img'/>
 
-        </img>
         <div className='book-content-info'>
           <h1 className='book-title'>
             {article?.article?.title}
           </h1>
         </div>
-        <Rating rate={article.article?.weight} disabled />
+        <Rating rate={3} disabled />
         <div className='book-add-to-cart'>
           <input min="1" max="100" type="number" className='book-add-to-cart-input'>
 
