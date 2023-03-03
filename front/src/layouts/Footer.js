@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { RiCustomerService2Line } from 'react-icons/ri'
 import { MdPayment } from 'react-icons/md'
 import { CiDiscount1 } from 'react-icons/ci'
+import { TbDiscount2 } from 'react-icons/tb'
 import { BsTruck } from 'react-icons/bs'
 
 function Footer() {
@@ -23,7 +24,10 @@ function Footer() {
             <p className="text-color-grey">{t('footer.secure')}</p>
           </MDBCol>
           <MDBCol>
-            <CiDiscount1 size="50px" fill="white" className="mb-2" />
+            <CiDiscount1 size="50px"
+             color="white"
+              // className="mb-2"
+             />
             <p className="text-color-grey">{t('footer.shipping')}</p>
           </MDBCol>
           <MDBCol>
@@ -36,7 +40,7 @@ function Footer() {
             <h5 className="mb-3 text-color-white">
               {t('account.myAccount')}
             </h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
@@ -81,7 +85,7 @@ function Footer() {
           <MDBCol>
             <h5 className="mb-3 text-color-white">
               {t('products.product')}</h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
@@ -115,7 +119,7 @@ function Footer() {
             <h5 className="mb-3 text-color-white">
               {t('ourcompany.ourCompany')}
             </h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
@@ -167,7 +171,7 @@ function Footer() {
             <h5 className="mb-3 text-color-white">
               {t('storeInfo.infoStore')}
             </h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey  m-0">
                   {t('storeInfo.jalyss')}
@@ -194,8 +198,8 @@ function Footer() {
                 </p>
               </li>
               <li className="mb-2">
-                <p className="text-decoration-none text-color-grey  m-0">
-                  +216 51 165 003
+                <p className="text-decoration-none text-color-grey  m-0" style={{direction:'ltr'}}>
+                  {'+216 51 165 003'}
                 </p>
               </li>
               <li className="mb-2">
@@ -207,7 +211,7 @@ function Footer() {
           </MDBCol>
           <MDBCol>
             <h5 className="mb-3 text-color-white">إنضم إلى القائمة البريدية</h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey">
                   {t('joinMailingList')}

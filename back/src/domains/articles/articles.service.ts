@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { skip } from 'rxjs';
 import { BranchesService } from 'src/domains/branches/branches.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -32,6 +33,7 @@ export class ArticleService {
   async findAllByBranch(branchId: string, filters: FilterArticle) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!.id;
     let insideWhere = {};
+    let skip=0
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
       console.log('=======> filter', filters);
@@ -46,7 +48,37 @@ export class ArticleService {
             [key]: value,
           };
         } else {
-          insideWhere[key] = value;
+          //array
+          if (['categories', 'publishingHouses', 'articleTypes'].includes(key)) {
+            if (Array.isArray(value)) {
+              insideWhere['article'] = {}
+              switch (key) {
+                case 'categories':
+                  insideWhere['article']['categoryId'] = {
+                    in: value
+                  }
+                  break;
+                case 'publishingHouses':
+                  insideWhere['article']['publishingHouseId'] = {
+                    in: value
+                  }
+                  break;
+                default:
+                  insideWhere['article']['typeId'] = {
+                    in: value
+                  }
+              }
+            }
+            else {
+              throw new HttpException(key + ' must be array', HttpStatus.BAD_REQUEST)
+            }
+          } else
+          //skip
+          if(key==='skip')
+            skip=Number(value)
+            //true or false
+            else
+            insideWhere[key] = value;
         }
       });
       if (errors.length > 0) {
@@ -82,23 +114,35 @@ export class ArticleService {
         branchId,
       },
       include: {
-        article: true
-      }
+        article: { include: { category: true, publishingHouse: true, type: true } }
+      },take:10,
+      skip
     });
   }
 
-  async findOne(id: string) {
+  async findOneByBranch(id: string) {
     return await this.prisma.articlesByBranch.findFirst({
       where: {
         id
       },
       include: {
-        article: true
+        article: { include: { category: true, publishingHouse: true, type: true } }
       }
+
     });
   }
+  async findOne(id: string) {
+    return await this.prisma.article.findFirst({
+      where: {
+        id
+      },
 
-  update(id: string, updateArticleDto: UpdateArticleDto) {
+      include: { category: true, publishingHouse: true, type: true }
+    }
+    );
+  }
+
+  update(id: string, dto: UpdateArticleDto) {
     return `This action updates a #${id} article`;
   }
 

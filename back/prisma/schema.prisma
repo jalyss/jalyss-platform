@@ -120,10 +120,12 @@ model PublishingHouse {
 
 model Article {
   id                String             @id @default(uuid())
-  name              String?
+  title             String?
   cover             String?
   weight            Float?
   code              Int?
+  shortDescription  String?           @map("short_desc")
+  longDescription   String?           @map("long_desc")
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   category          ArticleCategory    @relation(fields: [categoryId], references: [id])

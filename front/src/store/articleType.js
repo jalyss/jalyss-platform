@@ -28,7 +28,7 @@ export const articleTypeSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchArticleTypes.fulfilled, (state, action) => {
-      state.articleTypes = action.payload;
+      state.articleTypes.items = action.payload;
     });
     builder.addCase(fetchArticleType.fulfilled, (state, action) => {
       state.articleType = action.payload;

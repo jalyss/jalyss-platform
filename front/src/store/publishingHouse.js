@@ -15,8 +15,8 @@ export const fetchPublishingHouse = createAsyncThunk("publishingHouses/publishin
 export const publishingHouseSlice = createSlice({
   name: "publishingHouse",
   initialState: {
-    category: null,
-    categories: {
+    publishingHouse: null,
+    publishingHouses: {
       items: [],
       count: 0,
     },
@@ -28,10 +28,10 @@ export const publishingHouseSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchPublishingHouses.fulfilled, (state, action) => {
-      state.users = action.payload;
+      state.publishingHouses.items = action.payload;
     });
     builder.addCase(fetchPublishingHouse.fulfilled, (state, action) => {
-      state.user = action.payload;
+      state.publishingHouse = action.payload;
     });
   },
 });
