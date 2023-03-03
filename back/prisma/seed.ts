@@ -57,8 +57,8 @@ async function main() {
       logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
     },
   });
-  let publishinghouseIds=[publishingHouse1.id,publishingHouse2.id,publishingHouse3.id]
-  // create 10 dummy users
+  let publishinghouseIds = [publishingHouse1.id, publishingHouse2.id, publishingHouse3.id]
+  // create 10 dummy articles
   for (let i = 0; i < 10; i++) {
     articles.push(
       await prisma.article.create({
@@ -68,11 +68,12 @@ async function main() {
           weight: 110,
           categoryId: articleCategory.id,
           typeId: type.id,
-          publishingHouseId: publishinghouseIds[Math.floor(Math.random()*publishinghouseIds.length)],
+          publishingHouseId: publishinghouseIds[Math.floor(Math.random() * publishinghouseIds.length)],
         },
       }),
     );
   }
+
   // create dummy branch
   let branch = await prisma.branch.create({
     data: {
@@ -83,7 +84,7 @@ async function main() {
     },
   });
   let articlesByBranch = [];
-  for (let i = 0; i < articles.length; i+= 2) {    
+  for (let i = 0; i < articles.length; i += 2) {
     articlesByBranch.push(
       await prisma.articlesByBranch.create({
         data: {
