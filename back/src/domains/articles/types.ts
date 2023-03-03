@@ -4,6 +4,8 @@ export type FilterArticle = {
   bestRating: boolean;
   bestSaller: boolean;
   new: boolean;
-  category: string;
-  type: string;
+  categories: string[];
+  articleTypes: string[];
+  publishingHouses: string[];
+  skip:number
 };

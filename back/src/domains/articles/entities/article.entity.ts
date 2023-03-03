@@ -5,6 +5,8 @@ export const filterExample = {
   bestRating: true,
   bestSaller: true,
   new: true,
-  category: 'string',
-  type: 'string',
+  categories: ['string'],
+  articleTypes: ['string'],
+  publishingHouses: ['string'],
+  skip:0
 };

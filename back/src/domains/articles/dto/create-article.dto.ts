@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateArticleDto {
   @ApiProperty({ required: false })
-  name: string;
+  title: string;
   @ApiProperty({ required: false })
   cover: string;
   @ApiProperty({ required: false })
@@ -15,5 +15,6 @@ export class CreateArticleDto {
   publishingHouseId: string;
   @ApiProperty({ required: true })
   typeId: string;
+  
 
 }
