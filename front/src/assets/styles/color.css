@@ -18,6 +18,10 @@
   color: #ffffff;
 }
 
+.text-color-black {
+  color: #000000 !important;
+}
+
 ul {
   list-style-type: none;
 }
