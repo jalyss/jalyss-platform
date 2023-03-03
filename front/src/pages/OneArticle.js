@@ -1,51 +1,53 @@
 import axios from 'axios'
+import Rating from '../components/Rating'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import Rating from '../components/Rating'
 import { identifier } from '../constants/identifier/identifier'
 import { fetchArticleByBranch } from '../store/article'
-
+import "../book.css"
 
 function OneArticle() {
-  const dispatch=useDispatch()
-  const articleStore=useSelector(state=>state.article)
-  const {article}=articleStore
-  const {i18n}=useTranslation()
+  const dispatch = useDispatch()
+  const articleStore = useSelector(state => state.article)
+  const { article } = articleStore
+  const { i18n } = useTranslation()
   const { articleId } = useParams()
 
   useEffect(() => {
-   dispatch(fetchArticleByBranch(articleId))
+    dispatch(fetchArticleByBranch(articleId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <div >
-      <div>
-        <div className="fw-bold">
-          <h2 className='text-center ' >
-            {article?.article?.name}
-          </h2>
+
+    <div className='book' >
+      <div className='book-content'>
+        <img src={article?.article?.cover} alt={article?.article?.title} className='book-content-img'>
+
+        </img>
+        <div className='book-content-info'>
+          <h1 className='book-title'>
+            {article?.article?.title}
+          </h1>
+        </div>
+        <Rating rate={article.article?.weight} disabled />
+        <div className='book-add-to-cart'>
+          <input min="1" max="100" type="number" className='book-add-to-cart-input'>
+
+          </input>
+          <button className='book-add-to-cart-btn'>
+            <i className='bi bi-cart-plus'>
+            </i>
+            Add To Cart
+          </button>
         </div>
       </div>
-      <div className="container">
-        <div className="row">
-
-
-          <div className="col-md-4 ">
-            <img src={article?.article?.cover} alt="Thumbnail Image" className="img-thumbnail" />
-          </div>
-          <div className='col-md-6'>
-            <h4 className='text-uppercase text-black-50'>
-              {article?.article.category.nameEn}
-            </h4>
-            <h1>
-
-            </h1>
-          </div>
-        </div>
-
-      </div>
+        <p className='book-description'>
+          {article?.article?.longDescription}
+        </p>
 
 
     </div>
