@@ -12,6 +12,7 @@ code {
     monospace;
 }
 @import url('./assets/styles/color.css');
+@import url('./assets/styles/standardStyle.css');
 
 .article-card {
   width: 250px;

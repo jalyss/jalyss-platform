@@ -45,6 +45,10 @@ export class ArticleController {
   findOne(@Param('id') id: string) {
     return this.articleService.findOne(id);
   }
+  @Get('one-by-branch/:id')
+  findOneByBranch(@Param('id') id: string) {
+    return this.articleService.findOneByBranch(id);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
@@ -55,4 +59,6 @@ export class ArticleController {
   remove(@Param('id') id: string) {
     return this.articleService.remove(id);
   }
+
+
 }

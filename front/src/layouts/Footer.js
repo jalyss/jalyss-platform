@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { RiCustomerService2Line } from 'react-icons/ri'
 import { MdPayment } from 'react-icons/md'
 import { CiDiscount1 } from 'react-icons/ci'
+import { TbDiscount2 } from 'react-icons/tb'
 import { BsTruck } from 'react-icons/bs'
 
 function Footer() {
@@ -23,7 +24,10 @@ function Footer() {
             <p className="text-color-grey">{t('footer.secure')}</p>
           </MDBCol>
           <MDBCol>
-            <CiDiscount1 size="50px" fill="white" className="mb-2" />
+            <CiDiscount1 size="50px"
+             color="white"
+              // className="mb-2"
+             />
             <p className="text-color-grey">{t('footer.shipping')}</p>
           </MDBCol>
           <MDBCol>
@@ -36,7 +40,7 @@ function Footer() {
             <h5 className="mb-3 text-color-white">
               {t('account.myAccount')}
             </h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
@@ -57,7 +61,7 @@ function Footer() {
                   {t('account.order')}
                 </a>
               </li>
-              
+
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
@@ -79,15 +83,16 @@ function Footer() {
             </ul>
           </MDBCol>
           <MDBCol>
-            <h5 className="mb-3 text-color-white">المنتجات</h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <h5 className="mb-3 text-color-white">
+              {t('products.product')}</h5>
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
                   href="/"
                   title="التخفيضات"
                 >
-                  {t('products.product')}
+                  {t('products.reduction')}
                 </a>
               </li>
               <li className="mb-2">
@@ -96,7 +101,7 @@ function Footer() {
                   href="/"
                   title="وصل حديثاً"
                 >
-                 {t('products.recentlyArrived')}
+                  {t('products.recentlyArrived')}
                 </a>
               </li>
               <li className="mb-2">
@@ -112,16 +117,16 @@ function Footer() {
           </MDBCol>
           <MDBCol>
             <h5 className="mb-3 text-color-white">
-              شركتنا
-              </h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+              {t('ourcompany.ourCompany')}
+            </h5>
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <a
                   className="text-decoration-none text-color-grey"
                   href="/"
                   title="خدمه توصيل"
                 >
-                   {t('ourcompany.ourCompany')}
+                  {t('ourcompany.deliv')}
                 </a>
               </li>
               <li className="mb-2">
@@ -130,7 +135,7 @@ function Footer() {
                   href="/"
                   title="من نحن"
                 >
-                  {t('ourcompany.whoWeAre')} 
+                  {t('ourcompany.whoWeAre')}
                 </a>
               </li>
               <li className="mb-2">
@@ -148,7 +153,7 @@ function Footer() {
                   href="/"
                   title="خريطة الموقع"
                 >
-                 {t('ourcompany.map')}
+                  {t('ourcompany.map')}
                 </a>
               </li>
               <li className="mb-2">
@@ -163,16 +168,18 @@ function Footer() {
             </ul>
           </MDBCol>
           <MDBCol>
-            <h5 className="mb-3 text-color-white">معلومات المتجر</h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <h5 className="mb-3 text-color-white">
+              {t('storeInfo.infoStore')}
+            </h5>
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey  m-0">
-                  جليس كوم
+                  {t('storeInfo.jalyss')}
                 </p>
               </li>
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey  m-0">
-                  عمارة العنبرة، بجانب مركب
+                  {t('storeInfo.adress')}
                 </p>
               </li>
               <li className="mb-2">
@@ -191,8 +198,8 @@ function Footer() {
                 </p>
               </li>
               <li className="mb-2">
-                <p className="text-decoration-none text-color-grey  m-0">
-                  +216 51 165 003
+                <p className="text-decoration-none text-color-grey  m-0" style={{direction:'ltr'}}>
+                  {'+216 51 165 003'}
                 </p>
               </li>
               <li className="mb-2">
@@ -204,10 +211,10 @@ function Footer() {
           </MDBCol>
           <MDBCol>
             <h5 className="mb-3 text-color-white">إنضم إلى القائمة البريدية</h5>
-            <ul class="p-0 text-color-grey" id="footer_account_list">
+            <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey">
-                  انضم إلى النشرة الإخبارية لتلقي جميع أخبارنا.
+                  {t('joinMailingList')}
                 </p>
               </li>
             </ul>
