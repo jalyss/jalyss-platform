@@ -5,15 +5,16 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
 import { Liquid } from 'liquidjs';
+// import * as express from 'express';
 import { liquidColorFilters } from 'liquidjs-color-filters';
-const liquidEngine = new Liquid();
-liquidEngine.plugin(liquidColorFilters);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, '..', 'src/views'));
-  app.engine('liquid', liquidEngine.express());
-  app.setViewEngine('liquid');
+  
+  app.useStaticAssets('upload',{prefix:'/upload'})
+  app.useStaticAssets(join(__dirname, '../../../front', 'build'))
+  
+  
   app.setGlobalPrefix('/api/v1');
 
   const config = new DocumentBuilder()
