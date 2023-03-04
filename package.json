@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@angular-devkit/schematics": "^15.2.1",
     "moment": "^2.29.4",
     "react-icons": "^4.8.0"
   },
