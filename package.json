@@ -1,12 +1,14 @@
 {
   "dependencies": {
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "react-icons": "^4.8.0"
   },
   "name": "@jalyss-platform/root",
   "packageManager": "yarn@3.2.0",
   "private": true,
   "workspaces": [
-    "back","front"
+    "back",
+    "front"
   ],
   "scripts": {
     "start": "turbo run start --parallel",
@@ -15,15 +17,14 @@
     "test": "yarn workspaces foreach run test",
     "lint": "eslint \"{src,back,front,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,back,front,test}/**/*.ts\" --fix",
-    
-    "studio":"yarn workspace back studio",
-    "generate":"yarn workspace back generate",
-    "migrate:deploy":" yarn workspace back run migrate:deploy",
-    "migrate:dev:create":"yarn workspace back migrate:dev:create",
-    "migrate:reset":"yarn workspace back migrate:reset",
-    "migrate:dev":"yarn workspace back migrate:dev",
-    "seed":"yarn workspace back seed",
-    "prisma:build":"yarn workspace back prisma:build"
+    "studio": "yarn workspace back studio",
+    "generate": "yarn workspace back generate",
+    "migrate:deploy": " yarn workspace back run migrate:deploy",
+    "migrate:dev:create": "yarn workspace back migrate:dev:create",
+    "migrate:reset": "yarn workspace back migrate:reset",
+    "migrate:dev": "yarn workspace back migrate:dev",
+    "seed": "yarn workspace back seed",
+    "prisma:build": "yarn workspace back prisma:build"
   },
   "devDependencies": {
     "turbo": "^1.7.0"

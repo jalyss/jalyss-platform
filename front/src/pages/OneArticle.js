@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { BiCartAdd } from "react-icons/bi";
+
 import Rating from '../components/Rating'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +15,7 @@ function OneArticle() {
   const dispatch = useDispatch()
   const articleStore = useSelector(state => state.article)
   const { article } = articleStore
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const { articleId } = useParams()
 
   useEffect(() => {
@@ -34,13 +36,13 @@ function OneArticle() {
         </div>
         <Rating rate={3} disabled />
         <div className='book-add-to-cart'>
-          <input min="1" max="100" type="number" className='book-add-to-cart-input'>
+          <input min="1" max="100" type="number" className='book-add-to-cart-input'/>
 
-          </input>
+          
           <button className='book-add-to-cart-btn'>
-            <i className='bi bi-cart-plus'>
-            </i>
-            Add To Cart
+          <BiCartAdd size="30px" color="p" />
+            {t('OneArticle.addCart')}
+            
           </button>
         </div>
       </div>

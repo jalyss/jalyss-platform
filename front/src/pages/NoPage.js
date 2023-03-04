@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 function NoPage() {
-  const {t}=useTranslation()
+  const { t } = useTranslation()
   return (
     <div className="bg-purple ">
       <div className="stars">
@@ -17,21 +17,38 @@ function NoPage() {
           <a
             href="/"
             className="btn-go-home"
-            
+
           >
             GO BACK HOME
           </a>
         </div>
+
+
         <div className="objects">
-          
+
           <div className="box_astronaut">
             <img
               className="object_astronaut"
               src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg"
-              width="140px"
+              width="100px"
             />
           </div>
+
+
         </div>
+        <div className="objects">
+
+          <div className="box_astronaut">
+            <img
+              className="object_astronaut"
+              src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg"
+              width="60px"
+            />
+          </div>
+
+        </div>
+
+
         <div className="glowing_stars">
           <div className="star"></div>
           <div className="star"></div>

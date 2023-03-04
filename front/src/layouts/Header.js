@@ -71,7 +71,7 @@ function Header() {
             <RxAvatar size="30px" color="white" />
             <div className="text-white mx-2">
               <p className="m-0 text-right">{t("navbar.account.profile")}</p>
-              <p className="m-0">تسجيل الدخول - تسجيل</p>
+              <p className="m-0">{t("navbar.account.signup")}</p>
             </div>
           </div>
 
@@ -83,8 +83,8 @@ function Header() {
               </div>
             </div>
             <div className="text-white mx-2">
-              <p className="m-0 text-right">سلة مشترياتك</p>
-              <p className="m-0">د.ت. 0٫00</p>
+              <p className="m-0 text-right">{t('navbar.cart')}</p>
+              <p className="m-0">{t('navbar.tot')}</p>
             </div>
           </div>
         </div>
