@@ -2,6 +2,9 @@
   "navbar": {
     "cart": "سلة مشترياتك",
     "tot" : "د.ت 0,00",
+    "language":"اللغة",
+    "devise":"العملة",
+    
     "account": {
       "profile": "حسابي",
       "signup": " تسجيل الدخول"
