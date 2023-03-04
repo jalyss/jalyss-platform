@@ -2,13 +2,16 @@
     "navbar": {
         "cart": "Your Cart",
         "tot" : "0,00 TND",
+        "language":"Language",
+        "devise":"Devise",
+       
         "account": {
             "profile": "My Profile",
             "signup": "Sign Up"
         },
         "searchInput":"Search....",
         "searchButton":"Searching",
-        "articles":"Articles"        ,
+        "articles":"Articles",
         "home":"Home"
     }
 }
