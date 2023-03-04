@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ArticleCard from "../components/ArticleCard";
 import { fetchArticles, fetchArticlesByBranch } from "../store/article";
 import { fetchArticleTypes } from "../store/articleType";
@@ -12,6 +12,7 @@ import { identifier } from "../constants/identifier/identifier";
 
 function Articles() {
   const dispatch = useDispatch();
+  const {categoryId}=useParams()
   const articleStore = useSelector((state) => state.article);
   const categoryStore = useSelector((state) => state.category);
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
@@ -31,11 +32,15 @@ function Articles() {
   useEffect(() => {
     dispatch(fetchArticlesByBranch({...filters,identifier}));
   }, [filters])
+  
 
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchPublishingHouses());
     dispatch(fetchArticleTypes());
+    if(categoryId){
+      setFilters((Filters)=>({...Filters,categories:[categoryId]}))
+    }
   }, []);
   return (
     <div>
@@ -114,7 +119,7 @@ function Articles() {
         </div>
       </div>
       <div>
-        {/* <button onClick={()=>setFilters((Filters)=>({...Filters,skip:10}))}>next</button> */}
+        <button onClick={()=>setFilters((Filters)=>({...Filters,skip:10}))}>next</button>
       </div>
     </div>
   );

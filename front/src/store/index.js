@@ -1,8 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+
 import article from './article'
 import publishingHouse from './publishingHouse'
 import category from './category'
-import  articleType from './articleType'
+import articleType from './articleType'
+
+
 export const store = configureStore({
     reducer: {
      article,

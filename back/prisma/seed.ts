@@ -22,12 +22,25 @@ async function main() {
     );
   }
   //create dummy atricle Category
-  let articleCategory = await prisma.articleCategory.create({
+  let articleCategory1 = await prisma.articleCategory.create({
     data: {
       nameAr: 'تنمية بشرية',
-      nameEn: 'personal developement ',
+      nameEn: 'Personal developement',
     },
   });
+  let articleCategory2 = await prisma.articleCategory.create({
+    data: {
+      nameAr: 'ادارة الاعمال',
+      nameEn: 'Business',
+    },
+  });
+  let articleCategory3 = await prisma.articleCategory.create({
+    data: {
+      nameAr: 'وعي',
+      nameEn: 'Awareness',
+    },
+  });
+  let articleCategoryIds=[articleCategory1.id,articleCategory2.id,articleCategory3.id]
   //create dummy aarticle type
   let type = await prisma.type.create({
     data: {
@@ -59,14 +72,14 @@ async function main() {
   });
   let publishinghouseIds = [publishingHouse1.id, publishingHouse2.id, publishingHouse3.id]
   // create 10 dummy articles
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 20; i++) {
     articles.push(
       await prisma.article.create({
         data: {
           title: 'jaliss book ' + i,
           cover: `https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg`,
           weight: 110,
-          categoryId: articleCategory.id,
+          categoryId:articleCategoryIds[Math.floor(Math.random() *articleCategoryIds.length)],
           typeId: type.id,
           publishingHouseId: publishinghouseIds[Math.floor(Math.random() * publishinghouseIds.length)],
         },

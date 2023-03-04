@@ -6,10 +6,6 @@
   background-color: #edcc3f;
 }
 
-.rtl {
-  direction: rtl;
-}
-
 .text-color-grey {
   color: #bfbfbf;
 }
@@ -22,10 +18,6 @@
   color: #000000 !important;
 }
 
-ul {
-  list-style-type: none;
-}
 
-.article-card-icon {
-  margin-left: 10px;
-}
+
+

@@ -13,43 +13,7 @@ code {
 }
 @import url('./assets/styles/color.css');
 @import url('./assets/styles/standardStyle.css');
+@import url('./assets/styles/pagesAndViewStyles.css');
+@import url('./assets/styles/noPageStyle.css');
 
-.article-card {
-  width: 250px;
-}
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
-
-.dropdown-content {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s, opacity 0.5s linear;
-  position: absolute;
-  border: 1px solid #bfbfbf;
-  border-radius: 10px;
-  padding: 10px;
-  z-index: 9999;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  white-space: nowrap;
-}
-
-.dropdown-content a:hover {
-  color: #edcc3f;
-}
-
-.dropdown:hover .dropdown-content {
-  visibility: visible;
-  opacity: 1;
-}
