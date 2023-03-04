@@ -54,9 +54,10 @@ model User {
   fullNameAr           String
   email                String          @unique
   address              String
-  picture              String?
   tel                  String
   password             String
+  avatar               Media?           @relation(fields: [avatarId], references: [id])
+  avatarId             String?
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
   accountBalance       Float?
@@ -68,6 +69,7 @@ model User {
   functionalAreaId     String?
   jobTitle             JobTitle?       @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
+  Media                MediaUser[]
   Rating               Rating[]
   IntermediateCommands Command[]       @relation("intermediate")
   clientCommands       Command[]       @relation("clientCommand")
@@ -116,8 +118,8 @@ model Article {
   cover             String?
   weight            Float?
   code              Int?
-  shortDescription  String?           @map("short_desc")
-  longDescription   String?           @map("long_desc")
+  shortDescription  String?            @map("short_desc")
+  longDescription   String?            @map("long_desc")
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   category          ArticleCategory    @relation(fields: [categoryId], references: [id])
@@ -128,6 +130,7 @@ model Article {
   typeId            String
   ArticlesByBranch  ArticlesByBranch[]
   Supply            Supply[]
+  MediaArticle      MediaArticle[]
 }
 
 model ArticlesByBranch {
@@ -213,4 +216,35 @@ model Provider {
   logo           String
   email          String   @unique
   Supply         Supply[]
+}
+
+//media
+model Media {
+  id           String         @id @default(uuid())
+  path         String
+  type         String
+  alt          String
+  extension    String
+  description  String
+  MediaUser    MediaUser[]
+  MediaArticle MediaArticle[]
+  User         User[]
+}
+
+model MediaUser {
+  media   Media  @relation(fields: [mediaId], references: [id])
+  mediaId String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  @@unique(fields: [mediaId, userId], name: "userMedia")
+}
+
+model MediaArticle {
+  media     Media   @relation(fields: [mediaId], references: [id])
+  mediaId   String
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId String
+
+  @@unique(fields: [mediaId, articleId], name: "articleMedia")
 }
