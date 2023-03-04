@@ -1,12 +1,12 @@
 {
   "navbar": {
-    "cart": "سلة المشتريات",
+    "cart": "سلة مشترياتك",
+    "tot" : "د.ت 0,00",
     "account": {
       "profile": "حسابي",
-      "login": "الدخول",
-      "signup": "تسجيل"
+      "signup": " تسجيل الدخول"
     },
-    "searchInput": "ابحث",
+    "searchInput": "....ابحث",
     "searchButton": "بحث",
     "articles": "المنتجات",
     "home": "الصفحة الرئيسية"

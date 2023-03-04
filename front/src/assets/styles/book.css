@@ -15,6 +15,8 @@ height: 400px;
 object-fit: scale-down;
 padding: 20px;
 box-shadow: 0 0 1px 2px snow;
+border-radius: 7px;
+background-color: snow;
 margin-right: 20px;
 
 }
@@ -29,4 +31,23 @@ font-size: 32px;
 
 .book-add-to-cart{
 margin: 30px 0;
+}
+
+.book-add-to-cart-input{
+margin-right: 15px;
+font-size: 25px;
+font-weight:600;
+padding: 5px 10px ;
+
+}
+
+.book-add-to-cart-btn{
+border:1px solid purple ;
+border-radius: 20px;
+padding: 5px 10px;
+background-color: transparent;
+color: purple;
+font-size: 10px;
+font-weight: 600;
+
 }

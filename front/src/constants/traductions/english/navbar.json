@@ -1,12 +1,12 @@
 {
     "navbar": {
-        "cart": "your cart",
+        "cart": "Your Cart",
+        "tot" : "0,00 TND",
         "account": {
             "profile": "My Profile",
-            "login": "Login",
-            "signup": "Signup"
+            "signup": "Sign Up"
         },
-        "searchInput":"Search",
+        "searchInput":"Search....",
         "searchButton":"Searching",
         "articles":"Articles"        ,
         "home":"Home"
