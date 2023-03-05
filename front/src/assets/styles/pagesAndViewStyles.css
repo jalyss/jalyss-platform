@@ -5,6 +5,11 @@
   margin-left: 10px;
 }
 
+.article-image {
+  background-color: rgb(72, 24, 76, 0.08);
+  border-radius: 10px;
+}
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -39,4 +44,25 @@
 .dropdown:hover .dropdown-content {
   visibility: visible;
   opacity: 1;
+}
+
+.stock-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  background-color: #48184c;
+  color: white;
+  border-radius: 20px;
+}
+
+.rating {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 6px 12px;
+  background-color: white;
+  color: #48184c;
+  border-radius: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
