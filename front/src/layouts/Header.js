@@ -114,9 +114,85 @@ function Header() {
                   <div>
                     <div className="mini-body-offCanvas">
 
-                      <div>
-                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" className='book-content-img-cart' />
+                      <div class="container h-min-content py-initial">
+                        <div class="row d-flex justify-content-center align-items-center h-100">
+                          <div class="col">
+
+                            <div class="table-responsive">
+
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" class="h5">Shopping Bag</th>
+
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th scope="row">
+                                      <div class="flex-column ms-4">
+                                        <p class="mb-2">فن اللامبالاة</p>
+
+                                      </div>
+                                      <div class="d-flex align-items-center">
+                                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" class="img-fluid rounded-3"
+                                          alt="Book" />
+
+                                      </div>
+                                    </th>
+
+                                    <td class="align-middle">
+                                      <div class="d-flex flex-row">
+
+                                        <input id="form1" min="0" name="quantity" value="2" type="number"
+                                          class="form-control form-control-sm" />
+
+
+                                      </div>
+                                    </td>
+                                    <td class="align-middle">
+                                      <p class="mb-0">TND 78.00</p>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                                <tbody>
+                                  <tr>
+                                    <th scope="row">
+                                      <div class="flex-column ms-4">
+                                        <p class="mb-2">فن اللامبالاة</p>
+
+                                      </div>
+                                      <div class="d-flex align-items-center">
+                                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" class="img-fluid rounded-3"
+                                          alt="Book" />
+
+                                      </div>
+                                    </th>
+
+                                    <td class="align-middle">
+                                      <div class="d-flex flex-row">
+
+                                        <input id="form1" min="0" name="quantity" value="2" type="number"
+                                          class="form-control form-control-sm" />
+
+
+                                      </div>
+                                    </td>
+                                    <td class="align-middle">
+                                      <p class="mb-0">TND 78.00</p>
+                                    </td>
+                                  </tr>
+                                </tbody>
+
+                              </table>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+
+
                     </div>
                     <div>
                       <div className="subtotal">
@@ -138,14 +214,14 @@ function Header() {
 
                     <div className="double-btn">
                       <div >
-                        <button className="offCanvas-btn">
+                        <button className="offCanvas-btn1">
 
-                          VIEW CART
+                          <span className="label-btn">VIEW CART</span>
                         </button>
                       </div>
                       <div>
-                        <button className="offCanvas-btn">
-                          CHEKOUT
+                        <button className="offCanvas-btn2">
+                          <span className="label-btn"> CHECKOUT </span>
                         </button>
 
                       </div>
@@ -174,7 +250,7 @@ function Header() {
         </a>
         <div className="dropdown">
           <a href="/articles" className="text-decoration-none text-color-black">
-          {t('navbar.articles')}
+            {t('navbar.articles')}
           </a>
           <div class="dropdown-content bg-white">
             {categoryStore.categories.items.map((elem, i) => (
