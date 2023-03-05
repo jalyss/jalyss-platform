@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@angular-devkit/schematics": "^15.2.1",
     "moment": "^2.29.4",
     "react-icons": "^4.8.0"
   },
@@ -27,7 +28,7 @@
     "prisma:build": "yarn workspace back prisma:build"
   },
   "devDependencies": {
-    "turbo": "^1.7.0"
+    "turbo": "^1.8.3"
   },
   "browser": {
     "assert": false,
