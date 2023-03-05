@@ -2,9 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RxAvatar } from "react-icons/rx";
 import { RiShoppingCart2Line } from "react-icons/ri";
-import { Dropdown } from "react-bootstrap";
+
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/category";
+import WhiteSelect from "../components/WhiteSelect";
 
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { BiCartAdd } from "react-icons/bi";
@@ -30,13 +31,13 @@ function Header() {
     dispatch(fetchCategories());
   }, []);
 
-  const onChangeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    localStorage.setItem("lg", lng);
+  const onChangeLanguage = (event) => {
+    i18n.changeLanguage(event.target.value);
+    localStorage.setItem("lg", event.target.value);
   };
 
-  const onChangeDevise = (devise) => {
-    localStorage.setItem("devise", devise);
+  const onChangeDevise = (event) => {
+    localStorage.setItem("devise", event.target.value);
   };
 
   const currentDevise = localStorage.getItem("devise");
@@ -59,26 +60,32 @@ function Header() {
               {t("navbar.searchButton")}
             </button>
           </div>
-
-          <select
-            name="language"
-            onChange={(event) => onChangeLanguage(event.target.value)}
-            defaultValue={currentLanguage}
-          >
-            <option value="ar">AR</option>
-            <option value="en">EN</option>
-          </select>
-
-          <select
-            name="devise"
-            onChange={(event) => onChangeDevise(event.target.value)}
-            defaultValue={currentDevise}
-          >
-            <option value="eur">EUR</option>
-            <option value="mad">MAD</option>
-            <option value="tnd">TND</option>
-            <option value="usd">USD</option>
-          </select>
+          <div>
+            <WhiteSelect
+              height={30}
+              width={70}
+              value={currentLanguage}
+              onChange={onChangeLanguage}
+              data={[
+                { label: "AR", value: "ar" },
+                { label: "EN", value: "en" },
+              ]}
+              helper={t("navbar.language")}
+            />
+            <WhiteSelect
+              height={30}
+              width={80}
+              value={currentDevise}
+              onChange={onChangeDevise}
+              data={[
+                { label: "TND", value: "eur" },
+                { label: "MAD", value: "mad" },
+                { label: "EUR", value: "tnd" },
+                { label: "USD", value: "usd" },
+              ]}
+              helper={t("navbar.devise")}
+            />
+          </div>
 
           <div className={`d-flex align-items-center`}>
             <RxAvatar size="30px" color="white" />
@@ -108,7 +115,7 @@ function Header() {
                     <div className="mini-body-offCanvas">
 
                       <div>
-                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" title="fan la moubalet" className='book-content-img-cart' />
+                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" className='book-content-img-cart' />
                       </div>
                     </div>
                     <div>
@@ -163,11 +170,11 @@ function Header() {
       </div>
       <div className="d-flex justify-content-evenly align-content-center m-3">
         <a href="/" className="text-decoration-none text-color-black">
-          Home
+          {t('navbar.home')}
         </a>
         <div className="dropdown">
           <a href="/articles" className="text-decoration-none text-color-black">
-            Products
+          {t('navbar.articles')}
           </a>
           <div class="dropdown-content bg-white">
             {categoryStore.categories.items.map((elem, i) => (
