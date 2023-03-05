@@ -6,12 +6,25 @@ import { Dropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/category";
 
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import { BiCartAdd } from "react-icons/bi";
+import { BiCartDownload } from "react-icons/bi";
+
+
+
 function Header() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const categoryStore = useSelector((state) => state.category);
   const [showArticleMenu, setShowArticleMenu] = useState(false);
   const currentLanguage = useMemo(() => i18n?.languages[0], [i18n?.languages]);
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -77,8 +90,67 @@ function Header() {
 
           <div className={`d-flex align-items-center`}>
             <div className="position-relative">
-              <RiShoppingCart2Line size="30px" color="white" />
-              <div className="position-absolute bottom-50 end-50 rounded-circle px-1 bg-yellow">
+
+              <button variant="primary" onMouseOver={handleShow} className='cart_offcanvas' >
+                <BiCartDownload size="40px" color="white" />
+              </button>
+              <Offcanvas show={show} onHide={handleClose}>
+                <Offcanvas.Header closeButton>
+
+                  <Offcanvas.Title>
+                    <BiCartAdd size="30px" color="purple" />
+                    {t('Offcanvas.title')}
+
+                  </Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                  <div>
+                    <div className="mini-body-offCanvas">
+
+                      <div>
+                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" title="fan la moubalet" className='book-content-img-cart' />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="subtotal">
+                        <div>
+
+                          <span className="label" >
+                            Cart subtotal
+                          </span>
+
+                          <span className="price-wrapper">
+                            175.000 TND
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <div className="double-btn">
+                      <div >
+                        <button className="offCanvas-btn">
+
+                          VIEW CART
+                        </button>
+                      </div>
+                      <div>
+                        <button className="offCanvas-btn">
+                          CHEKOUT
+                        </button>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                </Offcanvas.Body>
+              </Offcanvas>
+
+
+              <div className="position-absolute bottom-50 rounded-circle px-1 bg-yellow">
                 <p className="m-0">1</p>
               </div>
             </div>
@@ -98,9 +170,9 @@ function Header() {
             Products
           </a>
           <div class="dropdown-content bg-white">
-            {categoryStore.categories.items.map((elem,i)=>(
-              <a href={`/articles/cat/${elem.id}`}>{currentLanguage==='en'?elem.nameEn:elem.nameAr}</a>
-            ))}     
+            {categoryStore.categories.items.map((elem, i) => (
+              <a href={`/articles/cat/${elem.id}`}>{currentLanguage === 'en' ? elem.nameEn : elem.nameAr}</a>
+            ))}
           </div>
         </div>
         <a href="/*" className="text-decoration-none text-color-black">
