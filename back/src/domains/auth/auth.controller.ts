@@ -1,45 +1,60 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
-  Delete,
+  Controller,
+  HttpException,
+  HttpStatus,
+  Post,
+  Get,
+  Request,
+  UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  BadRequestException
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { AuthService, RegistrationSeederStatus, RegistrationStatus } from "./auth.service";
+import { ApiBearerAuth, ApiSecurity, ApiTags } from "@nestjs/swagger";
+import { CreateUserDto } from 'src/domains/users/dto/create-user.dto';
+import { UserLogin } from 'src/domains/users/entities/user.entity';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
+
+  @Post('register')
+  public async register(@Body() createUserDto: CreateUserDto):
+      Promise<RegistrationStatus> {
+      const result: RegistrationStatus = await
+          this.authService.register(createUserDto,);
+      if (!result.success) {
+          throw new HttpException(result.message,
+              HttpStatus.BAD_REQUEST);
+      }
+      return result;
+  }
 
   @Post('login')
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
-  }
-  
-
-  @Get('getUsers')
-  findAll() {
-    return this.authService.findAll();
+  public async login(@Body() loginUserDto: UserLogin):
+      Promise<any> {
+      return await this.authService.login(loginUserDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @ApiSecurity('access-key')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('me')
+  async me(@Request() req) {
+      try {
+          if (!req.get('Authorization')) {
+              throw new Error('Missing Authorization header');
+          }
+          return await this.authService.me(
+              req.get('Authorization').replace('Bearer ', ''),
+          );
+      } catch (e) {
+          console.log('error', e);
+          throw new BadRequestException(e.message);
+      }
   }
 }

@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "start": "turbo run start --parallel",
-    "build": "yarn workspaces foreach run build",
+    "build": "yarn workspace front run build && yarn workspace back run build",
     "watch": "yarn workspaces foreach run build:watch",
     "test": "yarn workspaces foreach run test",
     "lint": "eslint \"{src,back,front,test}/**/*.ts\"",
