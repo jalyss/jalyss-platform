@@ -1,9 +1,14 @@
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 .rtl {
-    direction: rtl;
-  }
-  ul {
-    list-style-type: none;
-  }
+  direction: rtl;
+}
+ul {
+  list-style-type: none;
+}
+
+.form-check-input:checked {
+  background-color: #48184c !important;
+  border-color: #48184c !important;
+}
