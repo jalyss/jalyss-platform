@@ -15,7 +15,7 @@ export class CommandsService {
   async create(dto: CreateCommandDto, branchId: string) {
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
-    ); 
+    );
     return await this.prisma.command.create({
       data: {
         ...dto,
@@ -29,14 +29,12 @@ export class CommandsService {
     return await this.prisma.command.findMany({
       include: {
         commandLine: true,
+        branch: true,
       },
     });
   }
 
-  async findAllByBranchIdentifier(
-    branchId: string,
-    filters: FilterCommand,
-  ) {
+  async findAllByBranchIdentifier(branchId: string, filters: FilterCommand) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
       .id;
     let insideWhere = {};
@@ -68,8 +66,7 @@ export class CommandsService {
     return await this.prisma.command.findMany({
       where: {
         ...insideWhere,
-         branchId,
-        
+        branchId,
       },
       include: {
         commandLine: true,
@@ -77,12 +74,44 @@ export class CommandsService {
     });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} command`;
+  async findOne(id: string) {
+    return await this.prisma.command.findFirstOrThrow({
+      where: {
+        id,
+      },
+      include: {
+        commandLine: true,
+      },
+    });
   }
 
-  update(id: string, updateCommandDto: UpdateCommandDto) {
-    return `This action updates a #${id} command`;
+  async update(id: string, dto: UpdateCommandDto) {
+    const branchId = (await this.prisma.command.findFirstOrThrow({
+      where: {
+        id,
+      },
+    }))!.branchId;
+    const command = await this.findOne(id);
+
+    return await this.prisma.command.update({
+      where: { id },
+      data: {
+        ...dto,
+        branchId,
+        // must delete lines befor updated because maybe the quantity changed
+        commandLine: {
+          deleteMany: {
+            commandId: id,
+            articleByBranchId: {
+              in: command.commandLine.map((l) => l.articleByBranchId),
+            },
+          },
+          create: dto.commandLine.map((elem) => ({
+            ...elem,
+          })),
+        },
+      },
+    });
   }
 
   remove(id: string) {
