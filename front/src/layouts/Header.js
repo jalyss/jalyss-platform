@@ -113,7 +113,9 @@ function Header() {
                   </Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
+
                   <Cart />
+
                 </Offcanvas.Body>
               </Offcanvas>
 
@@ -134,7 +136,9 @@ function Header() {
         </a>
         <div className="dropdown">
           <a href="/articles" className="text-decoration-none text-color-black">
+
             {t("navbar.articles")}
+
           </a>
           <div class="dropdown-content bg-white">
             {categoryStore.categories.items.map((elem, i) => (
