@@ -72,13 +72,24 @@ async function main() {
   });
   let publishinghouseIds = [publishingHouse1.id, publishingHouse2.id, publishingHouse3.id]
   // create 10 dummy articles
+  let cover = await prisma.media.create({
+    data:{
+      type   :      'image',
+      alt     :     'cover test',
+      extension :   'jpg',
+      description : 'cover test',
+      path:`https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg`
+    }
+  })
   for (let i = 0; i < 20; i++) {
     articles.push(
       await prisma.article.create({
         data: {
-          title: 'jaliss book ' + i,
-          cover: `https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg`,
+          title: 'jalyss book ' + i,
+          coverId: cover.id ,
           weight: 110,
+          pageNumber :  255,
+          code:`0000-${i}`,
           categoryId:articleCategoryIds[Math.floor(Math.random() *articleCategoryIds.length)],
           typeId: type.id,
           publishingHouseId: publishinghouseIds[Math.floor(Math.random() * publishinghouseIds.length)],

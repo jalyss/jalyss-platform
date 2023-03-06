@@ -2,17 +2,25 @@ import Rating from '../components/Rating'
 import { FiEye } from 'react-icons/fi'
 import { BsBag } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
+import { useCart } from 'react-use-cart';
 
-function ArticleCard({ article, onViewClick, onBasketClick }) {
+
+function ArticleCard({ article }) {
+  const { addItem } = useCart();
   const navigate = useNavigate()
+  
   return (
+    
+
     <div className="article-card position-relative mx-3 mb-2 ">
       <div className="position-relative">
         <div className="stock-label">
           <h6 className="m-0">{article.stock} </h6>
         </div>
         <img
-          src={article.article.cover}
+
+          src={article.article.cover.path}
+
           className="w-100 object-fit-contain article-image "
           alt=""
         />
@@ -32,7 +40,9 @@ function ArticleCard({ article, onViewClick, onBasketClick }) {
           </div>
           <div
             className="bg-yellow p-1 rounded pointer m-1"
-            onClick={() => console.log(article)}
+
+            onClick={()=> addItem(article)}
+
           >
             <BsBag size={20} />
           </div>
