@@ -11,6 +11,7 @@ import { fetchPublishingHouses } from '../store/publishingHouse'
 import { identifier } from '../constants/identifier/identifier'
 import Accordion from '../components/Accordion'
 import '../assets/styles/filters.css'
+
 import useMeta from '../hooks/useMeta'
 import DocumentMeta from "react-document-meta";
 
@@ -18,11 +19,14 @@ function Articles() {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
   const meta=useMeta(t('articles.pageName'),t('articles.pageDescription'))
+
   const { categoryId } = useParams()
   const articleStore = useSelector((state) => state.article)
   const categoryStore = useSelector((state) => state.category)
   const publishingHouseStore = useSelector((state) => state.publishingHouse)
   const articleTypeStore = useSelector((state) => state.articleType)
+
+
 
   const lg = i18n.languages[0] === 'en'
   const [filters, setFilters] = useState({
@@ -172,7 +176,9 @@ function Articles() {
           next
         </button>
       </div>
+
     </DocumentMeta>
+
   )
 }
 
