@@ -7,25 +7,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/category";
 import WhiteSelect from "../components/WhiteSelect";
 
-import Offcanvas from 'react-bootstrap/Offcanvas';
+import Offcanvas from "react-bootstrap/Offcanvas";
 import { BiCartAdd } from "react-icons/bi";
 import { BiCartDownload } from "react-icons/bi";
-
-
+import Cart from "../components/Cart";
+import { useCart } from "react-use-cart";
 
 function Header() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
+  const {
+    isEmpty,
+    totalItems,
+} = useCart();
   const categoryStore = useSelector((state) => state.category);
   const [showArticleMenu, setShowArticleMenu] = useState(false);
   const currentLanguage = useMemo(() => i18n?.languages[0], [i18n?.languages]);
-
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -97,164 +98,49 @@ function Header() {
 
           <div className={`d-flex align-items-center`}>
             <div className="position-relative">
-
-              <button variant="primary" onMouseOver={handleShow} className='cart_offcanvas' >
+              <button
+                variant="primary"
+                onClick={handleShow}
+                className="cart_offcanvas"
+              >
                 <BiCartDownload size="40px" color="white" />
               </button>
               <Offcanvas show={show} onHide={handleClose}>
                 <Offcanvas.Header closeButton>
-
                   <Offcanvas.Title>
                     <BiCartAdd size="30px" color="purple" />
-                    {t('Offcanvas.title')}
-
+                    {t("Offcanvas.title")}
                   </Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                  <div>
-                    <div className="mini-body-offCanvas">
-
-                      <div class="container h-min-content py-initial">
-                        <div class="row d-flex justify-content-center align-items-center h-100">
-                          <div class="col">
-
-                            <div class="table-responsive">
-
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th scope="col" class="h5">Shopping Bag</th>
-
-                                    <th scope="col">Quantity</th>
-                                    <th scope="col">Price</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <th scope="row">
-                                      <div class="flex-column ms-4">
-                                        <p class="mb-2">فن اللامبالاة</p>
-
-                                      </div>
-                                      <div class="d-flex align-items-center">
-                                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" class="img-fluid rounded-3"
-                                          alt="Book" />
-
-                                      </div>
-                                    </th>
-
-                                    <td class="align-middle">
-                                      <div class="d-flex flex-row">
-
-                                        <input id="form1" min="0" name="quantity" value="2" type="number"
-                                          class="form-control form-control-sm" />
-
-
-                                      </div>
-                                    </td>
-                                    <td class="align-middle">
-                                      <p class="mb-0">TND 78.00</p>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                                <tbody>
-                                  <tr>
-                                    <th scope="row">
-                                      <div class="flex-column ms-4">
-                                        <p class="mb-2">فن اللامبالاة</p>
-
-                                      </div>
-                                      <div class="d-flex align-items-center">
-                                        <img src="https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg" class="img-fluid rounded-3"
-                                          alt="Book" />
-
-                                      </div>
-                                    </th>
-
-                                    <td class="align-middle">
-                                      <div class="d-flex flex-row">
-
-                                        <input id="form1" min="0" name="quantity" value="2" type="number"
-                                          class="form-control form-control-sm" />
-
-
-                                      </div>
-                                    </td>
-                                    <td class="align-middle">
-                                      <p class="mb-0">TND 78.00</p>
-                                    </td>
-                                  </tr>
-                                </tbody>
-
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-
-                    </div>
-                    <div>
-                      <div className="subtotal">
-                        <div>
-
-                          <span className="label" >
-                            Cart subtotal
-                          </span>
-
-                          <span className="price-wrapper">
-                            175.000 TND
-                          </span>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                    <div className="double-btn">
-                      <div >
-                        <button className="offCanvas-btn1">
-
-                          <span className="label-btn">VIEW CART</span>
-                        </button>
-                      </div>
-                      <div>
-                        <button className="offCanvas-btn2">
-                          <span className="label-btn"> CHECKOUT </span>
-                        </button>
-
-                      </div>
-                    </div>
-
-                  </div>
-
+                  <Cart />
                 </Offcanvas.Body>
               </Offcanvas>
 
-
               <div className="position-absolute bottom-50 rounded-circle px-1 bg-yellow">
-                <p className="m-0">1</p>
+                <p className="m-0">{totalItems}</p>
               </div>
             </div>
             <div className="text-white mx-2">
-              <p className="m-0 text-right">{t('navbar.cart')}</p>
-              <p className="m-0">{t('navbar.tot')}</p>
+              <p className="m-0 text-right">{t("navbar.cart")}</p>
+              <p className="m-0">{t("navbar.tot")}</p>
             </div>
           </div>
         </div>
       </div>
       <div className="d-flex justify-content-evenly align-content-center m-3">
         <a href="/" className="text-decoration-none text-color-black">
-          {t('navbar.home')}
+          {t("navbar.home")}
         </a>
         <div className="dropdown">
           <a href="/articles" className="text-decoration-none text-color-black">
-            {t('navbar.articles')}
+            {t("navbar.articles")}
           </a>
           <div class="dropdown-content bg-white">
             {categoryStore.categories.items.map((elem, i) => (
-              <a href={`/articles/cat/${elem.id}`}>{currentLanguage === 'en' ? elem.nameEn : elem.nameAr}</a>
+              <a href={`/articles/cat/${elem.id}`} key={i}>
+                {currentLanguage === "en" ? elem.nameEn : elem.nameAr}
+              </a>
             ))}
           </div>
         </div>

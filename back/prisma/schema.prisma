@@ -56,7 +56,7 @@ model User {
   address              String
   tel                  String
   password             String
-  avatar               Media?           @relation(fields: [avatarId], references: [id])
+  avatar               Media?          @relation(fields: [avatarId], references: [id])
   avatarId             String?
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
@@ -113,24 +113,28 @@ model PublishingHouse {
 }
 
 model Article {
-  id                String             @id @default(uuid())
-  title             String?
-  cover             String?
-  weight            Float?
-  code              Int?
-  shortDescription  String?            @map("short_desc")
-  longDescription   String?            @map("long_desc")
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  category          ArticleCategory    @relation(fields: [categoryId], references: [id])
-  categoryId        String
-  publishingHouse   PublishingHouse    @relation(fields: [publishingHouseId], references: [id])
-  publishingHouseId String
-  type              Type               @relation(fields: [typeId], references: [id])
-  typeId            String
-  ArticlesByBranch  ArticlesByBranch[]
-  Supply            Supply[]
-  MediaArticle      MediaArticle[]
+  id                 String             @id @default(uuid())
+  title              String
+  cover              Media?             @relation(fields: [coverId], references: [id])
+  coverId            String?
+  weight             Float
+  pageNumber         Int
+  code               String             @unique
+  shortDescriptionEn String?            @map("short_desc_en")
+  longDescriptionEn  String?            @map("long_desc_en")
+  shortDescriptionAr String?            @map("short_desc_ar")
+  longDescriptionAr  String?            @map("long_desc_ar")
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  category           ArticleCategory    @relation(fields: [categoryId], references: [id])
+  categoryId         String
+  publishingHouse    PublishingHouse    @relation(fields: [publishingHouseId], references: [id])
+  publishingHouseId  String
+  type               Type               @relation(fields: [typeId], references: [id])
+  typeId             String
+  ArticlesByBranch   ArticlesByBranch[]
+  Supply             Supply[]
+  media              MediaArticle[]
 }
 
 model ArticlesByBranch {
@@ -229,6 +233,7 @@ model Media {
   MediaUser    MediaUser[]
   MediaArticle MediaArticle[]
   User         User[]
+  Article      Article[]
 }
 
 model MediaUser {
