@@ -4,6 +4,7 @@ import navbarAr from '../constants/traductions/arabic/navbar.json'
 import navbarEn from '../constants/traductions/english/navbar.json'
 import footerAr from '../constants/traductions/arabic/footer.json'
 import footerEn from '../constants/traductions/english/footer.json'
+import oneArticleAr from '../constants/traductions/arabic/OneArticle.json'
 
 
 i18n
@@ -18,7 +19,7 @@ i18n
       },
       ar:{
         translation: 
-            {...navbarAr,...footerAr}
+            {...navbarAr,...footerAr,...oneArticleAr}
           
       }
     },

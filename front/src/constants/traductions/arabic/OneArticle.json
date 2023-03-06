@@ -1,7 +1,11 @@
 {
-    "OneArticle": {
-        
-        "addCart": "أضف إلى السلة"
-        
-    }
+  "OneArticle": {
+    "addCart": "أضف إلى السلة",
+    "info": "البيانات",
+    "category": "الصنف",
+    "weight": "الوزن",
+    "nPages": "عدد الصفحات",
+    "publishingHouse": "دار النشر",
+    "ref": "المرجع"
+  }
 }
