@@ -43,7 +43,9 @@ export class CommandsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommandDto: UpdateCommandDto) {
+  update(@Param('id') id: string, 
+  @Body() updateCommandDto: UpdateCommandDto
+  ) {
     return this.commandsService.update(id, updateCommandDto);
   }
 

@@ -26,6 +26,11 @@ export class ArticleService {
     return this.prisma.article.findMany({
       include: {
         ArticlesByBranch: true,
+        media:true,
+        cover:true,
+        publishingHouse:true,
+        category:true,
+        type:true
       },
     });
   }
@@ -114,7 +119,7 @@ export class ArticleService {
         branchId,
       },
       include: {
-        article: { include: { category: true, publishingHouse: true, type: true } }
+        article: { include: { category: true, publishingHouse: true, type: true,cover:true } }
       },take:10,
       skip
     });
@@ -126,7 +131,7 @@ export class ArticleService {
         id
       },
       include: {
-        article: { include: { category: true, publishingHouse: true, type: true } }
+        article: { include: { category: true, publishingHouse: true, type: true ,cover:true} }
       }
 
     });
