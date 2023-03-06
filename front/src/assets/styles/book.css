@@ -1,165 +1,141 @@
 .book {
-    padding: 30px;
+  padding: 30px;
 }
 
 .book-content {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-
+  display: flex;
+  margin-bottom: 20px;
 }
 
 .book-content-img {
-    width: 300px;
-    height: 400px;
-    object-fit: scale-down;
-    padding: 20px;
-    box-shadow: 0 0 1px 2px snow;
-    border-radius: 7px;
-    background-color: snow;
-    margin-right: 20px;
-
+  width: 500px;
+  height: auto;
+  object-fit: contain;
+  padding: 20px;
+  margin-left: 2rem;
+  border-radius: 16px;
+  background-color: rgb(72, 24, 76, 0.08);
 }
 
 .book-content-info {
-    width: 60%;
-
-
+  width: 60%;
 }
 
 .book-title {
-    font-size: 32px;
+  font-size: 32px;
 }
 
 .book-add-to-cart {
-    margin: 30px 0;
+  margin: 30px 0;
+  display: flex;
+  align-items: center;
 }
 
 .book-add-to-cart-input {
-    margin-right: 15px;
-    font-size: 25px;
-    font-weight: 600;
-    padding: 5px 10px;
-
+  margin-left: 15px;
+  font-weight: 600;
+  border: 1px solid grey;
+  font-size: 20px;
+  width: 70px;
+  border-radius: 10px;
+  padding: 5px 10px;
 }
 
 .book-add-to-cart-btn {
-    border: 1px solid purple;
-    border-radius: 20px;
-    padding: 5px 10px;
-    background-color: transparent;
-    color: purple;
-    font-size: 10px;
-    font-weight: 600;
-
+  border: 1px solid purple;
+  border-radius: 10px;
+  padding: 5px 10px;
+  background-color: transparent;
+  color: purple;
 }
 
 .cart_offcanvas {
-    background-color: transparent;
-    border: none;
-
+  background-color: transparent;
+  border: none;
 }
 
 .book-content-img-cart {
-
-    width: 170px;
-    height: 170px;
-    object-fit: scale-down;
-    padding: 5px;
-    box-shadow: 0 0 1px 2px snow;
-    border-radius: 7px;
-    background-color: snow;
-    margin-right: 20px;
-
+  width: 170px;
+  height: 170px;
+  object-fit: scale-down;
+  padding: 5px;
+  box-shadow: 0 0 1px 2px snow;
+  border-radius: 7px;
+  background-color: snow;
+  margin-right: 20px;
 }
 
-
 .offCanvas-btn1 {
-    width: 100%;
-    border: 1px solid #edcc3f;
-    border-radius: 5px;
-    padding: 12px 100px;
-    background-color: #edcd3f2a;
-    color: rgb(0, 0, 0);
-    font-size: 10px;
-    font-weight: 600;
-
-
-
+  width: 100%;
+  border: 1px solid #edcc3f;
+  border-radius: 5px;
+  padding: 12px 100px;
+  background-color: #edcd3f2a;
+  color: rgb(0, 0, 0);
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .offCanvas-btn1:hover {
-    background-color: #edcc3f;
-    transition: 0.7s;
-    color: rgb(255, 255, 255)
+  background-color: #edcc3f;
+  transition: 0.7s;
+  color: rgb(255, 255, 255);
 }
 
 .offCanvas-btn2 {
-    width: 100%;
-    border: 1px solid #be1111b1;
-    border-radius: 5px;
-    padding: 10px 150px;
-    background-color: #be11111a;
-    color: rgb(0, 0, 0);
-    font-size: 10px;
-    font-weight: 600;
-    margin-top: 5px;
-
+  width: 100%;
+  border: 1px solid #be1111b1;
+  border-radius: 5px;
+  padding: 10px 150px;
+  background-color: #be11111a;
+  color: rgb(0, 0, 0);
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 5px;
 }
 
 .offCanvas-btn2:hover {
-    background-color: #be1111;
-    transition: 0.7s;
-    color: rgb(255, 255, 255);
+  background-color: #be1111;
+  transition: 0.7s;
+  color: rgb(255, 255, 255);
 }
 
-
-
 .double-btn {
-    margin-top: 15px;
-
-
+  margin-top: 15px;
 }
 
 .subtotal {
-
-    border-bottom: 1px solid #eee;
-    border-top: 1px solid #eee;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0 10px;
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid #eee;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 10px;
 }
 
 .label {
-
-    color: #222;
-    text-transform: uppercase;
-    font-weight: 640;
-    font-size: 18px;
-    margin: 0;
+  color: #222;
+  text-transform: uppercase;
+  font-weight: 640;
+  font-size: 18px;
+  margin: 0;
 }
 
 .label-btn {
-
-    font-weight: 600;
-    font-size: 16px;
-    text-transform: uppercase;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
 }
 
 .price-wrapper {
-
-    float: right;
-    font-size: 20px;
-    font-weight: 800;
-    color: #333;
-
+  float: right;
+  font-size: 20px;
+  font-weight: 800;
+  color: #333;
 }
 
 .mini-body-offCanvas {
-
-    margin: 0 -15px;
-    overflow-x: auto;
-    padding: 15px;
-    height: 500px;
-
+  margin: 0 -15px;
+  overflow-x: auto;
+  padding: 15px;
+  height: 500px;
 }
