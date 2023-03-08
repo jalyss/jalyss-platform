@@ -9,6 +9,7 @@ import NoPage from '../pages/NoPage'
 import OneArticle from '../pages/OneArticle'
 import Profile from '../pages/Profile'
 import Signup from '../pages/Signup'
+import Checkout from '../pages/Checkout'
 
 function Router() {
     return (
@@ -22,6 +23,7 @@ function Router() {
                         <Route path="articles/cat/:categoryId" element={<Articles />} />
                         <Route path="one-article/:articleId" element={<OneArticle />} />
                         <Route path="profile" element={<Profile />} />
+                        <Route path="checkout" element={<Checkout />} />
                         <Route path="login" element={<Login />} />
                         <Route path="signup" element={<Signup />} />
                         <Route path="*" element={<NoPage />} />

@@ -10,6 +10,8 @@ function Cart() {
     removeItem,
     emptyCart,
   } = useCart();
+
+  
   return (
     <div>
       <div className="mini-body-offCanvas">
