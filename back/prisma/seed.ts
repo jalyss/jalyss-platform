@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { create } from 'domain';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -21,7 +22,38 @@ async function main() {
       }),
     );
   }
-  //create dummy atricle Category
+
+  //create dummy author
+  let author1 = await prisma.author.create({
+    data: {
+      nameAr: ' داير واين',
+      nameEn: ' Wayne Dyer',
+      biographyAr: ',',
+      biographyEn: ','
+    },
+  });
+
+  let author2 = await prisma.author.create({
+    data: {
+      nameAr: 'كوفي ستيفن',
+      nameEn: ' Stephen Covey',
+      biographyAr: ',',
+      biographyEn: ','
+    },
+  });
+
+  let author3 = await prisma.author.create({
+    data: {
+      nameAr: ' شوبرا ديباك',
+      nameEn: ' Deepak Chopra',
+      biographyAr: ',',
+      biographyEn: ','
+    },
+  });
+  let authorIds = [author1.id, author2.id, author3.id]
+
+
+  //create dummy article Category
   let articleCategory1 = await prisma.articleCategory.create({
     data: {
       nameAr: 'تنمية بشرية',
@@ -40,7 +72,7 @@ async function main() {
       nameEn: 'Awareness',
     },
   });
-  let articleCategoryIds=[articleCategory1.id,articleCategory2.id,articleCategory3.id]
+  let articleCategoryIds = [articleCategory1.id, articleCategory2.id, articleCategory3.id]
   //create dummy aarticle type
   let type = await prisma.type.create({
     data: {
@@ -73,12 +105,12 @@ async function main() {
   let publishinghouseIds = [publishingHouse1.id, publishingHouse2.id, publishingHouse3.id]
   // create 10 dummy articles
   let cover = await prisma.media.create({
-    data:{
-      type   :      'image',
-      alt     :     'cover test',
-      extension :   'jpg',
-      description : 'cover test',
-      path:`https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg`
+    data: {
+      type: 'image',
+      alt: 'cover test',
+      extension: 'jpg',
+      description: 'cover test',
+      path: `https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg`
     }
   })
   for (let i = 0; i < 20; i++) {
@@ -86,11 +118,16 @@ async function main() {
       await prisma.article.create({
         data: {
           title: 'jalyss book ' + i,
-          coverId: cover.id ,
+          coverId: cover.id,
           weight: 110,
-          pageNumber :  255,
-          code:`0000-${i}`,
-          categoryId:articleCategoryIds[Math.floor(Math.random() *articleCategoryIds.length)],
+          pageNumber: 255,
+          code: `0000-${i}`,
+          ArticleByAuthor: {
+            create: {
+              authorId: authorIds[Math.floor(Math.random() * authorIds.length)]
+            }
+          },
+          categoryId: articleCategoryIds[Math.floor(Math.random() * articleCategoryIds.length)],
           typeId: type.id,
           publishingHouseId: publishinghouseIds[Math.floor(Math.random() * publishinghouseIds.length)],
         },

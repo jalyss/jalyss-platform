@@ -7,5 +7,6 @@ export type FilterArticle = {
   categories: string[];
   articleTypes: string[];
   publishingHouses: string[];
+  authors: string[];
   skip:number
 };

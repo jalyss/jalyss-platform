@@ -26,11 +26,11 @@ export class ArticleService {
     return this.prisma.article.findMany({
       include: {
         ArticlesByBranch: true,
-        media:true,
-        cover:true,
-        publishingHouse:true,
-        category:true,
-        type:true
+        media: true,
+        cover: true,
+        publishingHouse: true,
+        category: true,
+        type: true
       },
     });
   }
@@ -38,7 +38,7 @@ export class ArticleService {
   async findAllByBranch(branchId: string, filters: FilterArticle) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!.id;
     let insideWhere = {};
-    let skip=0
+    let skip = 0
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
       console.log('=======> filter', filters);
@@ -54,7 +54,7 @@ export class ArticleService {
           };
         } else {
           //array
-          if (['categories', 'publishingHouses', 'articleTypes'].includes(key)) {
+          if (['categories', 'publishingHouses', 'articleTypes', 'authors'].includes(key)) {
             if (Array.isArray(value)) {
               insideWhere['article'] = {}
               switch (key) {
@@ -68,6 +68,13 @@ export class ArticleService {
                     in: value
                   }
                   break;
+                case 'authors':
+                  insideWhere ['article']['ArticleByAuthor']={}
+                  insideWhere ['article']['ArticleByAuthor']['some']={}
+                  insideWhere['article']['ArticleByAuthor']['some']['authorId'] = {
+                    in: value
+                  }
+                  break;
                 default:
                   insideWhere['article']['typeId'] = {
                     in: value
@@ -78,12 +85,12 @@ export class ArticleService {
               throw new HttpException(key + ' must be array', HttpStatus.BAD_REQUEST)
             }
           } else
-          //skip
-          if(key==='skip')
-            skip=Number(value)
+            //skip
+            if (key === 'skip')
+              skip = Number(value)
             //true or false
             else
-            insideWhere[key] = value;
+              insideWhere[key] = value;
         }
       });
       if (errors.length > 0) {
@@ -119,8 +126,8 @@ export class ArticleService {
         branchId,
       },
       include: {
-        article: { include: { category: true, publishingHouse: true, type: true,cover:true } }
-      },take:10,
+        article: { include: { category: true, publishingHouse: true, type: true, cover: true } }
+      }, take: 10,
       skip
     });
   }
@@ -131,7 +138,7 @@ export class ArticleService {
         id
       },
       include: {
-        article: { include: { category: true, publishingHouse: true, type: true ,cover:true} }
+        article: { include: { category: true, publishingHouse: true, type: true, cover: true } }
       }
 
     });

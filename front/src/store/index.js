@@ -4,6 +4,7 @@ import article from './article'
 import publishingHouse from './publishingHouse'
 import category from './category'
 import articleType from './articleType'
+import author from './author'
 
 
 export const store = configureStore({
@@ -11,7 +12,8 @@ export const store = configureStore({
      article,
      publishingHouse,
      articleType,
-     category
+     category,
+     author
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
