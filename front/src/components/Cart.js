@@ -1,5 +1,6 @@
 import React from "react";
 import { useCart } from "react-use-cart";
+import { BsBagXFill } from "react-icons/bs";
 
 function Cart() {
   const {
@@ -46,7 +47,7 @@ function Cart() {
 
                         <td className="align-middle">
                           <div className="d-flex flex-row">
-                            <button onClick={()=> updateItemQuantity(item.id, item.quantity - 1)}>-</button>
+                            <button onClick={() => updateItemQuantity(item.id, item.quantity - 1)}>-</button>
                             <input
                               id="form1"
                               min="0"
@@ -55,12 +56,18 @@ function Cart() {
                               type="number"
                               className="form-control form-control-sm"
                             />
-                            <button onClick={()=> updateItemQuantity(item.id, item.quantity + 1)}>+</button>
+                            <button onClick={() => updateItemQuantity(item.id, item.quantity + 1)}>+</button>
+
                           </div>
+
                         </td>
                         <td className="align-middle">
                           <p className="mb-0">TND {item.price}</p>
+                          <div >
+                            <BsBagXFill type="button" size="30px" color="black" />
+                          </div>
                         </td>
+
                       </tr>
                     ))}
                   </tbody>
@@ -87,7 +94,7 @@ function Cart() {
           </button>
         </div>
         <div>
-          <button className="offCanvas-btn2"  onClick={()=> emptyCart()} disabled={items.length===0?true:false}>
+          <button className="offCanvas-btn2" onClick={() => emptyCart()} disabled={items.length === 0 ? true : false}>
             <span className="label-btn"> CHECKOUT </span>
           </button>
         </div>

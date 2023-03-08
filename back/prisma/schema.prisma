@@ -135,6 +135,25 @@ model Article {
   ArticlesByBranch   ArticlesByBranch[]
   Supply             Supply[]
   media              MediaArticle[]
+  ArticleByAuthor    ArticleByAuthor[]
+}
+
+model Author {
+  id              String            @id @default(uuid())
+  nameAr          String
+  nameEn          String
+  biographyAr     String?
+  biographyEn     String?
+  ArticleByAuthor ArticleByAuthor[]
+}
+
+model ArticleByAuthor {
+  article   Article @relation(fields: [articleId], references: [id])
+  articleId String
+  author    Author  @relation(fields: [authorId], references: [id])
+  authorId  String
+
+  @@unique([authorId, articleId])
 }
 
 model ArticlesByBranch {

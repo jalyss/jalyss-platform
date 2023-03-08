@@ -1,7 +1,7 @@
 {
     "navbar": {
         "cart": "Your Cart",
-        "tot" : "0,00 TND",
+        "tot" : " TND ",
         "language":"Language",
         "devise":"Devise",
        

@@ -8,5 +8,6 @@ export const filterExample = {
   categories: ['string'],
   articleTypes: ['string'],
   publishingHouses: ['string'],
+  authors : ['string'],
   skip:0
 };

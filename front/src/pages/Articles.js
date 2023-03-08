@@ -8,6 +8,7 @@ import { fetchArticles, fetchArticlesByBranch } from '../store/article'
 import { fetchArticleTypes } from '../store/articleType'
 import category, { fetchCategories } from '../store/category'
 import { fetchPublishingHouses } from '../store/publishingHouse'
+import { fetchAuthors } from '../store/author'
 import { identifier } from '../constants/identifier/identifier'
 import Accordion from '../components/Accordion'
 import '../assets/styles/filters.css'
@@ -18,12 +19,13 @@ import DocumentMeta from "react-document-meta";
 function Articles() {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
-  const meta=useMeta(t('articles.pageName'),t('articles.pageDescription'))
+  const meta = useMeta(t('articles.pageName'), t('articles.pageDescription'))
 
   const { categoryId } = useParams()
   const articleStore = useSelector((state) => state.article)
   const categoryStore = useSelector((state) => state.category)
   const publishingHouseStore = useSelector((state) => state.publishingHouse)
+  const authorStore=useSelector((state)=> state.author)
   const articleTypeStore = useSelector((state) => state.articleType)
 
 
@@ -33,6 +35,7 @@ function Articles() {
     categories: [],
     publishingHouses: [],
     articleTypes: [],
+    authors: [],
     min: null,
     max: null,
   })
@@ -45,12 +48,14 @@ function Articles() {
     dispatch(fetchCategories())
     dispatch(fetchPublishingHouses())
     dispatch(fetchArticleTypes())
+    dispatch(fetchAuthors())
+
     if (categoryId) {
       setFilters((Filters) => ({ ...Filters, categories: [categoryId] }))
     }
   }, [categoryId, dispatch])
 
-  
+
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -71,15 +76,15 @@ function Articles() {
                       onChange={(e) => {
                         e.target.checked === true
                           ? setFilters((Filter) => ({
-                              ...Filter,
-                              categories: [...Filter.categories, element.id],
-                            }))
+                            ...Filter,
+                            categories: [...Filter.categories, element.id],
+                          }))
                           : setFilters((Filter) => ({
-                              ...Filter,
-                              categories: Filter.categories.filter(
-                                (elem, j) => elem !== element.id
-                              ),
-                            }))
+                            ...Filter,
+                            categories: Filter.categories.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }))
                       }}
                     />
                     <label className="form-check-label">
@@ -103,18 +108,18 @@ function Articles() {
                       onChange={(e) => {
                         e.target.checked === true
                           ? setFilters((Filter) => ({
-                              ...Filter,
-                              articleTypes: [
-                                ...Filter.articleTypes,
-                                element.id,
-                              ],
-                            }))
+                            ...Filter,
+                            articleTypes: [
+                              ...Filter.articleTypes,
+                              element.id,
+                            ],
+                          }))
                           : setFilters((Filter) => ({
-                              ...Filter,
-                              articleTypes: Filter.articleTypes.filter(
-                                (elem, j) => elem !== element.id
-                              ),
-                            }))
+                            ...Filter,
+                            articleTypes: Filter.articleTypes.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }))
                       }}
                     />
                     <label className="form-check-label">
@@ -139,19 +144,19 @@ function Articles() {
                         onChange={(e) => {
                           e.target.checked === true
                             ? setFilters((Filter) => ({
-                                ...Filter,
-                                publishingHouses: [
-                                  ...Filter.publishingHouses,
-                                  element.id,
-                                ],
-                              }))
+                              ...Filter,
+                              publishingHouses: [
+                                ...Filter.publishingHouses,
+                                element.id,
+                              ],
+                            }))
                             : setFilters((Filter) => ({
-                                ...Filter,
-                                publishingHouses:
-                                  Filter.publishingHouses.filter(
-                                    (elem, j) => elem !== element.id
-                                  ),
-                              }))
+                              ...Filter,
+                              publishingHouses:
+                                Filter.publishingHouses.filter(
+                                  (elem, j) => elem !== element.id
+                                ),
+                            }))
                         }}
                       />
                       <label className="form-check-label">{element.name}</label>
@@ -161,8 +166,44 @@ function Articles() {
               </>
             }
           />
+
+          <Accordion
+            title='Authors'
+            content={
+              <>
+                {authorStore.authors.items.map(
+                  (element, i) => (
+                    <div className={`d-flex align-items-center`} key={i}>
+                      <input
+                        className="form-check-input m-2"
+                        type="checkbox"
+                        onChange={(e) => {
+                          e.target.checked === true
+                            ? setFilters((Filter) => ({
+                              ...Filter,
+                              authors: [
+                                ...Filter.authors,
+                                element.id,
+                              ],
+                            }))
+                            : setFilters((Filter) => ({
+                              ...Filter,
+                              authors:
+                                Filter.authors.filter(
+                                  (elem, j) => elem !== element.id
+                                ),
+                            }))
+                        }}
+                      />
+                      <label className="form-check-label">{element.nameEn}:{element.nameAr}</label>
+                    </div>
+                  )
+                )}
+              </>
+            }
+          />
         </div>
-            
+
         <div className="d-flex flex-wrap px-3 ">
           {articleStore.articles.items.map((element, index) => {
             return <ArticleCard key={index} article={element} />

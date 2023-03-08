@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RxAvatar } from "react-icons/rx";
-import { RiShoppingCart2Line } from "react-icons/ri";
+
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/category";
@@ -19,6 +19,7 @@ function Header() {
   const {
     isEmpty,
     totalItems,
+    cartTotal,
 } = useCart();
   const categoryStore = useSelector((state) => state.category);
   const [showArticleMenu, setShowArticleMenu] = useState(false);
@@ -79,9 +80,9 @@ function Header() {
               value={currentDevise}
               onChange={onChangeDevise}
               data={[
-                { label: "TND", value: "eur" },
+                { label: "TND", value: "tnd" },
                 { label: "MAD", value: "mad" },
-                { label: "EUR", value: "tnd" },
+                { label: "EUR", value: "eur" },
                 { label: "USD", value: "usd" },
               ]}
               helper={t("navbar.devise")}
@@ -109,7 +110,7 @@ function Header() {
                 <Offcanvas.Header closeButton>
                   <Offcanvas.Title>
                     <BiCartAdd size="30px" color="purple" />
-                    {t("Offcanvas.title")}
+                    {t("offCanvas.title")}
                   </Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
@@ -125,7 +126,7 @@ function Header() {
             </div>
             <div className="text-white mx-2">
               <p className="m-0 text-right">{t("navbar.cart")}</p>
-              <p className="m-0">{t("navbar.tot")}</p>
+              <p className="m-0">{cartTotal} {t('navbar.tot')} </p>
             </div>
           </div>
         </div>
