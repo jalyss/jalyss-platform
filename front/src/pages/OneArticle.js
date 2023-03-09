@@ -19,6 +19,8 @@ import '../assets/styles/book.css'
 import useMeta from '../hooks/useMeta'
 import DocumentMeta from 'react-document-meta'
 
+import { useCart } from 'react-use-cart';
+
 function OneArticle() {
   const dispatch = useDispatch()
   const articleStore = useSelector((state) => state.article)
@@ -26,6 +28,7 @@ function OneArticle() {
   const { t, i18n } = useTranslation()
   const { articleId } = useParams()
   const [meta, setMeta] = useState({ title: '', description: '' })
+  const { addItem } = useCart();
   useEffect(() => {
     dispatch(fetchArticleByBranch(articleId))
     // .then(res=>{if(!res.error){
@@ -61,36 +64,36 @@ function OneArticle() {
             <p className="mt-2">{t('OneArticle.ref')}</p>
             <p className="mt-2">{t('OneArticle.info')}</p>
             <TableContainer sx={{ width: 400 }} component={Paper}>
-              <Table  aria-label="simple table">
+              <Table aria-label="simple table">
                 <TableBody>
-                    <TableRow
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell className="fw-bold" align="right">{t('OneArticle.publishingHouse')}</TableCell>
-                      <TableCell  align="right">{article?.article?.publishingHouse.name}</TableCell>
-                    </TableRow>
-                    <TableRow
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell className="fw-bold" align="right" >{t('OneArticle.category')}</TableCell>
-                      <TableCell  align="right">{article?.article?.category.nameAr}</TableCell>
-                    </TableRow>
-                    <TableRow
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell className="fw-bold" align="right">{t('OneArticle.weight')}</TableCell>
-                      <TableCell  align="right">{article?.article?.weight}</TableCell>
-                    </TableRow>
-                    <TableRow
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell className="fw-bold" align="right">{t('OneArticle.nPages')}</TableCell>
-                      <TableCell  align="right">{article?.article?.pageNumber}</TableCell>
-                    </TableRow>
+                  <TableRow
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">{t('OneArticle.publishingHouse')}</TableCell>
+                    <TableCell align="right">{article?.article?.publishingHouse.name}</TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right" >{t('OneArticle.category')}</TableCell>
+                    <TableCell align="right">{article?.article?.category.nameAr}</TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">{t('OneArticle.weight')}</TableCell>
+                    <TableCell align="right">{article?.article?.weight}</TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">{t('OneArticle.nPages')}</TableCell>
+                    <TableCell align="right">{article?.article?.pageNumber}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
-          
+
             <div className="book-add-to-cart">
               <input
                 min="1"
@@ -100,9 +103,16 @@ function OneArticle() {
                 className="book-add-to-cart-input"
               />
 
-              <button className="book-add-to-cart-btn d-flex align-items-center">
+              <button className="book-add-to-cart-btn d-flex align-items-center"
+              
+              onClick={()=> addItem(article)}
+              
+              >
+                
                 <MdOutlineAddShoppingCart size="30px" color="p" />
+                
                 <p className="m-0">{t('OneArticle.addCart')}</p>
+
               </button>
             </div>
           </div>

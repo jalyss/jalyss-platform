@@ -27,7 +27,9 @@ function Articles() {
   const publishingHouseStore = useSelector((state) => state.publishingHouse)
   const authorStore=useSelector((state)=> state.author)
   const articleTypeStore = useSelector((state) => state.articleType)
-
+  const removeItemHandler=(item) =>{
+    dispatch({type:'cart_remove_item', payload: item})
+  }
 
 
   const lg = i18n.languages[0] === 'en'

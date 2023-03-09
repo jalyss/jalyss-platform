@@ -65,8 +65,10 @@ function Cart() {
                         </td>
                         <td className="align-middle">
                           <p className="mb-0">TND {item.price}</p>
-                          <div >
-                            <BsBagXFill type="button" size="30px" color="black" />
+                          <div  >
+                            <BsBagXFill type="button" size="30px" color="black" 
+                              onClick={() =>removeItem(item.id)}
+                            />
                           </div>
                         </td>
 
