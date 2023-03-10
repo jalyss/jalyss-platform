@@ -115,7 +115,7 @@ function Header() {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
 
-                  <Cart />
+                  <Cart handleClose={handleClose} />
 
                 </Offcanvas.Body>
               </Offcanvas>

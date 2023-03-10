@@ -20,7 +20,7 @@ function Checkout() {
       <form className="checkout-form">
         <div class="row">
           <div class="col mb-3 ">
-            <label for="firstname">الاسم الأول</label>
+            <label for="firstname">الاسم </label>
             <input
               class="form-control mt-2"
               required
@@ -29,30 +29,9 @@ function Checkout() {
               onChange={(event) => setFirstname(event.target.value)}
             />
           </div>
-          <div class="col mb-3 ">
-            <label for="lastname">الاسم الأخير</label>
-            <input
-              required
-              class="form-control mt-2"
-              id="lastname"
-              value={lastname}
-              onChange={(event) => setLastname(event.target.value)}
-            />
-          </div>
+
         </div>
-        <div class="row">
-          <div class="col mb-3">
-            <label for="email">عنوان البريد</label>
-            <input
-              required
-              type="email"
-              class="form-control mt-2"
-              id="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </div>
-        </div>
+
         <div class="row">
           <div class="col mb-3 ">
             <label for="phone">الهاتف</label>
@@ -72,6 +51,19 @@ function Checkout() {
               id="city"
               value={city}
               onChange={(event) => setCity(event.target.value)}
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col mb-3">
+            <label for="email">عنوان البريد</label>
+            <input
+              required
+              type="email"
+              class="form-control mt-2"
+              id="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </div>
         </div>

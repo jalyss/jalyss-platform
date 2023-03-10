@@ -1,8 +1,9 @@
 import React from "react";
 import { useCart } from "react-use-cart";
 import { BsBagXFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
-function Cart() {
+function Cart({handleClose}) {
   const {
     isEmpty,
     items,
@@ -11,7 +12,7 @@ function Cart() {
     removeItem,
     emptyCart,
   } = useCart();
-
+const navigate=useNavigate()
   
   return (
     <div>
@@ -93,13 +94,16 @@ function Cart() {
 
       <div className="double-btn">
         <div>
-          <button className="offCanvas-btn1">
-            <span className="label-btn">VIEW CART</span>
+          <button  onClick={()=>{
+            handleClose()
+            navigate('/checkout')}} className="offCanvas-btn1">
+            <span className="label-btn">CHECKOUT</span>
           </button>
         </div>
         <div>
-          <button className="offCanvas-btn2" onClick={() => emptyCart()} disabled={items.length === 0 ? true : false}>
-            <span className="label-btn"> CHECKOUT </span>
+          <button onClick={()=>{
+            emptyCart()}} className="offCanvas-btn2" >
+            <span className="label-btn"> Clear Cart </span>
           </button>
         </div>
       </div>
