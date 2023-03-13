@@ -69,6 +69,10 @@ model User {
   functionalAreaId     String?
   jobTitle             JobTitle?       @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
+  country              Country?        @relation(fields: [countryId], references: [id])
+  countryId            String?
+  city                 City?           @relation(fields: [cityId], references: [id])
+  cityId               String?
   Media                MediaUser[]
   Rating               Rating[]
   IntermediateCommands Command[]       @relation("intermediate")
@@ -210,7 +214,6 @@ model Command {
   clientName     String        @map("client_name")
   clientAddress  String        @map("client_address")
   clientTel      String        @map("client_tel")
-  clientEmail    String?       @map("client_email")
   confirm        Boolean       @default(false)
   delivered      Boolean       @default(false)
   paid           Boolean       @default(false)
@@ -219,7 +222,30 @@ model Command {
   branchId       String        @map("branch_id")
   intermediate   User?         @relation(name: "intermediate", fields: [intermediateId], references: [id])
   intermediateId String?       @map("intermediate_id")
+  country        Country?      @relation(fields: [countryId], references: [id])
+  countryId      String?
+  city           City?         @relation(fields: [cityId], references: [id])
+  cityId         String?
   commandLine    CommandLine[]
+}
+
+model Country {
+  id      String    @id @default(uuid())
+  nameAr  String
+  nameEn  String
+  City    City[]
+  Command Command[]
+  User    User[]
+}
+
+model City {
+  id        String    @id @default(uuid())
+  nameAr    String
+  nameEn    String
+  country   Country?   @relation(fields: [countryId], references: [id])
+  countryId String?
+  Command   Command[]
+  User      User[]
 }
 
 model Supply {

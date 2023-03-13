@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { validateOrReject } from 'class-validator';
 import { BranchesService } from 'src/domains/branches/branches.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommandDto } from './dto/create-command.dto';
@@ -13,9 +14,13 @@ export class CommandsService {
     private readonly branchService: BranchesService,
   ) {}
   async create(dto: CreateCommandDto, branchId: string) {
+    validateOrReject(dto);
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
     );
+    if(!dto.commandLine){
+      throw new HttpException("don't have items", HttpStatus.BAD_REQUEST)
+    }
     return await this.prisma.command.create({
       data: {
         ...dto,
