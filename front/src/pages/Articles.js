@@ -41,6 +41,7 @@ function Articles() {
     min: null,
     max: null,
   })
+  
 
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }))
@@ -208,7 +209,7 @@ function Articles() {
 
         <div className="d-flex flex-wrap px-3 ">
           {articleStore.articles.items.map((element, index) => {
-            return <ArticleCard key={index} article={element} />
+            return <ArticleCard key={index} article={element}  />
           })}
         </div>
       </div>
