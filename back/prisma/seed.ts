@@ -22,7 +22,43 @@ async function main() {
       }),
     );
   }
+  //create dummy country
+  let country1 = await prisma.country.create({
+    data: {
+      nameAr: 'تونس ',
+      nameEn: ' Tunisia',
+      
+    },
+  });
 
+  let country2 = await prisma.country.create({
+    data: {
+      nameAr: 'المغرب',
+      nameEn: ' Marroc',
+ 
+    },
+
+  });
+  let city1 = await prisma.city.create({
+    data: {
+      nameAr: 'تونس',
+      nameEn: 'Tunis',
+      countryId:country1.id
+ 
+    },
+
+  });
+  let city2 = await prisma.city.create({
+    data: {
+      nameAr: 'صفاقس',
+      nameEn: 'Sfax',
+      countryId:country1.id
+ 
+    },
+
+  });
+  let countryIds=[country1.id,country2.id]
+  
   //create dummy author
   let author1 = await prisma.author.create({
     data: {

@@ -14,13 +14,15 @@ export class CommandsService {
     private readonly branchService: BranchesService,
   ) {}
   async create(dto: CreateCommandDto, branchId: string) {
-    validateOrReject(dto);
+    // validateOrReject(dto);
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
     );
-    if(!dto.commandLine){
-      throw new HttpException("don't have items", HttpStatus.BAD_REQUEST)
-    }
+    console.log(branchId,branch.id);
+    
+    // if(!dto.commandLine){
+    //   throw new HttpException("don't have items", HttpStatus.BAD_REQUEST)
+    // }
     return await this.prisma.command.create({
       data: {
         ...dto,
