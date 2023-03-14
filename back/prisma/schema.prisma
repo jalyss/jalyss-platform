@@ -242,8 +242,8 @@ model City {
   id        String    @id @default(uuid())
   nameAr    String
   nameEn    String
-  country   Country?   @relation(fields: [countryId], references: [id])
-  countryId String?
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId String
   Command   Command[]
   User      User[]
 }

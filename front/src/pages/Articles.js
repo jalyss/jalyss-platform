@@ -198,7 +198,7 @@ function Articles() {
                             }))
                         }}
                       />
-                      <label className="form-check-label">{element.nameEn}:{element.nameAr}</label>
+                      <label className="form-check-label">{element.nameEn}({element.nameAr})</label>
                     </div>
                   )
                 )}
