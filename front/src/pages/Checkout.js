@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import DocumentMeta from 'react-document-meta'
 import { useTranslation } from 'react-i18next'
 import useMeta from '../hooks/useMeta'
@@ -14,7 +15,7 @@ import { fetchCities } from '../store/city'
 
 function Checkout({ }) {
   const { t, i18n } = useTranslation()
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const countryStore = useSelector((state) => state.country)
   const cityStore = useSelector((state) => state.city)
@@ -62,11 +63,11 @@ function Checkout({ }) {
       )
   };
 
-useEffect(()=>{
-  if(commandStore.command){
-    navigate(`/command/${commandStore.command.id}`)
-  }
-},[commandStore.command])
+  useEffect(() => {
+    if (commandStore.command) {
+      navigate(`/command/${commandStore.command.id}`)
+    }
+  }, [commandStore.command])
   console.log(commandStore.command);
   return (
     <div className="d-flex p-4">
@@ -79,7 +80,7 @@ useEffect(()=>{
               class="form-control mt-2"
               required
               id="clientName"
-              value={command?.clientName}
+              value={command?.className}
               name='clientName'
               onChange={handleChange}
 
@@ -88,6 +89,25 @@ useEffect(()=>{
           </div>
 
         </div>
+
+        <div class="row">
+          <div class="col mb-3 ">
+            <label for="clientEmail" >بريد إلكتروني <span style={{ color: 'red' }}>*</span></label>
+
+            <input
+              class="form-control mt-2"
+              required
+              id="clientEmail"
+              value={command?.clientEmail}
+              name='clientEmail'
+              onChange={handleChange}
+
+            />
+
+          </div>
+
+        </div>
+
 
         <div class="row">
           <div class="col mb-3 ">
@@ -155,15 +175,19 @@ useEffect(()=>{
         <input type='checkbox' id='delivery' checked={command?.hasDelivery} onChange={handleChecked} />
 
         <div className="w-100 d-flex justify-content-center">
-          <button
-            type='submit'
-            className="confirm-button mt-3"
-            onSubmit={submitCommand}
+          
+            <button
 
-            disabled={items.length === 0 ? true : false}
-          >
-            <span className="label-btn">اتمام الطلب</span>
-          </button>
+              type='submit'
+              className="confirm-button mt-3"
+              onSubmit={submitCommand}
+
+              disabled={items.length === 0 ? true : false}
+            >
+
+              <span className="label-btn">اتمام الطلب</span>
+            </button>
+          
         </div>
       </form>
 

@@ -10,6 +10,7 @@ import OneArticle from '../pages/OneArticle'
 import Profile from '../pages/Profile'
 import Signup from '../pages/Signup'
 import Checkout from '../pages/Checkout'
+import Invoice from '../pages/Invoice'
 
 function Router() {
     return (
@@ -26,6 +27,7 @@ function Router() {
                         <Route path="checkout" element={<Checkout />} />
                         <Route path="login" element={<Login />} />
                         <Route path="signup" element={<Signup />} />
+                        <Route path="invoice" element={<Invoice />} />
                         <Route path="*" element={<NoPage />} />
                     </Route>
                     

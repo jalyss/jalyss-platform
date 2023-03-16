@@ -15,6 +15,8 @@ export class CreateCommandDto {
     @ApiProperty({ required: true })
     clientTel: string
     @ApiProperty({ required: true })
+    clientEmail: string
+    @ApiProperty({ required: true })
     delivered: boolean
     @ApiProperty({ required: true })
     paid: boolean
