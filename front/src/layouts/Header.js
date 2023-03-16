@@ -92,8 +92,14 @@ function Header() {
           <div className={`d-flex align-items-center`}>
             <RxAvatar size="30px" color="white" />
             <div className="text-white mx-2">
-              <p className="m-0 text-right">{t("navbar.account.profile")}</p>
-              <p className="m-0">{t("navbar.account.signup")}</p>
+              <a href="/Login" className="m-0 text-right">
+                {t("navbar.account.profile")}
+                
+                </a>
+              <a href="/Signup" className="m-0" >
+                {t("navbar.account.signup")}
+                
+                </a>
             </div>
           </div>
 
