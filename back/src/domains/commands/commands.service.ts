@@ -23,6 +23,7 @@ export class CommandsService {
     // if(!dto.commandLine){
     //   throw new HttpException("don't have items", HttpStatus.BAD_REQUEST)
     // }
+    
     return await this.prisma.command.create({
       data: {
         ...dto,
