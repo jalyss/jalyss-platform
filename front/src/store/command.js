@@ -7,14 +7,14 @@ export const fetchCommands = createAsyncThunk("commands/commands", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/commands/TUN`);
   return response.data;
   });
-export const fetchCommand = createAsyncThunk("commands/commands", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/commands/TUN/${id}`);
+export const fetchCommand = createAsyncThunk("commands/command", async (id) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/commands/one/${id}`);
   return response.data;
   });
 
-export const createCommand= createAsyncThunk("commands/commands", async (body,dispatch) => {
+export const createCommand= createAsyncThunk("commands/createCommand", async (body,{dispatch}) => {
   const response = await axios.post(`${config.API_ENDPOINT}/commands/TUN/`,body);
- dispatch(fetchCommand(response.id)) // for dispath the result on state.command to see its data in the next page after checkout
+ dispatch(fetchCommand(response.data.id)) // for dispath the result on state.command to see its data in the next page after checkout
   return response.data;
   });
 

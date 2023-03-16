@@ -214,6 +214,7 @@ model Command {
   clientName     String        @map("client_name")
   clientAddress  String        @map("client_address")
   clientTel      String        @map("client_tel")
+  clientEmail    String        @map("client_email")
   confirm        Boolean       @default(false)
   delivered      Boolean       @default(false)
   paid           Boolean       @default(false)
@@ -242,8 +243,8 @@ model City {
   id        String    @id @default(uuid())
   nameAr    String
   nameEn    String
-  country   Country?   @relation(fields: [countryId], references: [id])
-  countryId String?
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId String
   Command   Command[]
   User      User[]
 }

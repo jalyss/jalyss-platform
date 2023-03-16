@@ -1,42 +1,56 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import DocumentMeta from 'react-document-meta'
 import { useTranslation } from 'react-i18next'
 import useMeta from '../hooks/useMeta'
 import '../assets/styles/checkout.css'
 import { useCart } from 'react-use-cart'
 import { createCommand, fetchCommands } from '../store/command'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showErrorToast, showSuccessToast } from '../utils/toast'
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import { FormControlLabel, Radio } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { fetchCountries } from '../store/country'
+import { fetchCities } from '../store/city'
 
 function Checkout({ }) {
   const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const [clientAddress, setClientAddress] = useState('')
-  const [clientName, setClientName] = useState('')
-  const [country, setCountry] = useState('')
-  const [clientTel, setClientTel] = useState('')
-  const [city, setCity] = useState('')
-  const [delivered, setDelivered] = useState('')
-
+  const countryStore = useSelector((state) => state.country)
+  const cityStore = useSelector((state) => state.city)
+  const commandStore = useSelector((state) => state.command)
   const { items, cartTotal, updateItemQuantity } = useCart()
-  console.log('items', items);
-  const submitCommand = async (event) => {
-    event.preventDefault();
+
+  const [command, setCommand] = useState({ hasDelivery: true })
+
+  useEffect(() => {
+    dispatch(fetchCountries())
+  }, [])
+  useEffect(() => {
+    if (command.countryId)
+      dispatch(fetchCities(command?.countryId))
+  }, [command?.countryId])
+
+  useEffect(() => {
     const commandLine = items.map((item, i) => ({
       articleByBranchId: item.id,
       quantity: item.quantity
-    })) 
-    dispatch(createCommand({
-      clientName,
-      clientTel,
-      clientAddress,
-      commandLine
-      //plz add the check box of hasDelivery
-      //country,  // this must be Id
-      //city // this must be Id
     }))
+    setCommand({ ...command, commandLine })
+  }, [items])
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setCommand((Command) => ({ ...Command, [name]: value }))
+  }
+  const handleChecked = (e) => {
+    const { checked } = e.target
+    setCommand((Command) => ({ ...Command, hasDelivery: checked }))
+  }
+
+  const submitCommand = async (event) => {
+    event.preventDefault();
+    dispatch(createCommand(command))
       .then(res => {
         if (!res.error) {
           showSuccessToast(t('command.created'))
@@ -49,6 +63,12 @@ function Checkout({ }) {
       )
   };
 
+  useEffect(() => {
+    if (commandStore.command) {
+      navigate(`/command/${commandStore.command.id}`)
+    }
+  }, [commandStore.command])
+  console.log(commandStore.command);
   return (
     <div className="d-flex p-4">
       <form className="checkout-form" onSubmit={submitCommand}>
@@ -60,14 +80,34 @@ function Checkout({ }) {
               class="form-control mt-2"
               required
               id="clientName"
-              value={clientName}
-              onChange={(event) => setClientName(event.target.value)}
+              value={command?.className}
+              name='clientName'
+              onChange={handleChange}
 
             />
 
           </div>
 
         </div>
+
+        <div class="row">
+          <div class="col mb-3 ">
+            <label for="clientEmail" >بريد إلكتروني <span style={{ color: 'red' }}>*</span></label>
+
+            <input
+              class="form-control mt-2"
+              required
+              id="clientEmail"
+              value={command?.clientEmail}
+              name='clientEmail'
+              onChange={handleChange}
+
+            />
+
+          </div>
+
+        </div>
+
 
         <div class="row">
           <div class="col mb-3 ">
@@ -77,64 +117,77 @@ function Checkout({ }) {
               type="tel"
               class="form-control mt-2"
               id="clientTel"
-              value={clientTel}
-              onChange={(event) => setClientTel(event.target.value)}
+              value={command?.clientTel}
+              name='clientTel'
+              onChange={handleChange}
             />
           </div>
           <div class="col mb-3 ">
             <label for="clientAddress">العنوان<span style={{ color: 'red' }}>*</span></label>
             <input
               required
+              name='clientAddress'
               class="form-control mt-2"
               id="clientAddress"
-              value={clientAddress}
-              onChange={(event) => setClientAddress(event.target.value)}
+              value={command?.clientAddress}
+              onChange={handleChange}
             />
           </div>
         </div>
         <div class="row">
           <div class="col mb-3 ">
             <label for="country">البلد</label>
-            <input
-              // this must be autocomplete or select from array of country fetched from database
-              type="tel"
+            <select
+              name='countryId'
               class="form-control mt-2"
               id="country"
-              value={country}
-              onChange={(event) => setCountry(event.target.value)}
-            />
+              value={command?.countryId}
+              onChange={handleChange}>
+              <option value={null} >--حدد الدولة--</option>
+              {countryStore.countries.items.map(item => (
+
+                <option value={item.id} >{item.nameAr}</option>
+
+              ))}
+
+            </select>
           </div>
+
           <div class="col mb-3 ">
             <label for="city">المدينة</label>
-            <input
-              // this must be autocomplete or select from array of country fetched from database
+            <select
+              name='cityId'
               class="form-control mt-2"
               id="city"
-              value={city}
-              onChange={(event) => setCity(event.target.value)}
-            />
+              value={command?.cityId}
+              onChange={handleChange}
+            >
+              <option value={null}>--حدد الدولة--</option>
+              {cityStore.cities.items.map(item => (
+                <option value={item.id}>{item.nameAr}</option>
+              ))}
+
+
+            </select>
           </div>
         </div>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
-          name="radio-buttons-group"
-        >
-          <FormControlLabel value="delivered" control={<Radio />} label="Delivery" />
-          <FormControlLabel value="notDelivered" control={<Radio />} label="Not Delivery" />
-
-        </RadioGroup>
-
+        <label for="delivery">{t('checkout.delivery.label')}</label>
+        <input type='checkbox' id='delivery' checked={command?.hasDelivery} onChange={handleChecked} />
 
         <div className="w-100 d-flex justify-content-center">
-          <button
-            type='submit'
-            className="confirm-button mt-3"
-            onClick={submitCommand}
-            disabled={items.length === 0 ? true : false}
-          >
-            <span className="label-btn">اتمام الطلب</span>
-          </button>
+          
+            <button
+
+              type='submit'
+              className="confirm-button mt-3"
+              onSubmit={submitCommand}
+
+              disabled={items.length === 0 ? true : false}
+            >
+
+              <span className="label-btn">اتمام الطلب</span>
+            </button>
+          
         </div>
       </form>
 
