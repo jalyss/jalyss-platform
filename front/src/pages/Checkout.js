@@ -27,7 +27,7 @@ function Checkout({ }) {
     const commandLine = items.map((item, i) => ({
       articleByBranchId: item.id,
       quantity: item.quantity
-    }))
+    })) 
     dispatch(createCommand({
       clientName,
       clientTel,
