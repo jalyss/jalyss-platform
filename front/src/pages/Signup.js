@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import '../assets/styles/signup.css'
 
 function Signup() {
@@ -15,8 +16,9 @@ function Signup() {
   const [jobName, setJobName] = useState('')
   const [accountBalance, setAccountBalance] = useState('')
   const [category, setCategory] = useState('')
+  const [isShowPassword, setIsShowPassword] = useState(false)
 
-  const login = () => {
+  const signup = () => {
     console.log({
       email,
       clientName,
@@ -51,7 +53,7 @@ function Signup() {
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Signup</h2>
-      <form className="checkout-form" onSubmit={login}>
+      <form className="checkout-form" onSubmit={signup}>
         <div className="d-flex">
           <div className="position-relative">
             <label id="image">الصورة</label>
@@ -129,14 +131,26 @@ function Signup() {
                 <label for="password">
                   كلمة المرور <span style={{ color: 'red' }}>*</span>
                 </label>
-                <input
-                  class="form-control mt-2"
-                  required
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                />
+                <div className="position-relative">
+                  <input
+                    class="form-control mt-2"
+                    required
+                    id="password"
+                    type={isShowPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                  <div
+                    className="icon-eye"
+                    onClick={() => setIsShowPassword(!isShowPassword)}
+                  >
+                    {isShowPassword ? (
+                      <AiOutlineEyeInvisible />
+                    ) : (
+                      <AiOutlineEye />
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -253,7 +267,11 @@ function Signup() {
         </div>
 
         <div className="w-100 d-flex justify-content-center">
-          <button type="submit" className="confirm-button mt-3" onClick={login}>
+          <button
+            type="submit"
+            className="confirm-button mt-3"
+            onClick={signup}
+          >
             <span className="label-btn">تسجيل</span>
           </button>
         </div>
