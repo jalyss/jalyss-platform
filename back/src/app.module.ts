@@ -12,10 +12,12 @@ import { BranchesModule } from './domains/branches/branches.module';
 import { UsersModule } from './domains/users/users.module';
 import { MediasModule } from './domains/medias/medias.module';
 import { MediasService } from './domains/medias/medias.service';
+import { countriesModule } from './domains/country/countries.module';
+import { CitesModule } from './domains/cites/cities.module';
 
 
 @Module({
-  imports: [AuthModule, PrismaModule, ArticleModule, CommandsModule, BranchesModule,UsersModule,MediasModule],
+  imports: [AuthModule, PrismaModule, ArticleModule, CommandsModule, BranchesModule,UsersModule,MediasModule,countriesModule,CitesModule],
   controllers: [AppController],
   providers: [AppService, PrismaService,MediasService],
 })

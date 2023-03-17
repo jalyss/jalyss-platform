@@ -37,7 +37,7 @@ export class CommandsController {
     return this.commandsService.findAllByBranchIdentifier(branchId,filters);
   }
 
-  @Get(':id')
+  @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.commandsService.findOne(id);
   }
