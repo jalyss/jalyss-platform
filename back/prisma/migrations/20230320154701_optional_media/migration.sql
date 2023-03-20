@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Media" ALTER COLUMN "alt" DROP NOT NULL,
+ALTER COLUMN "description" DROP NOT NULL;

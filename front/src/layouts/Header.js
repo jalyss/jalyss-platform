@@ -14,13 +14,15 @@ import Cart from "../components/Cart";
 import { useCart } from "react-use-cart";
 
 function Header() {
+  const authStore = useSelector(state => state.auth)
+  const { me } = authStore
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const {
     isEmpty,
     totalItems,
     cartTotal,
-} = useCart();
+  } = useCart();
   const categoryStore = useSelector((state) => state.category);
   const [showArticleMenu, setShowArticleMenu] = useState(false);
   const currentLanguage = useMemo(() => i18n?.languages[0], [i18n?.languages]);
@@ -90,16 +92,27 @@ function Header() {
           </div>
 
           <div className={`d-flex align-items-center`}>
-            <RxAvatar size="30px" color="white" />
+            {authStore.me?.avatar?.path?
+            <img src={authStore.me.avatar.path} className="rounded-circle" style={{width:50}}/>
+            :<RxAvatar size="30px" color="white" />}
             <div className="text-white mx-2">
-              <a href="/Login" className="m-0 text-right">
-                {t("navbar.account.profile")}
-                
+              {authStore.me ?
+                <a href="/profile" className="m-0 text-right">
+                  {authStore.me.fullNameAr}
+
                 </a>
-              <a href="/Signup" className="m-0" >
-                {t("navbar.account.signup")}
-                
-                </a>
+                :
+                <>
+                  <a href="/login" className="m-0 text-right">
+                    {t("navbar.account.profile")}
+
+                  </a>
+                  <a href="/signup" className="m-0" >
+                    {t("navbar.account.signup")}
+
+                  </a>
+                </>
+              }
             </div>
           </div>
 
@@ -156,13 +169,13 @@ function Header() {
           </div>
         </div>
         <a href="/*" className="text-decoration-none text-color-black">
-          Space
+          {t("navbar.space")}
         </a>
         <a href="/*" className="text-decoration-none text-color-black">
-          Training
+          {t("navbar.training")}
         </a>
         <a href="/*" className="text-decoration-none text-color-black">
-          Blogs
+          {t("navbar.blogs")}
         </a>
       </div>
     </>

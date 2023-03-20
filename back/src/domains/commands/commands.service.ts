@@ -88,7 +88,9 @@ export class CommandsService {
         id,
       },
       include: {
-        commandLine: true,
+        commandLine: {include:{articleByBranch:{include:{article:true}}}},
+        country:true,
+        city:true
       },
     });
   }

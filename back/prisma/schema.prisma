@@ -275,9 +275,9 @@ model Media {
   id           String         @id @default(uuid())
   path         String
   type         String
-  alt          String
+  alt          String?
   extension    String
-  description  String
+  description  String?
   MediaUser    MediaUser[]
   MediaArticle MediaArticle[]
   User         User[]
