@@ -156,13 +156,13 @@ function Header() {
           </div>
         </div>
         <a href="/*" className="text-decoration-none text-color-black">
-          Space
+        {t("navbar.space")}
         </a>
         <a href="/*" className="text-decoration-none text-color-black">
-          Training
+        {t("navbar.training")}
         </a>
         <a href="/*" className="text-decoration-none text-color-black">
-          Blogs
+        {t("navbar.blogs")}
         </a>
       </div>
     </>

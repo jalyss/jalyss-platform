@@ -27,7 +27,7 @@ function Router() {
                         <Route path="checkout" element={<Checkout />} />
                         <Route path="login" element={<Login />} />
                         <Route path="signup" element={<Signup />} />
-                        <Route path="invoice" element={<Invoice />} />
+                        <Route path="invoice/invoiceId" element={<Invoice />} />
                         <Route path="*" element={<NoPage />} />
                     </Route>
                     

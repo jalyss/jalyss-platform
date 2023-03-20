@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import DocumentMeta from 'react-document-meta'
 import { useTranslation } from 'react-i18next'
 import useMeta from '../hooks/useMeta'
@@ -13,10 +13,12 @@ import { useNavigate } from 'react-router-dom'
 import { fetchCountries } from '../store/country'
 import { fetchCities } from '../store/city'
 
+
 function Checkout({ }) {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const {invoiceId}=useParams()
   const countryStore = useSelector((state) => state.country)
   const cityStore = useSelector((state) => state.city)
   const commandStore = useSelector((state) => state.command)
@@ -54,7 +56,9 @@ function Checkout({ }) {
       .then(res => {
         if (!res.error) {
           showSuccessToast(t('command.created'))
+          navigate(`invoice/${invoiceId}`)
           // must show the facture navigate to other page to see the command
+
         } else {
           console.log(res);
           showErrorToast(res.error.message)
@@ -175,19 +179,19 @@ function Checkout({ }) {
         <input type='checkbox' id='delivery' checked={command?.hasDelivery} onChange={handleChecked} />
 
         <div className="w-100 d-flex justify-content-center">
-          
-            <button
 
-              type='submit'
-              className="confirm-button mt-3"
-              onSubmit={submitCommand}
+          <button
 
-              disabled={items.length === 0 ? true : false}
-            >
+            type='submit'
+            className="confirm-button mt-3"
+            onSubmit={submitCommand}
 
-              <span className="label-btn">اتمام الطلب</span>
-            </button>
-          
+            disabled={items.length === 0 ? true : false}
+          >
+
+            <span className="label-btn">اتمام الطلب</span>
+          </button>
+
         </div>
       </form>
 

@@ -5,7 +5,10 @@ import navbarEn from '../constants/traductions/english/navbar.json'
 import footerAr from '../constants/traductions/arabic/footer.json'
 import footerEn from '../constants/traductions/english/footer.json'
 import oneArticleAr from '../constants/traductions/arabic/OneArticle.json'
-
+import oneArticleEn from '../constants/traductions/english/OneArticle.json'
+import noPageAr from "../constants/traductions/arabic/noPage.json";
+import noPageEn from "../constants/traductions/english/noPage.json";
+//import CheckoutAr from "../constants/traductions/arabic/";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -15,11 +18,11 @@ i18n
     // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
     resources: {
       en: {
-        translation:{...navbarEn,...footerEn}
+        translation:{...navbarEn,...footerEn,...oneArticleEn,...noPageEn}
       },
       ar:{
         translation: 
-            {...navbarAr,...footerAr,...oneArticleAr}
+            {...navbarAr,...footerAr,...oneArticleAr,...noPageAr}
           
       }
     },

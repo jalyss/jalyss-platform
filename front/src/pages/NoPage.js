@@ -23,7 +23,7 @@ function NoPage() {
             className="btn-go-home"
 
           >
-            GO BACK HOME
+            {t('noPage.goHome')}
           </a>
         </div>
 

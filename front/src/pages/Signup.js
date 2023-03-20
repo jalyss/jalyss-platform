@@ -1,41 +1,49 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import { createSignUp, fetchAuth, fetchSign_up, register } from '../store/signUp'
 import '../assets/styles/signup.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { showErrorToast } from '../utils/toast'
 
 function Signup() {
+  const dispatch = useDispatch()
+  const signUpStore= useSelector((state) => state.auth)
+
+  const [fullNameAr, setFullNameAr] = useState('')
+  const [fullNameEn, setFullNameEn] = useState('')
   const [email, setEmail] = useState('')
-  const [clientName, setClientName] = useState('')
-  const [country, setCountry] = useState('')
-  const [clientTel, setClientTel] = useState('')
+  const [address, setAddress] = useState('')
+
+  const [tel, setTel] = useState('')
   const [password, setPassword] = useState('')
-  const [clientAddress, setClientAddress] = useState('')
-  const [city, setCity] = useState('')
   const [educationLevel, setEducationLevel] = useState('')
   const [functionalArea, setFunctionalArea] = useState('')
-  const [jobName, setJobName] = useState('')
+  const [jobTitle, setJobTitle ] = useState('')
+  const [country, setCountry] = useState('')
+  const [city, setCity] = useState('')
   const [accountBalance, setAccountBalance] = useState('')
-  const [category, setCategory] = useState('')
+  
   const [isShowPassword, setIsShowPassword] = useState(false)
 
-  const signup = () => {
-    console.log({
-      email,
-      clientName,
-      country,
-      clientTel,
-      password,
-      clientAddress,
-      city,
-      educationLevel,
-      functionalArea,
-      jobName,
-      accountBalance,
-      category,
-    })
-  }
+  useEffect(() => {
+    dispatch(fetchAuth())
+  }, [])
 
   const [preview, setPreview] = useState(null)
+  const submitSignup = async (event) => {
+    event.preventDefault();
+    dispatch(register())
+      .then(res => {
+        if (!res.error) {
+          showSuccessToast(t('user.created'))
+        } else {
+          console.log(res);
+          showErrorToast(res.error.message)
+        }
+      }
+      )
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -50,10 +58,11 @@ function Signup() {
     }
   }
 
+  
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Signup</h2>
-      <form className="checkout-form" onSubmit={signup}>
+      <form className="checkout-form" onSubmit={submitSignup}>
         <div className="d-flex">
           <div className="position-relative">
             <label id="image">الصورة</label>
@@ -84,16 +93,32 @@ function Signup() {
           <div className="w-100">
             <div class="row">
               <div class="col mb-3 ">
-                <label for="clientName">
-                  الاسم <span style={{ color: 'red' }}>*</span>
+                <label for="fullNameAr">
+                الاسم بالعربية <span style={{ color: 'red' }}>*</span>
                 </label>
 
                 <input
                   class="form-control mt-2"
                   required
-                  id="clientName"
-                  value={clientName}
-                  onChange={(event) => setClientName(event.target.value)}
+                  id="fullNameAr"
+                  value={fullNameAr}
+                  onChange={(event) => setFullNameAr(event.target.value)}
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3 ">
+                <label for="fullNameEn">
+                الاسم بالإنجليزية <span style={{ color: 'red' }}>*</span>
+                </label>
+
+                <input
+                  class="form-control mt-2"
+                  required
+                  id="fullNameEn"
+                  value={fullNameEn}
+                  onChange={(event) => setFullNameEn(event.target.value)}
                 />
               </div>
             </div>
@@ -101,7 +126,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="email">
-                  عنوان البريد<span style={{ color: 'red' }}>*</span>
+                عنوان البريد الإلكتروني<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -113,16 +138,16 @@ function Signup() {
                 />
               </div>
               <div class="col mb-3 ">
-                <label for="clientTel">
+                <label for="tel">
                   الهاتف<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
                   type="tel"
                   class="form-control mt-2"
-                  id="clientTel"
-                  value={clientTel}
-                  onChange={(event) => setClientTel(event.target.value)}
+                  id="tel"
+                  value={tel}
+                  onChange={(event) => setTel(event.target.value)}
                 />
               </div>
             </div>
@@ -155,15 +180,15 @@ function Signup() {
             </div>
             <div class="row">
               <div class="col mb-3 ">
-                <label for="clientAddress">
+                <label for="address">
                   العنوان<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
                   class="form-control mt-2"
-                  id="clientAddress"
-                  value={clientAddress}
-                  onChange={(event) => setClientAddress(event.target.value)}
+                  id="address"
+                  value={address}
+                  onChange={(event) => setAddress(event.target.value)}
                 />
               </div>
             </div>
@@ -223,44 +248,20 @@ function Signup() {
                 />
               </div>
               <div class="col mb-3 ">
-                <label for="jobName">اسم الوظيفة</label>
+                <label for="jobTitle">اسم الوظيفة</label>
                 <input
                   class="form-control mt-2"
-                  id="jobName"
-                  value={jobName}
-                  onChange={(event) => setJobName(event.target.value)}
+                  id="jobTitle"
+                  value={jobTitle}
+                  onChange={(event) => setJobTitle (event.target.value)}
                 />
               </div>
             </div>
 
             <div class="row">
               <div class="col mb-3 ">
-                <label for="category">الفئة</label>
-                <RadioGroup
-                  onChange={(event) => setCategory(event.target.value)}
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  name="radio-buttons-group"
-                  id="category"
-                >
-                  <FormControlLabel
-                    value="fournisseur"
-                    control={<Radio />}
-                    label="Fournisseur"
-                    className="m-0"
-                  />
-                  <FormControlLabel
-                    value="partenaire"
-                    control={<Radio />}
-                    label="Partenaire"
-                    className="m-0"
-                  />
-                  <FormControlLabel
-                    value="intermediaire"
-                    control={<Radio />}
-                    label="Intermediaire"
-                    className="m-0"
-                  />
-                </RadioGroup>
+                
+               
               </div>
             </div>
           </div>
@@ -270,7 +271,7 @@ function Signup() {
           <button
             type="submit"
             className="confirm-button mt-3"
-            onClick={signup}
+            onSubmit={submitSignup}
           >
             <span className="label-btn">تسجيل</span>
           </button>
