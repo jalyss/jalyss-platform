@@ -22,7 +22,7 @@ function Checkout({ }) {
   const countryStore = useSelector((state) => state.country)
   const cityStore = useSelector((state) => state.city)
   const commandStore = useSelector((state) => state.command)
-  const { items, cartTotal, updateItemQuantity } = useCart()
+  const { items, cartTotal, updateItemQuantity,emptyCart } = useCart()
 
   const [command, setCommand] = useState({ hasDelivery: true })
 
@@ -56,9 +56,10 @@ function Checkout({ }) {
       .then(res => {
         if (!res.error) {
           showSuccessToast(t('command.created'))
-          navigate(`invoice/${invoiceId}`)
+          emptyCart()
           // must show the facture navigate to other page to see the command
-
+          
+         navigate(`/invoice/${res.payload.id}`)
         } else {
           console.log(res);
           showErrorToast(res.error.message)
@@ -67,12 +68,9 @@ function Checkout({ }) {
       )
   };
 
-  useEffect(() => {
-    if (commandStore.command) {
-      navigate(`/command/${commandStore.command.id}`)
-    }
-  }, [commandStore.command])
-  console.log(commandStore.command);
+
+  
+  
   return (
     <div className="d-flex p-4">
       <form className="checkout-form" onSubmit={submitCommand}>
@@ -166,7 +164,7 @@ function Checkout({ }) {
               value={command?.cityId}
               onChange={handleChange}
             >
-              <option value={null}>--حدد الدولة--</option>
+              <option value={null}>--حدد المدينة--</option>
               {cityStore.cities.items.map(item => (
                 <option value={item.id}>{item.nameAr}</option>
               ))}

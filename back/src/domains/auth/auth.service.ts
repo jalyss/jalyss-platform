@@ -34,21 +34,22 @@ export class AuthService {
         }
         return status;
     }
-    
+
     async login(loginUserDto: UserLogin): Promise<any> {
         // find user in db
         const user = await
             this.usersService.findByLogin(loginUserDto);
+        console.log(user, '============>');
 
         // generate and sign token
         const token = this._createToken(user);
 
         return token
-            // data: user
-        
+        // data: user
+
     }
 
-    private _createToken(args:FormatLogin): any {
+    private _createToken(args: FormatLogin): any {
         const user: FormatLogin = args;
         const Authorization = this.jwtService.sign(user);
         return {
@@ -67,9 +68,9 @@ export class AuthService {
     }
 
     async me(token: string) {
-        const payload = this.jwtService.decode(token) as any;
-        
-        
+        const payload = this.jwtService.decode(token, {}) as any;
+
+
         return new Promise((resolve, reject) => {
             resolve(payload);
         });

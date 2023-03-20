@@ -1,39 +1,39 @@
 import React, { useEffect, useState } from 'react'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import { createSignUp, fetchAuth, fetchSign_up, register } from '../store/signUp'
+import { register } from '../store/auth'
 import '../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { showErrorToast } from '../utils/toast'
+import { showErrorToast, showSuccessToast } from '../utils/toast'
+import { useTranslation } from 'react-i18next'
+import axios from 'axios'
 
 function Signup() {
   const dispatch = useDispatch()
-  const signUpStore= useSelector((state) => state.auth)
+  const { t, i18n } = useTranslation()
 
-  const [fullNameAr, setFullNameAr] = useState('')
-  const [fullNameEn, setFullNameEn] = useState('')
-  const [email, setEmail] = useState('')
-  const [address, setAddress] = useState('')
-
-  const [tel, setTel] = useState('')
-  const [password, setPassword] = useState('')
-  const [educationLevel, setEducationLevel] = useState('')
-  const [functionalArea, setFunctionalArea] = useState('')
-  const [jobTitle, setJobTitle ] = useState('')
-  const [country, setCountry] = useState('')
-  const [city, setCity] = useState('')
-  const [accountBalance, setAccountBalance] = useState('')
-  
   const [isShowPassword, setIsShowPassword] = useState(false)
-
-  useEffect(() => {
-    dispatch(fetchAuth())
-  }, [])
-
   const [preview, setPreview] = useState(null)
+  const [user, setUser] = useState({})
+  const [avatar, setAvatar] = useState(null)
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setUser((User) => ({ ...User, [name]: value }))
+  }
+  console.log(avatar);
   const submitSignup = async (event) => {
     event.preventDefault();
-    dispatch(register())
+    let aux = Object.assign({}, user)
+    if (avatar!==null) {
+      console.log('in if');
+      const image = new FormData()
+      image.append('file', avatar)
+      const response=await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/upload`, image)
+        aux.avatarId=response.data.id
+    }
+
+    dispatch(register(aux))
       .then(res => {
         if (!res.error) {
           showSuccessToast(t('user.created'))
@@ -47,18 +47,19 @@ function Signup() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
-    const reader = new FileReader()
+    // const reader = new FileReader()
+    // if (file) {
+    //   reader.readAsDataURL(file)
+    // }
+    // reader.onloadend = () => {
+    //   setPreview(reader.result)
+    // }
+    setPreview( URL.createObjectURL(file))
+    setAvatar(file)
 
-    reader.onloadend = () => {
-      setPreview(reader.result)
-    }
-
-    if (file) {
-      reader.readAsDataURL(file)
-    }
   }
 
-  
+
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Signup</h2>
@@ -69,7 +70,7 @@ function Signup() {
             <div class="image-upload">
               <img
                 src={
-                  preview ||
+                  preview ?preview:
                   'http://tsr-industrie.fr/wp-content/uploads/2016/04/ef3-placeholder-image.jpg'
                 }
                 alt=""
@@ -83,8 +84,12 @@ function Signup() {
             </div>
             {preview && (
               <button
+              type='button'
                 class="delete-button"
-                onClick={() => setPreview(undefined)}
+                onClick={() => {
+                  setPreview(null)
+                  setAvatar(null)
+                }}
               >
                 X
               </button>
@@ -94,15 +99,16 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="fullNameAr">
-                الاسم بالعربية <span style={{ color: 'red' }}>*</span>
+                  الاسم بالعربية <span style={{ color: 'red' }}>*</span>
                 </label>
 
                 <input
                   class="form-control mt-2"
                   required
+                  name='fullNameAr'
                   id="fullNameAr"
-                  value={fullNameAr}
-                  onChange={(event) => setFullNameAr(event.target.value)}
+                  value={user?.fullNameAr}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -110,15 +116,17 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="fullNameEn">
-                الاسم بالإنجليزية <span style={{ color: 'red' }}>*</span>
+                  الاسم بالإنجليزية <span style={{ color: 'red' }}>*</span>
                 </label>
 
                 <input
                   class="form-control mt-2"
                   required
                   id="fullNameEn"
-                  value={fullNameEn}
-                  onChange={(event) => setFullNameEn(event.target.value)}
+                  name="fullNameEn"
+                  pattern="^(\w\w+)\s(\w+)$"
+                  value={user?.fullNameEn}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -126,15 +134,16 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="email">
-                عنوان البريد الإلكتروني<span style={{ color: 'red' }}>*</span>
+                  عنوان البريد الإلكتروني<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
                   class="form-control mt-2"
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  name="email"
+                  value={user?.email}
+                  onChange={handleChange}
                 />
               </div>
               <div class="col mb-3 ">
@@ -146,8 +155,9 @@ function Signup() {
                   type="tel"
                   class="form-control mt-2"
                   id="tel"
-                  value={tel}
-                  onChange={(event) => setTel(event.target.value)}
+                  name='tel'
+                  value={user?.tel}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -156,24 +166,33 @@ function Signup() {
                 <label for="password">
                   كلمة المرور <span style={{ color: 'red' }}>*</span>
                 </label>
-                <div className="position-relative">
+                <div className=" d-flex  " >
                   <input
-                    class="form-control mt-2"
+                    style={{ width: '100%' }}
                     required
+                    className='form-control'
                     id="password"
+                    name='password'
                     type={isShowPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    value={user?.password}
+                    onChange={handleChange}
                   />
-                  <div
-                    className="icon-eye"
-                    onClick={() => setIsShowPassword(!isShowPassword)}
-                  >
-                    {isShowPassword ? (
-                      <AiOutlineEyeInvisible />
-                    ) : (
-                      <AiOutlineEye />
-                    )}
+                  <div className='position-relative w-0'>
+                    <div
+                      style={{
+                        left: i18n.languages[0] === 'ar' ? 15 : -25,
+                        top: 5,
+
+                      }}
+                      className="icon-eye"
+                      onClick={() => setIsShowPassword(!isShowPassword)}
+                    >
+                      {isShowPassword ? (
+                        <AiOutlineEyeInvisible />
+                      ) : (
+                        <AiOutlineEye />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -187,8 +206,9 @@ function Signup() {
                   required
                   class="form-control mt-2"
                   id="address"
-                  value={address}
-                  onChange={(event) => setAddress(event.target.value)}
+                  name="address"
+                  value={user?.address}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -200,8 +220,9 @@ function Signup() {
                   type="tel"
                   class="form-control mt-2"
                   id="country"
-                  value={country}
-                  onChange={(event) => setCountry(event.target.value)}
+                  name="countryId"
+                  value={user?.countryId}
+                  onChange={handleChange}
                 />
               </div>
               <div class="col mb-3 ">
@@ -210,8 +231,9 @@ function Signup() {
                   // this must be autocomplete or select from array of country fetched from database
                   class="form-control mt-2"
                   id="city"
-                  value={city}
-                  onChange={(event) => setCity(event.target.value)}
+                  name="cityId"
+                  value={user?.cityId}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -222,8 +244,9 @@ function Signup() {
                 <input
                   class="form-control mt-2"
                   id="functionalArea"
-                  value={functionalArea}
-                  onChange={(event) => setFunctionalArea(event.target.value)}
+                  name="functionalAreaId"
+                  value={user?.functionalAreaId}
+                  onChange={handleChange}
                 />
               </div>
               <div class="col mb-3 ">
@@ -231,37 +254,31 @@ function Signup() {
                 <input
                   class="form-control mt-2"
                   id="educationLevel"
-                  value={educationLevel}
-                  onChange={(event) => setEducationLevel(event.target.value)}
+                  name="educationLevelId"
+                  value={user?.educationLevelId}
+                  onChange={handleChange}
                 />
               </div>
             </div>
 
             <div class="row">
-              <div class="col mb-3 ">
-                <label for="accountBalance">رصيد حسابك</label>
-                <input
-                  class="form-control mt-2"
-                  id="accountBalance"
-                  value={accountBalance}
-                  onChange={(event) => setAccountBalance(event.target.value)}
-                />
-              </div>
+
               <div class="col mb-3 ">
                 <label for="jobTitle">اسم الوظيفة</label>
                 <input
                   class="form-control mt-2"
                   id="jobTitle"
-                  value={jobTitle}
-                  onChange={(event) => setJobTitle (event.target.value)}
+                  name="jobTitleId"
+                  value={user?.jobTitleId}
+                  onChange={handleChange}
                 />
               </div>
             </div>
 
             <div class="row">
               <div class="col mb-3 ">
-                
-               
+
+
               </div>
             </div>
           </div>

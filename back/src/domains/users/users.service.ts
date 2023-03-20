@@ -87,6 +87,7 @@ export class UsersService {
       where: { email },
       include: {
         Media: true,
+        avatar:true
       },
     });
 

@@ -8,7 +8,7 @@ import author from './author'
 import country from './country'
 import city from './city'
 import command from './command'
-import signUp from './signUp' 
+import auth from './auth' 
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +20,7 @@ export const store = configureStore({
     country,
     city,
     command,
-    signUp
+    auth
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

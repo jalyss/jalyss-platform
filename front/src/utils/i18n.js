@@ -1,5 +1,5 @@
 import i18n from "i18next";
-import {  initReactI18next } from "react-i18next";
+import { initReactI18next } from "react-i18next";
 import navbarAr from '../constants/traductions/arabic/navbar.json'
 import navbarEn from '../constants/traductions/english/navbar.json'
 import footerAr from '../constants/traductions/arabic/footer.json'
@@ -18,15 +18,16 @@ i18n
     // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
     resources: {
       en: {
-        translation:{...navbarEn,...footerEn,...oneArticleEn,...noPageEn}
+        translation:
+          { ...navbarEn, ...footerEn, ...oneArticleEn, ...noPageEn }
       },
-      ar:{
-        translation: 
-            {...navbarAr,...footerAr,...oneArticleAr,...noPageAr}
-          
+      ar: {
+        translation:
+          { ...navbarAr, ...footerAr, ...oneArticleAr, ...noPageAr }
+
       }
     },
-    lng: localStorage.getItem('lg')?localStorage.getItem('lg'):"ar", // if you're using a language detector, do not define the lng option
+    lng: localStorage.getItem('lg') ? localStorage.getItem('lg') : "ar", // if you're using a language detector, do not define the lng option
     fallbackLng: "en",
 
     interpolation: {
