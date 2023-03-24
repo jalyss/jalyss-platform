@@ -183,18 +183,8 @@ function Footer() {
                 </p>
               </li>
               <li className="mb-2">
-                <p className="text-decoration-none text-color-grey m-0">
-                  الجموسي
-                </p>
-              </li>
-              <li className="mb-2">
                 <p className="text-decoration-none text-color-grey  m-0">
-                  3000 صفاقس
-                </p>
-              </li>
-              <li className="mb-2">
-                <p className="text-decoration-none text-color-grey  m-0">
-                  Tunisia
+                {t('storeInfo.tunisia')}
                 </p>
               </li>
               <li className="mb-2">
@@ -210,7 +200,7 @@ function Footer() {
             </ul>
           </MDBCol>
           <MDBCol>
-            <h5 className="mb-3 text-color-white">إنضم إلى القائمة البريدية</h5>
+            <h5 className="mb-3 text-color-white">{t('joinMailingList')}</h5>
             <ul className="p-0 text-color-grey" id="footer_account_list">
               <li className="mb-2">
                 <p className="text-decoration-none text-color-grey">
@@ -220,7 +210,7 @@ function Footer() {
             </ul>
             <input
               className="w-100 p-2 border-0 "
-              placeholder='بريدك الإلكتروني'
+              placeholder={t('yourEmail')}
             />
           </MDBCol>
         </MDBRow>

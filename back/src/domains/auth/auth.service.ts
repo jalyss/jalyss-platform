@@ -1,14 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FormatLogin, UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
-
 import { JwtPayload } from "./jwt.strategy";
-
 import { User } from '@prisma/client'
 import { hash } from "bcrypt";
 import { CreateUserDto } from 'src/domains/users/dto/create-user.dto';
 import { UserLogin } from 'src/domains/users/entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { MailService } from 'src/domains/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +15,7 @@ export class AuthService {
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
         private readonly usersService: UsersService,
+        private readonly nodeMailerService:MailService
     ) { }
     async register(userDto: CreateUserDto):
         Promise<RegistrationStatus> {
@@ -74,8 +74,27 @@ export class AuthService {
         return new Promise((resolve, reject) => {
             resolve(payload);
         });
+
     }
+    async forgetPassword(email: string) {
+        const result = await this.prisma.user.findUnique({
+            where: {
+                email
+            }
+        })
+        if (result) {
+            let code = ''
+            for (let i = 0; i < 6; i++) {
+                code += Math.floor(Math.random() * 9)
+            }
+            console.log(code);
+            this.nodeMailerService.mail()
+        }
+
+    }
+
 }
+
 export interface RegistrationStatus {
     success: boolean;
     message: string;

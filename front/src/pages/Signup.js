@@ -9,8 +9,9 @@ import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 
 function Signup() {
+  const { t , i18n} = useTranslation()
   const dispatch = useDispatch()
-  const { t, i18n } = useTranslation()
+  
 
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [preview, setPreview] = useState(null)
@@ -62,11 +63,11 @@ function Signup() {
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>Signup</h2>
+      <h2>{t('signup')}</h2>
       <form className="checkout-form" onSubmit={submitSignup}>
         <div className="d-flex">
           <div className="position-relative">
-            <label id="image">الصورة</label>
+            <label id="image">{t('image')}</label>
             <div class="image-upload">
               <img
                 src={
@@ -98,8 +99,7 @@ function Signup() {
           <div className="w-100">
             <div class="row">
               <div class="col mb-3 ">
-                <label for="fullNameAr">
-                  الاسم بالعربية <span style={{ color: 'red' }}>*</span>
+                <label for="fullNameAr">{t('nameAr')}<span style={{ color: 'red' }}>*</span>
                 </label>
 
                 <input
@@ -116,7 +116,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="fullNameEn">
-                  الاسم بالإنجليزية <span style={{ color: 'red' }}>*</span>
+                {t('nameEn')}<span style={{ color: 'red' }}>*</span>
                 </label>
 
                 <input
@@ -134,7 +134,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="email">
-                  عنوان البريد الإلكتروني<span style={{ color: 'red' }}>*</span>
+                {t('email')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -148,7 +148,7 @@ function Signup() {
               </div>
               <div class="col mb-3 ">
                 <label for="tel">
-                  الهاتف<span style={{ color: 'red' }}>*</span>
+                {t('phone')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -164,7 +164,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="password">
-                  كلمة المرور <span style={{ color: 'red' }}>*</span>
+                {t('password')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <div className=" d-flex  " >
                   <input
@@ -200,7 +200,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="address">
-                  العنوان<span style={{ color: 'red' }}>*</span>
+                {t('address')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -214,7 +214,7 @@ function Signup() {
             </div>
             <div class="row">
               <div class="col mb-3 ">
-                <label for="country">البلد</label>
+                <label for="country">{t('country')}</label>
                 <input
                   // this must be autocomplete or select from array of country fetched from database
                   type="tel"
@@ -226,7 +226,7 @@ function Signup() {
                 />
               </div>
               <div class="col mb-3 ">
-                <label for="city">المدينة</label>
+                <label for="city">{t('city')}</label>
                 <input
                   // this must be autocomplete or select from array of country fetched from database
                   class="form-control mt-2"
@@ -240,7 +240,7 @@ function Signup() {
 
             <div class="row">
               <div class="col mb-3 ">
-                <label for="functionalArea">المجال الوظيفي</label>
+                <label for="functionalArea"> {t('functionalArea')}</label>
                 <input
                   class="form-control mt-2"
                   id="functionalArea"
@@ -250,7 +250,7 @@ function Signup() {
                 />
               </div>
               <div class="col mb-3 ">
-                <label for="educationLevel">المستوى التعليمي</label>
+                <label for="educationLevel">{t('educationLevel')} </label>
                 <input
                   class="form-control mt-2"
                   id="educationLevel"
@@ -264,7 +264,7 @@ function Signup() {
             <div class="row">
 
               <div class="col mb-3 ">
-                <label for="jobTitle">اسم الوظيفة</label>
+                <label for="jobTitle">{t('jobTitle')} </label>
                 <input
                   class="form-control mt-2"
                   id="jobTitle"
@@ -290,7 +290,7 @@ function Signup() {
             className="confirm-button mt-3"
             onSubmit={submitSignup}
           >
-            <span className="label-btn">تسجيل</span>
+            <span className="label-btn">{t('btnSignup')}</span>
           </button>
         </div>
       </form>
