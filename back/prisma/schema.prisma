@@ -73,6 +73,7 @@ model User {
   countryId            String?
   city                 City?           @relation(fields: [cityId], references: [id])
   cityId               String?
+  confirmkey           String?
   Media                MediaUser[]
   Rating               Rating[]
   IntermediateCommands Command[]       @relation("intermediate")

@@ -28,6 +28,7 @@
     "prisma:build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.3.10",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -45,9 +46,11 @@
     "liquidjs": "^10.6.1",
     "liquidjs-color-filters": "^1.0.0",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "pug": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.6.2"

@@ -34,7 +34,7 @@ export class AuthController {
         return result;
     }
 
-    
+
     @Post('login')
     public async login(@Body() loginUserDto: UserLogin):
         Promise<any> {
@@ -57,4 +57,11 @@ export class AuthController {
             throw new BadRequestException(e.message);
         }
     }
+
+    @Post('forget-password')
+    forgetPassword(@Body() body: any) {
+        return this.authService.forgetPassword(body.email)
+
+    }
+
 }

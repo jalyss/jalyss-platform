@@ -1,24 +1,39 @@
 import React, { useState } from 'react'
 
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import '../assets/styles/signup.css'
+
+import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
+import { login } from '../store/auth'
+import { useNavigate } from 'react-router-dom'
+import { showErrorToast } from '../utils/toast'
 
 function Login() {
+  const { t, i18n } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isShowPassword, setIsShowPassword] = useState(false)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const login = () => {
-    console.log({
-      email,
-      password,
-    })
+  const submitLogin = async (event) => {
+    event.preventDefault();
+    dispatch(login({email:email,password:password}))
+      .then(res=>{
+        if (!res.error) {
+          navigate(`/profile`)
+        } else {
+          showErrorToast(res.error.message)
+        }
+      })
+
+
   }
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>login</h2>
-      <form className="checkout-form" onSubmit={login}>
+      <form className="checkout-form" onSubmit={submitLogin}>
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
@@ -39,21 +54,30 @@ function Login() {
             <label for="password">
               كلمة المرور <span style={{ color: 'red' }}>*</span>
             </label>
-            <div className="position-relative">
+            <div className=" d-flex ">
               <input
-                class="form-control mt-2"
+                class="form-control mt-2 w-100"
                 required
                 id="password"
                 type={isShowPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               />
-              <div
-                className="icon-eye"
-                onClick={() => setIsShowPassword(!isShowPassword)}
-              >
-                {isShowPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              <div className='w-0 position-relative' >
+                <div
+                  style={{
+
+                    left: i18n.languages[0] === 'ar' ? 15 : -25,
+                    top: 15
+
+                  }}
+                  className="icon-eye"
+                  onClick={() => setIsShowPassword(!isShowPassword)}
+                >
+                  {isShowPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -61,7 +85,7 @@ function Login() {
         <p className="text-center">هل نسيت كلمة المرور؟</p>
 
         <div className="w-100 d-flex justify-content-center">
-          <button type="submit" className="confirm-button mt-3" onClick={login}>
+          <button type="submit" className="confirm-button mt-3" onSubmit={submitLogin}>
             <span className="label-btn">تسجيل الدخول</span>
           </button>
         </div>

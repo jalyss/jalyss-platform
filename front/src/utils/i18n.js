@@ -8,7 +8,12 @@ import oneArticleAr from '../constants/traductions/arabic/OneArticle.json'
 import oneArticleEn from '../constants/traductions/english/OneArticle.json'
 import noPageAr from "../constants/traductions/arabic/noPage.json";
 import noPageEn from "../constants/traductions/english/noPage.json";
-//import CheckoutAr from "../constants/traductions/arabic/";
+import CheckoutAr from "../constants/traductions/arabic/checkout.json"; 
+import CheckoutEn from "../constants/traductions/english/checkout.json"; 
+import SignupAr from "../constants/traductions/arabic/signUp.json";
+import SignupEn from "../constants/traductions/english/signUp.json";
+import articlesAr from "../constants/traductions/arabic/articles.json";
+import articlesEn from "../constants/traductions/english/articles.json";
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -19,11 +24,11 @@ i18n
     resources: {
       en: {
         translation:
-          { ...navbarEn, ...footerEn, ...oneArticleEn, ...noPageEn }
+          { ...navbarEn, ...footerEn, ...oneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn}
       },
       ar: {
         translation:
-          { ...navbarAr, ...footerAr, ...oneArticleAr, ...noPageAr }
+          { ...navbarAr, ...footerAr, ...oneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr }
 
       }
     },

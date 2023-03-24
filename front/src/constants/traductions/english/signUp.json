@@ -1,0 +1,21 @@
+{
+    "signup":"Sign Up",
+    "image":"Picture",
+    "nameAr":"Full Name Arabic",
+    "nameEn":"Full Name English",
+    "email":"Email",
+    "phone":"Phone",
+    "password":"Password",
+    "address":"Assress",
+    "country":"Country",
+    "city":"City",
+    "functionalArea":"Functional Area",
+    "educationLevel":"Education Level",
+    "jobTitle":"Job Title",
+    "btnSignup":"Create An Account"
+    
+    
+    
+    
+    
+    }

@@ -62,12 +62,12 @@ function Articles() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
-        <p>{t('articles.title')}</p>
+        <p>{t('title')}</p>
       </div>
       <div className="d-flex p-2 ">
         <div className='filters'>
           <Accordion
-            title={t('articles.filter.category')}
+            title={t('filter.category')}
             content={
               <>
                 {categoryStore.categories.items.map((element, i) => (
@@ -100,7 +100,7 @@ function Articles() {
           />
 
           <Accordion
-            title={t('articles.filter.articleType')}
+            title={t('filter.articleType')}
             content={
               <>
                 {articleTypeStore.articleTypes.items.map((element, i) => (
@@ -135,7 +135,7 @@ function Articles() {
           />
 
           <Accordion
-            title={t('articles.filter.publishingHouse')}
+            title={t('filter.publishingHouse')}
             content={
               <>
                 {publishingHouseStore.publishingHouses.items.map(
@@ -171,7 +171,7 @@ function Articles() {
           />
 
           <Accordion
-            title='Authors'
+            title={t('filter.author')}
             content={
               <>
                 {authorStore.authors.items.map(

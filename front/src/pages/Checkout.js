@@ -15,14 +15,14 @@ import { fetchCities } from '../store/city'
 
 
 function Checkout({ }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {invoiceId}=useParams()
+  const { invoiceId } = useParams()
   const countryStore = useSelector((state) => state.country)
   const cityStore = useSelector((state) => state.city)
   const commandStore = useSelector((state) => state.command)
-  const { items, cartTotal, updateItemQuantity,emptyCart } = useCart()
+  const { items, cartTotal, updateItemQuantity, emptyCart } = useCart()
 
   const [command, setCommand] = useState({ hasDelivery: true })
 
@@ -58,8 +58,8 @@ function Checkout({ }) {
           showSuccessToast(t('command.created'))
           emptyCart()
           // must show the facture navigate to other page to see the command
-          
-         navigate(`/invoice/${res.payload.id}`)
+
+          navigate(`/invoice/${res.payload.id}`)
         } else {
           console.log(res);
           showErrorToast(res.error.message)
@@ -69,14 +69,14 @@ function Checkout({ }) {
   };
 
 
-  
-  
+
+
   return (
     <div className="d-flex p-4">
       <form className="checkout-form" onSubmit={submitCommand}>
         <div class="row">
           <div class="col mb-3 ">
-            <label for="clientName" >الاسم <span style={{ color: 'red' }}>*</span></label>
+            <label for="clientName" >{t('label.name')} <span style={{ color: 'red' }}>*</span></label>
 
             <input
               class="form-control mt-2"
@@ -94,7 +94,7 @@ function Checkout({ }) {
 
         <div class="row">
           <div class="col mb-3 ">
-            <label for="clientEmail" >بريد إلكتروني <span style={{ color: 'red' }}>*</span></label>
+            <label for="clientEmail" >{t('label.email')}<span style={{ color: 'red' }}>*</span></label>
 
             <input
               class="form-control mt-2"
@@ -113,7 +113,7 @@ function Checkout({ }) {
 
         <div class="row">
           <div class="col mb-3 ">
-            <label for="clientTel">الهاتف<span style={{ color: 'red' }}>*</span></label>
+            <label for="clientTel">{t('label.phone')}<span style={{ color: 'red' }}>*</span></label>
             <input
               required
               type="tel"
@@ -125,7 +125,7 @@ function Checkout({ }) {
             />
           </div>
           <div class="col mb-3 ">
-            <label for="clientAddress">العنوان<span style={{ color: 'red' }}>*</span></label>
+            <label for="clientAddress">{t('label.address')}<span style={{ color: 'red' }}>*</span></label>
             <input
               required
               name='clientAddress'
@@ -138,14 +138,14 @@ function Checkout({ }) {
         </div>
         <div class="row">
           <div class="col mb-3 ">
-            <label for="country">البلد</label>
+            <label for="country">{t('label.country')}</label>
             <select
               name='countryId'
               class="form-control mt-2"
               id="country"
               value={command?.countryId}
               onChange={handleChange}>
-              <option value={null} >--حدد الدولة--</option>
+              <option value={null} >--{t('label.selectCountry')}--</option>
               {countryStore.countries.items.map(item => (
 
                 <option value={item.id} >{item.nameAr}</option>
@@ -156,7 +156,7 @@ function Checkout({ }) {
           </div>
 
           <div class="col mb-3 ">
-            <label for="city">المدينة</label>
+            <label for="city">{t('label.city')}</label>
             <select
               name='cityId'
               class="form-control mt-2"
@@ -164,7 +164,7 @@ function Checkout({ }) {
               value={command?.cityId}
               onChange={handleChange}
             >
-              <option value={null}>--حدد المدينة--</option>
+              <option value={null}>--{t('label.selectCity')}--</option>
               {cityStore.cities.items.map(item => (
                 <option value={item.id}>{item.nameAr}</option>
               ))}
@@ -173,7 +173,7 @@ function Checkout({ }) {
             </select>
           </div>
         </div>
-        <label for="delivery">{t('checkout.delivery.label')}</label>
+        <label for="delivery">{t('label.delivery')}</label>
         <input type='checkbox' id='delivery' checked={command?.hasDelivery} onChange={handleChecked} />
 
         <div className="w-100 d-flex justify-content-center">
@@ -187,7 +187,7 @@ function Checkout({ }) {
             disabled={items.length === 0 ? true : false}
           >
 
-            <span className="label-btn">اتمام الطلب</span>
+            <span className="label-btn">{t('label.btnConfirm')}</span>
           </button>
 
         </div>
@@ -202,11 +202,11 @@ function Checkout({ }) {
                   <thead>
                     <tr>
                       <th scope="col" className="h5">
-                        سلة الشراء
+                        {t('label.cart')}
                       </th>
 
-                      <th scope="col">الكمية</th>
-                      <th scope="col">الثمن</th>
+                      <th scope="col">{t('label.quantity')}</th>
+                      <th scope="col">{t('label.price')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -252,7 +252,7 @@ function Checkout({ }) {
                           </div>
                         </td>
                         <td className="align-middle">
-                          <p className="mb-0">TND {item.price}</p>
+                          <p className="mb-0">{t('label.devise')} {item.price}</p>
                         </td>
                       </tr>
                     ))}
@@ -264,7 +264,7 @@ function Checkout({ }) {
         </div>
         <div>
           <div className="d-flex justify-content-between w-100">
-            <span className="label">الإجمالي</span>
+            <span className="label">{t('label.total')}</span>
             <span className="price-wrapper">{cartTotal}</span>
           </div>
         </div>

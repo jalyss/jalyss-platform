@@ -92,14 +92,14 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
     }
 
     // compare passwords
     const areEqual = await bcrypt.compare(password, user.password);
 
     if (!areEqual) {
-      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
     }
 
     const { password: p, ...rest } = user;
