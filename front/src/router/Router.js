@@ -11,6 +11,7 @@ import Profile from '../pages/Profile'
 import Signup from '../pages/Signup'
 import Checkout from '../pages/Checkout'
 import Invoice from '../pages/Invoice'
+import ResetPassword from '../pages/ResetPassword'
 
 function Router() {
     return (
@@ -27,6 +28,7 @@ function Router() {
                         <Route path="checkout" element={<Checkout />} />
                         <Route path="login" element={<Login />} />
                         <Route path="signup" element={<Signup />} />
+                        <Route path="reset-password" element={<ResetPassword />} />
                         <Route path="invoice/:invoiceId" element={<Invoice />} />
                         <Route path="*" element={<NoPage />} />
                     </Route>

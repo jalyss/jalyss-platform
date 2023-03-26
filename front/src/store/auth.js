@@ -23,6 +23,12 @@ export const login = createAsyncThunk("auth/login", async (body,{ dispatch }) =>
   return response.data;
 });
 
+export const resetPassword = createAsyncThunk("/", async (body,{ dispatch }) => {
+ console.log(body)
+
+ return body
+});
+
 export const register = createAsyncThunk("auth/register", async (body, { dispatch }) => {
   const response = await axios.post(`${config.API_ENDPOINT}/auth/register`, body);
   dispatch(login({ email: body.email, password: body.password }))

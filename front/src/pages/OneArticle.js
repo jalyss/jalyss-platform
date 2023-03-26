@@ -1,10 +1,8 @@
-import axios from 'axios'
 import { MdOutlineAddShoppingCart } from 'react-icons/md'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Rating from '../components/Rating'
@@ -13,7 +11,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { identifier } from '../constants/identifier/identifier'
 import { fetchArticleByBranch } from '../store/article'
 import '../assets/styles/book.css'
 import useMeta from '../hooks/useMeta'
@@ -25,7 +22,7 @@ function OneArticle() {
   const dispatch = useDispatch()
   const articleStore = useSelector((state) => state.article)
   const { article } = articleStore
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { articleId } = useParams()
   const [meta, setMeta] = useState({ title: '', description: '' })
   const { addItem } = useCart();
