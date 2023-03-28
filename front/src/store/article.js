@@ -24,8 +24,11 @@ export const fetchArticle = createAsyncThunk(
   });
 export const fetchArticleByBranch = createAsyncThunk(
   "articles/articleByBranch",
+  
   async (id) => {
+   
     const response = await axios.get(`${config.API_ENDPOINT}/articles/one-by-branch/${id}`);
+   
     return response.data;
   });
 

@@ -41,16 +41,16 @@ export class ArticleService {
     let skip = 0
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
-      console.log('=======> filter', filters);
+      
       let errors = [];
       Object.entries(filters).forEach(([key, value]) => {
-        if (!filterExample[key]) {
+        if (!filterExample[key]) {   
           errors.push(key);
         }
         if (['lte', 'gte'].includes(key)) {
           insideWhere['price'] = {
             ...insideWhere['price'],
-            [key]: value,
+            [key]: +value,
           };
         } else {
           //array
@@ -125,9 +125,10 @@ export class ArticleService {
         ...insideWhere,
         branchId,
       },
+      orderBy:{price:'asc'},
       include: {
         article: { include: { category: true, publishingHouse: true, type: true, cover: true } }
-      }, take: 10,
+      }, take: 5,
       skip
     });
   }

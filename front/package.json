@@ -16,6 +16,8 @@
     "i18next": "^22.4.10",
     "install": "^0.13.0",
     "mdb-react-ui-kit": "^5.1.0",
+    "rc-slider": "^10.1.1",
+    "rc-tooltip": "^6.0.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-document-meta": "^3.0.0-beta.2",

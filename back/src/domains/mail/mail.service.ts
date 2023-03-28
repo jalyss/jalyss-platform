@@ -8,18 +8,28 @@ import { MailerService } from '@nestjs-modules/mailer';
 export class MailService {
     constructor(private readonly mailerService: MailerService) { }
 
-     mail(): void {
-        this.mailerService
+    async mailForgotPassword(email:string,code:string){
+        const result = await this.mailerService
             .sendMail({
-                to: 'wassimmarweni.sfax@gmail.com', 
-                from: 'wassimmarweni.sfax@gmail.com', 
+                to: email,
+                from: 'testmarouani1@gmail.com',
                 subject: 'Test Mailer ✔',
-                text: 'welcome', 
-                html: '<b>welcome</b>',
+                text: 'welcome',
+                html: `<h1>welcome</h1><p>${code}</p>`,
+                
             })
-            .then(() => { })
-            .catch((z) => {console.log(z);
-             });
+            // .then((result) => {
+            //     console.log(result);
+            //     console.log('==Result==');
+                
+            // })
+            // .catch((error) => {
+            //     console.log(error);
+            //     console.log('==Error==');
+            // });
+
+            return result;
+            
     }
 
 
