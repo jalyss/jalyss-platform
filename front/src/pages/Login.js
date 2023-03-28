@@ -18,8 +18,8 @@ function Login() {
 
   const submitLogin = async (event) => {
     event.preventDefault();
-    dispatch(login({email:email,password:password}))
-      .then(res=>{
+    dispatch(login({ email: email, password: password }))
+      .then(res => {
         if (!res.error) {
           navigate(`/profile`)
         } else {
@@ -81,9 +81,9 @@ function Login() {
             </div>
           </div>
         </div>
-
-        <p className="text-center">هل نسيت كلمة المرور؟</p>
-
+        
+          <a href='reset-password' className="text-center">هل نسيت كلمة المرور؟</a>
+        
         <div className="w-100 d-flex justify-content-center">
           <button type="submit" className="confirm-button mt-3" onSubmit={submitLogin}>
             <span className="label-btn">تسجيل الدخول</span>
