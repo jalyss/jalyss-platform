@@ -1,47 +1,61 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+
+import Slider from 'rc-slider'
+import 'rc-slider/assets/index.css'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import ArticleCard from '../components/ArticleCard'
-import { fetchArticles, fetchArticlesByBranch } from '../store/article'
+import { fetchArticlesByBranch } from '../store/article'
 import { fetchArticleTypes } from '../store/articleType'
-import category, { fetchCategories } from '../store/category'
+import { fetchCategories } from '../store/category'
 import { fetchPublishingHouses } from '../store/publishingHouse'
 import { fetchAuthors } from '../store/author'
 import { identifier } from '../constants/identifier/identifier'
 import Accordion from '../components/Accordion'
 import '../assets/styles/filters.css'
-
 import useMeta from '../hooks/useMeta'
 import DocumentMeta from "react-document-meta";
+import 'rc-tooltip/assets/bootstrap.css';
+
+
 
 function Articles() {
+
+  
+  
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
   const meta = useMeta(t('articles.pageName'), t('articles.pageDescription'))
-
+  
   const { categoryId } = useParams()
   const articleStore = useSelector((state) => state.article)
   const categoryStore = useSelector((state) => state.category)
   const publishingHouseStore = useSelector((state) => state.publishingHouse)
-  const authorStore=useSelector((state)=> state.author)
+  const authorStore = useSelector((state) => state.author)
   const articleTypeStore = useSelector((state) => state.articleType)
-  const removeItemHandler=(item) =>{
-    dispatch({type:'cart_remove_item', payload: item})
-  }
-
-
-  const lg = i18n.languages[0] === 'en'
+  
+  
+  
+  const [price, setPrice] = useState([1, 1000])
   const [filters, setFilters] = useState({
     categories: [],
     publishingHouses: [],
     articleTypes: [],
     authors: [],
-    min: null,
-    max: null,
+    lte: null,
+    gte: null,
+    skip:0
   })
   
+  const lg = i18n.languages[0] === 'en'
+ 
+
+
+
+
+
+
 
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }))
@@ -52,11 +66,13 @@ function Articles() {
     dispatch(fetchPublishingHouses())
     dispatch(fetchArticleTypes())
     dispatch(fetchAuthors())
+  }, [dispatch])
 
+  useEffect(() => {
     if (categoryId) {
       setFilters((Filters) => ({ ...Filters, categories: [categoryId] }))
     }
-  }, [categoryId, dispatch])
+  }, [categoryId])
 
 
   return (
@@ -64,8 +80,34 @@ function Articles() {
       <div>
         <p>{t('title')}</p>
       </div>
+
       <div className="d-flex p-2 ">
+
         <div className='filters'>
+          <Fragment>
+            <div className=''>
+              <div >
+                <Slider
+                  range
+                  marks={{
+                    1: `TND 1`,
+                    1000: `TND 1000`
+                  }}
+
+                  min={0}
+                  max={1000}
+                  defaultValue={[1, 1000]}
+                  tipFormatter={value => `TND${value}`}
+                  value={price}
+
+                  onChange={price => {
+                    setPrice(price)
+                    setFilters((Filters) => ({ ...Filters, gte: price[0], lte: price[1] }))}}
+                />
+                
+              </div>
+            </div>
+          </Fragment>
           <Accordion
             title={t('filter.category')}
             content={
@@ -209,13 +251,18 @@ function Articles() {
 
         <div className="d-flex flex-wrap px-3 ">
           {articleStore.articles.items.map((element, index) => {
-            return <ArticleCard key={index} article={element}  />
+
+            return <ArticleCard key={index} article={element}
+
+            />
+
+
           })}
         </div>
       </div>
       <div>
         <button
-          onClick={() => setFilters((Filters) => ({ ...Filters, skip: 10 }))}
+          onClick={() => setFilters((Filters) => ({ ...Filters, skip: filters.skip+5 }))}
         >
           next
         </button>

@@ -1,6 +1,6 @@
 export class Article {}
 export const filterExample = {
-  lte: 0,
+  lte: 1,
   gte: 1000,
   bestRating: true,
   bestSaller: true,
@@ -9,5 +9,5 @@ export const filterExample = {
   articleTypes: ['string'],
   publishingHouses: ['string'],
   authors : ['string'],
-  skip:0
+  skip:1
 };
