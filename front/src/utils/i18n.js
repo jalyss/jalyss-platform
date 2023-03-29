@@ -14,6 +14,11 @@ import SignupAr from "../constants/traductions/arabic/signUp.json";
 import SignupEn from "../constants/traductions/english/signUp.json";
 import articlesAr from "../constants/traductions/arabic/articles.json";
 import articlesEn from "../constants/traductions/english/articles.json";
+import loginAr from "../constants/traductions/arabic/login.json";
+import loginEn from "../constants/traductions/english/login.json";
+import resetpassAr from "../constants/traductions/arabic/resetpass.json";
+import resetpassEn from "../constants/traductions/english/resetpass.json";
+
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
@@ -24,11 +29,11 @@ i18n
     resources: {
       en: {
         translation:
-          { ...navbarEn, ...footerEn, ...oneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn}
+          { ...navbarEn, ...footerEn, ...oneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn,...loginEn,...resetpassEn}
       },
       ar: {
         translation:
-          { ...navbarAr, ...footerAr, ...oneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr }
+          { ...navbarAr, ...footerAr, ...oneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr,...loginAr,...resetpassAr }
 
       }
     },

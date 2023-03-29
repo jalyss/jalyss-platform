@@ -4,11 +4,13 @@ import { useDispatch } from 'react-redux'
 import { resetPassword } from '../store/auth'
 import { useNavigate } from 'react-router-dom'
 import { showErrorToast } from '../utils/toast'
+import { useTranslation } from 'react-i18next'
 
 function ResetPassword() {
   const [email, setEmail] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { t, i18n } = useTranslation()
 
   const submitResetPassword = async (event) => {
     event.preventDefault()
@@ -23,12 +25,12 @@ function ResetPassword() {
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>Reset Password</h2>
+      <h2>{t('reset')}</h2>
       <form className="checkout-form" onSubmit={submitResetPassword}>
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
-              عنوان البريد<span style={{ color: 'red' }}>*</span>
+             {t('address')}<span style={{ color: 'red' }}>*</span>
             </label>
             <input
               required
@@ -47,7 +49,7 @@ function ResetPassword() {
             className="confirm-button mt-3"
             onSubmit={submitResetPassword}
           >
-            <span className="label-btn">إرسال رابط إعادة الضبط</span>
+            <span className="label-btn">{t('send')}</span>
           </button>
         </div>
       </form>
