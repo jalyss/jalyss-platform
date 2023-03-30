@@ -60,7 +60,7 @@ function NewPassword() {
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
-              {t('mdp')}
+            confirm password
               <span style={{ color: 'red' }}>*</span>
             </label>
             <div className=" d-flex ">
@@ -98,7 +98,7 @@ function NewPassword() {
             className="confirm-button mt-3"
             onSubmit={submitResetPassword}
           >
-            <span className="label-btn">{t('send')}</span>
+            <span className="label-btn">Confirm</span>
           </button>
         </div>
       </form>
