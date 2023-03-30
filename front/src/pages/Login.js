@@ -32,12 +32,12 @@ function Login() {
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>login</h2>
+      <h2>{t('login')}</h2>
       <form className="checkout-form" onSubmit={submitLogin}>
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
-              عنوان البريد<span style={{ color: 'red' }}>*</span>
+              {t('address')}<span style={{ color: 'red' }}>*</span>
             </label>
             <input
               required
@@ -52,7 +52,7 @@ function Login() {
         <div class="row">
           <div class="col mb-3">
             <label for="password">
-              كلمة المرور <span style={{ color: 'red' }}>*</span>
+             {t('mdp')}<span style={{ color: 'red' }}>*</span>
             </label>
             <div className=" d-flex ">
               <input
@@ -82,11 +82,11 @@ function Login() {
           </div>
         </div>
         
-          <a href='reset-password' className="text-center">هل نسيت كلمة المرور؟</a>
+          <a href='reset-password' className="text-center">{t('forgetpass')}</a>
         
         <div className="w-100 d-flex justify-content-center">
           <button type="submit" className="confirm-button mt-3" onSubmit={submitLogin}>
-            <span className="label-btn">تسجيل الدخول</span>
+            <span className="label-btn"> {t('btnlogin')}</span>
           </button>
         </div>
       </form>
