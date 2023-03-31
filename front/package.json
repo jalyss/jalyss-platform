@@ -31,6 +31,7 @@
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.1.1",
     "react-use-cart": "^1.13.0",
+    "react-whatsapp-chat-widget": "^1.1.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
