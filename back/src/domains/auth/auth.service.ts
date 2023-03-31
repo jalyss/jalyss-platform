@@ -39,7 +39,6 @@ export class AuthService {
         // find user in db
         const user = await
             this.usersService.findByLogin(loginUserDto);
-        console.log(user, '============>');
 
         // generate and sign token
         const token = this._createToken(user);
@@ -134,11 +133,7 @@ export class AuthService {
         }
     }
 
-    async logout() {
-        
-
-
-    }
+    
 
 }
 

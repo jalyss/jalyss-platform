@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { showErrorToast, showSuccessToast } from '../utils/toast'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 function Signup() {
   const { t , i18n} = useTranslation()
   const dispatch = useDispatch()
+  const navigate=useNavigate()
   
 
   const [isShowPassword, setIsShowPassword] = useState(false)
@@ -38,6 +40,7 @@ function Signup() {
       .then(res => {
         if (!res.error) {
           showSuccessToast(t('user.created'))
+          navigate('/profile')
         } else {
           console.log(res);
           showErrorToast(res.error.message)
@@ -65,8 +68,8 @@ function Signup() {
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>{t('signup')}</h2>
       <form className="checkout-form" onSubmit={submitSignup}>
-        <div className="d-flex">
-          <div className="position-relative">
+        <div className="d-flex flex-wrap">
+          <div className="position-relative m-3">
             <label id="image">{t('image')}</label>
             <div class="image-upload">
               <img
@@ -96,7 +99,7 @@ function Signup() {
               </button>
             )}
           </div>
-          <div className="w-100">
+          <div className=" m-3">
             <div class="row">
               <div class="col mb-3 ">
                 <label for="fullNameAr">{t('nameAr')}<span style={{ color: 'red' }}>*</span>
