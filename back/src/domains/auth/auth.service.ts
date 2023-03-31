@@ -134,6 +134,12 @@ export class AuthService {
         }
     }
 
+    async logout() {
+        
+
+
+    }
+
 }
 
 export interface RegistrationStatus {

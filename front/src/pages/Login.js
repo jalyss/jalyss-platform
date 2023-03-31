@@ -26,9 +26,8 @@ function Login() {
           showErrorToast(res.error.message)
         }
       })
-
-
   }
+
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
@@ -90,6 +89,7 @@ function Login() {
           </button>
         </div>
       </form>
+      
     </div>
   )
 }

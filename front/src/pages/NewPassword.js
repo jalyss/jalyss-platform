@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { useTranslation } from 'react-i18next'
+import { changePassword } from '../store/auth'
 
 function NewPassword() {
   const [password, setPassword] = useState('')
@@ -14,15 +15,22 @@ function NewPassword() {
   const navigate = useNavigate()
   const { t, i18n } = useTranslation()
 
-  const submitResetPassword = async (event) => {
+  const submitChangePassword = async (event) => {
     event.preventDefault()
+    dispatch(changePassword({password: password, confirmPassword: confirmPassword})).then((res) => {
+      if (!res.error) {
+        setShowModal(true)
+      } else {
+        showErrorToast(res.error.message)
+      }
+    })
     navigate('/login')
   }
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>{t('reset')}</h2>
-      <form className="checkout-form" onSubmit={submitResetPassword}>
+      <form className="checkout-form" onSubmit={submitChangePassword}>
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
@@ -96,7 +104,7 @@ function NewPassword() {
           <button
             type="submit"
             className="confirm-button mt-3"
-            onSubmit={submitResetPassword}
+            onSubmit={submitChangePassword}
           >
             <span className="label-btn">Confirm</span>
           </button>

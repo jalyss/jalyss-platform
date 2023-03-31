@@ -72,7 +72,7 @@ export class AuthController {
     verificationCode(
         @Body() body:any
     ) {
-        return this.authService.verificationCode(body.code ,body.email)
+        return this.authService.verificationCode(body.code, body.email )
     }
 
     @ApiSecurity('apiKey')
