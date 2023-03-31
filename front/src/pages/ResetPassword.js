@@ -21,6 +21,7 @@ function ResetPassword() {
     dispatch(resetPassword({ email })).then((res) => {
       if (!res.error) {
         setShowModal(true)
+        
       } else {
         showErrorToast(res.error.message)
       }
@@ -30,7 +31,7 @@ function ResetPassword() {
 
   const submitConfirmCode = async (event) => {
     event.preventDefault()
-    dispatch(verificationCode({ code: confirmCode })).then((res) => {
+    dispatch(verificationCode({ code: confirmCode ,email})).then((res) => {
       if (!res.error) {
         setShowModal(true)
       } else {
