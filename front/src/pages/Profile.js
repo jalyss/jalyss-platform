@@ -12,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 
-import { me } from "../store/auth"
+
 
 function Profile() {
   const { t, i18n } = useTranslation()
@@ -22,7 +22,11 @@ function Profile() {
   const [editMode, setEditMode] = useState(false)
   const [preview, setPreview] = useState(null)
   const [avatar, setAvatar] = useState(null)
-
+useEffect(()=>{
+  if(authStore.me){
+    setUser(authStore.me)
+  }
+},[authStore.me])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -80,12 +84,12 @@ function Profile() {
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile</h2>
       <form className="checkout-form" onSubmit={submitEditProfile}>
-        <div className="d-flex">
+        <div className="d-flex flex-wrap">
           <div className="position-relative">
             <label id="image">{t('image')}</label>
             <div class="image-upload">
               <img
-                src={authStore?.me?.avatar.path} 
+                src={authStore?.me?.avatar?.path} 
                 alt=""
               />
 
@@ -111,7 +115,7 @@ function Profile() {
               </button>
             )}
           </div>
-          <div className="w-100">
+          <div className="d-flex justify-content-center w-100 m-3">
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
@@ -128,11 +132,11 @@ function Profile() {
                           required
                           name="fullNameAr"
                           id="fullNameAr"
-                          value={authStore?.me?.fullNameAr}
+                          value={user?.fullNameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.fullNameAr}</span>
+                        <span>{user?.fullNameAr}</span>
                       )
                       }
                     </TableCell>
@@ -150,11 +154,11 @@ function Profile() {
                           required
                           name="fullNameAr"
                           id="fullNameAr"
-                          value={authStore?.me?.fullNameEn}
+                          value={user?.fullNameEn}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.fullNameEn}</span>
+                        <span>{user?.fullNameEn}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -172,11 +176,11 @@ function Profile() {
                           type="email"
                           id="email"
                           name="email"
-                          value={authStore?.me?.email}
+                          value={user?.email}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.email}</span>
+                        <span>{user?.email}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -194,11 +198,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="tel"
                           name="tel"
-                          value={authStore?.me?.tel}
+                          value={user?.tel}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.tel}</span>
+                        <span>{user?.tel}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -215,11 +219,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="address"
                           name="address"
-                          value={authStore?.me?.address}
+                          value={user?.address}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.address}</span>
+                        <span>{user?.address}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -236,11 +240,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="country"
                           name="countryId"
-                          value={authStore?.me?.country?.nameAr}
+                          value={user?.country?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.country?.nameAr}</span>
+                        <span>{user?.country?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -256,11 +260,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="city"
                           name="cityId"
-                          value={authStore?.me?.city?.nameAr}
+                          value={user?.city?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.city?.nameAr}</span>
+                        <span>{user?.city?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -276,11 +280,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="functionalArea"
                           name="functionalAreaId"
-                          value={authStore?.me?.functionalArea?.nameAr}
+                          value={user?.functionalArea?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.functionalArea?.nameAr}</span>
+                        <span>{user?.functionalArea?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -296,11 +300,11 @@ function Profile() {
                           class="form-control"
                           id="educationLevel"
                           name="educationLevelId"
-                          value={authStore?.me?.educationLevel?.nameAr}
+                          value={user?.educationLevel?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.educationLevel?.nameAr}</span>
+                        <span>{user?.educationLevel?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -316,11 +320,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="jobTitle"
                           name="jobTitleId"
-                          value={authStore?.me?.jobTitle?.nameAr}
+                          value={user?.jobTitle?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{authStore?.me?.jobTitle?.nameAr}</span>
+                        <span>{user?.jobTitle?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>

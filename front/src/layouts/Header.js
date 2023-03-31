@@ -54,7 +54,7 @@ function Header() {
           src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
         />
 
-        <div className="d-flex w-100 align-items-center justify-content-evenly">
+        <div className="d-flex w-100 align-items-center justify-content-evenly flex-wrap">
           <div className="d-flex w-50 mx-2">
             <input
               className="w-100 p-2 border-0 "

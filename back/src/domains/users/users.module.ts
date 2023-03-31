@@ -9,6 +9,6 @@ import { MailService } from '../mail/mail.service';
 @Module({
   controllers: [UsersController],
   providers: [UsersService,AuthService,JwtService,PrismaService,MailService],
-  imports: [PrismaModule],
+  imports: [],
 })
 export class UsersModule {}
