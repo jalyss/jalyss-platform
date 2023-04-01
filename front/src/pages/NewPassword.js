@@ -60,7 +60,7 @@ function NewPassword() {
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
-            {t('confpass')}              
+              Confirm password
             <span style={{ color: 'red' }}>*</span>
             </label>
             <div className=" d-flex ">
