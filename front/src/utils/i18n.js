@@ -4,8 +4,8 @@ import navbarAr from '../constants/traductions/arabic/navbar.json'
 import navbarEn from '../constants/traductions/english/navbar.json'
 import footerAr from '../constants/traductions/arabic/footer.json'
 import footerEn from '../constants/traductions/english/footer.json'
-import oneArticleAr from '../constants/traductions/arabic/OneArticle.json'
-import oneArticleEn from '../constants/traductions/english/OneArticle.json'
+import OneArticleAr from '../constants/traductions/arabic/OneArticle.json'
+import OneArticleEn from '../constants/traductions/english/OneArticle.json'
 import noPageAr from "../constants/traductions/arabic/noPage.json";
 import noPageEn from "../constants/traductions/english/noPage.json";
 import CheckoutAr from "../constants/traductions/arabic/checkout.json"; 
@@ -29,11 +29,11 @@ i18n
     resources: {
       en: {
         translation:
-          { ...navbarEn, ...footerEn, ...oneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn,...loginEn,...resetpassEn}
+          { ...navbarEn, ...footerEn, ...OneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn,...loginEn,...resetpassEn}
       },
       ar: {
         translation:
-          { ...navbarAr, ...footerAr, ...oneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr,...loginAr,...resetpassAr }
+          { ...navbarAr, ...footerAr, ...OneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr,...loginAr,...resetpassAr }
 
       }
     },

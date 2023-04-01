@@ -60,8 +60,8 @@ function NewPassword() {
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
-            confirm password
-              <span style={{ color: 'red' }}>*</span>
+            {t('confpass')}              
+            <span style={{ color: 'red' }}>*</span>
             </label>
             <div className=" d-flex ">
               <input
@@ -98,7 +98,7 @@ function NewPassword() {
             className="confirm-button mt-3"
             onSubmit={submitResetPassword}
           >
-            <span className="label-btn">Confirm</span>
+            <span className="label-btn">{t('confirm')}</span>
           </button>
         </div>
       </form>
