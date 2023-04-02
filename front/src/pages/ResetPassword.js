@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { useDispatch } from 'react-redux'
-import { resetPassword } from '../store/auth'
+import { resetPassword, verificationCode } from '../store/auth'
 import { useNavigate } from 'react-router-dom'
 import { showErrorToast } from '../utils/toast'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,7 @@ function ResetPassword() {
   const [confirmCode, setConfirmCode] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { t,i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [showModal, setShowModal] = useState(false)
 
   const submitResetPassword = async (event) => {
@@ -21,13 +21,23 @@ function ResetPassword() {
     dispatch(resetPassword({ email })).then((res) => {
       if (!res.error) {
         setShowModal(true)
+        
       } else {
         showErrorToast(res.error.message)
       }
     })
   }
 
+
   const submitConfirmCode = async (event) => {
+    event.preventDefault()
+    dispatch(verificationCode({ code: confirmCode ,email})).then((res) => {
+      if (!res.error) {
+        setShowModal(true)
+      } else {
+        showErrorToast(res.error.message)
+      }
+    })
     console.log(confirmCode)
     navigate('/new-password')
   }
@@ -69,7 +79,7 @@ function ResetPassword() {
       <Modal centered show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton />
         <Modal.Body style={{
-          direction:  i18n.languages[0] === 'ar' ? 'rtl' : 'ltr'
+          direction: i18n.languages[0] === 'ar' ? 'rtl' : 'ltr'
         }}>
           <Form onSubmit={submitConfirmCode}>
             <Form.Group>

@@ -6,7 +6,7 @@ import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { response } from 'express';
-import { Media, MediaUser, User } from '@prisma/client';
+import { Media, User } from '@prisma/client';
 
 export interface FormatLogin extends Partial<User> {
   id: string;
@@ -23,7 +23,7 @@ export interface FormatLogin extends Partial<User> {
   educationLevelId: string;
   functionalAreaId: string;
   jobTitleId: string;
-  Media: MediaUser[];
+  avatar: Media;
 }
 
 @Injectable()
@@ -52,16 +52,9 @@ export class UsersService {
   //   delete response.password
   //   if (isMatch && response.role === 'admin')
   //     return response;
-  //   else throw 'Rmail or password is incorrect'
+  //   
   // }
-  // async login(data: UserLogin) {
-  //   const response = await this.prisma.user.findUniqueOrThrow({ where: { email: data.email } });
-  //   const isMatch = await bcrypt.compare(data.password, response.password);
-  //   delete response.password
-  //   if (isMatch)
-  //     return response;
-  //   else throw 'email or password is incorrect'
-  // }
+  // 
 
   findAll() {
     return this.prisma.user.findMany({
@@ -102,7 +95,7 @@ export class UsersService {
       throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
     }
 
-    const { password: p, ...rest } = user;
+    const { password: p, confirmkey:k,...rest } = user;
     return rest;
   }
   async findByPayload({ email }: any): Promise<any> {

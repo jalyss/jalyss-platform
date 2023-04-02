@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { create } from 'domain';
-
+import * as bcrypt from 'bcrypt';
 // initialize Prisma Client
 const prisma = new PrismaClient();
 
@@ -8,6 +8,7 @@ async function main() {
   let users = [];
   let articles = [];
   // create 10 dummy users
+  const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
     users.push(
       await prisma.user.create({
@@ -17,7 +18,7 @@ async function main() {
           fullNameEn: `jalyss${i}`,
           address: 'sfax',
           tel: '123456789',
-          password: '1234',
+          password: await bcrypt.hash('1234', salt),
         },
       }),
     );

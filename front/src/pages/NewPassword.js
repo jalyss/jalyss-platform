@@ -1,47 +1,60 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import { useTranslation } from 'react-i18next'
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
+import { changePassword, login, me } from "../store/auth";
+import { showErrorToast } from "../utils/toast";
 
 function NewPassword() {
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [isShowPassword, setIsShowPassword] = useState(false)
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { t, i18n } = useTranslation()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
-  const submitResetPassword = async (event) => {
-    event.preventDefault()
-    navigate('/login')
-  }
+  const submitChangePassword = async (event) => {
+    event.preventDefault();
+    dispatch(
+      changePassword({ password: password, confirmPassword: confirmPassword })
+    ).then((res) => {
+      if (!res.error) {
+        let token = JSON.parse(localStorage.getItem("tokenCode"));
+        localStorage.setItem("token", JSON.stringify(token));
+        localStorage.removeItem("tokenCode");
+        dispatch(me(token.Authorization)).then((res) => navigate("/profile"));
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>{t('reset')}</h2>
-      <form className="checkout-form" onSubmit={submitResetPassword}>
+      <h2>{t("reset")}</h2>
+      <form className="checkout-form" onSubmit={submitChangePassword}>
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
-              {t('mdp')}
-              <span style={{ color: 'red' }}>*</span>
+              {t("mdp")}
+              <span style={{ color: "red" }}>*</span>
             </label>
             <div className=" d-flex ">
               <input
                 class="form-control mt-2 w-100"
                 required
                 id="password"
-                type={isShowPassword ? 'text' : 'password'}
+                type={isShowPassword ? "text" : "password"}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
               />
               <div className="w-0 position-relative">
                 <div
                   style={{
-                    left: i18n.languages[0] === 'ar' ? 15 : -25,
+                    left: i18n.languages[0] === "ar" ? 15 : -25,
                     top: 15,
                   }}
                   className="icon-eye"
@@ -68,14 +81,14 @@ function NewPassword() {
                 class="form-control mt-2 w-100"
                 required
                 id="password"
-                type={isShowPassword ? 'text' : 'password'}
+                type={isShowPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
               />
               <div className="w-0 position-relative">
                 <div
                   style={{
-                    left: i18n.languages[0] === 'ar' ? 15 : -25,
+                    left: i18n.languages[0] === "ar" ? 15 : -25,
                     top: 15,
                   }}
                   className="icon-eye"
@@ -96,14 +109,14 @@ function NewPassword() {
           <button
             type="submit"
             className="confirm-button mt-3"
-            onSubmit={submitResetPassword}
+            onSubmit={submitChangePassword}
           >
             <span className="label-btn">{t('confirm')}</span>
           </button>
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default NewPassword
+export default NewPassword;

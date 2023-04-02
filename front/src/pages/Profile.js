@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { register } from '../store/auth'
+import React, { useEffect, useState } from 'react'
+import auth, { register } from '../store/auth'
 import '../assets/styles/signup.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showErrorToast, showSuccessToast } from '../utils/toast'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
@@ -12,14 +12,21 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 
+
+
 function Profile() {
   const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
-
+  const authStore = useSelector((state) => state.auth)
+  const [user, setUser] = useState({})
   const [editMode, setEditMode] = useState(false)
   const [preview, setPreview] = useState(null)
-  const [user, setUser] = useState({})
   const [avatar, setAvatar] = useState(null)
+useEffect(()=>{
+  if(authStore.me){
+    setUser(authStore.me)
+  }
+},[authStore.me])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -55,26 +62,34 @@ function Profile() {
     }
   }
 
+
+
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     setPreview(URL.createObjectURL(file))
     setAvatar(file)
   }
 
+  console.log(authStore);
+
+  const handleLogout = () => {
+    // Clear user session data, e.g. authentication token
+    localStorage.removeItem('token')
+
+    // Redirect to the login page
+    window.location.href = '/Login'
+  };
+
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile</h2>
       <form className="checkout-form" onSubmit={submitEditProfile}>
-        <div className="d-flex">
+        <div className="d-flex flex-wrap">
           <div className="position-relative">
             <label id="image">{t('image')}</label>
             <div class="image-upload">
               <img
-                src={
-                  preview
-                    ? preview
-                    : 'http://tsr-industrie.fr/wp-content/uploads/2016/04/ef3-placeholder-image.jpg'
-                }
+                src={authStore?.me?.avatar?.path} 
                 alt=""
               />
 
@@ -100,7 +115,7 @@ function Profile() {
               </button>
             )}
           </div>
-          <div className="w-100">
+          <div className="d-flex justify-content-center w-100 m-3">
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
@@ -121,8 +136,9 @@ function Profile() {
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.fullNameAr
-                      )}
+                        <span>{user?.fullNameAr}</span>
+                      )
+                      }
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -138,11 +154,11 @@ function Profile() {
                           required
                           name="fullNameAr"
                           id="fullNameAr"
-                          value={user?.fullNameAr}
+                          value={user?.fullNameEn}
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.fullNameEn
+                        <span>{user?.fullNameEn}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -164,7 +180,7 @@ function Profile() {
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.email
+                        <span>{user?.email}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -186,7 +202,7 @@ function Profile() {
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.phone
+                        <span>{user?.tel}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -207,7 +223,7 @@ function Profile() {
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.address
+                        <span>{user?.address}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -224,11 +240,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="country"
                           name="countryId"
-                          value={user?.countryId}
+                          value={user?.country?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.countryId
+                        <span>{user?.country?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -244,11 +260,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="city"
                           name="cityId"
-                          value={user?.cityId}
+                          value={user?.city?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.cityId
+                        <span>{user?.city?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -264,11 +280,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="functionalArea"
                           name="functionalAreaId"
-                          value={user?.functionalAreaId}
+                          value={user?.functionalArea?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.functionalAreaId
+                        <span>{user?.functionalArea?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -284,11 +300,11 @@ function Profile() {
                           class="form-control"
                           id="educationLevel"
                           name="educationLevelId"
-                          value={user?.educationLevelId}
+                          value={user?.educationLevel?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.educationLevelId
+                        <span>{user?.educationLevel?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -304,11 +320,11 @@ function Profile() {
                           class="form-control mt-2"
                           id="jobTitle"
                           name="jobTitleId"
-                          value={user?.jobTitleId}
+                          value={user?.jobTitle?.nameAr}
                           onChange={handleChange}
                         />
                       ) : (
-                        user?.jobTitleId
+                        <span>{user?.jobTitle?.nameAr}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -328,6 +344,7 @@ function Profile() {
           </button>
         </div>
       </form>
+      <button className="confirm-button mt-3" onClickCapture={handleLogout}>Logout </button>
     </div>
   )
 }

@@ -14,8 +14,10 @@ import {
 import { AuthService, RegistrationSeederStatus, RegistrationStatus } from "./auth.service";
 import { ApiBearerAuth, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from 'src/domains/users/dto/create-user.dto';
-import { UserLogin } from 'src/domains/users/entities/user.entity';
+import { UpdatePasswordDto, UserLogin } from 'src/domains/users/entities/user.entity';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { CurrentUser } from './decorators/currentUser';
+import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -58,10 +60,29 @@ export class AuthController {
         }
     }
 
-    @Post('forget-password')
-    forgetPassword(@Body() body: any) {
-        return this.authService.forgetPassword(body.email)
+    @Post('forgot-password')
+    forgotPassword(@Body() body: any) {
+        return this.authService.forgotPassword(body.email)
 
+    }
+
+
+    @Post('verification-code')
+
+    verificationCode(
+        @Body() body:any
+    ) {
+        return this.authService.verificationCode(body.code, body.email )
+    }
+
+    @ApiSecurity('apiKey')
+    @UseGuards(JwtAuthGuard)
+    @Post('change-password')
+    changePassword(
+        @CurrentUser() user: any,
+        @Body() body : UpdateAuthDto
+    ) {
+        return this.authService.changePassword(user.email,body.password,body.confirmPassword)
     }
 
 }
