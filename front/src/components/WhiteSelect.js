@@ -7,7 +7,8 @@ import Select from "@mui/material/Select";
 
 function WhiteSelect({value,onChange,data,helper,height,width,}) {
   return (
-    <FormControl>
+    <FormControl className='flex-row align-items-center'>
+            <FormHelperText sx={{color:'white'}}>{helper}</FormHelperText>
             <Select
               value={value}
               onChange={onChange}
@@ -38,7 +39,6 @@ function WhiteSelect({value,onChange,data,helper,height,width,}) {
               <MenuItem value={elem.value} key={i}>{elem.label}</MenuItem>
                 ))}
             </Select>
-            <FormHelperText sx={{color:'white'}}>{helper}</FormHelperText>
           </FormControl>
   )
 }

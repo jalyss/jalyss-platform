@@ -1,5 +1,10 @@
 {
     "reset":"Reset Password",
-    "address":"Email",
-    "send":"Send"
+    "mail":"Email",
+    "send":"Send",
+    "next":"Next",
+    "code":"Code",
+    "confirm":"Confirm",
+    "confpass":"Confirm Password"
+    
 }

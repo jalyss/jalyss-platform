@@ -50,7 +50,7 @@ function ResetPassword() {
           <div class="row">
             <div class="col mb-3 ">
               <label for="email">
-                {t('address')}
+                {t('mail')}
                 <span style={{ color: 'red' }}>*</span>
               </label>
               <input
@@ -83,7 +83,7 @@ function ResetPassword() {
         }}>
           <Form onSubmit={submitConfirmCode}>
             <Form.Group>
-              <Form.Label>Code</Form.Label>
+              <Form.Label>{t('code')}</Form.Label>
               <Form.Control
                 required
                 autoFocus
@@ -97,7 +97,7 @@ function ResetPassword() {
               className="confirm-button mt-3"
               onSubmit={submitConfirmCode}
             >
-              <span className="label-btn">{'Next'}</span>
+              <span className="label-btn">{t('next')}</span>
             </button>
           </Form>
         </Modal.Body>
