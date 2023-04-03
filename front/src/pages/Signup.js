@@ -203,7 +203,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="address">
-                {t('address')}<span style={{ color: 'red' }}>*</span>
+                {t('yy')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
