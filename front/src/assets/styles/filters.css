@@ -40,6 +40,18 @@
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
+@media all and (max-width: 992px) {
+  .responsive-filters {
+    display: none !important;
+  }
+}
+
+@media all and (min-width: 992px) {
+  .filters-button {
+    display: none !important;
+  }
+}
+
 .arrow-icon {
   transition: all 0.5s;
   rotate: 180deg;
