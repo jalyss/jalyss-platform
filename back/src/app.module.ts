@@ -15,12 +15,22 @@ import { CitesModule } from './domains/cites/cities.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { MailModule } from './domains/mail/mail.module';
-
+import { EmployeeModule } from './domains/employee/employee.module';
 @Module({
   imports: [
     MailModule,
-    AuthModule, PrismaModule, ArticleModule, CommandsModule, BranchesModule,UsersModule,MediasModule,countriesModule,CitesModule],
+    AuthModule,
+    PrismaModule,
+    ArticleModule,
+    CommandsModule,
+    BranchesModule,
+    UsersModule,
+    MediasModule,
+    countriesModule,
+    CitesModule,
+    EmployeeModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, PrismaService,MediasService],
+  providers: [AppService, PrismaService, MediasService],
 })
-export class AppModule {}
+export class AppModule { }
