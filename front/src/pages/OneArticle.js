@@ -34,14 +34,15 @@ function OneArticle() {
   const { addItem } = useCart();
   useEffect(() => {
     dispatch(fetchArticleByBranch(articleId))
-     .then(res=>{if(!res.error){
-      console.log(useMeta(res.data?.title, res.data?.shortDescription));
-     console.log(res.payload.article.title)
-      setMeta(useMeta(res.payload.article.title, article?.shortDescription));
-    }})
+    .then(res=>{if(!res.error){
+    console.log(useMeta(res.data?.title, res.data?.shortDescription));
+    console.log(res.payload.article.title)
+    setMeta(useMeta(res.payload.article.title, article?.shortDescription));
+        }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
- 
+
 
   console.log(article)
   useEffect(() => {
@@ -50,16 +51,16 @@ function OneArticle() {
   }, [article])
 
   const handleRatingChange = async (rate) => {
-    dispatch(createArticleByBranchRating({rate,articleByBranchId:articleId,commit:''}))
+    dispatch(createArticleByBranchRating({ rate, articleByBranchId: articleId, commit: '' }))
 
-  //     .then((res) => {
-  //       if (!res.error) {
-  //         showErrorToast('Rating saved successfully')
-  //       } else {
-  //         console.log(res);
-  //         showErrorToast(res.error.message)
-  //       }
-  //     })
+    //     .then((res) => {
+    //       if (!res.error) {
+    //         showErrorToast('Rating saved successfully')
+    //       } else {
+    //         console.log(res);
+    //         showErrorToast(res.error.message)
+    //       }
+    //     })
   };
 
 
