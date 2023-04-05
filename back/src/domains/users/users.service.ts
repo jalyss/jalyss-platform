@@ -1,11 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
+
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { response } from 'express';
+
 import { Media, User } from '@prisma/client';
 
 export interface FormatLogin extends Partial<User> {
@@ -38,24 +39,8 @@ export class UsersService {
       data,
     });
   }
-  // async signInAdmin(data: UserLogin) {
-  //   const response = await this.prisma.user.findUniqueOrThrow({ where: { email: data.email } });
-  //   if (!response) {
-  //     throw new HttpException("invalid_credentials",
-  //       HttpStatus.UNAUTHORIZED);
-  //   }
-  //   const isMatch = await bcrypt.compare(data.password, response.password);
-  //   if (!isMatch) {
-  //     throw new HttpException("invalid_credentials",
-  //       HttpStatus.UNAUTHORIZED);
-  //   }
-  //   delete response.password
-  //   if (isMatch && response.role === 'admin')
-  //     return response;
-  //   
-  // }
-  // 
 
+  
   findAll() {
     return this.prisma.user.findMany({
       include: { Media: true },

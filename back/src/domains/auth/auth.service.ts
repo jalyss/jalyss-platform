@@ -1,11 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FormatLogin, UsersService } from "../users/users.service";
+import { EmployeeService } from '../employee/employee.service';
 import { JwtService } from "@nestjs/jwt";
 import { JwtPayload } from "./jwt.strategy";
 import { User } from '@prisma/client'
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/domains/users/dto/create-user.dto';
 import { UserLogin } from 'src/domains/users/entities/user.entity';
+import { EmployeeLogin } from '../employee/entities/employee.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MailService } from 'src/domains/mail/mail.service';
 
@@ -15,7 +17,8 @@ export class AuthService {
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
         private readonly usersService: UsersService,
-        private readonly nodeMailerService: MailService
+        private readonly nodeMailerService: MailService,
+        private readonly employeeService: EmployeeService
     ) { }
     async register(userDto: CreateUserDto):
         Promise<RegistrationStatus> {
@@ -35,6 +38,7 @@ export class AuthService {
         return status;
     }
 
+   
     async login(loginUserDto: UserLogin): Promise<any> {
         // find user in db
         const user = await
@@ -133,7 +137,7 @@ export class AuthService {
         }
     }
 
-    
+
 
 }
 

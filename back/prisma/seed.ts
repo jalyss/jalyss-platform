@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
+  let employees=[];
   let users = [];
   let articles = [];
   // create 10 dummy users
@@ -23,6 +24,25 @@ async function main() {
       }),
     );
   }
+
+  //create employee
+  const saltEm = await bcrypt.genSalt();
+  for (let i = 0; i < 4; i++) {
+    employees.push(
+      await prisma.employee.create({
+        data: {
+          email: 'employee' + i + '@gmail.com',
+          nameAr: `employee${i}`,
+          nameEn: `employee${i}`,
+          address: 'sfax',
+          tel: '11111111',
+          password: await bcrypt.hash('1234', saltEm),
+          isAdmin: true,
+        },
+      }),
+    );
+  }
+
   //create dummy country
   let country1 = await prisma.country.create({
     data: {
@@ -206,7 +226,7 @@ async function main() {
         data: {
           articleByBranchId: articlesByBranch[Math.floor(Math.random() * articlesByBranch.length)].id,
           userId: users[Math.floor(Math.random() * users.length)].id,
-          rate: Math.floor(Math.random() *5),
+          rate: Math.floor(Math.random() * 5),
           commit: ''
         }
       })

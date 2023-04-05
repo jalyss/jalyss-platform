@@ -203,11 +203,12 @@ model Employee {
   email    String  @unique
   address  String
   tel      String
+  password String
   isAdmin  Boolean
   branch   Branch? @relation(fields: [branchId], references: [id])
   branchId String? @map("branch_id")
-  role     Role    @relation(fields: [roleId], references: [id])
-  roleId   String
+  role     Role ?   @relation(fields: [roleId], references: [id])
+  roleId   String?
 }
 
 model Role {
