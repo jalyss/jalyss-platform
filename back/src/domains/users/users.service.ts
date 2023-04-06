@@ -29,7 +29,7 @@ export interface FormatLogin extends Partial<User> {
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(data: CreateUserDto) {
     const salt = await bcrypt.genSalt();
@@ -40,7 +40,7 @@ export class UsersService {
     });
   }
 
-  
+
   findAll() {
     return this.prisma.user.findMany({
       include: { Media: true },
@@ -65,7 +65,7 @@ export class UsersService {
       where: { email },
       include: {
         Media: true,
-        avatar:true
+        avatar: true
       },
     });
 
@@ -80,13 +80,20 @@ export class UsersService {
       throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
     }
 
-    const { password: p, confirmkey:k,...rest } = user;
+    const { password: p, confirmkey: k, ...rest } = user;
     return rest;
   }
   async findByPayload({ email }: any): Promise<any> {
-    return await this.prisma.user.findFirst({
+    let user = {}
+    user = await this.prisma.user.findFirst({
       where: { email },
     });
+    if (!user)
+      user = await this.prisma.employee.findFirst({
+        where: { email }
+      })
+    return user
+
   }
   async updatePassword(payload: UpdatePasswordDto, id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
