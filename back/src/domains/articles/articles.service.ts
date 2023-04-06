@@ -6,6 +6,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { filterExample } from './entities/article.entity';
 import { FilterArticle } from './types';
+import { CreateRatingDto } from './dto/create-rating.dto';
 
 @Injectable()
 export class ArticleService {
@@ -22,15 +23,16 @@ export class ArticleService {
     });
   }
 
+
   findAll() {
     return this.prisma.article.findMany({
       include: {
-        ArticlesByBranch: true,
+        ArticlesByBranch: { include: { rating: true } },
         media: true,
         cover: true,
         publishingHouse: true,
         category: true,
-        type: true
+        type: true,
       },
     });
   }
@@ -41,10 +43,10 @@ export class ArticleService {
     let skip = 0
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
-      
+
       let errors = [];
       Object.entries(filters).forEach(([key, value]) => {
-        if (!filterExample[key]) {   
+        if (!filterExample[key]) {
           errors.push(key);
         }
         if (['lte', 'gte'].includes(key)) {
@@ -69,8 +71,8 @@ export class ArticleService {
                   }
                   break;
                 case 'authors':
-                  insideWhere ['article']['ArticleByAuthor']={}
-                  insideWhere ['article']['ArticleByAuthor']['some']={}
+                  insideWhere['article']['ArticleByAuthor'] = {}
+                  insideWhere['article']['ArticleByAuthor']['some'] = {}
                   insideWhere['article']['ArticleByAuthor']['some']['authorId'] = {
                     in: value
                   }
@@ -120,29 +122,56 @@ export class ArticleService {
         },
       });
     }
-    return await this.prisma.articlesByBranch.findMany({
+    let articlesByBranch = await this.prisma.articlesByBranch.findMany({
       where: {
         ...insideWhere,
         branchId,
       },
-      orderBy:{price:'asc'},
+      orderBy: { price: 'asc' },
       include: {
+        rating: true,
         article: { include: { category: true, publishingHouse: true, type: true, cover: true } }
       }, take: 5,
       skip
     });
+    return await Promise.all(articlesByBranch.map(async elem => {
+
+      let rating = await this.prisma.rating.groupBy({
+        by:['articleByBranchId'],
+        _sum: {
+          rate: true,
+        },
+        _count:{rate:true},where:{
+          articleByBranchId:elem.id
+        }
+      })
+      console.log(rating);
+            
+      return({...elem,rating:Math.floor(rating[0]._sum.rate/rating[0]._count.rate)}); 
+    }
+    ))
   }
 
   async findOneByBranch(id: string) {
-    return await this.prisma.articlesByBranch.findFirst({
+    let articleByBranch= await this.prisma.articlesByBranch.findFirst({
       where: {
         id
       },
       include: {
+        rating: true,
         article: { include: { category: true, publishingHouse: true, type: true, cover: true } }
       }
-
     });
+    let rating = await this.prisma.rating.groupBy({
+      by:['articleByBranchId'],
+      _sum: {
+        rate: true,
+      },
+      _count:{rate:true},where:{
+        articleByBranchId:articleByBranch.id
+      }
+    })
+    return {...articleByBranch,rating:Math.floor(rating[0]._sum.rate/rating[0]._count.rate)}
   }
   async findOne(id: string) {
     return await this.prisma.article.findFirst({
@@ -161,5 +190,24 @@ export class ArticleService {
 
   remove(id: string) {
     return `This action removes a #${id} article`;
+  }
+
+  //Rating services
+  async createRating(dto: CreateRatingDto, userId: string, articleByBranchId: string) {
+    return await this.prisma.rating.create({
+      data: { ...dto, userId, articleByBranchId }
+    })
+  }
+  async updateRating(dto: CreateRatingDto, userId: string, articleByBranchId: string) {
+    return await this.prisma.rating.update({
+      where: {
+        articleUser: { userId, articleByBranchId }
+      },
+      data: {
+        commit: dto.commit,
+        rate: dto.rate
+      }
+    })
+
   }
 }

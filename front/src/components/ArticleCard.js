@@ -1,4 +1,5 @@
 import Rating from '../components/Rating'
+
 import { FiEye } from 'react-icons/fi'
 import { BsBag } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
@@ -8,9 +9,10 @@ import { useCart } from 'react-use-cart';
 function ArticleCard({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate()
-  
+  console.log(article);
+
   return (
-    
+
 
     <div className="article-card position-relative mx-3 mb-2 ">
       <div className="position-relative">
@@ -25,7 +27,10 @@ function ArticleCard({ article }) {
           alt=""
         />
         <div className="rating">
-          <Rating rate={article?.rate} disabled />
+          <Rating
+            edit={false}
+            rating={article?.rating}
+          />
         </div>
       </div>
 
@@ -41,7 +46,7 @@ function ArticleCard({ article }) {
           <div
             className="bg-yellow p-1 rounded pointer m-1"
 
-            onClick={()=> addItem(article)}
+            onClick={() => addItem(article)}
 
           >
             <BsBag size={20} />

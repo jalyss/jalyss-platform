@@ -6,43 +6,63 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Rating from '../components/Rating'
+
+
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { fetchArticleByBranch } from '../store/article'
+import { createArticleByBranchRating, fetchArticleByBranch, fetchArticleByBranchRating } from '../store/article'
 import '../assets/styles/book.css'
 import useMeta from '../hooks/useMeta'
 import DocumentMeta from 'react-document-meta'
 
 import { useCart } from 'react-use-cart';
+import axios from 'axios';
+import { showErrorToast } from '../utils/toast';
 
 function OneArticle() {
+  const [rating, setRating] = useState(0);
   const dispatch = useDispatch()
   const articleStore = useSelector((state) => state.article)
   const { article } = articleStore
   const { t } = useTranslation()
   const { articleId } = useParams()
+  const { articleByBranchId } = useParams()
   const [meta, setMeta] = useState({ title: '', description: '' })
   const { addItem } = useCart();
   useEffect(() => {
     dispatch(fetchArticleByBranch(articleId))
-    // .then(res=>{if(!res.error){
-
-    //   console.log(useMeta(res.data?.title, res.data?.shortDescription));
-    //  console.log(res.payload.article.title)
-    //   setMeta(useMeta(res.payload.article.title, article?.shortDescription));
-    // }})
+    .then(res=>{if(!res.error){
+    console.log(useMeta(res.data?.title, res.data?.shortDescription));
+    console.log(res.payload.article.title)
+    setMeta(useMeta(res.payload.article.title, article?.shortDescription));
+        }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  console.log('meta', meta)
 
-  console.log(article?.article)
+
+  console.log(article)
   useEffect(() => {
     if (article)
       setMeta(useMeta(article.article.title, article.article?.shortDescription))
   }, [article])
+
+  const handleRatingChange = async (rate) => {
+    dispatch(createArticleByBranchRating({ rate, articleByBranchId: articleId, commit: '' }))
+
+    //     .then((res) => {
+    //       if (!res.error) {
+    //         showErrorToast('Rating saved successfully')
+    //       } else {
+    //         console.log(res);
+    //         showErrorToast(res.error.message)
+    //       }
+    //     })
+  };
+
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
@@ -57,7 +77,11 @@ function OneArticle() {
             <div className="book-content-info">
               <h1 className="book-title">{article?.article?.title}</h1>
             </div>
-            <Rating rate={3} disabled />
+            <Rating
+              rating={article?.rating}
+              onChangeRate={handleRatingChange}
+              edit={true}
+            />
             <p className="mt-2">{t('OneArticle.ref')}</p>
             <p className="mt-2">{t('OneArticle.info')}</p>
             <TableContainer sx={{ width: 400 }} component={Paper}>
@@ -101,13 +125,13 @@ function OneArticle() {
               />
 
               <button className="book-add-to-cart-btn d-flex align-items-center"
-              
-              onClick={()=> addItem(article)}
-              
+
+                onClick={() => addItem(article)}
+
               >
-                
+
                 <MdOutlineAddShoppingCart size="30px" color="p" />
-                
+
                 <p className="m-0">{t('OneArticle.addCart')}</p>
 
               </button>

@@ -11,6 +11,7 @@ import { PassportModule } from '@nestjs/passport';
 import { MailService } from 'src/domains/mail/mail.service';
 import { MailerModule, MAILER_OPTIONS } from '@nestjs-modules/mailer/dist';
 import { MailModule } from '../mail/mail.module';
+import { EmployeeService } from '../employee/employee.service';
 
 
 @Module({
@@ -30,7 +31,7 @@ import { MailModule } from '../mail/mail.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService,UsersService,JwtStrategy,MailService],
+  providers: [AuthService, PrismaService,UsersService,JwtStrategy,MailService,EmployeeService],
   exports: [
     PassportModule,
     JwtModule

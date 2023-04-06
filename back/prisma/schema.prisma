@@ -169,7 +169,7 @@ model ArticlesByBranch {
   article     Article       @relation(fields: [articleId], references: [id])
   price       Float
   stock       Int
-  Rating      Rating[]
+  rating      Rating[]
   CommandLine CommandLine[]
 
   @@unique([branchId, articleId])
@@ -196,6 +196,28 @@ model CommandLine {
   @@unique(fields: [commandId, articleByBranchId], name: "commandArticle")
 }
 
+model Employee {
+  id       String  @id @default(uuid())
+  nameAr   String
+  nameEn   String
+  email    String  @unique
+  address  String
+  tel      String
+  password String
+  isAdmin  Boolean
+  branch   Branch? @relation(fields: [branchId], references: [id])
+  branchId String? @map("branch_id")
+  role     Role ?   @relation(fields: [roleId], references: [id])
+  roleId   String?
+}
+
+model Role {
+  id         String     @id @default(uuid())
+  roleNameAr String
+  roleNameEn String
+  employee   Employee[]
+}
+
 model Branch {
   id               String             @id @default(uuid())
   name             String
@@ -204,6 +226,7 @@ model Branch {
   mainBranch       Boolean            @default(false)
   articlesByBranch ArticlesByBranch[]
   commands         Command[]
+  employee         Employee[]
 }
 
 model Command {

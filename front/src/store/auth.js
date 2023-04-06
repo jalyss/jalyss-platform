@@ -33,10 +33,7 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   "auth/register",
   async (body, { dispatch }) => {
-    const response = await axios.post(
-      `${config.API_ENDPOINT}/auth/register`,
-      body
-    );
+    const response = await axios.post(`${config.API_ENDPOINT}/auth/register`,body);
     dispatch(login({ email: body.email, password: body.password }));
     return response.data;
   }
