@@ -5,7 +5,19 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EmployeeLogin } from '../employee/entities/employee.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { Employee } from '@prisma/client';
 
+export interface FormatLoginAdmin extends Partial<Employee> {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  email: string;
+  address: string;
+  tel: string;
+  isAdmin: boolean;
+  branchId: string;
+  roleId: string;
+}
 
 @Injectable()
 export class EmployeeService {

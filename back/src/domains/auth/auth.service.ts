@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FormatLogin, UsersService } from "../users/users.service";
-import { EmployeeService } from '../employee/employee.service';
+import { EmployeeService, FormatLoginAdmin } from '../employee/employee.service';
 import { JwtService } from "@nestjs/jwt";
 import { JwtPayload } from "./jwt.strategy";
 import { User } from '@prisma/client'
+import { Employee } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/domains/users/dto/create-user.dto';
 import { UserLogin } from 'src/domains/users/entities/user.entity';
@@ -38,7 +39,7 @@ export class AuthService {
         return status;
     }
 
-   
+
     async login(loginUserDto: UserLogin): Promise<any> {
         // find user in db
         const user = await
@@ -51,7 +52,35 @@ export class AuthService {
         // data: user
 
     }
+    //////////////:admin auth
+    async loginAdmin(loginEmployeeDto: EmployeeLogin): Promise<any> {
 
+        const employee = await
+            this.employeeService.findByLogin(loginEmployeeDto);
+
+
+        const token = this._createTokenAdmin(employee);
+
+        return token
+
+    }
+    private _createTokenAdmin(args: FormatLoginAdmin): any {
+        const employee: FormatLoginAdmin = args;
+        const Authorization = this.jwtService.sign(employee);
+        return {
+            expiresIn: process.env.EXPIRESIN,
+            Authorization,
+        };
+    }
+
+    async meAdmin(tokenAdmin: string) {
+        const payload = this.jwtService.decode(tokenAdmin, {}) as any;
+        return new Promise((resolve, reject) => {
+            resolve(payload);
+        });
+
+    }
+    //////////////////
     private _createToken(args: FormatLogin): any {
         const user: FormatLogin = args;
         const Authorization = this.jwtService.sign(user);
@@ -72,8 +101,6 @@ export class AuthService {
 
     async me(token: string) {
         const payload = this.jwtService.decode(token, {}) as any;
-
-
         return new Promise((resolve, reject) => {
             resolve(payload);
         });

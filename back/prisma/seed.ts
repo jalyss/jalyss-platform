@@ -25,7 +25,7 @@ async function main() {
     );
   }
 
-  //create employee
+  //create employees
   const saltEm = await bcrypt.genSalt();
   for (let i = 0; i < 4; i++) {
     employees.push(

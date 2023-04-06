@@ -15,6 +15,7 @@ import { AuthService, RegistrationSeederStatus, RegistrationStatus } from "./aut
 import { ApiBearerAuth, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { CreateUserDto } from 'src/domains/users/dto/create-user.dto';
 import { UpdatePasswordDto, UserLogin } from 'src/domains/users/entities/user.entity';
+import { EmployeeLogin } from '../employee/entities/employee.entity';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CurrentUser } from './decorators/currentUser';
 import { UpdateAuthDto } from './dto/update-auth.dto';
@@ -43,6 +44,12 @@ export class AuthController {
         return await this.authService.login(loginUserDto);
     }
 
+    @Post('login-admin')
+    public async loginAdmin(@Body() loginEmployeeDto: EmployeeLogin):
+        Promise<any> {
+        return await this.authService.loginAdmin(loginEmployeeDto);
+    }
+
     @ApiSecurity('apiKey')
     @UseGuards(JwtAuthGuard)
     @Get('me')
@@ -52,6 +59,22 @@ export class AuthController {
                 throw new Error('Missing Authorization header');
             }
             return await this.authService.me(
+                req.get('Authorization').replace('Bearer ', ''),
+            );
+        } catch (e) {
+            console.log('error', e);
+            throw new BadRequestException(e.message);
+        }
+    }
+    @ApiSecurity('apiKey')
+    @UseGuards(JwtAuthGuard)
+    @Get('meAdmin')
+    async meAdmin(@Request() req) {
+        try {
+            if (!req.get('Authorization')) {
+                throw new Error('Missing Authorization header');
+            }
+            return await this.authService.meAdmin(
                 req.get('Authorization').replace('Bearer ', ''),
             );
         } catch (e) {
