@@ -2,6 +2,8 @@ import React from "react";
 import { useCart } from "react-use-cart";
 import { BsBagXFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next'
+
 
 function Cart({handleClose}) {
   const {
@@ -13,6 +15,8 @@ function Cart({handleClose}) {
     emptyCart,
   } = useCart();
 const navigate=useNavigate()
+const { t, i18n } = useTranslation()
+
   
   return (
     <div>
@@ -25,11 +29,11 @@ const navigate=useNavigate()
                   <thead>
                     <tr>
                       <th scope="col" className="h5">
-                        Shopping Bag
+                        {t('offCanvas.shop')}
                       </th>
 
-                      <th scope="col">Quantity</th>
-                      <th scope="col">Price</th>
+                      <th scope="col">{t('offCanvas.quan')}</th>
+                      <th scope="col">{t('offCanvas.price')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -85,7 +89,7 @@ const navigate=useNavigate()
       <div>
         <div className="subtotal">
           <div>
-            <span className="label">Cart subtotal</span>
+            <span className="label">{t('offCanvas.total')} </span>
 
             <span className="price-wrapper">{cartTotal}</span>
           </div>
@@ -97,13 +101,13 @@ const navigate=useNavigate()
           <button  onClick={()=>{
             handleClose()
             navigate('/checkout')}} className="offCanvas-btn1">
-            <span className="label-btn">CHECKOUT</span>
+            <span className="label-btn">{t('offCanvas.checkout')}</span>
           </button>
         </div>
         <div>
           <button onClick={()=>{
             emptyCart()}} className="offCanvas-btn2" >
-            <span className="label-btn"> Clear Cart </span>
+            <span className="label-btn"> {t('offCanvas.clear')}  </span>
           </button>
         </div>
       </div>
