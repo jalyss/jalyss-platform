@@ -19,6 +19,7 @@ import DocumentMeta from 'react-document-meta'
 import { BsFilterSquare } from 'react-icons/bs'
 import 'rc-tooltip/assets/bootstrap.css'
 
+
 function Articles() {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
@@ -102,16 +103,17 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            categories: [...Filter.categories, element.id],
-                          }))
+                          ...Filter,
+                          categories: [...Filter.categories, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            categories: Filter.categories.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }))
+                          ...Filter,
+                          categories: Filter.categories.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }))
                     }}
+                    checked={filters.categories.includes(element.id)}
                   />
                   <label className="form-check-label">
                     {lg ? element.nameEn : element.nameAr}
@@ -134,16 +136,17 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            articleTypes: [...Filter.articleTypes, element.id],
-                          }))
+                          ...Filter,
+                          articleTypes: [...Filter.articleTypes, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            articleTypes: Filter.articleTypes.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }))
+                          ...Filter,
+                          articleTypes: Filter.articleTypes.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }))
                     }}
+                    checked={filters.articleTypes.includes(element.id)}
                   />
                   <label className="form-check-label">
                     {lg ? element.nameEn : element.nameAr}
@@ -166,19 +169,20 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            publishingHouses: [
-                              ...Filter.publishingHouses,
-                              element.id,
-                            ],
-                          }))
+                          ...Filter,
+                          publishingHouses: [
+                            ...Filter.publishingHouses,
+                            element.id,
+                          ],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            publishingHouses: Filter.publishingHouses.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }))
+                          ...Filter,
+                          publishingHouses: Filter.publishingHouses.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }))
                     }}
+                    checked={filters.publishingHouses.includes(element.id)}
                   />
                   <label className="form-check-label">{element.name}</label>
                 </div>
@@ -199,16 +203,17 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            authors: [...Filter.authors, element.id],
-                          }))
+                          ...Filter,
+                          authors: [...Filter.authors, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            authors: Filter.authors.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }))
+                          ...Filter,
+                          authors: Filter.authors.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }))
                     }}
+                    checked={filters.authors.includes(element.id)}
                   />
                   <label className="form-check-label">
                     {element.nameEn}({element.nameAr})
@@ -238,13 +243,13 @@ function Articles() {
       >
         <Offcanvas.Header closeButton />
         <Offcanvas.Body>
-          <Filters />
+          <Filters /> 
         </Offcanvas.Body>
       </Offcanvas>
 
       <div className="d-flex p-2 ">
         <div className="responsive-filters">
-          <Filters />
+          <Filters /> 
         </div>
         <div className="d-flex flex-wrap px-3 ">
           {articleStore.articles.items.map((element, index) => {
@@ -258,7 +263,7 @@ function Articles() {
             setFilters((Filters) => ({ ...Filters, skip: filters.skip + 5 }))
           }
         >
-          next
+          Next
         </button>
       </div>
     </DocumentMeta>
@@ -266,3 +271,5 @@ function Articles() {
 }
 
 export default Articles
+
+

@@ -18,6 +18,8 @@ import loginAr from "../constants/traductions/arabic/login.json";
 import loginEn from "../constants/traductions/english/login.json";
 import resetpassAr from "../constants/traductions/arabic/resetpass.json";
 import resetpassEn from "../constants/traductions/english/resetpass.json";
+import offCanvasAr from "../constants/traductions/arabic/offCanvas.json";
+import offCanvasEn from "../constants/traductions/english/offCanvas.json";
 
 
 i18n
@@ -29,11 +31,11 @@ i18n
     resources: {
       en: {
         translation:
-          { ...navbarEn, ...footerEn, ...OneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn,...loginEn,...resetpassEn}
+          { ...navbarEn, ...footerEn, ...OneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn,...loginEn,...resetpassEn,...offCanvasEn}
       },
       ar: {
         translation:
-          { ...navbarAr, ...footerAr, ...OneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr,...loginAr,...resetpassAr }
+          { ...navbarAr, ...footerAr, ...OneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr,...loginAr,...resetpassAr,...offCanvasAr }
 
       }
     },

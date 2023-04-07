@@ -39,7 +39,7 @@
   height: fit-content;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
-
+/* media screen for .accordion */
 @media all and (max-width: 992px) {
   .responsive-filters {
     display: none !important;

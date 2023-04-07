@@ -2,7 +2,25 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-//////////admin
+
+
+
+
+export const me = createAsyncThunk("auth/me", async (token) => {
+  let configs = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
+  console.log(config);
+  const response = await axios.get(`${config.API_ENDPOINT}/auth/me`, {
+    ...configs,
+  });
+
+  return response.data;
+});
+
+//////////////////////////
 
 export const meAdmin = createAsyncThunk("auth/meAdmin", async (token) => {
   let configs = {
@@ -18,6 +36,7 @@ export const meAdmin = createAsyncThunk("auth/meAdmin", async (token) => {
   return response.data;
 });
 
+
 export const loginAdmin = createAsyncThunk(
   "auth/login-admin",
   async (body, { dispatch }) => {
@@ -32,21 +51,7 @@ export const loginAdmin = createAsyncThunk(
   }
 );
 
-//////////////
-export const me = createAsyncThunk("auth/me", async (token) => {
-  let configs = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
-  console.log(config);
-  const response = await axios.get(`${config.API_ENDPOINT}/auth/me`, {
-    ...configs,
-  });
-
-  return response.data;
-});
-
+//////////////////////////
 export const login = createAsyncThunk(
   "auth/login",
   async (body, { dispatch }) => {
@@ -60,6 +65,7 @@ export const login = createAsyncThunk(
     return response.data;
   }
 );
+
 
 export const register = createAsyncThunk(
   "auth/register",
@@ -119,6 +125,7 @@ export const AuthSlice = createSlice({
   name: "auth",
   initialState: {
     me: null,
+    meAdmin:null,
     error: null,
     deleteError: null,
     saveError: null,
@@ -128,6 +135,9 @@ export const AuthSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(me.fulfilled, (state, action) => {
       state.me = action.payload;
+    });
+    builder.addCase(meAdmin.fulfilled, (state, action) => {
+      state.meAdmin = action.payload;
     });
   },
 });
