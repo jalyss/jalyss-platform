@@ -2,7 +2,25 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-//////////admin
+
+
+
+
+export const me = createAsyncThunk("auth/me", async (token) => {
+  let configs = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  };
+  console.log(config);
+  const response = await axios.get(`${config.API_ENDPOINT}/auth/me`, {
+    ...configs,
+  });
+
+  return response.data;
+});
+
+//////////////////////////
 
 export const meAdmin = createAsyncThunk("auth/meAdmin", async (token) => {
   let configs = {
@@ -17,6 +35,7 @@ export const meAdmin = createAsyncThunk("auth/meAdmin", async (token) => {
 
   return response.data;
 });
+
 
 export const loginAdmin = createAsyncThunk(
   "auth/login-admin",
@@ -32,34 +51,7 @@ export const loginAdmin = createAsyncThunk(
   }
 );
 
-//////////////
-export const me = createAsyncThunk("auth/me", async (token) => {
-  let configs = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
-  console.log(config);
-  const response = await axios.get(`${config.API_ENDPOINT}/auth/me`, {
-    ...configs,
-  });
-
-  return response.data;
-});
-export const meAdmin = createAsyncThunk("auth/meAdmin", async (token) => {
-  let configs = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
-  console.log(config);
-  const response = await axios.get(`${config.API_ENDPOINT}/auth/meAdmin`, {
-    ...configs,
-  });
-
-  return response.data;
-});
-
+//////////////////////////
 export const login = createAsyncThunk(
   "auth/login",
   async (body, { dispatch }) => {
@@ -73,19 +65,7 @@ export const login = createAsyncThunk(
     return response.data;
   }
 );
-export const loginAdmin = createAsyncThunk(
-  "auth/loginAdmin",
-  async (body, { dispatch }) => {
-    const response = await axios.post(
-      `${config.API_ENDPOINT}/auth/loginAdmin`,
-      body
-    );
-    let aux = JSON.stringify(response.data);
-    localStorage.setItem("tokenAdmin", aux);
-    dispatch(meAdmin(response.data.Authorization));
-    return response.data;
-  }
-);
+
 
 export const register = createAsyncThunk(
   "auth/register",

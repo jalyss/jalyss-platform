@@ -13,7 +13,7 @@ import Checkout from '../pages/Checkout'
 import Invoice from '../pages/Invoice'
 import ResetPassword from '../pages/ResetPassword'
 import NewPassword from '../pages/NewPassword'
-import loginadmin from '../pages/loginadmin'
+import Loginadmin from '../pages/loginadmin'
 
 function Router() {
     return (
@@ -37,7 +37,13 @@ function Router() {
 
                     </Route>
                     
+
                     <Route path='admin' element={<Admin />} />
+                    <Route path='loginadmin' element={<Loginadmin />} />
+
+                    
+
+
                   
 
 
