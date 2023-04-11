@@ -13,7 +13,7 @@ export class ArticleService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly branchService: BranchesService,
-  ) { }
+  ) {}
 
   async create(dto: CreateArticleDto, branchId: string) {
     return await this.prisma.article.create({
@@ -22,7 +22,6 @@ export class ArticleService {
       },
     });
   }
-
 
   findAll() {
     return this.prisma.article.findMany({
@@ -38,12 +37,12 @@ export class ArticleService {
   }
 
   async findAllByBranch(branchId: string, filters: FilterArticle) {
-    branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!.id;
+    branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
+      .id;
     let insideWhere = {};
-    let skip = 0
+    let skip = 0;
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
-
       let errors = [];
       Object.entries(filters).forEach(([key, value]) => {
         if (!filterExample[key]) {
@@ -56,43 +55,52 @@ export class ArticleService {
           };
         } else {
           //array
-          if (['categories', 'publishingHouses', 'articleTypes', 'authors'].includes(key)) {
+          if (
+            [
+              'categories',
+              'publishingHouses',
+              'articleTypes',
+              'authors',
+            ].includes(key)
+          ) {
             if (Array.isArray(value)) {
-              insideWhere['article'] = {}
+              insideWhere['article'] = {};
               switch (key) {
                 case 'categories':
                   insideWhere['article']['categoryId'] = {
-                    in: value
-                  }
+                    in: value,
+                  };
                   break;
                 case 'publishingHouses':
                   insideWhere['article']['publishingHouseId'] = {
-                    in: value
-                  }
+                    in: value,
+                  };
                   break;
                 case 'authors':
-                  insideWhere['article']['ArticleByAuthor'] = {}
-                  insideWhere['article']['ArticleByAuthor']['some'] = {}
-                  insideWhere['article']['ArticleByAuthor']['some']['authorId'] = {
-                    in: value
-                  }
+                  insideWhere['article']['ArticleByAuthor'] = {};
+                  insideWhere['article']['ArticleByAuthor']['some'] = {};
+                  insideWhere['article']['ArticleByAuthor']['some'][
+                    'authorId'
+                  ] = {
+                    in: value,
+                  };
                   break;
                 default:
                   insideWhere['article']['typeId'] = {
-                    in: value
-                  }
+                    in: value,
+                  };
               }
+            } else {
+              throw new HttpException(
+                key + ' must be array',
+                HttpStatus.BAD_REQUEST,
+              );
             }
-            else {
-              throw new HttpException(key + ' must be array', HttpStatus.BAD_REQUEST)
-            }
-          } else
-            //skip
-            if (key === 'skip')
-              skip = Number(value)
-            //true or false
-            else
-              insideWhere[key] = value;
+          }
+          //skip
+          else if (key === 'skip') skip = Number(value);
+          //true or false
+          else insideWhere[key] = value;
         }
       });
       if (errors.length > 0) {
@@ -104,7 +112,7 @@ export class ArticleService {
     }
     //
     if (filters.bestSaller) {
-      delete insideWhere['bestSaller']
+      delete insideWhere['bestSaller'];
       return await this.prisma.commandLine.groupBy({
         by: ['articleByBranchId'],
         _count: {
@@ -130,58 +138,81 @@ export class ArticleService {
       orderBy: { price: 'asc' },
       include: {
         rating: true,
-        article: { include: { category: true, publishingHouse: true, type: true, cover: true } }
-      }, take: 5,
-      skip
-    });
-    return await Promise.all(articlesByBranch.map(async elem => {
-
-      let rating = await this.prisma.rating.groupBy({
-        by:['articleByBranchId'],
-        _sum: {
-          rate: true,
+        article: {
+          include: {
+            category: true,
+            publishingHouse: true,
+            type: true,
+            cover: true,
+          },
         },
-        _count:{rate:true},where:{
-          articleByBranchId:elem.id
-        }
-      })
-      console.log(rating);
-            
-      return({...elem,rating:Math.floor(rating[0]._sum.rate/rating[0]._count.rate)}); 
-    }
-    ))
+      },
+      take: 5,
+      skip,
+    });
+    return await Promise.all(
+      articlesByBranch.map(async (elem) => {
+        let rating = await this.prisma.rating.groupBy({
+          by: ['articleByBranchId'],
+          _sum: {
+            rate: true,
+          },
+          _count: { rate: true },
+          where: {
+            articleByBranchId: elem.id,
+          },
+        });
+        console.log(rating);
+        if (rating.length && rating[0]._sum?.rate)
+          return {
+            ...elem,
+            rating: Math.floor(rating[0]._sum.rate / rating[0]._count.rate),
+          };
+        else return { ...elem, rating: 1 };
+      }),
+    );
   }
 
   async findOneByBranch(id: string) {
-    let articleByBranch= await this.prisma.articlesByBranch.findFirst({
+    let articleByBranch = await this.prisma.articlesByBranch.findFirst({
       where: {
-        id
+        id,
       },
       include: {
         rating: true,
-        article: { include: { category: true, publishingHouse: true, type: true, cover: true } }
-      }
+        article: {
+          include: {
+            category: true,
+            publishingHouse: true,
+            type: true,
+            cover: true,
+          },
+        },
+      },
     });
     let rating = await this.prisma.rating.groupBy({
-      by:['articleByBranchId'],
+      by: ['articleByBranchId'],
       _sum: {
         rate: true,
       },
-      _count:{rate:true},where:{
-        articleByBranchId:articleByBranch.id
-      }
-    })
-    return {...articleByBranch,rating:Math.floor(rating[0]._sum.rate/rating[0]._count.rate)}
+      _count: { rate: true },
+      where: {
+        articleByBranchId: articleByBranch.id,
+      },
+    });
+    return {
+      ...articleByBranch,
+      rating: Math.floor(rating[0]._sum.rate / rating[0]._count.rate),
+    };
   }
   async findOne(id: string) {
     return await this.prisma.article.findFirst({
       where: {
-        id
+        id,
       },
 
-      include: { category: true, publishingHouse: true, type: true }
-    }
-    );
+      include: { category: true, publishingHouse: true, type: true },
+    });
   }
 
   update(id: string, dto: UpdateArticleDto) {
@@ -193,21 +224,28 @@ export class ArticleService {
   }
 
   //Rating services
-  async createRating(dto: CreateRatingDto, userId: string, articleByBranchId: string) {
+  async createRating(
+    dto: CreateRatingDto,
+    userId: string,
+    articleByBranchId: string,
+  ) {
     return await this.prisma.rating.create({
-      data: { ...dto, userId, articleByBranchId }
-    })
+      data: { ...dto, userId, articleByBranchId },
+    });
   }
-  async updateRating(dto: CreateRatingDto, userId: string, articleByBranchId: string) {
+  async updateRating(
+    dto: CreateRatingDto,
+    userId: string,
+    articleByBranchId: string,
+  ) {
     return await this.prisma.rating.update({
       where: {
-        articleUser: { userId, articleByBranchId }
+        articleUser: { userId, articleByBranchId },
       },
       data: {
         commit: dto.commit,
-        rate: dto.rate
-      }
-    })
-
+        rate: dto.rate,
+      },
+    });
   }
 }
