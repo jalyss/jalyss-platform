@@ -2,7 +2,7 @@ import React from 'react'
 
 function article() {
   return (
-    <div>article</div>
+    <div style={{}}>article</div>
   )
 }
 

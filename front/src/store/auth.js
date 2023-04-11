@@ -46,7 +46,7 @@ export const loginAdmin = createAsyncThunk(
     );
     let aux = JSON.stringify(response.data);
     localStorage.setItem("token", aux);
-    dispatch(me(response.data.Authorization));
+    dispatch(meAdmin(response.data.Authorization));
     return response.data;
   }
 );
