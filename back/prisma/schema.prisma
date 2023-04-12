@@ -78,6 +78,7 @@ model User {
   Rating               Rating[]
   IntermediateCommands Command[]       @relation("intermediate")
   clientCommands       Command[]       @relation("clientCommand")
+<<<<<<< Updated upstream
   Blog                 Blog[]
   BlogLike             BlogLike[]
   chatRooms            UserChatRoom[]
@@ -110,6 +111,9 @@ model UserChatRoom {
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
   @@unique(fields: [userId,chatRoomId],name:"joinerRoom")
+=======
+  bookings             Booking[] // One-to-Many relation to Booking
+>>>>>>> Stashed changes
 }
 
 model UserCategory {
@@ -359,6 +363,7 @@ model MediaArticle {
   @@unique(fields: [mediaId, articleId], name: "articleMedia")
 }
 
+<<<<<<< Updated upstream
 model MediaBlog {
   blog    Blog   @relation(fields: [blogId], references: [id])
   blogId  String
@@ -397,4 +402,31 @@ model BlogCategory {
   nameAr String
   nameEn String
   Blog   Blog[]
+=======
+model WorkSpace {
+  id          Int       @id @default(autoincrement())
+  name        String
+  image       String
+  description String
+  capacity    Int
+  amenities   String
+  price       Float
+  type        String
+  rating      Float
+  reviews     Int
+  bookings    Booking[] // One-to-Many relation to Booking
+}
+
+model Booking {
+  id          Int       @id @default(autoincrement())
+  date        DateTime
+  startTime   String
+  endTime     String
+  user        User      @relation(fields: [userId], references: [id])  
+  userId      Int
+  workspace   WorkSpace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+
+  @@unique([userId, workspaceId])
+>>>>>>> Stashed changes
 }

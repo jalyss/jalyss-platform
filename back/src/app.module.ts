@@ -17,7 +17,11 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { MailModule } from './domains/mail/mail.module';
 import { EmployeeModule } from './domains/employee/employee.module';
 import { BlogsModule } from './domains/blogs/blogs.module';
+<<<<<<< Updated upstream
 import { ChatModule } from './domains/chat/chat.module';
+=======
+import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
+>>>>>>> Stashed changes
 @Module({
   imports: [
     MailModule,
@@ -32,7 +36,11 @@ import { ChatModule } from './domains/chat/chat.module';
     CitesModule,
     EmployeeModule,
     BlogsModule,
+<<<<<<< Updated upstream
     ChatModule
+=======
+    WorkSpacesModule,
+>>>>>>> Stashed changes
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],
