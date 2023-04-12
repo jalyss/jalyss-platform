@@ -17,6 +17,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { MailModule } from './domains/mail/mail.module';
 import { EmployeeModule } from './domains/employee/employee.module';
 import { BlogsModule } from './domains/blogs/blogs.module';
+import { ChatModule } from './domains/chat/chat.module';
 @Module({
   imports: [
     MailModule,
@@ -31,6 +32,7 @@ import { BlogsModule } from './domains/blogs/blogs.module';
     CitesModule,
     EmployeeModule,
     BlogsModule,
+    ChatModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],
