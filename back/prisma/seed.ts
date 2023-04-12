@@ -1,12 +1,15 @@
 import { PrismaClient } from '@prisma/client';
-
+import { create } from 'domain';
+import * as bcrypt from 'bcrypt';
 // initialize Prisma Client
 const prisma = new PrismaClient();
 
 async function main() {
+  let employees=[];
   let users = [];
   let articles = [];
   // create 10 dummy users
+  const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
     users.push(
       await prisma.user.create({
@@ -16,12 +19,98 @@ async function main() {
           fullNameEn: `jalyss${i}`,
           address: 'sfax',
           tel: '123456789',
-          password: '1234',
+          password: await bcrypt.hash('1234', salt),
         },
       }),
     );
   }
-  //create dummy atricle Category
+
+  //create employees
+  const saltEm = await bcrypt.genSalt();
+  for (let i = 0; i < 4; i++) {
+    employees.push(
+      await prisma.employee.create({
+        data: {
+          email: 'employee' + i + '@gmail.com',
+          nameAr: `employee${i}`,
+          nameEn: `employee${i}`,
+          address: 'sfax',
+          tel: '11111111',
+          password: await bcrypt.hash('1234', saltEm),
+          isAdmin: true,
+        },
+      }),
+    );
+  }
+
+  //create dummy country
+  let country1 = await prisma.country.create({
+    data: {
+      nameAr: 'تونس ',
+      nameEn: ' Tunisia',
+
+    },
+  });
+
+  let country2 = await prisma.country.create({
+    data: {
+      nameAr: 'المغرب',
+      nameEn: ' Marroc',
+
+    },
+
+  });
+  let city1 = await prisma.city.create({
+    data: {
+      nameAr: 'تونس',
+      nameEn: 'Tunis',
+      countryId: country1.id
+
+    },
+
+  });
+  let city2 = await prisma.city.create({
+    data: {
+      nameAr: 'صفاقس',
+      nameEn: 'Sfax',
+      countryId: country1.id
+
+    },
+
+  });
+  let countryIds = [country1.id, country2.id]
+
+  //create dummy author
+  let author1 = await prisma.author.create({
+    data: {
+      nameAr: ' داير واين',
+      nameEn: ' Wayne Dyer',
+      biographyAr: ',',
+      biographyEn: ','
+    },
+  });
+
+  let author2 = await prisma.author.create({
+    data: {
+      nameAr: 'كوفي ستيفن',
+      nameEn: ' Stephen Covey',
+      biographyAr: ',',
+      biographyEn: ','
+    },
+  });
+
+  let author3 = await prisma.author.create({
+    data: {
+      nameAr: ' شوبرا ديباك',
+      nameEn: ' Deepak Chopra',
+      biographyAr: ',',
+      biographyEn: ','
+    },
+  });
+  let authorIds = [author1.id, author2.id, author3.id]
+
+
+  //create dummy article Category
   let articleCategory1 = await prisma.articleCategory.create({
     data: {
       nameAr: 'تنمية بشرية',
@@ -40,7 +129,7 @@ async function main() {
       nameEn: 'Awareness',
     },
   });
-  let articleCategoryIds=[articleCategory1.id,articleCategory2.id,articleCategory3.id]
+  let articleCategoryIds = [articleCategory1.id, articleCategory2.id, articleCategory3.id]
   //create dummy aarticle type
   let type = await prisma.type.create({
     data: {
@@ -73,12 +162,12 @@ async function main() {
   let publishinghouseIds = [publishingHouse1.id, publishingHouse2.id, publishingHouse3.id]
   // create 10 dummy articles
   let cover = await prisma.media.create({
-    data:{
-      type   :      'image',
-      alt     :     'cover test',
-      extension :   'jpg',
-      description : 'cover test',
-      path:`https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg`
+    data: {
+      type: 'image',
+      alt: 'cover test',
+      extension: 'jpg',
+      description: 'cover test',
+      path: `https://jalyss.com/899-home_default/The-Subtle-Art-of-Not-Giving.jpg`
     }
   })
   for (let i = 0; i < 20; i++) {
@@ -86,11 +175,16 @@ async function main() {
       await prisma.article.create({
         data: {
           title: 'jalyss book ' + i,
-          coverId: cover.id ,
+          coverId: cover.id,
           weight: 110,
-          pageNumber :  255,
-          code:`0000-${i}`,
-          categoryId:articleCategoryIds[Math.floor(Math.random() *articleCategoryIds.length)],
+          pageNumber: 255,
+          code: `0000-${i}`,
+          ArticleByAuthor: {
+            create: {
+              authorId: authorIds[Math.floor(Math.random() * authorIds.length)]
+            }
+          },
+          categoryId: articleCategoryIds[Math.floor(Math.random() * articleCategoryIds.length)],
           typeId: type.id,
           publishingHouseId: publishinghouseIds[Math.floor(Math.random() * publishinghouseIds.length)],
         },
@@ -107,6 +201,7 @@ async function main() {
       mainBranch: true,
     },
   });
+
   let articlesByBranch = [];
   for (let i = 0; i < articles.length; i += 2) {
     articlesByBranch.push(
@@ -123,8 +218,22 @@ async function main() {
 
   console.log(users);
   console.log(articles);
-
   console.log(articlesByBranch);
+  let rating = [];
+  for (let i = 0; i < articles.length; i += 2) {
+    rating.push(
+      await prisma.rating.create({
+        data: {
+          articleByBranchId: articlesByBranch[Math.floor(Math.random() * articlesByBranch.length)].id,
+          userId: users[Math.floor(Math.random() * users.length)].id,
+          rate: Math.floor(Math.random() * 5),
+          commit: ''
+        }
+      })
+    )
+  }
+
+
 }
 
 // execute the main function

@@ -1,12 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
+
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { response } from 'express';
-import { Media, MediaUser, User } from '@prisma/client';
+
+import { Media, User } from '@prisma/client';
 
 export interface FormatLogin extends Partial<User> {
   id: string;
@@ -23,12 +24,12 @@ export interface FormatLogin extends Partial<User> {
   educationLevelId: string;
   functionalAreaId: string;
   jobTitleId: string;
-  Media: MediaUser[];
+  avatar: Media;
 }
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(data: CreateUserDto) {
     const salt = await bcrypt.genSalt();
@@ -38,30 +39,7 @@ export class UsersService {
       data,
     });
   }
-  // async signInAdmin(data: UserLogin) {
-  //   const response = await this.prisma.user.findUniqueOrThrow({ where: { email: data.email } });
-  //   if (!response) {
-  //     throw new HttpException("invalid_credentials",
-  //       HttpStatus.UNAUTHORIZED);
-  //   }
-  //   const isMatch = await bcrypt.compare(data.password, response.password);
-  //   if (!isMatch) {
-  //     throw new HttpException("invalid_credentials",
-  //       HttpStatus.UNAUTHORIZED);
-  //   }
-  //   delete response.password
-  //   if (isMatch && response.role === 'admin')
-  //     return response;
-  //   else throw 'Rmail or password is incorrect'
-  // }
-  // async login(data: UserLogin) {
-  //   const response = await this.prisma.user.findUniqueOrThrow({ where: { email: data.email } });
-  //   const isMatch = await bcrypt.compare(data.password, response.password);
-  //   delete response.password
-  //   if (isMatch)
-  //     return response;
-  //   else throw 'email or password is incorrect'
-  // }
+
 
   findAll() {
     return this.prisma.user.findMany({
@@ -87,27 +65,35 @@ export class UsersService {
       where: { email },
       include: {
         Media: true,
+        avatar: true
       },
     });
 
     if (!user) {
-      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
     }
 
     // compare passwords
     const areEqual = await bcrypt.compare(password, user.password);
 
     if (!areEqual) {
-      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
     }
 
-    const { password: p, ...rest } = user;
+    const { password: p, confirmkey: k, ...rest } = user;
     return rest;
   }
   async findByPayload({ email }: any): Promise<any> {
-    return await this.prisma.user.findFirst({
+    let user = {}
+    user = await this.prisma.user.findFirst({
       where: { email },
     });
+    if (!user)
+      user = await this.prisma.employee.findFirst({
+        where: { email }
+      })
+    return user
+
   }
   async updatePassword(payload: UpdatePasswordDto, id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({

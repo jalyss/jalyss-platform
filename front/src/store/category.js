@@ -23,7 +23,7 @@ export const categorySlice = createSlice({
     error: null,
     deleteError: null,
     saveError: null,
-    createUserError: null,
+    createCategoryError: null,
   },
   reducers: {},
   extraReducers(builder) {

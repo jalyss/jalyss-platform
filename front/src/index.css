@@ -15,5 +15,8 @@ code {
 @import url('./assets/styles/standardStyle.css');
 @import url('./assets/styles/pagesAndViewStyles.css');
 @import url('./assets/styles/noPageStyle.css');
+@import url('./assets/styles/invoice.css');
+@import url('./assets/styles/signup.css');
+@import url('./assets/styles/layoutStyles.css');
 
 

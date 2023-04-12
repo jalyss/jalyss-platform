@@ -22,12 +22,31 @@ export const fetchArticle = createAsyncThunk(
     const response = await axios.get(`${config.API_ENDPOINT}/articles/one/${id}`);
     return response.data;
   });
-export const fetchArticleByBranch = createAsyncThunk(
-  "articles/articleByBranch",
-  async (id) => {
-    const response = await axios.get(`${config.API_ENDPOINT}/articles/one-by-branch/${id}`);
+export const fetchArticleByBranch = createAsyncThunk("articles/articleByBranch", async (id) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/articles/one-by-branch/${id}`);
+  return response.data;
+});
+
+
+export const createArticleByBranchRating = createAsyncThunk(
+  "articles/rating", async (body, { dispatch }) => {
+    console.log(body);
+    const articleByBranchId=body.articleByBranchId
+    delete body.articleByBranchId
+    let token=JSON.parse(localStorage.getItem('token'))
+    const configs={
+      headers:{
+        Authorization:'Bearer '+ token.Authorization
+      }
+    }
+    if (!token) return;//if u don't have token inthe localstorage this meaning that u are not a user so will break the function with return nothing
+    console.log(token);
+    const response = await axios.post(`${config.API_ENDPOINT}/articles/rating/${articleByBranchId}`, body,configs);
+    dispatch(fetchArticleByBranch(articleByBranchId))
     return response.data;
   });
+
+
 
 export const articleSlice = createSlice({
   name: "article",
@@ -56,6 +75,7 @@ export const articleSlice = createSlice({
     builder.addCase(fetchArticleByBranch.fulfilled, (state, action) => {
       state.article = action.payload;
     });
+    
   },
 });
 export default articleSlice.reducer;

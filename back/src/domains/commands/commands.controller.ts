@@ -37,13 +37,15 @@ export class CommandsController {
     return this.commandsService.findAllByBranchIdentifier(branchId,filters);
   }
 
-  @Get(':id')
+  @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.commandsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommandDto: UpdateCommandDto) {
+  update(@Param('id') id: string, 
+  @Body() updateCommandDto: UpdateCommandDto
+  ) {
     return this.commandsService.update(id, updateCommandDto);
   }
 

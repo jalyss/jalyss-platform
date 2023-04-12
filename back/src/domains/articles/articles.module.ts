@@ -9,6 +9,8 @@ import { PublishingHouseController } from './publishingHouses.controller';
 import { CategoryController } from './categories.controller';
 import { CategoryService } from './categories.service';
 import { PublishingHouseService } from './publishingHouses.service';
+import { authorService } from './author.service';
+import { authorController } from './author.controller';
 
 @Module({
   controllers: [
@@ -16,6 +18,7 @@ import { PublishingHouseService } from './publishingHouses.service';
     ArticleTypeController,
     PublishingHouseController,
     CategoryController,
+    authorController,
   ],
   providers: [
     ArticleService,
@@ -24,6 +27,7 @@ import { PublishingHouseService } from './publishingHouses.service';
     PublishingHouseService,
     PrismaService,
     BranchesService,
+    authorService,
   ],
 })
 export class ArticleModule {}

@@ -30,9 +30,10 @@
   "storeInfo": {
     "infoStore": "Info store",
     "jalyss": "Jalysscom ",
-    "adress": "Anbara 1 Building next to Jammousi Cultural Complex , Sfax3000"
-    
+    "adress": "Anbara 1 Building next to Jammousi Cultural Complex , Sfax3000",
+    "tunisia":"Tunisia"
   },
 
-  "joinMailingList": " Join Mailing List "
+  "joinMailingList": " Join Mailing List ",
+  "yourEmail": " Your Email"
 }

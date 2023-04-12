@@ -1,6 +1,12 @@
 {
     "OneArticle": {
-        "addCart": "Add To Cart"
-        
+      "addCart": " Add to cart",
+      "info": "Informations",
+      "category": "Category",
+      "weight": "Weight",
+      "nPages": " Number of pages ",
+      "publishingHouse": "PublishingHouse",
+      "ref": "Reference"
     }
-}
+  }
+  

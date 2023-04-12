@@ -1,17 +1,19 @@
 {
   "navbar": {
     "cart": "سلة مشترياتك",
-    "tot" : "د.ت 0,00",
-    "language":"اللغة",
-    "devise":"العملة",
-    
+    "tot": "  د.ت ",
+    "language": "اللغة",
+    "devise": "العملة",
     "account": {
       "profile": "حسابي",
       "signup": " تسجيل الدخول"
     },
-    "searchInput": "....ابحث",
+    "searchInput": "ابحث....",
     "searchButton": "بحث",
     "articles": "المنتجات",
-    "home": "الصفحة الرئيسية"
+    "home": "الصفحة الرئيسية",
+    "space": "فضاء جاليسكوم",
+    "training": "التدريب",
+    "blogs": "المدونات"
   }
 }

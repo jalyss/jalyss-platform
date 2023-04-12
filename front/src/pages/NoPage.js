@@ -4,8 +4,11 @@ import { useTranslation } from "react-i18next";
 function NoPage() {
   const { t } = useTranslation()
   return (
+    
     <div className="bg-purple ">
-      <div className="stars">
+      
+      <div className="stars"   >
+        
 
         <div className="central-body">
           <h1 className="text-white">{t('noPage.commingSoon')}</h1>
@@ -14,12 +17,13 @@ function NoPage() {
             src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
             width="100px"
           />
+          
           <a
             href="/"
             className="btn-go-home"
 
           >
-            GO BACK HOME
+            {t('noPage.goHome')}
           </a>
         </div>
 

@@ -20,6 +20,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Median')
     .setDescription('The Median API description')
+    .addApiKey({ type: 'apiKey', name: 'Authorization', in: 'header' },'apiKey')
     .setVersion('0.1')
     .build();
 

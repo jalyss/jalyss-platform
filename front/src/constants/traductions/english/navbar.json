@@ -1,7 +1,7 @@
 {
     "navbar": {
         "cart": "Your Cart",
-        "tot" : "0,00 TND",
+        "tot" : " TND ",
         "language":"Language",
         "devise":"Devise",
        
@@ -12,6 +12,9 @@
         "searchInput":"Search....",
         "searchButton":"Searching",
         "articles":"Articles",
-        "home":"Home"
+        "home":"Home",
+        "space":"Space Jalysscom",
+        "training":"Traning",
+        "blogs":"Blogs"
     }
 }

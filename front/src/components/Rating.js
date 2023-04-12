@@ -1,17 +1,27 @@
-import { AiFillStar } from 'react-icons/ai'
 
-function Rating({ rate, onChangeRate, disabled }) {
-  const stars = ['1', '2', '3', '4', '5']
+import ReactStars from 'react-stars';
+
+
+function Rating({ rating, onChangeRate,edit }) {
+
 
   return (
     <div className='d-flex'>
-      {stars.map((star) => (
-        <span key={star} onClick={() => !disabled && onChangeRate(star)}>
-          <AiFillStar fill={star <= rate ? '#edcc3f' : '#d4d4d4'} />
-        </span>
-      ))}
+      <ReactStars
+        count={5}
+        value={rating}
+        onChange={onChangeRate}
+        size={24}
+        half={false}
+        edit={edit}
+        color1={'#D3D3D3'}
+        color2={'#ffd700'}
+      />
     </div>
   )
 }
+
+
+
 
 export default Rating
