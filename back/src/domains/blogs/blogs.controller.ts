@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
+import { FilterBlog } from './entities/blog.entity';
 
 @Controller('blogs')
 export class BlogsController {
@@ -15,6 +16,12 @@ export class BlogsController {
   @Get()
   findAll() {
     return this.blogsService.findAll();
+  }
+  @Get('with-filters')
+  findAllWithFilter(
+    @Query() filters:FilterBlog
+  ){
+    return this.blogsService.findAllWithFilter(filters)
   }
 
   @Get(':id')
