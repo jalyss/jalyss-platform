@@ -18,7 +18,7 @@ import { MailModule } from './domains/mail/mail.module';
 import { EmployeeModule } from './domains/employee/employee.module';
 import { BlogsModule } from './domains/blogs/blogs.module';
 import { ChatModule } from './domains/chat/chat.module';
-import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
+import { WorkSpacesModule } from './domains/work-spaces/work-spaces-services.module';
 @Module({
   imports: [
     MailModule,

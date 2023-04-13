@@ -13,8 +13,8 @@ export class WorkSpacesController {
   constructor(private readonly workSpacesService: WorkSpacesService) {}
 
   @Post()
-  create(@Body() createWorkSpaceDto: CreateWorkSpaceDto) {
-    return this.workSpacesService.create(createWorkSpaceDto);
+  create(@Body() dto: CreateWorkSpaceDto) {
+    return this.workSpacesService.create(dto);
   }
 
   @Get()
