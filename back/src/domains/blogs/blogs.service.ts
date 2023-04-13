@@ -8,6 +8,7 @@ import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
 export class BlogsService {
   constructor(private readonly prisma: PrismaService) {}
   async create(dto: CreateBlogDto) {
+  
     return await this.prisma.blog.create({
       data: dto,
     });
