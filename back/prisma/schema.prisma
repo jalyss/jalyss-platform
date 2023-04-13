@@ -361,7 +361,7 @@ model MediaArticle {
   @@unique(fields: [mediaId, articleId], name: "articleMedia")
 }
 
-// <<<<<<< Updated upstream
+
 model MediaBlog {
   blog    Blog   @relation(fields: [blogId], references: [id])
   blogId  String
