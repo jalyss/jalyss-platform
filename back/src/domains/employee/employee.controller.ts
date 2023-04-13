@@ -10,15 +10,16 @@ export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.employeeService.findAll();
   }
 
-  @Get(':id')
+  @Get('/one:id')
   findOne(@Param('id') id: string) {
     return this.employeeService.findOne(id);
   }
+
 
   @Post('create')
   create(@Body() dto: CreateEmployeeDto) {

@@ -34,7 +34,7 @@ export class UsersController {
     private readonly authService: AuthService
   ) { }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.usersService.findAll();
   }
