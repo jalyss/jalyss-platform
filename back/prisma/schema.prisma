@@ -413,6 +413,8 @@ model WorkSpace {
   type        String
   rating      Float
   reviews     Int
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
   bookings    Booking[] // One-to-Many relation to Booking
 }
 
