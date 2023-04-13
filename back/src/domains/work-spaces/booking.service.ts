@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateBookingDto } from './dto/create-booking.dto';
 // import { CreateCategoryDto } from './dto/create-category.dto';
 // import { UpdateCategoryDto } from './dto/update-category.dto';
 
@@ -11,13 +12,12 @@ export class BookingService {
 
   ) { }
 
-//   async create(dto: CreateCategoryDto) {
-//     return await this.prisma.articleCategory.create({
-//       data: {
-//         ...dto,
-//       },
-//     });
-//   }
+
+  async create(dto:CreateBookingDto) {
+    return await this.prisma.booking.create({
+      data: dto,
+    });
+  }
 
   findAll() {
     return this.prisma.booking.findMany();

@@ -9,7 +9,7 @@ import {
   } from '@nestjs/common';
   import { ApiTags } from '@nestjs/swagger';
 import { BookingService } from './booking.service';
-//   import { CreateCategoryDto } from './dto/create-category.dto';
+  import { CreateBookingDto } from './dto/create-booking.dto';
 //   import { UpdateCategoryDto } from './dto/update-category.dto';
   
   
@@ -18,12 +18,10 @@ import { BookingService } from './booking.service';
   export class BookingController {
     constructor(private readonly bookingService: BookingService) {}
   
-    // @Post()
-    // create(
-    //   @Body() dto: CreateCategoryDto,
-    //  ) {
-    //   return this.categoryService.create(dto);
-    // }
+    @Post()
+    create(@Body() dto: CreateBookingDto) {
+      return this.bookingService.create(dto);
+    }
   
     @Get()
     findAll() {

@@ -59,9 +59,9 @@ export class AuthService {
             this.employeeService.findByLogin(loginEmployeeDto);
 
 
-        const token = this._createTokenAdmin(employee);
+        // const token = this._createTokenAdmin(employee);
 
-        return token
+        // return token
 
     }
     private _createTokenAdmin(args: FormatLoginAdmin): any {
