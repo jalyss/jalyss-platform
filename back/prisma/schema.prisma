@@ -423,6 +423,8 @@ model Booking {
   date        DateTime
   startTime   String
   endTime     String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
   user        User      @relation(fields: [userId], references: [id])
   userId      String
   workspace   WorkSpace @relation(fields: [workspaceId], references: [id])
