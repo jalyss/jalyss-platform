@@ -78,11 +78,11 @@ model User {
   Rating               Rating[]
   IntermediateCommands Command[]       @relation("intermediate")
   clientCommands       Command[]       @relation("clientCommand")
-<<<<<<< Updated upstream
   Blog                 Blog[]
   BlogLike             BlogLike[]
   chatRooms            UserChatRoom[]
   ChatMessage          ChatMessage[]
+  bookings             Booking[] // One-to-Many relation to Booking
 }
 
 model ChatRoom {
@@ -110,10 +110,8 @@ model UserChatRoom {
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
-  @@unique(fields: [userId,chatRoomId],name:"joinerRoom")
-=======
-  bookings             Booking[] // One-to-Many relation to Booking
->>>>>>> Stashed changes
+
+  @@unique(fields: [userId, chatRoomId], name: "joinerRoom")
 }
 
 model UserCategory {
@@ -363,7 +361,7 @@ model MediaArticle {
   @@unique(fields: [mediaId, articleId], name: "articleMedia")
 }
 
-<<<<<<< Updated upstream
+// <<<<<<< Updated upstream
 model MediaBlog {
   blog    Blog   @relation(fields: [blogId], references: [id])
   blogId  String
@@ -402,9 +400,10 @@ model BlogCategory {
   nameAr String
   nameEn String
   Blog   Blog[]
-=======
+}
+
 model WorkSpace {
-  id          Int       @id @default(autoincrement())
+  id          String       @id @default(uuid())
   name        String
   image       String
   description String
@@ -418,15 +417,14 @@ model WorkSpace {
 }
 
 model Booking {
-  id          Int       @id @default(autoincrement())
+  id          String       @id @default(uuid())
   date        DateTime
   startTime   String
   endTime     String
-  user        User      @relation(fields: [userId], references: [id])  
-  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
   workspace   WorkSpace @relation(fields: [workspaceId], references: [id])
-  workspaceId Int
+  workspaceId String
 
   @@unique([userId, workspaceId])
->>>>>>> Stashed changes
 }
