@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client';
-import { create } from 'domain';
+import { Domain, create } from 'domain';
 import * as bcrypt from 'bcrypt';
+import { domainToUnicode } from 'url';
 // initialize Prisma Client
 const prisma = new PrismaClient();
 
 async function main() {
-  let employees=[];
   let users = [];
   let articles = [];
   // create 10 dummy users
@@ -25,24 +25,153 @@ async function main() {
     );
   }
 
-  //create employees
-  const saltEm = await bcrypt.genSalt();
-  for (let i = 0; i < 4; i++) {
-    employees.push(
-      await prisma.employee.create({
-        data: {
-          email: 'employee' + i + '@gmail.com',
-          nameAr: `employee${i}`,
-          nameEn: `employee${i}`,
-          address: 'sfax',
-          tel: '11111111',
-          password: await bcrypt.hash('1234', saltEm),
-          isAdmin: true,
-        },
-      }),
-    );
-  }
+ //create roles
+  let itManagerRole = await prisma.role.create({
+    data: {
+      roleNameAr: '',
+      roleNameEn: '',
+      permissions: [
+        { "domain": "employee", "action": "read" },
+        { "domain": "employee", "action": "create" },
+        { "domain": "employee", "action": "update" },
+        { "domain": "employee", "action": "delete" },
+        { "domain": "blog", "action": "read" },
+        { "domain": "blog", "action": "update" },
+        { "domain": "blog", "action": "delete" },
+      ],
+    }
+  })
+  let hrManagerRole = await prisma.role.create({
 
+    data: {
+      roleNameAr: '',
+      roleNameEn: '',
+      permissions: [
+        { "domain": "blog", "action": "read" },
+        { "domain": "blog", "action": "update" },
+        { "domain": "blog", "action": "delete" },
+      ],
+    }
+  })
+  let selesAgentRole = await prisma.role.create({
+
+    data: {
+      roleNameAr: '',
+      roleNameEn: '',
+      permissions: [
+        { "domain": "blog", "action": "read" },
+        { "domain": "blog", "action": "update" },
+        { "domain": "blog", "action": "delete" },
+      ],
+    }
+  })
+  let groutAgentRole = await prisma.role.create({
+
+    data: {
+      roleNameAr: '',
+      roleNameEn: '',
+      permissions: [
+        { "domain": "blog", "action": "read" },
+        { "domain": "blog", "action": "update" },
+        { "domain": "blog", "action": "delete" },
+      ],
+    }
+  })
+  let developerRole = await prisma.role.create({
+
+    data: {
+      roleNameAr: '',
+      roleNameEn: '',
+      permissions: [
+        { "domain": "blog", "action": "read" },
+        { "domain": "blog", "action": "update" },
+        { "domain": "blog", "action": "delete" },
+      ],
+    }
+  })
+
+
+ //create employees
+  const saltEm = await bcrypt.genSalt();
+  let manager = await prisma.employee.create({
+    data: {
+      fullNameAr: 'بسمة',
+      fullNameEn: 'besma',
+      email: 'besma@jalyss.com',
+      address: '',
+      tel: '',
+      password: await bcrypt.hash('1234', saltEm),
+      isAdmin: true,
+      
+    }
+  })
+  let developer1 = await prisma.employee.create({
+    data: {
+      fullNameAr: 'وسيم',
+      fullNameEn: 'wassim',
+      email: 'wassim@jalyss.com',
+      address: '',
+      tel: '',
+      password: await bcrypt.hash('1234', saltEm),
+      roleId: developerRole.id,
+    }
+  })
+  let developer2 = await prisma.employee.create({
+    data: {
+      fullNameAr: 'غادة',
+      fullNameEn: 'ghada',
+      email: 'ghada@jalyss.com',
+      address: '',
+      tel: '',
+      password: await bcrypt.hash('1234', saltEm),
+      roleId: developerRole.id,
+    }
+  })
+  let itManager = await prisma.employee.create({
+    data: {
+      fullNameAr: 'خليل',
+      fullNameEn: 'khalil',
+      email: 'khalil@jalyss.com',
+      address: '',
+      tel: '',
+      password: await bcrypt.hash('1234', saltEm),
+      roleId: itManagerRole.id,
+    }
+  })
+
+   let groutAgent = await prisma.employee.create({
+    data: {
+      fullNameAr: 'ناديه',
+      fullNameEn: 'nedia',
+      email: 'nedia@jalyss.com',
+      address: '',
+      tel: '',
+      password: await bcrypt.hash('1234', saltEm),
+      roleId: groutAgentRole.id,
+    }
+  })
+  let sellesAgent = await prisma.employee.create({
+    data: {
+      fullNameAr: 'اماني',
+      fullNameEn: 'ameni',
+      email: 'ameni@jalyss.com',
+      address: '',
+      tel: '',
+      password: await bcrypt.hash('1234', saltEm),
+      roleId: selesAgentRole.id,
+    }
+  })
+  let hrManager = await prisma.employee.create({
+    data: {
+      fullNameAr: 'ابتسام',
+      fullNameEn: 'ibtisem',
+      email: 'ibtisem@jalyss.com',
+      address: '',
+      tel: '',
+      password: await bcrypt.hash('1234', saltEm),
+      roleId: hrManagerRole.id,
+    }
+  })
   //create dummy country
   let country1 = await prisma.country.create({
     data: {
@@ -160,6 +289,7 @@ async function main() {
     },
   });
   let publishinghouseIds = [publishingHouse1.id, publishingHouse2.id, publishingHouse3.id]
+
   // create 10 dummy articles
   let cover = await prisma.media.create({
     data: {
