@@ -9,8 +9,8 @@ import { Employee } from '@prisma/client';
 
 export interface FormatLoginAdmin extends Partial<Employee> {
   id: string;
-  nameAr: string;
-  nameEn: string;
+  fullNameAr: string;
+  fullNameEn: string;
   email: string;
   address: string;
   tel: string;

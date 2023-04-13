@@ -231,25 +231,26 @@ model CommandLine {
 }
 
 model Employee {
-  id       String  @id @default(uuid())
-  nameAr   String
-  nameEn   String
-  email    String  @unique
-  address  String
-  tel      String
-  password String
-  isAdmin  Boolean
-  branch   Branch? @relation(fields: [branchId], references: [id])
-  branchId String? @map("branch_id")
-  role     Role?   @relation(fields: [roleId], references: [id])
-  roleId   String?
+  id         String  @id @default(uuid())
+  fullNameAr String
+  fullNameEn String
+  email      String  @unique
+  address    String
+  tel        String
+  password   String
+  isAdmin    Boolean @default(false)
+  branch     Branch? @relation(fields: [branchId], references: [id])
+  branchId   String? @map("branch_id")
+  role       Role?   @relation(fields: [roleId], references: [id])
+  roleId     String?
 }
 
 model Role {
-  id         String     @id @default(uuid())
-  roleNameAr String
-  roleNameEn String
-  employee   Employee[]
+  id          String     @id @default(uuid())
+  roleNameAr  String
+  roleNameEn  String
+  permissions Json
+  employee    Employee[]
 }
 
 model Branch {
