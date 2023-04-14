@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { CreateServiceDto } from './dto/create-service.dto';
-// import { UpdateWorkSpaceDto } from './dto/update-work-space.dto';
+import { UpdateServiceDto } from './dto/update-service.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 
@@ -22,18 +22,18 @@ export class ServiceController {
     return this.serviceService.findAll();
   }
 
-//   @Get(':id')
-//   findOne(@Param('id') id: string) {
-//     return this.workSpacesService.findOne(+id);
-//   }
+  @Get('one/:id')
+  findOne(@Param('id') id: string) {
+    return this.serviceService.findOne(id);
+  }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() UpdateServiceDto: UpdateServiceDto) {
+    return this.serviceService.update(id, UpdateServiceDto);
+  }
 
-//   @Patch(':id')
-//   update(@Param('id') id: string, @Body() updateWorkSpaceDto: UpdateWorkSpaceDto) {
-//     return this.workSpacesService.update(+id, updateWorkSpaceDto);
-//   }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.serviceService.remove(id);
+  }
 
-//   @Delete(':id')
-//   remove(@Param('id') id: string) {
-//     return this.workSpacesService.remove(+id);
-//   }
 }

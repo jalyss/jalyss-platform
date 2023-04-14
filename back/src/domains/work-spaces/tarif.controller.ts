@@ -12,10 +12,10 @@ import { ApiTags } from '@nestjs/swagger';
 export class TarifController {
   constructor(private readonly tarifService: TarifService) {}
 
-//   @Post()
-//   create(@Body() dto: CreateTarifDto) {
-//     return this.tarifService.create(dto);
-//   }
+  @Post()
+  create(@Body() dto: CreateTarifDto) {
+    return this.tarifService.create(dto);
+  }
 
   @Get()
   findAll() {

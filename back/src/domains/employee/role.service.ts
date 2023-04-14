@@ -14,21 +14,12 @@ export class RoleService {
     ) { }
 
     async create(dto: CreateRoleDto) {
-        const roleData = {
-          roleNameAr: dto.roleNameAr,
-          roleNameEn: dto.roleNameEn,
-          permissions: {
-            set: dto.permissions.map((permission) => ({
-              domain: permission.domain,
-              action: permission.action,
-            })),
-          },
-        };
-        const role = await this.prisma.role.create({
-          data: roleData,
+        return await this.prisma.role.create({
+            data: {
+                ...dto, permissions:dto.permissions as Prisma.JsonArray
+            },
         });
-       
-      }
+    }
 
     findAll() {
         return this.prisma.role.findMany();

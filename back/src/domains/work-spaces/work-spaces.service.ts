@@ -20,15 +20,21 @@ export class WorkSpacesService {
     return this.prisma.workSpace.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} workSpace`;
-  }
+  async findOne(id: string) {
+    return await this.prisma.workSpace.findFirst({
+        where: {
+            id,
+        },
+    });
 
-  update(id: number, updateWorkSpaceDto: UpdateWorkSpaceDto) {
-    return `This action updates a #${id} workSpace`;
-  }
+}
 
-  remove(id: number) {
-    return `This action removes a #${id} workSpace`;
-  }
+async update(id: string, dto: UpdateWorkSpaceDto) {
+  return await this.prisma.workSpace.update({ where: { id }, data: dto });
+}
+
+async remove(id: string) {
+  return await this.prisma.workSpace.delete({ where: { id } });
+}
+
 }

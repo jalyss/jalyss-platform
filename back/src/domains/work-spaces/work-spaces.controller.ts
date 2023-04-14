@@ -22,18 +22,20 @@ export class WorkSpacesController {
     return this.workSpacesService.findAll();
   }
 
-  @Get(':id')
+  @Get('one/:id')
   findOne(@Param('id') id: string) {
-    return this.workSpacesService.findOne(+id);
+    return this.workSpacesService.findOne(id);
   }
 
+ 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWorkSpaceDto: UpdateWorkSpaceDto) {
-    return this.workSpacesService.update(+id, updateWorkSpaceDto);
+  update(@Param('id') id: string, @Body() UpdateWorkSpaceDto: UpdateWorkSpaceDto) {
+    return this.workSpacesService.update(id, UpdateWorkSpaceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.workSpacesService.remove(+id);
-  }
+    remove(@Param('id') id: string) {
+        return this.workSpacesService.remove(id);
+    }
+
 }

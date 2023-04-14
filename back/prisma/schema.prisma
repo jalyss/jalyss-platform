@@ -446,7 +446,7 @@ model Tarif {
   id         String    @id @default(uuid())
   duration   String?
   price      Float
-  descrption String
+  description String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   bookings   Booking[]

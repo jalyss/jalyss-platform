@@ -23,15 +23,15 @@ export interface FormatLoginAdmin extends Partial<Employee> {
 export class EmployeeService {
   constructor(private prisma: PrismaService) { }
 
-  // async create(data: CreateEmployeeDto) {
-  //   const salt = await bcrypt.genSalt();
-  //   data.password = await bcrypt.hash(data.password, salt);
+  async create(data: CreateEmployeeDto) {
+    const salt = await bcrypt.genSalt();
+    data.password = await bcrypt.hash(data.password, salt);
 
-  //   return this.prisma.employee.create({
-  //     data,
-  //   });
+    return this.prisma.employee.create({
+      data,
+    });
 
-  // }
+  }
 
   async findByLogin({ email, password }: EmployeeLogin) {
     const emlpoyee = await this.prisma.employee.findFirst({

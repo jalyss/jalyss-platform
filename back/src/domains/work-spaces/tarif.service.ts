@@ -10,14 +10,20 @@ export class TarifService {
       ) { }
 
 
-//   async create(dto:CreateTarifDto) {
-//     return await this.prisma.tarif.create({
-//       data: dto,
-//     });
-//   }
+   
+  async create(dto:CreateTarifDto) {
+    return await this.prisma.tarif.create({
+      data: dto,
+    });
+  }
+      
 
-  findAll() {
-    return this.prisma.tarif.findMany();
+  async findAll() {
+    return this.prisma.tarif.findMany({
+      include: {
+        bookings: true
+      }
+    });
   }
 
  
