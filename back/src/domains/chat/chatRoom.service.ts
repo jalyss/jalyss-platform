@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
+import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
+import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class ChatService {
+export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateChatDto) {
+  async create(dto: CreateChatRoomDto) {
     return await this.prisma.chatRoom.create({
       data:dto
     });
@@ -33,4 +33,7 @@ export class ChatService {
   async remove(id: string) {
     return await this.prisma.chatRoom.delete({ where: { id } });
   }
+
+
+
 }
