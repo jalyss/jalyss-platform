@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import { sidebarData } from "../constants/sidebarData";
+// import { sidebarData } from "../constants/sidebarDataBranch";
 import isEnglish from "../helpers/isEnglish";
 
 function Header() {
@@ -20,14 +20,14 @@ function Header() {
   };
 
   const getBrandText = () => {
-    for (let i = 0; i < sidebarData.length; i++) {
-      if (location.pathname.indexOf('admin' + sidebarData[i].path) !== -1) {
-        if(isEng)
-        return sidebarData[i].nameEn;
-        else
-        return sidebarData[i].nameAr
-      }
-    }
+  //   for (let i = 0; i < sidebarData.length; i++) {
+  //     if (location.pathname.indexOf('admin' + sidebarData[i].path) !== -1) {
+  //       if(isEng)
+  //       return sidebarData[i].nameEn;
+  //       else
+  //       return sidebarData[i].nameAr
+  //     }
+  //   }
     return "Brand";
   };
   return (
@@ -185,7 +185,11 @@ function Header() {
               <Nav.Link
                 className="m-0"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => {
+                  e.preventDefault()
+                  localStorage.removeItem('tokenAdmin')
+                  window.location.pathname='/'
+                }}
               >
                 <span className="no-icon">Log out</span>
               </Nav.Link>

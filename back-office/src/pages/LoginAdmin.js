@@ -8,21 +8,18 @@ import { loginAdmin } from '../store/auth'
 import { useNavigate } from 'react-router-dom'
 import { showErrorToast } from '../utils/toast'
 
-function loginadmin() {
+function LoginAdmin() {
   const { t, i18n } = useTranslation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isShowPassword, setIsShowPassword] = useState(false)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const submitLogin = async (event) => {
     event.preventDefault();
     dispatch(loginAdmin({ email: email, password: password }))
       .then(res => {
-        if (!res.error) {
-          navigate(`/admin`)
-        } else {
+        if (res.error) {
           showErrorToast(res.error.message)
         }
       })
@@ -94,4 +91,4 @@ function loginadmin() {
   )
 }
 
-export default loginadmin 
+export default LoginAdmin 
