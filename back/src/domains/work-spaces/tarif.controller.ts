@@ -3,6 +3,7 @@ import { TarifService } from './tarif.service';
 import { CreateTarifDto } from './dto/create-tarif.dto';
 // import { UpdateWorkSpaceDto } from './dto/update-work-space.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { UpdateTarifDto } from './dto/update-tarif.dto';
 
 
 
@@ -22,18 +23,21 @@ export class TarifController {
     return this.tarifService.findAll();
   }
 
-//   @Get(':id')
-//   findOne(@Param('id') id: string) {
-//     return this.workSpacesService.findOne(+id);
-//   }
+  @Get('one/:id')
+  findOne(@Param('id') id: string) {
+    return this.tarifService.findOne(id);
+  }
 
-//   @Patch(':id')
-//   update(@Param('id') id: string, @Body() updateWorkSpaceDto: UpdateWorkSpaceDto) {
-//     return this.workSpacesService.update(+id, updateWorkSpaceDto);
-//   }
+ 
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() UpdateTarifDto: UpdateTarifDto) {
+    return this.tarifService.update(id, UpdateTarifDto);
+  }
 
-//   @Delete(':id')
-//   remove(@Param('id') id: string) {
-//     return this.workSpacesService.remove(+id);
-//   }
+  @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.tarifService.remove(id);
+    }
+
+
 }

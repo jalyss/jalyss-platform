@@ -60,9 +60,9 @@ async remove(id: string) {
 
   if (tarifs && tarifs.length > 0) {
     for (const tariff of tarifs) {
-      // delete all bookings associated with the tariff
+      
       await this.prisma.booking.deleteMany({ where: { tarifId: tariff.id } });
-      // then delete the tariff
+   
       await this.prisma.tarif.delete({ where: { id: tariff.id } });
     }
   }
