@@ -1,0 +1,36 @@
+{
+  "footer": {
+    "support": "24/7 دعم العملاء",
+    "secure": "طرق دفع آمنة",
+    "shipping": "الشحن في جميع أنحاء العالم "
+  },
+  "account": {
+    "myAccount": "حسابي",
+    "personalInfo": "المعلومات الشخصية",
+    "order": "الطلبات",
+    "headline": "العناوين",
+    "coup": "القسائم"
+  },
+  "products": {
+    "product": "المنتجات",
+    "reduction": "التخفيضات",
+    "recentlyArrived": "وصل حديثاً",
+    "bestSeller": "الأكثر مبيعاً"
+  },
+  "ourcompany": {
+    "ourCompany": "شركتنا",
+    "deliv": "خدمه توصيل",
+    "whoWeAre": "من نحن",
+    "callUs": "اتصل بنا",
+    "map": "خريطة الموقع",
+    "stor": "المتاجر"
+  },
+  "storeInfo": {
+    "infoStore": "معلومات عن المتجر",
+    "jalyss": "جليس كوم",
+    "adress": "عمارة العنبرة 1، بجانب مركب الجموسي",
+    "tunisia":"تونس"
+  },
+  "joinMailingList": "إنضم إلى القائمة البريدية",
+  "yourEmail": "بريدك الإلكتروني"
+}

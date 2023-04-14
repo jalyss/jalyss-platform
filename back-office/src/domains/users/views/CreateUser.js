@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import { register } from '../store/auth'
-import '../assets/styles/signup.css'
+import { register } from '../../../store/auth'
+import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { showErrorToast, showSuccessToast } from '../utils/toast'
+import { showErrorToast, showSuccessToast } from '../../../utils/toast'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-function createuser() {
+function CreateUser() {
   const { t , i18n} = useTranslation()
   const dispatch = useDispatch()
   const navigate=useNavigate()
@@ -272,4 +272,4 @@ function createuser() {
   )
 }
 
-export default createuser
+export default CreateUser

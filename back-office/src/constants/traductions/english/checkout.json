@@ -1,0 +1,19 @@
+{
+    "label": {
+        "delivery": "Delivery",
+        "name": "Full Name",
+        "email": "Email",
+        "phone": "Phone Number",
+        "address": "Address",
+        "country": "Country",
+        "selectCountry": "Select Coutry",
+        "city": "City",
+        "selectCity": "Select City",
+        "btnConfirm": "Place Order",
+        "cart": "Cart",
+        "quantity": "Quantity",
+        "price": "Price",
+        "devise": "TND",
+        "total": "Total"
+    }
+}
