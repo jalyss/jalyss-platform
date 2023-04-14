@@ -6,25 +6,23 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class MessagesService {
   constructor(private readonly prisma: PrismaService) {}
-  
-  async create(dto: CreateMessageDto, userId: string,chatRoomId: string) {
+
+  async create(dto: CreateMessageDto, userId: string, chatRoomId: string) {
     return await this.prisma.chatMessage.create({
       data: {
         ...dto,
         userId,
         chatRoomId,
-      }
+      },
     });
   }
 
-  async getChatRoomMessages(chatRoomId:string) {
+  async getChatRoomMessages(chatRoomId: string) {
     return await this.prisma.chatMessage.findMany({
-      where : { chatRoomId },
-      include : { user :true }
+      where: { chatRoomId },
+      include: { user: true },
     });
   }
-
-
 
   async update(chatRoomId: string, messageId: string, dto: UpdateMessageDto) {
     return await this.prisma.chatMessage.updateMany({
@@ -32,7 +30,7 @@ export class MessagesService {
         chatRoomId: chatRoomId,
         id: messageId,
       },
-      data:dto,
+      data: dto,
     });
   }
   async remove(chatRoomId: string, messageId: string) {

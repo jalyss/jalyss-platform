@@ -8,7 +8,7 @@ export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
   async create(dto: CreateChatRoomDto) {
     return await this.prisma.chatRoom.create({
-      data:dto
+      data: dto,
     });
   }
 
@@ -26,14 +26,11 @@ export class ChatRoomService {
   async update(id: string, dto: UpdateChatDto) {
     return await this.prisma.chatRoom.update({
       where: { id },
-      data:dto,
+      data: dto,
     });
   }
 
   async remove(id: string) {
     return await this.prisma.chatRoom.delete({ where: { id } });
   }
-
-
-
 }

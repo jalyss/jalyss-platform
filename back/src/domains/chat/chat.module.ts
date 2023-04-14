@@ -6,8 +6,8 @@ import { MessagesController } from './messages.controller';
 import { MessagesService } from './messages.service';
 
 @Module({
-  controllers: [ChatRoomController,MessagesController],
+  controllers: [ChatRoomController, MessagesController],
 
-  providers: [ChatRoomService,MessagesService,PrismaService]
+  providers: [ChatRoomService, MessagesService, PrismaService],
 })
 export class ChatModule {}
