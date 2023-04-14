@@ -32,9 +32,7 @@ export class MessagesController {
   ) {
     return this.messagesService.getChatRoomMessages(chatRoomId);
   }
-
-
-
+  
   @Patch(':chatRoomId/:messageId')
   update(@Param('chatRoomId') chatRoomId: string,
   @Param('messageId') messageId: string, 
