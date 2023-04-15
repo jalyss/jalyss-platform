@@ -49,43 +49,154 @@ model JobTitle {
 }
 
 model User {
-  id                   String          @id @default(uuid())
+  id                   String            @id @default(uuid())
   fullNameEn           String
   fullNameAr           String
-  email                String          @unique
+  email                String            @unique
   address              String
   tel                  String
   password             String
-  avatar               Media?          @relation(fields: [avatarId], references: [id])
+  avatar               Media?            @relation(fields: [avatarId], references: [id])
   avatarId             String?
-  createdAt            DateTime        @default(now())
-  updatedAt            DateTime        @updatedAt
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
   accountBalance       Float?
-  category             UserCategory?   @relation(fields: [categoryId], references: [id])
+  category             UserCategory?     @relation(fields: [categoryId], references: [id])
   categoryId           String?
-  educationLevel       EducationLevel? @relation(fields: [educationLevelId], references: [id])
+  educationLevel       EducationLevel?   @relation(fields: [educationLevelId], references: [id])
   educationLevelId     String?
-  functionalArea       FunctionalArea? @relation(fields: [functionalAreaId], references: [id])
+  functionalArea       FunctionalArea?   @relation(fields: [functionalAreaId], references: [id])
   functionalAreaId     String?
-  jobTitle             JobTitle?       @relation(fields: [jobTitleId], references: [id])
+  jobTitle             JobTitle?         @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
-  country              Country?        @relation(fields: [countryId], references: [id])
+  country              Country?          @relation(fields: [countryId], references: [id])
   countryId            String?
-  city                 City?           @relation(fields: [cityId], references: [id])
+  city                 City?             @relation(fields: [cityId], references: [id])
   cityId               String?
   confirmkey           String?
   Media                MediaUser[]
   Rating               Rating[]
-  IntermediateCommands Command[]       @relation("intermediate")
-  clientCommands       Command[]       @relation("clientCommand")
+  IntermediateCommands Command[]         @relation("intermediate")
+  clientCommands       Command[]         @relation("clientCommand")
   Blog                 Blog[]
   BlogLike             BlogLike[]
-  chatRooms            UserChatRoom[] // many to many relationships user&chatRoom
+  chatRooms            UserChatRoom[] // *many to many relationships user&chatRoom
   ChatMessage          ChatMessage[]
   bookings             Booking[] // One-to-Many relation to Booking
+  coaching             Coaching[]
+  sessionRequests      SessionRequest[]
+  trainingBooks        TrainingBooking[] // *One-to-Many relation to TrainingBooking
+  userpayments         UserPayment[] // *One-to-Many relation to UserPayment
 }
 
+model UserPayment {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  amout     Float
+  createdAt DateTime @default(now())
+}
 
+model Coaching {
+  id        String  @id @default(uuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+}
+
+model SessionRequest {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model TrainingBooking {
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
+  sessionTarifId String
+}
+
+model SessionTarif {
+  id        String            @id @default(uuid())
+  title     String
+  price     Float
+  bookings  TrainingBooking[] // *one to many relation to TrainingBooking
+  session   Session           @relation(fields: [sessionId], references: [id])
+  sessionId String
+}
+
+model Session {
+  id          String                  @id @default(uuid())
+  title       String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  tarifs      SessionTarif[] // * one to many relation to Session Tarif
+  sessionType SessionHasSessionType[] // *many to many relation sessionType
+  lectures    SessionHasLecture[] // *many to many relation lecture 
+}
+
+//!join table between Session and SessionType
+
+model SessionHasSessionType {
+  session       Session     @relation(fields: [sessionId], references: [id])
+  sessionId     String
+  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id])
+  sessionTypeId String
+
+  @@unique(fields: [sessionId, sessionTypeId], name: "joiner")
+}
+
+//!join table between Session and Lecture
+
+model SessionHasLecture {
+  session   Session @relation(fields: [sessionId], references: [id])
+  sessionId String
+  lectures  Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+
+  @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
+}
+
+model SessionType {
+  id       String                  @id @default(uuid())
+  title    String
+  sessions SessionHasSessionType[] //*many to many relation to Session
+}
+
+model Lecture {
+  id         String              @id @default(uuid())
+  title      String
+  content    String
+  category   ArticleCategory[]
+  sessions   SessionHasLecture[]
+  assesments Assessments[]
+  coaching   Coaching[]
+}
+model ArticleCategory {
+  id        String    @id @default(uuid())
+  nameAr    String
+  nameEn    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  articles  Article[]
+  lecture   Lecture? @relation(fields: [lectureId], references: [id])
+  lectureId String?
+}
+
+model Assessments {
+  id        String  @id @default(uuid())
+  title     String
+  content   String
+  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+}
 
 model ChatRoom {
   id           String         @id @default(uuid())
@@ -96,14 +207,12 @@ model ChatRoom {
   participants UserChatRoom[]
 }
 
-
-
 model ChatMessage {
-  id         String    @id @default(uuid())
+  id         String   @id @default(uuid())
   text       String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  user       User      @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
@@ -120,8 +229,6 @@ model UserChatRoom {
   @@unique(fields: [userId, chatRoomId], name: "joinerRoom")
 }
 
-
-
 model UserCategory {
   id        String   @id @default(uuid())
   nameAr    String
@@ -132,15 +239,6 @@ model UserCategory {
 }
 
 model Type {
-  id        String    @id @default(uuid())
-  nameAr    String
-  nameEn    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  articles  Article[]
-}
-
-model ArticleCategory {
   id        String    @id @default(uuid())
   nameAr    String
   nameEn    String
@@ -439,7 +537,7 @@ model Booking {
   startTime String
   endTime   String
   status    Status   @default(pending)
-  paid      Boolean   @default(false)
+  paid      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
