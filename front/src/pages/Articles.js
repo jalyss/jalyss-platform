@@ -42,6 +42,7 @@ function Articles() {
     gte: null,
     skip: 0,
   })
+  console.log(publishingHouseStore)
 
   const lg = i18n.languages[0] === 'en'
   const [showFilters, setShowFilters] = useState(false)

@@ -21,3 +21,7 @@
 .text-color-black {
   color: #000000 !important;
 }
+
+.bg-purple-8 {
+  background-color: rgb(72, 24, 76, 0.08);
+}
