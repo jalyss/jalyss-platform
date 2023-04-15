@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChatDto } from './dto/create-chat.dto';
-import { UpdateChatDto } from './dto/update-chat.dto';
+import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
+import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class ChatService {
+export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateChatDto) {
+  async create(dto: CreateChatRoomDto) {
     return await this.prisma.chatRoom.create({
-      data:dto
+      data: dto,
     });
   }
 
@@ -26,7 +26,7 @@ export class ChatService {
   async update(id: string, dto: UpdateChatDto) {
     return await this.prisma.chatRoom.update({
       where: { id },
-      data:dto,
+      data: dto,
     });
   }
 
