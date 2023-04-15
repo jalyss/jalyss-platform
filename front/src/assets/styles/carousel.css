@@ -1,0 +1,10 @@
+.image-carousel {
+  height: 400px;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 900px) {
+  .image-carousel {
+    height: auto;
+  }
+}
