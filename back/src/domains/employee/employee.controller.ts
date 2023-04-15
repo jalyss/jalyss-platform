@@ -21,10 +21,10 @@ export class EmployeeController {
   }
 
 
-  // @Post('create')
-  // create(@Body() dto: CreateEmployeeDto) {
-  //   return this.employeeService.create(dto)
-  // }
+  @Post('create')
+  create(@Body() dto: CreateEmployeeDto) {
+    return this.employeeService.create(dto)
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
