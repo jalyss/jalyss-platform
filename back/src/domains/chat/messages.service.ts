@@ -6,31 +6,39 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class MessagesService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateMessageDto ) {
+
+  async create(dto: CreateMessageDto, userId: string, chatRoomId: string) {
     return await this.prisma.chatMessage.create({
-      data:dto
+      data: {
+        ...dto,
+        userId,
+        chatRoomId,
+      },
     });
   }
 
-  async findAll() {
-    return await this.prisma.chatMessage.findMany();
-  }
-
-  async findOne(id: string) {
-    return await this.prisma.chatMessage.findUnique({
-      where: { id },
-      
+  async getChatRoomMessages(chatRoomId: string) {
+    return await this.prisma.chatMessage.findMany({
+      where: { chatRoomId },
+      include: { user: true },
     });
   }
 
-  async update(id: string, dto: UpdateMessageDto) {
-    return await this.prisma.chatMessage.update({
-      where: { id },
-      data:dto,
+  async update(chatRoomId: string, messageId: string, dto: UpdateMessageDto) {
+    return await this.prisma.chatMessage.updateMany({
+      where: {
+        chatRoomId: chatRoomId,
+        id: messageId,
+      },
+      data: dto,
     });
   }
-
-  async remove(id: string) {
-    return await this.prisma.chatMessage.delete({ where: { id } });
+  async remove(chatRoomId: string, messageId: string) {
+    return await this.prisma.chatMessage.deleteMany({
+      where: {
+        chatRoomId: chatRoomId,
+        id: messageId,
+      },
+    });
   }
 }

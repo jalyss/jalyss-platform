@@ -1,0 +1,39 @@
+{
+  "footer": {
+    "support": "24/7 Customer Support",
+    "secure": "Secure payment methods",
+    "shipping": "Shipping worldwide"
+  },
+
+  "account": {
+    "myAccount": "My Account",
+    "personalInfo": "Personal informations ",
+    "order": "Orders",
+    "headline": "Headlines",
+    "coup": "Coupons"
+  },
+
+  "products": {
+    "product": "Products",
+    "reduction": "Reductions",
+    "recentlyArrived": "Recently arrived",
+    "bestSeller": "Best seller"
+  },
+  "ourcompany": {
+    "ourCompany": "Our company",
+    "deliv": "Delivery",
+    "whoWeAre": "Who we are",
+    "callUs": "Call us",
+    "map": "Location map",
+    "stor": "Stores"
+  },
+  "storeInfo": {
+    "infoStore": "Info store",
+    "jalyss": "Jalysscom ",
+    "adress": "Anbara 1 Building next to Jammousi Cultural Complex , Sfax3000",
+    "tunisia":"Tunisia"
+  },
+
+  "joinMailingList": " Join Mailing List ",
+  "yourEmail": " Your Email"
+}

@@ -1,0 +1,9 @@
+{
+    "filter": {
+        "articleType": "Article Type",
+        "publishingHouse": "Publishing House",
+        "category": "Category",
+        "author": "Authors"
+    },
+    "title": "Title"
+}

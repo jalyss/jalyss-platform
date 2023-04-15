@@ -10,6 +10,7 @@
   "private": true,
   "workspaces": [
     "back",
+    "back-office",
     "front"
   ],
   "scripts": {

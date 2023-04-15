@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateMessageDto {
+export class CreateChatRoomDto {
     @ApiProperty()
-    text:string
+    name:string
 }
