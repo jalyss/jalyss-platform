@@ -15,7 +15,7 @@ async function main() {
       await prisma.user.create({
         data: {
           email: 'jaliss' + i + '@gmail.com',
-          fullNameAr: `jalyss${i}`,
+          fullNameAr: `جليس ${i}`,
           fullNameEn: `jalyss${i}`,
           address: 'sfax',
           tel: '123456789',
