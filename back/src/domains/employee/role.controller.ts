@@ -1,47 +1,38 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateRoleDto } from "./dto/create-role.dto";
-import { UpdateRoleDto } from "./dto/update-role.dto";
-import { Prisma } from "@prisma/client";
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { RoleService } from './role.service';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('role')
+@Controller('role')
+export class roleController {
+    constructor(private readonly roleService: RoleService) { }
 
 
-
-@Injectable()
-export class RoleService {
-    
-    constructor(
-        private readonly prisma: PrismaService,
-    ) { }
-
-    async create(dto: CreateRoleDto) {
-        return await this.prisma.role.create({
-            data: {
-                ...dto, permissions:dto.permissions as Prisma.JsonArray
-            },
-        });
-    }
-
+    @Get('all')
     findAll() {
-        return this.prisma.role.findMany();
+        return this.roleService.findAll();
     }
 
-    async findOne(id: string) {
-        return await this.prisma.role.findFirst({
-            where: {
-                id,
-            },
-        });
-
-    }
-
-    async update(id: string, dto: UpdateRoleDto) {
-        return await this.prisma.role.update({ where: { id }, data: dto });
-    }
-
-    async remove(id: string) {
-        return await this.prisma.role.delete({ where: { id } });
+    @Get('/one:id')
+    findOne(@Param('id') id: string) {
+        return this.roleService.findOne(id);
     }
 
 
+    @Post('create')
+    create(@Body() dto: CreateRoleDto) {
+        return this.roleService.create(dto)
+    }
 
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() UpdateRoleDto: UpdateRoleDto) {
+        return this.roleService.update(id, UpdateRoleDto);
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.roleService.remove(id);
+    }
 }
