@@ -23,7 +23,7 @@ function Signup() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setUser((User) => ({ ...User, [name]: value }))
-  }
+  } 
   console.log(avatar);
   const submitSignup = async (event) => {
     event.preventDefault();
