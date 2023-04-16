@@ -2,14 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import include from 'liquidjs/dist/tags/include';
 
 @Injectable()
 export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateChatRoomDto) {
-    return await this.prisma.chatRoom.create({
-      data: dto,
+  async create(dto: CreateChatRoomDto,senderId:string) {
+   return await this.prisma.chatRoom.create({
+      data: {
+        name: dto.name,
+        participants: {
+          create: [
+            {
+              userId: senderId,
+            },
+            {
+              userId: dto.receiverId,
+            },
+          ],
+        },
+        messages:{create:{
+          text:dto.text,
+          userId:senderId
+        }}
+      },
+      include:{
+        participants:true,
+        messages:true
+      }
     });
+    
   }
 
   async findAll() {
