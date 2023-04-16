@@ -1,3 +1,4 @@
+
 import React, { useContext } from "react";
 import SideBar from "../layouts/Sidebar";
 import { sidebarData } from "../constants/sidebarData";
@@ -9,15 +10,14 @@ import { Box } from "@mui/material";
 function Admin() {
   const isRtl = useContext(RtlContext);
   return (
-    <div className={`d-flex  `}>
-      <ProSidebarProvider>
-        <SideBar />
-        <div className="w-100">
-          <Header />
+    <div className={`d-flex `}>
+      <Sidebar sidebarData={sidebarData} />
+      <div className="w-100">
+        <Header />
+        <div className="pages">
           <Outlet />
-
         </div>
-      </ProSidebarProvider>
+      </div>
     </div>
 
   );
