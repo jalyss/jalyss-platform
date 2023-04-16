@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import include from 'liquidjs/dist/tags/include';
+
 
 @Injectable()
 export class ChatRoomService {
