@@ -10,14 +10,15 @@ import { Box } from "@mui/material";
 function Admin() {
   const isRtl = useContext(RtlContext);
   return (
-    <div className={`d-flex `}>
-      <Sidebar sidebarData={sidebarData} />
-      <div className="w-100">
-        <Header />
-        <div className="pages">
+    <div className={`d-flex  `}>
+      <ProSidebarProvider>
+        <SideBar />
+        <div className="w-100">
+          <Header />
           <Outlet />
+
         </div>
-      </div>
+      </ProSidebarProvider>
     </div>
 
   );
