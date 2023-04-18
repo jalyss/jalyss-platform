@@ -47,15 +47,21 @@ export class BlogsService {
     });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} blog`;
+  async findOne(id: string) {
+    return await this.prisma.blog.findFirst({
+        where: {
+            id,
+        },
+    });
+  
   }
 
-  update(id: string, updateBlogDto: UpdateBlogDto) {
-    return `This action updates a #${id} blog`;
+ 
+async update(id: string, dto: UpdateBlogDto) {
+  return await this.prisma.blog.update({ where: { id }, data: dto });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} blog`;
-  }
+  async remove(id: string) {
+    return await this.prisma.blog.delete({ where: { id } });
+    }
 }

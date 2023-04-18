@@ -35,6 +35,7 @@ import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
     BlogsModule,
     ChatModule,
     WorkSpacesModule,
+    BlogsModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],

@@ -1,13 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateBlogDto {
+export class CreateCommentBlogDto {
 @ApiProperty()
 content: string;
-
-@ApiProperty()
-confirm: boolean;
 @ApiProperty()
 userId:string
 @ApiProperty()
-categoryId:string
+blogId:string
 }

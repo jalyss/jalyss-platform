@@ -18,6 +18,7 @@ import Branch from "../apps/Branch";
 import Employee from "../domains/employees/Employee";
 import EmployeeList from "../domains/employees/views/EmployeeList";
 import CreateEmployee from "../domains/employees/views/CreateEmployee";
+import Article from "../domains/articles/Article";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -49,6 +50,10 @@ function Router() {
               <Route index element={<CustomerList />} />
               <Route path="create" element={<CreateCustomer />} />
             </Route>
+            <Route path="article" element={<Article />}>
+              {/* <Route index element={<CustomerList />} />
+              <Route path="create" element={<CreateCustomer />} /> */}
+            </Route>
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>
@@ -56,6 +61,7 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
           </Route>
+          
         )}
         <Route path="*" element={<NoPage />} />
       </Routes>

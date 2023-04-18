@@ -346,6 +346,25 @@ async function main() {
     );
   }
 
+  // create dummy services 
+  let serviceIds = [];
+
+const serviceNames = ["Domicilation", "Private Space", "Meeting Space", "Co-Working Zone"];
+
+for (let i = 0; i < serviceNames.length; i++) {
+  let service = await prisma.service.create({
+    data: {
+      name: serviceNames[i],
+     
+    }
+  });
+
+  serviceIds.push(service.id);
+}
+
+console.log(serviceIds);
+
+
   console.log(users);
   console.log(articles);
   console.log(articlesByBranch);
