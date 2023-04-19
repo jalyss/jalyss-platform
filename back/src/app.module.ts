@@ -19,6 +19,7 @@ import { EmployeeModule } from './domains/employee/employee.module';
 import { BlogsModule } from './domains/blogs/blogs.module';
 import { ChatModule } from './domains/chat/chat.module';
 import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
+import { LikesModule } from './likes/likes.module';
 @Module({
   imports: [
     MailModule,
@@ -35,7 +36,8 @@ import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
     BlogsModule,
     ChatModule,
     WorkSpacesModule,
-    BlogsModule
+    BlogsModule,
+    LikesModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateBlogLikeDto {
+export class CreateLikeDto {
  
   @ApiProperty()
   userId: string;

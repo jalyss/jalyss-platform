@@ -1,13 +1,13 @@
 import { Injectable ,HttpException,HttpStatus} from '@nestjs/common';
-import { CreateBlogLikeDto } from './dto/create-blog-like.dto';
-import { UpdateBlogLikeDto } from './dto/update-blog-like.dto';
+import { CreateLikeDto } from './dto/create-like.dto';
+import { UpdateLikeDto } from './dto/update-like.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 
 @Injectable()
-export class BlogLikesService {
+export class LikesService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateBlogLikeDto) {
+  async create(dto: CreateLikeDto) {
   
     return await this.prisma.blogLike.create({
       data: dto,
@@ -28,7 +28,7 @@ export class BlogLikesService {
   }
 
  
-async update(id: string, dto: UpdateBlogLikeDto) {
+async update(id: string, dto: UpdateLikeDto) {
   return await this.prisma.blogLike.update({ where: { id }, data: dto });
   }
 

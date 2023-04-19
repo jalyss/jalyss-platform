@@ -191,6 +191,7 @@ model ArticleCategory {
   articles  Article[]
   lecture   Lecture? @relation(fields: [lectureId], references: [id])
   lectureId String?
+  Blog   Blog[]
 }
 
 model Assessments {
@@ -473,8 +474,8 @@ model MediaArticle {
 
 // blog
 model MediaBlog {
-  id         String       @id @default(uuid())
-  blog    Blog   @relation(fields: [blogId], references: [id])
+
+  blog    Blog   @relation(fields: [blogId], references: [id],onDelete: Cascade)
   blogId  String
   media   Media  @relation(fields: [mediaId], references: [id])
   mediaId String
@@ -490,9 +491,9 @@ model Blog {
   updatedAt  DateTime     @updatedAt
   user       User         @relation(fields: [userId], references: [id],onDelete: Cascade)
   userId     String
-  categoryId String
   confirm    Boolean      @default(false)
-  category   BlogCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category   ArticleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
   MediaBlog  MediaBlog[]
   BlogLike   BlogLike[]
   commentBlog  CommentBlog[]
@@ -520,12 +521,12 @@ model LikeCategory {
   blogLike    BlogLike[]
 }
 
-model BlogCategory {
-  id     String @id @default(uuid())
-  nameAr String
-  nameEn String
-  Blog   Blog[]
-}
+// model BlogCategory {
+//   id     String @id @default(uuid())
+//   nameAr String
+//   nameEn String
+//   Blog   Blog[]
+// }
 
 model CommentBlog {
   id          String                @id @default(uuid())
