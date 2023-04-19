@@ -5,7 +5,7 @@ ALTER TABLE "ArticleCategory" ADD COLUMN     "lectureId" TEXT;
 CREATE TABLE "UserPayment" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "amout" DOUBLE PRECISION NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "UserPayment_pkey" PRIMARY KEY ("id")
