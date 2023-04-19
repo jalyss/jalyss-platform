@@ -9,6 +9,14 @@ export class MediasService {
   create(data: CreateMediaDto) {
     return this.prisma.media.create({data});
   }
+  async createMany(data: CreateMediaDto[]) {
+    let files=[]
+    await  Promise.all (data.map(async(elem)=>{
+       const medias=await this.prisma.media.create({data:elem});
+       files.push(medias)
+    }))
+    return files
+  }
 
   findAll() {
     return this.prisma.media.findMany();

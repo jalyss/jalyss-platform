@@ -19,6 +19,7 @@ import { EmployeeModule } from './domains/employee/employee.module';
 import { BlogsModule } from './domains/blogs/blogs.module';
 import { ChatModule } from './domains/chat/chat.module';
 import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
+import { LikesModule } from './likes/likes.module';
 import { TrainingModule } from './domains/training/training.module';
 @Module({
   imports: [
@@ -36,6 +37,8 @@ import { TrainingModule } from './domains/training/training.module';
     BlogsModule,
     ChatModule,
     WorkSpacesModule,
+    BlogsModule,
+    LikesModule,
     TrainingModule,
   ],
   controllers: [AppController],

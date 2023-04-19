@@ -88,7 +88,7 @@ model User {
   trainingBooks        TrainingBooking[] // *One-to-Many relation to TrainingBooking
   userpayments         UserPayment[] // *One-to-Many relation to UserPayment
   commentBlog          CommentBlog[]
-  replyCommentaireBlog ReplyCommentaireBlog[]
+  replyCommentaireBlog ReplyCommentBlog[]
   bookMark  Bookmark[]
 }
 
@@ -191,6 +191,7 @@ model ArticleCategory {
   articles  Article[]
   lecture   Lecture? @relation(fields: [lectureId], references: [id])
   lectureId String?
+  Blog   Blog[]
 }
 
 model Assessments {
@@ -471,8 +472,10 @@ model MediaArticle {
   @@unique(fields: [mediaId, articleId], name: "articleMedia")
 }
 
+// blog
 model MediaBlog {
-  blog    Blog   @relation(fields: [blogId], references: [id])
+
+  blog    Blog   @relation(fields: [blogId], references: [id],onDelete: Cascade)
   blogId  String
   media   Media  @relation(fields: [mediaId], references: [id])
   mediaId String
@@ -480,17 +483,17 @@ model MediaBlog {
   @@unique(fields: [blogId, mediaId], name: "blogMedia")
 }
 
-// blog
+
 model Blog {
   id         String       @id @default(uuid())
   content    String
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
-  user       User         @relation(fields: [userId], references: [id])
+  user       User         @relation(fields: [userId], references: [id],onDelete: Cascade)
   userId     String
-  categoryId String
   confirm    Boolean      @default(false)
-  category   BlogCategory @relation(fields: [categoryId], references: [id])
+  category   ArticleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
   MediaBlog  MediaBlog[]
   BlogLike   BlogLike[]
   commentBlog  CommentBlog[]
@@ -499,62 +502,77 @@ model Blog {
  
 }
 
+
 model BlogLike {
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  blogId String
-  blog   Blog   @relation(fields: [blogId], references: [id])
-
-  @@unique(fields: [userId, blogId], name: "blogLike")
-}
-
-model BlogCategory {
   id     String @id @default(uuid())
-  nameAr String
-  nameEn String
-  Blog   Blog[]
+  userId  String
+  user    User   @relation(fields: [userId], references: [id],onDelete: Cascade)
+  blogId  String
+  blog    Blog   @relation(fields: [blogId], references: [id],onDelete: Cascade)
+  likeCategoryId   String
+  likeCategory    LikeCategory    @relation(fields: [likeCategoryId], references: [id],onDelete: Cascade)
+  
+
+  @@unique(fields: [userId, blogId ,likeCategoryId ], name: "blogLike")
 }
+model LikeCategory {
+  id           String      @id @default(uuid())
+  type         String
+  blogLike    BlogLike[]
+}
+
+// model BlogCategory {
+//   id     String @id @default(uuid())
+//   nameAr String
+//   nameEn String
+//   Blog   Blog[]
+// }
 
 model CommentBlog {
-  id        String   @id @default(uuid())
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  blog      Blog     @relation(fields: [blogId], references: [id])
-  blogId    String
-  replyCommentaireBlog ReplyCommentaireBlog[]
- 
+  id          String                @id @default(uuid())
+  content     String
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  blog        Blog                  @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId      String
+  replies     ReplyCommentBlog[]
 }
 
-model ReplyCommentaireBlog {
+
+model ReplyCommentBlog {
   id        String   @id @default(uuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
   userId    String
-  commentBlog   CommentBlog  @relation(fields: [commentBlogId], references: [id])
+  commentBlog   CommentBlog  @relation(fields: [commentBlogId], references: [id],onDelete: Cascade)
   commentBlogId String
   
 }
 
 model Bookmark {
-   blog    Blog   @relation(fields: [blogId], references: [id])
+  id      String   @id @default(uuid())
+  blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId  String
-  user   User  @relation(fields: [userId], references: [id])
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   @@unique(fields: [blogId, userId])
 }
 
+
 model View {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
-  blog      Blog     @relation(fields: [blogId], references: [id])
+  blog      Blog     @relation(fields: [blogId], references: [id],onDelete: Cascade)
   blogId    String
 }
+
+
+
 
 //workSdpace
 model WorkSpace {
@@ -579,7 +597,7 @@ model Service {
   workSpace WorkSpace[]
   tarif     Tarif[]
 }
-
+             
 model Booking {
   id        String   @id @default(uuid())
   date      DateTime

@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateBlogDto {
-  @ApiProperty()
-  content: string;
+export class CreateLikeDto {
+ 
   @ApiProperty()
   userId: string;
+
   @ApiProperty()
-  categoryId: string;
+  blogId: string;
+
   @ApiProperty()
-  mediaIds?: string[];
+  likeCategoryId: string;
+
+ 
 }
