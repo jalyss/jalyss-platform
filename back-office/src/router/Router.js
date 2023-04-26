@@ -19,6 +19,7 @@ import Employee from "../domains/employees/Employee";
 import EmployeeList from "../domains/employees/views/EmployeeList";
 import CreateEmployee from "../domains/employees/views/CreateEmployee";
 import Article from "../domains/articles/Article";
+import EditUser from "../domains/users/views/EditUser";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -36,16 +37,17 @@ function Router() {
     <BrowserRouter>
       <Routes>
         {auth.meAdmin ? (
-          <Route path="/" element={auth.meAdmin.isAdmin?<Main />:<Branch/>}>
+          <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
             <Route path="user" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
+              <Route path="edit/:id" element={<EditUser />} />
             </Route>
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
             </Route>
-            
+
             <Route path="customer" element={<Customer />}>
               <Route index element={<CustomerList />} />
               <Route path="create" element={<CreateCustomer />} />

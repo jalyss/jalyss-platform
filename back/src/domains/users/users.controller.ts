@@ -13,7 +13,8 @@ import {
   UseGuards,
   UseInterceptors,
   Headers,
-  Post
+  Post,
+  Delete
 } from '@nestjs/common';
 import { ApiHeader, ApiQuery, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
@@ -23,6 +24,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { UpdatePasswordDto } from './entities/user.entity';
 import { AuthService } from 'src/domains/auth/auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto, UpdateUserStatusDto } from './dto/update-user.dto';
 
 
 @ApiTags('users')
@@ -44,14 +46,40 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+
   @Post('create')
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto)
   }
 
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
+  }
 
 
 
+
+
+  @UseGuards(JwtAuthGuard)
+  @ApiSecurity('Aaccess-key')
+  @UseInterceptors(ClassSerializerInterceptor) 
+  @Put('update/:id')
+  public async updateUserStatus(@Param('id') id: string, @Body()
+  updateUserStatusDto: UpdateUserStatusDto) {
+    return await this.usersService
+      .updateUserStatus(id, updateUserStatusDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiSecurity('Aaccess-key')
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Put('isActive/:id')
+  public async updateUser(@Param('id') id: string, @Body()
+  updateUserDto: UpdateUserDto) {
+    return await this.usersService
+      .update(id, updateUserDto,);
+  }
 
   @UseGuards(JwtAuthGuard)
   @ApiSecurity('Aaccess-key')

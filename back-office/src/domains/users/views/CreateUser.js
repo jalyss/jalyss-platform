@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { register } from '../../../store/auth'
+import { createUser } from '../../../store/user'
 import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { showErrorToast, showSuccessToast } from '../../../utils/toast'
@@ -36,11 +37,10 @@ function CreateUser() {
         aux.avatarId=response.data.id
     }
 
-    dispatch(register(aux))
+    dispatch(createUser(aux))
       .then(res => {
         if (!res.error) {
           showSuccessToast(t('user.created'))
-          navigate('/profile')
         } else {
           console.log(res);
           showErrorToast(res.error.message)

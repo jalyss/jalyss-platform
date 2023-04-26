@@ -74,6 +74,7 @@ model User {
   city                 City?             @relation(fields: [cityId], references: [id])
   cityId               String?
   confirmkey           String?
+  isActive             Boolean                @default(true)
   Media                MediaUser[]
   Rating               Rating[]
   IntermediateCommands Command[]         @relation("intermediate")
@@ -225,7 +226,7 @@ model ChatMessage {
 //join table between user and chat room 
 
 model UserChatRoom {
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
@@ -322,7 +323,7 @@ model ArticlesByBranch {
 model Rating {
   articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
   articleByBranchId String
-  user              User             @relation(fields: [userId], references: [id])
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String
   rate              Int
   commit            String
@@ -378,7 +379,7 @@ model Command {
   id             String        @id @default(uuid())
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  client         User?         @relation(name: "clientCommand", fields: [clientId], references: [id])
+  client         User?         @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
   clientId       String?       @map("client_id")
   clientName     String        @map("client_name")
   clientAddress  String        @map("client_address")
@@ -390,7 +391,7 @@ model Command {
   hasDelivery    Boolean       @default(false) @map("has_delivery")
   branch         Branch        @relation(fields: [branchId], references: [id])
   branchId       String        @map("branch_id")
-  intermediate   User?         @relation(name: "intermediate", fields: [intermediateId], references: [id])
+  intermediate   User?         @relation(name: "intermediate", fields: [intermediateId], references: [id], onDelete: Cascade)
   intermediateId String?       @map("intermediate_id")
   country        Country?      @relation(fields: [countryId], references: [id])
   countryId      String?
@@ -457,7 +458,7 @@ model Media {
 model MediaUser {
   media   Media  @relation(fields: [mediaId], references: [id])
   mediaId String
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
 
   @@unique(fields: [mediaId, userId], name: "userMedia")
@@ -550,7 +551,6 @@ model ReplyCommentBlog {
   userId    String
   commentBlog   CommentBlog  @relation(fields: [commentBlogId], references: [id],onDelete: Cascade)
   commentBlogId String
-  
 }
 
 model Bookmark {
@@ -607,7 +607,7 @@ model Booking {
   paid      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   tarif     Tarif    @relation(fields: [tarifId], references: [id])
   tarifId   String
@@ -616,18 +616,16 @@ model Booking {
 }
 
 model Tarif {
-  id         String    @id @default(uuid())
-  duration   String?
-  price      Float
+  id          String    @id @default(uuid())
+  duration    String?
+  price       Float
   description String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  bookings   Booking[]
-  service    Service   @relation(fields: [serviceId], references: [id])
-  serviceId  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+  service     Service   @relation(fields: [serviceId], references: [id])
+  serviceId   String
 }
-
-
 
 enum Status {
   confirmed
