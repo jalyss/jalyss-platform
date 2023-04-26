@@ -14,6 +14,11 @@ import Invoice from "../pages/Invoice";
 import ResetPassword from "../pages/ResetPassword";
 import NewPassword from "../pages/NewPassword";
 
+import Loginadmin from "../pages/loginadmin";
+import Createuser from "../pages/createuser";
+import Chatroom from "../pages/Chatroom";
+
+import { useSelector } from "react-redux";
 
 function Router() {
 
@@ -34,6 +39,7 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
+            <Route path="/chat" element={<Chatroom/>}/>
           </Route>
           
         </Routes>
