@@ -81,11 +81,8 @@ const [openPicker , setPicker] = useState(false)
           boxShadow: "0px 0px 2px",
         }}
       >
-        <Stack direction="row" alignItems="center" spacing={3}> 
-        <Stack sx={{width : "100%" }}>
-        <Box sx={{ display : openPicker ? "inline" : "none" , zIndex :10 , position:"fixed" , bottom : 81, right :100 }}>
-        <Picker data={data} onEmojiSelect={console.log} />
-        </Box>
+        <Stack direction="row" alignItems="center" spacing={3} > 
+        <Stack sx={{width : "100%" }} >
         <StyledInput fullWidth placeholder="write a message . . ." variant="filled" InputProps={{
           disableUnderline : true,
           startAdornment : <InputAdornment>
@@ -97,6 +94,9 @@ const [openPicker , setPicker] = useState(false)
             <IconButton onClick={() => {
               setPicker((prev) => !prev)
             }}>
+            <Box sx={{ display : openPicker ? "inline" : "none" , zIndex :10 , position:"absolute" , bottom : 50, right :10  }}>
+        <Picker data={data} onEmojiSelect={console.log} />
+        </Box>
               <Smiley/>
             </IconButton>
           </InputAdornment>
