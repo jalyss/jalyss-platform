@@ -8,4 +8,5 @@ export const sidebarDataBranch = [
   { nameEn: "Customer", nameAr: "الحريف", path: "customer", children: [] },
   { nameEn: "User", nameAr: "المستخدم", path: "user", children: [] },
   { nameEn: "Employee", nameAr: "الموظف", path: "employee", children: [] },
+  { nameEn: "Aticle", nameAr: "المنتج ", path: "article", children: [] },
 ];

@@ -13,7 +13,7 @@ export const fetchEmployee = createAsyncThunk("employees/employee", async (id) =
 });
 
 export const createEmployee = createAsyncThunk("employees/createEmployee", async (body, { dispatch }) => {
-  let token = JSON.parse(localStorage.getItem('token'))
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
   const configs = {
     headers: {
       Authorization: 'Bearer ' + token.Authorization
@@ -25,14 +25,27 @@ export const createEmployee = createAsyncThunk("employees/createEmployee", async
 });
 
 export const removeEmployee = createAsyncThunk("employees/deleteEmployee", async (id, { dispatch }) => {
-  let token = JSON.parse(localStorage.getItem('token'))
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
   const configs = {
     headers: {
       Authorization: 'Bearer ' + token.Authorization
     }
   }
-  const response = await axios.delete(`${config.API_ENDPOINT}/Employees/${id}`, configs);
+  const response = await axios.delete(`${config.API_ENDPOINT}/employees/${id}`, configs);
   dispatch(fetchEmployees())
+  return response.data;
+});
+export const editEmployee = createAsyncThunk("employees/editEmployee", async (args, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token.Authorization
+    }
+  }
+  let id=args.id
+  delete args.id
+  const response = await axios.patch(`${config.API_ENDPOINT}/employees/${id}`, args,configs);
+  dispatch(fetchEmployee(id))
   return response.data;
 });
 

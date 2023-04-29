@@ -19,10 +19,9 @@ function CreateEmployee() {
 
   useEffect(() => {
     dispatch(fetchBranches())
-  }, [])
-  useEffect(() => {
     dispatch(fetchRoles())
   }, [])
+ 
   const handleChange = (e) => {
     const { name, value } = e.target
     setEmployee((Employee) => ({ ...Employee, [name]: value }))

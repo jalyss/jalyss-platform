@@ -11,6 +11,7 @@ import NewPassword from "../pages/NewPassword";
 import User from "../domains/users/User";
 import CreateUser from "../domains/users/views/CreateUser";
 import UserList from "../domains/users/views/UserList";
+import EditUser from "../domains/users/views/EditUser";
 import Customer from "../domains/customers/Customer";
 import CreateCustomer from "../domains/customers/views/CreateCustomer";
 import CustomerList from "../domains/customers/views/CustomerList";
@@ -18,9 +19,8 @@ import Branch from "../apps/Branch";
 import Employee from "../domains/employees/Employee";
 import EmployeeList from "../domains/employees/views/EmployeeList";
 import CreateEmployee from "../domains/employees/views/CreateEmployee";
-import Article from "../domains/articles/Article";
-import EditUser from "../domains/users/views/EditUser";
 import EditEmployee from "../domains/employees/views/EditEmployee";
+import Article from "../domains/articles/Article";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -42,14 +42,13 @@ function Router() {
             <Route path="user" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
-              <Route path="edit/:id" element={<EditUser />} />
+              <Route path="edit/:userId" element={<EditUser />} />
             </Route>
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
-              <Route path="edit/:id" element={< EditEmployee/>} />
+              <Route path="edit/:employeeId" element={< EditEmployee/>} />
             </Route>
-
             <Route path="customer" element={<Customer />}>
               <Route index element={<CustomerList />} />
               <Route path="create" element={<CreateCustomer />} />

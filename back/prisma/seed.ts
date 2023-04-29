@@ -8,6 +8,16 @@ const prisma = new PrismaClient();
 async function main() {
   let users = [];
   let articles = [];
+
+    // create dummy branch
+    let branch = await prisma.branch.create({
+      data: {
+        name: 'Tunis',
+        identifier: 'TUN',
+        address: 'sfax ambra immeuble ',
+        mainBranch: true,
+      },
+    });
   // create 10 dummy users
   const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
@@ -26,10 +36,25 @@ async function main() {
   }
 
  //create roles
+  let managerRole = await prisma.role.create({
+    data: {
+      nameAr: 'المدير',
+      nameEn: 'CEO',
+      permissions: [
+        { "domain": "employee", "action": "read" },
+        { "domain": "employee", "action": "create" },
+        { "domain": "employee", "action": "update" },
+        { "domain": "employee", "action": "delete" },
+        { "domain": "blog", "action": "read" },
+        { "domain": "blog", "action": "update" },
+        { "domain": "blog", "action": "delete" },
+      ],
+    }
+  })
   let itManagerRole = await prisma.role.create({
     data: {
-      roleNameAr: '',
-      roleNameEn: '',
+      nameAr: 'مسؤول الاعلامية',
+      nameEn: 'It Manager',
       permissions: [
         { "domain": "employee", "action": "read" },
         { "domain": "employee", "action": "create" },
@@ -44,8 +69,8 @@ async function main() {
   let hrManagerRole = await prisma.role.create({
 
     data: {
-      roleNameAr: '',
-      roleNameEn: '',
+      nameAr: 'مسؤول الموارد البشرية',
+      nameEn: 'HR Manager',
       permissions: [
         { "domain": "blog", "action": "read" },
         { "domain": "blog", "action": "update" },
@@ -56,8 +81,8 @@ async function main() {
   let selesAgentRole = await prisma.role.create({
 
     data: {
-      roleNameAr: '',
-      roleNameEn: '',
+      nameAr: 'رجل المبيعات',
+      nameEn: 'Sales Agent',
       permissions: [
         { "domain": "blog", "action": "read" },
         { "domain": "blog", "action": "update" },
@@ -68,8 +93,8 @@ async function main() {
   let groutAgentRole = await prisma.role.create({
 
     data: {
-      roleNameAr: '',
-      roleNameEn: '',
+      nameAr: 'مسؤول التعليب',
+      nameEn: 'Grout Agent',
       permissions: [
         { "domain": "blog", "action": "read" },
         { "domain": "blog", "action": "update" },
@@ -80,8 +105,8 @@ async function main() {
   let developerRole = await prisma.role.create({
 
     data: {
-      roleNameAr: '',
-      roleNameEn: '',
+    nameAr: 'مبرمج',
+      nameEn: 'Developer',
       permissions: [
         { "domain": "blog", "action": "read" },
         { "domain": "blog", "action": "update" },
@@ -102,6 +127,8 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       isAdmin: true,
+      roleId:managerRole.id,
+      branchId:branch.id
       
     }
   })
@@ -114,6 +141,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
+      branchId:branch.id
     }
   })
   let developer2 = await prisma.employee.create({
@@ -125,6 +153,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
+      branchId:branch.id
     }
   })
   let itManager = await prisma.employee.create({
@@ -136,6 +165,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: itManagerRole.id,
+      branchId:branch.id
     }
   })
 
@@ -148,6 +178,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: groutAgentRole.id,
+      branchId:branch.id
     }
   })
   let sellesAgent = await prisma.employee.create({
@@ -159,6 +190,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: selesAgentRole.id,
+      branchId:branch.id
     }
   })
   let hrManager = await prisma.employee.create({
@@ -170,6 +202,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: hrManagerRole.id,
+      branchId:branch.id
     }
   })
   //create dummy country
@@ -322,15 +355,7 @@ async function main() {
     );
   }
 
-  // create dummy branch
-  let branch = await prisma.branch.create({
-    data: {
-      name: 'Tunis',
-      identifier: 'TUN',
-      address: 'sfax ambra immeuble ',
-      mainBranch: true,
-    },
-  });
+
 
   let articlesByBranch = [];
   for (let i = 0; i < articles.length; i += 2) {

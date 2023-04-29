@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react'
 import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import axios from 'axios'
+
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { fetchEmployee } from '../../../store/employee'
+import { editEmployee, fetchEmployee } from '../../../store/employee'
 import { useParams } from 'react-router-dom'
 import { fetchBranches } from '../../../store/branche'
 import { fetchRoles } from '../../../store/role'
@@ -25,23 +25,17 @@ function EditEmployee() {
   const [editMode, setEditMode] = useState(false)
   const { employeeId } = useParams()
   const employeeStore = useSelector((state) => state.employee)
-  
-  console.log(employeeId);
 
   useEffect(() => {
     dispatch(fetchBranches())
-  }, [])
-  useEffect(() => {
     dispatch(fetchRoles())
-  }, [])
-  useEffect(() => {
     dispatch(fetchEmployee(employeeId))
   }, [])
+
 
   useEffect(() => {
     if (employeeStore.employee)
       setEmployee(employeeStore.employee)
-
   }, [employeeStore.employee])
 
   const handleChange = (e) => {
@@ -56,7 +50,9 @@ function EditEmployee() {
     } else {
       event.preventDefault()
       let aux = Object.assign({}, employee)
-
+      delete aux.branch 
+      delete aux.role
+      dispatch(editEmployee(aux))
       setEditMode(false)
     }
   }

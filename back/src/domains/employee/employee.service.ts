@@ -72,7 +72,7 @@ export class EmployeeService {
   }
 
   findOne(id: string) {
-    return this.prisma.employee.findUniqueOrThrow({ where: { id: id } });
+    return this.prisma.employee.findUniqueOrThrow({ where: { id: id },include:{role:true,branch:true} });
   }
 
   update(id: string, data: UpdateEmployeeDto) {
