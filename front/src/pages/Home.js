@@ -1,79 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CarouselImages from '../components/Carousel'
 import HorizontalMenu from '../components/DragContainter'
 import { MDBFooter, MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit'
+import { fetchPublishingHouses } from '../store/publishingHouse'
+import { fetchArticlesByBranch } from '../store/article'
+import {identifier} from '../constants/identifier/identifier'
 
 function Home() {
   const { t, i18n } = useTranslation()
+  const dispatch = useDispatch()
+  const publishingHouseStore = useSelector(state=>state.publishingHouse)
+  const articleStore = useSelector(state=>state.article)
 
-  const publishingHouseStore = [
-    {
-      id: 'b93dead1-696a-4b55-b1fa-8540b54679f7',
-      name: 'جرير',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-03-25T13:56:36.512Z',
-      updatedAt: '2023-03-25T13:56:36.512Z',
-    },
-    {
-      id: '4720c492-1974-4404-937b-cc70dc9b55f5',
-      name: 'جبل عمان',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-03-25T13:56:36.516Z',
-      updatedAt: '2023-03-25T13:56:36.516Z',
-    },
-    {
-      id: '5e09d2d1-937a-4d21-b2da-db0f304dbfdd',
-      name: 'ملهمون',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-03-25T13:56:36.518Z',
-      updatedAt: '2023-03-25T13:56:36.518Z',
-    },
-    {
-      id: '12f15b94-8599-4673-abd2-8bc02f9c8067',
-      name: 'جرير',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-04-06T14:26:44.431Z',
-      updatedAt: '2023-04-06T14:26:44.431Z',
-    },
-    {
-      id: 'cc6db93b-43a2-491a-9dc4-78594819aff6',
-      name: 'جبل عمان',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-04-06T14:26:44.440Z',
-      updatedAt: '2023-04-06T14:26:44.440Z',
-    },
-    {
-      id: '12f15b94-8599-4673-abd2-8bc02f9c8067',
-      name: 'جرير',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-04-06T14:26:44.431Z',
-      updatedAt: '2023-04-06T14:26:44.431Z',
-    },
-    {
-      id: 'cc6db93b-43a2-491a-9dc4-78594819aff6',
-      name: 'جبل عمان',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-04-06T14:26:44.440Z',
-      updatedAt: '2023-04-06T14:26:44.440Z',
-    },
-    {
-      id: '2aa245aa-7dc7-4c1c-8e28-813b458e3610',
-      name: 'ملهمون',
-      address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
-      createdAt: '2023-04-06T14:26:44.444Z',
-      updatedAt: '2023-04-06T14:26:44.444Z',
-    },
-  ]
+   useEffect(()=>{
+    dispatch(fetchArticlesByBranch({identifier,bestSaller:true}))
+    dispatch(fetchPublishingHouses())
+   },[dispatch])
+  console.log(publishingHouseStore.publishingHouses.items)
+  console.log(articleStore.articles.items)
   return (
     <>
       <CarouselImages
@@ -83,7 +29,10 @@ function Home() {
         ]}
       />
 
-      <HorizontalMenu items={publishingHouseStore} />
+      <HorizontalMenu items={publishingHouseStore.publishingHouses.items} />
+      <HorizontalMenu items={articleStore.articles.items} />
+
+
       <MDBContainer>
         <MDBRow className="text-center mb-5">
           <MDBCol>
