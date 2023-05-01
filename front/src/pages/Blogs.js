@@ -1,199 +1,106 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FaFire } from "react-icons/fa";
-
+import { useNavigate } from "react-router-dom";
+import { blogss, trendingblogss } from "../constants/BlogsData";
+import {Fade} from "react-reveal";
+import landingPerson from "../assets/styles/landingPerson.json";
+import data from "../assets/styles/data.json";
+import DisplayLottie from "./DisplayLottie";
+import DocumentMeta from "react-document-meta";
+import useMeta from "../hooks/useMeta";
+import { useTranslation } from "react-i18next";
 function Blogs() {
-  const [blogs, setBlogs] = useState([
-    {
-      id: 1,
-      title: "7 CSS tools you should be using ",
-      category: "development",
-      subCategory: ["frontend", "ui/ux", "design"],
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-      authorName: "John Doe",
-      authorAvatar:
-        "https://www.seekpng.com/png/detail/506-5062029_about-the-author-avatar.png",
-      createdAt: "June 03, 2021",
-      cover:
-        "https://firstsiteguide.com/wp-content/uploads/2017/06/personal.png",
-    },
-    {
-      id: 2,
-      title: "Milan Places That Highlight The City",
-      category: "travel",
-      subCategory: ["vacation", "holidays", "sight seeing"],
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-      authorName: "John Doe",
-      authorAvatar:
-        "https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png",
-      createdAt: "June 03, 2021",
-      cover:
-        "https://cdn.dribbble.com/users/22136/screenshots/13929049/media/8481526fd29b0d7c346bb6e1ae30960f.jpg?compress=1&resize=400x300",
-    },
-    {
-      id: 3,
-      title: "Online Shopping – An Alternative to Shopping in the Mall",
-      category: "shopping",
-      subCategory: ["e-commerce store", "clothing", "shopping store"],
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-      authorName: "John Doe",
-      authorAvatar:
-        "https://www.nj.com/resizer/zovGSasCaR41h_yUGYHXbVTQW2A=/1280x0/smart/cloudfront-us-east-1.images.arcpublishing.com/advancelocal/SJGKVE5UNVESVCW7BBOHKQCZVE.jpg",
-      createdAt: "June 03, 2021",
-      cover:
-        "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/makeup-blog-cover-header-template-design-e54ae757dbec04731c9453e7e583eacd_screen.jpg?ts=1599078201",
-    },
-    {
-      id: 4,
-      title: "ADVENTURE IN YOU",
-      category: "adventure",
-      subCategory: ["adrenaline", "stay-fit", "lifestyle"],
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-      authorName: "John Doe",
-      authorAvatar:
-        "https://im.indiatimes.in/content/2022/Feb/AMP-44_61fb8b8840826.jpg?w=820&h=540&cc=1",
-      createdAt: "June 03, 2021",
-      cover:
-        "https://www.shutterstock.com/image-vector/podcast-covers-standtype-studio-microphone-260nw-1936658734.jpg",
-    },
-    {
-      id: 5,
-      title: "Loaded BBQ Baked Potatoes",
-      category: "cooking",
-      subCategory: ["bbq", "food", "lifestyle"],
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-      authorName: "John Doe",
-      authorAvatar: "https://cdn-icons-png.flaticon.com/512/5556/5556468.png",
-      createdAt: "June 03, 2021",
-      cover:
-        "https://www.designhill.com/design-blog/wp-content/uploads/2018/04/Book-Cover-Design.jpg",
-    },
-    {
-      id: 6,
-      title: "Beyond the Beach",
-      category: "travel",
-      subCategory: ["beaches", "sea", "holidays"],
-      description:
-        "Lorem Ipsum is simply dummy text of th, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      authorName: "John Doe",
-      authorAvatar:
-        "https://www.pngmart.com/files/22/User-Avatar-Profile-PNG-Isolated-Transparent-Picture.png",
-      createdAt: "June 03, 2021",
-      cover:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWqYwuYrk6znDSzzI1QAt3dxoI3A6YtTfWZg&usqp=CAU",
-    },
-    {
-      id: 7,
-      title: "Art & Perception",
-      category: "art",
-      subCategory: ["skill", "design", "passion"],
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-      authorName: "John Doe",
-      authorAvatar:
-        "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png",
-      createdAt: "June 03, 2021",
-      cover: "https://i.ytimg.com/vi/s9rj6xWIkeA/maxresdefault.jpg",
-    },
-  ]);
-  const [trendingBlogs, setTrendingBlogs] = useState([
-    {
-      id: 7,
-      authorName: "John Doe",
-      title: "Art & Perception",
-      authorAvatar:
-        "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png",
-      createdAt: "June 03, 2021",
-    },
-    {
-      id: 11,
-      authorName: "Jane Smith",
-      title: "The Science of Cooking",
-      authorAvatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_I7naanAwdaK0p6sjZWAJzqHy3QD71Wb6syF4OvJwegZAn1HYPS-2EmcMZjw57AHe8Tc&usqp=CAU",
-      createdAt: "September 14, 2020",
-    },
-    {
-      id: 42,
-      authorName: "Samantha Lee",
-      title: "Travel Photography",
-      authorAvatar:
-        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-      createdAt: "July 02, 2021",
-    },
-    {
-      id: 12,
-      authorName: "Olivia Brown",
-      title: "Healthy Eating Habits for a Better Life",
-      authorAvatar:
-        "https://www.americantravelblogger.com/wp-content/uploads/2017/09/3pRiRvW4.jpg",
-      createdAt: "November 27, 2021",
-    },
-    {
-      id: 11,
-      authorName: "David Lee",
-      title: "The Future of Electric Cars",
-      authorAvatar:
-        "https://photographypro.com/wp-content/uploads/2017/08/portrait-photography-focal-length-telephoto-1.jpg",
-      createdAt: "October 15, 2021",
-    },
-    {
-      id: 11,
-      authorName: "Jane Smith",
-      title: "The Science of Cooking",
-      authorAvatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt5nzi_lZnB56agglieG1ABy2Pyho61Z0ydjDTzKCTkKxGcaZ45gvCgT0r0k6MG9tQ&usqp=CAU",
-      createdAt: "September 14, 2020",
-    },
-  ]);
+  const navigate = useNavigate();
+  const [blogs, setBlogs] = useState(blogss);
+  const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
+  const { t, i18n } = useTranslation()
+  const meta = useMeta(t('blog.title'), t('blog.description'))
+
+  const greeting = {
+    title: "Welcome to Jalyss Blog 👋",
+    subTitle:
+      "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
+    displayGreeting: true, // Set false to hide this section, defaults to true
+  };
   return (
+    <DocumentMeta {...meta} className="container-fluid">
     <div>
-      <Header>
-        <Subtitle>
-          Welcome to Jalyss Blog <span>&#128075;</span>  
-        </Subtitle>
-        <Description>
-          The path to personal growth <br /> exploring change and development
-          through reading.
-        </Description>
-      </Header>
+      <Fade bottom duration={1000} distance="40px">
+        <Containerr style={{alignItems:'normal',height: "600px" , margin:"0 70px"}}>
+          <div className="d-flex align-items-center justify-content-center  " style={{margin:30}}>
+            <div className="col-lg-6">
+              {/* <GreetingMain> */}
+                <GreetingTextDiv style={{margin:20}}>
+                <GreetingText>Welcome to Jalyss Blog <br />👋</GreetingText>
+
+                  <GreetingSubTitle>{greeting.subTitle}</GreetingSubTitle>
+                  <GreetingButtonDiv>
+                    <GreetingButton $primary> <NoStyle href="#blogListWrapper" >Explore</NoStyle>
+ </GreetingButton>
+                    <GreetingButton onClick={()=>{navigate('/BlogsForm')}}>Write yours</GreetingButton>
+                  </GreetingButtonDiv>
+                </GreetingTextDiv>
+              {/* </GreetingMain> */}
+            </div>
+            <div className="col-lg-6">
+              <GreetingImageDiv>
+                <LandingPerson animationData={landingPerson} />
+              </GreetingImageDiv>
+            </div>
+          </div>
+        </Containerr>
+      </Fade>
+      <Fade bottom duration={3000} distance="40px">
+        <Containerr style={{alignItems:'normal', margin:"0 70px"}}>
+          <div className=" d-flex align-items-center">
+            <div className="col-lg-6">
+              <GreetingImageDiv>
+                <LandingPerson animationData={data} />
+              </GreetingImageDiv>
+            </div>
+            <div className="col-lg-6">
+              <GreetingMain>
+                <GreetingTextDiv>
+                  <GreetingText>
+                    Trending on Jalyss <br /> <FaFire /> 
+                  </GreetingText>
+                  <div className="d-flex flex-wrap justify-content-center">
+                    {trendingBlogs.map((blog, index) => (
+                      <BlogContainer key={blog.id}>
+                        <BlogNumber>{`${(index + 1)
+                          .toString()
+                          .padStart(2, "0")}`}</BlogNumber>
+                        <BlogAuthorAvatar
+                          src={blog.authorAvatar}
+                          alt={blog.authorName}
+                        />
+                        <BlogDetails>
+                          <BlogAuthorName>{blog.authorName}</BlogAuthorName>
+                          <BlogTitle>{blog.title}</BlogTitle>
+                          <BlogCreatedAt>{blog.createdAt}</BlogCreatedAt>
+                        </BlogDetails>
+                      </BlogContainer>
+                    ))}
+                  </div>
+                </GreetingTextDiv>
+              </GreetingMain>
+            </div>
+          </div>
+        </Containerr>
+      </Fade>
+
+      <Separator />
+
       <SearchBarWrap>
         <SearchForm>
           <SearchInput type="text" placeholder="Search By Category" />
           <GoButton>Go</GoButton>
         </SearchForm>
       </SearchBarWrap>
-
-      <StyledHeading>
-        <FaFire />
-        Trending on Jalyss
-      </StyledHeading>
-      <Container>
-        <TrendingBlogsContainer>
-          {trendingBlogs.map((blog, index) => (
-            <BlogContainer key={blog.id}>
-              <BlogNumber>{`${(index + 1)
-                .toString()
-                .padStart(2, "0")}`}</BlogNumber>
-              <BlogAuthorAvatar src={blog.authorAvatar} alt={blog.authorName} />
-              <BlogDetails>
-                <BlogAuthorName>{blog.authorName}</BlogAuthorName>
-                <BlogTitle>{blog.title}</BlogTitle>
-                <BlogCreatedAt>{blog.createdAt}</BlogCreatedAt>
-              </BlogDetails>
-            </BlogContainer>
-          ))}
-        </TrendingBlogsContainer>
-      </Container>
-      <Separator />
-      <BlogListWrapper>
-        {blogs.map((blog) => (
-          <BlogItemWrapper key={blog.id}>
+      <BlogListWrapper id="blogListWrapper" >
+        {blogs.map((blog, i) => (
+          <BlogItemWrapper key={blog.id}  onClick={() => navigate(`/blogs/${i}`)}    style={{ cursor: "pointer" }}>
             <BlogItemCover src={blog.cover} alt="cover" />
             <Chip>{blog.category}</Chip>
             <BlogItemTitle>{blog.title}</BlogItemTitle>
@@ -206,36 +113,74 @@ function Blogs() {
                   <BlogItemAuthorDate>{blog.createdAt}</BlogItemAuthorDate>
                 </BlogItemAuthorInfo>
               </BlogItemAuthor>
-              <BlogItemLink>➝</BlogItemLink>
+              {/* <BlogItemLink
+
+              >
+                ➝
+              </BlogItemLink> */}
             </BlogItemFooter>
           </BlogItemWrapper>
         ))}
       </BlogListWrapper>
     </div>
+    </DocumentMeta>
   );
 }
-const Header = styled.header`
-  text-align: center;
-`;
-
-const Title = styled.h2`
-  color: #0080ff;
-  font-size: 2rem;
-`;
-
-const Subtitle = styled.h1`
-  font-size: 3rem;
-  color: #0f52ba;
-  margin-bottom: 1rem;
-  margin-top: 3rem;
-  span {
-    color: #b0c4de;
+const NoStyle=styled.a` 
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+    color: white;
   }
+`
+const Row = styled.div`
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 `;
 
-const Description = styled.p`
+const BlogContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width:300px;
+  margin-top:20px;
+  margin-bottom:20px;
+`;
+
+const BlogNumber = styled.h3`
+  margin: 0;
   color: #a9a9a9;
-  font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
+const BlogAuthorAvatar = styled.img`
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+`;
+
+const BlogDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const BlogTitle = styled.h6`
+  margin: 0;
+  // font-size: 1.25rem;
+  font-weight: bold;
+`;
+const BlogAuthorName = styled.p`
+  margin: 0;
+  font-size: 1rem;
+`;
+
+const BlogCreatedAt = styled.p`
+  margin: 0;
+  font-size: 0.75rem;
+  color: #666;
 `;
 
 const SearchBarWrap = styled.div`
@@ -385,82 +330,85 @@ const Chip = styled.div`
   margin: 0 20px;
 `;
 
-const TrendingBlogsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 1rem;
-  margin: 0 250px;
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+const Separator = styled.div`
+  border-top: 0.5px dashed #a9a9a9;
 
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
 `;
-
-const BlogContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-`;
-
-const BlogNumber = styled.h3`
-  margin: 0;
-  color: #a9a9a9;
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const BlogAuthorAvatar = styled.img`
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-`;
-
-const BlogDetails = styled.div`
+const Containerr = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const BlogTitle = styled.h6`
-  margin: 0;
-  // font-size: 1.25rem;
-  font-weight: bold;
-`;
-
-const BlogAuthorName = styled.p`
-  margin: 0;
-  font-size: 1rem;
-`;
-
-const BlogCreatedAt = styled.p`
-  margin: 0;
-  font-size: 0.75rem;
-  color: #666;
-`;
-const StyledHeading = styled.h2`
-  display: flex;
   align-items: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  margin-left: 250px;
+  margin-top:-30px
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+`;
 
-  svg {
-    margin-right: 10px;
+const GreetingMain = styled.div`
+  display: flex;
+  // margin-left: 80px;
+`;
+
+const GreetingTextDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const GreetingText = styled.h1`
+  margin-bottom: 20px;
+  font-size: 50px;
+  // line-height: 1.1;
+  text-align: center;
+  white-space: pre-line;
+  color: #000000 @media (max-width: 768px) {
+    font-size: 30px;
+    text-align: center;
   }
 `;
 
-const Container = styled.div`
+const GreetingSubTitle = styled.p`
+  font-size: 29px;
+  line-height: 40px;
+  font-size: 30px;
+  line-height: 40px;
+  color: #868e96;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: normal;
+    text-align: center;
+  }
+`;
+
+const GreetingButtonDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
+  width: 100%;
 `;
-const Separator = styled.div`
-  border-top: 0.5px dashed #a9a9a9;
-  margin-top: 40px;
+
+const GreetingButton = styled.button`
+  background: ${(props) => (props.$primary ? "#0f52ba" : "white")};
+  color: ${(props) => (props.$primary ? "white" : "#0f52ba")};
+
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid ${(props) => (props.$primary ? "#0f52ba" : "#0f52ba")};
+  border-radius: 3px;
+  width: 150px;
+  height: 50px;
+`;
+
+const GreetingImageDiv = styled.div`
+  height: 100%;
+`;
+
+const LandingPerson = styled(DisplayLottie)`
+  max-width: 50%;
+  height: auto;
 `;
 
 export default Blogs;

@@ -14,6 +14,8 @@ import Invoice from "../pages/Invoice";
 import ResetPassword from "../pages/ResetPassword";
 import NewPassword from "../pages/NewPassword";
 import Blogs from "../pages/Blogs";
+import BlogsDetail from "../pages/BlogsDetail";
+import BlogsForm from "../pages/BlogsForm";
 
 
 function Router() {
@@ -36,6 +38,8 @@ function Router() {
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
             <Route path="blogs" element={<Blogs />} />
+            <Route path="blogs/:blogId" element={<BlogsDetail />} />
+            <Route path="blogsForm" element={<BlogsForm/>} />
           </Route>
           
         </Routes>
