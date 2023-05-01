@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import CarouselImages from '../components/Carousel'
-import HorizontalMenu from '../components/DragContainter'
+// import HorizontalMenu from '../components/DragContainter'
 import { MDBFooter, MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit'
 import { fetchPublishingHouses } from '../store/publishingHouse'
 import { fetchArticlesByBranch } from '../store/article'
@@ -28,9 +28,9 @@ function Home() {
           'https://jalyss.com/modules/cz_imageslider/views/img/4ac709113ead13b8f3c71c0e4bed81f0a435d809_25555-01.jpg',
         ]}
       />
-
+{/* 
       <HorizontalMenu items={publishingHouseStore.publishingHouses.items} />
-      <HorizontalMenu items={articleStore.articles.items} />
+      <HorizontalMenu items={articleStore.articles.items} /> */}
 
 
       <MDBContainer>

@@ -10,6 +10,9 @@ import DisplayLottie from "./DisplayLottie";
 import DocumentMeta from "react-document-meta";
 import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCirclePlus, faHeart } from '@fortawesome/free-solid-svg-icons'
+
 function Blogs() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(blogss);
@@ -36,7 +39,7 @@ function Blogs() {
 
                   <GreetingSubTitle>{greeting.subTitle}</GreetingSubTitle>
                   <GreetingButtonDiv>
-                    <GreetingButton $primary> <NoStyle href="#blogListWrapper" >Explore</NoStyle>
+                    <GreetingButton $primary> <NoStyle href="#blogListWrapper" >Explore &#9654;</NoStyle>
  </GreetingButton>
                     <GreetingButton onClick={()=>{navigate('/BlogsForm')}}>Write yours</GreetingButton>
                   </GreetingButtonDiv>
@@ -55,9 +58,9 @@ function Blogs() {
         <Containerr style={{alignItems:'normal', margin:"0 70px"}}>
           <div className=" d-flex align-items-center">
             <div className="col-lg-6">
-              <GreetingImageDiv>
+              <GreetingImageDivv>
                 <LandingPerson animationData={data} />
-              </GreetingImageDiv>
+              </GreetingImageDivv>
             </div>
             <div className="col-lg-6">
               <GreetingMain>
@@ -91,14 +94,16 @@ function Blogs() {
       </Fade>
 
       <Separator />
+      
 
-      <SearchBarWrap>
+
+      <SearchBarWrap id="blogListWrapper">
         <SearchForm>
           <SearchInput type="text" placeholder="Search By Category" />
           <GoButton>Go</GoButton>
         </SearchForm>
       </SearchBarWrap>
-      <BlogListWrapper id="blogListWrapper" >
+      <BlogListWrapper  >
         {blogs.map((blog, i) => (
           <BlogItemWrapper key={blog.id}  onClick={() => navigate(`/blogs/${i}`)}    style={{ cursor: "pointer" }}>
             <BlogItemCover src={blog.cover} alt="cover" />
@@ -212,7 +217,7 @@ const GoButton = styled.button`
   border: none;
   padding: 0.3rem 1rem;
   border-radius: 5px;
-  background-color: #0f52ba;
+  background-color: #f62966;
   color: #fff;
 `;
 
@@ -390,13 +395,13 @@ const GreetingButtonDiv = styled.div`
 `;
 
 const GreetingButton = styled.button`
-  background: ${(props) => (props.$primary ? "#0f52ba" : "white")};
-  color: ${(props) => (props.$primary ? "white" : "#0f52ba")};
+  background: ${(props) => (props.$primary ? "#f62966" : "white")};
+  color: ${(props) => (props.$primary ? "white" : "#f62966")};
 
   font-size: 1em;
   margin: 1em;
   padding: 0.25em 1em;
-  border: 2px solid ${(props) => (props.$primary ? "#0f52ba" : "#0f52ba")};
+  border: 2px solid ${(props) => (props.$primary ? "#f62966" : "#f62966")};
   border-radius: 3px;
   width: 150px;
   height: 50px;
@@ -404,6 +409,9 @@ const GreetingButton = styled.button`
 
 const GreetingImageDiv = styled.div`
   height: 100%;
+`;
+const GreetingImageDivv = styled.div`
+ margin-top:70px
 `;
 
 const LandingPerson = styled(DisplayLottie)`

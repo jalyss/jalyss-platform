@@ -68,7 +68,8 @@ class ImageBlot extends BlockEmbed {
     const imgTag = super.create();
     imgTag.setAttribute("src", value.src);
     imgTag.setAttribute("alt", value.alt);
-    imgTag.setAttribute("width", "100%");
+    imgTag.setAttribute("width", "0%");
+    imgTag.setAttribute("height", "77");
 
     return imgTag;
   }
@@ -117,36 +118,6 @@ class VideoBlot extends BlockEmbed {
 VideoBlot.blotName = "video";
 VideoBlot.tagName = "video";
 Quill.register(VideoBlot);
-
-class ULBlot extends BlockEmbed {
-  static blotName = "ul";
-  static tagName = "ul";
-
-  static create() {
-    const node = super.create();
-    node.setAttribute("class", "ql-ul");
-    return node;
-  }
-}
-
-class OLBlot extends BlockEmbed {
-  static blotName = "ol";
-  static tagName = "ol";
-
-  static create() {
-    const node = super.create();
-    node.setAttribute("class", "ql-ol");
-    return node;
-  }
-}
-
-ULBlot.blotName = "ul";
-ULBlot.tagName = "ul";
-Quill.register(ULBlot);
-
-OLBlot.blotName = "ol";
-OLBlot.tagName = "ol";
-Quill.register(OLBlot);
 
 class FileBlot extends BlockEmbed {
   static create(value) {
@@ -430,16 +401,16 @@ class QuillEditor extends React.Component {
           <button className="ql-underline" />
           <button className="ql-strike" />
           <button className="ql-list" value="ordered" />
-            <button className="ql-list" value="bullet" />
-          <button className="ql-insertImage">I</button>
-          <button className="ql-insertVideo">V</button>
-          <button className="ql-insertFile">F</button>
+          <button className="ql-list" value="bullet"  />
+          <button className="ql-insertImage" style={{ height: "0px" }}>&#128444;</button>
+
+          <button className="ql-insertVideo" style={{ height: "-50px" }}>	&#128249;</button>
+          <button className="ql-insertFile" style={{ height: "-50px" }}>&#128462;</button>
           <button className="ql-link" />
           <button className="ql-code-block" />
           <button className="ql-video" />
           <button className="ql-blockquote" />
           <button className="ql-clean" />
-       
         </div>
         <ReactQuill
           ref={(el) => {
@@ -480,18 +451,28 @@ class QuillEditor extends React.Component {
   modules = {
     // syntax: true,
     toolbar: {
-        container: "#toolbar",
-        handlers: {
-            insertImage: this.imageHandler,
-            insertVideo: this.videoHandler,
-            insertFile: this.fileHandler,
-            insertPoll: this.pollHandler
-        },
-        items: [
-            'bold', 'italic', 'underline', 'strike',
-            { 'list': 'ordered'}, { 'list': 'bullet' },
-            'image', 'video', 'file', 'link', 'code-block', 'blockquote', 'clean'
-        ]
+      container: "#toolbar",
+      handlers: {
+        insertImage: this.imageHandler,
+        insertVideo: this.videoHandler,
+        insertFile: this.fileHandler,
+        insertPoll: this.pollHandler,
+      },
+      items: [
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        { list: "ordered" },
+        { list: "bullet" },
+        "image",
+        "video",
+        "file",
+        "link",
+        "code-block",
+        "blockquote",
+        "clean",
+      ],
     },
   };
 
