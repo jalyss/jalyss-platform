@@ -1,20 +1,40 @@
+
 import React, { useState } from "react";
-import "react-quill/dist/quill.snow.css";
 import { Button, Typography,Form } from "antd";
 import QuillEditor from "../components/QuillEditor";
 const { Title } = Typography;
+
 const BlogsForm = () => {
+
   const [content, setContent] = useState("");
   const [files,setFiles]=useState([])
-  const onEditorChange = (value ) => {
-    setContent(value);
-    console.log('value',value);
+
+  
+  const onEditorChange = (newContent ) => {
+    setContent(newContent);
+    localStorage.setItem('blogContent', newContent); // store the content in localStorage
+    console.log('newContent',newContent);
   };
   const onFilesChange = (files ) => {
     setFiles(files);
     console.log('files',files);
   };
 
+ 
+  // Retrieve the content from localStorage on component mount
+  useState(() => {
+    const storedContent = localStorage.getItem('blogContent');
+    if (storedContent) {
+      setContent(storedContent);
+    }
+  }, []);
+
+
+  
+  const handleClearStorage = () => {
+    localStorage.clear();
+    setContent('');
+  };
   return (
     <div>
       <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
@@ -40,6 +60,12 @@ const BlogsForm = () => {
           </Button>
         </div>
       </Form>
+      </div>
+      <div>
+        <h2>Content from localStorage:</h2>
+        <button onClick={handleClearStorage}>Clear Storage</button>
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+
       </div>
     </div>
   );

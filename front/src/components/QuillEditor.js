@@ -68,8 +68,8 @@ class ImageBlot extends BlockEmbed {
     const imgTag = super.create();
     imgTag.setAttribute("src", value.src);
     imgTag.setAttribute("alt", value.alt);
-    imgTag.setAttribute("width", "0%");
-    imgTag.setAttribute("height", "77");
+    imgTag.setAttribute("width", value.naturalWidth);
+    imgTag.setAttribute("height", value.naturalHeight);
 
     return imgTag;
   }
@@ -400,17 +400,68 @@ class QuillEditor extends React.Component {
           <button className="ql-italic" />
           <button className="ql-underline" />
           <button className="ql-strike" />
+          <select className="ql-color">
+            <option value="rgb(0, 0, 0)" />
+            <option value="rgb(230, 0, 0)" />
+            <option value="rgb(255, 153, 0)" />
+            <option value="rgb(255, 255, 0)" />
+            <option value="rgb(0, 138, 0)" />
+            <option value="rgb(0, 102, 204)" />
+            <option value="rgb(153, 51, 255)" />
+            <option value="rgb(255, 255, 255)" />
+            <option value="rgb(250, 204, 204)" />
+            <option value="rgb(255, 235, 204)" />
+            <option value="rgb(255, 255, 204)" />
+            <option value="rgb(204, 232, 204)" />
+            <option value="rgb(204, 224, 245)" />
+            <option value="rgb(235, 214, 255)" />
+            <option value="rgb(187, 187, 187)" />
+            <option value="rgb(102, 185, 102)" />
+            <option value="rgb(102, 163, 224)" />
+            <option value="rgb(194, 133, 255)" />
+            <option value="rgb(136, 136, 136)" />
+            <option value="rgb(161, 0, 0)" />
+            <option value="rgb(178, 107, 0)" />
+            <option value="rgb(178, 178, 0)" />
+            <option value="rgb(0, 97, 0)" />
+            <option value="rgb(0, 71, 178)" />
+            <option value="rgb(107, 36, 178)" />
+            <option value="rgb(68, 68, 68)" />
+            <option value="rgb(92, 0, 0)" />
+            <option value="rgb(102, 61, 0)" />
+            <option value="rgb(102, 102, 0)" />
+            <option value="rgb(0, 55, 0)" />
+            <option value="rgb(0, 41, 102)" />
+            <option value="rgb(61, 20, 102)" />
+          </select>
           <button className="ql-list" value="ordered" />
-          <button className="ql-list" value="bullet"  />
-          <button className="ql-insertImage" style={{ height: "0px" }}>&#128444;</button>
-
-          <button className="ql-insertVideo" style={{ height: "-50px" }}>	&#128249;</button>
-          <button className="ql-insertFile" style={{ height: "-50px" }}>&#128462;</button>
+          <button className="ql-list" value="bullet" />
+          <select
+            className="ql-align"
+            style={{ marginTop:"-2px" }}
+            defaultValue={""}
+            onChange={(e) => e.persist()}
+          >
+            <option value="">Select alignment</option>
+            <option value="center">Center</option>
+            <option value="right">Right</option>
+          </select>
+          <button className="ql-insertImage" style={{ marginTop:"-3px" }} >
+            &#128444;
+          </button>
+          <button className="ql-insertVideo" style={{ marginTop:"-3px" }}>
+            {" "}
+            &#128249;
+          </button>
+          <button className="ql-insertFile" style={{ marginTop:"-2px" }}>
+            &#128462;
+          </button>
           <button className="ql-link" />
           <button className="ql-code-block" />
           <button className="ql-video" />
           <button className="ql-blockquote" />
           <button className="ql-clean" />
+         
         </div>
         <ReactQuill
           ref={(el) => {
@@ -472,6 +523,17 @@ class QuillEditor extends React.Component {
         "code-block",
         "blockquote",
         "clean",
+        { header: [1, 2, 3, 4, 5, 6, false] }, // heading styles
+        { align: [] }, // text alignment
+        { undo: true }, // undo
+        { redo: true }, // redo
+        { background: [] }, // text highlighting
+        { script: "sub" }, // subscript
+        { script: "super" }, // superscript
+        { table: true }, // table insertion
+        { emoji: true }, // emoji insertion
+        { "code-block": "highlighted" }, // code highlighting
+        { formula: true }, // math formulas
       ],
     },
   };
@@ -492,7 +554,16 @@ class QuillEditor extends React.Component {
     "list",
     "bullet",
     "ordered",
+
+    "size",
+    "background",
+    "align",
+    "script",
+    "table",
+    "emoji",
+    "code-block",
+    "formula",
+    "color",
   ];
 }
-
 export default QuillEditor;

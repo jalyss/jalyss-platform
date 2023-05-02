@@ -3,8 +3,28 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { blogss } from "../constants/BlogsData";
-
+import "react-quill/dist/quill.snow.css";
+import QuillEditor from "../components/QuillEditor";
+// import { parse } from 'node-html-parser';
 const BlogDetail = () => {
+  // function parseJSX(code) {
+  //   const div = document.createElement("div");
+  //   div.innerHTML = code;
+  //   return div.textContent;
+  // }
+  
+  // document.addEventListener("DOMContentLoaded", function() {
+  //   const preTag = document.querySelector("pre.ql-syntax");
+  //   if (preTag) {
+  //     const code = preTag.textContent.trim();
+  //     const parsedCode = parseJSX(code);
+  //     console.log(parsedCode);
+  
+  //     const parsedElement = eval(parsedCode);
+  //     document.body.appendChild(parsedElement);
+  //   }
+  // });
+  
   const { blogId } = useParams();
   const navigate = useNavigate();
   const [selectedBlog, setSelectedBlog] = useState(blogss[blogId]);
@@ -20,12 +40,12 @@ const BlogDetail = () => {
     <BlogDetailWrapper>
       <BlogDetailContent>
         <HeaderContent>
-        <GoBackLink onClick={() => navigate(-1)}>
-          <span> &#8592;</span> <span>Go Back</span>
-        </GoBackLink>
-        <BookmarkIcon>
-          <span>&#x1F516;</span>
-        </BookmarkIcon>
+          <GoBackLink onClick={() => navigate(-1)}>
+            <span> &#8592;</span> <span>Go Back</span>
+          </GoBackLink>
+          <BookmarkIcon>
+            <span>&#x1F516;</span>
+          </BookmarkIcon>
         </HeaderContent>
         <BlogContainer>
           <BlogHeader>
@@ -50,7 +70,7 @@ const BlogDetail = () => {
             </AuthorContainer> */}
           </BlogHeader>
           <BlogImg src={selectedBlog.cover} alt="cover" />
-
+           
           <BlogDescription>{selectedBlog.description}</BlogDescription>
         </BlogContainer>
       </BlogDetailContent>
@@ -82,19 +102,20 @@ const BlogDetail = () => {
               </SideBlogContainer>
             ))}
         </SideContainer>
+        
       </BlogDetailSidebar>
     </BlogDetailWrapper>
   );
 };
-const HeaderContent=styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-`
+const HeaderContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 const BookmarkIcon = styled.span`
-   cursor: pointer;
- font-size:30px;
- margin-bottom: 2rem;
+  cursor: pointer;
+  font-size: 30px;
+  margin-bottom: 2rem;
   /* Responsive adjustments */
   @media (max-width: 768px) {
     top: -20px;
