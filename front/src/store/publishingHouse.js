@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-export const fetchPublishingHouses = createAsyncThunk("publishingHouses/publishingHouses", async (id) => {
+export const fetchPublishingHouses = createAsyncThunk("publishingHouses/publishingHouses", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/publishing-houses/`);
   return response.data;
 });
