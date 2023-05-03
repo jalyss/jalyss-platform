@@ -355,7 +355,24 @@ async function main() {
     );
   }
 
+  // create dummy branch
 
+  let mainBranch = await prisma.branch.create({
+    data: {
+      name: 'Main',
+      identifier: 'Main',
+      address: 'sfax ambra immeuble ',
+      mainBranch: true,
+    },
+  });
+  let maBranch = await prisma.branch.create({
+    data: {
+      name: 'Marroco',
+      identifier: 'Ma',
+      address: 'Marrakch ',
+      mainBranch: true,
+    },
+  });
 
   let articlesByBranch = [];
   for (let i = 0; i < articles.length; i += 2) {
