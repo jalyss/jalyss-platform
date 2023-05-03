@@ -28,7 +28,7 @@ function EditEmployee() {
 
   useEffect(() => {
     dispatch(fetchBranches())
-    dispatch(fetchRoles())
+    dispatch(fetchRoles()) 
     dispatch(fetchEmployee(employeeId))
   }, [])
 

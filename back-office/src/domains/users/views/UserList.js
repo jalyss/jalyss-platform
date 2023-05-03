@@ -4,7 +4,7 @@ import { DataGrid, GridActionsCellItem, GridToolbarContainer } from '@mui/x-data
 import { fetchUsers, removeUser } from '../../../store/user';
 import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AiFillEdit } from 'react-icons/ai';
 import { AiFillDelete } from 'react-icons/ai';
 import { IoIosPersonAdd } from "react-icons/io";
@@ -90,7 +90,7 @@ function UserList() {
             icon={<AiFillDelete />}
             label="Delete"
 
-            onClick={() =>{ handleDeleteClick(id)} }
+            onClick={() => { handleDeleteClick(id) }}
             // should open popup to ask are u sure delete this user (yes/no)
             color="inherit"
           />,
@@ -112,7 +112,12 @@ function UserList() {
   useEffect(() => {
     if (userStore.users.items.length) {
       let aux = userStore.users.items.map(e => {
-        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, createdAt: e.createdAt.slice(0, 10) }
+        return {
+          ...e,
+          fullName: isEng ? e.fullNameEn : e.fullNameAr,
+          phone: e.tel,
+          createdAt: e.createdAt.slice(0, 10)
+        }
       }
       )
       console.log(aux);
@@ -123,7 +128,7 @@ function UserList() {
 
 
   const handleDeleteClick = (id) => {
-    
+
     dispatch(removeUser(id));
 
   };

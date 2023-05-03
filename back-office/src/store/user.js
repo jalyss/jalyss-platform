@@ -35,6 +35,20 @@ export const removeUser = createAsyncThunk("users/deleteUser", async (id,{dispat
   return response.data;
 });
 
+export const editUser = createAsyncThunk("users/editUser", async (args, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('token'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token.Authorization
+    }
+  }
+  let id=args.id
+  delete args.id
+  const response = await axios.patch(`${config.API_ENDPOINT}/users/${id}`, args,configs);
+  dispatch(fetchUsers(id))
+  return response.data;
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {

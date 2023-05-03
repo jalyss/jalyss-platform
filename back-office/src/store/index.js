@@ -4,6 +4,7 @@ import user from './user';
 import employee from './employee';
 import branche from './branche';
 import role from './role'
+import article from './article';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     user,
     employee,
     branche,
-    role
+    role,
+    article
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

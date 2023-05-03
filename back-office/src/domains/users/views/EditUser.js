@@ -11,7 +11,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { fetchUser, fetchUsers, removeUser } from '../../../store/user';
+import { editUser, fetchUser, fetchUsers, removeUser } from '../../../store/user';
 import { useParams } from 'react-router-dom'
 
 
@@ -22,17 +22,17 @@ function EditUser() {
   const [user, setUser] = useState({})
   const [editMode, setEditMode] = useState(false)
   const [avatar, setAvatar] = useState(null)
-  const {userId}=useParams()
+  const { userId } = useParams()
   const userStore = useSelector((state) => state.user)
 
-useEffect(()=>{
-  dispatch(fetchUser(userId))
-},[])
-useEffect(()=>{
-  if( userStore.user)
-  setUser(userStore.user)
-  
-},[userStore.user])
+  useEffect(() => {
+    dispatch(fetchUser(userId))
+  }, [])
+  useEffect(() => {
+    if (userStore.user)
+      setUser(userStore.user)
+
+  }, [userStore.user])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -46,27 +46,19 @@ useEffect(()=>{
     } else {
       event.preventDefault()
       let aux = Object.assign({}, user)
-      if (avatar !== null) {
-        console.log('in if')
-        const image = new FormData()
-        image.append('file', avatar)
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          image
-        )
-        aux.avatarId = response.data.id
-      }
-     
+
+      dispatch(editUser(aux))
+
       setEditMode(false)
     }
   }
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>Profile user </h2>
+      <h2>Profile User </h2>
       <form className="checkout-form" onSubmit={submitEditProfile}>
         <div className="d-flex flex-wrap">
-          
+
           <div className="d-flex justify-content-center w-100 m-3">
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
@@ -162,7 +154,7 @@ useEffect(()=>{
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('address')}
+                      العنوان
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -192,11 +184,11 @@ useEffect(()=>{
                           class="form-control mt-2"
                           id="country"
                           name="countryId"
-                          value={user?.country?.nameAr}
+                          value={user?.countryId}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{user?.country?.nameAr}</span>
+                        <span>{user?.countryId}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -212,11 +204,11 @@ useEffect(()=>{
                           class="form-control mt-2"
                           id="city"
                           name="cityId"
-                          value={user?.city?.nameAr}
+                          value={user?.cityId}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{user?.city?.nameAr}</span>
+                        <span>{user?.cityId}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -232,11 +224,11 @@ useEffect(()=>{
                           class="form-control mt-2"
                           id="functionalArea"
                           name="functionalAreaId"
-                          value={user?.functionalArea?.nameAr}
+                          value={user?.functionalAreaId}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{user?.functionalArea?.nameAr}</span>
+                        <span>{user?.functionalAreaId}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -252,11 +244,11 @@ useEffect(()=>{
                           class="form-control"
                           id="educationLevel"
                           name="educationLevelId"
-                          value={user?.educationLevel?.nameAr}
+                          value={user?.educationLevelId}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{user?.educationLevel?.nameAr}</span>
+                        <span>{user?.educationLevelId}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -272,11 +264,11 @@ useEffect(()=>{
                           class="form-control mt-2"
                           id="jobTitle"
                           name="jobTitleId"
-                          value={user?.jobTitle?.nameAr}
+                          value={user?.jobTitleId}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{user?.jobTitle?.nameAr}</span>
+                        <span>{user?.jobTitleId}</span>
                       )}
                     </TableCell>
                   </TableRow>

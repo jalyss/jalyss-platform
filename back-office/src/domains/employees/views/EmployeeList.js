@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Typography, useTheme } from '@mui/material'
-import { DataGrid, GridActionsCellItem, GridToolbarContainer } from '@mui/x-data-grid';
+import { Box, Button } from '@mui/material'
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AiFillEdit } from 'react-icons/ai';
 import { AiFillDelete } from 'react-icons/ai';
 import { IoIosPersonAdd } from "react-icons/io";
@@ -102,7 +102,7 @@ function EmployeeList() {
   useEffect(() => {
     if (employeeStore.employees.items.length) {
       let aux = employeeStore.employees.items.map(e => {
-        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel }
+        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr }
       })
       console.log(aux);
       setRows(aux)
@@ -110,7 +110,7 @@ function EmployeeList() {
   }, [employeeStore.employees.items])
 
   const handleDeleteClick = (id) => {
-    
+
     dispatch(removeEmployee(id));
 
   };
@@ -129,8 +129,6 @@ function EmployeeList() {
         </Button>
       </div>
       <div className='position-relative'>Employee List
-
-
         <Box sx={{ height: 600, width: '100%' }}>
           <DataGrid
             rows={rows}

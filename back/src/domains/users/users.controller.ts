@@ -14,7 +14,8 @@ import {
   UseInterceptors,
   Headers,
   Post,
-  Delete
+  Delete,
+  Patch
 } from '@nestjs/common';
 import { ApiHeader, ApiQuery, ApiSecurity, ApiTags } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
@@ -50,6 +51,11 @@ export class UsersController {
   @Post('create')
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto)
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')

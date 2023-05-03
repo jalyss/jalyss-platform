@@ -21,6 +21,9 @@ import EmployeeList from "../domains/employees/views/EmployeeList";
 import CreateEmployee from "../domains/employees/views/CreateEmployee";
 import EditEmployee from "../domains/employees/views/EditEmployee";
 import Article from "../domains/articles/Article";
+import ArticleList from "../domains/articles/views/ArticleList";
+import CreateArticle from "../domains/articles/views/CreateArticle";
+import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -47,15 +50,13 @@ function Router() {
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
-              <Route path="edit/:employeeId" element={< EditEmployee/>} />
+              <Route path="edit/:employeeId" element={< EditEmployee />} />
             </Route>
-            <Route path="customer" element={<Customer />}>
-              <Route index element={<CustomerList />} />
-              <Route path="create" element={<CreateCustomer />} />
-            </Route>
-            <Route path="article" element={<Article />}>
-              {/* <Route index element={<CustomerList />} />
-              <Route path="create" element={<CreateCustomer />} /> */}
+
+            <Route path="articles" element={<Article />}>
+              <Route index element={<ArticleList />} />
+              <Route path='articles-by-branch' element={<ArticleByBranchList />} />
+              <Route path="create" element={<CreateArticle />} />
             </Route>
           </Route>
         ) : (
