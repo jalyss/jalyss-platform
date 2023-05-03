@@ -13,6 +13,7 @@ import Checkout from "../pages/Checkout";
 import Invoice from "../pages/Invoice";
 import ResetPassword from "../pages/ResetPassword";
 import NewPassword from "../pages/NewPassword";
+import TrainingPage from "../pages/TrainingPage";
 import Blogs from "../pages/Blogs";
 import BlogsDetail from "../pages/BlogsDetail";
 import BlogsForm from "../pages/BlogsForm";
@@ -37,6 +38,7 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
+            <Route path="training" element={<TrainingPage />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
             <Route path="blogsForm" element={<BlogsForm/>} />
