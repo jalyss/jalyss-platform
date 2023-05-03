@@ -287,6 +287,7 @@ model Article {
   Supply             Supply[]
   media              MediaArticle[]
   ArticleByAuthor    ArticleByAuthor[]
+  MvtArticle         MvtArticle[]
 }
 
 model Author {
@@ -319,6 +320,21 @@ model ArticlesByBranch {
   CommandLine CommandLine[]
 
   @@unique([branchId, articleId])
+}
+
+model MvtArticle {
+  branchSender     Branch   @relation(name: "sender", fields: [branchSenderId], references: [id])
+  branchSenderId   String
+  branchReceiver   Branch   @relation(name: "receiver", fields: [branchReceiverId], references: [id])
+  branchReceiverId String
+  articleId        String
+  article          Article  @relation(fields: [articleId], references: [id])
+  date             DateTime
+  quantity         Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique(fields: [branchReceiverId, branchSenderId, articleId, date], name: "mvtArticle")
 }
 
 model Rating {
@@ -366,14 +382,16 @@ model Role {
 }
 
 model Branch {
-  id               String             @id @default(uuid())
-  name             String
-  identifier       String             @unique
-  address          String
-  mainBranch       Boolean            @default(false)
-  articlesByBranch ArticlesByBranch[]
-  commands         Command[]
-  employee         Employee[]
+  id                 String             @id @default(uuid())
+  name               String
+  identifier         String             @unique
+  address            String
+  mainBranch         Boolean            @default(false)
+  articlesByBranch   ArticlesByBranch[]
+  commands           Command[]
+  employee           Employee[]
+  MvtArticleSender   MvtArticle[]       @relation("sender")
+  MvtArticleReceiver MvtArticle[]       @relation("receiver")
 }
 
 model Command {
