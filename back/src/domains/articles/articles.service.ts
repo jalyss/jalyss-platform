@@ -26,7 +26,7 @@ export class ArticleService {
   findAll() {
     return this.prisma.article.findMany({
       include: {
-        ArticlesByBranch: { include: { rating: true } },
+        ArticlesByBranch: { include: { rating: true,branch:true } },
         media: true,
         cover: true,
         publishingHouse: true,

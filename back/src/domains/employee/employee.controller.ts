@@ -4,8 +4,8 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('employee')
-@Controller('employee')
+@ApiTags('employees')
+@Controller('employees')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
@@ -15,7 +15,7 @@ export class EmployeeController {
     return this.employeeService.findAll();
   }
 
-  @Get('/one:id')
+  @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.employeeService.findOne(id);
   }

@@ -20,41 +20,6 @@ export const me = createAsyncThunk("auth/me", async (token) => {
   return response.data;
 });
 
-//////////////////////////
-
-export const meAdmin = createAsyncThunk("auth/meAdmin", async (token) => {
-  let configs = {
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  };
-  console.log(config);
-  const response = await axios.get(`${config.API_ENDPOINT}/auth/meAdmin`, {
-    ...configs,
-  });
-
-  return response.data;
-});
-
-
-export const loginAdmin = createAsyncThunk(
-  "auth/login-admin",
-  async (body, { dispatch }) => {
-    const response = await axios.post(
-      `${config.API_ENDPOINT}/auth/login-admin`,
-      body
-    );
-    let aux = JSON.stringify(response.data);
-    localStorage.setItem("token", aux);
-    dispatch(meAdmin(response.data.Authorization));
-    return response.data;
-  }
-);
-
-
-
-//////////////
-
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -140,9 +105,7 @@ export const AuthSlice = createSlice({
     builder.addCase(me.fulfilled, (state, action) => {
       state.me = action.payload;
     });
-    builder.addCase(meAdmin.fulfilled, (state, action) => {
-      state.meAdmin = action.payload;
-    });
+   
   },
 });
 export default AuthSlice.reducer;

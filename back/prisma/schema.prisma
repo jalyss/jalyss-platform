@@ -49,35 +49,36 @@ model JobTitle {
 }
 
 model User {
-  id                   String            @id @default(uuid())
+  id                   String             @id @default(uuid())
   fullNameEn           String
   fullNameAr           String
-  email                String            @unique
+  email                String             @unique
   address              String
   tel                  String
   password             String
-  avatar               Media?            @relation(fields: [avatarId], references: [id])
+  avatar               Media?             @relation(fields: [avatarId], references: [id])
   avatarId             String?
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @updatedAt
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
   accountBalance       Float?
-  category             UserCategory?     @relation(fields: [categoryId], references: [id])
+  category             UserCategory?      @relation(fields: [categoryId], references: [id])
   categoryId           String?
-  educationLevel       EducationLevel?   @relation(fields: [educationLevelId], references: [id])
+  educationLevel       EducationLevel?    @relation(fields: [educationLevelId], references: [id])
   educationLevelId     String?
-  functionalArea       FunctionalArea?   @relation(fields: [functionalAreaId], references: [id])
+  functionalArea       FunctionalArea?    @relation(fields: [functionalAreaId], references: [id])
   functionalAreaId     String?
-  jobTitle             JobTitle?         @relation(fields: [jobTitleId], references: [id])
+  jobTitle             JobTitle?          @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
-  country              Country?          @relation(fields: [countryId], references: [id])
+  country              Country?           @relation(fields: [countryId], references: [id])
   countryId            String?
-  city                 City?             @relation(fields: [cityId], references: [id])
+  city                 City?              @relation(fields: [cityId], references: [id])
   cityId               String?
   confirmkey           String?
+  isActive             Boolean            @default(true)
   Media                MediaUser[]
   Rating               Rating[]
-  IntermediateCommands Command[]         @relation("intermediate")
-  clientCommands       Command[]         @relation("clientCommand")
+  IntermediateCommands Command[]          @relation("intermediate")
+  clientCommands       Command[]          @relation("clientCommand")
   Blog                 Blog[]
   BlogLike             BlogLike[]
   chatRooms            UserChatRoom[] // *many to many relationships user&chatRoom
@@ -89,14 +90,14 @@ model User {
   userpayments         UserPayment[] // *One-to-Many relation to UserPayment
   commentBlog          CommentBlog[]
   replyCommentaireBlog ReplyCommentBlog[]
-  bookMark  Bookmark[]
+  bookMark             Bookmark[]
 }
 
 model UserPayment {
   id        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  amount     Float
+  amount    Float
   createdAt DateTime @default(now())
 }
 
@@ -182,6 +183,7 @@ model Lecture {
   assesments Assessments[]
   coaching   Coaching[]
 }
+
 model ArticleCategory {
   id        String    @id @default(uuid())
   nameAr    String
@@ -189,9 +191,9 @@ model ArticleCategory {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   articles  Article[]
-  lecture   Lecture? @relation(fields: [lectureId], references: [id])
+  lecture   Lecture?  @relation(fields: [lectureId], references: [id])
   lectureId String?
-  Blog   Blog[]
+  Blog      Blog[]
 }
 
 model Assessments {
@@ -225,7 +227,7 @@ model ChatMessage {
 //join table between user and chat room 
 
 model UserChatRoom {
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
@@ -322,7 +324,7 @@ model ArticlesByBranch {
 model Rating {
   articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
   articleByBranchId String
-  user              User             @relation(fields: [userId], references: [id])
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String
   rate              Int
   commit            String
@@ -357,8 +359,8 @@ model Employee {
 
 model Role {
   id          String     @id @default(uuid())
-  roleNameAr  String
-  roleNameEn  String
+  nameAr      String
+  nameEn      String
   permissions Json
   employee    Employee[]
 }
@@ -378,7 +380,7 @@ model Command {
   id             String        @id @default(uuid())
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
-  client         User?         @relation(name: "clientCommand", fields: [clientId], references: [id])
+  client         User?         @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
   clientId       String?       @map("client_id")
   clientName     String        @map("client_name")
   clientAddress  String        @map("client_address")
@@ -390,7 +392,7 @@ model Command {
   hasDelivery    Boolean       @default(false) @map("has_delivery")
   branch         Branch        @relation(fields: [branchId], references: [id])
   branchId       String        @map("branch_id")
-  intermediate   User?         @relation(name: "intermediate", fields: [intermediateId], references: [id])
+  intermediate   User?         @relation(name: "intermediate", fields: [intermediateId], references: [id], onDelete: Cascade)
   intermediateId String?       @map("intermediate_id")
   country        Country?      @relation(fields: [countryId], references: [id])
   countryId      String?
@@ -457,7 +459,7 @@ model Media {
 model MediaUser {
   media   Media  @relation(fields: [mediaId], references: [id])
   mediaId String
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String
 
   @@unique(fields: [mediaId, userId], name: "userMedia")
@@ -474,8 +476,7 @@ model MediaArticle {
 
 // blog
 model MediaBlog {
-
-  blog    Blog   @relation(fields: [blogId], references: [id],onDelete: Cascade)
+  blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId  String
   media   Media  @relation(fields: [mediaId], references: [id])
   mediaId String
@@ -483,42 +484,39 @@ model MediaBlog {
   @@unique(fields: [blogId, mediaId], name: "blogMedia")
 }
 
-
 model Blog {
-  id         String       @id @default(uuid())
-  content    String
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  user       User         @relation(fields: [userId], references: [id],onDelete: Cascade)
-  userId     String
-  confirm    Boolean      @default(false)
-  category   ArticleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId String
-  MediaBlog  MediaBlog[]
-  BlogLike   BlogLike[]
-  commentBlog  CommentBlog[]
-  bookmark Bookmark[]
-  view  View[]
- 
+  id          String          @id @default(uuid())
+  content     String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  confirm     Boolean         @default(false)
+  category    ArticleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+  MediaBlog   MediaBlog[]
+  BlogLike    BlogLike[]
+  commentBlog CommentBlog[]
+  bookmark    Bookmark[]
+  view        View[]
 }
-
 
 model BlogLike {
-  id     String @id @default(uuid())
-  userId  String
-  user    User   @relation(fields: [userId], references: [id],onDelete: Cascade)
-  blogId  String
-  blog    Blog   @relation(fields: [blogId], references: [id],onDelete: Cascade)
-  likeCategoryId   String
-  likeCategory    LikeCategory    @relation(fields: [likeCategoryId], references: [id],onDelete: Cascade)
-  
+  id             String       @id @default(uuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blogId         String
+  blog           Blog         @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  likeCategoryId String
+  likeCategory   LikeCategory @relation(fields: [likeCategoryId], references: [id], onDelete: Cascade)
 
-  @@unique(fields: [userId, blogId ,likeCategoryId ], name: "blogLike")
+  @@unique(fields: [userId, blogId, likeCategoryId], name: "blogLike")
 }
+
 model LikeCategory {
-  id           String      @id @default(uuid())
-  type         String
-  blogLike    BlogLike[]
+  id       String     @id @default(uuid())
+  type     String
+  blogLike BlogLike[]
 }
 
 // model BlogCategory {
@@ -529,50 +527,44 @@ model LikeCategory {
 // }
 
 model CommentBlog {
-  id          String                @id @default(uuid())
-  content     String
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @updatedAt
-  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  blog        Blog                  @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  blogId      String
-  replies     ReplyCommentBlog[]
+  id        String             @id @default(uuid())
+  content   String
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  blog      Blog               @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId    String
+  replies   ReplyCommentBlog[]
 }
 
-
 model ReplyCommentBlog {
-  id        String   @id @default(uuid())
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
-  userId    String
-  commentBlog   CommentBlog  @relation(fields: [commentBlogId], references: [id],onDelete: Cascade)
+  id            String      @id @default(uuid())
+  content       String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  commentBlog   CommentBlog @relation(fields: [commentBlogId], references: [id], onDelete: Cascade)
   commentBlogId String
-  
 }
 
 model Bookmark {
-  id      String   @id @default(uuid())
-  blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  blogId  String
-  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(uuid())
+  blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   @@unique(fields: [blogId, userId])
 }
 
-
 model View {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
-  blog      Blog     @relation(fields: [blogId], references: [id],onDelete: Cascade)
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId    String
 }
-
-
-
 
 //workSdpace
 model WorkSpace {
@@ -597,7 +589,7 @@ model Service {
   workSpace WorkSpace[]
   tarif     Tarif[]
 }
-             
+
 model Booking {
   id        String   @id @default(uuid())
   date      DateTime
@@ -607,7 +599,7 @@ model Booking {
   paid      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   tarif     Tarif    @relation(fields: [tarifId], references: [id])
   tarifId   String
@@ -616,18 +608,16 @@ model Booking {
 }
 
 model Tarif {
-  id         String    @id @default(uuid())
-  duration   String?
-  price      Float
+  id          String    @id @default(uuid())
+  duration    String?
+  price       Float
   description String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  bookings   Booking[]
-  service    Service   @relation(fields: [serviceId], references: [id])
-  serviceId  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+  service     Service   @relation(fields: [serviceId], references: [id])
+  serviceId   String
 }
-
-
 
 enum Status {
   confirmed

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { register } from '../../../store/auth'
+import { createUser } from '../../../store/user'
 import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { showErrorToast, showSuccessToast } from '../../../utils/toast'
@@ -10,10 +11,10 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 function CreateUser() {
-  const { t , i18n} = useTranslation()
+  const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
-  const navigate=useNavigate()
-  
+  const navigate = useNavigate()
+
 
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [preview, setPreview] = useState(null)
@@ -28,19 +29,10 @@ function CreateUser() {
   const submitSignup = async (event) => {
     event.preventDefault();
     let aux = Object.assign({}, user)
-    if (avatar!==null) {
-      console.log('in if');
-      const image = new FormData()
-      image.append('file', avatar)
-      const response=await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/upload`, image)
-        aux.avatarId=response.data.id
-    }
-
-    dispatch(register(aux))
+    dispatch(createUser(aux))
       .then(res => {
         if (!res.error) {
           showSuccessToast(t('user.created'))
-          navigate('/profile')
         } else {
           console.log(res);
           showErrorToast(res.error.message)
@@ -49,19 +41,7 @@ function CreateUser() {
       )
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    // const reader = new FileReader()
-    // if (file) {
-    //   reader.readAsDataURL(file)
-    // }
-    // reader.onloadend = () => {
-    //   setPreview(reader.result)
-    // }
-    setPreview( URL.createObjectURL(file))
-    setAvatar(file)
 
-  }
 
 
   return (
@@ -69,7 +49,7 @@ function CreateUser() {
       <h2>create user</h2>
       <form className="checkout-form" onSubmit={submitSignup}>
         <div className="d-flex flex-wrap">
-         
+
           <div className=" m-3">
             <div class="row">
               <div class="col mb-3 ">
@@ -90,7 +70,7 @@ function CreateUser() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="fullNameEn">
-                {t('nameEn')}<span style={{ color: 'red' }}>*</span>
+                  {t('nameEn')}<span style={{ color: 'red' }}>*</span>
                 </label>
 
                 <input
@@ -98,7 +78,7 @@ function CreateUser() {
                   required
                   id="fullNameEn"
                   name="fullNameEn"
-                  pattern="^(\w\w+)\s(\w+)$"
+                 // pattern="^(\w\w+)\s(\w+)$"
                   value={user?.fullNameEn}
                   onChange={handleChange}
                 />
@@ -108,7 +88,7 @@ function CreateUser() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="email">
-                {t('email')}<span style={{ color: 'red' }}>*</span>
+                  {t('email')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -122,7 +102,7 @@ function CreateUser() {
               </div>
               <div class="col mb-3 ">
                 <label for="tel">
-                {t('phone')}<span style={{ color: 'red' }}>*</span>
+                  {t('phone')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -138,7 +118,7 @@ function CreateUser() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="password">
-                {t('password')}<span style={{ color: 'red' }}>*</span>
+                  {t('password')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <div className=" d-flex  " >
                   <input
@@ -173,8 +153,45 @@ function CreateUser() {
             </div>
             <div class="row">
               <div class="col mb-3 ">
+                <label for="confirmPassword">
+                  تاكيد كلمه المرور
+                  <span style={{ color: 'red' }}>*</span>
+                </label>
+                <div className=" d-flex  " >
+                  <input
+                    style={{ width: '100%' }}
+                    required
+                    className='form-control'
+                    id="confirmPassword"
+                    name='confirmPassword'
+                    type={isShowPassword ? 'text' : 'password'}
+                    value={user?.password}
+                    onChange={handleChange}
+                  />
+                  <div className='position-relative w-0'>
+                    <div
+                      style={{
+                        left: i18n.languages[0] === 'ar' ? 15 : -25,
+                        top: 5,
+
+                      }}
+                      className="icon-eye"
+                      onClick={() => setIsShowPassword(!isShowPassword)}
+                    >
+                      {isShowPassword ? (
+                        <AiOutlineEyeInvisible />
+                      ) : (
+                        <AiOutlineEye />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3 ">
                 <label for="address">
-                {t('yy')}<span style={{ color: 'red' }}>*</span>
+                  {t('yy')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
