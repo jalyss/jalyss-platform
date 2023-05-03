@@ -41,14 +41,22 @@ function HorizontalMenu({ items }) {
         onMouseUp={() => dragStop}
         onMouseMove={handleDrag}
       >
-        {items.map(({ id, logo }) => (
-          <div className="horizontal-item">
-            <img key={id} draggable="false" src={logo} alt={id} />
+        {items.map(({ id, logo, name }) => (
+          <div key={id} className="horizontal-item">
+
+            <img key={id} draggable="false" src={logo} alt={name} />
           </div>
         ))}
       </ScrollMenu>
     </div>
     </div>
+    
+  )
+  (<div>
+
+    
+    </div>
+
   )
 }
 export default HorizontalMenu

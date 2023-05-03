@@ -5,9 +5,9 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateRoleDto {
 
     @ApiProperty({ required: true })
-    roleNameAr: string
+    nameAr: string
     @ApiProperty({ required: true })
-    roleNameEn: string
+    nameEn: string
     @ApiProperty({ required: true })
     permissions:Permission[]
 }
