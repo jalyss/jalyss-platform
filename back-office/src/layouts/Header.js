@@ -1,35 +1,44 @@
 import React from "react";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-// import { sidebarData } from "../constants/sidebarDataBranch";
+import { sidebarDataBranch } from "../constants/sidebarDataBranch";
 import isEnglish from "../helpers/isEnglish";
-import Badge from '@mui/material/Badge';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import WhiteSelect from "../components/WhiteSelect";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../hooks/useLanguage";
 
-
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Header() {
+  const { t, i18n } = useTranslation();
+  const currentLanguage = useLanguage();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
+  const onChangeLanguage = (event) => {
+    console.log("hello");
+    console.log(event.target.value);
+    i18n.changeLanguage(event.target.value);
+    localStorage.setItem("lg", event.target.value);
+  };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-
   const location = useLocation();
-  const isEng = isEnglish()
+  const isEng = isEnglish();
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
     document.documentElement.classList.toggle("nav-open");
@@ -43,21 +52,19 @@ function Header() {
   };
 
   const getBrandText = () => {
-    //   for (let i = 0; i < sidebarData.length; i++) {
-    //     if (location.pathname.indexOf('admin' + sidebarData[i].path) !== -1) {
-    //       if(isEng)
-    //       return sidebarData[i].nameEn;
-    //       else
-    //       return sidebarData[i].nameAr
-    //     }
-    //   }
+    for (let i = 0; i < sidebarDataBranch.length; i++) {
+      if (location.pathname.indexOf(sidebarDataBranch[i].path) !== -1) {
+        if (isEng) return sidebarDataBranch[i].nameEn;
+        else return sidebarDataBranch[i].nameAr;
+      }
+    }
     return "Brand";
   };
   return (
     <div className="bg-lightPurple header">
       <div className=""></div>
       <Navbar bg="bg-lightPurple" expand="lg">
-        <Container >
+        <Container>
           <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
             <Button
               variant="dark"
@@ -74,12 +81,16 @@ function Header() {
               {getBrandText()}
             </Navbar.Brand>
           </div>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className="mr-2 d-flex flex-column">
-            <span className="navbar-toggler-bar burger-lines">...</span>
-            <span className="navbar-toggler-bar burger-lines">...</span>
-            <span className="navbar-toggler-bar burger-lines">...</span>
-          </Navbar.Toggle>
+
           <Navbar.Collapse id="basic-navbar-nav">
+            <Navbar.Toggle
+              aria-controls="basic-navbar-nav"
+              className="mr-2 d-flex flex-column"
+            >
+              <span className="navbar-toggler-bar burger-lines">...</span>
+              <span className="navbar-toggler-bar burger-lines">...</span>
+              <span className="navbar-toggler-bar burger-lines">...</span>
+            </Navbar.Toggle>
             <Nav className="nav mr-auto" navbar>
               <Nav.Item>
                 <Nav.Link
@@ -89,7 +100,7 @@ function Header() {
                   className="m-0"
                 >
                   <i className="nc-icon nc-palette"></i>
-                  <span className="d-lg-none ml-1">Dashboard</span>
+                  {/* <span className="d-lg-none ml-1">Dashboard</span> */}
                 </Nav.Link>
               </Nav.Item>
               <Dropdown as={Nav.Item}>
@@ -204,85 +215,100 @@ function Header() {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-
-
             </Nav>
+            <WhiteSelect
+              height={30}
+              width={70}
+              value={currentLanguage}
+              onChange={onChangeLanguage}
+              data={[
+                { label: "AR", value: "ar" },
+                { label: "EN", value: "en" },
+              ]}
+              helper={t("Language")}
+              example={() => console.log("done")}
+            />
           </Navbar.Collapse>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src="https://stimg.cardekho.com/images/carexteriorimages/930x620/Nissan/Nissan-GTR/744/front-left-side-47.jpg"
+                />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={handleCloseUserMenu}>
+                <MenuItem>
+                  <Typography textAlign="center">
+                    <span className="no-icon">Profile</span>
+                  </Typography>
+                </MenuItem>
+                <MenuItem>
+                  <Typography>
+                    <span
+                      onClick={(e) => {
+                        e.preventDefault();
+                        localStorage.removeItem("tokenAdmin");
+                        window.location.pathname = "/";
+                      }}
+                      className="no-icon"
+                    >
+                      Log out
+                    </span>
+                  </Typography>
+                </MenuItem>
+              </MenuItem>
+              <Typography>
+                <MenuItem>
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="inherit"
+                  >
+                    <Badge badgeContent={4} color="error">
+                      <MailIcon />
+                    </Badge>
+                  </IconButton>
+                  <p>Messages</p>
+                </MenuItem>
+              </Typography>
+              <Typography>
+                <MenuItem>
+                  <IconButton
+                    size="large"
+                    aria-label="show 17 new notifications"
+                    color="inherit"
+                  >
+                    <Badge badgeContent={17} color="error">
+                      <NotificationsIcon />
+                    </Badge>
+                  </IconButton>
+                  <p>Notifications</p>
+                </MenuItem>
+              </Typography>
+            </Menu>
+          </Box>
         </Container>
-        <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="https://stimg.cardekho.com/images/carexteriorimages/930x620/Nissan/Nissan-GTR/744/front-left-side-47.jpg" />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-
-            <MenuItem onClick={handleCloseUserMenu}>
-              <MenuItem>
-                <Typography textAlign="center">
-                  <span className="no-icon">
-                    Profile
-                  </span>
-                </Typography>
-              </MenuItem>
-              <MenuItem>
-                <Typography>
-                  <span onClick={(e) => {
-                    e.preventDefault()
-                    localStorage.removeItem('tokenAdmin')
-                    window.location.pathname = '/'
-                  }} className="no-icon">
-                    Log out
-                  </span>
-                </Typography>
-              </MenuItem>
-
-            </MenuItem>
-            <Typography>
-              <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                  <Badge badgeContent={4} color="error">
-                    <MailIcon />
-                  </Badge>
-                </IconButton>
-                <p>Messages</p>
-              </MenuItem>
-            </Typography>
-            <Typography>
-              <MenuItem>
-                <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="inherit"
-                >
-                  <Badge badgeContent={17} color="error">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton>
-                <p>Notifications</p>
-              </MenuItem>
-            </Typography>
-
-          </Menu >
-        </Box >
-      </Navbar >
-    </div >
+      </Navbar>
+    </div>
   );
 }
 
-export default Header
+export default Header;

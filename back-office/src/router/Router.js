@@ -11,6 +11,7 @@ import NewPassword from "../pages/NewPassword";
 import User from "../domains/users/User";
 import CreateUser from "../domains/users/views/CreateUser";
 import UserList from "../domains/users/views/UserList";
+import EditUser from "../domains/users/views/EditUser";
 import Customer from "../domains/customers/Customer";
 import CreateCustomer from "../domains/customers/views/CreateCustomer";
 import CustomerList from "../domains/customers/views/CustomerList";
@@ -18,7 +19,12 @@ import Branch from "../apps/Branch";
 import Employee from "../domains/employees/Employee";
 import EmployeeList from "../domains/employees/views/EmployeeList";
 import CreateEmployee from "../domains/employees/views/CreateEmployee";
+import EditEmployee from "../domains/employees/views/EditEmployee";
 import Article from "../domains/articles/Article";
+import ArticleList from "../domains/articles/views/ArticleList";
+import CreateArticle from "../domains/articles/views/CreateArticle";
+import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
+import Dashboard from "../domains/dashboard/Dashboard";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -36,23 +42,23 @@ function Router() {
     <BrowserRouter>
       <Routes>
         {auth.meAdmin ? (
-          <Route path="/" element={auth.meAdmin.isAdmin?<Main />:<Branch/>}>
+          <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
+          <Route path="dashboard" element={<Dashboard/>}/>
             <Route path="user" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
+              <Route path="edit/:userId" element={<EditUser />} />
             </Route>
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
+              <Route path="edit/:employeeId" element={< EditEmployee />} />
             </Route>
-            
-            <Route path="customer" element={<Customer />}>
-              <Route index element={<CustomerList />} />
-              <Route path="create" element={<CreateCustomer />} />
-            </Route>
-            <Route path="article" element={<Article />}>
-              {/* <Route index element={<CustomerList />} />
-              <Route path="create" element={<CreateCustomer />} /> */}
+
+            <Route path="articles" element={<Article />}>
+              <Route index element={<ArticleList />} />
+              <Route path='articles-by-branch' element={<ArticleByBranchList />} />
+              <Route path="create" element={<CreateArticle />} />
             </Route>
           </Route>
         ) : (
@@ -61,7 +67,7 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
           </Route>
-          
+
         )}
         <Route path="*" element={<NoPage />} />
       </Routes>
