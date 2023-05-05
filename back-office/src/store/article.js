@@ -22,11 +22,22 @@ export const fetchArticle = createAsyncThunk(
     const response = await axios.get(`${config.API_ENDPOINT}/articles/one/${id}`);
     return response.data;
   });
+
 export const fetchArticleByBranch = createAsyncThunk("articles/articleByBranch", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/articles/one-by-branch/${id}`);
   return response.data;
 });
 
+export const addTransactionStock=createAsyncThunk("mvt", async()=>{
+  const response=await axios.get(`${config.API_ENDPOINT}/mvt`)
+return response.data;
+})
+
+export const createArticle= createAsyncThunk("articles/createArticle", async (body,{dispatch}) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/articles/TUN/`,body);
+ dispatch(fetchArticle(response.data.id)) 
+  return response.data;
+  });
 
 export const createArticleByBranchRating = createAsyncThunk(
   "articles/rating", async (body, { dispatch }) => {

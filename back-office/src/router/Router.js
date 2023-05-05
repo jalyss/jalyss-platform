@@ -12,9 +12,6 @@ import User from "../domains/users/User";
 import CreateUser from "../domains/users/views/CreateUser";
 import UserList from "../domains/users/views/UserList";
 import EditUser from "../domains/users/views/EditUser";
-import Customer from "../domains/customers/Customer";
-import CreateCustomer from "../domains/customers/views/CreateCustomer";
-import CustomerList from "../domains/customers/views/CustomerList";
 import Branch from "../apps/Branch";
 import Employee from "../domains/employees/Employee";
 import EmployeeList from "../domains/employees/views/EmployeeList";
@@ -25,6 +22,7 @@ import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
+
 
 function Router() {
   const auth = useSelector((state) => state.auth);

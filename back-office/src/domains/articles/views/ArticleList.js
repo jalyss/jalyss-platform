@@ -116,7 +116,7 @@ function ArticleList() {
             setRows(aux)
         }
     }, [articleStore.articles.items])
-console.log(articleStore.articles.items);
+    console.log(articleStore.articles.items);
     const handleDeleteClick = (id) => {
 
         // dispatch(removeEmployee(id));
@@ -131,8 +131,9 @@ console.log(articleStore.articles.items);
 
     return (
         <div>
+            
             <div>
-                <Button type='button' href='article/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
+                <Button type='button' href='articles/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
                     <span className='btn btn-sm '>
                         Add Article
                     </span>
