@@ -75,7 +75,7 @@ section {
   box-shadow: 0px 17px 16px -11px #f66962;
   transform: scale(1.06);
 }
-.btn {
+.btnn {
   color: #f66962;
   padding: 0.9rem 1.1rem;
   background: transparent;
@@ -84,7 +84,7 @@ section {
   box-shadow: 0px 13px 24px -7px #f66962;
   font-size: 0.8rem;
 }
-.btn:hover {
+.btnn:hover {
   border: 1.5px solid #f66962;
   transform: scale(1.06);
   color: #f66962;
@@ -469,7 +469,7 @@ section {
 
 }
 
-.card {
+.cardy {
  
   background-color: hsl(0, 0%, 100%);
   padding: 20px;
@@ -484,7 +484,7 @@ section {
 
 .sectioncta {
   background-image: url(../../img/cta-bg.png);
-  background-color: hsl(235, 70%, 60%);
+  background-color:  #fba388;
   color: hsl(0, 0%, 100%);
   /* background-repeat: no-repeat; */
   background-size: auto;
@@ -517,7 +517,7 @@ section {
 
 .teach {
   background-color: white;
-  color :hsl(235, 70%, 60%); 
+  color :#FF9979; 
   padding: 0.9rem 1.1rem;
   border-radius: 0.6rem;
   font-size: 1.5rem;
@@ -568,4 +568,62 @@ section {
 .unicode {
   font-size: 28px;
   color : #f66962
+}
+
+
+/* mentor home */ 
+
+.mentorhome {
+  position: relative;
+  height: 70vh;
+  width: 100%;
+  background: url(../../img/bgmentorbg.jpg);
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+.mentorhome-text h1 {
+  font-size: var(--big-font);
+  margin: 15px 0 15px;
+  font-weight: bold;
+}
+.mentorhome-text h6 {
+  color: var(--main-color);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+.mentorhome-text p {
+  color: var(--second-color);
+  font-size: var(--p-font);
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.mentorhome-img img {
+  height: 80%;
+  width: 80%;
+  margin-top: -70px;
+  margin-left: 100px;
+}
+
+.teach-btn {
+  background: #f66962;
+  border: none;
+  padding:1rem 2rem;
+  color: #fff;
+  border: 1.5px solid #f66962;
+  border-radius: 1rem;
+  box-shadow: 0px 13px 24px -7px #f66962;
+  transition: all 0.3s ease-in-out;
+  margin: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+.teach-btn:hover {
+  box-shadow: 0px 17px 16px -11px #f66962;
+  transform: scale(1.06);
 }
