@@ -19,6 +19,10 @@ import BlogsDetail from "../pages/BlogsDetail";
 import BlogsForm from "../pages/BlogsForm";
 
 
+import Chatroom from "../pages/Chatroom";
+
+import { useSelector } from "react-redux";
+
 function Router() {
 
   return (
@@ -38,6 +42,7 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
+            <Route path="/chat" element={<Chatroom/>}/>
             <Route path="training" element={<TrainingPage />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />

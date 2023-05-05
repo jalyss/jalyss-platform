@@ -24,6 +24,7 @@ import Article from "../domains/articles/Article";
 import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
+import Dashboard from "../domains/dashboard/Dashboard";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -42,6 +43,7 @@ function Router() {
       <Routes>
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
+          <Route path="dashboard" element={<Dashboard/>}/>
             <Route path="user" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
