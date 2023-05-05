@@ -6,7 +6,11 @@ function Sidebar({ sidebarData }) {
   const isEng = isEnglish();
   return (
     <div className="bg-darkPurple sidebar">
-      <div className="w-100 sidebarContent">
+      
+      
+      <div 
+      // className="w-100 sidebarContent"
+      >
         {sidebarData.map((elem, i) => (
           <div>
             <Link to={elem.path} className="w-100 sidebarItem">

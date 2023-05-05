@@ -288,6 +288,17 @@ CREATE TABLE "ArticlesByBranch" (
 );
 
 -- CreateTable
+CREATE TABLE "MvtArticle" (
+    "branchSenderId" TEXT NOT NULL,
+    "branchReceiverId" TEXT NOT NULL,
+    "articleId" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "Rating" (
     "articleByBranchId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -321,8 +332,8 @@ CREATE TABLE "Employee" (
 -- CreateTable
 CREATE TABLE "Role" (
     "id" TEXT NOT NULL,
-    "roleNameAr" TEXT NOT NULL,
-    "roleNameEn" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
     "permissions" JSONB NOT NULL,
 
     CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
@@ -583,6 +594,9 @@ CREATE UNIQUE INDEX "ArticleByAuthor_authorId_articleId_key" ON "ArticleByAuthor
 CREATE UNIQUE INDEX "ArticlesByBranch_branchId_articleId_key" ON "ArticlesByBranch"("branchId", "articleId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "MvtArticle_branchReceiverId_branchSenderId_articleId_date_key" ON "MvtArticle"("branchReceiverId", "branchSenderId", "articleId", "date");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Rating_articleByBranchId_userId_key" ON "Rating"("articleByBranchId", "userId");
 
 -- CreateIndex
@@ -719,6 +733,15 @@ ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_branchId_fkey" F
 
 -- AddForeignKey
 ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_branchSenderId_fkey" FOREIGN KEY ("branchSenderId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_branchReceiverId_fkey" FOREIGN KEY ("branchReceiverId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Rating" ADD CONSTRAINT "Rating_articleByBranchId_fkey" FOREIGN KEY ("articleByBranchId") REFERENCES "ArticlesByBranch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
