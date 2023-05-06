@@ -10,6 +10,8 @@ import { IoIosPersonAdd } from "react-icons/io";
 import { fetchEmployees, removeEmployee } from '../../../store/employee';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import Modal from 'react-bootstrap/Modal';
+import { fetchBranche, fetchBranches } from '../../../store/branche';
+import { fetchRole, fetchRoles } from '../../../store/role';
 
 
 function EmployeeList() {
@@ -53,7 +55,7 @@ function EmployeeList() {
 
     },
     {
-      field: 'branch',
+      field: 'branchId',
       headerName: 'Branch ',
       width: 100,
 
@@ -103,11 +105,14 @@ function EmployeeList() {
   const [rows, setRows] = useState([])
   useEffect(() => {
     dispatch(fetchEmployees())
+   
   }, [])
   useEffect(() => {
     if (employeeStore.employees.items.length) {
       let aux = employeeStore.employees.items.map(e => {
+       
         return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr }
+        
       })
       console.log(aux);
       setRows(aux)

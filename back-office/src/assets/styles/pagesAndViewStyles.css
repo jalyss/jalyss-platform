@@ -4,6 +4,9 @@
 .article-card-icon {
   margin-left: 10px;
 }
+.view {
+  padding: 30px;
+}
 
 .article-image {
   background-color: rgb(72, 24, 76, 0.08);

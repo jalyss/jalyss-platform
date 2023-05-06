@@ -12,8 +12,8 @@ import { MvtsService } from './mvts.service';
 import { UpdateMvtArticleDto } from './dto/update-mvt.dto';
 import { CreateMvtArticleDto } from './dto/create-mvt.dto';
 
-@ApiTags('mvt')
-@Controller('mvt')
+@ApiTags('mvts')
+@Controller('mvts')
 export class MvtController {
     constructor(private readonly mvtsService: MvtsService) { }
     @Post()

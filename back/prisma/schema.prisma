@@ -330,7 +330,7 @@ model MvtArticle {
   branchReceiverId String
   articleId        String
   article          Article   @relation(fields: [articleId], references: [id])
-  date             DateTime  @default(now())
+  date             DateTime  
   quantity         Int
   status           StatusMvt @default(pending)
   createdAt        DateTime  @default(now())
