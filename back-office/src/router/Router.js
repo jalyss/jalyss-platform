@@ -22,6 +22,7 @@ import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
+import Charts from "../domains/charts/Charts";
 
 
 function Router() {
@@ -58,6 +59,7 @@ function Router() {
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
             </Route>
+            <Route path="charts" element={<Charts/>}/>
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>

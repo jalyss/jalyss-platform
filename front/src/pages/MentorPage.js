@@ -1,11 +1,16 @@
 import React , { Fragment } from 'react'
-import TrainingMentor from '../components/TrainingMentor'
+import MentorHome from '../components/MentorHome'
+import MentorDes from '../components/MentorDes'
+import MentorSteps from '../components/MentorSteps'
+
 
 
 function MentorPage() {
   return (
     <Fragment>
-    <TrainingMentor/>
+    <MentorHome/>
+    <MentorDes/>
+    <MentorSteps/>
   </Fragment>
   )
 }
