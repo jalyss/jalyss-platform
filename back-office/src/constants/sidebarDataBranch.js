@@ -2,7 +2,7 @@ export const sidebarDataBranch = [
   {
     nameEn: "Dashboard",
     nameAr: "لوحة التحكم",
-    path: "dashboard",
+    path: "charts",
     children: [],
   },
 
@@ -19,5 +19,6 @@ export const sidebarDataBranch = [
         path: "articles-by-branch",
       },
     ],
-  },
+  }
+  
 ];

@@ -4,9 +4,7 @@ import banner from "../img/cta-banner.jpg"
 import { useNavigate } from "react-router-dom";
 
 const TrainingMentor = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+
   const navigate = useNavigate();
   return (
     <section className="sectioncta" aria-label="workshop">

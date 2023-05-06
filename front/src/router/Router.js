@@ -17,6 +17,7 @@ import TrainingPage from "../pages/TrainingPage";
 import Blogs from "../pages/Blogs";
 import BlogsDetail from "../pages/BlogsDetail";
 import BlogsForm from "../pages/BlogsForm";
+import MentorPage from "../pages/MentorPage";
 
 
 import Chatroom from "../pages/Chatroom";
@@ -47,6 +48,7 @@ function Router() {
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
             <Route path="blogsForm" element={<BlogsForm/>} />
+            <Route path="mentor" element={<MentorPage/>} />
           </Route>
           
         </Routes>

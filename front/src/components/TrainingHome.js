@@ -16,7 +16,7 @@ function TrainingHome() {
               <button className='primary-btn'>
                 GET STARTED NOW 	
               </button>
-              <button className='btn'>
+              <button className='btnn'>
               SEE COURSES 
               </button>
 		</div>
