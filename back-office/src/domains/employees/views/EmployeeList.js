@@ -49,7 +49,7 @@ function EmployeeList() {
     {
       field: 'tel',
       headerName: 'Phone ',
-      type: 'number',
+      
       width: 100,
       sortable: false,
 

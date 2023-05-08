@@ -27,7 +27,7 @@ function ArticleList() {
         {
             field: 'code',
             headerName: 'Code ',
-            type: 'number',
+            
             width: 100,
             sortable: true,
         },

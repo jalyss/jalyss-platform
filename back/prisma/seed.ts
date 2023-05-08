@@ -222,6 +222,7 @@ async function main() {
     },
 
   });
+  //
   let city1 = await prisma.city.create({
     data: {
       nameAr: 'تونس',
@@ -241,6 +242,7 @@ async function main() {
 
   });
   let countryIds = [country1.id, country2.id]
+  let cityIds = [city1.id, city2.id]
 
   //create dummy author
   let author1 = await prisma.author.create({
@@ -395,6 +397,26 @@ async function main() {
       stock: 10,
     },
   })
+
+  //create dummy orders
+let commands=[]
+  for (let i = 0; i < 10; i++) {
+    commands.push(
+      await prisma.command.create({
+        data: {
+          clientName:'client'+i,
+          clientAddress:'Lac 2 Tunis',
+          clientTel:'22222222',
+          clientEmail: 'client' + i + '@gmail.com',
+          branchId:branch.id,
+          countryId:countryIds[Math.floor(Math.random()*countryIds.length)],
+          cityId:cityIds[Math.floor(Math.random()*cityIds.length)],
+        
+          
+        },
+      }),
+    );
+  }
 
 
   // create dummy services 

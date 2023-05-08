@@ -23,6 +23,10 @@ import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 import Charts from "../domains/charts/Charts";
+import Command from "../domains/commands/Command";
+import CommandList from "../domains/commands/views/CommandList";
+import CreateCommand from "../domains/commands/views/CreateCommand";
+import EditCommand from "../domains/commands/views/EditCommand";
 
 
 function Router() {
@@ -42,7 +46,7 @@ function Router() {
       <Routes>
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
-          <Route path="dashboard" element={<Dashboard/>}/>
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="user" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
@@ -59,7 +63,14 @@ function Router() {
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
             </Route>
-            <Route path="charts" element={<Charts/>}/>
+
+            <Route path="charts" element={<Charts />} />
+
+            <Route path="command" element={<Command />}>
+              <Route index element={<CommandList />} />
+              <Route path="create" element={<CreateCommand />} />
+              <Route path="edit/:commandId" element={< EditCommand />} />
+            </Route>
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>

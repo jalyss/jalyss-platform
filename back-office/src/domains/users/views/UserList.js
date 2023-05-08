@@ -47,7 +47,6 @@ function UserList() {
     {
       field: 'phone',
       headerName: 'Phone ',
-      type: 'number',
       width: 100,
       sortable: false,
 
