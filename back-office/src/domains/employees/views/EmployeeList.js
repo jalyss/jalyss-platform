@@ -22,8 +22,19 @@ function EmployeeList() {
   const handleShow = () => setShow(true);
   const columns = [
     {
-      field: 'id', headerName: 'ID', width: 90
+      field: 'avatar',
+      headerName: 'Avatar',
+      width: 150,
+      renderCell: (params) => (
+        <img
+          src={params.row.avatar.path}
+          style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+        />
+      ),
     },
+    // {
+    //   field: 'id', headerName: 'ID', width: 150
+    // },
     {
       field: 'fullName',
       headerName: 'Full name',
@@ -42,38 +53,51 @@ function EmployeeList() {
     {
       field: 'address',
       headerName: 'Address',
-      width: 110,
-      editable: true,
+      width: 150,
+      editable: false,
       sortable: false,
+      // filterable:false,
     },
     {
       field: 'tel',
       headerName: 'Phone ',
+      type: 'number',
+      width: 150,
+      headerAlign:'left',
+      align:'left',
+      sortable: false,
+
+    },
+    {
       
-      width: 100,
-      sortable: false,
-
-    },
-    {
-      field: 'branchId',
+   
       headerName: 'Branch ',
-      width: 100,
-
+      width: 150,
+      valueGetter: (params) => (
+       
+        params.row.branch.name
+        
+      ),
     },
 
+
     {
+      
       field: 'role',
-      headerName: 'Role',
-      width: 100,
-      editable: true,
-      sortable: false,
+     
+      valueGetter: (params) => (
+       
+        params.row.role.nameAr
+        
+      ),
+      
 
     },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 100,
+      width: 150,
       cellClassName: 'actions',
       getActions: ({ id }) => {
 
@@ -83,14 +107,17 @@ function EmployeeList() {
             label="Edit"
             className="textPrimary"
             onClick={() => handleEditClick(id)}
-            color="inherit"
+            color="success"
+            
 
           />,
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
-            onClick={() => { setElementId(id), handleShow() }}
-            color="inherit"
+
+            onClick={() => { handleDeleteClick(id) }}
+            // should open popup to ask are u sure delete this user (yes/no)
+            color="error"
           />,
 
         ];
@@ -110,9 +137,7 @@ function EmployeeList() {
   useEffect(() => {
     if (employeeStore.employees.items.length) {
       let aux = employeeStore.employees.items.map(e => {
-       
-        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr }
-        
+        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr, avatarurl: e.avatarurl }
       })
       console.log(aux);
       setRows(aux)
@@ -132,47 +157,32 @@ function EmployeeList() {
   };
   
   const handleEditClick = (id) => {
-    console.log(id);
+    console.log('iii',id);
     navigate(`edit/${id}`)
   };
   return (
-
-
-    <div>
-
-      <>
-
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Are you sure!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={() => { handleDeleteClick(elementId), handleClose() }}>
-              Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
-      <div>
-        <Button type='button' href='employee/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
+    <div style={{margin:20}}>
+      <div className='d-flex justify-content-end' 
+    //   style={{marginLeft:1400,
+    // marginTop: 15,borderRadius:10}}
+    >
+        <Button type='button' href='employee/create' variant="outlined" endIcon={<IoIosPersonAdd />} style={{color:"blue"}}>
           <span className='btn btn-sm '>
             Add Employee
           </span>
         </Button>
       </div>
-      <div className='position-relative'>Employee List
+      <div><h2 style={{paddingLeft:10,paddingTop:10}}>Employee List</h2>
         <Box sx={{ height: 600, width: '100%' }}>
           <DataGrid
             rows={rows}
+            
             columns={columns}
             initialState={{
               pagination: {
                 paginationModel: {
                   pageSize: 10,
+                  
                 },
               },
             }}
