@@ -4,13 +4,22 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
-import { AiFillEdit } from 'react-icons/ai';
+import { AiOutlineEye } from 'react-icons/ai';
 import { AiFillDelete } from 'react-icons/ai';
 import { IoIosPersonAdd } from "react-icons/io";
 import { fetchEmployees, removeEmployee } from '../../../store/employee';
+import { showErrorToast, showSuccessToast } from '../../../utils/toast';
+import Modal from 'react-bootstrap/Modal';
+import { fetchBranche, fetchBranches } from '../../../store/branche';
+import { fetchRole, fetchRoles } from '../../../store/role';
 
 
 function EmployeeList() {
+  const [show, setShow] = useState(false);
+  const [elementId, setElementId]=useState(null);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const columns = [
     {
       field: 'id', headerName: 'ID', width: 90
@@ -40,13 +49,13 @@ function EmployeeList() {
     {
       field: 'tel',
       headerName: 'Phone ',
-      type: 'number',
+      
       width: 100,
       sortable: false,
 
     },
     {
-      field: 'branch',
+      field: 'branchId',
       headerName: 'Branch ',
       width: 100,
 
@@ -70,7 +79,7 @@ function EmployeeList() {
 
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
+            icon={<AiOutlineEye />}
             label="Edit"
             className="textPrimary"
             onClick={() => handleEditClick(id)}
@@ -80,9 +89,7 @@ function EmployeeList() {
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
-
-            onClick={() => { handleDeleteClick(id) }}
-            // should open popup to ask are u sure delete this user (yes/no)
+            onClick={() => { setElementId(id), handleShow() }}
             color="inherit"
           />,
 
@@ -98,11 +105,14 @@ function EmployeeList() {
   const [rows, setRows] = useState([])
   useEffect(() => {
     dispatch(fetchEmployees())
+   
   }, [])
   useEffect(() => {
     if (employeeStore.employees.items.length) {
       let aux = employeeStore.employees.items.map(e => {
+       
         return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr }
+        
       })
       console.log(aux);
       setRows(aux)
@@ -111,16 +121,42 @@ function EmployeeList() {
 
   const handleDeleteClick = (id) => {
 
-    dispatch(removeEmployee(id));
+    dispatch(removeEmployee(id)).then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('Employee has been deleted')
+      }
+    })
 
   };
-
+  
   const handleEditClick = (id) => {
     console.log(id);
     navigate(`edit/${id}`)
   };
   return (
+
+
     <div>
+
+      <>
+
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => { handleDeleteClick(elementId), handleClose() }}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
       <div>
         <Button type='button' href='employee/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
           <span className='btn btn-sm '>

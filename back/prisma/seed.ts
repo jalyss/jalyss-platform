@@ -9,15 +9,15 @@ async function main() {
   let users = [];
   let articles = [];
 
-    // create dummy branch
-    let branch = await prisma.branch.create({
-      data: {
-        name: 'Tunis',
-        identifier: 'TUN',
-        address: 'sfax ambra immeuble ',
-        mainBranch: true,
-      },
-    });
+  // create dummy branch
+  let branch = await prisma.branch.create({
+    data: {
+      name: 'Tunis',
+      identifier: 'TUN',
+      address: 'sfax ambra immeuble ',
+      mainBranch: true,
+    },
+  });
   // create 10 dummy users
   const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
@@ -35,7 +35,7 @@ async function main() {
     );
   }
 
- //create roles
+  //create roles
   let managerRole = await prisma.role.create({
     data: {
       nameAr: 'المدير',
@@ -105,7 +105,7 @@ async function main() {
   let developerRole = await prisma.role.create({
 
     data: {
-    nameAr: 'مبرمج',
+      nameAr: 'مبرمج',
       nameEn: 'Developer',
       permissions: [
         { "domain": "blog", "action": "read" },
@@ -116,7 +116,7 @@ async function main() {
   })
 
 
- //create employees
+  //create employees
   const saltEm = await bcrypt.genSalt();
   let manager = await prisma.employee.create({
     data: {
@@ -127,9 +127,9 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       isAdmin: true,
-      roleId:managerRole.id,
-      branchId:branch.id
-      
+      roleId: managerRole.id,
+      branchId: branch.id
+
     }
   })
   let developer1 = await prisma.employee.create({
@@ -141,7 +141,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
-      branchId:branch.id
+      branchId: branch.id
     }
   })
   let developer2 = await prisma.employee.create({
@@ -153,7 +153,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
-      branchId:branch.id
+      branchId: branch.id
     }
   })
   let itManager = await prisma.employee.create({
@@ -165,11 +165,11 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: itManagerRole.id,
-      branchId:branch.id
+      branchId: branch.id
     }
   })
 
-   let groutAgent = await prisma.employee.create({
+  let groutAgent = await prisma.employee.create({
     data: {
       fullNameAr: 'ناديه',
       fullNameEn: 'nedia',
@@ -178,7 +178,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: groutAgentRole.id,
-      branchId:branch.id
+      branchId: branch.id
     }
   })
   let sellesAgent = await prisma.employee.create({
@@ -190,7 +190,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: selesAgentRole.id,
-      branchId:branch.id
+      branchId: branch.id
     }
   })
   let hrManager = await prisma.employee.create({
@@ -202,7 +202,7 @@ async function main() {
       tel: '',
       password: await bcrypt.hash('1234', saltEm),
       roleId: hrManagerRole.id,
-      branchId:branch.id
+      branchId: branch.id
     }
   })
   //create dummy country
@@ -222,6 +222,7 @@ async function main() {
     },
 
   });
+  //
   let city1 = await prisma.city.create({
     data: {
       nameAr: 'تونس',
@@ -241,6 +242,7 @@ async function main() {
 
   });
   let countryIds = [country1.id, country2.id]
+  let cityIds = [city1.id, city2.id]
 
   //create dummy author
   let author1 = await prisma.author.create({
@@ -387,24 +389,53 @@ async function main() {
       }),
     );
   }
+  await prisma.articlesByBranch.create({
+    data: {
+      branchId: mainBranch.id,
+      articleId: articles[0].id,
+      price: 125.25,
+      stock: 10,
+    },
+  })
+
+  //create dummy orders
+let commands=[]
+  for (let i = 0; i < 10; i++) {
+    commands.push(
+      await prisma.command.create({
+        data: {
+          clientName:'client'+i,
+          clientAddress:'Lac 2 Tunis',
+          clientTel:'22222222',
+          clientEmail: 'client' + i + '@gmail.com',
+          branchId:branch.id,
+          countryId:countryIds[Math.floor(Math.random()*countryIds.length)],
+          cityId:cityIds[Math.floor(Math.random()*cityIds.length)],
+        
+          
+        },
+      }),
+    );
+  }
+
 
   // create dummy services 
   let serviceIds = [];
 
-const serviceNames = ["Domicilation", "Private Space", "Meeting Space", "Co-Working Zone"];
+  const serviceNames = ["Domicilation", "Private Space", "Meeting Space", "Co-Working Zone"];
 
-for (let i = 0; i < serviceNames.length; i++) {
-  let service = await prisma.service.create({
-    data: {
-      name: serviceNames[i],
-     
-    }
-  });
+  for (let i = 0; i < serviceNames.length; i++) {
+    let service = await prisma.service.create({
+      data: {
+        name: serviceNames[i],
 
-  serviceIds.push(service.id);
-}
+      }
+    });
 
-console.log(serviceIds);
+    serviceIds.push(service.id);
+  }
+
+  console.log(serviceIds);
 
 
   console.log(users);

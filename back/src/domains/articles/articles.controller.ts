@@ -7,7 +7,8 @@ import {
   Param,
   Delete,
   Query,
-  UseGuards
+  UseGuards,
+  Put
 } from '@nestjs/common';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ArticleService } from './articles.service';
@@ -17,6 +18,7 @@ import { FilterArticle } from './types';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/currentUser';
+import { UpdateArticleByBranchDto } from './dto/update-article.ByBranch.dto';
 
 @ApiTags('articles')
 @Controller('articles')
@@ -56,8 +58,12 @@ export class ArticleController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
-    return this.articleService.update(id, updateArticleDto);
+  update(@Param('id') id: string, @Body() dto: UpdateArticleDto) {
+    return this.articleService.update(id, dto);
+  }
+  @Put(':id')
+  updateArticleByBranch(@Param('id') id: string, @Body() dto: UpdateArticleByBranchDto) {
+    return this.articleService.updateArticleByBranch(id, dto);
   }
 
   @Delete(':id')
@@ -67,7 +73,7 @@ export class ArticleController {
 
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
-  @Post('rating/:articleByBranchId') 
+  @Post('rating/:articleByBranchId')
   async createRating(
     @CurrentUser() user: any,
     @Body() createRatingDto: CreateRatingDto,

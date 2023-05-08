@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('confirmed', 'pending', 'refused');
 
+-- CreateEnum
+CREATE TYPE "StatusMvt" AS ENUM ('pending', 'in_progress', 'on_hold', 'delivered');
+
 -- CreateTable
 CREATE TABLE "EducationLevel" (
     "id" TEXT NOT NULL,
@@ -289,13 +292,17 @@ CREATE TABLE "ArticlesByBranch" (
 
 -- CreateTable
 CREATE TABLE "MvtArticle" (
+    "id" TEXT NOT NULL,
     "branchSenderId" TEXT NOT NULL,
     "branchReceiverId" TEXT NOT NULL,
     "articleId" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "quantity" INTEGER NOT NULL,
+    "status" "StatusMvt" NOT NULL DEFAULT 'pending',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "MvtArticle_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable

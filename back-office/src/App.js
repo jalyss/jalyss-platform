@@ -3,6 +3,7 @@ import './App.css';
 import "./utils/i18n";
 import { useTranslation } from "react-i18next";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Router from './router/Router';
 
 export const RtlContext = createContext();

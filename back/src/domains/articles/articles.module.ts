@@ -11,6 +11,8 @@ import { CategoryService } from './categories.service';
 import { PublishingHouseService } from './publishingHouses.service';
 import { authorService } from './author.service';
 import { authorController } from './author.controller';
+import { MvtController } from './mvts.controller';
+import { MvtsService } from './mvts.service';
 
 @Module({
   controllers: [
@@ -19,6 +21,7 @@ import { authorController } from './author.controller';
     PublishingHouseController,
     CategoryController,
     authorController,
+    MvtController
   ],
   providers: [
     ArticleService,
@@ -28,6 +31,7 @@ import { authorController } from './author.controller';
     PrismaService,
     BranchesService,
     authorService,
+    MvtsService
   ],
 })
 export class ArticleModule {}

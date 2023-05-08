@@ -5,15 +5,19 @@ import { fetchUsers, removeUser } from '../../../store/user';
 import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
-import { AiFillEdit } from 'react-icons/ai';
+import { AiOutlineEye } from 'react-icons/ai';
 import { AiFillDelete } from 'react-icons/ai';
 import { IoIosPersonAdd } from "react-icons/io";
+import { showErrorToast, showSuccessToast } from '../../../utils/toast';
+import Modal from 'react-bootstrap/Modal';
 
 
 
 function UserList() {
-
-
+  const [show, setShow] = useState(false);
+  const [elementId, setElementId] = useState(null);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const columns = [
     {
       field: 'id', headerName: 'ID', width: 90
@@ -43,7 +47,6 @@ function UserList() {
     {
       field: 'phone',
       headerName: 'Phone ',
-      type: 'number',
       width: 100,
       sortable: false,
 
@@ -79,7 +82,7 @@ function UserList() {
 
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
+            icon={<AiOutlineEye />}
             label="Edit"
             className="textPrimary"
             onClick={() => handleEditClick(id)}
@@ -90,7 +93,7 @@ function UserList() {
             icon={<AiFillDelete />}
             label="Delete"
 
-            onClick={() => { handleDeleteClick(id) }}
+            onClick={() => { setElementId(id), handleShow() }}
             // should open popup to ask are u sure delete this user (yes/no)
             color="inherit"
           />,
@@ -129,7 +132,13 @@ function UserList() {
 
   const handleDeleteClick = (id) => {
 
-    dispatch(removeUser(id));
+    dispatch(removeUser(id)).then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('User has been deleted')
+      }
+    })
 
   };
 
@@ -140,6 +149,23 @@ function UserList() {
 
   return (
     <div>
+      <>
+
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => { handleDeleteClick(elementId), handleClose() }}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
       <div className='top-0 start-0'>
         <Button type='button' href='user/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
           <span className='btn btn-sm '>
