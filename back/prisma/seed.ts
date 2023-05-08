@@ -115,6 +115,65 @@ async function main() {
     }
   })
 
+  //creat mediasAvatarEmployee
+  let mediasAvatarEmployee1 = await prisma.media.create({
+    data: {
+      path: 'https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+
+  let mediasAvatarEmployee2 = await prisma.media.create({
+    data: {
+      path: 'https://stylesatlife.com/wp-content/uploads/2022/12/Haircuts-for-School-Boys-11.jpg.webp',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+
+  let mediasAvatarEmployee3 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1351445167/photo/happy-male-youngster-smiling-at-the-camera-outdoors.jpg?b=1&s=170667a&w=0&k=20&c=iebfRFHi1ncG_CNCZLmOSLnRI_TO0D4rACMbarHsADc=',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee4 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1159801546/photo/portrait-of-handsome-boy-posing-in-photo-studio.jpg?s=612x612&w=0&k=20&c=YLyXwo6WaVWv8j80fLEyPjOmp3--6VlVYRU-Eyco5eQ=',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee5 = await prisma.media.create({
+    data: {
+      path: 'https://blog.hootsuite.com/wp-content/uploads/2020/02/Image-copyright-556x556.png',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee6 = await prisma.media.create({
+    data: {
+      path: 'https://pixlr.com/images/index/remove-bg.webp',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee7 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
 
   //create employees
   const saltEm = await bcrypt.genSalt();
@@ -123,13 +182,14 @@ async function main() {
       fullNameAr: 'بسمة',
       fullNameEn: 'besma',
       email: 'besma@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-kairouan',
+      tel: '65555550',
       password: await bcrypt.hash('1234', saltEm),
       isAdmin: true,
-      roleId: managerRole.id,
-      branchId: branch.id
-
+      roleId:managerRole.id,
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee1.id,
+      
     }
   })
   let developer1 = await prisma.employee.create({
@@ -137,11 +197,12 @@ async function main() {
       fullNameAr: 'وسيم',
       fullNameEn: 'wassim',
       email: 'wassim@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-carthage',
+      tel: '45454545',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
-      branchId: branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee2.id,
     }
   })
   let developer2 = await prisma.employee.create({
@@ -149,11 +210,12 @@ async function main() {
       fullNameAr: 'غادة',
       fullNameEn: 'ghada',
       email: 'ghada@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'Tunis',
+      tel: '20202020',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
-      branchId: branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee3.id,
     }
   })
   let itManager = await prisma.employee.create({
@@ -161,11 +223,12 @@ async function main() {
       fullNameAr: 'خليل',
       fullNameEn: 'khalil',
       email: 'khalil@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-soussa',
+      tel: '60606060',
       password: await bcrypt.hash('1234', saltEm),
       roleId: itManagerRole.id,
-      branchId: branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee4.id,
     }
   })
 
@@ -174,11 +237,12 @@ async function main() {
       fullNameAr: 'ناديه',
       fullNameEn: 'nedia',
       email: 'nedia@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'Tunis-Monastir',
+      tel: '78787878',
       password: await bcrypt.hash('1234', saltEm),
       roleId: groutAgentRole.id,
-      branchId: branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee5.id,
     }
   })
   let sellesAgent = await prisma.employee.create({
@@ -186,11 +250,12 @@ async function main() {
       fullNameAr: 'اماني',
       fullNameEn: 'ameni',
       email: 'ameni@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'Tunis-Monastir',
+      tel: '96969696',
       password: await bcrypt.hash('1234', saltEm),
       roleId: selesAgentRole.id,
-      branchId: branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee6.id,
     }
   })
   let hrManager = await prisma.employee.create({
@@ -198,11 +263,12 @@ async function main() {
       fullNameAr: 'ابتسام',
       fullNameEn: 'ibtisem',
       email: 'ibtisem@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-elkef',
+      tel: '6777760',
       password: await bcrypt.hash('1234', saltEm),
       roleId: hrManagerRole.id,
-      branchId: branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee7.id,
     }
   })
   //create dummy country

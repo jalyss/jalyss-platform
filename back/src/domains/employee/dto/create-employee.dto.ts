@@ -19,4 +19,6 @@ export class CreateEmployeeDto {
     branchId: string
     @ApiProperty({ required: false })
     roleId: string
+    @ApiProperty({ required: false })
+    avatarId: string
 }

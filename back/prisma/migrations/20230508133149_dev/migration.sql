@@ -328,10 +328,13 @@ CREATE TABLE "Employee" (
     "email" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "tel" TEXT NOT NULL,
+    "avatarId" TEXT,
     "password" TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "branch_id" TEXT,
     "roleId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Employee_pkey" PRIMARY KEY ("id")
 );
@@ -761,6 +764,9 @@ ALTER TABLE "CommandLine" ADD CONSTRAINT "CommandLine_commandId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "CommandLine" ADD CONSTRAINT "CommandLine_articleByBranchId_fkey" FOREIGN KEY ("articleByBranchId") REFERENCES "ArticlesByBranch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Employee" ADD CONSTRAINT "Employee_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Employee" ADD CONSTRAINT "Employee_branch_id_fkey" FOREIGN KEY ("branch_id") REFERENCES "Branch"("id") ON DELETE SET NULL ON UPDATE CASCADE;
