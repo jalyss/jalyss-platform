@@ -1,5 +1,4 @@
-import Slider from 'rc-slider'
-import 'rc-slider/assets/index.css'
+import Slider from 'rc-slider';
 import React, { Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Offcanvas from 'react-bootstrap/Offcanvas'
@@ -18,6 +17,8 @@ import useMeta from '../hooks/useMeta'
 import DocumentMeta from 'react-document-meta'
 import { BsFilterSquare } from 'react-icons/bs'
 import 'rc-tooltip/assets/bootstrap.css'
+import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
+import 'rc-slider/assets/index.css'
 
 
 function Articles() {
@@ -42,6 +43,7 @@ function Articles() {
     gte: null,
     skip: 0,
   })
+
   console.log(publishingHouseStore)
 
   const lg = i18n.languages[0] === 'en'
@@ -68,28 +70,37 @@ function Articles() {
     return (
       <div className="filters ">
         <Fragment>
-          <div className="accordion">
-            <Slider
-              range
-              marks={{
-                1: `TND 1`,
-                1000: `TND 1000`,
-              }}
-              min={0}
-              max={1000}
-              defaultValue={[1, 1000]}
-              tipFormatter={(value) => `TND${value}`}
-              value={price}
-              onChange={(price) => {
-                setPrice(price)
-                setFilters((Filters) => ({
-                  ...Filters,
-                  gte: price[0],
-                  lte: price[1],
-                }))
-              }}
-            />
-          </div>
+          <Accordion
+            title={t('filter.price')}
+            content={
+              <div className="px-3 pt-3" >
+                
+                <Slider
+                  range
+                  draggableTrack
+                  min={0}
+                  max={1000}
+                  defaultValue={[1, 1000]}
+                  tipFormatter={(value) => `TND${value}`}
+                  allowCross={false}
+                  value={price}
+                  onChange={(price) => {
+                    setPrice(price)
+                    setFilters((Filters) => ({
+                      ...Filters,
+                      gte: price[0],
+                      lte: price[1],
+                    }))
+                  }}
+
+                />
+                <div className='d-flex justify-content-between mt-1'>
+                  <p>{price[1]}</p>
+                  <p>{price[0]}</p>
+                </div>
+              </div>
+            }
+          />
         </Fragment>
         <Accordion
           title={t('filter.category')}
@@ -104,15 +115,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          categories: [...Filter.categories, element.id],
-                        }))
+                            ...Filter,
+                            categories: [...Filter.categories, element.id],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          categories: Filter.categories.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }))
+                            ...Filter,
+                            categories: Filter.categories.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }))
                     }}
                     checked={filters.categories.includes(element.id)}
                   />
@@ -137,15 +148,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          articleTypes: [...Filter.articleTypes, element.id],
-                        }))
+                            ...Filter,
+                            articleTypes: [...Filter.articleTypes, element.id],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          articleTypes: Filter.articleTypes.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }))
+                            ...Filter,
+                            articleTypes: Filter.articleTypes.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }))
                     }}
                     checked={filters.articleTypes.includes(element.id)}
                   />
@@ -170,18 +181,18 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          publishingHouses: [
-                            ...Filter.publishingHouses,
-                            element.id,
-                          ],
-                        }))
+                            ...Filter,
+                            publishingHouses: [
+                              ...Filter.publishingHouses,
+                              element.id,
+                            ],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          publishingHouses: Filter.publishingHouses.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }))
+                            ...Filter,
+                            publishingHouses: Filter.publishingHouses.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }))
                     }}
                     checked={filters.publishingHouses.includes(element.id)}
                   />
@@ -204,15 +215,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          authors: [...Filter.authors, element.id],
-                        }))
+                            ...Filter,
+                            authors: [...Filter.authors, element.id],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          authors: Filter.authors.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }))
+                            ...Filter,
+                            authors: Filter.authors.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }))
                     }}
                     checked={filters.authors.includes(element.id)}
                   />
@@ -244,13 +255,13 @@ function Articles() {
       >
         <Offcanvas.Header closeButton />
         <Offcanvas.Body>
-          <Filters /> 
+          <Filters />
         </Offcanvas.Body>
       </Offcanvas>
 
       <div className="d-flex p-2 ">
         <div className="responsive-filters">
-          <Filters /> 
+          <Filters />
         </div>
         <div className="d-flex flex-wrap px-3 ">
           {articleStore.articles.items.map((element, index) => {
@@ -258,13 +269,23 @@ function Articles() {
           })}
         </div>
       </div>
-      <div>
+      <div className="d-flex justify-content-center mb-3 ">
         <button
+          className="bg-yellow px-4 py-2  border-0  mx-2 "
+          onClick={() =>
+            filters.skip > 0 &&
+            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 5 }))
+          }
+        >
+          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t('prev')}
+        </button>
+        <button
+          className=" bg-yellow px-4 py-2 border-0 mx-2"
           onClick={() =>
             setFilters((Filters) => ({ ...Filters, skip: filters.skip + 5 }))
           }
         >
-          Next
+          {t('next')} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
         </button>
       </div>
     </DocumentMeta>
@@ -272,5 +293,3 @@ function Articles() {
 }
 
 export default Articles
-
-
