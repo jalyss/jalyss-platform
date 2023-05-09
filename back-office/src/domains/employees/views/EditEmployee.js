@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef} from 'react'
 
 import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,14 @@ import { useParams } from 'react-router-dom'
 import { fetchBranches } from '../../../store/branche'
 import { fetchRoles } from '../../../store/role'
 import {fetchMedias} from "../../../store/media"
+import axios from "axios";
+
+import  Cropper ,{ReactCropperElement}  from "react-cropper";
+import "cropperjs/dist/cropper.css";
+import { Dialog, DialogContent } from '@mui/material'
+
+
+ 
 function EditEmployee() {
   const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
@@ -29,14 +37,25 @@ function EditEmployee() {
   const [avatar, setAvatar] = useState(null)
 
   const [preview, setPreview] = useState(null)
-
+  const [open,setOpen]=useState(false)
+  const cropperRef = useRef(null);
+  const onCrop = () => {
+    const cropper =cropperRef.current?.cropper;
+    console.log(cropper.getCroppedCanvas().toDataURL());
+  };
+  
   useEffect(() => {
     dispatch(fetchBranches())
     dispatch(fetchRoles()) 
     dispatch(fetchMedias())
     dispatch(fetchEmployee(employeeId))
   }, [])
+// useEffect(()=>{
+//   if(preview)
+//   setOpen(true)
 
+// },[preview])
+  
  console.log("media",mediaStore);
   useEffect(() => {
     if (employeeStore.employee)
@@ -67,6 +86,8 @@ function EditEmployee() {
       }
       delete aux.branch 
       delete aux.role
+      delete aux.avatar;
+      delete aux.Media;
       dispatch(editEmployee(aux))
       setEditMode(false)
     }
@@ -84,17 +105,25 @@ function EditEmployee() {
       <h2>Profile Employee</h2>
      
       <form className="checkout-form" onSubmit={submitEditProfile}>
-    
+        {/* <Dialog open={open}>
+          <DialogContent>
+             <Cropper
+                src={preview?preview:employee?.avatar?.path} 
+              
+                style={{ height: 400, width: "100%" }}
+                // Cropper.js options
+                aspectRatio={1/ 1}
+                guides={false}
+                crop={onCrop}
+                ref={cropperRef}
+              /></DialogContent>      
+         </Dialog> */}
         <div className="d-flex flex-wrap">
         <label id="image">{t('image')}</label>
             <div class="image-upload">
-              <img
-                src={employee?.avatar?.path} 
-              
-                alt=""
-              />
+             
 
-              {editMode && (
+              { editMode && (
                 <input
                   id="image"
                   type="file"
@@ -103,6 +132,18 @@ function EditEmployee() {
                 />
               )}
               </div>
+              {preview && editMode && (
+              <button
+                type="button"
+                class="delete-button"
+                onClick={() => {
+                  setPreview(null);
+                  setAvatar(null);
+                }}
+              >
+                X
+              </button>
+            )}
       
           <div className="d-flex justify-content-center w-100 m-3">
         

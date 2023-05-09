@@ -31,6 +31,8 @@ export class EmployeeService {
 
     return this.prisma.employee.create({
       data,
+      include:{avatar:true},
+    
     });
 
   }
@@ -82,6 +84,7 @@ export class EmployeeService {
     return this.prisma.employee.update({
       where: { id },
       data,
+      include:{avatar:true}
     });
   }
 
