@@ -20,6 +20,7 @@ function EmployeeList() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
   const columns = [
     {
       field: 'avatar',
@@ -27,7 +28,7 @@ function EmployeeList() {
       width: 150,
       renderCell: (params) => (
         <img
-          src={params.row.avatar.path}
+          src={params.row.avatar?.path}
           style={{ width: '40px', height: '40px', borderRadius: '50%' }}
         />
       ),
@@ -75,7 +76,7 @@ function EmployeeList() {
       width: 150,
       valueGetter: (params) => (
        
-        params.row.branch.name
+        params.row.branch?.name
         
       ),
     },
@@ -87,7 +88,7 @@ function EmployeeList() {
      
       valueGetter: (params) => (
        
-        params.row.role.nameAr
+        params.row.role?.nameAr
         
       ),
       
