@@ -24,12 +24,12 @@ const Charts2 = () => {
 
   return (
     
-    <div >
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column',marginTop:20 }}>
    
       <div className="App">
       <LineChart
-         width={400}
-         height={430}
+         width={500}
+         height={500}
          data={data}
          margin={{
            top: 5,

@@ -1,48 +1,45 @@
 import React from 'react'
 import TrainingHeading from './TrainingHeading'
-import { awrapper } from '../dummydata'
+
+import teach from "../img/teach.png"
+import inspire from "../img/inspire.png"
+import road from "../img/roadToS.png"
 
 const MentorDes = () => {
   return (
-    <section id="about">
-      <div className="About_container">
-      <div id='Heading' >
+    <>
+      
+   <section> <TrainingHeading  title='SO MANY REASONS TO START' /></section>
      
-     <TrainingHeading  title='SO MANY REASONS TO START' />
-   </div>
-   <section>
-        <p>TwensaEvents is a website dedicated to buy tickets for events in Tunisia. Whether you're looking for music festivals, art exhibits, or sports events, we've got you covered.</p>
+    
+  
+
+   <div className="About_container">
+   <div>
+       
         <div className="icon-row">
-          <div className="icon">
-            <img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png" alt="Music Icon" />
-            <h3>Music Festivals</h3>
-          </div>
-          <div className="icon">
-            <img src="https://media.istockphoto.com/id/1155278164/vector/theatrical-masks-set.jpg?s=612x612&w=0&k=20&c=WH0oQRqYG8BsOTFt7x-uuGB7vi5lXECPoNIy1CTZ-Xc=" alt="Art Icon" />
-            <h3>Art Exhibits</h3>
-          </div>
-          <div className="icon">
-            <img src="https://media.istockphoto.com/id/1155278164/vector/theatrical-masks-set.jpg?s=612x612&w=0&k=20&c=WH0oQRqYG8BsOTFt7x-uuGB7vi5lXECPoNIy1CTZ-Xc=" alt="Art Icon" />
-            <h3>Art Exhibits</h3>
-          </div>
+        <div className="icon">
+  <img src={teach} alt="teach Icon" />
+  <h3>Teach with style</h3>
+  <p className='para'>Publish the course you want, in the style you want, and  be in charge of your own material.</p>
+</div>
+<div className="icon">
+  <img src={inspire} alt="inspire" />
+  <h3>Stir learners</h3>
+  <p className='para'>Teach what you know and assist students in exploring their interests, learning new skills</p>
+</div>
+<div className="icon">
+  <img src={road} alt="sucess road" />
+  <h3>Acheive more success.</h3>
+  <p className='para'>Develop your professional abilities, gain expertise, and achieve your goals. </p>
+</div>
           
-        </div></section>
-      </div>
-      <section className='Mentorawrapper'>
-        <div className='containermentor griddy'>
-          {awrapper.map((e) => {
-            return (
-              <div className='box flex'>
-                <div className='text'>
-                  <h1>{e.data}</h1>
-                  <h3>{e.title}</h3>
-                </div>
-              </div>
-            )
-          })}
         </div>
-      </section>
-    </section>
+        </div>
+      </div>
+      
+   
+    </>
   )
 }
 

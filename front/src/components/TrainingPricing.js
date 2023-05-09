@@ -3,17 +3,7 @@ import { price } from '../dummydata'
 import TrainingHeading from './TrainingHeading'
 
 const TrainingPricing = () => {
-//     var colors = ["green","darkblue"]
-// var currentColor = 0
-// var lis = document.querySelectorAll(".know")
-// function changeColor() {
-//   --currentColor
-//   if (currentColor < 0) currentColor = colors.length -1
-//   for (var i = 0; i < lis.length; i++) {
-//     lis[i].style.color = colors[(currentColor +i) % colors.length]
-//   }
-// }
-// setInterval(changeColor, 1000)
+
   return (
     <>
     
