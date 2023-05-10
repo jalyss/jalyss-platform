@@ -13,7 +13,16 @@ import Checkout from "../pages/Checkout";
 import Invoice from "../pages/Invoice";
 import ResetPassword from "../pages/ResetPassword";
 import NewPassword from "../pages/NewPassword";
+import TrainingPage from "../pages/TrainingPage";
+import Blogs from "../pages/Blogs";
+import BlogsDetail from "../pages/BlogsDetail";
+import BlogsForm from "../pages/BlogsForm";
+import MentorPage from "../pages/MentorPage";
 
+
+import Chatroom from "../pages/Chatroom";
+
+import { useSelector } from "react-redux";
 
 function Router() {
 
@@ -34,6 +43,12 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
+            <Route path="/chat" element={<Chatroom/>}/>
+            <Route path="training" element={<TrainingPage />} />
+            <Route path="blogs" element={<Blogs />} />
+            <Route path="blogs/:blogId" element={<BlogsDetail />} />
+            <Route path="blogsForm" element={<BlogsForm/>} />
+            <Route path="mentor" element={<MentorPage/>} />
           </Route>
           
         </Routes>

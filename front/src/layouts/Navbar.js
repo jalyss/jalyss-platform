@@ -16,6 +16,8 @@ import { BiCartAdd } from 'react-icons/bi'
 import { BiCartDownload } from 'react-icons/bi'
 import Cart from '../components/Cart'
 import { useCart } from 'react-use-cart'
+import { ChatCircleDots } from 'phosphor-react'
+import { IconButton } from '@mui/material'
 
 function NavBar() {
   const authStore = useSelector((state) => state.auth)
@@ -155,6 +157,14 @@ function NavBar() {
                     </>
                   )}
                 </div>
+                <div>
+                  {authStore.me &&  (
+                    <IconButton href='/chat'>
+                    <ChatCircleDots size={32} color="#ccaa00" />
+                    </IconButton>
+                    
+                  ) }
+                </div>   
               </div>
             </Nav>
             <Nav className="header-icon me-auto">
@@ -245,15 +255,20 @@ function NavBar() {
                 </a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="/*">
+                <a class="nav-link" href="/training">
                   {t('navbar.training')}
                 </a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="/*">
+                <a class="nav-link" href="/blogs">
                   {t('navbar.blogs')}
                 </a>
               </li>
+              {/* <li class="nav-item active">
+                <a class="nav-link" href="/chat">
+                  {t('chat')}
+                </a>
+              </li> */}
             </ul>
           </div>
         </div>

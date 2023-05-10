@@ -20,6 +20,8 @@ import resetpassAr from "../constants/traductions/arabic/resetpass.json";
 import resetpassEn from "../constants/traductions/english/resetpass.json";
 import offCanvasAr from "../constants/traductions/arabic/offCanvas.json";
 import offCanvasEn from "../constants/traductions/english/offCanvas.json";
+import blogAr from "../constants/traductions/arabic/blog.json";
+import blogEn from "../constants/traductions/english/blog.json";
 
 
 i18n
@@ -31,11 +33,11 @@ i18n
     resources: {
       en: {
         translation:
-          { ...navbarEn, ...footerEn, ...OneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn,...loginEn,...resetpassEn,...offCanvasEn}
+          { ...navbarEn, ...footerEn, ...OneArticleEn, ...noPageEn,...CheckoutEn,...SignupEn,...articlesEn,...loginEn,...resetpassEn,...offCanvasEn,...blogEn}
       },
       ar: {
         translation:
-          { ...navbarAr, ...footerAr, ...OneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr,...loginAr,...resetpassAr,...offCanvasAr }
+          { ...navbarAr, ...footerAr, ...OneArticleAr, ...noPageAr,...CheckoutAr,...SignupAr,...articlesAr,...loginAr,...resetpassAr,...offCanvasAr,...blogAr }
 
       }
     },

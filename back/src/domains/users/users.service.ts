@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto, UpdateUserStatusDto } from './dto/update-user.dto';
 import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -43,7 +43,7 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true },
+      include: { Media: true, avatar: true },
     });
   }
 
@@ -52,6 +52,13 @@ export class UsersService {
   }
 
   update(id: string, data: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+  
+  updateUserStatus(id: string, data: UpdateUserStatusDto) {
     return this.prisma.user.update({
       where: { id },
       data,
