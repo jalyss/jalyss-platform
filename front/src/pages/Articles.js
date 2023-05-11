@@ -1,5 +1,5 @@
-import Slider from 'rc-slider';
-import React, { Fragment, useEffect, useState } from 'react'
+import Slider from 'rc-slider'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,7 +19,8 @@ import { BsFilterSquare } from 'react-icons/bs'
 import 'rc-tooltip/assets/bootstrap.css'
 import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
 import 'rc-slider/assets/index.css'
-
+import { groupBy, isEmpty, map } from 'lodash'
+import HorizontalMenu from '../components/DragContainter'
 
 function Articles() {
   const dispatch = useDispatch()
@@ -73,8 +74,7 @@ function Articles() {
           <Accordion
             title={t('filter.price')}
             content={
-              <div className="px-3 pt-3" >
-                
+              <div className="px-3 pt-3">
                 <Slider
                   range
                   draggableTrack
@@ -92,9 +92,8 @@ function Articles() {
                       lte: price[1],
                     }))
                   }}
-
                 />
-                <div className='d-flex justify-content-between mt-1'>
+                <div className="d-flex justify-content-between mt-1">
                   <p>{price[1]}</p>
                   <p>{price[0]}</p>
                 </div>
@@ -239,6 +238,16 @@ function Articles() {
     )
   }
 
+  const groupedArticles = useMemo(
+    () =>
+      groupBy(articleStore.articles.items, (item) => item.article.categoryId),
+    [articleStore.articles.items]
+  )
+
+  console.log(filters.categories)
+  console.log(groupedArticles)
+  console.log(articleStore.articles.items)
+
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -263,10 +272,31 @@ function Articles() {
         <div className="responsive-filters">
           <Filters />
         </div>
-        <div className="d-flex flex-wrap px-3 ">
-          {articleStore.articles.items.map((element, index) => {
-            return <ArticleCard key={index} article={element} />
-          })}
+        <div className="px-3">
+          {!isEmpty(filters.categories) ? (
+            map(groupedArticles, (element) => (
+              <>
+                <p>{element[0].article.category[lg ? 'nameEn' : 'nameAr']}</p>
+
+                <HorizontalMenu>
+                  {element.map((el) => (
+                    <div
+                      key={el.id}
+                      className="horizontal-item horizontal-item-article"
+                    >
+                      <ArticleCard article={el} />
+                    </div>
+                  ))}
+                </HorizontalMenu>
+              </>
+            ))
+          ) : (
+            <div className="d-flex flex-wrap px-3 ">
+              {articleStore.articles.items.map((element, index) => (
+                <ArticleCard key={index} article={element} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <div className="d-flex justify-content-center mb-3 ">
