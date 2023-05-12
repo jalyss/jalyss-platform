@@ -24,7 +24,7 @@ import PrivateZone from "../pages/PrivateZone";
 import Domiciliation from "../pages/Domiciliation";
 import ReserveCoworkin from "../pages/ReserveCoworkin";
 import MentorPage from "../pages/MentorPage";
-
+import ReserveMeeting from "../pages/ReserveMeeting";
 
 import Chatroom from "../pages/Chatroom";
 
@@ -61,6 +61,7 @@ function Router() {
             <Route path="Domiciliation" element={<Domiciliation />} />
             <Route path="ReserveCoworkin" element={<ReserveCoworkin />} />
             <Route path="mentor" element={<MentorPage/>} />
+            <Route path="ReserveMeeting" element={<ReserveMeeting/>} />
           </Route>
           
         </Routes>

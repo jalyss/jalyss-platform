@@ -1,18 +1,100 @@
-import React from "react";
-import CarouselImages from "../components/Carousel";
+import React , {useEffect} from "react";
 import { Link } from "react-router-dom";
+import {
+  Grid,
+  
+} from "@mui/material";
+import { makeStyles } from '@mui/styles';
+import { Card, CardMedia , Typography} from '@mui/material';
 
+const useStyles = makeStyles((theme) => ({
+  imagesGroup: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap:6,
+    marginBottom:6,
+  },
+  card: {
+    width: '40%',
+     // Add other styling properties as needed
+  },
+  media: {
+    height: 0,
+   
+    paddingTop: '50%', // 16:9 aspect ratio
+  },
+  topText: {
+    marginTop: 2,
+  },
+  bottomText: {
+    marginTop: 2,
+  },
+}));
 function CoworkingZone() {
+  const classes = useStyles();
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[])
   return (
     <div>
-      <CarouselImages
-        images={[
-          "https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png",
-          "https://www.interieurs.com.tn/wp-content/uploads/2022/11/bureau-new-island-scaled.jpg?v=1669101303",
-          "https://www.meublesmezghani.com/wp-content/uploads/2019/11/04-AMBASSADEUR-4-PIED-Richmond-570x372.jpg",
-          "https://www.megasb.fr/media/0b/e3/a5/1634845517/108752_bild_alter7.jpg",
-        ]}
-      />
+       <Typography variant="h2" align="center" style={{color:"purple" ,marginBottom:50}}>
+      Coworking Zone 
+      </Typography>
+      <Grid container spacing={3} justifyContent="center" item>
+        <Grid item xs={12} sm={12} sx={{ width: { xs: "100%", sm: "50%" } }} >
+          <imageGroup className={classes.imagesGroup}>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image="https://coworker.imgix.net/photos/tunisia/tunis/work-zone/7-1560519620.jpg?w=800&h=0&q=90&auto=format,compress&fit=crop&mark=/template/img/wm_icon.png&markscale=5&markalign=center,middle"
+               
+              />
+            </Card>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image="https://coworker.imgix.net/photos/tunisia/tunis/work-zone/7-1560519620.jpg?w=800&h=0&q=90&auto=format,compress&fit=crop&mark=/template/img/wm_icon.png&markscale=5&markalign=center,middle"
+                
+              />
+            </Card>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image="https://coworker.imgix.net/photos/tunisia/tunis/work-zone/7-1560519620.jpg?w=800&h=0&q=90&auto=format,compress&fit=crop&mark=/template/img/wm_icon.png&markscale=5&markalign=center,middle"
+                
+              />
+            </Card>
+          </imageGroup>
+        </Grid>
+      </Grid>
+      <Grid container spacing={3} justifyContent="center">
+        <Grid item xs={12} sm={12} sx={{ width: { xs: "100%", sm: "50%" } }}>
+          <imageGroup className={classes.imagesGroup}>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image="https://coworker.imgix.net/photos/tunisia/tunis/work-zone/7-1560519620.jpg?w=800&h=0&q=90&auto=format,compress&fit=crop&mark=/template/img/wm_icon.png&markscale=5&markalign=center,middle"
+               
+              />
+            </Card>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image="https://coworker.imgix.net/photos/tunisia/tunis/work-zone/7-1560519620.jpg?w=800&h=0&q=90&auto=format,compress&fit=crop&mark=/template/img/wm_icon.png&markscale=5&markalign=center,middle"
+               
+              />
+            </Card>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image="https://coworker.imgix.net/photos/tunisia/tunis/work-zone/7-1560519620.jpg?w=800&h=0&q=90&auto=format,compress&fit=crop&mark=/template/img/wm_icon.png&markscale=5&markalign=center,middle"
+               
+              />
+            </Card>
+          </imageGroup>
+        </Grid>
+       
+  </Grid>
       <p className=" firstLine">PRICING</p>
       <p className="secondLine">PRICE PER UNIT</p>
       <p className="thirdLine">
