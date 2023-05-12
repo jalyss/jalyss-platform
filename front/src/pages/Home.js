@@ -7,19 +7,20 @@ import { MDBFooter, MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit'
 import { fetchPublishingHouses } from '../store/publishingHouse'
 import { fetchArticlesByBranch } from '../store/article'
 import { identifier } from '../constants/identifier/identifier'
-import ArticleCard from '../components/ArticleCard'
+
 
 function Home() {
   const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
-  const publishingHouseStore = useSelector((state) => state.publishingHouse)
-  const articleStore = useSelector((state) => state.article)
+  const publishingHouseStore = useSelector(state => state.publishingHouse)
+  const articleStore = useSelector(state => state.article)
 
   useEffect(() => {
-    dispatch(fetchArticlesByBranch({ identifier }))
+    dispatch(fetchArticlesByBranch({ identifier, bestSaller: true }))
     dispatch(fetchPublishingHouses())
   }, [dispatch])
-
+  console.log(publishingHouseStore.publishingHouses.items)
+  console.log(articleStore.articles.items)
   return (
     <>
       <CarouselImages
@@ -28,22 +29,13 @@ function Home() {
           'https://jalyss.com/modules/cz_imageslider/views/img/4ac709113ead13b8f3c71c0e4bed81f0a435d809_25555-01.jpg',
         ]}
       />
-      <HorizontalMenu>
-        {publishingHouseStore.publishingHouses.items.map(({ id, logo }) => (
-          <div key={id} className="horizontal-item horizontal-item-publishingHouse ">
-            <img key={id} draggable="false" src={logo} alt={id} />
-          </div>
-        ))}
-      </HorizontalMenu>
-      <HorizontalMenu>
-        {articleStore.articles.items.map((element) => (
-          <div key={element.id} className="horizontal-item horizontal-item-article">
-            <ArticleCard article={element} />
-          </div>
-        ))}
-      </HorizontalMenu>
+      
+      <HorizontalMenu items={publishingHouseStore.publishingHouses.items} />
+      <HorizontalMenu items={articleStore.articles.items} />
+
 
       <MDBContainer>
+
         <MDBRow className="text-center mb-5">
           <MDBCol>
             <img

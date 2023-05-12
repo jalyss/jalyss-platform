@@ -3,7 +3,8 @@
         "articleType": " نوع المنتج",
         "publishingHouse": " ديار النشر ",
         "category": "الفئة",
-        "author": "المؤلفون"
+        "author": "المؤلفون",
+        "fl":"السعر"
     },
     "title": "Title"
 }

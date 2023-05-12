@@ -3,7 +3,8 @@
         "articleType": "Article Type",
         "publishingHouse": "Publishing House",
         "category": "Category",
-        "author": "Authors"
+        "author": "Authors",
+        "fl": "Price"
     },
     "title": "Title"
 }
