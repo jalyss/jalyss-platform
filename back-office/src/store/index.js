@@ -5,6 +5,11 @@ import employee from './employee';
 import branche from './branche';
 import role from './role'
 import article from './article';
+import articleType from './articleType';
+import author from './author';
+import category from './category';
+import publishingHouse from './publishingHouse';
+import command from './command';
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +18,13 @@ export const store = configureStore({
     employee,
     branche,
     role,
-    article
+    article,
+    articleType,
+    author,
+    category,
+    publishingHouse,
+    command
+    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

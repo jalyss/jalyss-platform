@@ -12,9 +12,6 @@ import User from "../domains/users/User";
 import CreateUser from "../domains/users/views/CreateUser";
 import UserList from "../domains/users/views/UserList";
 import EditUser from "../domains/users/views/EditUser";
-import Customer from "../domains/customers/Customer";
-import CreateCustomer from "../domains/customers/views/CreateCustomer";
-import CustomerList from "../domains/customers/views/CustomerList";
 import Branch from "../apps/Branch";
 import Employee from "../domains/employees/Employee";
 import EmployeeList from "../domains/employees/views/EmployeeList";
@@ -24,6 +21,13 @@ import Article from "../domains/articles/Article";
 import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
+import Dashboard from "../domains/dashboard/Dashboard";
+import Charts from "../domains/charts/Charts";
+import Command from "../domains/commands/Command";
+import CommandList from "../domains/commands/views/CommandList";
+import CreateCommand from "../domains/commands/views/CreateCommand";
+import EditCommand from "../domains/commands/views/EditCommand";
+
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -42,6 +46,7 @@ function Router() {
       <Routes>
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="user" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
@@ -57,6 +62,14 @@ function Router() {
               <Route index element={<ArticleList />} />
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
+            </Route>
+
+            <Route path="charts" element={<Charts />} />
+
+            <Route path="command" element={<Command />}>
+              <Route index element={<CommandList />} />
+              <Route path="create" element={<CreateCommand />} />
+              <Route path="edit/:commandId" element={< EditCommand />} />
             </Route>
           </Route>
         ) : (

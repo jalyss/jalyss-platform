@@ -2,11 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-
-
-
-
-export const me = createAsyncThunk("auth/me", async (token) => {
+export const me = createAsyncThunk("auth/me", async () => {
+  let token = JSON.parse(localStorage.getItem("token")).Authorization;
   let configs = {
     headers: {
       Authorization: "Bearer " + token,
@@ -20,7 +17,6 @@ export const me = createAsyncThunk("auth/me", async (token) => {
   return response.data;
 });
 
-
 export const login = createAsyncThunk(
   "auth/login",
   async (body, { dispatch }) => {
@@ -30,16 +26,18 @@ export const login = createAsyncThunk(
     );
     let aux = JSON.stringify(response.data);
     localStorage.setItem("token", aux);
-    dispatch(me(response.data.Authorization));
+    dispatch(me());
     return response.data;
   }
 );
 
-
 export const register = createAsyncThunk(
   "auth/register",
   async (body, { dispatch }) => {
-    const response = await axios.post(`${config.API_ENDPOINT}/auth/register`,body);
+    const response = await axios.post(
+      `${config.API_ENDPOINT}/auth/register`,
+      body
+    );
     dispatch(login({ email: body.email, password: body.password }));
     return response.data;
   }
@@ -89,12 +87,33 @@ export const changePassword = createAsyncThunk(
     return response.data;
   }
 );
+export const authUpdate = createAsyncThunk(
+  "auth/update",
+  async (args, { dispatch }) => {
+    const { id, ...rest } = args;
+    let token = JSON.parse(localStorage.getItem("token")).Authorization;
+    console.log(token);
+    let configs = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/auth/update`,
+      rest,
+      configs
+    );
+    localStorage.setItem("token", JSON.stringify(response.data));
+    dispatch(me());
+    return response.data;
+  }
+);
 
 export const AuthSlice = createSlice({
   name: "auth",
   initialState: {
     me: null,
-    meAdmin:null,
+    meAdmin: null,
     error: null,
     deleteError: null,
     saveError: null,
@@ -105,7 +124,6 @@ export const AuthSlice = createSlice({
     builder.addCase(me.fulfilled, (state, action) => {
       state.me = action.payload;
     });
-   
   },
 });
 export default AuthSlice.reducer;

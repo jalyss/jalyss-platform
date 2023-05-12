@@ -16,7 +16,9 @@ function CreateEmployee() {
   const [employee, setEmployee] = useState({})
   const roleStore = useSelector((state) => state.role)
   const branchStore = useSelector((state) => state.branche)
+  const [avatar, setAvatar] = useState(null)
 
+  const [preview, setPreview] = useState(null)
   useEffect(() => {
     dispatch(fetchBranches())
     dispatch(fetchRoles())
@@ -42,12 +44,45 @@ function CreateEmployee() {
       )
 
   }
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    setPreview(URL.createObjectURL(file))
+    setAvatar(file)
+  }
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Create Employee</h2>
       <form className="checkout-form" onSubmit={submitCreate}>
         <div className="d-flex flex-wrap">
+        <label id="image">{t('image')}</label>
+            <div class="image-upload">
+              <img
+                src={preview?preview:employee?.avatar?.path} 
+              
+                alt=""
+              />
 
+              (
+                <input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              )
+              </div>
+              {preview &&  (
+              <button
+                type="button"
+                class="delete-button"
+                onClick={() => {
+                  setPreview(null);
+                  setAvatar(null);
+                }}
+              >
+                X
+              </button>
+            )}
           <div className=" m-3">
             <div class="row">
               <div class="col mb-3 ">

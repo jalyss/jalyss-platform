@@ -21,5 +21,7 @@ export class UpdateEmployeeDto {
     branchId: string
     @ApiProperty({ required: false })
     roleId: string
+    @ApiProperty({ required: false })
+    avatarId: string
 }
 

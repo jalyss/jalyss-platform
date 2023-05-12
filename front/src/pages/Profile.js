@@ -1,83 +1,82 @@
-import React, { useEffect, useState } from 'react'
-import auth, { register } from '../store/auth'
-import '../assets/styles/signup.css'
-import { useDispatch, useSelector } from 'react-redux'
-import { showErrorToast, showSuccessToast } from '../utils/toast'
-import { useTranslation } from 'react-i18next'
-import axios from 'axios'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-
-
+import React, { useEffect, useState } from "react";
+import auth, { authUpdate, register } from "../store/auth";
+import "../assets/styles/signup.css";
+import { useDispatch, useSelector } from "react-redux";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 function Profile() {
-  const { t, i18n } = useTranslation()
-  const dispatch = useDispatch()
-  const authStore = useSelector((state) => state.auth)
-  const [user, setUser] = useState({})
-  const [editMode, setEditMode] = useState(false)
-  const [preview, setPreview] = useState(null)
-  const [avatar, setAvatar] = useState(null)
-useEffect(()=>{
-  if(authStore.me){
-    setUser(authStore.me)
-  }
-},[authStore.me])
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const authStore = useSelector((state) => state.auth);
+  const [user, setUser] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+  useEffect(() => {
+    if (authStore.me) {
+      setUser(authStore.me);
+    }
+  }, [authStore.me]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setUser((User) => ({ ...User, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setUser((User) => ({ ...User, [name]: value }));
+  };
   const submitEditProfile = async (event) => {
     if (!editMode) {
-      event.preventDefault()
-      setEditMode(true)
+      event.preventDefault();
+      setEditMode(true);
     } else {
-      event.preventDefault()
-      let aux = Object.assign({}, user)
+      event.preventDefault();
+      let aux = Object.assign({}, user);
       if (avatar !== null) {
-        console.log('in if')
-        const image = new FormData()
-        image.append('file', avatar)
+        console.log("in if");
+        const image = new FormData();
+        image.append("file", avatar);
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
           image
-        )
-        aux.avatarId = response.data.id
+        );
+        aux.avatarId = response.data.id;
       }
-
-      dispatch(register(aux)).then((res) => {
+      delete aux.avatar;
+      delete aux.Media;
+      delete aux.exp;
+      delete aux.iat;
+      dispatch(authUpdate(aux)).then((res) => {
         if (!res.error) {
-          showSuccessToast(t('user.created'))
+          showSuccessToast(t("user.updated"));
+          setEditMode(false);
         } else {
-          console.log(res)
-          showErrorToast(res.error.message)
+          console.log(res);
+          showErrorToast(res.error.message);
         }
-      })
-      setEditMode(false)
+      });
     }
-  }
-
-
+  };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    setPreview(URL.createObjectURL(file))
-    setAvatar(file)
-  }
+    const file = e.target.files[0];
+    setPreview(URL.createObjectURL(file));
+    setAvatar(file);
+  };
 
   console.log(authStore);
 
   const handleLogout = () => {
     // Clear user session data, e.g. authentication token
-    localStorage.removeItem('token')
+    localStorage.removeItem("token");
 
     // Redirect to the login page
-    window.location.href = '/Login'
+    window.location.href = "/Login";
   };
 
   return (
@@ -86,12 +85,9 @@ useEffect(()=>{
       <form className="checkout-form" onSubmit={submitEditProfile}>
         <div className="d-flex flex-wrap">
           <div className="position-relative">
-            <label id="image">{t('image')}</label>
+            <label id="image">{t("image")}</label>
             <div class="image-upload">
-              <img
-                src={authStore?.me?.avatar?.path} 
-                alt=""
-              />
+              <img src={preview?preview:authStore?.me?.avatar?.path} alt="" />
 
               {editMode && (
                 <input
@@ -102,13 +98,13 @@ useEffect(()=>{
                 />
               )}
             </div>
-            {preview && (
+            {preview && editMode && (
               <button
                 type="button"
                 class="delete-button"
                 onClick={() => {
-                  setPreview(null)
-                  setAvatar(null)
+                  setPreview(null);
+                  setAvatar(null);
                 }}
               >
                 X
@@ -120,10 +116,10 @@ useEffect(()=>{
               <Table aria-label="simple table">
                 <TableBody>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('nameAr')}
+                      {t("nameAr")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -137,15 +133,14 @@ useEffect(()=>{
                         />
                       ) : (
                         <span>{user?.fullNameAr}</span>
-                      )
-                      }
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('nameEn')}
+                      {t("nameEn")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -163,10 +158,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('email')}
+                      {t("email")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -185,10 +180,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('phone')}
+                      {t("phone")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -207,10 +202,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('address')}
+                      {t("address")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -228,10 +223,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('country')}
+                      {t("country")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -249,10 +244,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('city')}
+                      {t("city")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -269,10 +264,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('functionalArea')}
+                      {t("functionalArea")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -289,10 +284,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('educationLevel')}
+                      {t("educationLevel")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -309,10 +304,10 @@ useEffect(()=>{
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('jobTitle')}
+                      {t("jobTitle")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -340,13 +335,15 @@ useEffect(()=>{
             className="confirm-button mt-3"
             onSubmit={submitEditProfile}
           >
-            <span className="label-btn">{editMode ? 'حفظ' : 'تعديل'}</span>
+            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
           </button>
         </div>
       </form>
-      <button className="confirm-button mt-3" onClickCapture={handleLogout}>Logout </button>
+      <button className="confirm-button mt-3" onClickCapture={handleLogout}>
+        Logout{" "}
+      </button>
     </div>
-  )
+  );
 }
 
-export default Profile
+export default Profile;

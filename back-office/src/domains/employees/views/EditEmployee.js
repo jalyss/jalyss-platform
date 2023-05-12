@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef} from 'react'
 
 import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,7 +14,15 @@ import { editEmployee, fetchEmployee } from '../../../store/employee'
 import { useParams } from 'react-router-dom'
 import { fetchBranches } from '../../../store/branche'
 import { fetchRoles } from '../../../store/role'
+import {fetchMedias} from "../../../store/media"
+import axios from "axios";
 
+import  Cropper ,{ReactCropperElement}  from "react-cropper";
+import "cropperjs/dist/cropper.css";
+import { Dialog, DialogContent } from '@mui/material'
+
+
+ 
 function EditEmployee() {
   const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
@@ -22,17 +30,33 @@ function EditEmployee() {
   const [employee, setEmployee] = useState({})
   const roleStore = useSelector((state) => state.role)
   const branchStore = useSelector((state) => state.branche)
+  const mediaStore =useSelector((state)=> state.media)
   const [editMode, setEditMode] = useState(false)
   const { employeeId } = useParams()
   const employeeStore = useSelector((state) => state.employee)
+  const [avatar, setAvatar] = useState(null)
 
+  const [preview, setPreview] = useState(null)
+  const [open,setOpen]=useState(false)
+  const cropperRef = useRef(null);
+  const onCrop = () => {
+    const cropper =cropperRef.current?.cropper;
+    console.log(cropper.getCroppedCanvas().toDataURL());
+  };
+  
   useEffect(() => {
     dispatch(fetchBranches())
     dispatch(fetchRoles()) 
+    dispatch(fetchMedias())
     dispatch(fetchEmployee(employeeId))
   }, [])
+// useEffect(()=>{
+//   if(preview)
+//   setOpen(true)
 
-
+// },[preview])
+  
+ console.log("media",mediaStore);
   useEffect(() => {
     if (employeeStore.employee)
       setEmployee(employeeStore.employee)
@@ -50,19 +74,79 @@ function EditEmployee() {
     } else {
       event.preventDefault()
       let aux = Object.assign({}, employee)
+      if (avatar !== null) {
+        console.log('in if')
+        const image = new FormData()
+        image.append('file', avatar)
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          image
+        )
+        aux.avatarId = response.data.id
+      }
       delete aux.branch 
       delete aux.role
+      delete aux.avatar;
+      delete aux.Media;
       dispatch(editEmployee(aux))
       setEditMode(false)
     }
   }
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    setPreview(URL.createObjectURL(file))
+    setAvatar(file)
+  }
+  console.log("emmpp",employee);
+  console.log("employeeStore",employeeStore);
+
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile Employee</h2>
+     
       <form className="checkout-form" onSubmit={submitEditProfile}>
+        {/* <Dialog open={open}>
+          <DialogContent>
+             <Cropper
+                src={preview?preview:employee?.avatar?.path} 
+              
+                style={{ height: 400, width: "100%" }}
+                // Cropper.js options
+                aspectRatio={1/ 1}
+                guides={false}
+                crop={onCrop}
+                ref={cropperRef}
+              /></DialogContent>      
+         </Dialog> */}
         <div className="d-flex flex-wrap">
+        <label id="image">{t('image')}</label>
+            <div class="image-upload">
+             
 
+              { editMode && (
+                <input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              )}
+              </div>
+              {preview && editMode && (
+              <button
+                type="button"
+                class="delete-button"
+                onClick={() => {
+                  setPreview(null);
+                  setAvatar(null);
+                }}
+              >
+                X
+              </button>
+            )}
+      
           <div className="d-flex justify-content-center w-100 m-3">
+        
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
@@ -112,7 +196,7 @@ function EditEmployee() {
                   <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
+                    <TableCell className="fw-bold" align="left">
                       {t('email')}
                     </TableCell>
                     <TableCell align="right">
@@ -134,8 +218,8 @@ function EditEmployee() {
                   <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
-                      العنوان
+                    <TableCell className="fw-bold" align="left">
+                      Address
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -155,7 +239,7 @@ function EditEmployee() {
                   <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
+                    <TableCell className="fw-bold" align="left">
                       {t('phone')}
                     </TableCell>
                     <TableCell align="right">
@@ -178,8 +262,8 @@ function EditEmployee() {
                   <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
-                      الفرع
+                    <TableCell className="fw-bold" align="left">
+                      Branch
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -205,8 +289,8 @@ function EditEmployee() {
                   <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
-                      الدور
+                    <TableCell className="fw-bold" align="left">
+                      Role
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -215,6 +299,7 @@ function EditEmployee() {
                           class="form-control mt-2"
                           id="role"
                           value={employee?.roleId}
+                        
                           onChange={handleChange}
                         >
                           <option value={null}>--حدد الدور--</option>
@@ -242,7 +327,7 @@ function EditEmployee() {
             className="confirm-button mt-3"
             onSubmit={submitEditProfile}
           >
-            <span className="label-btn">{editMode ? 'حفظ' : 'تعديل'}</span>
+            <span className="label-btn" >{editMode ? 'Save': 'Edit'}</span>
           </button>
         </div>
       </form>

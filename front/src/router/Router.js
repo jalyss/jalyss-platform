@@ -23,6 +23,13 @@ import MeetingZone from "../pages/MeetingZone";
 import PrivateZone from "../pages/PrivateZone";
 import Domiciliation from "../pages/Domiciliation";
 import ReserveCoworkin from "../pages/ReserveCoworkin";
+import MentorPage from "../pages/MentorPage";
+
+
+import Chatroom from "../pages/Chatroom";
+
+import { useSelector } from "react-redux";
+
 function Router() {
 
   return (
@@ -42,6 +49,7 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
+            <Route path="/chat" element={<Chatroom/>}/>
             <Route path="training" element={<TrainingPage />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
@@ -52,6 +60,7 @@ function Router() {
             <Route path="PrivateZone" element={<PrivateZone />} />
             <Route path="Domiciliation" element={<Domiciliation />} />
             <Route path="ReserveCoworkin" element={<ReserveCoworkin />} />
+            <Route path="mentor" element={<MentorPage/>} />
           </Route>
           
         </Routes>

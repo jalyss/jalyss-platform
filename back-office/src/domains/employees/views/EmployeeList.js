@@ -4,17 +4,38 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
-import { AiFillEdit } from 'react-icons/ai';
+import { AiOutlineEye } from 'react-icons/ai';
 import { AiFillDelete } from 'react-icons/ai';
 import { IoIosPersonAdd } from "react-icons/io";
 import { fetchEmployees, removeEmployee } from '../../../store/employee';
+import { showErrorToast, showSuccessToast } from '../../../utils/toast';
+import Modal from 'react-bootstrap/Modal';
+import { fetchBranche, fetchBranches } from '../../../store/branche';
+import { fetchRole, fetchRoles } from '../../../store/role';
 
 
 function EmployeeList() {
+  const [show, setShow] = useState(false);
+  const [elementId, setElementId]=useState(null);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  
   const columns = [
     {
-      field: 'id', headerName: 'ID', width: 90
+      field: 'avatar',
+      headerName: 'Avatar',
+      width: 150,
+      renderCell: (params) => (
+        <img
+          src={params.row.avatar?.path}
+          style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+        />
+      ),
     },
+    // {
+    //   field: 'id', headerName: 'ID', width: 150
+    // },
     {
       field: 'fullName',
       headerName: 'Full name',
@@ -33,48 +54,62 @@ function EmployeeList() {
     {
       field: 'address',
       headerName: 'Address',
-      width: 110,
-      editable: true,
+      width: 150,
+      editable: false,
       sortable: false,
+      // filterable:false,
     },
     {
       field: 'tel',
       headerName: 'Phone ',
       type: 'number',
-      width: 100,
+      width: 150,
+      headerAlign:'left',
+      align:'left',
       sortable: false,
 
     },
     {
-      field: 'branch',
+      
+   
       headerName: 'Branch ',
-      width: 100,
-
+      width: 150,
+      valueGetter: (params) => (
+       
+        params.row.branch?.name
+        
+      ),
     },
 
+
     {
+      
       field: 'role',
-      headerName: 'Role',
-      width: 100,
-      editable: true,
-      sortable: false,
+     
+      valueGetter: (params) => (
+       
+        params.row.role?.nameAr
+        
+      ),
+      
 
     },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 100,
+      width: 150,
       cellClassName: 'actions',
       getActions: ({ id }) => {
 
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
+            icon={<AiOutlineEye />}
             label="Edit"
             className="textPrimary"
             onClick={() => handleEditClick(id)}
-            color="inherit"
+            color="success"
+            
 
           />,
           <GridActionsCellItem
@@ -83,7 +118,7 @@ function EmployeeList() {
 
             onClick={() => { handleDeleteClick(id) }}
             // should open popup to ask are u sure delete this user (yes/no)
-            color="inherit"
+            color="error"
           />,
 
         ];
@@ -98,11 +133,12 @@ function EmployeeList() {
   const [rows, setRows] = useState([])
   useEffect(() => {
     dispatch(fetchEmployees())
+   
   }, [])
   useEffect(() => {
     if (employeeStore.employees.items.length) {
       let aux = employeeStore.employees.items.map(e => {
-        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr }
+        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr, avatarurl: e.avatarurl }
       })
       console.log(aux);
       setRows(aux)
@@ -111,32 +147,43 @@ function EmployeeList() {
 
   const handleDeleteClick = (id) => {
 
-    dispatch(removeEmployee(id));
+    dispatch(removeEmployee(id)).then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('Employee has been deleted')
+      }
+    })
 
   };
-
+  
   const handleEditClick = (id) => {
-    console.log(id);
+    console.log('iii',id);
     navigate(`edit/${id}`)
   };
   return (
-    <div>
-      <div>
-        <Button type='button' href='employee/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
+    <div style={{margin:20}}>
+      <div className='d-flex justify-content-end' 
+    //   style={{marginLeft:1400,
+    // marginTop: 15,borderRadius:10}}
+    >
+        <Button type='button' href='employee/create' variant="outlined" endIcon={<IoIosPersonAdd />} style={{color:"blue"}}>
           <span className='btn btn-sm '>
             Add Employee
           </span>
         </Button>
       </div>
-      <div className='position-relative'>Employee List
+      <div><h2 style={{paddingLeft:10,paddingTop:10}}>Employee List</h2>
         <Box sx={{ height: 600, width: '100%' }}>
           <DataGrid
             rows={rows}
+            
             columns={columns}
             initialState={{
               pagination: {
                 paginationModel: {
                   pageSize: 10,
+                  
                 },
               },
             }}

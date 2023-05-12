@@ -9,15 +9,15 @@ async function main() {
   let users = [];
   let articles = [];
 
-    // create dummy branch
-    let branch = await prisma.branch.create({
-      data: {
-        name: 'Tunis',
-        identifier: 'TUN',
-        address: 'sfax ambra immeuble ',
-        mainBranch: true,
-      },
-    });
+  // create dummy branch
+  let branch = await prisma.branch.create({
+    data: {
+      name: 'Tunis',
+      identifier: 'TUN',
+      address: 'sfax ambra immeuble ',
+      mainBranch: true,
+    },
+  });
   // create 10 dummy users
   const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
@@ -35,7 +35,7 @@ async function main() {
     );
   }
 
- //create roles
+  //create roles
   let managerRole = await prisma.role.create({
     data: {
       nameAr: 'المدير',
@@ -105,7 +105,7 @@ async function main() {
   let developerRole = await prisma.role.create({
 
     data: {
-    nameAr: 'مبرمج',
+      nameAr: 'مبرمج',
       nameEn: 'Developer',
       permissions: [
         { "domain": "blog", "action": "read" },
@@ -115,20 +115,80 @@ async function main() {
     }
   })
 
+  //creat mediasAvatarEmployee
+  let mediasAvatarEmployee1 = await prisma.media.create({
+    data: {
+      path: 'https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg',
+      type:'image',
+      extension:'jpg',
 
- //create employees
+    }
+  })
+
+  let mediasAvatarEmployee2 = await prisma.media.create({
+    data: {
+      path: 'https://stylesatlife.com/wp-content/uploads/2022/12/Haircuts-for-School-Boys-11.jpg.webp',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+
+  let mediasAvatarEmployee3 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1351445167/photo/happy-male-youngster-smiling-at-the-camera-outdoors.jpg?b=1&s=170667a&w=0&k=20&c=iebfRFHi1ncG_CNCZLmOSLnRI_TO0D4rACMbarHsADc=',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee4 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1159801546/photo/portrait-of-handsome-boy-posing-in-photo-studio.jpg?s=612x612&w=0&k=20&c=YLyXwo6WaVWv8j80fLEyPjOmp3--6VlVYRU-Eyco5eQ=',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee5 = await prisma.media.create({
+    data: {
+      path: 'https://blog.hootsuite.com/wp-content/uploads/2020/02/Image-copyright-556x556.png',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee6 = await prisma.media.create({
+    data: {
+      path: 'https://pixlr.com/images/index/remove-bg.webp',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+  let mediasAvatarEmployee7 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type:'image',
+      extension:'jpg',
+
+    }
+  })
+
+  //create employees
   const saltEm = await bcrypt.genSalt();
   let manager = await prisma.employee.create({
     data: {
       fullNameAr: 'بسمة',
       fullNameEn: 'besma',
       email: 'besma@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-kairouan',
+      tel: '65555550',
       password: await bcrypt.hash('1234', saltEm),
       isAdmin: true,
       roleId:managerRole.id,
-      branchId:branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee1.id,
       
     }
   })
@@ -137,11 +197,12 @@ async function main() {
       fullNameAr: 'وسيم',
       fullNameEn: 'wassim',
       email: 'wassim@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-carthage',
+      tel: '45454545',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
-      branchId:branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee2.id,
     }
   })
   let developer2 = await prisma.employee.create({
@@ -149,11 +210,12 @@ async function main() {
       fullNameAr: 'غادة',
       fullNameEn: 'ghada',
       email: 'ghada@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'Tunis',
+      tel: '20202020',
       password: await bcrypt.hash('1234', saltEm),
       roleId: developerRole.id,
-      branchId:branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee3.id,
     }
   })
   let itManager = await prisma.employee.create({
@@ -161,24 +223,26 @@ async function main() {
       fullNameAr: 'خليل',
       fullNameEn: 'khalil',
       email: 'khalil@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-soussa',
+      tel: '60606060',
       password: await bcrypt.hash('1234', saltEm),
       roleId: itManagerRole.id,
-      branchId:branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee4.id,
     }
   })
 
-   let groutAgent = await prisma.employee.create({
+  let groutAgent = await prisma.employee.create({
     data: {
       fullNameAr: 'ناديه',
       fullNameEn: 'nedia',
       email: 'nedia@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'Tunis-Monastir',
+      tel: '78787878',
       password: await bcrypt.hash('1234', saltEm),
       roleId: groutAgentRole.id,
-      branchId:branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee5.id,
     }
   })
   let sellesAgent = await prisma.employee.create({
@@ -186,11 +250,12 @@ async function main() {
       fullNameAr: 'اماني',
       fullNameEn: 'ameni',
       email: 'ameni@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'Tunis-Monastir',
+      tel: '96969696',
       password: await bcrypt.hash('1234', saltEm),
       roleId: selesAgentRole.id,
-      branchId:branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee6.id,
     }
   })
   let hrManager = await prisma.employee.create({
@@ -198,11 +263,12 @@ async function main() {
       fullNameAr: 'ابتسام',
       fullNameEn: 'ibtisem',
       email: 'ibtisem@jalyss.com',
-      address: '',
-      tel: '',
+      address: 'tunis-elkef',
+      tel: '6777760',
       password: await bcrypt.hash('1234', saltEm),
       roleId: hrManagerRole.id,
-      branchId:branch.id
+      branchId:branch.id,
+      avatarId:mediasAvatarEmployee7.id,
     }
   })
   //create dummy country
@@ -222,6 +288,7 @@ async function main() {
     },
 
   });
+  //
   let city1 = await prisma.city.create({
     data: {
       nameAr: 'تونس',
@@ -241,6 +308,7 @@ async function main() {
 
   });
   let countryIds = [country1.id, country2.id]
+  let cityIds = [city1.id, city2.id]
 
   //create dummy author
   let author1 = await prisma.author.create({
@@ -387,24 +455,53 @@ async function main() {
       }),
     );
   }
+  await prisma.articlesByBranch.create({
+    data: {
+      branchId: mainBranch.id,
+      articleId: articles[0].id,
+      price: 125.25,
+      stock: 10,
+    },
+  })
+
+  //create dummy orders
+let commands=[]
+  for (let i = 0; i < 10; i++) {
+    commands.push(
+      await prisma.command.create({
+        data: {
+          clientName:'client'+i,
+          clientAddress:'Lac 2 Tunis',
+          clientTel:'22222222',
+          clientEmail: 'client' + i + '@gmail.com',
+          branchId:branch.id,
+          countryId:countryIds[Math.floor(Math.random()*countryIds.length)],
+          cityId:cityIds[Math.floor(Math.random()*cityIds.length)],
+        
+          
+        },
+      }),
+    );
+  }
+
 
   // create dummy services 
   let serviceIds = [];
 
-const serviceNames = ["Domicilation", "Private Space", "Meeting Space", "Co-Working Zone"];
+  const serviceNames = ["Domicilation", "Private Space", "Meeting Space", "Co-Working Zone"];
 
-for (let i = 0; i < serviceNames.length; i++) {
-  let service = await prisma.service.create({
-    data: {
-      name: serviceNames[i],
-     
-    }
-  });
+  for (let i = 0; i < serviceNames.length; i++) {
+    let service = await prisma.service.create({
+      data: {
+        name: serviceNames[i],
 
-  serviceIds.push(service.id);
-}
+      }
+    });
 
-console.log(serviceIds);
+    serviceIds.push(service.id);
+  }
+
+  console.log(serviceIds);
 
 
   console.log(users);

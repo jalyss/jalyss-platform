@@ -44,6 +44,7 @@ export const editEmployee = createAsyncThunk("employees/editEmployee", async (ar
   }
   let id=args.id
   delete args.id
+ 
   const response = await axios.patch(`${config.API_ENDPOINT}/employees/${id}`, args,configs);
   dispatch(fetchEmployee(id))
   return response.data;

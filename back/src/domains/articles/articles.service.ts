@@ -7,13 +7,14 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { filterExample } from './entities/article.entity';
 import { FilterArticle } from './types';
 import { CreateRatingDto } from './dto/create-rating.dto';
+import { UpdateArticleByBranchDto } from './dto/update-article.ByBranch.dto';
 
 @Injectable()
 export class ArticleService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly branchService: BranchesService,
-  ) {}
+  ) { }
 
   async create(dto: CreateArticleDto, branchId: string) {
     return await this.prisma.article.create({
@@ -26,12 +27,13 @@ export class ArticleService {
   findAll() {
     return this.prisma.article.findMany({
       include: {
-        ArticlesByBranch: { include: { rating: true,branch:true } },
+        ArticlesByBranch: { include: { rating: true, branch: true,article:true } },
         media: true,
         cover: true,
         publishingHouse: true,
         category: true,
         type: true,
+
       },
     });
   }
@@ -217,6 +219,12 @@ export class ArticleService {
 
   update(id: string, dto: UpdateArticleDto) {
     return `This action updates a #${id} article`;
+  }
+  async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
+    return await this.prisma.articlesByBranch.update({
+      where: { id }, data: dto
+    })
+
   }
 
   remove(id: string) {

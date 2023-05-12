@@ -65,8 +65,6 @@ export class UsersController {
 
 
 
-
-
   @UseGuards(JwtAuthGuard)
   @ApiSecurity('Aaccess-key')
   @UseInterceptors(ClassSerializerInterceptor) 
