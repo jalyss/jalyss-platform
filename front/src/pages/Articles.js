@@ -72,7 +72,7 @@ function Articles() {
       <div className="filters ">
         <Fragment>
           <Accordion
-            title={t('filter.fl')}
+            title={t('filter.price')}
             content={
               <div className="px-3 pt-3">
                 <Slider
@@ -251,7 +251,7 @@ function Articles() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
-     <p>{t('title')}</p>
+        <p>{t('title')}</p>
         <div className="filters-button">
           <BsFilterSquare onClick={() => setShowFilters(true)} />
         </div>

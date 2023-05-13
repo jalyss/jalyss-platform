@@ -12,7 +12,7 @@ export const fetchArticlesByBranch = createAsyncThunk(
     const identifier = args.identifier
     delete args.identifier
     console.log(args);
-    const response = await axios.get(`${config.API_ENDPOINT}/articles/6b8ec8ce-df4d-4cff-8d10-3e8c96441680`, { params: args });
+    const response = await axios.get(`${config.API_ENDPOINT}/articles/${identifier}`, { params: args });
     return response.data;
   });
 
