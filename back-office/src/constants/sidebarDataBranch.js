@@ -30,7 +30,7 @@ export const sidebarDataBranch = [
     path: "articles",
     children: [
       {
-        nameEn: "articles by branch",
+        nameEn: "Article by branch",
         nameAr: "المنتجات حسب الفرع",
         path: "articles-by-branch",
       },

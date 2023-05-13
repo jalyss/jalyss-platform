@@ -5,7 +5,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-function WhiteSelect({value,onChange,data,helper,height,width,}) {
+function WhiteSelect({value,onChange,data,helper,height,width,color}) {
   return (
     <FormControl className='flex-row align-items-center'>
             <FormHelperText sx={{color:'white'}}>{helper}</FormHelperText>
@@ -20,18 +20,18 @@ function WhiteSelect({value,onChange,data,helper,height,width,}) {
                 width: width,
                 height: height,
 
-                color: "white",
+                color: color || "white",
                 ".MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(228, 219, 233, 0.25)",
+                  borderColor: color || "rgba(228, 219, 233, 0.25)",
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(228, 219, 233, 0.25)",
+                  borderColor: color || "rgba(228, 219, 233, 0.25)",
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(228, 219, 233, 0.25)",
+                  borderColor: color || "rgba(228, 219, 233, 0.25)",
                 },
                 ".MuiSvgIcon-root ": {
-                  fill: "white !important",
+                  fill: color || "white !important",
                 },
               }}
             >
