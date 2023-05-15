@@ -250,7 +250,7 @@ function NavBar() {
                 </ul>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="/*">
+                <a class="nav-link" href="/spaceJalyss">
                   {t('navbar.space')}
                 </a>
               </li>

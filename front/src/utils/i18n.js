@@ -4,7 +4,7 @@ import navbarAr from '../constants/traductions/arabic/navbar.json'
 import navbarEn from '../constants/traductions/english/navbar.json'
 import footerAr from '../constants/traductions/arabic/footer.json'
 import footerEn from '../constants/traductions/english/footer.json'
-import OneArticleAr from '../constants/traductions/arabic/oneArticle.json'
+import OneArticleAr from '../constants/traductions/arabic/OneArticle.json'
 import OneArticleEn from '../constants/traductions/english/OneArticle.json'
 import noPageAr from "../constants/traductions/arabic/noPage.json";
 import noPageEn from "../constants/traductions/english/noPage.json";
