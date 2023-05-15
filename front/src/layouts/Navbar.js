@@ -143,15 +143,15 @@ function NavBar() {
                 )}
                 <div className="text-white mx-2">
                   {authStore.me ? (
-                    <a href="/profile" className="m-0 text-right">
+                    <a href="/profile" className="m-0 text-right text-decoration-none text-white">
                       {authStore.me.fullNameAr}
                     </a>
                   ) : (
                     <>
-                      <a href="/login" className="m-0 text-right">
+                      <a href="/login" className="m-0 text-right text-decoration-none text-white">
                         {t('navbar.account.profile')}
                       </a>
-                      <a href="/signup" className="m-0">
+                      <a href="/signup" className="m-0 text-decoration-none text-white">
                         {t('navbar.account.signup')}
                       </a>
                     </>

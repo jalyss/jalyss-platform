@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  background-color: #fafafa !important;
+
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -19,4 +21,3 @@ code {
 @import url('./assets/styles/signup.css');
 @import url('./assets/styles/layoutStyles.css');
 @import url('./assets/styles/checkout.css');
-
