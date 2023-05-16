@@ -4,7 +4,7 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
-import { GiConfirmed ,GiCancel} from 'react-icons/gi';
+import { GiConfirmed, GiCancel } from 'react-icons/gi';
 import { AiOutlineEye } from 'react-icons/ai';
 import { FcCancel } from 'react-icons/fc';
 import { GrAdd } from 'react-icons/gr';
@@ -18,7 +18,13 @@ import { fetchCommands } from '../../../store/command';
 
 function CommandList() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
+  const [confirm, setConfirm] = useState(false);
+  const [delivery, setDelivery] = useState(false);
+  const [paid, setPaid] = useState(false);
+  const [confirmId, setConfirmId] = useState(null);
+  const [deliveryId, setDeliveryId] = useState(null);
+  const [paidId, setPaidId] = useState(null);
+  
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -46,6 +52,7 @@ function CommandList() {
       headerName: 'PHONE CLIENT ',
       width: 150,
       sortable: false,
+      
 
     },
 
@@ -59,23 +66,13 @@ function CommandList() {
 
         return [
           <GridActionsCellItem
-            icon={<FcCancel size={15} />}
+            icon={paid ? <GiConfirmed size={20} color='#3cb371' /> : <FcCancel size={15} />}
 
             label="confirmPaid"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={() => handlePaid(id)}
             color="inherit"
           />,
-          <GridActionsCellItem
-            icon={<GiConfirmed size={20} color='#3cb371' />}
-
-            label="confirmPaid"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-
-
         ];
 
       },
@@ -86,8 +83,6 @@ function CommandList() {
       headerName: '	HAS DELIVERY',
       width: 150,
       sortable: true,
-
-
     },
     {
       field: 'confirm',
@@ -96,27 +91,22 @@ function CommandList() {
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-
         return [
           <GridActionsCellItem
-            icon={<FcCancel  size={15} />}
-
+            icon={confirm ? <GiConfirmed size={20} color='#3cb371' /> : <FcCancel size={15} />}
             label="confirm"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={() => handleConfirm(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<GiConfirmed size={20} color='#3cb371' />}
-
+            icon={confirm ? <GiConfirmed size={20} color='#3cb371' /> : <FcCancel size={15} />}
             label="confirm"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={() => handleConfirm(id)}
             color="inherit"
           />,
-
         ];
-
       },
     },
     {
@@ -128,18 +118,17 @@ function CommandList() {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<GiCancel color='red' size={15} />}
-
-            label="confirm"
+            icon={delivery ? <GiCancel color='red' size={15} /> : <TbTruckDelivery size={20} />}
+            label="delivered"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={() => handleDelivery(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<TbTruckDelivery size={20} />}
-            label="Edit"
+            label="delivered"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={() => handleDelivery(id)}
             color="inherit"
           />,
 
@@ -204,7 +193,18 @@ function CommandList() {
     }
   }, [commandStore.commands.items])
 
+  const handleConfirm = (confirmId) => {
+    setConfirm(!confirm)
 
+  };
+  const handlePaid = () => {
+    setPaid(!paid)
+
+  };
+  const handleDelivery = () => {
+    setDelivery(!delivery)
+
+  };
 
   const handleEditClick = (id) => {
     console.log(id);

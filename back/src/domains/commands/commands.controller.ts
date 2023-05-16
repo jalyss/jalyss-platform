@@ -41,6 +41,10 @@ export class CommandsController {
   findOne(@Param('id') id: string) {
     return this.commandsService.findOne(id);
   }
+@Get('commandLine/all')
+findAllCommanLIne(){
+  return this.commandsService.findAllCommandLIne();
+}
 
   @Patch(':id')
   update(@Param('id') id: string, 

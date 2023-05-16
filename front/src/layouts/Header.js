@@ -94,7 +94,6 @@ function Header() {
             <div className="text-white mx-2">
               <a href="/Login" className="m-0 text-right">
                 {t("navbar.account.profile")}
-                
                 </a>
               <a href="/Signup" className="m-0" >
                 {t("navbar.account.signup")}

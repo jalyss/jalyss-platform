@@ -95,6 +95,15 @@ export class CommandsService {
     });
   }
 
+async findAllCommandLIne(){
+  return await this.prisma.commandLine.findMany({
+    include :{
+      articleByBranch:{include:{article:{include:{category:true}},branch:true}}
+    }
+  })
+
+}
+
   async update(id: string, dto: UpdateCommandDto) {
     const branchId = (await this.prisma.command.findFirstOrThrow({
       where: {

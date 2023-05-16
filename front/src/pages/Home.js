@@ -8,6 +8,7 @@ import { fetchPublishingHouses } from '../store/publishingHouse'
 import { fetchArticlesByBranch } from '../store/article'
 import { identifier } from '../constants/identifier/identifier'
 import ArticleCard from '../components/ArticleCard'
+import TrainingHeading from '../components/TrainingHeading'
 
 function Home() {
   const { t, i18n } = useTranslation()
@@ -35,6 +36,9 @@ function Home() {
           </div>
         ))}
       </HorizontalMenu>
+      <TrainingHeading title="Best Sellers"/>
+
+      
       <HorizontalMenu>
         {articleStore.articles.items.map((element) => (
           <div key={element.id} className="horizontal-item horizontal-item-article">
