@@ -58,14 +58,22 @@ const Charts = () => {
       </div>
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: 1, marginTop: 20 }}>
         <section style={{ height: 500, width: 500, marginLeft: 80 }}>
-          <h3 style={{ textAlign: 'center' }}> TOP 5 USERS JOB</h3>
-          <Charts1 />
+          <h3 style={{ textAlign: 'center' }}> MOST-SELLING CATEGORIES</h3>
+          <Charts4 />
         </section>
 
         <section style={{ height: 600, width: 500 }}>
-          <h3 style={{ textAlign: 'center' }}>  TRANSCATION</h3>
+          <h3 style={{ textAlign: 'center' }}>  MOST ARTICLES SELLS</h3>
           <Charts3 />
         </section>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: 1, marginTop: 20 }}>
+        <div>
+          <section style={{ height: 500, width: 500, marginLeft: 80 }}>
+            <h3 style={{ textAlign: 'center' }}>MOST USERS JOB</h3>
+            <Charts1 />
+          </section>
+        </div>
       </div>
     </div>
   )

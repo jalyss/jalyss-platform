@@ -32,14 +32,14 @@ const Charts2 = () => {
         const month = date.toLocaleString("default", { month: "long" });
         return `${month} ${year}`;
       });
-      console.log(dates);
+      // console.log(dates);
       setData1(dates);
     }
 
   }, [commandStore.commands.items])
-
-
-  console.log(data1);
+  const dataCount = data1.filter(e => e === "mai 2023").length
+  //console.log(data1);
+  //console.log(dataCount);
   //commandStore.commands.items.forEach(order => {
   //const date = new Date(order.createdAt);
   //const month = date.toLocaleString('default', { month: 'long' });
@@ -75,23 +75,23 @@ const Charts2 = () => {
   const data = [
 
     {
-      "name": data1[0],
-      "orders": 56,
+      "name": 'January',
+      "orders": 0,
       "amt": 2400
     },
     {
       "name": "February",
-      "orders": 43,
+      "orders": 0,
       "amt": 2210
     },
     {
       "name": "March",
-      "orders": 39,
+      "orders": 0,
       "amt": 2290
     },
     {
-      "name": " April",
-      "orders": 21,
+      "name": data1[0],
+      "orders": dataCount,
       "amt": 2000
     },
 
@@ -99,24 +99,24 @@ const Charts2 = () => {
 
 
   return (
-    
-      <div className="App">
-        <AreaChart width={1000} height={500} data={data}
-          margin={{ top: 10, right: 50, left: -20, bottom: 0 }}>
-          <defs>
-            <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Area type="monotone" dataKey="orders" stroke="#8884d8" fillOpacity={1} fill="url(#colorOrders)" />
-        </AreaChart>
-      </div>
-    
+
+    <div className="App">
+      <AreaChart width={1000} height={500} data={data}
+        margin={{ top: 10, right: 50, left: -20, bottom: 0 }}>
+        <defs>
+          <linearGradient id="colorOrders" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="name" />
+        <YAxis />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Tooltip />
+        <Area type="monotone" dataKey="orders" stroke="#8884d8" fillOpacity={1} fill="url(#colorOrders)" />
+      </AreaChart>
+    </div>
+
 
   );
 };

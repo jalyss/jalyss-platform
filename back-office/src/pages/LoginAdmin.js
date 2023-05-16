@@ -1,94 +1,136 @@
 import React, { useState } from 'react'
-
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { loginAdmin } from '../store/auth'
 import { useNavigate } from 'react-router-dom'
 import { showErrorToast } from '../utils/toast'
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function LoginAdmin() {
-  const { t, i18n } = useTranslation()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isShowPassword, setIsShowPassword] = useState(false)
-  const dispatch = useDispatch()
+function Copyright(props) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" href="">
+                Your Website
+            </Link>
 
-  const submitLogin = async (event) => {
-    event.preventDefault();
-    dispatch(loginAdmin({ email: email, password: password }))
-      .then(res => {
-        if (res.error) {
-          showErrorToast(res.error.message)
-        }
-      })
-  }
-
-
-  return (
-    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>{t('login')}</h2>
-      <form className="checkout-form" onSubmit={submitLogin}>
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="email">
-              {t('address')}<span style={{ color: 'red' }}>*</span>
-            </label>
-            <input
-              required
-              class="form-control mt-2"
-              type="email"
-              id="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3">
-            <label for="password">
-             {t('mdp')}<span style={{ color: 'red' }}>*</span>
-            </label>
-            <div className=" d-flex ">
-              <input
-                class="form-control mt-2 w-100"
-                required
-                id="password"
-                type={isShowPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-              <div className='w-0 position-relative' >
-                <div
-                  style={{
-
-                    left: i18n.languages[0] === 'ar' ? 15 : -25,
-                    top: 15
-
-                  }}
-                  className="icon-eye"
-                  onClick={() => setIsShowPassword(!isShowPassword)}
-                >
-                  {isShowPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-        
-          <a href='reset-password' className="text-center">{t('forgetpass')}</a>
-        
-        <div className="w-100 d-flex justify-content-center">
-          <button type="submit" className="confirm-button mt-3" onSubmit={submitLogin}>
-            <span className="label-btn"> {t('btnlogin')}</span>
-          </button>
-        </div>
-      </form>
-      
-    </div>
-  )
+        </Typography>
+    );
 }
 
+const theme = createTheme();
+
+function LoginAdmin() {
+    const { t, i18n } = useTranslation()
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isShowPassword, setIsShowPassword] = useState(false)
+    const dispatch = useDispatch()
+
+    const submitLogin = async (event) => {
+        event.preventDefault();
+        dispatch(loginAdmin({ email: email, password: password }))
+            .then(res => {
+                if (res.error) {
+                    showErrorToast(res.error.message)
+                }
+            })
+    }
+
+
+    return (
+        <ThemeProvider theme={theme}>
+            <Grid container component="main" sx={{ height: '100vh' }}>
+                <CssBaseline />
+                <Grid
+                    item
+                    xs={false}
+                    sm={4}
+                    md={7}
+                    sx={{
+                        backgroundImage: 'url(https://wallpaper-house.com/data/out/8/wallpaper2you_231925.jpg)',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundColor: (t) =>
+                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                    }}
+                />
+                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+                    <Box
+                        sx={{
+                            my: 8,
+                            mx: 4,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Login
+                        </Typography>
+                        <Box component="form" noValidate onSubmit={submitLogin} sx={{ mt: 1 }}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                type='email'
+                                id="email"
+                                label="Email Address"
+                                name="email"
+                                autoComplete="email"
+                                autoFocus
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                            />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
+
+                            />
+                            <FormControlLabel
+                                control={<Checkbox value="remember" color="primary" />}
+                                label="Remember me"
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                               Login
+                            </Button>
+                            
+                            <Copyright sx={{ mt: 5 }} />
+                        </Box>
+                    </Box>
+                </Grid>
+            </Grid>
+        </ThemeProvider>
+    );
+}
 export default LoginAdmin 

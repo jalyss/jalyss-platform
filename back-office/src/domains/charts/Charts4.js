@@ -1,37 +1,76 @@
 import React from 'react'
 import { ResponsiveBar } from '@nivo/bar'
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { fetchCommandLine, fetchCommands } from '../../store/command';
 
 function Charts4() {
+    const dispatch = useDispatch()
+    const commandStore = useSelector((state) => state.command)
+    const [category, setCategory] = useState([])
+    const [branch, setBranch] = useState([])
+
+
+    useEffect(() => {
+        dispatch(fetchCommandLine())
+    }, [dispatch])
+
+    useEffect(() => {
+        if (commandStore.commandLines.items.length > 0) {
+            const branchs = commandStore.commandLines.items.map((e) => {
+                const branch1 = e.articleByBranch.branch.name
+                return `${branch1}`;
+            })
+            setBranch(branchs);
+        }
+    }, [commandStore.commandLines.items])
+    useEffect(() => {
+        if (commandStore.commandLines.items.length > 0) {
+            const categories = commandStore.commandLines.items.map((e) => {
+                const category = e.articleByBranch.article.category.nameEn
+                return `${category}`;
+            })
+            setCategory(categories);
+        }
+    }, [commandStore.commandLines.items])
+
+    console.log(category);
+    console.log(branch);
+
+    console.log(commandStore.commandLines.items);
+
+
     const data = [
         {
-            "branch": "Tunisia",
-            "personnel development": 193,
-            "personnel developmentColor": "hsl(150, 70%, 50%)",
-            "business": 108,
-            "businessColor": "hsl(321, 70%, 50%)",
-            "psychology": 35,
-            "psychologyColor": "hsl(285, 70%, 50%)",
-            "novels": 136,
-            "novelsColor": "hsl(25, 70%, 50%)",
-            "philosophy": 167,
-            "philosophyColor": "hsl(270, 70%, 50%)",
-            "civilization": 75,
-            "civilizationColor": "hsl(85, 70%, 50%)"
+            "branch": branch,
+            "Personnel development": 41,
+            "personnel developmentColor": "hsl(26, 70%, 50%)",
+            "Business": 33,
+            "businessColor": "hsl(10, 70%, 50%)",
+            "Psychology": 28,
+            "psychologyColor": "hsl(350, 70%, 50%)",
+            "Novels": 22,
+            "novelsColor": "hsl(253, 70%, 50%)",
+            "Philosophy": 11,
+            "philosophyColor": "hsl(63, 70%, 50%)",
+            "Awareness": 30,
+            "warenessColor": "hsl(46, 70%, 50%)"
         },
         {
             "branch": "Marroc",
-            "personnel development": 124,
+            "Personnel development": 0,
             "personnel developmentColor": "hsl(26, 70%, 50%)",
-            "business": 44,
+            "Business": 0,
             "businessColor": "hsl(10, 70%, 50%)",
-            "psychology": 60,
+            "Psychology": 0,
             "psychologyColor": "hsl(350, 70%, 50%)",
-            "novels": 34,
+            "Novels": 0,
             "novelsColor": "hsl(253, 70%, 50%)",
-            "philosophy": 3,
+            "Philosophy": 0,
             "philosophyColor": "hsl(63, 70%, 50%)",
-            "civilization": 114,
-            "civilizationColor": "hsl(46, 70%, 50%)"
+            "Awareness": 0,
+            "AwarenessColor": "hsl(46, 70%, 50%)"
         },
 
     ]
@@ -39,19 +78,19 @@ function Charts4() {
         <ResponsiveBar
             data={data}
             keys={[
-                'personnel development',
-                'business',
-                'psychology',
-                'novels',
-                'philosophy',
-                'civilization'
+                'Personnel development',
+                'Business',
+                'Psychology',
+                'Novels',
+                'Philosophy',
+                'Awareness'
             ]}
             indexBy="branch"
-            margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+            margin={{ top: 50, right: 180, bottom: 50, left: 60 }}
             padding={0.2}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'nivo' }}
+            colors={{ scheme: 'blue_purple' }}
             defs={[
                 {
                     id: 'dots',
@@ -75,13 +114,13 @@ function Charts4() {
             fill={[
                 {
                     match: {
-                        id: 'philosophy'
+                        id: 'Philosophy'
                     },
                     id: 'dots'
                 },
                 {
                     match: {
-                        id: 'psychology'
+                        id: 'Psychology'
                     },
                     id: 'lines'
                 }
@@ -101,7 +140,7 @@ function Charts4() {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'branch',
+                legend: 'BRANCH',
                 legendPosition: 'middle',
                 legendOffset: 32
             }}
@@ -109,7 +148,7 @@ function Charts4() {
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'category',
+                legend: 'CATEGORY',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
