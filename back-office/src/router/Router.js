@@ -63,8 +63,8 @@ function Router() {
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
             </Route>
-
-            <Route path="charts" element={<Charts />} />
+{/* 
+            <Route path="charts" element={<Charts />} /> */}
 
             <Route path="command" element={<Command />}>
               <Route index element={<CommandList />} />

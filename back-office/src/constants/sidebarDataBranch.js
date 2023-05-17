@@ -5,24 +5,47 @@ export const sidebarDataBranch = [
     path: "charts",
     children: [],
   },
-
   {
-    nameEn: "User",
-    nameAr: "المستخدم",
-    path: "user",
-    children: []
-  },
-  {
-    nameEn: "Employee",
-    nameAr: "الموظف",
-    path: "employee",
-    children: []
+    nameEn: "Roles",
+    nameAr: "الادوار",
+    path: "role",
+    children: [
+      {
+        nameEn: "User",
+        nameAr: "المستخدم",
+        path: "user",
+      },
+      {
+        nameEn: "Employee",
+        nameAr: "الموظف",
+        path: "employee",
+      },
+    ],
   },
   {
     nameEn: "Orders",
     nameAr: "الطلبات",
     path: "command",
-    children: []
+    children: [
+      {
+        nameEn: "All orders",
+        nameAr: "كل الطلبات",
+        path: "command",
+        children: [],
+      },
+      {
+        nameEn: "Non deliverd orders",
+        nameAr: "طلبات لم يتم تسليمها",
+        path: "command",
+        children: [],
+      },
+      {
+        nameEn: "Delivered orders",
+        nameAr: "طلبات تم تسليمها",
+        path: "command",
+        children: [],
+      },
+    ],
   },
   {
     nameEn: "Article",
@@ -35,6 +58,5 @@ export const sidebarDataBranch = [
         path: "articles-by-branch",
       },
     ],
-  }
-
+  },
 ];

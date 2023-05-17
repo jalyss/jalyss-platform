@@ -31,6 +31,19 @@ export class CommandsController {
   findAll() {
     return this.commandsService.findAll();
   }
+
+  @Get('/ nonDeliveredCommands')
+  async  nonDeliveredCommands() {
+    const commands = await this.commandsService. nonDeliveredCommands();
+    return commands;
+  }
+
+  @Get('/fetchDeliveredCommands')
+  async fetchDeliveredCommands() {
+    const commands = await this.commandsService.fetchDeliveredCommands();
+    return commands;
+  }
+
   @Get(':branchId')
   findAllByBranchId(@Param('branchId') branchId: string,
   @Query() filters:FilterCommand) {

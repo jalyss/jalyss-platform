@@ -7,6 +7,14 @@ export const fetchCommands = createAsyncThunk("commands/commands", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/commands/TUN`);
   return response.data;
 });
+
+export const  nonDeliveredCommands = createAsyncThunk("commands/commands", async () => {
+  const response = await axios.get(`${config.API_ENDPOINT}/commands/nonDeliveredCommands`);
+  const commands = response.data;
+  const  nonDeliveredCommands = commands.filter(command => !command.hasDelivery);
+  return  nonDeliveredCommands;
+});
+
 export const fetchCommand = createAsyncThunk("commands/command", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/commands/one/${id}`);
   return response.data;
@@ -53,5 +61,3 @@ export const commandSlice = createSlice({
   },
 });
 export default commandSlice.reducer;
-
-
