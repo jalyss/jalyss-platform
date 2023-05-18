@@ -8,81 +8,76 @@ import { Box, Typography } from '@mui/material';
 function Sidebar() {
   const isEng = isEnglish();
   const location = useLocation();
-  const [activeDropdown, setActiveDropdown] = useState('');
 
-  const handleDropdownClick = (path) => {
-    setActiveDropdown(path === activeDropdown ? '' : path);
+  const [activeItems, setActiveItems] = useState([]);
+
+  const handleItemClick = (path) => {
+    if (activeItems.includes(path)) {
+      setActiveItems(activeItems.filter((item) => item !== path));
+    } else {
+      setActiveItems([path]);
+    }
+  };
+
+  const isItemActive = (path) => {
+    return activeItems.includes(path);
+  };
+
+  const isChildActive = (path) => {
+    return location.pathname.endsWith(path);
   };
 
   return (
     <Box
       className="sidebar"
-      borderRight={isEng && '1px solid #d9d9d9'}
-      borderLeft={!isEng && '1px solid #d9d9d9'}
+      borderRight={isEng ? '1px solid #d9d9d9' : 'none'}
+      borderLeft={!isEng ? '1px solid #d9d9d9' : 'none'}
     >
       <div className="d-flex justify-content-center align-items-center">
         <img width={120} src={Logo} alt="logo" />
       </div>
       {sidebarDataBranch.map((elem, index) => {
-        const isActive =
-          location.pathname.substring(location.pathname.lastIndexOf('/') + 1) === elem.path;
-        const isDropdownActive = elem.children.length > 0 && elem.path === activeDropdown;
-        const hasChildren = elem.children.length > 0;
-
+        const isActive = isItemActive(elem.path);
         return (
           <div key={index}>
-            {hasChildren ? (
-              <div
-                onClick={() => handleDropdownClick(elem.path)}
-                style={{
-                  borderLeft: isActive && !isEng ? '2px solid #48184c' : '',
-                  borderRight: isActive && isEng ? '2px solid #48184c' : '',
-                }}
-                className={`sidebarItem ${isActive ? 'activeSidebarItem' : ''}`}
-              >
-                <Typography fontWeight={isActive ? 'bold' : 'normal'}>
-                  {isEng ? elem.nameEn : elem.nameAr}
-                </Typography>
-              </div>
-            ) : (
-              <Link
-                to={'/' + elem.path}
-                style={{
-                  borderLeft: isActive && !isEng ? '2px solid #48184c' : '',
-                  borderRight: isActive && isEng ? '2px solid #48184c' : '',
-                }}
-                className={`sidebarItem ${isActive ? 'activeSidebarItem' : ''}`}
-              >
-                <Typography fontWeight={isActive ? 'bold' : 'normal'}>
-                  {isEng ? elem.nameEn : elem.nameAr}
-                </Typography>
-              </Link>
-            )}
-
-            {isDropdownActive &&
-              elem.children.map((el, j) => {
-                const isActiveChildren =
-                  location.pathname.substring(location.pathname.lastIndexOf('/') + 1) === el.path;
-
-                return (
-                  <div key={j}>
+            <div
+              onClick={() => handleItemClick(elem.path)}
+              style={{
+                borderLeft: isActive && !isEng && '2px solid #48184c',
+                borderRight: isActive && isEng && '2px solid #48184c',
+              }}
+              className={`sidebarItem ${isActive && 'activeSidebarItem'}`}
+            >
+              <Typography fontWeight={isActive && 'bold'}>
+                {isEng ? elem.nameEn : elem.nameAr}
+              </Typography>
+            </div>
+            {isActive && elem.children.length > 0 && (
+              <div className="sidebarChildren">
+                {elem.children.map((el, j) => {
+                  const isActiveChildren = isChildActive(elem.path + '/' + el.path);
+                  return (
                     <Link
-                      to={'/' + el.path}
+                      key={j}
+                      to={elem.path + '/' + el.path}
                       style={{
-                        paddingLeft: isEng ? '50px' : '',
-                        paddingRight: !isEng ? '50px' : '',
-                        borderLeft: isActiveChildren && !isEng ? '2px solid #48184c' : '',
-                        borderRight: isActiveChildren && isEng ? '2px solid #48184c' : '',
+                        paddingLeft: isEng && '50px',
+                        paddingRight: !isEng && '50px',
+                        borderLeft: isActiveChildren && !isEng && '2px solid #48184c',
+                        borderRight: isActiveChildren && isEng && '2px solid #48184c',
                       }}
-                      className={`sidebarItem ${isActiveChildren ? 'activeSidebarItem' : ''}`}
+                      className={`sidebarItem ${
+                        isActiveChildren && 'activeSidebarItem'
+                      }`}
                     >
-                      <Typography fontWeight={isActiveChildren ? 'bold' : 'normal'}>
+                      <Typography fontWeight={isActiveChildren && 'bold'}>
                         • {isEng ? el.nameEn : el.nameAr}
                       </Typography>
                     </Link>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+            )}
           </div>
         );
       })}
@@ -90,4 +85,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar
+export default Sidebar;
