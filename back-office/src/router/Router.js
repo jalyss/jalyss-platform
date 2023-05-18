@@ -27,8 +27,7 @@ import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
-import CommandsNonDelivered from "../domains/commands/views/CommandsNonDelivered";
-import CommandsDelivered from "../domains/commands/views/CommandsDelivered";
+
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -48,7 +47,7 @@ function Router() {
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="user" element={<User />}>
+            <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
               <Route path="edit/:userId" element={<EditUser />} />
@@ -67,12 +66,10 @@ function Router() {
 {/* 
             <Route path="charts" element={<Charts />} /> */}
 
-            <Route path="command" element={<Command />}>
+            <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
               <Route path="create" element={<CreateCommand />} />
               <Route path="edit/:commandId" element={< EditCommand />} />
-              <Route path="delivered" element={<CommandsDelivered />} />
-              <Route path="non-delivered" element={<CommandsNonDelivered/>} />
             </Route>
           </Route>
         ) : (

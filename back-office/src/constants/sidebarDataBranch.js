@@ -6,9 +6,106 @@ export const sidebarDataBranch = [
     children: [],
   },
   {
+    nameEn: "Branches",
+    nameAr: "المنتج ",
+    path: "branches",
+    children: [],
+  },
+  {
+    nameEn: "Supplying",
+    nameAr: "توريد",
+    path: "suppluing",
+    children: [
+      {
+        nameEn: "Articles",
+        nameAr: "المنتجات ",
+        path: "articles",
+      },
+      {
+        nameEn: "Articles by branch",
+        nameAr: "المنتجات حسب الفرع",
+        path: "articles/articles-by-branch",
+      },
+      {
+        nameEn: "Providers",
+        nameAr: "المزوّد",
+        path: "provider",
+      },
+      {
+        nameEn: "Category",
+        nameAr: "الفئة",
+        path: "category",
+      },
+      {
+        nameEn: "Type",
+        nameAr: "نوع",
+        path: "type",
+      },
+      {
+        nameEn: "Publishing house",
+        nameAr: "دار النشر",
+        path: "publishing-house",
+      },
+      {
+        nameEn: "Author",
+        nameAr: "المؤلف",
+        path: "author",
+      },
+    ],
+  },
+  {
+    nameEn: "Sellings",
+    nameAr: "المبيعات",
+    path: "Sellings",
+    children: [
+      {
+        nameEn: "Orders list",
+        nameAr: "الطلبات ",
+        path: "commands",
+      },
+      {
+        nameEn: "List of users",
+        nameAr: "المستخدم",
+        path: "users"
+      },
+      {
+        nameEn: "Client",
+        nameAr: "المستخدم",
+        path: "client"
+      },
+      {
+        nameEn: "Space",
+        nameAr: "الفضاء ",
+        path: "space",
+      },
+      {
+      nameEn: "Trainings",
+      nameAr: "المبيعات ",
+      path: "trainings",
+      },
+    ],
+  },
+  {
+    nameEn: "Interactions",
+    nameAr: "المنتج ",
+    path: "Interactions",
+    children: [
+      {
+        nameEn: "Blogs",
+        nameAr: "المدونات",
+        path: "blogs",
+      },
+      {
+        nameEn: "chat",
+        nameAr: "المحادثة",
+        path: "chat",
+      },
+    ],
+  },
+  {
     nameEn: "Admin settings",
     nameAr: " اعدادات المشرف",
-    path: "",
+    path: "settings",
     children: [
       {
         nameEn: "Employee",
@@ -19,103 +116,6 @@ export const sidebarDataBranch = [
         nameEn: "Roles",
         nameAr: "الادوار",
         path: "role",
-      },
-    ],
-  },
-  {
-    nameEn: "Supplying",
-    nameAr: "توريد",
-    path: "",
-    children: [
-      {
-        nameEn: "Article",
-        nameAr: "المنتج ",
-        path: "articles",
-      },
-      {
-        nameEn: "Article by branch",
-        nameAr: "المنتجات حسب الفرع",
-        path: "articles-by-branch",
-      },
-      {
-        nameEn: "Providers",
-        nameAr: "المزوّد",
-        path: "",
-      },
-      {
-        nameEn: "Category",
-        nameAr: "الفئة",
-        path: "",
-      },
-      {
-        nameEn: "Type",
-        nameAr: "نوع",
-        path: "",
-      },
-      {
-        nameEn: "Publishing house",
-        nameAr: "دار النشر",
-        path: "",
-      },
-      {
-        nameEn: "Author",
-        nameAr: "المؤلف",
-        path: "",
-      },
-    ],
-  },
-  {
-    nameEn: "Branchs",
-    nameAr: "المنتج ",
-    path: "",
-    children: [],
-  },
-  {
-    nameEn: "Iteration",
-    nameAr: "المنتج ",
-    path: "articles",
-    children: [
-      {
-        nameEn: "Blogs",
-        nameAr: "المدونات",
-        path: "articles",
-      },
-      {
-        nameEn: "chat",
-        nameAr: "المحادثة",
-        path: "articles",
-      },
-    ],
-  },
-  {
-    nameEn: "Sellings",
-    nameAr: "المبيعات",
-    path: "articles",
-    children: [
-      {
-        nameEn: "Orders list",
-        nameAr: "الطلبات ",
-        path: "articles",
-      },
-      {
-        nameEn: "List of users",
-        nameAr: "المستخدم",
-        path: "user"
-      },
-      {
-        nameEn: "Client",
-        nameAr: "المستخدم",
-        path: "user"
-      },
-      {
-        nameEn: "Space",
-        nameAr: "الفضاء ",
-        path: "user",
-      },
-      {
-      nameEn: "Sellings",
-      nameAr: "المبيعات ",
-      path: "",
       },
     ],
   },
