@@ -47,7 +47,7 @@ function Router() {
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="user" element={<User />}>
+            <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
               <Route path="edit/:userId" element={<EditUser />} />
@@ -63,10 +63,10 @@ function Router() {
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
             </Route>
+{/* 
+            <Route path="charts" element={<Charts />} /> */}
 
-            <Route path="charts" element={<Charts />} />
-
-            <Route path="command" element={<Command />}>
+            <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
               <Route path="create" element={<CreateCommand />} />
               <Route path="edit/:commandId" element={< EditCommand />} />

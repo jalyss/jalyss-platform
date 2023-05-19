@@ -1,6 +1,6 @@
 .sidebar {
   width: 260px;
-  height: 100vh;
+  height: 100%;
   color: white;
   position: fixed;
   background: white;
@@ -10,7 +10,17 @@
 }
 .sidebarContent {
   text-decoration: none;
+  overflow-y:scroll;
+  height: 100%;
+  padding-top: 50px;
+
 }
+.sidebarContent::-webkit-scrollbar{
+  display: none;
+  }
+  .sidebarContent::-webkit-scrollbar-thumb{
+    
+  }
 .sidebarItem {
   text-size-adjust: 100%;
   white-space: nowrap;
