@@ -137,18 +137,5 @@ async findAllCommandLIne(){
     return `This action removes a #${id} command`;
   }
 
-  async nonDeliveredCommands() {
-    const commands = await this.prisma.command.findMany();
-
-    const filteredCommands = commands.filter((command) => !command.hasDelivery);
-    return filteredCommands;
-  }
-
-  async fetchDeliveredCommands() {
-    const commands = await this.prisma.command.findMany();
-
-    const filteredCommands = commands.filter((command) => command.hasDelivery);
-    return filteredCommands;
-  }
 
 }

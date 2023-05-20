@@ -26,7 +26,7 @@ export const login = createAsyncThunk(
     );
     let aux = JSON.stringify(response.data);
     localStorage.setItem("token", aux);
-    dispatch(me());
+   ;
     return response.data;
   }
 );

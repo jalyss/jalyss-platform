@@ -1,15 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Query,UseGuards } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { FilterBlog } from './entities/blog.entity';
+import {ApiTags,ApiSecurity} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/currentUser';
 
+@ApiTags('blogs')
 @Controller('blogs')
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createBlogDto: CreateBlogDto) {
+  create(@CurrentUser() user: any,@Body() createBlogDto: CreateBlogDto) {
     return this.blogsService.create(createBlogDto);
   }
 
