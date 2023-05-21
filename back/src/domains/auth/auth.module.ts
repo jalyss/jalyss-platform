@@ -16,8 +16,6 @@ import { EmployeeService } from '../employee/employee.service';
 
 @Module({
   imports: [
-    
-    UsersModule,
     PassportModule.register({
       defaultStrategy: 'jwt',
       property: 'user',
