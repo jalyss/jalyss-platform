@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Button, Typography, Form } from "antd";
 import QuillEditor from "../components/QuillEditor";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { createBlog } from "../store/blog";
 
 const { Title } = Typography;
 
 const BlogsForm = () => {
+  const dispatch = useDispatch();
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
 
@@ -28,40 +29,20 @@ const BlogsForm = () => {
     }
   }, []);
 
-  const decoded = jwt.verify(token, "your secret or key");  
-var userId = decoded.id  
-console.log(userId)  
-
   const handleClearStorage = () => {
     localStorage.clear();
     setContent("");
   };
 
-  const handleSubmit = async () => {
-    try {
-
-      const response = await axios.post(
-        `localhost:3000/api/v1/blogs`,
-        {body:{
-          content,
-          userId,
-          categoryId,
-        }
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem("bearer"+json.parse(localstorage.getItem("token")).Authorization)
-          },
-        }
-      );
-      const data = response.data;
-console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-    
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    let body = {
+      content,
+      categoryId: "62ddd786-10a1-47fd-a412-a3175f171a4c",
+    };
+    dispatch(createBlog(body));
   };
-  
+
   return (
     <div>
       <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
@@ -74,11 +55,20 @@ console.log(data);
           onFilesChange={onFilesChange}
         />
 
-      
-            <Button onClick={handleSubmit} >
-              Submit
+        {/* <textarea value={text} onChange={(e) => setText(e.target.value)} /> */}
+        <form onSubmit={handleSubmit}>
+          {/* select category required */}
+          <div style={{ textAlign: "center", margin: "2rem auto" }}>
+            <Button
+              size="large"
+              htmlType="submit"
+              className=""
+              onSubmit={handleSubmit}
+            >
+              submit
             </Button>
-          
+          </div>
+        </form>
       </div>
       <div>
         <h2>Content from localStorage:</h2>

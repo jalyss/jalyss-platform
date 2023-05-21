@@ -3,22 +3,22 @@ import styled from "styled-components";
 import { FaFire } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { blogss, trendingblogss } from "../constants/BlogsData";
-import {Fade} from "react-reveal";
+import { Fade } from "react-reveal";
 import landingPerson from "../assets/styles/landingPerson.json";
 import data from "../assets/styles/data.json";
 import DisplayLottie from "./DisplayLottie";
 import DocumentMeta from "react-document-meta";
 import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faHeart } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function Blogs() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(blogss);
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
-  const { t, i18n } = useTranslation()
-  const meta = useMeta(t('blog.title'), t('blog.description'))
+  const { t, i18n } = useTranslation();
+  const meta = useMeta(t("blog.title"), t("blog.description"));
 
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
@@ -28,117 +28,135 @@ function Blogs() {
   };
   return (
     <DocumentMeta {...meta} className="container-fluid">
-    <div>
-      <Fade bottom duration={1000} distance="40px">
-        <Containerr style={{alignItems:'normal',height: "600px" , margin:"0 70px"}}>
-          <div className="d-flex align-items-center justify-content-center  " style={{margin:30}}>
-            <div className="col-lg-6">
-              {/* <GreetingMain> */}
-                <GreetingTextDiv style={{margin:20}}>
-                <GreetingText>Welcome to Jalyss Blog <br />👋</GreetingText>
+      <div>
+        <Fade bottom duration={1000} distance="40px">
+          <Containerr
+            style={{ alignItems: "normal", height: "600px", margin: "0 70px" }}
+          >
+            <div
+              className="d-flex align-items-center justify-content-center  "
+              style={{ margin: 30 }}
+            >
+              <div className="col-lg-6">
+                {/* <GreetingMain> */}
+                <GreetingTextDiv style={{ margin: 20 }}>
+                  <GreetingText>
+                    Welcome to Jalyss Blog <br />
+                    👋
+                  </GreetingText>
 
                   <GreetingSubTitle>{greeting.subTitle}</GreetingSubTitle>
                   <GreetingButtonDiv>
-                    <GreetingButton $primary> <NoStyle href="#blogListWrapper" >Explore &#9654;</NoStyle>
- </GreetingButton>
-                    <GreetingButton onClick={()=>{navigate('/BlogsForm')}}>Write yours</GreetingButton>
+                    <GreetingButton $primary>
+                      {" "}
+                      <NoStyle href="#blogListWrapper">Explore &#9654;</NoStyle>
+                    </GreetingButton>
+                    <GreetingButton
+                      onClick={() => {
+                        navigate("/BlogsForm");
+                      }}
+                    >
+                      Write yours
+                    </GreetingButton>
                   </GreetingButtonDiv>
                 </GreetingTextDiv>
-              {/* </GreetingMain> */}
+                {/* </GreetingMain> */}
+              </div>
+              <div className="col-lg-6">
+                <GreetingImageDiv>
+                  <LandingPerson animationData={landingPerson} />
+                </GreetingImageDiv>
+              </div>
             </div>
-            <div className="col-lg-6">
-              <GreetingImageDiv>
-                <LandingPerson animationData={landingPerson} />
-              </GreetingImageDiv>
+          </Containerr>
+        </Fade>
+        <Fade bottom duration={3000} distance="40px">
+          <Containerr style={{ alignItems: "normal", margin: "0 70px" }}>
+            <div className=" d-flex align-items-center">
+              <div className="col-lg-6">
+                <GreetingImageDivv>
+                  <LandingPerson animationData={data} />
+                </GreetingImageDivv>
+              </div>
+              <div className="col-lg-6">
+                <GreetingMain>
+                  <GreetingTextDiv>
+                    <GreetingText>
+                      Trending on Jalyss <br /> <FaFire />
+                    </GreetingText>
+                    <div className="d-flex flex-wrap justify-content-center">
+                      {trendingBlogs.map((blog, index) => (
+                        <BlogContainer key={blog.id}>
+                          <BlogNumber>{`${(index + 1)
+                            .toString()
+                            .padStart(2, "0")}`}</BlogNumber>
+                          <BlogAuthorAvatar
+                            src={blog.authorAvatar}
+                            alt={blog.authorName}
+                          />
+                          <BlogDetails>
+                            <BlogAuthorName>{blog.authorName}</BlogAuthorName>
+                            <BlogTitle>{blog.title}</BlogTitle>
+                            <BlogCreatedAt>{blog.createdAt}</BlogCreatedAt>
+                          </BlogDetails>
+                        </BlogContainer>
+                      ))}
+                    </div>
+                  </GreetingTextDiv>
+                </GreetingMain>
+              </div>
             </div>
-          </div>
-        </Containerr>
-      </Fade>
-      <Fade bottom duration={3000} distance="40px">
-        <Containerr style={{alignItems:'normal', margin:"0 70px"}}>
-          <div className=" d-flex align-items-center">
-            <div className="col-lg-6">
-              <GreetingImageDivv>
-                <LandingPerson animationData={data} />
-              </GreetingImageDivv>
-            </div>
-            <div className="col-lg-6">
-              <GreetingMain>
-                <GreetingTextDiv>
-                  <GreetingText>
-                    Trending on Jalyss <br /> <FaFire /> 
-                  </GreetingText>
-                  <div className="d-flex flex-wrap justify-content-center">
-                    {trendingBlogs.map((blog, index) => (
-                      <BlogContainer key={blog.id}>
-                        <BlogNumber>{`${(index + 1)
-                          .toString()
-                          .padStart(2, "0")}`}</BlogNumber>
-                        <BlogAuthorAvatar
-                          src={blog.authorAvatar}
-                          alt={blog.authorName}
-                        />
-                        <BlogDetails>
-                          <BlogAuthorName>{blog.authorName}</BlogAuthorName>
-                          <BlogTitle>{blog.title}</BlogTitle>
-                          <BlogCreatedAt>{blog.createdAt}</BlogCreatedAt>
-                        </BlogDetails>
-                      </BlogContainer>
-                    ))}
-                  </div>
-                </GreetingTextDiv>
-              </GreetingMain>
-            </div>
-          </div>
-        </Containerr>
-      </Fade>
+          </Containerr>
+        </Fade>
 
-      <Separator />
-      
+        <Separator />
 
-
-      <SearchBarWrap id="blogListWrapper">
-        <SearchForm>
-          <SearchInput type="text" placeholder="Search By Category" />
-          <GoButton>Go</GoButton>
-        </SearchForm>
-      </SearchBarWrap>
-      <BlogListWrapper  >
-        {blogs.map((blog, i) => (
-          <BlogItemWrapper key={blog.id}  onClick={() => navigate(`/blogs/${i}`)}    style={{ cursor: "pointer" }}>
-            <BlogItemCover src={blog.cover} alt="cover" />
-            <Chip>{blog.category}</Chip>
-            <BlogItemTitle>{blog.title}</BlogItemTitle>
-            <BlogItemDescription>{blog.description}</BlogItemDescription>
-            <BlogItemFooter>
-              <BlogItemAuthor>
-                <BlogItemAuthorAvatar src={blog.authorAvatar} alt="avatar" />
-                <BlogItemAuthorInfo>
-                  <BlogItemAuthorName>{blog.authorName}</BlogItemAuthorName>
-                  <BlogItemAuthorDate>{blog.createdAt}</BlogItemAuthorDate>
-                </BlogItemAuthorInfo>
-              </BlogItemAuthor>
-              {/* <BlogItemLink
+        <SearchBarWrap id="blogListWrapper">
+          <SearchForm>
+            <SearchInput type="text" placeholder="Search By Category" />
+            <GoButton>Go</GoButton>
+          </SearchForm>
+        </SearchBarWrap>
+        <BlogListWrapper>
+          {blogs.map((blog, i) => (
+            <BlogItemWrapper
+              key={blog.id}
+              onClick={() => navigate(`/blogs/${i}`)}
+              style={{ cursor: "pointer" }}
+            >
+              <BlogItemCover src={blog.cover} alt="cover" />
+              <Chip>{blog.category}</Chip>
+              <BlogItemTitle>{blog.title}</BlogItemTitle>
+              <BlogItemDescription>{blog.description}</BlogItemDescription>
+              <BlogItemFooter>
+                <BlogItemAuthor>
+                  <BlogItemAuthorAvatar src={blog.authorAvatar} alt="avatar" />
+                  <BlogItemAuthorInfo>
+                    <BlogItemAuthorName>{blog.authorName}</BlogItemAuthorName>
+                    <BlogItemAuthorDate>{blog.createdAt}</BlogItemAuthorDate>
+                  </BlogItemAuthorInfo>
+                </BlogItemAuthor>
+                {/* <BlogItemLink
 
               >
                 ➝
               </BlogItemLink> */}
-            </BlogItemFooter>
-          </BlogItemWrapper>
-        ))}
-      </BlogListWrapper>
-    </div>
+              </BlogItemFooter>
+            </BlogItemWrapper>
+          ))}
+        </BlogListWrapper>
+      </div>
     </DocumentMeta>
   );
 }
-const NoStyle=styled.a` 
+const NoStyle = styled.a`
   color: inherit;
   text-decoration: none;
   &:hover {
     text-decoration: none;
     color: white;
   }
-`
+`;
 const Row = styled.div`
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -148,9 +166,9 @@ const BlogContainer = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
-  width:300px;
-  margin-top:20px;
-  margin-bottom:20px;
+  width: 300px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 const BlogNumber = styled.h3`
@@ -337,7 +355,6 @@ const Chip = styled.div`
 
 const Separator = styled.div`
   border-top: 0.5px dashed #a9a9a9;
-
 `;
 const Containerr = styled.div`
   display: flex;
@@ -411,7 +428,7 @@ const GreetingImageDiv = styled.div`
   height: 100%;
 `;
 const GreetingImageDivv = styled.div`
- margin-top:70px
+  margin-top: 70px;
 `;
 
 const LandingPerson = styled(DisplayLottie)`
