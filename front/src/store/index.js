@@ -9,6 +9,8 @@ import country from './country'
 import city from './city'
 import command from './command'
 import auth from './auth' 
+import blog from './blog' 
+
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +22,9 @@ export const store = configureStore({
     country,
     city,
     command,
-    auth
+    auth,
+    blog,
+    
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

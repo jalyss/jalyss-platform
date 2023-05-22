@@ -16,6 +16,8 @@ import { BiCartAdd } from 'react-icons/bi'
 import { BiCartDownload } from 'react-icons/bi'
 import Cart from '../components/Cart'
 import { useCart } from 'react-use-cart'
+import { ChatCircleDots } from 'phosphor-react'
+import { IconButton } from '@mui/material'
 
 function NavBar() {
   const authStore = useSelector((state) => state.auth)
@@ -141,20 +143,28 @@ function NavBar() {
                 )}
                 <div className="text-white mx-2">
                   {authStore.me ? (
-                    <a href="/profile" className="m-0 text-right">
+                    <a href="/profile" className="m-0 text-right text-decoration-none text-white">
                       {authStore.me.fullNameAr}
                     </a>
                   ) : (
                     <>
-                      <a href="/login" className="m-0 text-right">
+                      <a href="/login" className="m-0 text-right text-decoration-none text-white">
                         {t('navbar.account.profile')}
                       </a>
-                      <a href="/signup" className="m-0">
+                      <a href="/signup" className="m-0 text-decoration-none text-white">
                         {t('navbar.account.signup')}
                       </a>
                     </>
                   )}
                 </div>
+                <div>
+                  {authStore.me &&  (
+                    <IconButton href='/chat'>
+                    <ChatCircleDots size={32} color="#ccaa00" />
+                    </IconButton>
+                    
+                  ) }
+                </div>   
               </div>
             </Nav>
             <Nav className="header-icon me-auto">
@@ -240,20 +250,25 @@ function NavBar() {
                 </ul>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="/*">
+                <a class="nav-link" href="/spaceJalyss">
                   {t('navbar.space')}
                 </a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="/*">
+                <a class="nav-link" href="/training">
                   {t('navbar.training')}
                 </a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="/*">
+                <a class="nav-link" href="/blogs">
                   {t('navbar.blogs')}
                 </a>
               </li>
+              {/* <li class="nav-item active">
+                <a class="nav-link" href="/chat">
+                  {t('chat')}
+                </a>
+              </li> */}
             </ul>
           </div>
         </div>

@@ -7,7 +7,6 @@ export class CreateCommandDto {
     clientId: string
     @ApiProperty({ required: false })
     intermediateId?: string
-   
     @ApiProperty({ required: true })
     clientName: string
     @ApiProperty({ required: true })

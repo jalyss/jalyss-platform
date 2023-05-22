@@ -1,0 +1,11 @@
+{
+    "offCanvas": {
+        "title": "Your Purchases",
+        "shop": "Shopping Bag ",
+        "quan":" Quantity ",
+        "price":" Price ",
+        "total":"Total ",
+        "checkout":"Go to checkout",
+        "clear":"Clear your bag"
+    }
+}

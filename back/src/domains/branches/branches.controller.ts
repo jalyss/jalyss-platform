@@ -13,7 +13,7 @@ export class BranchesController {
     return this.branchesService.create(createBranchDto);
   }
 
-  @Get()
+  @Get('all')
   findAll() {
     return this.branchesService.findAll();
   }

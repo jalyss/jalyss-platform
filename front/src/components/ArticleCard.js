@@ -9,7 +9,6 @@ import { useCart } from 'react-use-cart';
 function ArticleCard({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate()
-  console.log(article);
 
   return (
 

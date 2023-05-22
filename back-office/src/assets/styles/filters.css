@@ -1,0 +1,58 @@
+.accordion {
+  width: 100%;
+  border-bottom: 1px solid #d4d4d4;
+  padding-bottom: 10px;
+}
+
+.accordion-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.accordion-toggle-active {
+  background-color: rgb(72, 24, 76, 0.08);
+  color: #48184c;
+}
+
+.accordion-content {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  opacity: 0;
+  height: 0;
+  transition: height 0.5s;
+}
+
+.open {
+  height: auto;
+  opacity: 1;
+  border-right: 3px solid #48184c;
+  transition: height 0.5s;
+}
+
+.filters {
+  min-width: 300px;
+  height: fit-content;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+/* media screen for .accordion */
+@media all and (max-width: 992px) {
+  .responsive-filters {
+    display: none !important;
+  }
+}
+
+@media all and (min-width: 992px) {
+  .filters-button {
+    display: none !important;
+  }
+}
+
+.arrow-icon {
+  transition: all 0.5s;
+  rotate: 180deg;
+}

@@ -1,0 +1,20 @@
+{
+    "label": {
+        "delivery": "التوصيل",
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "phone": "الهاتف",
+        "address": "العنوان",
+        "country": " الدولة",
+        "selectCountry": "حدد الدولة",
+        "city": "المدينة",
+        "selectCity": "حدد المدينة",
+        "btnConfirm": "اتمام الطلب",
+        "cart": "السلة",
+        "quantity": "الكمية",
+        "price": "السعر",
+        "devise": "د",
+        "total": "الإجمالي"
+    }
+}
+

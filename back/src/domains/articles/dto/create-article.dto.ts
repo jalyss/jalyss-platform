@@ -12,6 +12,10 @@ export class CreateArticleDto {
   pageNumber: number;
   @ApiProperty({ required: false })
   code: string;
+  @ApiProperty({ required: false })
+  shortDescriptionAr: string;
+  @ApiProperty({ required: false })
+  longDescriptionAr: string;
   @ApiProperty({ required: true })
   categoryId: string;
   @ApiProperty({ required: true })

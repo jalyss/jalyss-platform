@@ -7,6 +7,7 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { filterExample } from './entities/article.entity';
 import { FilterArticle } from './types';
 import { CreateRatingDto } from './dto/create-rating.dto';
+import { UpdateArticleByBranchDto } from './dto/update-article.ByBranch.dto';
 
 @Injectable()
 export class ArticleService {
@@ -26,7 +27,9 @@ export class ArticleService {
   findAll() {
     return this.prisma.article.findMany({
       include: {
-        ArticlesByBranch: { include: { rating: true } },
+        ArticlesByBranch: {
+          include: { rating: true, branch: true, article: true },
+        },
         media: true,
         cover: true,
         publishingHouse: true,
@@ -39,11 +42,11 @@ export class ArticleService {
   async findAllByBranch(branchId: string, filters: FilterArticle) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
       .id;
-    let insideWhere = {};
+    const insideWhere = {};
     let skip = 0;
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
-      let errors = [];
+      const errors = [];
       Object.entries(filters).forEach(([key, value]) => {
         if (!filterExample[key]) {
           errors.push(key);
@@ -130,7 +133,7 @@ export class ArticleService {
         },
       });
     }
-    let articlesByBranch = await this.prisma.articlesByBranch.findMany({
+    const articlesByBranch = await this.prisma.articlesByBranch.findMany({
       where: {
         ...insideWhere,
         branchId,
@@ -152,7 +155,7 @@ export class ArticleService {
     });
     return await Promise.all(
       articlesByBranch.map(async (elem) => {
-        let rating = await this.prisma.rating.groupBy({
+        const rating = await this.prisma.rating.groupBy({
           by: ['articleByBranchId'],
           _sum: {
             rate: true,
@@ -174,7 +177,7 @@ export class ArticleService {
   }
 
   async findOneByBranch(id: string) {
-    let articleByBranch = await this.prisma.articlesByBranch.findFirst({
+    const articleByBranch = await this.prisma.articlesByBranch.findFirst({
       where: {
         id,
       },
@@ -190,7 +193,7 @@ export class ArticleService {
         },
       },
     });
-    let rating = await this.prisma.rating.groupBy({
+    const rating = await this.prisma.rating.groupBy({
       by: ['articleByBranchId'],
       _sum: {
         rate: true,
@@ -217,6 +220,12 @@ export class ArticleService {
 
   update(id: string, dto: UpdateArticleDto) {
     return `This action updates a #${id} article`;
+  }
+  async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
+    return await this.prisma.articlesByBranch.update({
+      where: { id },
+      data: dto,
+    });
   }
 
   remove(id: string) {
