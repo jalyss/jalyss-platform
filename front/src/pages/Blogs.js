@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled from "styled-components";
 import { FaFire } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -12,13 +12,27 @@ import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch} from "react-redux";
+import { fetchBlogs } from "../store/blog";
+import {useSelector} from "react-redux"
+
 
 function Blogs() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const blogs = async () => {
+      await dispatch(fetchBlogs());
+    };
+    fetchData();
+  }, [dispatch]);
+
   const navigate = useNavigate();
-  const [blogs, setBlogs] = useState(blogss);
+  const blogs = useSelector((state) => state.blog.blogs);
+  console.log(blogs,"ahi")
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("blog.title"), t("blog.description"));
+
 
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
@@ -125,8 +139,8 @@ function Blogs() {
               style={{ cursor: "pointer" }}
             >
               <BlogItemCover src={blog.cover} alt="cover" />
-              <Chip>{blog.category}</Chip>
-              <BlogItemTitle>{blog.title}</BlogItemTitle>
+              {/* <Chip>{blog.category}</Chip> */}
+              {/* <BlogItemTitle>{blog.title}</BlogItemTitle> */}
               <BlogItemDescription>{blog.description}</BlogItemDescription>
               <BlogItemFooter>
                 <BlogItemAuthor>
