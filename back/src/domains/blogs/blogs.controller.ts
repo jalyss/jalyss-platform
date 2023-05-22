@@ -35,6 +35,8 @@ export class BlogsController {
 
   @Get('one/:id')
   findOne(@Param('id') id: string) {
+   
+    
     return this.blogsService.findOne(id);
   }
 

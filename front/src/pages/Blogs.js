@@ -15,6 +15,7 @@ import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../store/blog";
 import { useSelector } from "react-redux";
+import {fetchCategory} from "../store/category";
 import axios from "axios";
 
 function Blogs() {
@@ -22,7 +23,9 @@ function Blogs() {
 
   const navigate = useNavigate();
   const blogStore = useSelector((state) => state.blog);
-  const { blogs } = blogStore;
+  const { blogs.items } = blogStore;
+  const categoryStore = useSelector((state) => state.category);
+  const { category } = categoryStore
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("blog.title"), t("blog.description"));
@@ -35,7 +38,11 @@ function Blogs() {
   useEffect(() => {
     dispatch(fetchBlogs());
   }, [dispatch]);
-  console.log(blogs);
+  console.log("blo",blogs);
+  useEffect(() => {
+    dispatch(fetchCategory(blogs.items.categoryId));
+  }, []);
+console.log("cat",category);
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -135,7 +142,7 @@ function Blogs() {
               style={{ cursor: "pointer" }}
             >
               <BlogItemCover src={blog.cover} alt="cover" />
-              {/* <Chip>{blog.category}</Chip> */}
+              <Chip>{category.nameEn}</Chip>
               {/* <BlogItemTitle>{blog.title}</BlogItemTitle> */}
               <BlogItemDescription>{blog.content}</BlogItemDescription>
               <BlogItemFooter>

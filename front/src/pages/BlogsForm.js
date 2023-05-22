@@ -36,7 +36,7 @@ console.log("ooo",categories);
     e.preventDefault()
     let body = {
       content,
-      // categoryId: "62ddd786-10a1-47fd-a412-a3175f171a4c",
+      categoryId,
     };
     dispatch(createBlog(body));
   };
