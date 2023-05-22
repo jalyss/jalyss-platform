@@ -6,6 +6,10 @@ export const fetchCategories = createAsyncThunk("categories/categories", async (
   const response = await axios.get(`${config.API_ENDPOINT}/categories/`);
   return response.data;
 });
+export const fetchCategoriesBlogs = createAsyncThunk("categories/categoriesBlog", async () => {
+  const response = await axios.get(`${config.API_ENDPOINT}/categories/`);
+  return response.data;
+});
 
 export const fetchCategory = createAsyncThunk("categories/category", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/categories/${id}`);
@@ -32,6 +36,9 @@ export const categorySlice = createSlice({
     });
     builder.addCase(fetchCategory.fulfilled, (state, action) => {
       state.category = action.payload;
+    });
+    builder.addCase(fetchCategoriesBlogs.fulfilled, (state, action) => {
+      state.categories.items = action.payload;
     });
   },
 });

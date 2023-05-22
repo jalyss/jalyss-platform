@@ -4,13 +4,12 @@ import config from "../configs";
 
 export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs`);
-  dispatch(fetchBlogs())
   return response.data;
+
 });
 
 export const fetchBlog = createAsyncThunk("blogs/fetchBlog", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs/one/${id}`);
-  dispatch(fetchBlogs())
   return response.data;
 });
 export const createBlog = createAsyncThunk(

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FaFire } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -12,34 +12,30 @@ import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../store/blog";
-import {useSelector} from "react-redux"
-
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 function Blogs() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    const blogs = async () => {
-      await dispatch(fetchBlogs());
-    };
-    fetchData();
-  }, [dispatch]);
 
   const navigate = useNavigate();
-  const blogs = useSelector((state) => state.blog.blogs);
-  console.log(blogs,"ahi")
+  const blogStore = useSelector((state) => state.blog);
+  const { blogs } = blogStore;
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("blog.title"), t("blog.description"));
-
-
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
     subTitle:
       "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
     displayGreeting: true, // Set false to hide this section, defaults to true
   };
+  useEffect(() => {
+    dispatch(fetchBlogs());
+  }, [dispatch]);
+  console.log(blogs);
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -132,7 +128,7 @@ function Blogs() {
           </SearchForm>
         </SearchBarWrap>
         <BlogListWrapper>
-          {blogs.map((blog, i) => (
+          {blogs.items.map((blog, i) => (
             <BlogItemWrapper
               key={blog.id}
               onClick={() => navigate(`/blogs/${i}`)}
@@ -141,7 +137,7 @@ function Blogs() {
               <BlogItemCover src={blog.cover} alt="cover" />
               {/* <Chip>{blog.category}</Chip> */}
               {/* <BlogItemTitle>{blog.title}</BlogItemTitle> */}
-              <BlogItemDescription>{blog.description}</BlogItemDescription>
+              <BlogItemDescription>{blog.content}</BlogItemDescription>
               <BlogItemFooter>
                 <BlogItemAuthor>
                   <BlogItemAuthorAvatar src={blog.authorAvatar} alt="avatar" />
