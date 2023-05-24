@@ -1,33 +1,23 @@
 import styled from "styled-components";
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { blogss } from "../constants/BlogsData";
-import "react-quill/dist/quill.snow.css";
-import QuillEditor from "../components/QuillEditor";
-// import { parse } from 'node-html-parser';
+import { useDispatch } from "react-redux";
+import { fetchBlog } from "../store/blog";
+import { useSelector } from "react-redux";
+
 const BlogDetail = () => {
-  // function parseJSX(code) {
-  //   const div = document.createElement("div");
-  //   div.innerHTML = code;
-  //   return div.textContent;
-  // }
-  
-  // document.addEventListener("DOMContentLoaded", function() {
-  //   const preTag = document.querySelector("pre.ql-syntax");
-  //   if (preTag) {
-  //     const code = preTag.textContent.trim();
-  //     const parsedCode = parseJSX(code);
-  //     console.log(parsedCode);
-  
-  //     const parsedElement = eval(parsedCode);
-  //     document.body.appendChild(parsedElement);
-  //   }
-  // });
+  const dispatch = useDispatch();
   
   const { blogId } = useParams();
   const navigate = useNavigate();
-  const [selectedBlog, setSelectedBlog] = useState(blogss[blogId]);
+  // const [selectedBlog, setSelectedBlog] = useState(blog[blogId]);
+  const blogStore = useSelector((state) => state.blog);
+  const { blog } = blogStore;
+  useEffect(() => {
+    console.log("Dispatching fetchBlog action...");
+    dispatch(fetchBlog(blogId))
+  }, []);
+ console.log("jj",blog);
 
   const handleBlogSelection = (blog) => {
     setSelectedBlog(blog);
@@ -36,9 +26,14 @@ const BlogDetail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  if (!blog) {
+    // Render a loading indicator or placeholder while waiting for the data
+    return <div>Loading...</div>;
+  }
   return (
     <BlogDetailWrapper>
-      <BlogDetailContent>
+       <BlogDetailContent>
         <HeaderContent>
           <GoBackLink onClick={() => navigate(-1)}>
             <span> &#8592;</span> <span>Go Back</span>
@@ -47,39 +42,37 @@ const BlogDetail = () => {
             <span>&#x1F516;</span>
           </BookmarkIcon>
         </HeaderContent>
-        <BlogContainer>
-          <BlogHeader>
-            <BlogDate>Published {selectedBlog.createdAt}</BlogDate>
+        <BlogContainer> 
+           <BlogHeader>
+            <BlogDate>Published {blog.createdAt}</BlogDate>
 
-            <Title>{selectedBlog.title}</Title>
+            <Title>{blog.title}</Title>
 
             <CategoryInfo>
               <CategoryLabel>Category:</CategoryLabel>
               <SubCategoryList>
-                {selectedBlog.subCategory.map((subCat, index) => (
-                  <SubCategoryItem key={index}>{subCat}</SubCategoryItem>
-                ))}
+              
               </SubCategoryList>
-            </CategoryInfo>
-            {/* <AuthorContainer>
+            </CategoryInfo> 
+             <AuthorContainer>
               <AuthorAvatar
-                src={selectedBlog.authorAvatar}
+                src={blog.authorAvatar}
                 alt="Author Avatar"
               />
-              <AuthorName>{selectedBlog.authorName}</AuthorName>
-            </AuthorContainer> */}
-          </BlogHeader>
-          <BlogImg src={selectedBlog.cover} alt="cover" />
+              <AuthorName>{blog.authorName}</AuthorName>
+            </AuthorContainer> 
+           </BlogHeader>
+          <BlogImg src={blog.cover} alt="cover" />
            
-          <BlogDescription>{selectedBlog.description}</BlogDescription>
+          <BlogDescription> <span dangerouslySetInnerHTML={{ __html: blog.content }} ></span></BlogDescription>
         </BlogContainer>
       </BlogDetailContent>
 
       <BlogDetailSidebar>
-        <AuthorAvatarr src={selectedBlog.authorAvatar} alt="author-avatar" />
-        <AuthorNamee>{selectedBlog.authorName}</AuthorNamee>
-        <MoreFromAuthor>More from {selectedBlog.authorName}</MoreFromAuthor>
-        <SideContainer>
+        <AuthorAvatarr src={blog.authorAvatar} alt="author-avatar" />
+        <AuthorNamee>{blog.authorName}</AuthorNamee>
+        <MoreFromAuthor>More from {blog.authorName}</MoreFromAuthor> 
+        {/* <SideContainer>
           {blogss
             .filter(
               (blog) =>
@@ -101,7 +94,7 @@ const BlogDetail = () => {
                 <SideBlogImage src={blog.cover} alt="blog-cover" />
               </SideBlogContainer>
             ))}
-        </SideContainer>
+        </SideContainer> */}
         
       </BlogDetailSidebar>
     </BlogDetailWrapper>

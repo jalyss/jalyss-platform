@@ -10,6 +10,7 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async () => {
 
 export const fetchBlog = createAsyncThunk("blogs/fetchBlog", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs/one/${id}`);
+  console.log("API Response:", response.data);
   return response.data;
 });
 export const createBlog = createAsyncThunk(

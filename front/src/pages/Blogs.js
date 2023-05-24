@@ -15,7 +15,12 @@ import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../store/blog";
 import { useSelector } from "react-redux";
-import {fetchCategory} from "../store/category";
+// import {fetchCategory} from "../store/category";
+import {
+  MDBPagination,
+  MDBPaginationItem,
+  MDBPaginationLink,
+} from "mdb-react-ui-kit";
 import axios from "axios";
 
 function Blogs() {
@@ -23,9 +28,9 @@ function Blogs() {
 
   const navigate = useNavigate();
   const blogStore = useSelector((state) => state.blog);
-  const { blogs.items } = blogStore;
-  const categoryStore = useSelector((state) => state.category);
-  const { category } = categoryStore
+  const { blogs } = blogStore;
+  // const categoryStore = useSelector((state) => state.category);
+  // const { category } = categoryStore
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("blog.title"), t("blog.description"));
@@ -38,11 +43,18 @@ function Blogs() {
   useEffect(() => {
     dispatch(fetchBlogs());
   }, [dispatch]);
-  console.log("blo",blogs);
-  useEffect(() => {
-    dispatch(fetchCategory(blogs.items.categoryId));
-  }, []);
-console.log("cat",category);
+  console.log("blo", blogs);
+  
+  function extractTextFromHTML(html) {
+    const temporaryElement = document.createElement("div");
+    temporaryElement.innerHTML = html;
+    return (
+      temporaryElement.textContent.substring(0, 100) ||
+      temporaryElement.innerText.substring(0, 100) ||
+      ""
+    );
+  }
+
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -88,7 +100,7 @@ console.log("cat",category);
           </Containerr>
         </Fade>
         <Fade bottom duration={3000} distance="40px">
-          <Containerr style={{ alignItems: "normal", margin: "0 70px" }}>
+          <Containerr style={{ alignItems: "normal", margin: "95px 70px" }}>
             <div className=" d-flex align-items-center">
               <div className="col-lg-6">
                 <GreetingImageDivv>
@@ -138,18 +150,43 @@ console.log("cat",category);
           {blogs.items.map((blog, i) => (
             <BlogItemWrapper
               key={blog.id}
-              onClick={() => navigate(`/blogs/${i}`)}
+              onClick={() => navigate(`/blogs/${blog.id}`)}
               style={{ cursor: "pointer" }}
             >
-              <BlogItemCover src={blog.cover} alt="cover" />
-              <Chip>{category.nameEn}</Chip>
-              {/* <BlogItemTitle>{blog.title}</BlogItemTitle> */}
-              <BlogItemDescription>{blog.content}</BlogItemDescription>
+              {blog.cover ? (
+                <BlogItemCover src={blog.cover} alt="cover" />
+              ) : (
+                <BlogItemCover
+                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                  alt="cover"
+                />
+              )}
+              <Chip>{blog.category.nameEn}</Chip>
+              <div className="d-flex flex-column gap-2">
+                <BlogItemTitle>{blog.title}</BlogItemTitle>
+
+                <BlogItemDescription>
+                  {" "}
+                  <p>{extractTextFromHTML(blog.content)}</p>
+                </BlogItemDescription>
+              </div>
               <BlogItemFooter>
                 <BlogItemAuthor>
-                  <BlogItemAuthorAvatar src={blog.authorAvatar} alt="avatar" />
+                  {blog.author.avatar ? (
+                    <BlogItemAuthorAvatar
+                      src={blog.author.avatar?.path}
+                      alt="avatar"
+                    />
+                  ) : (
+                    <BlogItemAuthorAvatar
+                      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                      alt="avatar"
+                    />
+                  )}
                   <BlogItemAuthorInfo>
-                    <BlogItemAuthorName>{blog.authorName}</BlogItemAuthorName>
+                    <BlogItemAuthorName className="mt-3">
+                      {blog.author.fullNameEn}
+                    </BlogItemAuthorName>
                     <BlogItemAuthorDate>{blog.createdAt}</BlogItemAuthorDate>
                   </BlogItemAuthorInfo>
                 </BlogItemAuthor>
@@ -162,6 +199,35 @@ console.log("cat",category);
             </BlogItemWrapper>
           ))}
         </BlogListWrapper>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1">
+                Previous
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                1
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                2
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                3
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="#">
+                Next
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </DocumentMeta>
   );
@@ -302,19 +368,13 @@ const BlogItemCover = styled.img`
 `;
 
 const BlogItemDescription = styled.p`
-  position: relative;
-  max-height: 80px;
+  maxheight: 100px;
   overflow: hidden;
   font-size: 0.8rem;
   color: #a9a9a9;
   transition: color 0.2s ease-in-out;
   margin: 0 20px;
-  &::before {
-    position: absolute;
-    content: "...";
-    bottom: 0;
-    right: 0;
-  }
+
   &:hover {
     color: #333;
   }

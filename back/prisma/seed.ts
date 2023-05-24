@@ -1142,6 +1142,7 @@ let articlesByBranchIds=[articlesBybranch1.id,articlesBybranch2.id,articlesBybra
   }
 
 
+
 }
 
 // execute the main function

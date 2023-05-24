@@ -165,7 +165,7 @@ export class ArticleService {
             articleByBranchId: elem.id,
           },
         });
-        console.log(rating);
+        
         if (rating.length && rating[0]._sum?.rate)
           return {
             ...elem,
