@@ -1,7 +1,7 @@
 export class Blog {}
 export type FilterBlog = {
-  authorIds: string[];
-  categoryIds: string[];
+  authorId: string[];
+  categoryId: string[];
   confirm: number;
   take: number;
   skip: number;
@@ -9,8 +9,8 @@ export type FilterBlog = {
 };
 
 export const FilterBlogExample = {
-  authorIds: ['id1', 'id2'],
-  categoryIds: ['id1', 'id2'],
+  authorId: ['id1', 'id2'],
+  categoryId: ['id1', 'id2'],
   confirm: 1,
   take: 10,
   skip: 10,

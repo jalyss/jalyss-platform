@@ -26,13 +26,23 @@ export class BlogsService {
     });
   }
 
-
-
   async findAll(filters: FilterBlog) {
     let errors = [];
-    Object.keys(filters).forEach((key, i) => {
+    let where = {};
+    let orderBy = {};
+    Object.entries(filters).forEach(([key, value], i) => {
       if (!(key in FilterBlogExample)) {
         errors.push(key);
+      }
+      if (!['take', 'skip','trend'].includes(key)) {
+        if (Array.isArray(value)) {
+          where = { ...where, [key]: { in: value } };
+        } else {
+          where = {
+            ...where,
+            [key]: key === 'confirm' ? (value == 1 ? true : false) : value,
+          };
+        }
       }
     });
     if (errors.length) {
@@ -50,37 +60,20 @@ export class BlogsService {
       );
     }
     if (filters.trend) {
-      let blogsWithViews = this.prisma.view.groupBy({
-        by: ['blogId'],
-        orderBy: {
-          _count: {
-            blogId: 'asc',
-          },
+      orderBy = {
+        view: {
+          _count: 'desc',
         },
-        take: 6,
-      });
-      let blogIds = (await blogsWithViews).map((blog) => blog.blogId);
-      let blogs = await this.searchBlogs(
-        { id: { in: blogIds } },
-        undefined,
-        undefined,
-      );
-      blogs = blogs.sort((a, b) => b._count.view - a._count.view);
+      };
+      let blogs = await this.searchBlogs({}, 6,0, orderBy);
       console.log('trend');
 
       return blogs;
     } else {
       console.log('NoTrend');
+      orderBy = { createdAt: 'desc' };
 
-      return await this.searchBlogs(
-        {
-          authorId: { in: filters.authorIds },
-          categoryId: { in: filters.categoryIds },
-          confirm: filters.confirm == 1 ? true : false,
-        },
-        filters.take,
-        filters.skip,
-      );
+      return await this.searchBlogs(where, +filters.take, +filters.skip, orderBy);
     }
   }
 
@@ -116,18 +109,32 @@ export class BlogsService {
   async remove(id: string) {
     return await this.prisma.blog.delete({ where: { id } });
   }
-  private async searchBlogs(where: any, take: number, skip: number) {
-    return await this.prisma.blog.findMany({
-      where,
-      include: {
-        MediaBlog: { include: { media: true } },
-        _count: { select: { view: true } },
-        category: true,
-        author: { include: { avatar: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-      take,
-      skip,
-    });
+  private async searchBlogs(
+    where: any,
+    take: number,
+    skip: number,
+    orderBy: any,
+  ) {
+    return this.prisma.$transaction(async (prisma)=>{
+      let items=await prisma.blog.findMany({
+        where,
+        include: {
+          MediaBlog: { include: { media: true } },
+          _count: { select: { view: true }, },
+          
+          category: true,
+          author: { select: { avatar: true,fullNameAr:true,fullNameEn:true,id:true } },
+        },
+       
+        orderBy,
+        take,
+        skip,
+      });
+
+      let count =await prisma.blog.count({where})
+      return {
+        items,count
+      }
+    })   
   }
 }

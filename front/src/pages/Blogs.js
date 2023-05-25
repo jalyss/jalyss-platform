@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+
 import { FaFire } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { blogss, trendingblogss } from "../constants/BlogsData";
@@ -15,13 +16,8 @@ import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../store/blog";
 import { useSelector } from "react-redux";
-// import {fetchCategory} from "../store/category";
-import {
-  MDBPagination,
-  MDBPaginationItem,
-  MDBPaginationLink,
-} from "mdb-react-ui-kit";
-import axios from "axios";
+
+import AutoCompleteFilter from "../components/AutoCompleteFilter";
 
 function Blogs() {
   const dispatch = useDispatch();
@@ -29,8 +25,8 @@ function Blogs() {
   const navigate = useNavigate();
   const blogStore = useSelector((state) => state.blog);
   const { blogs } = blogStore;
-  // const categoryStore = useSelector((state) => state.category);
-  // const { category } = categoryStore
+  const categoryStore = useSelector((state) => state.category);
+  const { categories } = categoryStore;
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("blog.title"), t("blog.description"));
@@ -40,11 +36,14 @@ function Blogs() {
       "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
     displayGreeting: true, // Set false to hide this section, defaults to true
   };
+  const [categoryId, setCategoryId] = useState([]);
+  const [authorId, setAuthorId] = useState([]);
+const [skip, setSkip] = useState(0);
+const take=5
   useEffect(() => {
-    dispatch(fetchBlogs());
-  }, [dispatch]);
-  console.log("blo", blogs);
-  
+    dispatch(fetchBlogs({take,skip,categoryId,authorId}));
+  }, [dispatch,authorId,categoryId,skip]);
+
   function extractTextFromHTML(html) {
     const temporaryElement = document.createElement("div");
     temporaryElement.innerHTML = html;
@@ -140,12 +139,19 @@ function Blogs() {
 
         <Separator />
 
-        <SearchBarWrap id="blogListWrapper">
-          <SearchForm>
-            <SearchInput type="text" placeholder="Search By Category" />
-            <GoButton>Go</GoButton>
-          </SearchForm>
-        </SearchBarWrap>
+        <AutoCompleteFilter
+          data={categories.items}
+          valueOptionName="id"
+          labelOptionName="nameEn"
+          onChange={setCategoryId}
+        />
+        <AutoCompleteFilter
+          data={categories.items}
+          valueOptionName="id"
+          labelOptionName="nameEn"
+          onChange={setAuthorId}
+        />
+
         <BlogListWrapper>
           {blogs.items.map((blog, i) => (
             <BlogItemWrapper
@@ -199,32 +205,32 @@ function Blogs() {
             </BlogItemWrapper>
           ))}
         </BlogListWrapper>
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">
+        <nav aria-label="Page navigation example " className="mt-3">
+          <ul className="pagination justify-content-center">
+            <li className={`page-item ${skip===0?'disabled':''}`}>
+              <button class="page-link" onClick={()=>setSkip(skip-take)} >
                 Previous
-              </a>
+              </button>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
+            <li className="page-item">
+              <a className="page-link" onClick={()=>setSkip(skip+take)}  href="#">
                 1
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
+            <li className="page-item">
+              <a className="page-link" onClick={()=>setSkip(skip+take*2)} href="#">
                 2
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
+            <li className="page-item">
+              <a className="page-link" onClick={()=>setSkip(skip+take*3)} href="#">
                 3
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" href="#">
+            <li className="page-item">
+              <button className="page-link" onClick={()=>setSkip(skip+take)}>
                 Next
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
@@ -261,6 +267,16 @@ const BlogNumber = styled.h3`
   font-weight: bold;
 `;
 
+const Chip = styled.div`
+  font-size: 0.7rem;
+  background: linear-gradient(to right, #6190e8, #a7bfe8);
+  color: #fff;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  width: fit-content;
+  text-transform: capitalize;
+  margin: 0 20px;
+`;
 const BlogAuthorAvatar = styled.img`
   width: 4rem;
   height: 4rem;
@@ -418,16 +434,6 @@ const BlogItemAuthorDate = styled.p`
   font-size: 0.6rem;
   color: #a9a9a9;
   font-weight: 600;
-`;
-const Chip = styled.div`
-  font-size: 0.7rem;
-  background: linear-gradient(to right, #6190e8, #a7bfe8);
-  color: #fff;
-  padding: 0.3rem 0.5rem;
-  border-radius: 5px;
-  width: fit-content;
-  text-transform: capitalize;
-  margin: 0 20px;
 `;
 
 const Separator = styled.div`
