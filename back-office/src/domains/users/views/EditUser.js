@@ -55,6 +55,7 @@ function EditUser() {
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
+    
       <h2>Profile User </h2>
       <form className="checkout-form" onSubmit={submitEditProfile}>
         <div className="d-flex flex-wrap">

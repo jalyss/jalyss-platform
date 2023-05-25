@@ -46,6 +46,7 @@ function CreateUser() {
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
+     
       <h2>create user</h2>
       <form className="checkout-form" onSubmit={submitSignup}>
         <div className="d-flex flex-wrap">

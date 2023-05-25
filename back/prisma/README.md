@@ -1,6 +1,7 @@
 # for generate and migration
 
-yarn generate 
+
+
 yarn migrate:dev <!-- creation and deploy and if database is empty it will run the seed -->
 
 
