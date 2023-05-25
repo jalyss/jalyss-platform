@@ -23,7 +23,7 @@ function Blogs() {
 
   const navigate = useNavigate();
   const blogStore = useSelector((state) => state.blog);
-  const { blogs.items } = blogStore;
+  const { blogs } = blogStore;
   const categoryStore = useSelector((state) => state.category);
   const { category } = categoryStore
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
@@ -39,10 +39,10 @@ function Blogs() {
     dispatch(fetchBlogs());
   }, [dispatch]);
   console.log("blo",blogs);
-  useEffect(() => {
-    dispatch(fetchCategory(blogs.items.categoryId));
-  }, []);
-console.log("cat",category);
+//   useEffect(() => {
+//     dispatch(fetchCategory(blogs.items.categoryId));
+//   }, []);
+// console.log("cat",category);
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -138,13 +138,14 @@ console.log("cat",category);
           {blogs.items.map((blog, i) => (
             <BlogItemWrapper
               key={blog.id}
-              onClick={() => navigate(`/blogs/${i}`)}
+              // onClick={() => navigate(/blogs/${i})}
               style={{ cursor: "pointer" }}
             >
               <BlogItemCover src={blog.cover} alt="cover" />
-              <Chip>{category.nameEn}</Chip>
+              {/* <Chip>{category.nameEn}</Chip> */}
               {/* <BlogItemTitle>{blog.title}</BlogItemTitle> */}
-              <BlogItemDescription>{blog.content}</BlogItemDescription>
+             
+              <BlogItemDescription> <span dangerouslySetInnerHTML={{ __html: blog.content }} ></span></BlogItemDescription>
               <BlogItemFooter>
                 <BlogItemAuthor>
                   <BlogItemAuthorAvatar src={blog.authorAvatar} alt="avatar" />
