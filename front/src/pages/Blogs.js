@@ -8,8 +8,8 @@ import DisplayLottie from "./DisplayLottie";
 import DocumentMeta from "react-document-meta";
 import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
-import { fetchBlogs, fetchTrends,removeBlog } from "../store/blog";
-import { useSelector,useDispatch } from "react-redux";
+import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
+import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import AutoCompleteFilter from "../components/AutoCompleteFilter";
 import { fetchUsers } from "../store/user";
@@ -23,7 +23,7 @@ import {
   MDBModalTitle,
   MDBModalBody,
   MDBModalFooter,
-} from 'mdb-react-ui-kit';
+} from "mdb-react-ui-kit";
 
 function Blogs() {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ function Blogs() {
 
   const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
-  const { blogs,trends } = blogStore;
+  const { blogs, trends } = blogStore;
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
   const userStore = useSelector((state) => state.user);
@@ -47,7 +47,7 @@ function Blogs() {
   const take = 6;
   let trend = 1;
   let confirm = 1;
-  
+
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
     subTitle:
@@ -57,12 +57,10 @@ function Blogs() {
 
   useEffect(() => {
     dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
-    dispatch(fetchTrends())
+    dispatch(fetchTrends());
     dispatch(fetchUsers());
   }, [dispatch, authorId, categoryId, skip]);
 
-
- 
   function extractTextFromHTML(html) {
     const temporaryElement = document.createElement("div");
     temporaryElement.innerHTML = html;
@@ -78,6 +76,9 @@ function Blogs() {
   };
   const toggleShow = () => setBasicModal(!basicModal);
   console.log("count", blogs.count);
+  const handleRemove = (id) => {
+    dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
+  };
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
@@ -237,24 +238,24 @@ function Blogs() {
                   className="blodItemCover"
                   src={blog.cover}
                   alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                  onClick={() => navigate("/blogs/${blog.id}")}
                 />
               ) : (
                 <img
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                  onClick={() => navigate("/blogs/${blog.id}")}
                 />
               )}
               <div
                 className="chip mt-3"
-                onClick={() => navigate(`/blogs/${blog.id}`)}
+                onClick={() => navigate("/blogs/${blog.id}")}
               >
                 {blog.category.nameEn}
               </div>
               <div
                 className="d-flex flex-column gap-2"
-                onClick={() => navigate(`/blogs/${blog.id}`)}
+                onClick={() => navigate("/blogs/${blog.id}")}
               >
                 <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
 
@@ -301,13 +302,12 @@ function Blogs() {
                     <span>&#8942;</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu size="sm" title="">
-                
                     {me?.id === blog.authorId ? (
                       <>
                         <Dropdown.Item
                           onClick={() => {
                             setSelectedId(blog.id);
-                            setBasicModal(true)
+                            setBasicModal(true);
                           }}
                         >
                           Delete
@@ -325,26 +325,36 @@ function Blogs() {
         </div>
 
         <>
+          <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
+            <MDBModalDialog>
+              <MDBModalContent>
+                <MDBModalHeader>
+                  <MDBModalTitle>Delete</MDBModalTitle>
+                  <MDBBtn
+                    className="btn-close"
+                    color="none"
+                    onClick={toggleShow}
+                  ></MDBBtn>
+                </MDBModalHeader>
+                <MDBModalBody>Press continue to delete this blog</MDBModalBody>
 
-      <MDBModal show={basicModal} setShow={setBasicModal} tabIndex='-1'>
-        <MDBModalDialog>
-          <MDBModalContent>
-            <MDBModalHeader>
-              <MDBModalTitle>Delete</MDBModalTitle>
-              <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
-            </MDBModalHeader>
-            <MDBModalBody>Press continue to delete this blog</MDBModalBody>
-
-            <MDBModalFooter>
-              <MDBBtn color='secondary' onClick={toggleShow}>
-                Close
-              </MDBBtn>
-              <MDBBtn onClick={()=>{dispatch(removeBlog(selectedId,{ take, skip, categoryId, authorId }))}}>Continue</MDBBtn>
-            </MDBModalFooter>
-          </MDBModalContent>
-        </MDBModalDialog>
-      </MDBModal>
-    </>
+                <MDBModalFooter>
+                  <MDBBtn color="secondary" onClick={toggleShow}>
+                    Close
+                  </MDBBtn>
+                  <MDBBtn
+                    onClick={() => {
+                      handleRemove(selectedId);
+                      setBasicModal(false);
+                    }}
+                  >
+                    Continue
+                  </MDBBtn>
+                </MDBModalFooter>
+              </MDBModalContent>
+            </MDBModalDialog>
+          </MDBModal>
+        </>
 
         <div className="d-flex justify-content-center my-5">
           <Pagination
