@@ -167,3 +167,13 @@
   margin-left: 8px;
   border-radius: 15px;
 }
+.ellipsis-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+.ellipsis-toggle::after {
+  display: none;
+}

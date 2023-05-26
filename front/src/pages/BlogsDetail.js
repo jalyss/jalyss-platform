@@ -13,6 +13,7 @@ const BlogDetail = () => {
   const { blogId } = useParams();
 
   // const [skip,setSkip]=useState()
+  const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
   const { blogs } = blogStore;
   const { blog } = blogStore;
