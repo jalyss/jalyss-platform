@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+
 import { FaFire } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { blogss, trendingblogss } from "../constants/BlogsData";
@@ -15,8 +16,8 @@ import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { fetchBlogs } from "../store/blog";
 import { useSelector } from "react-redux";
-import {fetchCategory} from "../store/category";
-import axios from "axios";
+
+import AutoCompleteFilter from "../components/AutoCompleteFilter";
 
 function Blogs() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function Blogs() {
   const blogStore = useSelector((state) => state.blog);
   const { blogs } = blogStore;
   const categoryStore = useSelector((state) => state.category);
-  const { category } = categoryStore
+  const { categories } = categoryStore;
   const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("blog.title"), t("blog.description"));
@@ -35,14 +36,24 @@ function Blogs() {
       "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
     displayGreeting: true, // Set false to hide this section, defaults to true
   };
+  const [categoryId, setCategoryId] = useState([]);
+  const [authorId, setAuthorId] = useState([]);
+const [skip, setSkip] = useState(0);
+const take=5
   useEffect(() => {
-    dispatch(fetchBlogs());
-  }, [dispatch]);
-  console.log("blo",blogs);
-//   useEffect(() => {
-//     dispatch(fetchCategory(blogs.items.categoryId));
-//   }, []);
-// console.log("cat",category);
+    dispatch(fetchBlogs({take,skip,categoryId,authorId}));
+  }, [dispatch,authorId,categoryId,skip]);
+
+  function extractTextFromHTML(html) {
+    const temporaryElement = document.createElement("div");
+    temporaryElement.innerHTML = html;
+    return (
+      temporaryElement.textContent.substring(0, 100) ||
+      temporaryElement.innerText.substring(0, 100) ||
+      ""
+    );
+  }
+
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -88,7 +99,7 @@ function Blogs() {
           </Containerr>
         </Fade>
         <Fade bottom duration={3000} distance="40px">
-          <Containerr style={{ alignItems: "normal", margin: "0 70px" }}>
+          <Containerr style={{ alignItems: "normal", margin: "95px 70px" }}>
             <div className=" d-flex align-items-center">
               <div className="col-lg-6">
                 <GreetingImageDivv>
@@ -128,29 +139,60 @@ function Blogs() {
 
         <Separator />
 
-        <SearchBarWrap id="blogListWrapper">
-          <SearchForm>
-            <SearchInput type="text" placeholder="Search By Category" />
-            <GoButton>Go</GoButton>
-          </SearchForm>
-        </SearchBarWrap>
+        <AutoCompleteFilter
+          data={categories.items}
+          valueOptionName="id"
+          labelOptionName="nameEn"
+          onChange={setCategoryId}
+        />
+        <AutoCompleteFilter
+          data={categories.items}
+          valueOptionName="id"
+          labelOptionName="nameEn"
+          onChange={setAuthorId}
+        />
+
         <BlogListWrapper>
           {blogs.items.map((blog, i) => (
             <BlogItemWrapper
               key={blog.id}
-              // onClick={() => navigate(/blogs/${i})}
+              onClick={() => navigate(`/blogs/${blog.id}`)}
               style={{ cursor: "pointer" }}
             >
-              <BlogItemCover src={blog.cover} alt="cover" />
-              {/* <Chip>{category.nameEn}</Chip> */}
-              {/* <BlogItemTitle>{blog.title}</BlogItemTitle> */}
-             
-              <BlogItemDescription> <span dangerouslySetInnerHTML={{ __html: blog.content }} ></span></BlogItemDescription>
+              {blog.cover ? (
+                <BlogItemCover src={blog.cover} alt="cover" />
+              ) : (
+                <BlogItemCover
+                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                  alt="cover"
+                />
+              )}
+              <Chip>{blog.category.nameEn}</Chip>
+              <div className="d-flex flex-column gap-2">
+                <BlogItemTitle>{blog.title}</BlogItemTitle>
+
+                <BlogItemDescription>
+                  {" "}
+                  <p>{extractTextFromHTML(blog.content)}</p>
+                </BlogItemDescription>
+              </div>
               <BlogItemFooter>
                 <BlogItemAuthor>
-                  <BlogItemAuthorAvatar src={blog.authorAvatar} alt="avatar" />
+                  {blog.author.avatar ? (
+                    <BlogItemAuthorAvatar
+                      src={blog.author.avatar?.path}
+                      alt="avatar"
+                    />
+                  ) : (
+                    <BlogItemAuthorAvatar
+                      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                      alt="avatar"
+                    />
+                  )}
                   <BlogItemAuthorInfo>
-                    <BlogItemAuthorName>{blog.authorName}</BlogItemAuthorName>
+                    <BlogItemAuthorName className="mt-3">
+                      {blog.author.fullNameEn}
+                    </BlogItemAuthorName>
                     <BlogItemAuthorDate>{blog.createdAt}</BlogItemAuthorDate>
                   </BlogItemAuthorInfo>
                 </BlogItemAuthor>
@@ -163,6 +205,35 @@ function Blogs() {
             </BlogItemWrapper>
           ))}
         </BlogListWrapper>
+        <nav aria-label="Page navigation example " className="mt-3">
+          <ul className="pagination justify-content-center">
+            <li className={`page-item ${skip===0?'disabled':''}`}>
+              <button class="page-link" onClick={()=>setSkip(skip-take)} >
+                Previous
+              </button>
+            </li>
+            <li className="page-item">
+              <a className="page-link" onClick={()=>setSkip(skip+take)}  href="#">
+                1
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" onClick={()=>setSkip(skip+take*2)} href="#">
+                2
+              </a>
+            </li>
+            <li className="page-item">
+              <a className="page-link" onClick={()=>setSkip(skip+take*3)} href="#">
+                3
+              </a>
+            </li>
+            <li className="page-item">
+              <button className="page-link" onClick={()=>setSkip(skip+take)}>
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </DocumentMeta>
   );
@@ -196,6 +267,16 @@ const BlogNumber = styled.h3`
   font-weight: bold;
 `;
 
+const Chip = styled.div`
+  font-size: 0.7rem;
+  background: linear-gradient(to right, #6190e8, #a7bfe8);
+  color: #fff;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  width: fit-content;
+  text-transform: capitalize;
+  margin: 0 20px;
+`;
 const BlogAuthorAvatar = styled.img`
   width: 4rem;
   height: 4rem;
@@ -303,19 +384,13 @@ const BlogItemCover = styled.img`
 `;
 
 const BlogItemDescription = styled.p`
-  position: relative;
-  max-height: 80px;
+  maxheight: 100px;
   overflow: hidden;
   font-size: 0.8rem;
   color: #a9a9a9;
   transition: color 0.2s ease-in-out;
   margin: 0 20px;
-  &::before {
-    position: absolute;
-    content: "...";
-    bottom: 0;
-    right: 0;
-  }
+
   &:hover {
     color: #333;
   }
@@ -359,16 +434,6 @@ const BlogItemAuthorDate = styled.p`
   font-size: 0.6rem;
   color: #a9a9a9;
   font-weight: 600;
-`;
-const Chip = styled.div`
-  font-size: 0.7rem;
-  background: linear-gradient(to right, #6190e8, #a7bfe8);
-  color: #fff;
-  padding: 0.3rem 0.5rem;
-  border-radius: 5px;
-  width: fit-content;
-  text-transform: capitalize;
-  margin: 0 20px;
 `;
 
 const Separator = styled.div`

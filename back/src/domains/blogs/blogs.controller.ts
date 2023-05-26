@@ -23,15 +23,11 @@ export class BlogsController {
   }
 
   @Get()
-  findAll() {
-    return this.blogsService.findAll();
-  }
-  @Get('with-filters')
-  findAllWithFilter(
-    @Query() filters:FilterBlog
+  findAll( @Query() filters:FilterBlog
   ){
-    return this.blogsService.findAllWithFilter(filters)
+    return this.blogsService.findAll(filters)
   }
+ 
 
   @Get('one/:id')
   findOne(@Param('id') id: string) {
@@ -39,12 +35,15 @@ export class BlogsController {
     
     return this.blogsService.findOne(id);
   }
-
+  
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
     return this.blogsService.update(id, updateBlogDto);
   }
-
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.blogsService.remove(id);

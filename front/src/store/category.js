@@ -8,7 +8,9 @@ export const fetchCategories = createAsyncThunk("categories/categories", async (
 });
 export const fetchCategoriesBlogs = createAsyncThunk("categories/categoriesBlog", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/categories/`);
+  console.log("im category",response.data);
   return response.data;
+  
 });
 
 export const fetchCategory = createAsyncThunk("categories/category", async (id) => {

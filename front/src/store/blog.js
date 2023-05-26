@@ -2,14 +2,20 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/blogs`);
+export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (args) => {
+
+  const response = await axios.get(`${config.API_ENDPOINT}/blogs`,{
+    params:{
+      ...args
+    }
+  });
   return response.data;
 
 });
 
 export const fetchBlog = createAsyncThunk("blogs/fetchBlog", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs/one/${id}`);
+  console.log("API Response:", response.data);
   return response.data;
 });
 export const createBlog = createAsyncThunk(
@@ -49,10 +55,10 @@ export const brancheSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchBlogs.fulfilled, (state, action) => {
-      state.blogs.items = action.payload;
+      state.blogs.items = action.payload.items;
     });
     builder.addCase(fetchBlog.fulfilled, (state, action) => {
-      state.blog = action.payload;
+      state.blog = action.payload.count;
     });
   },
 });

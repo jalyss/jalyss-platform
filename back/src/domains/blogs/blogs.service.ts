@@ -7,13 +7,13 @@ import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
 @Injectable()
 export class BlogsService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateBlogDto,userId:string) {
+  async create(dto: CreateBlogDto, authorId: string) {
     let mediaIds = [];
     if (dto.mediaIds) {
       mediaIds = dto.mediaIds;
       delete dto?.mediaIds;
     }
-    let data = { ...dto,userId };
+    let data = { ...dto, authorId };
     if (mediaIds.length > 0) {
       data['MediaBlog'] = {
         create: mediaIds.map((id) => ({
@@ -26,42 +26,55 @@ export class BlogsService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.blog.findMany({
-      include: { MediaBlog: { include: { media: true } } },
-    });
-  }
-
-  async findAllWithFilter(filters: FilterBlog) {
-    let where = { confirm: true };
+  async findAll(filters: FilterBlog) {
     let errors = [];
-    Object.entries(filters).forEach(([key, value]) => {
-      let filterExample = Object.keys(FilterBlogExample);
-      if (filterExample.includes(key)) {
-        if (['userId', 'categoryId'].includes(key)) {
-          where = { ...where, [key]: { in: value } }; //type of value is array
-        } else where = { ...where, [key]: value }; // type of value is string
-      } else {
+    let where = {};
+    let orderBy = {};
+    Object.entries(filters).forEach(([key, value], i) => {
+      if (!(key in FilterBlogExample)) {
         errors.push(key);
       }
+      if (!['take', 'skip','trend'].includes(key)) {
+        if (Array.isArray(value)) {
+          where = { ...where, [key]: { in: value } };
+        } else {
+          where = {
+            ...where,
+            [key]: key === 'confirm' ? (value == 1 ? true : false) : value,
+          };
+        }
+      }
     });
-    if (errors.length > 0) {
-      let string = '';
-      errors.forEach((e) => {
-        string = string + e + ' ';
-      });
-      console.log(string);
+    if (errors.length) {
+      let verbe = errors.length > 1 ? 'are' : 'is';
+      let wrongKeys = '';
+      errors.forEach((error, i) => {
+        console.log(i);
 
-      // throw new Error(`${string} not matched for filters`)
+        let separator = i < errors.length - 1 ? ' /' : '';
+        wrongKeys += error + separator + ' ';
+      });
       throw new HttpException(
-        `${string} not matched for filters`,
+        wrongKeys + verbe + ' not matched',
         HttpStatus.BAD_REQUEST,
       );
     }
-    return await this.prisma.blog.findMany({
-      where,
-      include: { MediaBlog: { include: { media: true } } },
-    });
+    if (filters.trend) {
+      orderBy = {
+        view: {
+          _count: 'desc',
+        },
+      };
+      let blogs = await this.searchBlogs({}, 6,0, orderBy);
+      console.log('trend');
+
+      return blogs;
+    } else {
+      console.log('NoTrend');
+      orderBy = { createdAt: 'desc' };
+
+      return await this.searchBlogs(where, +filters.take, +filters.skip, orderBy);
+    }
   }
 
   async findOne(id: string) {
@@ -74,27 +87,54 @@ export class BlogsService {
   }
 
   async update(id: string, dto: UpdateBlogDto) {
-    await this.prisma.$transaction(async(prisma)=>{
-      await prisma.mediaBlog.deleteMany({where:{blogId:id}})
+    await this.prisma.$transaction(async (prisma) => {
+      await prisma.mediaBlog.deleteMany({ where: { blogId: id } });
       let mediaIds = [];
-    if (dto.mediaIds) {
-      mediaIds = dto.mediaIds;
-      delete dto?.mediaIds;
-    }
-    let data = { ...dto };
-    if (mediaIds.length > 0) {
-      data['MediaBlog'] = {
-        create: mediaIds.map((id) => ({
-          mediaId: id,
-        })),
-      };
-    }
+      if (dto.mediaIds) {
+        mediaIds = dto.mediaIds;
+        delete dto?.mediaIds;
+      }
+      let data = { ...dto };
+      if (mediaIds.length > 0) {
+        data['MediaBlog'] = {
+          create: mediaIds.map((id) => ({
+            mediaId: id,
+          })),
+        };
+      }
       return await prisma.blog.update({ where: { id }, data });
-    })
-
+    });
   }
 
   async remove(id: string) {
     return await this.prisma.blog.delete({ where: { id } });
+  }
+  private async searchBlogs(
+    where: any,
+    take: number,
+    skip: number,
+    orderBy: any,
+  ) {
+    return this.prisma.$transaction(async (prisma)=>{
+      let items=await prisma.blog.findMany({
+        where,
+        include: {
+          MediaBlog: { include: { media: true } },
+          _count: { select: { view: true }, },
+          
+          category: true,
+          author: { select: { avatar: true,fullNameAr:true,fullNameEn:true,id:true } },
+        },
+       
+        orderBy,
+        take,
+        skip,
+      });
+
+      let count =await prisma.blog.count({where})
+      return {
+        items,count
+      }
+    })   
   }
 }
