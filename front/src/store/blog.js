@@ -9,6 +9,7 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (args) => {
       ...args
     }
   });
+  console.log("resfr",response.data);
   return response.data;
 
 });
@@ -47,6 +48,11 @@ export const brancheSlice = createSlice({
       items: [],
       count: 0,
     },
+    trend:{
+      items:[],
+      count:0
+    }
+    ,
     error: null,
     deleteError: null,
     saveError: null,
@@ -56,10 +62,13 @@ export const brancheSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(fetchBlogs.fulfilled, (state, action) => {
       state.blogs.items = action.payload.items;
+      state.blogs.count =action.payload.count;
+      state.blogs.trend=action.payload.trend;
     });
     builder.addCase(fetchBlog.fulfilled, (state, action) => {
-      state.blog = action.payload.count;
+      state.blog = action.payload;
     });
+    
   },
 });
 export default brancheSlice.reducer;

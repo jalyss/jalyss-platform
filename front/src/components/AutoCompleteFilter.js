@@ -3,7 +3,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
-function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName }) {
+function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName,label }) {
   return (
     <Stack spacing={1} sx={{ width: 500 }}>
       <Autocomplete
@@ -15,7 +15,7 @@ function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName }) 
           <TextField
             {...params}
             variant="standard"
-            label="Multiple values"
+            label={label}
             placeholder="Favorites"
           />
         )}

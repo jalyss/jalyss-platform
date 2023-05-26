@@ -4,25 +4,30 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchBlog } from "../store/blog";
 import { useSelector } from "react-redux";
+import { fetchBlogs } from "../store/blog";
 
 const BlogDetail = () => {
   const dispatch = useDispatch();
-  
-  const { blogId } = useParams();
   const navigate = useNavigate();
-  // const [selectedBlog, setSelectedBlog] = useState(blog[blogId]);
+  const { blogId } = useParams();
+  
+
+  // const [skip,setSkip]=useState()
   const blogStore = useSelector((state) => state.blog);
+  const { blogs } = blogStore;
   const { blog } = blogStore;
   useEffect(() => {
-    console.log("Dispatching fetchBlog action...");
-    dispatch(fetchBlog(blogId))
-  }, []);
- console.log("jj",blog);
+    dispatch(fetchBlog(blogId));
+  }, [dispatch]);
+let take =5
+let skip =0
+const authorId = blog?.authorId;
 
-  const handleBlogSelection = (blog) => {
-    setSelectedBlog(blog);
-  };
-
+  useEffect(() => {
+    dispatch(fetchBlogs({take,skip,authorId}));
+  }, [dispatch,authorId,take,skip]);
+console.log('blooooo',blog);
+ console.log("aloo",blogs);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -33,7 +38,7 @@ const BlogDetail = () => {
   }
   return (
     <BlogDetailWrapper>
-       <BlogDetailContent>
+      <BlogDetailContent>
         <HeaderContent>
           <GoBackLink onClick={() => navigate(-1)}>
             <span> &#8592;</span> <span>Go Back</span>
@@ -42,60 +47,63 @@ const BlogDetail = () => {
             <span>&#x1F516;</span>
           </BookmarkIcon>
         </HeaderContent>
-        <BlogContainer> 
-           <BlogHeader>
+        <BlogContainer>
+          <BlogHeader>
             <BlogDate>Published {blog.createdAt}</BlogDate>
 
             <Title>{blog.title}</Title>
 
             <CategoryInfo>
               <CategoryLabel>Category:</CategoryLabel>
-              <SubCategoryList>
-              
-              </SubCategoryList>
-            </CategoryInfo> 
-             <AuthorContainer>
-              <AuthorAvatar
-                src={blog.authorAvatar}
-                alt="Author Avatar"
-              />
-              <AuthorName>{blog.authorName}</AuthorName>
-            </AuthorContainer> 
-           </BlogHeader>
-          <BlogImg src={blog.cover} alt="cover" />
-           
-          <BlogDescription> <span dangerouslySetInnerHTML={{ __html: blog.content }} ></span></BlogDescription>
+              <SubCategoryList>{blog.category.nameEn}</SubCategoryList>
+            </CategoryInfo>
+            <AuthorContainer>
+              <AuthorAvatar src={blog?.author.avatar.path} alt="Author Avatar" />
+              <AuthorName>{blog.author.fullNameEn}</AuthorName>
+            </AuthorContainer>
+          </BlogHeader>
+          {blog.cover ? (
+            <BlogImg src={blog.cover} alt="cover" />
+          ) : (
+            <BlogImg
+              src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+              alt="cover"
+            />
+          )}
+
+          <BlogDescription>
+            {" "}
+            <span dangerouslySetInnerHTML={{ __html: blog.content }}></span>
+          </BlogDescription>
         </BlogContainer>
       </BlogDetailContent>
 
       <BlogDetailSidebar>
-        <AuthorAvatarr src={blog.authorAvatar} alt="author-avatar" />
+        <AuthorAvatarr src={blog?.author.avatar.path} alt="author-avatar" />
         <AuthorNamee>{blog.authorName}</AuthorNamee>
-        <MoreFromAuthor>More from {blog.authorName}</MoreFromAuthor> 
-        {/* <SideContainer>
-          {blogss
-            .filter(
-              (blog) =>
-                blog.authorName === selectedBlog.authorName &&
-                blog.id !== selectedBlog.id
-            )
-
-            // .slice(0, 3)
-            .map((blog) => (
+        <MoreFromAuthor>More from {blog.author.fullNameEn}</MoreFromAuthor>
+        <SideContainer>
+          {blogs.items.map((blog) => (
               <SideBlogContainer
                 key={blog.id}
-                onClick={() => handleBlogSelection(blog)}
+                // onClick={() => handleBlogSelection(blog)}
               >
                 <SideBlogTitle>
                   {blog.title}
                   <br />
-                  <span>Category: </span> <small>{blog.category}</small>
+                  <span>Category: </span> <small>{blog.category.nameEn}</small>
                 </SideBlogTitle>
-                <SideBlogImage src={blog.cover} alt="blog-cover" />
+                {blog.cover ? (
+                <SideBlogImage src={blog.cover} alt="cover" />
+              ) : (
+                <SideBlogImage
+                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                  alt="cover"
+                />
+              )}
               </SideBlogContainer>
             ))}
-        </SideContainer> */}
-        
+        </SideContainer>
       </BlogDetailSidebar>
     </BlogDetailWrapper>
   );
