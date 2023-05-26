@@ -19,3 +19,4 @@ export class UpdatePasswordDto {
     @ApiProperty() old_password: string;
 
 }
+
