@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
 import { Avatar } from '@mui/material';
 import include from 'liquidjs/dist/src/tags/include';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class BlogsService {
@@ -36,7 +37,7 @@ export class BlogsService {
       if (!(key in FilterBlogExample)) {
         errors.push(key);
       }
-      if (!['take', 'skip','trend'].includes(key)) {
+      if (!['take', 'skip', 'trend'].includes(key)) {
         if (Array.isArray(value)) {
           where = { ...where, [key]: { in: value } };
         } else {
@@ -67,17 +68,25 @@ export class BlogsService {
           _count: 'desc',
         },
       };
-      let blogs = await this.searchBlogs({}, 6,0, orderBy);
-      console.log('trend',blogs);
+      let blogs = await this.searchBlogs(this.prisma, {}, 6, 0, orderBy);
+      console.log('trend', blogs);
 
       return blogs;
     } else {
       console.log('NoTrend');
       orderBy = { createdAt: 'desc' };
+      return await this.prisma.$transaction(async (prisma) => {
+        let items = await this.searchBlogs(
+          prisma,
+          where,
+          +filters.take,
+          +filters.skip,
+          orderBy,
+        );
+        let count = await prisma.blog.count({ where });
 
-   let result = await this.searchBlogs(where, +filters.take, +filters.skip, orderBy);
-   console.log("res",result);
-   return result
+        return { items, count };
+      });
     }
   }
 
@@ -86,7 +95,11 @@ export class BlogsService {
       where: {
         id,
       },
-      include: { MediaBlog: { include: { media: true } } ,author:{include:{avatar:true}},category:true },
+      include: {
+        MediaBlog: { include: { media: true } },
+        author: { include: { avatar: true } },
+        category: true,
+      },
     });
   }
 
@@ -114,33 +127,32 @@ export class BlogsService {
     return await this.prisma.blog.delete({ where: { id } });
   }
   private async searchBlogs(
+    prisma: Prisma.TransactionClient,
     where: any,
     take: number,
     skip: number,
     orderBy: any,
   ) {
-
-    return this.prisma.$transaction(async (prisma)=>{
-      let items=await prisma.blog.findMany({
-        where,
-        include: {
-          MediaBlog: { include: { media: true } },
-          _count: { select: { view: true }, },
-          // cover:true,
-          category: true,
-          author: { select: { avatar: true,fullNameAr:true,fullNameEn:true,id:true } },
+    return await prisma.blog.findMany({
+      where,
+      include: {
+        MediaBlog: { include: { media: true } },
+        _count: { select: { view: true } },
+        // cover:true,
+        category: true,
+        author: {
+          select: {
+            avatar: true,
+            fullNameAr: true,
+            fullNameEn: true,
+            id: true,
+          },
         },
-       
-        orderBy,
-        take,
-        skip,
-      });
-  
-      let count =await prisma.blog.count({where})
+      },
 
-      return {
-        items,count
-      }
-    })   
+      orderBy,
+      take,
+      skip,
+    });
   }
 }

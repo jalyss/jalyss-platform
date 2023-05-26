@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { FaFire } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { trendingblogss } from "../constants/BlogsData";
 import { Fade } from "react-reveal";
 import landingPerson from "../assets/styles/landingPerson.json";
 import data from "../assets/styles/data.json";
@@ -10,48 +8,58 @@ import DisplayLottie from "./DisplayLottie";
 import DocumentMeta from "react-document-meta";
 import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
-import { fetchBlogs } from "../store/blog";
-import { useSelector } from "react-redux";
+import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
+import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import AutoCompleteFilter from "../components/AutoCompleteFilter";
 import { fetchUsers } from "../store/user";
+import Dropdown from "react-bootstrap/Dropdown";
+import {
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+} from "mdb-react-ui-kit";
 
 function Blogs() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const meta = useMeta(t("blog.title"), t("blog.description"));
 
+  const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
-  const { blogs } = blogStore;
+  const { blogs, trends } = blogStore;
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
   const userStore = useSelector((state) => state.user);
   const { users } = userStore;
 
-  const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const [categoryId, setCategoryId] = useState([]);
   const [authorId, setAuthorId] = useState([]);
   const [skip, setSkip] = useState(0);
+  const [basicModal, setBasicModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   const take = 6;
   let trend = 1;
   let confirm = 1;
-  const { t, i18n } = useTranslation();
-  const meta = useMeta(t("blog.title"), t("blog.description"));
+
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
     subTitle:
       "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
     displayGreeting: true, // Set false to hide this section, defaults to true
   };
- 
-  useEffect(() => {
-    dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
-    dispatch(fetchUsers());
-  }, [dispatch, authorId, categoryId, skip]);
 
   useEffect(() => {
-    dispatch(fetchBlogs({ take, skip, trend, confirm }));
-  }, [dispatch, take, skip, trend, confirm]);
+    dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
+    dispatch(fetchTrends());
+    dispatch(fetchUsers());
+  }, [dispatch, authorId, categoryId, skip]);
 
   function extractTextFromHTML(html) {
     const temporaryElement = document.createElement("div");
@@ -66,8 +74,11 @@ function Blogs() {
     console.log(value);
     setSkip((value - 1) * take);
   };
-
+  const toggleShow = () => setBasicModal(!basicModal);
   console.log("count", blogs.count);
+  const handleRemove = (id) => {
+    dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
+  };
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
@@ -145,7 +156,7 @@ function Blogs() {
                       Trending on Jalyss <br /> <FaFire />
                     </h1>
                     <div className="d-flex flex-wrap justify-content-center">
-                      {trendingBlogs.map((blog, index) => (
+                      {trends.map((blog, index) => (
                         <div
                           className="d-flex gap-2 align-items-center"
                           style={{
@@ -193,8 +204,8 @@ function Blogs() {
         <div
           style={{
             borderTop: "0.5px",
-            height:"1px",
-            width:"100%",
+            height: "1px",
+            width: "100%",
             backgroundColor: "#a9a9a9",
           }}
         />
@@ -220,19 +231,32 @@ function Blogs() {
             <div
               className="blogItemWrapper"
               key={blog.id}
-              onClick={() => navigate(`/blogs/${blog.id}`)}
               style={{ cursor: "pointer" }}
             >
               {blog.cover ? (
-                <img className="blodItemCover" src={blog.cover} alt="cover" />
+                <img
+                  className="blodItemCover"
+                  src={blog.cover}
+                  alt="cover"
+                  onClick={() => navigate("/blogs/${blog.id}")}
+                />
               ) : (
                 <img
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
+                  onClick={() => navigate("/blogs/${blog.id}")}
                 />
               )}
-              <div className="chip mt-3">{blog.category.nameEn}</div>
-              <div className="d-flex flex-column gap-2">
+              <div
+                className="chip mt-3"
+                onClick={() => navigate("/blogs/${blog.id}")}
+              >
+                {blog.category.nameEn}
+              </div>
+              <div
+                className="d-flex flex-column gap-2"
+                onClick={() => navigate("/blogs/${blog.id}")}
+              >
                 <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
 
                 <p className="blogItemDescription">
@@ -240,7 +264,8 @@ function Blogs() {
                   <p>{extractTextFromHTML(blog.content)}</p>
                 </p>
               </div>
-              <div className="blogItemFooter">
+
+              <div className="blogItemFooter d-flex justify-content-between">
                 <div className="d-flex align-items-center">
                   {blog.author.avatar ? (
                     <img
@@ -268,10 +293,68 @@ function Blogs() {
                     </p>
                   </div>
                 </div>
+
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className="ellipsis-btn"
+                    style={{ all: "unset" }}
+                  >
+                    <span>&#8942;</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu size="sm" title="">
+                    {me?.id === blog.authorId ? (
+                      <>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedId(blog.id);
+                            setBasicModal(true);
+                          }}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                        <Dropdown.Item>Update</Dropdown.Item>
+                      </>
+                    ) : (
+                      <Dropdown.Item>Save</Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </div>
           ))}
         </div>
+
+        <>
+          <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
+            <MDBModalDialog>
+              <MDBModalContent>
+                <MDBModalHeader>
+                  <MDBModalTitle>Delete</MDBModalTitle>
+                  <MDBBtn
+                    className="btn-close"
+                    color="none"
+                    onClick={toggleShow}
+                  ></MDBBtn>
+                </MDBModalHeader>
+                <MDBModalBody>Press continue to delete this blog</MDBModalBody>
+
+                <MDBModalFooter>
+                  <MDBBtn color="secondary" onClick={toggleShow}>
+                    Close
+                  </MDBBtn>
+                  <MDBBtn
+                    onClick={() => {
+                      handleRemove(selectedId);
+                      setBasicModal(false);
+                    }}
+                  >
+                    Continue
+                  </MDBBtn>
+                </MDBModalFooter>
+              </MDBModalContent>
+            </MDBModalDialog>
+          </MDBModal>
+        </>
 
         <div className="d-flex justify-content-center my-5">
           <Pagination
@@ -289,7 +372,5 @@ function Blogs() {
     </DocumentMeta>
   );
 }
-
-
 
 export default Blogs;
