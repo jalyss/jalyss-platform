@@ -3,6 +3,8 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
+import { Avatar } from '@mui/material';
+import include from 'liquidjs/dist/src/tags/include';
 
 @Injectable()
 export class BlogsService {
@@ -66,14 +68,16 @@ export class BlogsService {
         },
       };
       let blogs = await this.searchBlogs({}, 6,0, orderBy);
-      console.log('trend');
+      console.log('trend',blogs);
 
       return blogs;
     } else {
       console.log('NoTrend');
       orderBy = { createdAt: 'desc' };
 
-      return await this.searchBlogs(where, +filters.take, +filters.skip, orderBy);
+   let result = await this.searchBlogs(where, +filters.take, +filters.skip, orderBy);
+   console.log("res",result);
+   return result
     }
   }
 
@@ -82,7 +86,7 @@ export class BlogsService {
       where: {
         id,
       },
-      include: { MediaBlog: { include: { media: true } } },
+      include: { MediaBlog: { include: { media: true } } ,author:{include:{avatar:true}},category:true },
     });
   }
 
@@ -115,13 +119,14 @@ export class BlogsService {
     skip: number,
     orderBy: any,
   ) {
+
     return this.prisma.$transaction(async (prisma)=>{
       let items=await prisma.blog.findMany({
         where,
         include: {
           MediaBlog: { include: { media: true } },
           _count: { select: { view: true }, },
-          
+          // cover:true,
           category: true,
           author: { select: { avatar: true,fullNameAr:true,fullNameEn:true,id:true } },
         },
@@ -130,8 +135,9 @@ export class BlogsService {
         take,
         skip,
       });
-
+  
       let count =await prisma.blog.count({where})
+
       return {
         items,count
       }
