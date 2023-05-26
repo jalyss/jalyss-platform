@@ -69,6 +69,7 @@ export class AuthController {
       }
       return await this.authService.me(
         req.get('Authorization').replace('Bearer ', ''),
+        
       );
     } catch (e) {
       console.log('error', e);

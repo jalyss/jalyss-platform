@@ -518,8 +518,8 @@ model Blog {
   user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   confirm     Boolean         @default(false)
-  category    ArticleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId  String
+  category    ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String?
   MediaBlog   MediaBlog[]
   BlogLike    BlogLike[]
   commentBlog CommentBlog[]

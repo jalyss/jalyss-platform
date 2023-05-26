@@ -7,13 +7,13 @@ import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
 @Injectable()
 export class BlogsService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateBlogDto) {
+  async create(dto: CreateBlogDto,userId:string) {
     let mediaIds = [];
     if (dto.mediaIds) {
       mediaIds = dto.mediaIds;
       delete dto?.mediaIds;
     }
-    let data = { ...dto };
+    let data = { ...dto,userId };
     if (mediaIds.length > 0) {
       data['MediaBlog'] = {
         create: mediaIds.map((id) => ({

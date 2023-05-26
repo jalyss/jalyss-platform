@@ -9,6 +9,7 @@ import country from './country'
 import city from './city'
 import command from './command'
 import auth from './auth' 
+import blog from './blog' 
 
 
 export const store = configureStore({
@@ -22,6 +23,7 @@ export const store = configureStore({
     city,
     command,
     auth,
+    blog,
     
   },
   middleware: (getDefaultMiddleware) =>

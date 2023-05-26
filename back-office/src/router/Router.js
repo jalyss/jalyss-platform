@@ -22,7 +22,7 @@ import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
-import Charts from "../domains/dashboard/components/charts/Charts"
+// import Charts from "../domains/charts/Charts";
 import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
@@ -64,7 +64,7 @@ function Router() {
               <Route path="create" element={<CreateArticle />} />
             </Route>
 
-            <Route path="charts" element={<Charts />} />
+            {/* <Route path="charts" element={<Charts />} /> */}
 
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />

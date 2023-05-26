@@ -96,7 +96,7 @@ function Header() {
                 <Avatar
                   alt="Remy Sharp"
                   sx={{ width: 36, height: 36 }}
-                  src={userStore.meAdmin.avatar.path}
+                  src={userStore?.meAdmin?.avatar?.path}
                 />
               </Box>
             </Stack>
