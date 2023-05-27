@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
-import { Bookmarks } from 'phosphor-react';
+import { Bookmarks } from "phosphor-react";
 
 export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (args) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs`, {
@@ -15,7 +15,7 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (args) => {
 export const fetchTrends = createAsyncThunk("blogs/fetchTrends", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs`, {
     params: {
-      trend:1,
+      trend: 1,
     },
   });
   return response.data;
@@ -26,6 +26,7 @@ export const fetchBlog = createAsyncThunk("blogs/fetchBlog", async (id) => {
   console.log("API Response:", response.data);
   return response.data;
 });
+
 export const createBlog = createAsyncThunk(
   "blogs/createBlog",
   async (body, { dispatch }) => {
@@ -46,9 +47,14 @@ export const createBlog = createAsyncThunk(
     return response.data;
   }
 );
+export const createView = createAsyncThunk("views/createView", async (body) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/views`, body);
+
+  return response.data;
+});
 export const removeBlog = createAsyncThunk(
   "blogs/deleteBlog",
-  async (args, { dispatch}) => {
+  async (args, { dispatch }) => {
     const { id, ...queries } = args;
     let token = JSON.parse(localStorage.getItem("token"));
     const configs = {
@@ -65,6 +71,28 @@ export const removeBlog = createAsyncThunk(
   }
 );
 
+export const editBlog = createAsyncThunk(
+  "blogs/editBlog",
+  async (args) => {
+    const { id, ...body } = args;
+    let token = JSON.parse(localStorage.getItem("token"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/blogs/${id}`,
+      id,
+      body,
+      configs
+    );
+console.log(response.data);
+    return response.data;
+  }
+);
+
 export const brancheSlice = createSlice({
   name: "blog",
   initialState: {
@@ -74,7 +102,7 @@ export const brancheSlice = createSlice({
       count: 0,
     },
     trends: [],
-    Bookmarks:[],
+    Bookmarks: [],
     error: null,
     deleteError: null,
     saveError: null,
@@ -87,7 +115,7 @@ export const brancheSlice = createSlice({
       state.blogs.count = action.payload.count;
     });
     builder.addCase(fetchTrends.fulfilled, (state, action) => {
-      state.trends = action.payload
+      state.trends = action.payload;
     });
     builder.addCase(fetchBlog.fulfilled, (state, action) => {
       state.blog = action.payload;

@@ -83,6 +83,7 @@ function Blogs() {
       }
     });
   };
+ 
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
@@ -265,13 +266,15 @@ function Blogs() {
                   className="blogItemCover"
                   src={blog.cover.path}
                   alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                  onClick={() => navigate(`/blogs/${blog.id}`)
+                }
                 />
               ) : (
                 <img
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                  onClick={() => navigate(`/blogs/${blog.id}`
+                  )}
                 />
               )}
               <div
@@ -282,7 +285,7 @@ function Blogs() {
               </div>
               <div
                 className="d-flex flex-column gap-2"
-                onClick={() => navigate("/blogs/${blog.id}")}
+                onClick={() => navigate(`/blogs/${blog.id}`)}
               >
                 <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
 
