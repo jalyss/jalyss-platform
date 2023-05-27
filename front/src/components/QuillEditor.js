@@ -5,8 +5,6 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 const __ISMSIE__ = navigator.userAgent.match(/Trident/i) ? true : false;
 
-// Quill.register('modules/clipboard', PlainClipboard, true);
-
 const QuillClipboard = Quill.import("modules/clipboard");
 
 class Clipboard extends QuillClipboard {
@@ -190,11 +188,11 @@ class QuillEditor extends React.Component {
   onPollsChange;
   _isMounted;
 
+
   constructor(props) {
     super(props);
 
     this.state = {
-      editorHtml: __ISMSIE__ ? "<p>&nbsp;</p>" : "",
       files: [],
     };
 
@@ -207,10 +205,13 @@ class QuillEditor extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
+    
   }
+ 
 
   componentWillUnmount() {
     this._isMounted = false;
+    
   }
 
   handleChange = (html) => {
@@ -220,14 +221,7 @@ class QuillEditor extends React.Component {
     // https://tv.naver.com/v/9176888
     // renderToStaticMarkup(ReactHtmlParser(html, options));
 
-    this.setState(
-      {
-        editorHtml: html,
-      },
-      () => {
-        this.props.onEditorChange(this.state.editorHtml);
-      }
-    );
+    this.props.onEditorChange(html);
   };
 
   // I V F P들을  눌렀을떄 insertImage: this.imageHandler로 가서  거기서 inputOpenImageRef를 클릭 시킨다.
@@ -438,7 +432,7 @@ class QuillEditor extends React.Component {
           <button className="ql-list" value="bullet" />
           <select
             className="ql-align"
-            style={{ marginTop:"-2px" }}
+            style={{ marginTop: "-2px" }}
             defaultValue={""}
             onChange={(e) => e.persist()}
           >
@@ -446,14 +440,14 @@ class QuillEditor extends React.Component {
             <option value="center">Center</option>
             <option value="right">Right</option>
           </select>
-          <button className="ql-insertImage" style={{ marginTop:"-3px" }} >
+          <button className="ql-insertImage" style={{ marginTop: "-3px" }}>
             &#128444;
           </button>
-          <button className="ql-insertVideo" style={{ marginTop:"-3px" }}>
+          <button className="ql-insertVideo" style={{ marginTop: "-3px" }}>
             {" "}
             &#128249;
           </button>
-          <button className="ql-insertFile" style={{ marginTop:"-2px" }}>
+          <button className="ql-insertFile" style={{ marginTop: "-2px" }}>
             &#128462;
           </button>
           <button className="ql-link" />
@@ -461,7 +455,6 @@ class QuillEditor extends React.Component {
           <button className="ql-video" />
           <button className="ql-blockquote" />
           <button className="ql-clean" />
-         
         </div>
         <ReactQuill
           ref={(el) => {
@@ -471,7 +464,7 @@ class QuillEditor extends React.Component {
           onChange={this.handleChange}
           modules={this.modules}
           formats={this.formats}
-          value={this.state.editorHtml}
+          value={this.props.value}
           placeholder={this.props.placeholder}
         />
         <input

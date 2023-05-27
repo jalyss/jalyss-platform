@@ -43,10 +43,7 @@ const BlogsForm = () => {
     }
   };
 
-  const onFilesChange = (files) => {
-    setFiles(files);
-    console.log("files", files);
-  };
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -84,6 +81,11 @@ const BlogsForm = () => {
     setStaticModal(!staticModal);
   };
 
+  const onFilesChange = (files) => {
+    setFiles(files);
+    console.log("files", files);
+  };
+  
   const handleChange = (e) => {
     setCategoryId(e.target.value);
     console.log("oo", categoryId);
@@ -129,6 +131,7 @@ const BlogsForm = () => {
           placeholder={"Start Posting Something"}
           onEditorChange={onEditorChange}
           onFilesChange={onFilesChange}
+          value={content}
         />
 
         <select

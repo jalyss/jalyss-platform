@@ -231,7 +231,7 @@ window.onclick = function(event) {
                           )}
                           <div className="d-flex flex-column ">
                             <p style={{ fontSize: "1rem" }}>
-                              {blog.authorName}
+                              {blog.author.fullNameEn}
                             </p>
                             <h6 style={{ fontWeight: "bold" }}>{blog.title}</h6>
                             <p style={{ fontSize: "0.75rem", color: "#666" }}>
@@ -349,29 +349,14 @@ window.onclick = function(event) {
                         <li></li>
                     </ul>
 
-                    <div id="myDropdown" class="dropdown-content" size="sm">
-                    {me?.id === blog.authorId ? (
-                      <>
-                        <a onClick={() => {
-                            setSelectedId(blog.id);
-                            setBasicModal(true);
-                          }} >Delete</a>
-                        
-                        <a >Update</a> 
-                        </> 
-                         ) : (                    
-                        <a onClick={() => {
-                          handleCreateBookmark(blog.id);
-                        }}>Save</a>
-                        )}
-                    </div>
-                
-                </div>
-                {/* <Dropdown class="dropdown">
-
-                    <span onClick={showDropdown()}>&#8942;</span>
-
-                  <Dropdown.Menu class="myDropdown" size="sm">
+              <Dropdown>
+                  <Dropdown.Toggle
+                    className="ellipsis-btn dropdownToggleBlogCard"
+                    style={{ all: "unset" }}
+                  >
+                    <span>&#8942;</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu size="sm" title="">
                     {me?.id === blog.authorId ? (
                       <>
                         <Dropdown.Item
@@ -380,8 +365,9 @@ window.onclick = function(event) {
                             setBasicModal(true);
                           }}
                         >
-                          Delete</Dropdown.Item>
-                        <Dropdown.Item>Update</Dropdown.Item>
+                          Delete
+                        </Dropdown.Item>
+                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
                       </>
                     ) : (
                       <Dropdown.Item
@@ -393,20 +379,16 @@ window.onclick = function(event) {
                       </Dropdown.Item>
                     )}
                   </Dropdown.Menu>
-                </Dropdown> */}
+                </Dropdown> 
               </div>
             </div>
           ))}
         </div>
 
         <>
-          <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
-            <MDBModalDialog>
-              <MDBModalContent>
                 <MDBModalHeader>
                   <MDBModalTitle>Delete</MDBModalTitle>
                   <MDBBtn
-                    className="btn-close"
                     color="none"
                     onClick={toggleShow}
                   ></MDBBtn>
@@ -414,17 +396,23 @@ window.onclick = function(event) {
                 <MDBModalBody>Press continue to delete this blog</MDBModalBody>
 
                 <MDBModalFooter>
-                  <MDBBtn color="secondary" onClick={toggleShow}>
+                  <button color="secondary" 
+                   type="button"
+                   class="btn btn-secondary btn-sm"
+                  onClick={toggleShow}>
                     Close
-                  </MDBBtn>
-                  <MDBBtn
+                  </button>
+                 
+                  <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
                     onClick={() => {
                       handleRemove(selectedId);
                       setBasicModal(false);
                     }}
                   >
                     Continue
-                  </MDBBtn>
+                  </button>
                 </MDBModalFooter>
               </MDBModalContent>
             </MDBModalDialog>
