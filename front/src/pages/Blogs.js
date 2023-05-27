@@ -323,7 +323,7 @@ function Blogs() {
 
                 <Dropdown>
                   <Dropdown.Toggle
-                    className="ellipsis-btn"
+                    className="ellipsis-btn dropdownToggleBlogCard"
                     style={{ all: "unset" }}
                   >
                     <span>&#8942;</span>

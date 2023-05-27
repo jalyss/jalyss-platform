@@ -4,7 +4,9 @@
   grid-gap: 3rem;
   margin: 40px 50px 0;
 }
-
+.dropdownToggleBlogCard:after{
+  display: none !important;
+}
 @media (max-width: 768px) {
   .blogListWrapper {
     grid-template-columns: repeat(2, 1fr);
