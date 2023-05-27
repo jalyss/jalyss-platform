@@ -62,6 +62,26 @@ function Blogs() {
       ""
     );
   }
+
+
+  function showDropdown() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+
   const handleChange = (event, value) => {
     console.log(value);
     setSkip((value - 1) * take);
@@ -320,15 +340,38 @@ function Blogs() {
                     </p>
                   </div>
                 </div>
+                <div class="dropdown">
+                  
+                    <ul class="dropbtn icons btn-right showLeft">
+                    <span onClick={showDropdown()}>&#8942;</span>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
 
-                <Dropdown>
-                  <Dropdown.Toggle
-                    className="ellipsis-btn"
-                    style={{ all: "unset" }}
-                  >
-                    <span>&#8942;</span>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu size="sm" title="">
+                    <div id="myDropdown" class="dropdown-content" size="sm">
+                    {me?.id === blog.authorId ? (
+                      <>
+                        <a onClick={() => {
+                            setSelectedId(blog.id);
+                            setBasicModal(true);
+                          }} >Delete</a>
+                        
+                        <a >Update</a> 
+                        </> 
+                         ) : (                    
+                        <a onClick={() => {
+                          handleCreateBookmark(blog.id);
+                        }}>Save</a>
+                        )}
+                    </div>
+                
+                </div>
+                {/* <Dropdown class="dropdown">
+
+                    <span onClick={showDropdown()}>&#8942;</span>
+
+                  <Dropdown.Menu class="myDropdown" size="sm">
                     {me?.id === blog.authorId ? (
                       <>
                         <Dropdown.Item
@@ -337,8 +380,7 @@ function Blogs() {
                             setBasicModal(true);
                           }}
                         >
-                          Delete
-                        </Dropdown.Item>
+                          Delete</Dropdown.Item>
                         <Dropdown.Item>Update</Dropdown.Item>
                       </>
                     ) : (
@@ -351,7 +393,7 @@ function Blogs() {
                       </Dropdown.Item>
                     )}
                   </Dropdown.Menu>
-                </Dropdown>
+                </Dropdown> */}
               </div>
             </div>
           ))}
