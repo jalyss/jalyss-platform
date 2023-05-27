@@ -2,7 +2,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchBlog } from "../store/blog";
+import { fetchBlog,createView  } from "../store/blog";
 import { useSelector } from "react-redux";
 import { fetchBlogs } from "../store/blog";
 import { CircleDashed } from 'phosphor-react';
@@ -21,6 +21,11 @@ const BlogDetail = () => {
   const { blog } = blogStore;
   useEffect(() => {
     dispatch(fetchBlog(blogId));
+    let body={
+      blogId
+    }
+    dispatch(
+      createView(body))
   }, [dispatch]);
   let take = 5;
   let skip = 0;

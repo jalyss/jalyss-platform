@@ -1,10 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import QuillEditor from "../components/QuillEditor";
-import { Typography } from "antd";
-import ReactQuill, { Quill } from "react-quill";
+import { Typography ,Button,form} from "antd";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
+import axios from "axios";
 
 import { Container } from "@mui/material";
-import { fetchBlog } from "../store/blog";
+import { editBlog, fetchBlog } from "../store/blog";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
@@ -21,6 +22,12 @@ function UpdateBlog() {
   const [newContent, setNewContent] = useState(null);
   const [title, setTitle] = useState(null);
   const [cover, setCover] = useState(null);
+  const [files, setFiles] = useState(null);
+  const [categoryId, setCategoryId] = useState("");
+
+  const categoryStore = useSelector((state) => state.category);
+  const { categories } = categoryStore;
+
 
   useEffect(() => {
     dispatch(fetchBlog(blogId));
@@ -30,21 +37,18 @@ function UpdateBlog() {
 
   useEffect(() => {
     if (blog) {
-      htmlToText(blog.content);
+        console.log('updateblog',blog.content);
+        blog.content.split('width')
+      setNewContent(blog.content);
       setCover(blog.cover);
       setTitle(blog.title);
     }
   }, [blog]);
 
-  const htmlToText = (content) => {
-    const parser = new DOMParser();
-    const parsedContent = parser.parseFromString(content, "text/html");
-    const textContent = parsedContent.documentElement.textContent;
-    setNewContent(textContent);
-  };
-  const handleTextChange = (delta, oldDelta, source) => {
-    const editorContent = quillRef.current.root.innerHTML;
-    onEditorChange(editorContent);
+ 
+  const handleChange = (e) => {
+    setCategoryId(e.target.value);
+    console.log("oo", categoryId);
   };
 
   const onFilesChange = (files) => {
@@ -67,7 +71,46 @@ function UpdateBlog() {
       console.log("Selected cover file:", e.target.files[0]);
     }
   };
-  const defaultContent = "<p>Default value</p>";
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let id=blog.id
+    let body = {
+      content:newContent,
+      categoryId,
+      title,
+    };
+
+    if (cover !== null) {
+      try {
+        const formData = new FormData();
+        formData.append("file", cover);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          formData
+        );
+
+        body.coverId = response.data.id;
+      } catch (error) {
+        console.error("Error uploading cover image:", error);
+      }
+    }
+
+    dispatch(editBlog(id,body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been updated");
+        navigate(-1);
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+
+   
+  };
+
+  
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
@@ -96,7 +139,7 @@ function UpdateBlog() {
           onClick={handleClick}
         />
       </div>
-      {/* <div className="mb-3">
+      <div className="mb-3">
             <div className="d-flex justify-content-end ">
               <input
               ref={ref} defaultValue={cover}
@@ -106,8 +149,8 @@ function UpdateBlog() {
                 onChange={handleFileChange}
               />
             </div>
-          </div> */}
-      <div> {newContent}</div>
+          </div>
+      
 
       <>
         <div id="editor-container">
@@ -118,17 +161,30 @@ function UpdateBlog() {
             onFilesChange={onFilesChange}
           />
         </div>
-        {/* <QuillEditor
-          ref={ref}
-          value={defaultContent}
-            placeholder={"Start Posting Something"}
-            onEditorChange={onEditorChange}
-            onFilesChange={onFilesChange}
-          >
-            <div className="my-editing-area"/>
-            </QuillEditor> */}
+        <select
+          value={categoryId}
+          class="form-select mt-3"
+          aria-label="Default select example"
+          onChange={handleChange}
+        >
+          <option selected>Choose your Blog category</option>
+          {categories.items.map((category, index) => (
+            <option key={index} value={category.id}>
+              {category.nameEn}
+            </option>
+          ))}
+        </select>
+        <form>
+        
+        <div style={{ textAlign: "center", margin: "2rem auto" }}>
+            <Button size="large" className="" onClick={handleSubmit} >
+              submit
+            </Button>
+        </div>
+        </form>
       </>
     </div>
+    
   );
 }
 
