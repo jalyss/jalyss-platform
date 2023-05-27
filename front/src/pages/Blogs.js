@@ -9,6 +9,7 @@ import DocumentMeta from "react-document-meta";
 import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
 import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
+import { createBookmark } from "../store/bookmarks";
 import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import AutoCompleteFilter from "../components/AutoCompleteFilter";
@@ -24,6 +25,7 @@ import {
   MDBModalBody,
   MDBModalFooter,
 } from "mdb-react-ui-kit";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 function Blogs() {
   const dispatch = useDispatch();
@@ -78,6 +80,19 @@ function Blogs() {
   console.log("count", blogs.count);
   const handleRemove = (id) => {
     dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
+  };
+  const handleCreateBookmark = (blogId) => {
+    let body = {
+      blogId,
+      userId: me.id,
+    };
+    dispatch(createBookmark(body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been saved");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
   };
 
   return (
@@ -238,18 +253,18 @@ function Blogs() {
                   className="blodItemCover"
                   src={blog.cover}
                   alt="cover"
-                  onClick={() => navigate("/blogs/${blog.id}")}
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
                 />
               ) : (
                 <img
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
-                  onClick={() => navigate("/blogs/${blog.id}")}
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
                 />
               )}
               <div
                 className="chip mt-3"
-                onClick={() => navigate("/blogs/${blog.id}")}
+               onClick={() => navigate(`/blogs/${blog.id}`)}
               >
                 {blog.category.nameEn}
               </div>
@@ -315,7 +330,13 @@ function Blogs() {
                         <Dropdown.Item>Update</Dropdown.Item>
                       </>
                     ) : (
-                      <Dropdown.Item>Save</Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleCreateBookmark(blog.id);
+                        }}
+                      >
+                        Save
+                      </Dropdown.Item>
                     )}
                   </Dropdown.Menu>
                 </Dropdown>
@@ -355,6 +376,7 @@ function Blogs() {
             </MDBModalDialog>
           </MDBModal>
         </>
+        
 
         <div className="d-flex justify-content-center my-5">
           <Pagination

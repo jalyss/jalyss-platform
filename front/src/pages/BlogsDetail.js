@@ -6,13 +6,15 @@ import { fetchBlog } from "../store/blog";
 import { useSelector } from "react-redux";
 import { fetchBlogs } from "../store/blog";
 import { CircleDashed } from 'phosphor-react';
+import { createBookmark } from "../store/bookmarks";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 const BlogDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { blogId } = useParams();
 
-  // const [skip,setSkip]=useState()
+ 
   const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
   const { blogs } = blogStore;
@@ -33,6 +35,20 @@ const BlogDetail = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const handleCreateBookmarkOne = (blogId) => {
+    let body = {
+      blogId,
+      userId:me.id,
+    };
+    dispatch(createBookmark(body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been saved");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+
   if (!blog) {
     // Render a loading indicator or placeholder while waiting for the data
     return <div>Loading...</div>;
@@ -52,9 +68,9 @@ const BlogDetail = () => {
           <div className="goBackLink" onClick={() => navigate(-1)}>
             <span> &#8592;</span> <span>Go Back</span>
           </div>
-          <span className="bookMarkIcon">
+          <div className="bookMarkIcon" onClick={()=>{handleCreateBookmarkOne(blog.id)}}>
             <span>&#x1F516;</span>
-          </span>
+          </div>
         </div>
         <div style={{ maxWidth: "700px", margin: "0 auto" }}>
           <div className="d-flex flex-column align-items-center">
