@@ -114,10 +114,10 @@ const BlogDetail = () => {
               </h3>
             </div>
           </div>
-          {blog.cover ? (
+          {blog.cover   ? (
             <img
               style={{ width: "100%", borderRadius: "15px" }}
-              src={blog.cover}
+              src={blog.cover?.path}
               alt="cover"
             />
           ) : (
@@ -175,7 +175,7 @@ const BlogDetail = () => {
                 <span className="spanBlog">Category: </span> <small>{blog.category.nameEn}</small>
               </h6 >
               {blog.cover ? (
-                <img  className="sideBlogImage"  src={blog.cover} alt="cover" />
+                <img  className="sideBlogImage"  src={blog.cover?.path} alt="cover" />
               ) : (
                 <img
                 className="sideBlogImage"

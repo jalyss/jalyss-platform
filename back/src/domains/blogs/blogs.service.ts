@@ -99,6 +99,7 @@ export class BlogsService {
         MediaBlog: { include: { media: true } },
         author: { include: { avatar: true } },
         category: true,
+        cover:true
       },
     });
   }
@@ -138,7 +139,7 @@ export class BlogsService {
       include: {
         MediaBlog: { include: { media: true } },
         _count: { select: { view: true } },
-        // cover:true,
+        cover:true,
         category: true,
         author: {
           select: {
