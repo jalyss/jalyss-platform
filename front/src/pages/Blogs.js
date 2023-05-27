@@ -62,26 +62,6 @@ function Blogs() {
       ""
     );
   }
-
-
-  function showDropdown() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
-}
-
   const handleChange = (event, value) => {
     console.log(value);
     setSkip((value - 1) * take);
@@ -340,16 +320,8 @@ window.onclick = function(event) {
                     </p>
                   </div>
                 </div>
-                <div class="dropdown">
-                  
-                    <ul class="dropbtn icons btn-right showLeft">
-                    <span onClick={showDropdown()}>&#8942;</span>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                    </ul>
 
-              <Dropdown>
+                <Dropdown>
                   <Dropdown.Toggle
                     className="ellipsis-btn dropdownToggleBlogCard"
                     style={{ all: "unset" }}
@@ -379,16 +351,21 @@ window.onclick = function(event) {
                       </Dropdown.Item>
                     )}
                   </Dropdown.Menu>
-                </Dropdown> 
+                </Dropdown>
               </div>
             </div>
           ))}
         </div>
 
         <>
+          <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
+            <MDBModalDialog>
+              <MDBModalContent>
+          
                 <MDBModalHeader>
                   <MDBModalTitle>Delete</MDBModalTitle>
                   <MDBBtn
+                    className="btn-close"
                     color="none"
                     onClick={toggleShow}
                   ></MDBBtn>
