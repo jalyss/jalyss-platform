@@ -211,7 +211,7 @@ function Blogs() {
                           )}
                           <div className="d-flex flex-column ">
                             <p style={{ fontSize: "1rem" }}>
-                              {blog.authorName}
+                              {blog.author.fullNameEn}
                             </p>
                             <h6 style={{ fontWeight: "bold" }}>{blog.title}</h6>
                             <p style={{ fontSize: "0.75rem", color: "#666" }}>
@@ -339,7 +339,7 @@ function Blogs() {
                         >
                           Delete
                         </Dropdown.Item>
-                        <Dropdown.Item>Update</Dropdown.Item>
+                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
                       </>
                     ) : (
                       <Dropdown.Item
@@ -361,6 +361,7 @@ function Blogs() {
           <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
             <MDBModalDialog>
               <MDBModalContent>
+          
                 <MDBModalHeader>
                   <MDBModalTitle>Delete</MDBModalTitle>
                   <MDBBtn
@@ -372,17 +373,23 @@ function Blogs() {
                 <MDBModalBody>Press continue to delete this blog</MDBModalBody>
 
                 <MDBModalFooter>
-                  <MDBBtn color="secondary" onClick={toggleShow}>
+                  <button color="secondary" 
+                   type="button"
+                   class="btn btn-secondary btn-sm"
+                  onClick={toggleShow}>
                     Close
-                  </MDBBtn>
-                  <MDBBtn
+                  </button>
+                 
+                  <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
                     onClick={() => {
                       handleRemove(selectedId);
                       setBasicModal(false);
                     }}
                   >
                     Continue
-                  </MDBBtn>
+                  </button>
                 </MDBModalFooter>
               </MDBModalContent>
             </MDBModalDialog>

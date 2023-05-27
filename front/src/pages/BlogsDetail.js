@@ -1,4 +1,4 @@
-import styled from "styled-components";
+
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -50,7 +50,7 @@ const BlogDetail = () => {
   };
 
   if (!blog) {
-    // Render a loading indicator or placeholder while waiting for the data
+    
     return <div>Loading...</div>;
   }
   return (
