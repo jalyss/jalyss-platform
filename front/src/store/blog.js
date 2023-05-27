@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
+import { Bookmarks } from 'phosphor-react';
 
 export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (args) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs`, {
@@ -73,6 +74,7 @@ export const brancheSlice = createSlice({
       count: 0,
     },
     trends: [],
+    Bookmarks:[],
     error: null,
     deleteError: null,
     saveError: null,
