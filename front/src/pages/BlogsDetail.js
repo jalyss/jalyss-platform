@@ -4,21 +4,32 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchBlog,createView  } from "../store/blog";
 import { useSelector } from "react-redux";
-import { fetchBlogs } from "../store/blog";
+import { fetchBlogs, removeBlog } from "../store/blog";
 import { CircleDashed } from 'phosphor-react';
 import { createBookmark } from "../store/bookmarks";
+import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter,} from "mdb-react-ui-kit";
+import Dropdown from "react-bootstrap/Dropdown";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 const BlogDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { blogId } = useParams();
-
- 
+  const [categoryId, setCategoryId] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
+  const [basicModal, setBasicModal] = useState(false);
+  const categoryStore = useSelector((state) => state.category);
+  const { categories } = categoryStore;
   const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
   const { blogs } = blogStore;
   const { blog } = blogStore;
+
+  const toggleShow = () => setBasicModal(!basicModal);
+  const handleRemove = (id) => {
+    dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
+  };
+
   useEffect(() => {
     dispatch(fetchBlog(blogId));
     let body={
@@ -27,6 +38,7 @@ const BlogDetail = () => {
     dispatch(
       createView(body))
   }, [dispatch]);
+
   let take = 5;
   let skip = 0;
   const authorId = blog?.authorId;
@@ -73,8 +85,78 @@ const BlogDetail = () => {
           <div className="goBackLink" onClick={() => navigate(-1)}>
             <span> &#8592;</span> <span>Go Back</span>
           </div>
-          <div className="bookMarkIcon" onClick={()=>{handleCreateBookmarkOne(blog.id)}}>
-            <span>&#x1F516;</span>
+          <div>
+          <Dropdown>
+                  <Dropdown.Toggle
+                    className="ellipsis-btn dropdownToggleBlogCard"
+                    style={{ all: "unset" }}
+                  >
+                    <span>&#8942;</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu size="sm" title="">
+                    {me?.id === blog.authorId ? (
+                      <>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedId(blog.id);
+                            setBasicModal(true);
+                            console.log(blog.id,"from the delete");
+                          }}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
+                      </>
+                    ) : (
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleCreateBookmarkOne(blog.id);
+                        }}
+                      >
+                        Save
+                      </Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+                <>
+          <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
+            <MDBModalDialog>
+              <MDBModalContent>
+          
+                <MDBModalHeader>
+                  <MDBModalTitle>Delete</MDBModalTitle>
+                  <MDBBtn
+                    className="btn-close"
+                    color="none"
+                    onClick={toggleShow}
+                  ></MDBBtn>
+                </MDBModalHeader>
+                <MDBModalBody>Press continue to delete this blog</MDBModalBody>
+
+                <MDBModalFooter>
+                  <button color="secondary" 
+                   type="button"
+                   class="btn btn-secondary btn-sm"
+                  onClick={toggleShow}>
+                    Close
+                  </button>
+                 
+                  <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                    onClick={() => {
+                      handleRemove(selectedId);
+                      setBasicModal(false);
+                      navigate(-1)
+                    }}
+                  >
+                    Continue
+                  </button>
+                </MDBModalFooter>
+              </MDBModalContent>
+            </MDBModalDialog>
+          </MDBModal>
+        </>
           </div>
         </div>
         <div style={{ maxWidth: "700px", margin: "0 auto" }}>

@@ -56,7 +56,7 @@ export const removeBlog = createAsyncThunk(
   "blogs/deleteBlog",
   async (args, { dispatch }) => {
     const { id, ...queries } = args;
-    let token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem("token"));
     const configs = {
       headers: {
         Authorization: "Bearer " + token.Authorization,
@@ -75,16 +75,17 @@ export const editBlog = createAsyncThunk(
   "blogs/editBlog",
   async (args) => {
     const { id, ...body } = args;
-    let token = JSON.parse(localStorage.getItem("token"));
+  const token = JSON.parse(localStorage.getItem("token")).Authorization;
+  console.log("Token:", token)
     const configs = {
       headers: {
-        Authorization: "Bearer " + token.Authorization,
+        Authorization: "Bearer " + token,
       },
     };
-
+    console.log(token,"this my ");
+    
     const response = await axios.patch(
-      `${config.API_ENDPOINT}/blogs/${id}`,
-      id,
+      `${configs.API_ENDPOINT}/blogs/${id}`,
       body,
       configs
     );

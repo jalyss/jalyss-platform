@@ -56,6 +56,7 @@ function Router() {
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
             <Route path="blogsForm" element={<BlogsForm/>} />
+            <Route path="blogs/:blogId" element={<UpdateBlog/>} />
             <Route path="spaceJalyss" element={<SpaceJalyss />} />
             <Route path="CoworkingZone" element={<CoworkingZone />} />
             <Route path="MeetingZone" element={<MeetingZone />} />
