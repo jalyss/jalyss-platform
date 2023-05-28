@@ -63,7 +63,6 @@ function Blogs() {
     );
   }
   const handleChange = (event, value) => {
-    console.log(value);
     setSkip((value - 1) * take);
   };
   const toggleShow = () => setBasicModal(!basicModal);
@@ -271,6 +270,7 @@ function Blogs() {
                 />
               ) : (
                 <img
+                className="blogItemCover"
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
                   onClick={() => navigate(`/blogs/${blog.id}`

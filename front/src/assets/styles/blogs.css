@@ -7,7 +7,16 @@
 .dropdownToggleBlogCard:after{
   display: none !important;
 }
-@media (max-width: 768px) {
+.dropdownToggleBlogCard {
+  width: 30px !important;
+  height:  30px !important;
+  text-align: center !important;
+}
+.dropdownToggleBlogCard:hover{
+  background-color: #3a0b5042 !important;
+  border-radius: 20px !important;
+}
+@media (max-width: 1200px) {
   .blogListWrapper {
     grid-template-columns: repeat(2, 1fr);
   }

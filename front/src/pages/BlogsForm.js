@@ -32,14 +32,13 @@ const BlogsForm = () => {
 
   const onEditorChange = (newContent) => {
     setContent(newContent);
-    localStorage.setItem("blogContent", newContent);
-    console.log("newContent", newContent);
+    
   };
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setCover(e.target.files[0]);
-      console.log("Selected cover file:", e.target.files[0]);
+     
     }
   };
 
@@ -83,12 +82,11 @@ const BlogsForm = () => {
 
   const onFilesChange = (files) => {
     setFiles(files);
-    console.log("files", files);
+  
   };
   
   const handleChange = (e) => {
     setCategoryId(e.target.value);
-    console.log("oo", categoryId);
   };
   const toggleShow = () => setStaticModal(!staticModal);
 

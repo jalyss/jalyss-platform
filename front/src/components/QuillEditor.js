@@ -1,12 +1,14 @@
 import React from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import ImageResize from "quill-image-resize-module-react";
+import ImageResize from "./imge-resize/ImageResize";
+import { ImageDrop } from "quill-image-drop-module";
 import axios from "axios";
-
+import parse from "html-react-parser";
 
 const QuillClipboard = Quill.import("modules/clipboard");
 Quill.register("modules/imageResize", ImageResize);
+Quill.register("modules/imageDrop", ImageDrop);
 class Clipboard extends QuillClipboard {
   getMetaTagElements = (stringContent) => {
     const el = document.createElement("div");
@@ -66,14 +68,23 @@ class ImageBlot extends BlockEmbed {
     const imgTag = super.create();
     imgTag.setAttribute("src", value.src);
     imgTag.setAttribute("alt", value.alt);
-    imgTag.setAttribute("width", value.naturalWidth);
+    imgTag.setAttribute(
+      "width",
+      value.width ? value.width : value.naturalWidth
+    );
     imgTag.setAttribute("height", value.naturalHeight);
 
     return imgTag;
   }
 
   static value(node) {
-    return { src: node.getAttribute("src"), alt: node.getAttribute("alt") };
+    console.log(node);
+    return {
+      src: node.getAttribute("src"),
+      alt: node.getAttribute("alt"),
+      width: node.getAttribute("width"),
+      height: node.getAttribute("height"),
+    };
   }
 }
 
@@ -202,20 +213,17 @@ class QuillEditor extends React.Component {
     this.inputOpenFileRef = React.createRef();
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-  }
+  // componentDidMount() {
+  //   this._isMounted = true;
+  // }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
+  // componentWillUnmount() {
+  //   this._isMounted = false;
+  // }
 
   handleChange = (html) => {
     console.log("html", html);
-    // https://youtu.be/BbR-QCoKngE
-    // https://www.youtube.com/embed/ZwKhufmMxko
-    // https://tv.naver.com/v/9176888
-    // renderToStaticMarkup(ReactHtmlParser(html, options));
+
 
     this.props.onEditorChange(html);
   };
@@ -471,6 +479,7 @@ class QuillEditor extends React.Component {
           <button className="ql-clean" />
         </div>
         <ReactQuill
+          className="ql-editor"
           ref={(el) => {
             this.reactQuillRef = el;
           }}
@@ -508,10 +517,12 @@ class QuillEditor extends React.Component {
 
   modules = {
     // syntax: true,
+
     imageResize: {
-      parchment: Quill.import("parchment"),
-      modules: ["Resize", "DisplaySize"],
+      modules: ["Resize", "DisplaySize", "Toolbar"],
     },
+    imageDrop: true,
+
     toolbar: {
       container: "#toolbar",
       handlers: {
@@ -565,7 +576,6 @@ class QuillEditor extends React.Component {
     "list",
     "bullet",
     "ordered",
-
     "size",
     "background",
     "align",

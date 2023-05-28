@@ -48,7 +48,7 @@ function NavBar() {
   }
 
   const currentDevise = localStorage.getItem('devise')
-  console.log(showArticleMenu)
+
 
   return (
     <>

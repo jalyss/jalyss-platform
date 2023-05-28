@@ -4,19 +4,22 @@ import { Typography ,Button,form} from "antd";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import axios from "axios";
 
-import { Container } from "@mui/material";
+import "react-quill/dist/quill.snow.css";
 import { editBlog, fetchBlog } from "../store/blog";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import ReactHtmlParser from 'react-html-parser'; 
 const { Title } = Typography;
 
 function UpdateBlog() {
   const dispatch = useDispatch();
   const { blogId } = useParams();
+  const navigate=useNavigate()
   const quillRef = useRef(null);
   const ref = useRef(null);
+  const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
   const { blog } = blogStore;
   const [newContent, setNewContent] = useState(null);
@@ -37,7 +40,7 @@ function UpdateBlog() {
 
   useEffect(() => {
     if (blog) {
-        console.log('updateblog',blog.content);
+        console.log('updateblog',ReactHtmlParser(blog.content));
         blog.content.split('width')
       setNewContent(blog.content);
       setCover(blog.cover);
@@ -76,12 +79,13 @@ function UpdateBlog() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     let id=blog.id
+   
     let body = {
       content:newContent,
       categoryId,
       title,
     };
-
+   
     if (cover !== null) {
       try {
         const formData = new FormData();
@@ -98,7 +102,7 @@ function UpdateBlog() {
       }
     }
 
-    dispatch(editBlog(id,body)).then((res) => {
+    dispatch(editBlog({id,body})).then((res) => {
       if (!res.error) {
         showSuccessToast("Blog has been updated");
         navigate(-1);
@@ -106,8 +110,6 @@ function UpdateBlog() {
         showErrorToast(res.error.message);
       }
     });
-
-   
   };
 
   
@@ -155,6 +157,7 @@ function UpdateBlog() {
       <>
         <div id="editor-container">
           <QuillEditor
+          
             placeholder={"Start Posting Something"}
             value={newContent}
             onEditorChange={onEditorChange}
