@@ -24,6 +24,7 @@ import Chatroom from "../pages/Chatroom";
 
 import { useSelector } from "react-redux";
 
+
 function Router() {
 
   return (
@@ -49,6 +50,7 @@ function Router() {
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
             <Route path="blogsForm" element={<BlogsForm/>} />
             <Route path="mentor" element={<MentorPage/>} />
+       
           </Route>
           
         </Routes>

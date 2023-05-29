@@ -41,7 +41,7 @@ function Blogs() {
                   <GreetingButtonDiv>
                     <GreetingButton $primary> <NoStyle href="#blogListWrapper" >Explore &#9654;</NoStyle>
  </GreetingButton>
-                    <GreetingButton onClick={()=>{navigate('/BlogsForm')}}>Write yours</GreetingButton>
+                    <GreetingButton onClick={()=>{ navigate('/BlogsForm') }}>Write yours</GreetingButton>
                   </GreetingButtonDiv>
                 </GreetingTextDiv>
               {/* </GreetingMain> */}

@@ -1,0 +1,26 @@
+.sent-message {
+  background-color: blue;
+  color: white;
+  border-radius: 100px;
+  padding: 10px;
+max-width: 500px;
+min-width: 200px;
+
+
+}
+
+.received-message {
+  background-color: gray;
+  color: white;
+  border-radius: 100px;
+  padding: 10px;
+  max-width: 500px;
+min-width: 200px;
+
+
+
+
+}
+.containerr {
+  padding: 5px;
+}

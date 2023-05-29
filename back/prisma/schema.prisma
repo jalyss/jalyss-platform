@@ -91,6 +91,7 @@ model User {
   commentBlog          CommentBlog[]
   replyCommentaireBlog ReplyCommentBlog[]
   bookMark             Bookmark[]
+  ConnetedUser         ConnetedUser?
 }
 
 model UserPayment {
@@ -206,7 +207,7 @@ model Assessments {
 
 model ChatRoom {
   id           String         @id @default(uuid())
-  name         String
+  name         String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   messages     ChatMessage[]
@@ -222,6 +223,13 @@ model ChatMessage {
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
+}
+
+model ConnetedUser {
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId])
 }
 
 //join table between user and chat room 
@@ -330,7 +338,7 @@ model MvtArticle {
   branchReceiverId String
   articleId        String
   article          Article   @relation(fields: [articleId], references: [id])
-  date             DateTime  
+  date             DateTime
   quantity         Int
   status           StatusMvt @default(pending)
   createdAt        DateTime  @default(now())
@@ -361,23 +369,22 @@ model CommandLine {
 }
 
 model Employee {
-  id         String  @id @default(uuid())
+  id         String   @id @default(uuid())
   fullNameAr String
   fullNameEn String
-  email      String  @unique
+  email      String   @unique
   address    String
   tel        String
   avatarId   String?
   avatar     Media?   @relation(fields: [avatarId], references: [id])
   password   String
-  isAdmin    Boolean @default(false)
-  branch     Branch? @relation(fields: [branchId], references: [id])
-  branchId   String? @map("branch_id")
-  role       Role?   @relation(fields: [roleId], references: [id])
+  isAdmin    Boolean  @default(false)
+  branch     Branch?  @relation(fields: [branchId], references: [id])
+  branchId   String?  @map("branch_id")
+  role       Role?    @relation(fields: [roleId], references: [id])
   roleId     String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Role {
@@ -573,6 +580,7 @@ model ReplyCommentBlog {
   userId        String
   commentBlog   CommentBlog @relation(fields: [commentBlogId], references: [id], onDelete: Cascade)
   commentBlogId String
+ 
 }
 
 model Bookmark {
