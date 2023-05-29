@@ -89,9 +89,15 @@ const BlogDetail = () => {
           <Dropdown>
                   <Dropdown.Toggle
                     className="ellipsis-btn dropdownToggleBlogCard"
-                    style={{ all: "unset" }}
+                      style={{      
+                      borderRadius: '100%',
+                      width: '40px',
+                      height: '40px',
+                      background: '#fff',
+                      border: 'none',
+                      transition: 'background-color 0.5s' }}
                   >
-                    <span>&#8942;</span>
+                    <span style={{ fontSize: '20px', color:"black"}}>&#8942;</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu size="sm" title="">
                     {me?.id === blog.authorId ? (
@@ -117,6 +123,13 @@ const BlogDetail = () => {
                       </Dropdown.Item>
                     )}
                   </Dropdown.Menu>
+                  <style>
+        {`
+          .ellipsis-btn:hover {
+            background-color: #8c21bd45 !important;
+          }
+        `}
+      </style>
                 </Dropdown>
                 <>
           <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">

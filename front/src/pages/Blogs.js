@@ -47,6 +47,15 @@ function Blogs() {
     displayGreeting: true,
   };
 
+  const [isBlinking, setIsBlinking] = useState(false);
+
+  const handleIconClick = () => {
+    setIsBlinking(true);
+    setTimeout(() => {
+      setIsBlinking(false);
+    }, 500);
+  };
+
   useEffect(() => {
     dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
     dispatch(fetchTrends());
@@ -325,36 +334,46 @@ function Blogs() {
                 </div>
 
                 <Dropdown>
-                  <Dropdown.Toggle
-                    className="ellipsis-btn dropdownToggleBlogCard"
-                    style={{ all: "unset" }}
-                  >
-                    <span>&#8942;</span>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu size="sm" title="">
-                    {me?.id === blog.authorId ? (
-                      <>
-                        <Dropdown.Item
-                          onClick={() => {
-                            setSelectedId(blog.id);
-                            setBasicModal(true);
-                          }}
-                        >
-                          Delete
-                        </Dropdown.Item>
-                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
-                      </>
-                    ) : (
-                      <Dropdown.Item
-                        onClick={() => {
-                          handleCreateBookmark(blog.id);
-                        }}
-                      >
-                        Save
-                      </Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
+      <Dropdown.Toggle
+        className={`ellipsis-btn dropdownToggleBlogCard ${isBlinking ? 'blinking' : ''}`}
+        style={{      
+        borderRadius: '100%',
+        width: '40px',
+        height: '40px',
+        background: '#fff',
+        border: 'none',
+        transition: 'background-color 0.5s',
+        }}
+      >
+        <span style={{ fontSize: '20px', color:"black"}}>&#8942;</span>
+      </Dropdown.Toggle>
+      <Dropdown.Menu size="sm" title="">
+        {me?.id === blog.authorId ? (
+          <>
+            <Dropdown.Item onClick={() => {
+              setSelectedId(blog.id);
+              setBasicModal(true);
+            }}>
+              Delete
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => navigate(`/update-blog/${blog.id}`)}>
+              Update
+            </Dropdown.Item>
+          </>
+        ) : (
+          <Dropdown.Item onClick={() => handleCreateBookmark(blog.id)}>
+            Save
+          </Dropdown.Item>
+        )}
+      </Dropdown.Menu>
+      <style>
+        {`
+          .ellipsis-btn:hover {
+            background-color: #8c21bd45 !important;
+          }
+        `}
+      </style>
+    </Dropdown>
               </div>
             </div>
           ))}

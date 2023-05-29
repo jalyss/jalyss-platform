@@ -18,6 +18,24 @@
     grid-template-columns: repeat(1, 1fr);
   }
 }
+
+@keyframes blinking {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.ellipsis-btn:hover {
+  background-color: #7915a7;
+}
+
+.dropdown-toggle {
+  white-space: nowrap;
+}
+
 .blogItemWrapper {
   display: flex;
   flex-direction: column;
