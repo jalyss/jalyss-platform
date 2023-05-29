@@ -522,7 +522,7 @@ model Blog {
   authorId    String
   confirm     Boolean          @default(false)
   category    ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId  String?
+  categoryId  String
   MediaBlog   MediaBlog[]
   BlogLike    BlogLike[]
   commentBlog CommentBlog[]

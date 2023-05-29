@@ -8,22 +8,16 @@ import DisplayLottie from "./DisplayLottie";
 import DocumentMeta from "react-document-meta";
 import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
-import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
-import { useSelector, useDispatch } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import AutoCompleteFilter from "../components/AutoCompleteFilter";
-import { fetchUsers } from "../store/user";
 import Dropdown from "react-bootstrap/Dropdown";
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-} from "mdb-react-ui-kit";
+import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter,} from "mdb-react-ui-kit";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUsers } from "../store/user";
+import { createBookmark } from "../store/bookmarks";
+import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
+
 
 function Blogs() {
   const dispatch = useDispatch();
@@ -45,14 +39,12 @@ function Blogs() {
   const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const take = 6;
-  let trend = 1;
-  let confirm = 1;
-
+ 
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
     subTitle:
       "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
-    displayGreeting: true, // Set false to hide this section, defaults to true
+    displayGreeting: true,
   };
 
   useEffect(() => {
@@ -71,14 +63,26 @@ function Blogs() {
     );
   }
   const handleChange = (event, value) => {
-    console.log(value);
     setSkip((value - 1) * take);
   };
   const toggleShow = () => setBasicModal(!basicModal);
-  console.log("count", blogs.count);
   const handleRemove = (id) => {
     dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
   };
+  const handleCreateBookmark = (blogId) => {
+    let body = {
+      blogId,
+      userId: me.id,
+    };
+    dispatch(createBookmark(body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been saved");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+ 
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
@@ -110,7 +114,17 @@ function Blogs() {
                       className="btn btn-danger"
                       style={{ height: "50px", width: "172px" }}
                     >
-                      <div href="#blogListWrapper">Explore &#9654;</div>
+                      <div
+                        onClick={() => {
+                          const element =
+                            document.querySelector(".blogListWrapper");
+                          if (element) {
+                            element.scrollIntoView({ behavior: "smooth" });
+                          }
+                        }}
+                      >
+                        Explore &#9654;
+                      </div>
                     </button>
 
                     <button
@@ -173,18 +187,31 @@ function Blogs() {
                               fontWeight: "bold",
                             }}
                           >{`${(index + 1).toString().padStart(2, "0")}`}</h3>
-                          <img
-                            style={{
-                              width: "4rem",
-                              height: "4rem",
-                              borderRadius: "50%",
-                            }}
-                            src={blog.authorAvatar}
-                            alt={blog.authorName}
-                          />
+
+                          {blog.author.avatar ? (
+                            <img
+                              style={{
+                                width: "4rem",
+                                height: "4rem",
+                                borderRadius: "50%",
+                              }}
+                              src={blog.author.avatar?.path}
+                              alt="avatar"
+                            />
+                          ) : (
+                            <img
+                              style={{
+                                width: "4rem",
+                                height: "4rem",
+                                borderRadius: "50%",
+                              }}
+                              src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                              alt="avatar"
+                            />
+                          )}
                           <div className="d-flex flex-column ">
                             <p style={{ fontSize: "1rem" }}>
-                              {blog.authorName}
+                              {blog.author.fullNameEn}
                             </p>
                             <h6 style={{ fontWeight: "bold" }}>{blog.title}</h6>
                             <p style={{ fontSize: "0.75rem", color: "#666" }}>
@@ -235,27 +262,30 @@ function Blogs() {
             >
               {blog.cover ? (
                 <img
-                  className="blodItemCover"
-                  src={blog.cover}
+                  className="blogItemCover"
+                  src={blog.cover.path}
                   alt="cover"
-                  onClick={() => navigate("/blogs/${blog.id}")}
+                  onClick={() => navigate(`/blogs/${blog.id}`)
+                }
                 />
               ) : (
                 <img
+                className="blogItemCover"
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
-                  onClick={() => navigate("/blogs/${blog.id}")}
+                  onClick={() => navigate(`/blogs/${blog.id}`
+                  )}
                 />
               )}
               <div
                 className="chip mt-3"
-                onClick={() => navigate("/blogs/${blog.id}")}
+                onClick={() => navigate(`/blogs/${blog.id}`)}
               >
                 {blog.category.nameEn}
               </div>
               <div
                 className="d-flex flex-column gap-2"
-                onClick={() => navigate("/blogs/${blog.id}")}
+                onClick={() => navigate(`/blogs/${blog.id}`)}
               >
                 <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
 
@@ -296,7 +326,7 @@ function Blogs() {
 
                 <Dropdown>
                   <Dropdown.Toggle
-                    className="ellipsis-btn"
+                    className="ellipsis-btn dropdownToggleBlogCard"
                     style={{ all: "unset" }}
                   >
                     <span>&#8942;</span>
@@ -312,10 +342,16 @@ function Blogs() {
                         >
                           Delete
                         </Dropdown.Item>
-                        <Dropdown.Item>Update</Dropdown.Item>
+                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
                       </>
                     ) : (
-                      <Dropdown.Item>Save</Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleCreateBookmark(blog.id);
+                        }}
+                      >
+                        Save
+                      </Dropdown.Item>
                     )}
                   </Dropdown.Menu>
                 </Dropdown>
@@ -328,6 +364,7 @@ function Blogs() {
           <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
             <MDBModalDialog>
               <MDBModalContent>
+          
                 <MDBModalHeader>
                   <MDBModalTitle>Delete</MDBModalTitle>
                   <MDBBtn
@@ -339,17 +376,23 @@ function Blogs() {
                 <MDBModalBody>Press continue to delete this blog</MDBModalBody>
 
                 <MDBModalFooter>
-                  <MDBBtn color="secondary" onClick={toggleShow}>
+                  <button color="secondary" 
+                   type="button"
+                   class="btn btn-secondary btn-sm"
+                  onClick={toggleShow}>
                     Close
-                  </MDBBtn>
-                  <MDBBtn
+                  </button>
+                 
+                  <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
                     onClick={() => {
                       handleRemove(selectedId);
                       setBasicModal(false);
                     }}
                   >
                     Continue
-                  </MDBBtn>
+                  </button>
                 </MDBModalFooter>
               </MDBModalContent>
             </MDBModalDialog>

@@ -6,6 +6,7 @@ import { FilterBlog } from './entities/blog.entity';
 import {ApiTags,ApiSecurity} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/currentUser';
+import { FormatLogin } from '../users/users.service';
 
 @ApiTags('blogs')
 @Controller('blogs')
@@ -17,7 +18,7 @@ export class BlogsController {
   @Post()
   create(@Body() createBlogDto: CreateBlogDto,
   @Request() req) {
-    console.log(req.user.id);
+   
     
     return this.blogsService.create(createBlogDto,req.user.id);
   }
@@ -40,8 +41,9 @@ export class BlogsController {
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
-    return this.blogsService.update(id, updateBlogDto);
+  update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto,@CurrentUser() user:FormatLogin) {
+   
+    return this.blogsService.update(id, updateBlogDto,user.id);
   }
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)

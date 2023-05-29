@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Button, Typography, Form } from "antd";
 import QuillEditor from "../components/QuillEditor";
-import { useDispatch } from "react-redux";
-import { createBlog } from "../store/blog";
-import { fetchCategoriesBlogs } from "../store/category";
-import { useSelector } from "react-redux";
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-} from "mdb-react-ui-kit";
+import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter,} from "mdb-react-ui-kit";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { fetchCategoriesBlogs } from "../store/category";
+import { createBlog } from "../store/blog";
+
+
+import axios from "axios";
 const { Title } = Typography;
 
 const BlogsForm = () => {
@@ -27,7 +21,8 @@ const BlogsForm = () => {
   const [files, setFiles] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState("")
+  const [cover, setCover] = useState("");
+
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
 
@@ -37,29 +32,42 @@ const BlogsForm = () => {
 
   const onEditorChange = (newContent) => {
     setContent(newContent);
-    localStorage.setItem("blogContent", newContent);
-    console.log("newContent", newContent);
+    
   };
+
   const handleFileChange = (e) => {
-    if (e.target.files) {
-      setFile(e.target.files[0]);
-      console.log("file",file);
+    if (e.target.files && e.target.files.length > 0) {
+      setCover(e.target.files[0]);
+     
     }
   };
 
-
-  const onFilesChange = (files) => {
-    setFiles(files);
-    console.log("files", files);
-  };
-
-  const handleSubmit = (e) => {
+ 
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     let body = {
       content,
       categoryId,
       title,
     };
+
+    if (cover !== null) {
+      try {
+        const formData = new FormData();
+        formData.append("file", cover);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          formData
+        );
+
+        body.coverId = response.data.id;
+      } catch (error) {
+        console.error("Error uploading cover image:", error);
+      }
+    }
+
     dispatch(createBlog(body)).then((res) => {
       if (!res.error) {
         showSuccessToast("Blog has been created");
@@ -68,13 +76,20 @@ const BlogsForm = () => {
         showErrorToast(res.error.message);
       }
     });
+
     setStaticModal(!staticModal);
   };
+
+  const onFilesChange = (files) => {
+    setFiles(files);
+  
+  };
+  
   const handleChange = (e) => {
     setCategoryId(e.target.value);
-    console.log("oo", categoryId);
   };
   const toggleShow = () => setStaticModal(!staticModal);
+
   return (
     <div>
       <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
@@ -84,36 +99,39 @@ const BlogsForm = () => {
         <div>
           {" "}
           <div class="input-group mb-3 ">
+            <div class="input-group-append ">
+              <span class="input-group-text" id="basic-addon2" style={{width:"162px"}}>
+                Blog title
+              </span>
+            </div>
             <input
               type="text"
-              class="form-control"
+              className="form-control w-50"
               placeholder=""
               aria-label="Recipient's username"
               aria-describedby="basic-addon2"
               onChange={(e) => setTitle(e.target.value)}
             />
-            <div class="input-group-append">
-              <span class="input-group-text" id="basic-addon2">
-                Blog title
-              </span>
-            </div>
           </div>
           <div className="mb-3">
-            <input
-              class="form-control form-control"
-              id="formFileLg"
-              type="file"
-              onClick={handleFileChange}   
-            />
+            <div className="d-flex justify-content-end ">
+              <input
+                className="form-control"
+                id="formFileLg"
+                type="file"
+                onChange={handleFileChange}
+              />
+            </div>
           </div>
         </div>
-
+        
         <QuillEditor
           placeholder={"Start Posting Something"}
           onEditorChange={onEditorChange}
           onFilesChange={onFilesChange}
+          value={content}
         />
-
+   
         <select
           value={categoryId}
           class="form-select mt-3"
@@ -128,7 +146,7 @@ const BlogsForm = () => {
           ))}
         </select>
         <form>
-          {/* select category required */}
+        
           <div style={{ textAlign: "center", margin: "2rem auto" }}>
             <Button size="large" className="" onClick={toggleShow}>
               submit
