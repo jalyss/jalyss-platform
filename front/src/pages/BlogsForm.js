@@ -124,14 +124,14 @@ const BlogsForm = () => {
             </div>
           </div>
         </div>
-
+        
         <QuillEditor
           placeholder={"Start Posting Something"}
           onEditorChange={onEditorChange}
           onFilesChange={onFilesChange}
           value={content}
         />
-
+   
         <select
           value={categoryId}
           class="form-select mt-3"

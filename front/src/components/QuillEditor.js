@@ -94,39 +94,39 @@ Quill.register(ImageBlot);
 
 class VideoBlot extends BlockEmbed {
   static create(value) {
+    const videoTag = super.create();
     if (value && value.src) {
-      const videoTag = super.create();
       videoTag.setAttribute("src", value.src);
       videoTag.setAttribute("title", value.title);
-      videoTag.setAttribute("width", "100%");
-      videoTag.setAttribute("height", "377");
+      videoTag.setAttribute("width", "400");
+      videoTag.setAttribute("height", "300");
       videoTag.setAttribute("controls", "");
-
-      return videoTag;
     } else {
       const iframeTag = document.createElement("iframe");
       iframeTag.setAttribute("src", value);
       iframeTag.setAttribute("frameborder", "0");
       iframeTag.setAttribute("allowfullscreen", true);
-      iframeTag.setAttribute("width", "100%");
+      iframeTag.setAttribute("width", "90%");
       iframeTag.setAttribute("height", "377");
       return iframeTag;
     }
+
+    return videoTag;
   }
 
   static value(node) {
     if (node.getAttribute("title")) {
-      return { src: node.getAttribute("src"), alt: node.getAttribute("title") };
+      return { src: node.getAttribute("src"), title: node.getAttribute("title") };
     } else {
       return node.getAttribute("src");
     }
-    // return { src: node.getAttribute('src'), alt: node.getAttribute('title') };
   }
 }
 
 VideoBlot.blotName = "video";
 VideoBlot.tagName = "video";
 Quill.register(VideoBlot);
+
 
 class FileBlot extends BlockEmbed {
   static create(value) {
@@ -223,7 +223,6 @@ class QuillEditor extends React.Component {
 
   handleChange = (html) => {
     console.log("html", html);
-
 
     this.props.onEditorChange(html);
   };
@@ -479,7 +478,7 @@ class QuillEditor extends React.Component {
           <button className="ql-clean" />
         </div>
         <ReactQuill
-          className="ql-editor"
+          // className="d-flex flex-center "
           ref={(el) => {
             this.reactQuillRef = el;
           }}
@@ -489,6 +488,7 @@ class QuillEditor extends React.Component {
           formats={this.formats}
           value={this.props.value}
           placeholder={this.props.placeholder}
+          style={{ height: "500px", width: "700px" }}
         />
         <input
           type="file"
