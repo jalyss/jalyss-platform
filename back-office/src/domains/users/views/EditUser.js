@@ -23,6 +23,9 @@ function EditUser() {
   const [editMode, setEditMode] = useState(false)
   const [avatar, setAvatar] = useState(null)
   const { userId } = useParams()
+
+
+  const [preview, setPreview] = useState(null)
   const userStore = useSelector((state) => state.user)
 
   useEffect(() => {
@@ -55,10 +58,36 @@ function EditUser() {
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
+    
       <h2>Profile User </h2>
       <form className="checkout-form" onSubmit={submitEditProfile}>
         <div className="d-flex flex-wrap">
+        <label id="image">{t('image')}</label>
+            <div class="image-upload">
+             
 
+              { editMode && (
+                <input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              )}
+              </div>
+              {preview && editMode && (
+              <button
+                type="button"
+                class="delete-button"
+                onClick={() => {
+                  setPreview(null);
+                  setAvatar(null);
+                }}
+              >
+                X
+              </button>
+            )}
+      
           <div className="d-flex justify-content-center w-100 m-3">
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
@@ -192,7 +221,7 @@ function EditUser() {
                       )}
                     </TableCell>
                   </TableRow>
-                  <TableRow
+                  {/* <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
@@ -211,8 +240,8 @@ function EditUser() {
                         <span>{user?.cityId}</span>
                       )}
                     </TableCell>
-                  </TableRow>
-                  <TableRow
+                  </TableRow> */}
+                  {/* <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
@@ -231,8 +260,8 @@ function EditUser() {
                         <span>{user?.functionalAreaId}</span>
                       )}
                     </TableCell>
-                  </TableRow>
-                  <TableRow
+                  </TableRow> */}
+                  {/* <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
@@ -251,8 +280,8 @@ function EditUser() {
                         <span>{user?.educationLevelId}</span>
                       )}
                     </TableCell>
-                  </TableRow>
-                  <TableRow
+                  </TableRow> */}
+                  {/* <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
@@ -271,7 +300,7 @@ function EditUser() {
                         <span>{user?.jobTitleId}</span>
                       )}
                     </TableCell>
-                  </TableRow>
+                  </TableRow> */}
                 </TableBody>
               </Table>
             </TableContainer>
