@@ -7,11 +7,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class BookmarkService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateBookmarkDto) {
-  
-    return await this.prisma.bookmark.create({
-      data: dto,
-    });
+  async create(dto: CreateBookmarkDto,userId:string) {
+    let data = { 
+      blogId:dto.blogId,
+      userId:userId
+     };
+    return await this.prisma.bookmark.create({ data } );
   }
 
   async findAll() {

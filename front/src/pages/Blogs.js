@@ -72,7 +72,6 @@ function Blogs() {
   const handleCreateBookmark = (blogId) => {
     let body = {
       blogId,
-      userId: me.id,
     };
     dispatch(createBookmark(body)).then((res) => {
       if (!res.error) {
