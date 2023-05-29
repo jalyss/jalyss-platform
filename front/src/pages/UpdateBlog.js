@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import QuillEditor from "../components/QuillEditor";
-import { Typography ,Button,form} from "antd";
+import { Typography, Button, form } from "antd";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import axios from "axios";
 
@@ -10,13 +10,13 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 import { useNavigate, useParams } from "react-router-dom";
-import ReactHtmlParser from 'react-html-parser'; 
+import ReactHtmlParser from "react-html-parser";
 const { Title } = Typography;
 
 function UpdateBlog() {
   const dispatch = useDispatch();
   const { blogId } = useParams();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const quillRef = useRef(null);
   const ref = useRef(null);
   const me = useSelector((state) => state.auth.me);
@@ -31,7 +31,6 @@ function UpdateBlog() {
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
 
-
   useEffect(() => {
     dispatch(fetchBlog(blogId));
   }, [dispatch]);
@@ -40,15 +39,14 @@ function UpdateBlog() {
 
   useEffect(() => {
     if (blog) {
-        console.log('updateblog',ReactHtmlParser(blog.content));
-        blog.content.split('width')
+      console.log("updateblog", ReactHtmlParser(blog.content));
+      blog.content.split("width");
       setNewContent(blog.content);
       setCover(blog.cover);
       setTitle(blog.title);
     }
   }, [blog]);
 
- 
   const handleChange = (e) => {
     setCategoryId(e.target.value);
     console.log("oo", categoryId);
@@ -75,17 +73,16 @@ function UpdateBlog() {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let id=blog.id
-   
+    let id = blog.id;
+
     let body = {
-      content:newContent,
+      content: newContent,
       categoryId,
       title,
     };
-   
+
     if (cover !== null) {
       try {
         const formData = new FormData();
@@ -102,7 +99,7 @@ function UpdateBlog() {
       }
     }
 
-    dispatch(editBlog({id,body})).then((res) => {
+    dispatch(editBlog({ id, body })).then((res) => {
       if (!res.error) {
         showSuccessToast("Blog has been updated");
         navigate(-1);
@@ -111,8 +108,6 @@ function UpdateBlog() {
       }
     });
   };
-
-  
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
@@ -142,22 +137,21 @@ function UpdateBlog() {
         />
       </div>
       <div className="mb-3">
-            <div className="d-flex justify-content-end ">
-              <input
-              ref={ref} defaultValue={cover}
-                className="form-control"
-                id="formFileLg"
-                type="file"
-                onChange={handleFileChange}
-              />
-            </div>
-          </div>
-      
+        <div className="d-flex justify-content-end ">
+          <input
+            ref={ref}
+            // defaultValue={blog?.cover.path}
+            className="form-control"
+            id="formFileLg"
+            type="file"
+            onChange={handleFileChange}
+          />
+        </div>
+      </div>
 
       <>
         <div id="editor-container">
           <QuillEditor
-          
             placeholder={"Start Posting Something"}
             value={newContent}
             onEditorChange={onEditorChange}
@@ -170,7 +164,7 @@ function UpdateBlog() {
           aria-label="Default select example"
           onChange={handleChange}
         >
-          <option selected>Choose your Blog category</option>
+          <option selected>{blog?.category.nameEn}</option>
           {categories.items.map((category, index) => (
             <option key={index} value={category.id}>
               {category.nameEn}
@@ -178,16 +172,14 @@ function UpdateBlog() {
           ))}
         </select>
         <form>
-        
-        <div style={{ textAlign: "center", margin: "2rem auto" }}>
-            <Button size="large" className="" onClick={handleSubmit} >
+          <div style={{ textAlign: "center", margin: "2rem auto" }}>
+            <Button size="large" className="" onClick={handleSubmit}>
               submit
             </Button>
-        </div>
+          </div>
         </form>
       </>
     </div>
-    
   );
 }
 
