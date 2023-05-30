@@ -1,18 +1,32 @@
-import React from "react";
+import React,{useContext, useEffect, useState} from "react";
 import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
-// import Icon from "../assets/styles/chat-121.png";
+import Icon from "../assets/styles/profile.png";
 import { Phone, ChatCircleDots, Users, Gear } from "phosphor-react";
 import Chats from "./Chats";
 import Conversation from "./conversation/Conversation";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
+import ConnectedUsers from "./ConnectedUsers";
+import { SocketContext } from "../apps/Client";
 
 const Chatroom = () => {
+  const authStore = useSelector(state => state.auth)
+  const socket = useContext(SocketContext);
   const theme = useTheme();
   console.log(theme);
+  const [chatRoomList,setChatRoomList] = useState([])
+  const [show,setShow]=useState(false)
+  const [mesg,setMesg]=useState(false)
 
- 
-
+  useEffect(()=>{
+    axios.get(`http://localhost:3001/api/v1/chatRoom/${"f62d33bd-9633-453f-9428-6c10368ac296"}`).then((response)=>{
+      let data = response.data
+      console.log(data)
+      setChatRoomList(data)
+    }).catch(err=>console.log(err))
+  },[])
 
   return (
     <div style={{display : "flex"}}>
@@ -51,12 +65,12 @@ const Chatroom = () => {
           >
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
               <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <ChatCircleDots />
+                <ChatCircleDots  onClick={() => setMesg(!mesg)}/>
               </IconButton>
             </Box>
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
               <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <Users />
+                <Users className="users" onClick={() => setShow(!show)}/>
               </IconButton>
             </Box>
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
@@ -80,9 +94,10 @@ const Chatroom = () => {
         </Stack>
        
       </Box>
-      <Chats/>
-      <Conversation/>
-      
+   { show&&<ConnectedUsers socket={socket} /> }  
+     { mesg&&<Chats chatRoomList={chatRoomList}/>}
+      <Conversation setChatRoomList={setChatRoomList}/>
+
     </div>
   );
 };

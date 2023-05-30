@@ -91,6 +91,7 @@ model User {
   commentBlog          CommentBlog[]
   replyCommentaireBlog ReplyCommentBlog[]
   bookMark             Bookmark[]
+  ConnectedUser         ConnectedUser?
 }
 
 model UserPayment {
@@ -206,7 +207,7 @@ model Assessments {
 
 model ChatRoom {
   id           String         @id @default(uuid())
-  name         String
+  name         String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   messages     ChatMessage[]
@@ -222,6 +223,13 @@ model ChatMessage {
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
+}
+
+model ConnectedUser {
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId])
 }
 
 //join table between user and chat room 
@@ -576,6 +584,7 @@ model ReplyCommentBlog {
   userId        String
   commentBlog   CommentBlog @relation(fields: [commentBlogId], references: [id], onDelete: Cascade)
   commentBlogId String
+ 
 }
 
 model Bookmark {

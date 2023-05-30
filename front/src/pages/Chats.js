@@ -8,50 +8,68 @@ import {
   Badge
 } from "@mui/material";
 import { CircleDashed, MagnifyingGlass } from "phosphor-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import SearchIconWrapper from "../components/SearchIconWrapper";
 import StyledInputBase from "../components/SearchInputBase";
 import Icon from "../assets/styles/profile.png";
 import StyledBadge from "../components/StyledBadge";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
-const Chats = () => {
+
+const Chats = ({ chatRoomList }) => {
+
+  const authStore = useSelector(state => state.auth)
+
   const ChatElement = () => {
     return (
       <Box
         sx={{
           width: "100%",
-          height: 65 ,
+          height: 65,
           borderRadius: 1,
           backgroundColor: "#fff",
         }}
       >
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Stack direction="row" spacing={2}>
-            <StyledBadge
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant="dot"
+        {chatRoomList.map((chatRoom) => {
+          let name = ''
+          if (chatRoom.name === null)
+            name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
+          else {
+            name = chatRoom.name
+          }
+          return (
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
             >
-              <Avatar src={Icon} />
-            </StyledBadge>
-            <Stack>
-              <Typography variant="subtitle1">Alaa Bouali</Typography>
-              <Typography variant="caption">wink cv chaamel !</Typography>
+              <Stack direction="row" spacing={2}>
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  variant="dot"
+                >
+                  <Avatar src={Icon} />
+                </StyledBadge>
+                <Stack>
+                  <Typography variant="subtitle1">{name}</Typography>
+                  <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
+                </Stack>
+
+              </Stack>
+              <Stack spacing={2} alignItems="center">
+                <Typography sx={{ fontWeight: 600 }} variant="caption">
+                 {chatRoom.messages[0].createdAt.slice(11,16)}
+                </Typography>
+                <Badge color="primary" badgeContent={2}></Badge>
+              </Stack>
             </Stack>
-            
-          </Stack>
-          <Stack spacing={2} alignItems="center">
-           <Typography sx={{fontWeight : 600}} variant="caption">
-             10:46
-           </Typography>
-          <Badge color="primary" badgeContent={2}></Badge>
-          </Stack>
-        </Stack>
+          )
+        }
+
+        )}
       </Box>
     );
   };
@@ -71,7 +89,7 @@ const Chats = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">chats</Typography>
+          <Typography variant="h5">Messages</Typography>
           <IconButton>
             <CircleDashed />
           </IconButton>
