@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateConnectedUsersDto } from './dto/create-connectedUsers.dto';
+import { CreateConnectedUserDto } from './dto/create-connectedUsers.dto';
 
 
 
@@ -9,21 +9,21 @@ export class ConnectedUsersService {
     constructor(private readonly prisma: PrismaService) {}
 
 
-async create(dto:CreateConnectedUsersDto) {
-    return await this.prisma.connetedUser.create({
-        data:dto
+async create(dto:CreateConnectedUserDto) {
+    return await this.prisma.connectedUser.create({
+        data:dto,
     })
 }
 
 async getUsers() {
-    return await this.prisma.connetedUser.findMany({
+    return await this.prisma.connectedUser.findMany({
        include:{user:true}
     })
 }
 
 
 async remove(userId:string){
-    return await this.prisma.connetedUser.deleteMany({
+    return await this.prisma.connectedUser.deleteMany({
         where : {
             userId:userId
         }

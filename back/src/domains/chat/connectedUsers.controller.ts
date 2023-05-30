@@ -11,7 +11,7 @@ import {
     Query,
   } from '@nestjs/common';
 import { ConnectedUsersService } from './connectedUsers.service';
-import { CreateConnectedUsersDto } from './dto/create-connectedUsers.dto';
+import { CreateConnectedUserDto } from './dto/create-connectedUsers.dto';
 
 @Controller('connectedUser')
 
@@ -20,7 +20,7 @@ export class ConnectedUserController {
 
  @Post('connectedUser')
  create(
-    @Body() dto : CreateConnectedUsersDto,
+    @Body() dto : CreateConnectedUserDto,
  ){
     return this.connectedUserService.create(dto)
  }

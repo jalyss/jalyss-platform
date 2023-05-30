@@ -1,10 +1,7 @@
 import {
   SubscribeMessage,
   WebSocketGateway,
-  OnGatewayInit,
-  WebSocketServer,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
+  WebSocketServer, 
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
@@ -21,6 +18,7 @@ import {
   ConnectedUsersio,
 } from './entities/chat.entity';
 import { ConnectedUsersService } from './connectedUsers.service';
+import { CreateConnectedUserDto } from './dto/create-connectedUsers.dto';
 
 @WebSocketGateway({
   cors: {
@@ -28,7 +26,7 @@ import { ConnectedUsersService } from './connectedUsers.service';
   },
 })
 export class ChatGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+  
 {
   constructor(
     private readonly PrismaService: PrismaService,
@@ -42,6 +40,43 @@ export class ChatGateway
   private logger: Logger = new Logger('ChatGateway');
 
   //! Send messages
+
+  @SubscribeMessage('connection')
+  async connect(client: Socket, payload: CreateConnectedUserDto) {
+   console.log(payload);
+   let connectedUser=await this.PrismaService.connetecdUser.findFirst({where:{userId:payload.userId}})
+   if(!connectedUser)
+   await this.PrismaService.connectedUser.create({data:{userId:payload.userId}})
+   
+   await this.connectedUsersList()
+   setTimeout(() =>{this.disconnect(payload.userId)},1000*60*2)
+
+  }
+
+  async disconnect(id: string) {
+    let connectedUser=await this.PrismaService.connectedUser.findFirst({where:{userId:id}})
+   if(connectedUser)
+    await this.PrismaService.connectedUser.delete({where:{userId:id}})
+    this.server.emit(`disconnect/${id}`)
+    await this.connectedUsersList()
+  }
+private async connectedUsersList(){
+  let connectedUserList= await this.PrismaService.connectedUser.findMany({
+    include:{
+      user:{
+        select:{
+          fullNameAr:true,fullNameEn:true,avatar:true
+        }
+      }
+    }
+  })
+  console.log(connectedUserList);
+  
+  for (let user of connectedUserList) {
+    this.server.emit(`connected-users/${user.userId}`, connectedUserList);
+  }
+}
+
 
   @SubscribeMessage('msgToServer')
   async handleMessage(client: Socket, payload: MessageSocketio) {
@@ -83,23 +118,5 @@ export class ChatGateway
     });
   }
 
-  afterInit(server: Server) {
-    this.logger.log('Init');
-  }
-
-  async handleConnection(client: Socket, payload:ConnectedUsersio) {
-    const {...rest} = payload;
-    const response = await this.ConnectedUsersService.create(rest)
-    console.log(`Connected ${client.id}`);
-    this.server.emit(`connected-user/${rest}`, response);
-
-  }
-
- async handleDisconnect(client: Socket) {
-    console.log(`Disconnected: ${client.id}`);
-  }
-
-
-
-
+  
 }

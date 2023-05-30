@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React,{useContext, useEffect, useState} from "react";
 import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import Icon from "../assets/styles/profile.png";
@@ -9,10 +9,11 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 import ConnectedUsers from "./ConnectedUsers";
+import { SocketContext } from "../apps/Client";
 
 const Chatroom = () => {
   const authStore = useSelector(state => state.auth)
-
+  const socket = useContext(SocketContext);
   const theme = useTheme();
   console.log(theme);
   const [chatRoomList,setChatRoomList] = useState([])
@@ -93,7 +94,7 @@ const Chatroom = () => {
         </Stack>
        
       </Box>
-   { show&&<ConnectedUsers /> }  
+   { show&&<ConnectedUsers socket={socket} /> }  
      { mesg&&<Chats chatRoomList={chatRoomList}/>}
       <Conversation setChatRoomList={setChatRoomList}/>
 

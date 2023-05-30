@@ -1,5 +1,5 @@
 import { CreateChatRoomDto } from "../dto/create-chatRoom.dto";
-import { CreateConnectedUsersDto } from "../dto/create-connectedUsers.dto";
+
 import { CreateMessageDto } from "../dto/create-message.dto";
 
 
@@ -19,6 +19,6 @@ export class ChatRoomSocketio extends CreateChatRoomDto {
 }
 
 
-export class ConnectedUsersio extends CreateConnectedUsersDto {
-    userId:string
+export class ConnectedUsersio {
+    usersIds:string[]
 }

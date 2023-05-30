@@ -1,3 +1,3 @@
-export class CreateConnectedUsersDto {
+export class CreateConnectedUserDto {
     userId:string
 }

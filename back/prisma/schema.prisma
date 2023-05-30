@@ -91,7 +91,7 @@ model User {
   commentBlog          CommentBlog[]
   replyCommentaireBlog ReplyCommentBlog[]
   bookMark             Bookmark[]
-  ConnetedUser         ConnetedUser?
+  ConnectedUser         ConnectedUser?
 }
 
 model UserPayment {
@@ -225,7 +225,7 @@ model ChatMessage {
   chatRoomId String
 }
 
-model ConnetedUser {
+model ConnectedUser {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
