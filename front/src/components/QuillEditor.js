@@ -116,7 +116,10 @@ class VideoBlot extends BlockEmbed {
 
   static value(node) {
     if (node.getAttribute("title")) {
-      return { src: node.getAttribute("src"), title: node.getAttribute("title") };
+      return {
+        src: node.getAttribute("src"),
+        title: node.getAttribute("title"),
+      };
     } else {
       return node.getAttribute("src");
     }
@@ -127,11 +130,10 @@ VideoBlot.blotName = "video";
 VideoBlot.tagName = "video";
 Quill.register(VideoBlot);
 
-
 class FileBlot extends BlockEmbed {
   static create(value) {
     const prefixTag = document.createElement("span");
-    prefixTag.innerText = "첨부파일 - ";
+   
 
     const bTag = document.createElement("b");
     //위에 첨부파일 글자 옆에  파일 이름이 b 태그를 사용해서 나온다.
@@ -318,13 +320,13 @@ class QuillEditor extends React.Component {
           if (response.data) {
             const quill = this.reactQuillRef.getEditor();
             quill.focus();
-
+            console.log("response", response.data);
             let range = quill.getSelection();
             let position = range ? range.index : 0;
             quill.insertEmbed(position, "video", {
               src: response.data.path,
               title:
-                response.data.response.data.path.split("/")[
+                response.data.path.split("/")[
                   response.data.path.split("/").length - 1
                 ],
             });
@@ -374,13 +376,7 @@ class QuillEditor extends React.Component {
 
             let range = quill.getSelection();
             let position = range ? range.index : 0;
-            quill.insertEmbed(
-              position,
-              "file",
-              response.data.path.split("/")[
-                response.data.path.split("/").length - 1
-              ]
-            );
+            quill.insertEmbed(position, "file", response.data.path);
             quill.setSelection(position + 1);
 
             if (this._isMounted) {

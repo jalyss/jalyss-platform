@@ -43,7 +43,6 @@ export const createBlog = createAsyncThunk(
       body,
       configs
     );
-    dispatch(fetchBlogs());
     return response.data;
   }
 );
