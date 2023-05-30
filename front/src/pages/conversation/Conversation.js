@@ -62,24 +62,21 @@ const Conversation = ({ setChatRoomList }) => {
 const handleSubmit=(e) => {
   if(messages.trim() !== "") {
   e.preventDefault()
-  // let payload = {
-
-  //   receiverId: '0258036f-268e-43c4-ba33-1f42de18187f',
-  //   senderId: authStore.me.id,
-  //   text: messages
-  // }
-  // socket.emit('create-chat-room', payload)
-   let payload = {
-
-    chatRoomId: '5f621766-a53c-4496-86d8-9befd06018ae',
-    userId: authStore.me.id,
+  let payload = {
+    receiverId: '0258036f-268e-43c4-ba33-1f42de18187f',
+    senderId: authStore.me.id,
     text: messages
   }
-  socket.emit('msgToServer', payload)
+  socket.emit('create-chat-room', payload)
+
+/* let payload = {
+ chatRoomId: '5f621766-a53c-4496-86d8-9befd06018ae',
+userId: authStore.me.id,
+text: messages
+ }
+socket.emit('msgToServer', payload) */
   setMessages("")}
   else { return }
- 
- 
 
 }
   return (
@@ -155,7 +152,6 @@ const handleSubmit=(e) => {
   )
 )}
       </Box>
-
       <Box
         p={4}
         sx={{
@@ -187,16 +183,13 @@ const handleSubmit=(e) => {
 
             }} setPicker={setPicker}  onChange={e=>setMessages(e.target.value)}
             value={messages}
-            
             />
           </Stack>
-
           <Box sx={{ height: 48, width: 48, background: "#57385c", borderRadius: 1.5 }}>
             <Stack sx={{ height: "100%", width: "100%" }} alignItems="center" justifyContent="center">
               <IconButton onSubmit={handleSubmit}>
                 <PaperPlaneTilt color="#fff" />
               </IconButton>
-
             </Stack>
           </Box>
         </Stack>

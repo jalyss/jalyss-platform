@@ -1,295 +1,217 @@
-import styled from "styled-components";
-import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { blogss } from "../constants/BlogsData";
-import "react-quill/dist/quill.snow.css";
-import QuillEditor from "../components/QuillEditor";
-// import { parse } from 'node-html-parser';
-const BlogDetail = () => {
-  // function parseJSX(code) {
-  //   const div = document.createElement("div");
-  //   div.innerHTML = code;
-  //   return div.textContent;
-  // }
-  
-  // document.addEventListener("DOMContentLoaded", function() {
-  //   const preTag = document.querySelector("pre.ql-syntax");
-  //   if (preTag) {
-  //     const code = preTag.textContent.trim();
-  //     const parsedCode = parseJSX(code);
-  //     console.log(parsedCode);
-  
-  //     const parsedElement = eval(parsedCode);
-  //     document.body.appendChild(parsedElement);
-  //   }
-  // });
-  
-  const { blogId } = useParams();
-  const navigate = useNavigate();
-  const [selectedBlog, setSelectedBlog] = useState(blogss[blogId]);
+import { useDispatch } from "react-redux";
+import { fetchBlog, createView } from "../store/blog";
+import { useSelector } from "react-redux";
+import { fetchBlogs } from "../store/blog";
+import { CircleDashed } from "phosphor-react";
+import { createBookmark } from "../store/bookmarks";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
 
-  const handleBlogSelection = (blog) => {
-    setSelectedBlog(blog);
-  };
+const BlogDetail = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { blogId } = useParams();
+
+  const me = useSelector((state) => state.auth.me);
+  const blogStore = useSelector((state) => state.blog);
+  const { blogs, blog } = blogStore;
+
+  useEffect(() => {
+    dispatch(fetchBlog(blogId));
+    dispatch(createView({ blogId }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (blog)
+      dispatch(fetchBlogs({ take: 5, skip: 0, authorId: blog.authorId }));
+  }, [dispatch, blog]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleCreateBookmarkOne = (blogId) => {
+    let body = {
+      blogId,
+      userId: me.id,
+    };
+    dispatch(createBookmark(body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been saved");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+  console.log("blog", blog);
+ 
+  if (!blog) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center "
+        style={{ position: "fixed", zIndex: 100, width: "100%", height: "100%",backgroundColor:'gray' }}
+      >
+        Loading...
+      </div>
+    );
+  }
   return (
-    <BlogDetailWrapper>
-      <BlogDetailContent>
-        <HeaderContent>
-          <GoBackLink onClick={() => navigate(-1)}>
+    <div className="d-flex">
+      <div
+        className="d-flex flex-column  "
+        style={{
+          margin: "30px",
+          flex: "1",
+          paddingRight: "20px",
+          borderRight: "1px dashed #ccc",
+        }}
+      >
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="goBackLink" onClick={() => navigate(-1)}>
             <span> &#8592;</span> <span>Go Back</span>
-          </GoBackLink>
-          <BookmarkIcon>
+          </div>
+          <div
+            className="bookMarkIcon"
+            onClick={() => {
+              handleCreateBookmarkOne(blog.id);
+            }}
+          >
             <span>&#x1F516;</span>
-          </BookmarkIcon>
-        </HeaderContent>
-        <BlogContainer>
-          <BlogHeader>
-            <BlogDate>Published {selectedBlog.createdAt}</BlogDate>
+          </div>
+        </div>
+        <div style={{ maxWidth: "700px", margin: "0 auto" }}>
+          <div className="d-flex flex-column align-items-center">
+            <p
+              style={{
+                fontSize: " 0.8rem",
+                color: "#a9a9a9",
+                fontWeight: " 500",
+              }}
+            >
+              Published {blog.createdAt}
+            </p>
 
-            <Title>{selectedBlog.title}</Title>
+            <h1 style={{ whiteSpace: "pre-line", textAlign: "center" }}>
+              {blog.title}
+            </h1>
 
-            <CategoryInfo>
-              <CategoryLabel>Category:</CategoryLabel>
-              <SubCategoryList>
-                {selectedBlog.subCategory.map((subCat, index) => (
-                  <SubCategoryItem key={index}>{subCat}</SubCategoryItem>
-                ))}
-              </SubCategoryList>
-            </CategoryInfo>
-            {/* <AuthorContainer>
-              <AuthorAvatar
-                src={selectedBlog.authorAvatar}
-                alt="Author Avatar"
-              />
-              <AuthorName>{selectedBlog.authorName}</AuthorName>
-            </AuthorContainer> */}
-          </BlogHeader>
-          <BlogImg src={selectedBlog.cover} alt="cover" />
-           
-          <BlogDescription>{selectedBlog.description}</BlogDescription>
-        </BlogContainer>
-      </BlogDetailContent>
+            <div className="categoryInfo">
+              <span className="categoryLabel">Category:</span>
+              <span className="chip">{blog.category.nameEn}</span>
+            </div>
+            <div
+              className="d-flex align-items-center"
+              style={{ margin: "0.5rem" }}
+            >
+              {blog.author.avatar ? (
+                <img
+                  className="blogItemAuthorAvatar"
+                  src={blog.author.avatar?.path}
+                  alt="avatar"
+                />
+              ) : (
+                <img
+                  className="blogItemAuthorAvatar"
+                  src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                  alt="avatar"
+                />
+              )}
+              <h3 style={{ fontSize: "1.2rem", color: "#333" }}>
+                {blog.author.fullNameEn}
+              </h3>
+            </div>
+          </div>
+          {blog.cover ? (
+            <img
+              style={{ width: "100%", borderRadius: "15px" }}
+              src={blog.cover?.path}
+              alt="cover"
+            />
+          ) : (
+            <img
+              style={{ width: "100%", borderRadius: "15px" }}
+              src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+              alt="cover"
+            />
+          )}
 
-      <BlogDetailSidebar>
-        <AuthorAvatarr src={selectedBlog.authorAvatar} alt="author-avatar" />
-        <AuthorNamee>{selectedBlog.authorName}</AuthorNamee>
-        <MoreFromAuthor>More from {selectedBlog.authorName}</MoreFromAuthor>
-        <SideContainer>
-          {blogss
-            .filter(
-              (blog) =>
-                blog.authorName === selectedBlog.authorName &&
-                blog.id !== selectedBlog.id
-            )
+          <p style={{ padding: "1rem", marginTop: "1.5rem" }}>
+            {" "}
+            <span dangerouslySetInnerHTML={{ __html: blog.content }}></span>
+          </p>
+        </div>
+      </div>
 
-            // .slice(0, 3)
-            .map((blog) => (
-              <SideBlogContainer
-                key={blog.id}
-                onClick={() => handleBlogSelection(blog)}
-              >
-                <SideBlogTitle>
-                  {blog.title}
-                  <br />
-                  <span>Category: </span> <small>{blog.category}</small>
-                </SideBlogTitle>
-                <SideBlogImage src={blog.cover} alt="blog-cover" />
-              </SideBlogContainer>
-            ))}
-        </SideContainer>
-        
-      </BlogDetailSidebar>
-    </BlogDetailWrapper>
+      <div style={{ width: "300px", marginTop: "15px" }}>
+        {blog.author.avatar ? (
+          <img
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              marginBottom: "10px",
+            }}
+            className="blogItemAuthorAvatar"
+            src={blog.author.avatar?.path}
+            alt="avatar"
+          />
+        ) : (
+          <img
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              marginBottom: "10px",
+            }}
+            className="blogItemAuthorAvatar"
+            src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+            alt="avatar"
+          />
+        )}
+        <p
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            marginBottom: "50px",
+          }}
+        >
+          {blog.authorName}
+        </p>
+        <h2 className="moreFromAuthor">More from {blog.author.fullNameEn}</h2>
+        <div style={{ marginTop: "10px" }}>
+          {blogs.items.map((blog) => (
+            <div
+              className="d-flex align-items-center"
+              style={{ cursor: "pointer", marginTop: "20px" }}
+              key={blog.id}
+              // onClick={() => handleBlogSelection(blog)}
+            >
+              <h6 className="sideBlogTitle">
+                {blog.title}
+                <br />
+                <span className="spanBlog">Category: </span>{" "}
+                <small>{blog.category.nameEn}</small>
+              </h6>
+              {blog.cover ? (
+                <img
+                  className="sideBlogImage"
+                  src={blog.cover?.path}
+                  alt="cover"
+                />
+              ) : (
+                <img
+                  className="sideBlogImage"
+                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                  alt="cover"
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
-const HeaderContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-const BookmarkIcon = styled.span`
-  cursor: pointer;
-  font-size: 30px;
-  margin-bottom: 2rem;
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    top: -20px;
-  }
-
-  @media (max-width: 480px) {
-    top: -30px;
-  }
-`;
-
-const SideBlogContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  cursor: pointer;
-`;
-const SideContainer = styled.div`
-  margin-top: 10px;
-`;
-
-const SideBlogTitle = styled.h6`
-  flex: 1;
-  span {
-    color: #6c757d;
-    font-size: 0.8rem;
-  }
-`;
-
-const SideBlogImage = styled.img`
-  width: 100px;
-  height: 80px;
-  object-fit: cover;
-  margin-left: 8px;
-  border-radius: 15px;
-`;
-const AuthorContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 0.5rem;
-`;
-
-const AuthorAvatar = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 1rem;
-`;
-
-const AuthorName = styled.h3`
-  font-size: 1.2rem;
-  color: #333;
-`;
-const BlogDetailWrapper = styled.div`
-  display: flex;
-  margin-top: 10px;
-  width: 100%;
-`;
-
-const BlogDetailContent = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin: 30px;
-  border-right: 1px dashed #ccc;
-  padding-right: 20px;
-`;
-
-const BlogDetailSidebar = styled.div`
-  width: 300px;
-  margin-top: 15px;
-`;
-const AuthorAvatarr = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-`;
-
-const AuthorNamee = styled.p`
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 50px;
-`;
-
-const BlogContainer = styled.div`
-  max-width: 700px;
-  margin: 0 auto;
-`;
-
-const GoBackLink = styled.div`
-  text-decoration: none;
-  font-size: 0.8rem;
-  color: #a9a9a9;
-  font-weight: 500;
-  margin-bottom: 2rem;
-  display: block;
-  cursor: pointer;
-`;
-
-const BlogHeader = styled.header`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const BlogDate = styled.p`
-  font-size: 0.8rem;
-  color: #a9a9a9;
-  font-weight: 500;
-`;
-
-const BlogImg = styled.img`
-  width: 100%;
-  border-radius: 15px;
-`;
-
-const BlogSubCategory = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const CategoryChip = styled.div`
-  margin: 1rem;
-`;
-
-const BlogDescription = styled.p`
-  padding: 1rem;
-  margin-top: 1.5rem;
-`;
-const CategoryInfo = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: Arial, sans-serif;
-  margin: 0.5rem;
-  ${BlogDate} {
-    margin-left: auto;
-  }
-`;
-
-const CategoryLabel = styled.span`
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 10px;
-  color: #333;
-`;
-
-const SubCategoryList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-`;
-
-const SubCategoryItem = styled.li`
-  font-size: 0.7rem;
-  background: linear-gradient(to right, #6190e8, #a7bfe8);
-  color: #fff;
-  padding: 0.3rem 0.5rem;
-  border-radius: 5px;
-  width: fit-content;
-  text-transform: capitalize;
-  margin: 0 4px;
-`;
-const MoreFromAuthor = styled.h2`
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #3a0b50;
-  text-decoration: underline;
-  font-style: italic;
-`;
-const Title = styled.h1`
-  text-align: center;
-  white-space: pre-line;
-`;
 
 export default BlogDetail;

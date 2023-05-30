@@ -4,7 +4,7 @@ import 'react-horizontal-scrolling-menu/dist/styles.css'
 import '../assets/styles/horizontalMenu.css'
 import useDrag from '../hooks/useDrag'
 
-function HorizontalMenu({ items }) {
+function HorizontalMenu({ children }) {
   // NOTE: for drag by mouse
   const { dragStart, dragStop, dragMove } = useDrag()
 
@@ -41,22 +41,10 @@ function HorizontalMenu({ items }) {
         onMouseUp={() => dragStop}
         onMouseMove={handleDrag}
       >
-        {items.map(({ id, logo, name }) => (
-          <div key={id} className="horizontal-item">
-
-            <img key={id} draggable="false" src={logo} alt={name} />
-          </div>
-        ))}
+        {children}
       </ScrollMenu>
     </div>
     </div>
-    
-  )
-  (<div>
-
-    
-    </div>
-
   )
 }
 export default HorizontalMenu

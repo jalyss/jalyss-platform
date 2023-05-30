@@ -1,15 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Query,UseGuards } from '@nestjs/common';
 import { BookmarkService } from './bookmark.service';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 import { UpdateBookmarkDto } from './dto/update-bookmark.dto';
+import {ApiTags,ApiSecurity} from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/currentUser';
+import { FormatLogin } from '../users/users.service';
 
+@ApiTags('bookmarks')
 @Controller('bookmarks')
 export class BookmarksController {
   constructor(private readonly bookmarkService: BookmarkService) {}
-
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() CreateBookmarkDto: CreateBookmarkDto) {
-    return this.bookmarkService.create(CreateBookmarkDto);
+  create(@Body() CreateBookmarkDto: CreateBookmarkDto,@CurrentUser() user:FormatLogin) {
+    return this.bookmarkService.create(CreateBookmarkDto,user.id);
   }
 
   @Get()

@@ -487,6 +487,7 @@ model Media {
   Article      Article[]
   MediaBlog    MediaBlog[]
   Employee     Employee[]
+  Blog         Blog[]
 }
 
 model MediaUser {
@@ -518,14 +519,17 @@ model MediaBlog {
 }
 
 model Blog {
-  id          String          @id @default(uuid())
+  id          String           @id @default(uuid())
   content     String
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  confirm     Boolean         @default(false)
-  category    ArticleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  cover       Media?            @relation(fields: [coverId], references: [id], onDelete: Cascade)
+  coverId     String?
+  title       String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  author      User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String
+  confirm     Boolean          @default(false)
+  category    ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String
   MediaBlog   MediaBlog[]
   BlogLike    BlogLike[]

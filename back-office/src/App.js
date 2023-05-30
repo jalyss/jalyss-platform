@@ -14,6 +14,8 @@ function App() {
     () => (i18n?.languages[0] === "ar" ? "rtl" : "ltr"),
     [i18n?.languages]
   );
+
+  
   return (
     <RtlContext.Provider value={isRtl}>
         <div style={{ direction: isRtl }}>

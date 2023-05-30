@@ -17,12 +17,20 @@ import TrainingPage from "../pages/TrainingPage";
 import Blogs from "../pages/Blogs";
 import BlogsDetail from "../pages/BlogsDetail";
 import BlogsForm from "../pages/BlogsForm";
+import SpaceJalyss from "../pages/SpaceJalyss";
+import CoworkingZone from "../pages/CoworkingZone";
+import MeetingZone from "../pages/MeetingZone";
+import PrivateZone from "../pages/PrivateZone";
+import Domiciliation from "../pages/Domiciliation";
+import ReserveCoworkin from "../pages/ReserveCoworkin";
 import MentorPage from "../pages/MentorPage";
+import ReserveMeeting from "../pages/ReserveMeeting";
 
 
 import Chatroom from "../pages/Chatroom";
 
 import { useSelector } from "react-redux";
+import UpdateBlog from "../pages/UpdateBlog";
 
 
 function Router() {
@@ -49,8 +57,15 @@ function Router() {
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
             <Route path="blogsForm" element={<BlogsForm/>} />
+            <Route path="spaceJalyss" element={<SpaceJalyss />} />
+            <Route path="CoworkingZone" element={<CoworkingZone />} />
+            <Route path="MeetingZone" element={<MeetingZone />} />
+            <Route path="PrivateZone" element={<PrivateZone />} />
+            <Route path="Domiciliation" element={<Domiciliation />} />
+            <Route path="ReserveCoworkin" element={<ReserveCoworkin />} />
             <Route path="mentor" element={<MentorPage/>} />
-       
+            <Route path="ReserveMeeting" element={<ReserveMeeting/>} />
+            <Route path="update-blog/:blogId" element={<UpdateBlog/>} />
           </Route>
           
         </Routes>

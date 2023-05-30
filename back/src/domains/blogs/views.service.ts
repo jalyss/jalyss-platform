@@ -3,7 +3,6 @@ import { CreateViewsDto } from './dto/create-views.dto';
 import { UpdateViewsDto } from './dto/update-views.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-
 @Injectable()
 export class ViewsService {
   constructor(private readonly prisma: PrismaService) {}

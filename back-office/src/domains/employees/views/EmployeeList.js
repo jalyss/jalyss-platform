@@ -138,7 +138,11 @@ function EmployeeList() {
   useEffect(() => {
     if (employeeStore.employees.items.length) {
       let aux = employeeStore.employees.items.map(e => {
-        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr, phone: e.tel, Branch: e?.branch?.name, Role: e?.role?.nameAr, avatarurl: e.avatarurl }
+        return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr,
+           phone: e.tel,
+            Branch: e?.branch?.name,
+             Role: e?.role?.nameAr,
+              avatarurl: e.avatarurl }
       })
       console.log(aux);
       setRows(aux)
@@ -173,7 +177,8 @@ function EmployeeList() {
           </span>
         </Button>
       </div>
-      <div><h2 style={{paddingLeft:10,paddingTop:10}}>Employee List</h2>
+      <div>
+        <h2 style={{paddingLeft:10,paddingTop:10}}>Employee List</h2>
         <Box sx={{ height: 600, width: '100%' }}>
           <DataGrid
             rows={rows}

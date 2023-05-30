@@ -127,7 +127,7 @@ function Signup() {
                   required
                   id="fullNameEn"
                   name="fullNameEn"
-                  pattern="^(\w\w+)\s(\w+)$"
+                 // pattern="^(\w\w+)\s(\w+)$"
                   value={user?.fullNameEn}
                   onChange={handleChange}
                 />
