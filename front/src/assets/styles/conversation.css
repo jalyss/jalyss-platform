@@ -17,10 +17,12 @@ min-width: 200px;
   max-width: 500px;
 min-width: 200px;
 
-
-
-
 }
 .containerr {
   padding: 5px;
 }
+.optionChat {
+  align-items:end ;
+  justify-content: center;
+}
+

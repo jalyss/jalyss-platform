@@ -8,7 +8,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import StyledBadge from "../../components/StyledBadge";
+import StyledBadge from "../StyledBadge";
 import Icon from "../../assets/styles/profile.png";
 import {
   CaretDown,
@@ -19,7 +19,7 @@ import {
   Smiley,
   VideoCamera,
 } from "phosphor-react";
-import StyledInput from "../../components/StyledInput";
+import StyledInput from "../StyledInput";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { io } from "socket.io-client";
@@ -100,12 +100,12 @@ socket.emit('msgToServer', payload) */
     }
   };
   return (
-    <Stack height="100%" maxHeight="100vh" width="auto">
+    <Stack height="100%" maxHeight="100vh" width="100%">
       <Box
         p={2}
         sx={{
           height: "15vh",
-          width: "150vh",
+          width: "100%",
           backgroundColor: "#F8FAFF",
           boxShadow: "0px 0px 2px",
         }}
@@ -155,7 +155,7 @@ socket.emit('msgToServer', payload) */
       <Box
         sx={{
           height: "70vh",
-          width: "150vh",
+          width: "100%",
           backgroundColor: "#fff",
           boxShadow: "0px 0px 2px",
           overflow: "auto",
@@ -188,7 +188,7 @@ socket.emit('msgToServer', payload) */
       <Box
         p={4}
         sx={{
-          width: "150vh",
+          width: "100%",
           backgroundColor: "#fff",
           boxShadow: "0px 0px 2px",
         }}
