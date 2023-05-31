@@ -85,17 +85,11 @@ const BlogDetail = () => {
           </div>
           <div>
           <Dropdown>
-                  <Dropdown.Toggle
+          <Dropdown.Toggle
                     className="ellipsis-btn dropdownToggleBlogCard"
-                      style={{      
-                      borderRadius: '100%',
-                      width: '40px',
-                      height: '40px',
-                      background: '#fff',
-                      border: 'none',
-                      transition: 'background-color 0.5s' }}
+                    style={{ all: "unset" }}
                   >
-                    <span style={{ fontSize: '20px', color:"black"}}>&#8942;</span>
+                    <span>&#8942;</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu size="sm" title="">
                     {me?.id === blog.authorId ? (
