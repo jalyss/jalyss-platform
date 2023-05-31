@@ -1,12 +1,14 @@
 import React from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import ImageResize from "quill-image-resize-module-react";
+import ImageResize from "./imge-resize/ImageResize";
+import { ImageDrop } from "quill-image-drop-module";
 import axios from "axios";
-
+import parse from "html-react-parser";
 
 const QuillClipboard = Quill.import("modules/clipboard");
 Quill.register("modules/imageResize", ImageResize);
+Quill.register("modules/imageDrop", ImageDrop);
 class Clipboard extends QuillClipboard {
   getMetaTagElements = (stringContent) => {
     const el = document.createElement("div");
@@ -66,14 +68,23 @@ class ImageBlot extends BlockEmbed {
     const imgTag = super.create();
     imgTag.setAttribute("src", value.src);
     imgTag.setAttribute("alt", value.alt);
-    imgTag.setAttribute("width", value.naturalWidth);
+    imgTag.setAttribute(
+      "width",
+      value.width ? value.width : value.naturalWidth
+    );
     imgTag.setAttribute("height", value.naturalHeight);
 
     return imgTag;
   }
 
   static value(node) {
-    return { src: node.getAttribute("src"), alt: node.getAttribute("alt") };
+    console.log(node);
+    return {
+      src: node.getAttribute("src"),
+      alt: node.getAttribute("alt"),
+      width: node.getAttribute("width"),
+      height: node.getAttribute("height"),
+    };
   }
 }
 
@@ -83,33 +94,35 @@ Quill.register(ImageBlot);
 
 class VideoBlot extends BlockEmbed {
   static create(value) {
+    const videoTag = super.create();
     if (value && value.src) {
-      const videoTag = super.create();
       videoTag.setAttribute("src", value.src);
       videoTag.setAttribute("title", value.title);
-      videoTag.setAttribute("width", "100%");
-      videoTag.setAttribute("height", "377");
+      videoTag.setAttribute("width", "400");
+      videoTag.setAttribute("height", "300");
       videoTag.setAttribute("controls", "");
-
-      return videoTag;
     } else {
       const iframeTag = document.createElement("iframe");
       iframeTag.setAttribute("src", value);
       iframeTag.setAttribute("frameborder", "0");
       iframeTag.setAttribute("allowfullscreen", true);
-      iframeTag.setAttribute("width", "100%");
+      iframeTag.setAttribute("width", "90%");
       iframeTag.setAttribute("height", "377");
       return iframeTag;
     }
+
+    return videoTag;
   }
 
   static value(node) {
     if (node.getAttribute("title")) {
-      return { src: node.getAttribute("src"), alt: node.getAttribute("title") };
+      return {
+        src: node.getAttribute("src"),
+        title: node.getAttribute("title"),
+      };
     } else {
       return node.getAttribute("src");
     }
-    // return { src: node.getAttribute('src'), alt: node.getAttribute('title') };
   }
 }
 
@@ -120,7 +133,7 @@ Quill.register(VideoBlot);
 class FileBlot extends BlockEmbed {
   static create(value) {
     const prefixTag = document.createElement("span");
-    prefixTag.innerText = "첨부파일 - ";
+   
 
     const bTag = document.createElement("b");
     //위에 첨부파일 글자 옆에  파일 이름이 b 태그를 사용해서 나온다.
@@ -202,20 +215,16 @@ class QuillEditor extends React.Component {
     this.inputOpenFileRef = React.createRef();
   }
 
-  componentDidMount() {
-    this._isMounted = true;
-  }
+  // componentDidMount() {
+  //   this._isMounted = true;
+  // }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
+  // componentWillUnmount() {
+  //   this._isMounted = false;
+  // }
 
   handleChange = (html) => {
     console.log("html", html);
-    // https://youtu.be/BbR-QCoKngE
-    // https://www.youtube.com/embed/ZwKhufmMxko
-    // https://tv.naver.com/v/9176888
-    // renderToStaticMarkup(ReactHtmlParser(html, options));
 
     this.props.onEditorChange(html);
   };
@@ -311,13 +320,13 @@ class QuillEditor extends React.Component {
           if (response.data) {
             const quill = this.reactQuillRef.getEditor();
             quill.focus();
-
+            console.log("response", response.data);
             let range = quill.getSelection();
             let position = range ? range.index : 0;
             quill.insertEmbed(position, "video", {
               src: response.data.path,
               title:
-                response.data.response.data.path.split("/")[
+                response.data.path.split("/")[
                   response.data.path.split("/").length - 1
                 ],
             });
@@ -367,13 +376,7 @@ class QuillEditor extends React.Component {
 
             let range = quill.getSelection();
             let position = range ? range.index : 0;
-            quill.insertEmbed(
-              position,
-              "file",
-              response.data.path.split("/")[
-                response.data.path.split("/").length - 1
-              ]
-            );
+            quill.insertEmbed(position, "file", response.data.path);
             quill.setSelection(position + 1);
 
             if (this._isMounted) {
@@ -471,6 +474,7 @@ class QuillEditor extends React.Component {
           <button className="ql-clean" />
         </div>
         <ReactQuill
+          // className="d-flex flex-center "
           ref={(el) => {
             this.reactQuillRef = el;
           }}
@@ -480,6 +484,7 @@ class QuillEditor extends React.Component {
           formats={this.formats}
           value={this.props.value}
           placeholder={this.props.placeholder}
+          style={{ height: "500px", width: "700px" }}
         />
         <input
           type="file"
@@ -508,10 +513,12 @@ class QuillEditor extends React.Component {
 
   modules = {
     // syntax: true,
+
     imageResize: {
-      parchment: Quill.import("parchment"),
-      modules: ["Resize", "DisplaySize"],
+      modules: ["Resize", "DisplaySize", "Toolbar"],
     },
+    imageDrop: true,
+
     toolbar: {
       container: "#toolbar",
       handlers: {
@@ -565,7 +572,6 @@ class QuillEditor extends React.Component {
     "list",
     "bullet",
     "ordered",
-
     "size",
     "background",
     "align",

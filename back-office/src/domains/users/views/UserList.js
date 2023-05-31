@@ -10,6 +10,7 @@ import { AiFillDelete } from 'react-icons/ai';
 import { IoIosPersonAdd } from "react-icons/io";
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import Modal from 'react-bootstrap/Modal';
+import { size } from 'draft-js/lib/DefaultDraftBlockRenderMap';
 
 
 
@@ -20,8 +21,17 @@ function UserList() {
   const handleShow = () => setShow(true);
   const columns = [
     {
-      field: 'id', headerName: 'ID', width: 90
-    },
+    field: 'avatar',
+    headerName: 'Avatar',
+    width: 150,
+    renderCell: (params) => (
+      <img
+        src={params.row.avatar?.path}
+        style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+      />
+    ),
+  },
+   
     {
       field: 'fullName',
       headerName: 'Full name',
@@ -37,13 +47,7 @@ function UserList() {
 
     },
 
-    {
-      field: 'address',
-      headerName: 'Address',
-      width: 110,
-      editable: true,
-      sortable: false,
-    },
+   
     {
       field: 'phone',
       headerName: 'Phone ',
@@ -57,12 +61,7 @@ function UserList() {
       width: 100,
 
     },
-    {
-      field: 'balance',
-      headerName: 'Balance ',
-      width: 100,
-
-    },
+  
 
     {
       field: 'city',
@@ -78,6 +77,7 @@ function UserList() {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
+
       getActions: ({ id }) => {
 
         return [
@@ -86,16 +86,14 @@ function UserList() {
             label="Edit"
             className="textPrimary"
             onClick={() => handleEditClick(id)}
-            color="inherit"
+            color="success"
 
           />,
-          <GridActionsCellItem
+            <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
-
             onClick={() => { setElementId(id), handleShow() }}
-            // should open popup to ask are u sure delete this user (yes/no)
-            color="inherit"
+            color="error"
           />,
 
         ];
@@ -119,11 +117,14 @@ function UserList() {
           ...e,
           fullName: isEng ? e.fullNameEn : e.fullNameAr,
           phone: e.tel,
+          city:e.address,
+          Avatar: e.avatar,
           createdAt: e.createdAt.slice(0, 10)
         }
       }
       )
-      console.log(aux);
+
+      console.log('users',aux);
       setRows(aux)
     }
 
@@ -131,7 +132,6 @@ function UserList() {
 
 
   const handleDeleteClick = (id) => {
-
     dispatch(removeUser(id)).then(res => {
       if (res.error) {
         showErrorToast(res.error.message)
@@ -142,6 +142,7 @@ function UserList() {
 
   };
 
+
   const handleEditClick = (id) => {
     console.log(id);
     navigate(`edit/${id}`)
@@ -150,8 +151,7 @@ function UserList() {
   return (
     <div>
       <>
-
-        <Modal show={show} onHide={handleClose}>
+     <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Delete</Modal.Title>
           </Modal.Header>
@@ -166,22 +166,24 @@ function UserList() {
           </Modal.Footer>
         </Modal>
       </>
-      <div className='top-0 start-0'>
+      <div className='top-0 start-0' style={{marginLeft:800}} >
         <Button type='button' href='user/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
           <span className='btn btn-sm '>
             Add user
           </span>
         </Button>
       </div>
-      <div className='position-relative'>User List
+      <div className='position-relative' >
+        <h1  style={{paddingLeft:10,paddingTop:10}}>User List</h1>
 
 
-        <Box sx={{ height: 600, width: '100%' }}>
+        <Box sx={{ height:600, width:'100%' }}>
           <DataGrid
             rows={rows}
             columns={columns}
             initialState={{
               pagination: {
+                
                 paginationModel: {
                   pageSize: 10,
                 },

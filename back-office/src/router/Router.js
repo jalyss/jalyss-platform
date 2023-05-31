@@ -28,6 +28,7 @@ import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
 
+import ChartTabs from "../domains/charts/ChartTabs";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -63,14 +64,15 @@ function Router() {
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
             </Route>
-{/* 
-            <Route path="charts" element={<Charts />} /> */}
+
+            {/* <Route path="charts" element={<Charts />} /> */}
 
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
               <Route path="create" element={<CreateCommand />} />
               <Route path="edit/:commandId" element={< EditCommand />} />
             </Route>
+            <Route path="charts" element={<ChartTabs/>}/>
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>

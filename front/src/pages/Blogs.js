@@ -11,7 +11,16 @@ import { useTranslation } from "react-i18next";
 import Pagination from "@mui/material/Pagination";
 import AutoCompleteFilter from "../components/AutoCompleteFilter";
 import Dropdown from "react-bootstrap/Dropdown";
-import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter,} from "mdb-react-ui-kit";
+import {
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+} from "mdb-react-ui-kit";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../store/user";
@@ -39,7 +48,7 @@ function Blogs() {
   const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const take = 6;
- 
+
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
     subTitle:
@@ -72,7 +81,6 @@ function Blogs() {
     );
   }
   const handleChange = (event, value) => {
-    console.log(value);
     setSkip((value - 1) * take);
   };
   const toggleShow = () => setBasicModal(!basicModal);
@@ -82,18 +90,17 @@ function Blogs() {
   const handleCreateBookmark = (blogId) => {
     let body = {
       blogId,
-      userId: me.id,
     };
     dispatch(createBookmark(body)).then((res) => {
       if (!res.error) {
         showSuccessToast("Blog has been saved");
       } else {
-        showErrorToast(res.error.message);
+        showErrorToast("alredy saved");
       }
     });
   };
- 
 
+ 
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
@@ -275,15 +282,14 @@ function Blogs() {
                   className="blogItemCover"
                   src={blog.cover.path}
                   alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`)
-                }
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
                 />
               ) : (
                 <img
+                  className="blogItemCover"
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`
-                  )}
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
                 />
               )}
               <div
@@ -333,47 +339,38 @@ function Blogs() {
                   </div>
                 </div>
 
-                <Dropdown>
-      <Dropdown.Toggle
-        className={`ellipsis-btn dropdownToggleBlogCard ${isBlinking ? 'blinking' : ''}`}
-        style={{      
-        borderRadius: '100%',
-        width: '40px',
-        height: '40px',
-        background: '#fff',
-        border: 'none',
-        transition: 'background-color 0.5s',
-        }}
-      >
-        <span style={{ fontSize: '20px', color:"black"}}>&#8942;</span>
-      </Dropdown.Toggle>
-      <Dropdown.Menu size="sm" title="">
-        {me?.id === blog.authorId ? (
-          <>
-            <Dropdown.Item onClick={() => {
-              setSelectedId(blog.id);
-              setBasicModal(true);
-            }}>
-              Delete
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate(`/update-blog/${blog.id}`)}>
-              Update
-            </Dropdown.Item>
-          </>
-        ) : (
-          <Dropdown.Item onClick={() => handleCreateBookmark(blog.id)}>
-            Save
-          </Dropdown.Item>
-        )}
-      </Dropdown.Menu>
-      <style>
-        {`
-          .ellipsis-btn:hover {
-            background-color: #8c21bd45 !important;
-          }
-        `}
-      </style>
-    </Dropdown>
+                
+  <Dropdown>
+                  <Dropdown.Toggle
+                    className="ellipsis-btn dropdownToggleBlogCard"
+                    style={{ all: "unset" }}
+                  >
+                    <span>&#8942;</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu size="sm" title="">
+                    {me?.id === blog.authorId ? (
+                      <>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedId(blog.id);
+                            setBasicModal(true);
+                          }}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
+                      </>
+                    ) : (
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleCreateBookmark(blog.id);
+                        }}
+                      >
+                        Save
+                      </Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
             </div>
           ))}
@@ -383,7 +380,6 @@ function Blogs() {
           <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
             <MDBModalDialog>
               <MDBModalContent>
-          
                 <MDBModalHeader>
                   <MDBModalTitle>Delete</MDBModalTitle>
                   <MDBBtn
@@ -395,16 +391,18 @@ function Blogs() {
                 <MDBModalBody>Press continue to delete this blog</MDBModalBody>
 
                 <MDBModalFooter>
-                  <button color="secondary" 
-                   type="button"
-                   class="btn btn-secondary btn-sm"
-                  onClick={toggleShow}>
+                  <button
+                    color="secondary"
+                    type="button"
+                    class="btn btn-secondary btn-sm"
+                    onClick={toggleShow}
+                  >
                     Close
                   </button>
-                 
+
                   <button
-                  type="button"
-                  class="btn btn-primary btn-sm"
+                    type="button"
+                    class="btn btn-primary btn-sm"
                     onClick={() => {
                       handleRemove(selectedId);
                       setBasicModal(false);

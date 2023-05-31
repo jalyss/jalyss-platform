@@ -15,7 +15,7 @@ export const fetchBookmark = createAsyncThunk("bookmarks/bookmark", async (id) =
 
 export const createBookmark = createAsyncThunk(
     "bookmarks/createBookmark",
-    async (body, { dispatch }) => {
+    async (body) => {
       const token = JSON.parse(localStorage.getItem("token")).Authorization;
   
       const configs = {
@@ -29,7 +29,7 @@ export const createBookmark = createAsyncThunk(
         body,
         configs
       );
-      console.log("bookmarkkkkk",response.data);
+    
       return response.data;
     }
   );

@@ -12,7 +12,7 @@ export const fetchUser = createAsyncThunk("users/user", async (id) => {
   return response.data;
 });
 
-export const createUser = createAsyncThunk("users/createUser", async (body, { dispatch }) => {
+export const createUser = createAsyncThunk("users/createUser", async (body, {dispatch  }) => {
   let token = JSON.parse(localStorage.getItem('token'))
   const configs = {
     headers: {

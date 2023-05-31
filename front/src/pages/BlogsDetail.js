@@ -1,11 +1,10 @@
-
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchBlog,createView  } from "../store/blog";
+import { fetchBlog, createView } from "../store/blog";
 import { useSelector } from "react-redux";
-import { fetchBlogs, removeBlog } from "../store/blog";
-import { CircleDashed } from 'phosphor-react';
+import { fetchBlogs } from "../store/blog";
+import { CircleDashed } from "phosphor-react";
 import { createBookmark } from "../store/bookmarks";
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter,} from "mdb-react-ui-kit";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -20,23 +19,15 @@ const BlogDetail = () => {
   const [basicModal, setBasicModal] = useState(false);
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
+
   const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
-  const { blogs } = blogStore;
-  const { blog } = blogStore;
-
+  const { blogs, blog } = blogStore;
   const toggleShow = () => setBasicModal(!basicModal);
-  const handleRemove = (id) => {
-    dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
-  };
-
+  
   useEffect(() => {
     dispatch(fetchBlog(blogId));
-    let body={
-      blogId
-    }
-    dispatch(
-      createView(body))
+    dispatch(createView({ blogId }));
   }, [dispatch]);
 
   let take = 5;
@@ -44,10 +35,10 @@ const BlogDetail = () => {
   const authorId = blog?.authorId;
 
   useEffect(() => {
-    dispatch(fetchBlogs({ take, skip, authorId }));
-  }, [dispatch, authorId, take, skip]);
-  console.log("blooooo", blog);
-  console.log("aloo", blogs);
+    if (blog)
+      dispatch(fetchBlogs({ take: 5, skip: 0, authorId: blog.authorId }));
+  }, [dispatch, blog]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -55,7 +46,7 @@ const BlogDetail = () => {
   const handleCreateBookmarkOne = (blogId) => {
     let body = {
       blogId,
-      userId:me.id,
+      userId: me.id,
     };
     dispatch(createBookmark(body)).then((res) => {
       if (!res.error) {
@@ -65,10 +56,17 @@ const BlogDetail = () => {
       }
     });
   };
-
+  console.log("blog", blog);
+ 
   if (!blog) {
-    
-    return <div>Loading...</div>;
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center "
+        style={{ position: "fixed", zIndex: 100, width: "100%", height: "100%",backgroundColor:'gray' }}
+      >
+        Loading...
+      </div>
+    );
   }
   return (
     <div className="d-flex">
@@ -131,6 +129,7 @@ const BlogDetail = () => {
         `}
       </style>
                 </Dropdown>
+                </div>
                 <>
           <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
             <MDBModalDialog>
@@ -170,7 +169,7 @@ const BlogDetail = () => {
             </MDBModalDialog>
           </MDBModal>
         </>
-          </div>
+
         </div>
         <div style={{ maxWidth: "700px", margin: "0 auto" }}>
           <div className="d-flex flex-column align-items-center">
@@ -214,7 +213,7 @@ const BlogDetail = () => {
               </h3>
             </div>
           </div>
-          {blog.cover   ? (
+          {blog.cover ? (
             <img
               style={{ width: "100%", borderRadius: "15px" }}
               src={blog.cover?.path}
@@ -250,35 +249,50 @@ const BlogDetail = () => {
           />
         ) : (
           <img
-          style={{
-            width: "100px",
-            height: "100px",
-            borderRadius: "50%",
-            marginBottom: "10px",
-          }}
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              marginBottom: "10px",
+            }}
             className="blogItemAuthorAvatar"
             src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
             alt="avatar"
           />
         )}
-        <p style={{fontSize:"1.2rem",fontWeight:"bold",marginBottom:"50px"}}>{blog.authorName}</p>
+        <p
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            marginBottom: "50px",
+          }}
+        >
+          {blog.authorName}
+        </p>
         <h2 className="moreFromAuthor">More from {blog.author.fullNameEn}</h2>
-        <div style={{marginTop:"10px"}}>
+        <div style={{ marginTop: "10px" }}>
           {blogs.items.map((blog) => (
-            <div className="d-flex align-items-center" style={{cursor:"pointer",marginTop:"20px"}}
+            <div
+              className="d-flex align-items-center"
+              style={{ cursor: "pointer", marginTop: "20px" }}
               key={blog.id}
               // onClick={() => handleBlogSelection(blog)}
             >
-              <h6  className="sideBlogTitle">
+              <h6 className="sideBlogTitle">
                 {blog.title}
                 <br />
-                <span className="spanBlog">Category: </span> <small>{blog.category.nameEn}</small>
-              </h6 >
+                <span className="spanBlog">Category: </span>{" "}
+                <small>{blog.category.nameEn}</small>
+              </h6>
               {blog.cover ? (
-                <img  className="sideBlogImage"  src={blog.cover?.path} alt="cover" />
+                <img
+                  className="sideBlogImage"
+                  src={blog.cover?.path}
+                  alt="cover"
+                />
               ) : (
                 <img
-                className="sideBlogImage"
+                  className="sideBlogImage"
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
                 />

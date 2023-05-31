@@ -23,7 +23,7 @@ export const fetchTrends = createAsyncThunk("blogs/fetchTrends", async () => {
 
 export const fetchBlog = createAsyncThunk("blogs/fetchBlog", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs/one/${id}`);
-  console.log("API Response:", response.data);
+  
   return response.data;
 });
 
@@ -43,7 +43,6 @@ export const createBlog = createAsyncThunk(
       body,
       configs
     );
-    dispatch(fetchBlogs());
     return response.data;
   }
 );
@@ -73,23 +72,19 @@ export const removeBlog = createAsyncThunk(
 
 export const editBlog = createAsyncThunk(
   "blogs/editBlog",
-  async (args) => {
-    const { id, ...body } = args;
-  const token = JSON.parse(localStorage.getItem("token")).Authorization;
-  console.log("Token:", token)
+  async (args)=>{
+    const {id,body}=args
+    let token = JSON.parse(localStorage.getItem("token"));
     const configs = {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.Authorization,
       },
     };
-    console.log(token,"this my ");
-    
     const response = await axios.patch(
-      `${configs.API_ENDPOINT}/blogs/${id}`,
+      `${config.API_ENDPOINT}/blogs/${id}`,
       body,
-      configs
+      configs 
     );
-console.log(response.data);
     return response.data;
   }
 );
