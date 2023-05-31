@@ -3,8 +3,6 @@ import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
-import { Avatar } from '@mui/material';
-
 import { Prisma, PrismaClient } from '@prisma/client';
 
 @Injectable()
@@ -89,6 +87,7 @@ export class BlogsService {
       });
     }
   }
+  
 
   async findOne(id: string) {
     return await this.prisma.blog.findFirst({
@@ -99,26 +98,33 @@ export class BlogsService {
         MediaBlog: { include: { media: true } },
         author: { include: { avatar: true } },
         category: true,
+        cover: true,
       },
     });
   }
 
-  async update(id: string, dto: UpdateBlogDto) {
+  async update(id: string, dto: UpdateBlogDto, userId: string) {
     await this.prisma.$transaction(async (prisma) => {
-      await prisma.mediaBlog.deleteMany({ where: { blogId: id } });
-      let mediaIds = [];
-      if (dto.mediaIds) {
-        mediaIds = dto.mediaIds;
+      let blog = await prisma.blog.findFirstOrThrow({ where: { id } });
+      if (blog.authorId !== userId)
+        throw new HttpException(
+          'this user can not update the blog',
+          HttpStatus.BAD_REQUEST,
+        );
+      // await prisma.mediaBlog.deleteMany({ where: { blogId: id } });
+      // let mediaIds = [];
+      // if (dto.mediaIds) {
+      //   mediaIds = dto.mediaIds;
         delete dto?.mediaIds;
-      }
+      // }
       let data = { ...dto };
-      if (mediaIds.length > 0) {
-        data['MediaBlog'] = {
-          create: mediaIds.map((id) => ({
-            mediaId: id,
-          })),
-        };
-      }
+      // if (mediaIds.length > 0) {
+      //   data['MediaBlog'] = {
+      //     create: mediaIds.map((id) => ({
+      //       mediaId: id,
+      //     })),
+      //   };
+      // }
       return await prisma.blog.update({ where: { id }, data });
     });
   }
@@ -138,7 +144,7 @@ export class BlogsService {
       include: {
         MediaBlog: { include: { media: true } },
         _count: { select: { view: true } },
-        // cover:true,
+        cover: true,
         category: true,
         author: {
           select: {

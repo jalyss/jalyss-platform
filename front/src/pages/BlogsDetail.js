@@ -1,41 +1,60 @@
-import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchBlog } from "../store/blog";
+import { fetchBlog, createView } from "../store/blog";
 import { useSelector } from "react-redux";
 import { fetchBlogs } from "../store/blog";
-import { CircleDashed } from 'phosphor-react';
+import { CircleDashed } from "phosphor-react";
+import { createBookmark } from "../store/bookmarks";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 const BlogDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { blogId } = useParams();
 
-  // const [skip,setSkip]=useState()
   const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
-  const { blogs } = blogStore;
-  const { blog } = blogStore;
-  useEffect(() => {
-    dispatch(fetchBlog(blogId));
-  }, [dispatch]);
-  let take = 5;
-  let skip = 0;
-  const authorId = blog?.authorId;
+  const { blogs, blog } = blogStore;
 
   useEffect(() => {
-    dispatch(fetchBlogs({ take, skip, authorId }));
-  }, [dispatch, authorId, take, skip]);
-  console.log("blooooo", blog);
-  console.log("aloo", blogs);
+    dispatch(fetchBlog(blogId));
+    dispatch(createView({ blogId }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (blog)
+      dispatch(fetchBlogs({ take: 5, skip: 0, authorId: blog.authorId }));
+  }, [dispatch, blog]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const handleCreateBookmarkOne = (blogId) => {
+    let body = {
+      blogId,
+      userId: me.id,
+    };
+    dispatch(createBookmark(body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been saved");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+  console.log("blog", blog);
+ 
   if (!blog) {
-    // Render a loading indicator or placeholder while waiting for the data
-    return <div>Loading...</div>;
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center "
+        style={{ position: "fixed", zIndex: 100, width: "100%", height: "100%",backgroundColor:'gray' }}
+      >
+        Loading...
+      </div>
+    );
   }
   return (
     <div className="d-flex">
@@ -52,9 +71,14 @@ const BlogDetail = () => {
           <div className="goBackLink" onClick={() => navigate(-1)}>
             <span> &#8592;</span> <span>Go Back</span>
           </div>
-          <span className="bookMarkIcon">
+          <div
+            className="bookMarkIcon"
+            onClick={() => {
+              handleCreateBookmarkOne(blog.id);
+            }}
+          >
             <span>&#x1F516;</span>
-          </span>
+          </div>
         </div>
         <div style={{ maxWidth: "700px", margin: "0 auto" }}>
           <div className="d-flex flex-column align-items-center">
@@ -101,7 +125,7 @@ const BlogDetail = () => {
           {blog.cover ? (
             <img
               style={{ width: "100%", borderRadius: "15px" }}
-              src={blog.cover}
+              src={blog.cover?.path}
               alt="cover"
             />
           ) : (
@@ -134,35 +158,50 @@ const BlogDetail = () => {
           />
         ) : (
           <img
-          style={{
-            width: "100px",
-            height: "100px",
-            borderRadius: "50%",
-            marginBottom: "10px",
-          }}
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              marginBottom: "10px",
+            }}
             className="blogItemAuthorAvatar"
             src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
             alt="avatar"
           />
         )}
-        <p style={{fontSize:"1.2rem",fontWeight:"bold",marginBottom:"50px"}}>{blog.authorName}</p>
+        <p
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            marginBottom: "50px",
+          }}
+        >
+          {blog.authorName}
+        </p>
         <h2 className="moreFromAuthor">More from {blog.author.fullNameEn}</h2>
-        <div style={{marginTop:"10px"}}>
+        <div style={{ marginTop: "10px" }}>
           {blogs.items.map((blog) => (
-            <div className="d-flex align-items-center" style={{cursor:"pointer",marginTop:"20px"}}
+            <div
+              className="d-flex align-items-center"
+              style={{ cursor: "pointer", marginTop: "20px" }}
               key={blog.id}
               // onClick={() => handleBlogSelection(blog)}
             >
-              <h6  className="sideBlogTitle">
+              <h6 className="sideBlogTitle">
                 {blog.title}
                 <br />
-                <span className="spanBlog">Category: </span> <small>{blog.category.nameEn}</small>
-              </h6 >
+                <span className="spanBlog">Category: </span>{" "}
+                <small>{blog.category.nameEn}</small>
+              </h6>
               {blog.cover ? (
-                <img  className="sideBlogImage"  src={blog.cover} alt="cover" />
+                <img
+                  className="sideBlogImage"
+                  src={blog.cover?.path}
+                  alt="cover"
+                />
               ) : (
                 <img
-                className="sideBlogImage"
+                  className="sideBlogImage"
                   src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                   alt="cover"
                 />
@@ -174,6 +213,5 @@ const BlogDetail = () => {
     </div>
   );
 };
-
 
 export default BlogDetail;

@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MessagesService } from './messages.service';
@@ -17,7 +18,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/currentUser';
 
 @ApiTags('Messages')
-@Controller('Messages')
+@Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
   // @UseGuards(JwtAuthGuard)
@@ -33,8 +34,13 @@ export class MessagesController {
   }
 
   @Get(':chatRoomId')
-  getChatRoomMessages(@Param('chatRoomId') chatRoomId: string) {
-    return this.messagesService.getChatRoomMessages(chatRoomId);
+  getChatRoomMessages(
+    @Param('chatRoomId') chatRoomId: string,
+    @Query() query: any,
+  ) {
+    console.log(query);
+    
+    return this.messagesService.getChatRoomMessages(chatRoomId,+query.numberMessages);
   }
 
   @Patch(':chatRoomId/:messageId')

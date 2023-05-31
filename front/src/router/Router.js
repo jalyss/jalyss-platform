@@ -30,6 +30,8 @@ import ReserveMeeting from "../pages/ReserveMeeting";
 import Chatroom from "../pages/Chatroom";
 
 import { useSelector } from "react-redux";
+import UpdateBlog from "../pages/UpdateBlog";
+
 
 function Router() {
 
@@ -63,6 +65,7 @@ function Router() {
             <Route path="ReserveCoworkin" element={<ReserveCoworkin />} />
             <Route path="mentor" element={<MentorPage/>} />
             <Route path="ReserveMeeting" element={<ReserveMeeting/>} />
+            <Route path="update-blog/:blogId" element={<UpdateBlog/>} />
           </Route>
           
         </Routes>

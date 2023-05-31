@@ -12,7 +12,7 @@ const TrainingCategories = () => {
     <TrainingHeading subtitle='CATEGORIES' title='Browse Top Categories' />
     <Marquee >
     <section>
-        <div className="container">
+        <div className="containerCategegories">
 
 
           <ul className="grid-list">

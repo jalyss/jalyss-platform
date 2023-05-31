@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import bg from '../img/Capture1.PNG'
+
 
 const MentorHome = () => {
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
