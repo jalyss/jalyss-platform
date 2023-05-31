@@ -17,26 +17,31 @@ import StyledBadge from "../components/StyledBadge";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-
-
 const ConnectedUsers = ({ socket }) => {
-  const authStore = useSelector(state => state.auth)
+  const authStore = useSelector((state) => state.auth);
 
-  const [connectedUsers, setConnectedUsers] = useState([])
+  const [connectedUsers, setConnectedUsers] = useState([]);
+  useEffect(() => {
+    if (authStore.me) {
+      socket.emit("online-users", authStore.me.id);
+    }
+  }, [socket, authStore.me]);
 
   useEffect(() => {
     if (authStore.me) {
       function listConnectedUsers(users) {
         console.log(users);
-        setConnectedUsers(users)
+        setConnectedUsers(users);
       }
-      socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers)
-      return () => { socket.off(`connected-users/${authStore.me.id}`, listConnectedUsers) }
+      socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers);
+      return () => {
+        socket.off(`connected-users/${authStore.me.id}`, listConnectedUsers);
+      };
     }
-  }, [socket, authStore.me])
-
+  }, [socket, authStore.me]);
+  
+console.log(connectedUsers);
   const ChatElement = ({ user }) => {
-
     return (
       <Box
         sx={{
@@ -46,7 +51,11 @@ const ConnectedUsers = ({ socket }) => {
           backgroundColor: "#fff",
         }}
       >
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Stack direction="row" spacing={2}>
             <StyledBadge
               overlap="circular"
@@ -56,7 +65,9 @@ const ConnectedUsers = ({ socket }) => {
               <Avatar src={Icon} />
             </StyledBadge>
             <Stack>
-              <Typography variant="subtitle1">{user.user.fullNameEn}</Typography>
+              <Typography variant="subtitle1">
+                {user.user.fullNameEn}
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
@@ -75,7 +86,11 @@ const ConnectedUsers = ({ socket }) => {
       }}
     >
       <Stack p={3} spacing={2}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
           <Typography variant="h5" style={{ whiteSpace: "nowrap" }}>
             Online Users
           </Typography>
@@ -91,11 +106,11 @@ const ConnectedUsers = ({ socket }) => {
             <StyledInputBase placeholder="Search" />
           </Search>
           <Divider />
-          {connectedUsers.map((user) => 
-            
-            <ChatElement user={user} /> )
-          }
-
+          {connectedUsers
+            .filter((u) => u.userId !== authStore.me?.id)
+            .map((user) => (
+              <ChatElement user={user} />
+            ))}
         </Stack>
       </Stack>
     </Box>
