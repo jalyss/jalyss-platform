@@ -44,7 +44,7 @@ export class ChatGateway
   @SubscribeMessage('connection')
   async connect(client: Socket, payload: CreateConnectedUserDto) {
    console.log(payload);
-   let connectedUser=await this.PrismaService.connetecdUser.findFirst({where:{userId:payload.userId}})
+   let connectedUser=await this.PrismaService.connectedUser.findFirst({where:{userId:payload.userId}})
    if(!connectedUser)
    await this.PrismaService.connectedUser.create({data:{userId:payload.userId}})
    
