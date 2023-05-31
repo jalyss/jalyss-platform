@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs, useTabState, usePanelState } from "@bumaga/tabs";
 import Charts2 from "./Charts2"
 import Charts3 from "./Charts3";
-import Charts from "./Charts.js"
+// import Charts from "./Charts.js"
 import '../../assets/styles/tabs.css'
 const Tab = ({ children }) => {
   const { onClick, isActive } = useTabState();

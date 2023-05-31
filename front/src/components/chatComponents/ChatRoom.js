@@ -9,16 +9,16 @@ import {
 } from "@mui/material";
 import { CircleDashed, MagnifyingGlass } from "phosphor-react";
 import React, { useEffect, useState } from "react";
-import Search from "../components/Search";
-import SearchIconWrapper from "../components/SearchIconWrapper";
-import StyledInputBase from "../components/SearchInputBase";
-import Icon from "../assets/styles/profile.png";
-import StyledBadge from "../components/StyledBadge";
+import Search from "../Search";
+import SearchIconWrapper from "../SearchIconWrapper";
+import StyledInputBase from "../SearchInputBase";
+import Icon from "../../assets/styles/profile.png";
+import StyledBadge from "../StyledBadge";
 import { useSelector } from "react-redux";
-import axios from "axios";
 
 
-const Chats = ({ chatRoomList }) => {
+
+const ChatRoom = ({ chatRoomList }) => {
 
   const authStore = useSelector(state => state.auth)
 
@@ -109,4 +109,4 @@ const Chats = ({ chatRoomList }) => {
   );
 };
 
-export default Chats;
+export default ChatRoom;
