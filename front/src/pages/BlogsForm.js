@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { fetchCategoriesBlogs } from "../store/category";
 import { createBlog } from "../store/blog";
+import Alert from "../components/Alert";
 
 import axios from "axios";
 const { Title } = Typography;
@@ -31,9 +32,13 @@ const BlogsForm = () => {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState(null);
   const [formValidated, setFormValidated] = useState(false);
+const [showSuccess, setShowSuccess] = useState(false)
+const [showFailure, setShowFailure] = useState(false)
+
 
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
+  
 
   useEffect(() => {
     dispatch(fetchCategoriesBlogs());
@@ -76,10 +81,19 @@ const BlogsForm = () => {
 
     dispatch(createBlog(body)).then((res) => {
       if (!res.error) {
-        showSuccessToast("Blog has been created");
+        toggleShow()
+        setShowSuccess(true)
+      setTimeout(() => {
+        setShowSuccess(false)
         navigate(-1);
+      }, 3000);
+
+       
       } else {
-        showErrorToast(res.error.message);
+        setShowFailure(true)
+        setTimeout(() => {
+          setShowFailure(false)
+        }, 2000);
       }
     });
 
@@ -148,6 +162,11 @@ const BlogsForm = () => {
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
+            {showFailure?<Alert
+       alertType="failed"
+      />:null}
+                {showSuccess?<Alert
+       alertType="success"/>:null}
       <form className={`row g-3 needs-validation ${formValidated ? "was-validated" : ""}`} noValidate onSubmit={toggleShow}>
         <div style={{ textAlign: "center" }}>
           <Title level={2}>Start Write your Blog!</Title>
@@ -168,7 +187,7 @@ const BlogsForm = () => {
               aria-describedby="basic-addon2"
               onChange={(e) => setTitle(e.target.value)}
               required
-            />
+              />
           </div>
           <div className="mb-3">
             <div className="d-flex justify-content-end ">
@@ -178,7 +197,7 @@ const BlogsForm = () => {
                 type="file"
                 onChange={handleFileChange}
                 
-              />
+                />
             </div>
           </div>
         </div>
@@ -213,7 +232,7 @@ const BlogsForm = () => {
         </div>
       </form>
       
-
+          
      { staticModal &&  <MDBModal staticBackdrop tabIndex="-1" show={staticModal}>
         <MDBModalDialog>
           <MDBModalContent>
@@ -249,7 +268,10 @@ const BlogsForm = () => {
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>}
+
+
     </div>
+
   );
 };
 
