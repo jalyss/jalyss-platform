@@ -31,11 +31,6 @@ const BlogsForm = () => {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState(null);
   const [formValidated, setFormValidated] = useState(false);
-<<<<<<< Updated upstream
-=======
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showFailure, setShowFailure] = useState(false);
->>>>>>> Stashed changes
 
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;

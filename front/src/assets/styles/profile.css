@@ -1,0 +1,27 @@
+@media only screen and (max-width: 600px){ 
+    .nav{
+        width: 343px;
+
+    }
+}
+@media only screen and (min-width: 768px){
+    .nav{
+        width: 1117px;
+
+    }
+ }
+
+ .upbtn{
+    width: 30px !important;
+    height:  30px !important;
+    text-align: center !important;
+    border-radius: 100% !important;
+    background-color: #4a0e65 !important;
+
+  }
+
+  .upbtn:hover{
+    background-color: #3a0b5042 !important;
+    border-radius: 20px !important;
+  }
+ 

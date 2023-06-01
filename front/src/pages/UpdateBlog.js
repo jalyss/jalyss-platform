@@ -3,25 +3,14 @@ import QuillEditor from "../components/QuillEditor";
 import { Typography, Button, form } from "antd";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import axios from "axios";
+
 import "react-quill/dist/quill.snow.css";
 import { editBlog, fetchBlog } from "../store/blog";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+
 import { useNavigate, useParams } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
-import Alert from "../components/Alert";
-
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-} from "mdb-react-ui-kit";
-
 const { Title } = Typography;
 
 function UpdateBlog() {
@@ -33,16 +22,11 @@ function UpdateBlog() {
   const me = useSelector((state) => state.auth.me);
   const blogStore = useSelector((state) => state.blog);
   const { blog } = blogStore;
-
-  const [Modal, setModal] = useState(false);
-  const [staticModal, setStaticModal] = useState(false);
   const [newContent, setNewContent] = useState(null);
   const [title, setTitle] = useState(null);
   const [cover, setCover] = useState(null);
   const [files, setFiles] = useState(null);
   const [categoryId, setCategoryId] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showFailure, setShowFailure] = useState(false);
 
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
@@ -66,13 +50,13 @@ function UpdateBlog() {
 
   const handleChange = (e) => {
     setCategoryId(e.target.value);
+    console.log("oo", categoryId);
   };
 
   const onFilesChange = (files) => {
     setFiles(files);
     console.log("files", files);
   };
-  
   const onEditorChange = (content) => {
     setNewContent(content);
   };
@@ -83,25 +67,12 @@ function UpdateBlog() {
       return <div>Loading...</div>;
     }
   };
-
-
-  const toggleShow = () => {
-    setStaticModal(!staticModal);
-  };
-
-
-  const showModal = () => {
-    setModal(!Modal);
-  };
-
-
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setCover(e.target.files[0]);
       console.log("Selected cover file:", e.target.files[0]);
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -112,6 +83,7 @@ function UpdateBlog() {
       categoryId,
       title,
     };
+
     if (cover !== null) {
       try {
         const formData = new FormData();
@@ -128,32 +100,18 @@ function UpdateBlog() {
       }
     }
 
-
     dispatch(editBlog({ id, body })).then((res) => {
       if (!res.error) {
-        toggleShow();
-        setShowSuccess(true);
-        setTimeout(() => {
-          setShowSuccess(false);
-          navigate("/blogs");
-        }, 2000);
+        showSuccessToast("Blog has been updated");
+        navigate(-1);
       } else {
-        toggleShow();
-        setShowFailure(true);
-        setTimeout(() => {
-          setShowFailure(false);
-        }, 2000);
+        showErrorToast(res.error.message);
       }
     });
   };
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
-
-{/* Two modal components are used from the MDB React UI Kit library to display a confirmation dialog and a success message when the blog update is successful */}
-      {showFailure ? <Alert alertType="failed" /> : null}
-      {showSuccess ? <Alert alertType="success" /> : null}
-
       <div style={{ textAlign: "center" }}>
         <Title level={2}>Update your Blog!</Title>
       </div>
@@ -192,80 +150,36 @@ function UpdateBlog() {
         </div>
       </div>
 
-      <div id="editor-container">
-        <QuillEditor
-          placeholder={"Start Posting Something"}
-          value={newContent}
-          onEditorChange={onEditorChange}
-          onFilesChange={onFilesChange}
-        />
-      </div>
-      <select
-        value={categoryId}
-        class="form-select mt-3"
-        aria-label="Default select example"
-        onChange={handleChange}
-      >
-        <option selected>{blog?.category.nameEn}</option>
-        {categories.items.map((category, index) => (
-          <option key={index} value={category.id}>
-            {category.nameEn}
-          </option>
-        ))}
-      </select>
-
-      <div style={{ textAlign: "center", margin: "2rem auto" }}>
-        <button class="btn btn-primary" onClick={toggleShow}>
-          Update
-        </button>
-      </div>
-
-      {staticModal && (
-        <MDBModal staticBackdrop tabIndex="-1" show={staticModal}>
-          <MDBModalDialog>
-            <MDBModalContent>
-              <MDBModalHeader>
-                <MDBModalTitle>
-                  Click on "Continue" to save the changes
-                </MDBModalTitle>
-                <MDBBtn
-                  className="btn-close"
-                  color="none"
-                  onClick={toggleShow}
-                ></MDBBtn>
-              </MDBModalHeader>
-              <MDBModalBody>
-                <span dangerouslySetInnerHTML={{ __html: newContent }}></span>
-              </MDBModalBody>
-              <MDBModalFooter>
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-sm"
-                  style={{ width: "80px" }}
-                  onClick={() => navigate(-1)}
-                >
-                  Close
-                </button>
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={handleSubmit}
-                >
-                  Continue
-                </button>
-              </MDBModalFooter>
-            </MDBModalContent>
-          </MDBModalDialog>
-        </MDBModal>
-      )}
-      {Modal && (
-        <MDBModal staticBackdrop tabIndex="-1" show={Modal}>
-          <MDBModalContent>
-            <MDBModalBody>
-              <span dangerouslySetInnerHTML={"Updated successfully"}></span>
-            </MDBModalBody>
-          </MDBModalContent>
-        </MDBModal>
-      )}
+      <>
+        <div id="editor-container">
+          <QuillEditor
+            placeholder={"Start Posting Something"}
+            value={newContent}
+            onEditorChange={onEditorChange}
+            onFilesChange={onFilesChange}
+          />
+        </div>
+        <select
+          value={categoryId}
+          class="form-select mt-3"
+          aria-label="Default select example"
+          onChange={handleChange}
+        >
+          <option selected>{blog?.category.nameEn}</option>
+          {categories.items.map((category, index) => (
+            <option key={index} value={category.id}>
+              {category.nameEn}
+            </option>
+          ))}
+        </select>
+        <form>
+          <div style={{ textAlign: "center", margin: "2rem auto" }}>
+            <Button size="large" className="" onClick={handleSubmit}>
+              submit
+            </Button>
+          </div>
+        </form>
+      </>
     </div>
   );
 }
