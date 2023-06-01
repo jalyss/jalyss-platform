@@ -17,7 +17,6 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { fetchCategoriesBlogs } from "../store/category";
 import { createBlog } from "../store/blog";
-import Alert from "../components/Alert";
 
 import axios from "axios";
 const { Title } = Typography;
@@ -32,13 +31,9 @@ const BlogsForm = () => {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState(null);
   const [formValidated, setFormValidated] = useState(false);
-const [showSuccess, setShowSuccess] = useState(false)
-const [showFailure, setShowFailure] = useState(false)
-
 
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
-  
 
   useEffect(() => {
     dispatch(fetchCategoriesBlogs());
@@ -81,19 +76,10 @@ const [showFailure, setShowFailure] = useState(false)
 
     dispatch(createBlog(body)).then((res) => {
       if (!res.error) {
-        toggleShow()
-        setShowSuccess(true)
-      setTimeout(() => {
-        setShowSuccess(false)
+        showSuccessToast("Blog has been created");
         navigate(-1);
-      }, 3000);
-
-       
       } else {
-        setShowFailure(true)
-        setTimeout(() => {
-          setShowFailure(false)
-        }, 2000);
+        showErrorToast(res.error.message);
       }
     });
 
@@ -162,11 +148,6 @@ const [showFailure, setShowFailure] = useState(false)
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
-            {showFailure?<Alert
-       alertType="failed"
-      />:null}
-                {showSuccess?<Alert
-       alertType="success"/>:null}
       <form className={`row g-3 needs-validation ${formValidated ? "was-validated" : ""}`} noValidate onSubmit={toggleShow}>
         <div style={{ textAlign: "center" }}>
           <Title level={2}>Start Write your Blog!</Title>
@@ -187,7 +168,7 @@ const [showFailure, setShowFailure] = useState(false)
               aria-describedby="basic-addon2"
               onChange={(e) => setTitle(e.target.value)}
               required
-              />
+            />
           </div>
           <div className="mb-3">
             <div className="d-flex justify-content-end ">
@@ -197,7 +178,7 @@ const [showFailure, setShowFailure] = useState(false)
                 type="file"
                 onChange={handleFileChange}
                 
-                />
+              />
             </div>
           </div>
         </div>
@@ -232,7 +213,7 @@ const [showFailure, setShowFailure] = useState(false)
         </div>
       </form>
       
-          
+
      { staticModal &&  <MDBModal staticBackdrop tabIndex="-1" show={staticModal}>
         <MDBModalDialog>
           <MDBModalContent>
@@ -268,10 +249,7 @@ const [showFailure, setShowFailure] = useState(false)
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>}
-
-
     </div>
-
   );
 };
 
