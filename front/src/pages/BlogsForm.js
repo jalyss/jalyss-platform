@@ -31,6 +31,11 @@ const BlogsForm = () => {
   const [title, setTitle] = useState("");
   const [cover, setCover] = useState(null);
   const [formValidated, setFormValidated] = useState(false);
+<<<<<<< Updated upstream
+=======
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showFailure, setShowFailure] = useState(false);
+>>>>>>> Stashed changes
 
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
@@ -57,7 +62,6 @@ const BlogsForm = () => {
       categoryId,
       title,
     };
-
     if (cover !== null) {
       try {
         const formData = new FormData();
@@ -82,9 +86,6 @@ const BlogsForm = () => {
         showErrorToast(res.error.message);
       }
     });
-
-   
-   
   };
 
   const onFilesChange = (files) => {
@@ -106,25 +107,17 @@ const BlogsForm = () => {
       setCategoryId(selectedOption);
     }
   };
-  
 
-
-
-
-
-
-
-
-  const toggleShow = () =>{ 
-    
-    setStaticModal(!staticModal);}
+  const toggleShow = () => {
+    setStaticModal(!staticModal);
+  };
 
   (function () {
     "use strict";
-  
+
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.querySelectorAll(".needs-validation");
-  
+
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms).forEach(function (form) {
       form.addEventListener(
@@ -144,7 +137,6 @@ const BlogsForm = () => {
       );
     });
   })();
-  
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
@@ -156,7 +148,11 @@ const BlogsForm = () => {
           {" "}
           <div class="input-group mb-3 ">
             <div class="input-group-append ">
-              <span class="input-group-text" id="basic-addon2" style={{width:"162px"}}>
+              <span
+                class="input-group-text"
+                id="basic-addon2"
+                style={{ width: "162px" }}
+              >
                 Blog title
               </span>
             </div>
@@ -198,7 +194,9 @@ const BlogsForm = () => {
           onChange={handleChange}
           required
         >
-          <option value="" disabled selected>Choose your Blog category</option>
+          <option value="" disabled selected>
+            Choose your Blog category
+          </option>
           {categories.items.map((category, index) => (
             <option key={index} value={category.id}>
               {category.nameEn}
@@ -207,7 +205,7 @@ const BlogsForm = () => {
         </select>
 
         <div style={{ textAlign: "center", margin: "2rem auto" }}>
-        <button class="btn btn-primary" type="submit" >
+          <button class="btn btn-primary" type="submit">
             Submit form
           </button>
         </div>

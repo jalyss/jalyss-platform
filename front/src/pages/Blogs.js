@@ -25,7 +25,8 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../store/user";
 import { createBookmark } from "../store/bookmarks";
-import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
+import { fetchBlogs, fetchTrends,removeBlog } from "../store/blog";
+import Alert from "../components/Alert";
 
 
 function Blogs() {
@@ -47,6 +48,9 @@ function Blogs() {
   const [skip, setSkip] = useState(0);
   const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showFailure, setShowFailure] = useState(false);
+
   const take = 6;
 
   const greeting = {
@@ -58,12 +62,7 @@ function Blogs() {
 
   const [isBlinking, setIsBlinking] = useState(false);
 
-  const handleIconClick = () => {
-    setIsBlinking(true);
-    setTimeout(() => {
-      setIsBlinking(false);
-    }, 500);
-  };
+
 
   useEffect(() => {
     dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
@@ -84,18 +83,40 @@ function Blogs() {
     setSkip((value - 1) * take);
   };
   const toggleShow = () => setBasicModal(!basicModal);
+  
   const handleRemove = (id) => {
-    dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
-  };
+    dispatch(removeBlog({ id, take, skip, categoryId, authorId })).then((res) => {
+      if (!res.error) {
+        toggleShow();
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 2000);
+      } else {
+        toggleShow();
+        setShowFailure(true);
+        setTimeout(() => {
+          setShowFailure(false);
+        }, 2000);
+      }
+  });
+};
+
   const handleCreateBookmark = (blogId) => {
     let body = {
       blogId,
     };
     dispatch(createBookmark(body)).then((res) => {
       if (!res.error) {
-        showSuccessToast("Blog has been saved");
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 2000);
       } else {
-        showErrorToast("alredy saved");
+        setShowFailure(true);
+        setTimeout(() => {
+          setShowFailure(false);
+        }, 2000);
       }
     });
   };
@@ -104,6 +125,11 @@ function Blogs() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
+
+        {/* Two modal components are used from the MDB React UI Kit library to display a confirmation dialog and a success message when the blog update is successful */}
+      {showFailure ? <Alert alertType="failed" /> : null}
+      {showSuccess ? <Alert alertType="success" /> : null}
+
         <Fade bottom duration={1000} distance="40px">
           <div
             style={{ alignItems: "normal", height: "600px", margin: "0 70px" }}

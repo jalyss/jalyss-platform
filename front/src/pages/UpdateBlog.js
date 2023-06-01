@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
+import Alert from "../components/Alert";
+
 import {
   MDBBtn,
   MDBModal,
@@ -39,6 +41,8 @@ function UpdateBlog() {
   const [cover, setCover] = useState(null);
   const [files, setFiles] = useState(null);
   const [categoryId, setCategoryId] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showFailure, setShowFailure] = useState(false);
 
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
@@ -68,6 +72,7 @@ function UpdateBlog() {
     setFiles(files);
     console.log("files", files);
   };
+  
   const onEditorChange = (content) => {
     setNewContent(content);
   };
@@ -79,13 +84,16 @@ function UpdateBlog() {
     }
   };
 
+
   const toggleShow = () => {
     setStaticModal(!staticModal);
   };
 
+
   const showModal = () => {
     setModal(!Modal);
   };
+
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -93,6 +101,7 @@ function UpdateBlog() {
       console.log("Selected cover file:", e.target.files[0]);
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,7 +112,6 @@ function UpdateBlog() {
       categoryId,
       title,
     };
-
     if (cover !== null) {
       try {
         const formData = new FormData();
@@ -120,19 +128,32 @@ function UpdateBlog() {
       }
     }
 
+
     dispatch(editBlog({ id, body })).then((res) => {
       if (!res.error) {
-        // showSuccessAlert("Blog has been updated");
-        showModal();
-        navigate("/blogs");
+        toggleShow();
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          navigate("/blogs");
+        }, 2000);
       } else {
-        showErrorToast(res.error.message);
+        toggleShow();
+        setShowFailure(true);
+        setTimeout(() => {
+          setShowFailure(false);
+        }, 2000);
       }
     });
   };
 
   return (
     <div style={{ maxWidth: "700px", margin: "2rem auto" }}>
+
+{/* Two modal components are used from the MDB React UI Kit library to display a confirmation dialog and a success message when the blog update is successful */}
+      {showFailure ? <Alert alertType="failed" /> : null}
+      {showSuccess ? <Alert alertType="success" /> : null}
+
       <div style={{ textAlign: "center" }}>
         <Title level={2}>Update your Blog!</Title>
       </div>
@@ -205,7 +226,7 @@ function UpdateBlog() {
             <MDBModalContent>
               <MDBModalHeader>
                 <MDBModalTitle>
-                  Click on "Continue" to save the changes 
+                  Click on "Continue" to save the changes
                 </MDBModalTitle>
                 <MDBBtn
                   className="btn-close"
