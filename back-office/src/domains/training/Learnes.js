@@ -1,11 +1,9 @@
 import React from 'react'
 
-function Dashboard() {
+export const Learnes = () => {
   return (
     <div>
-  
+      
     </div>
   )
 }
-
-export default Dashboard

@@ -27,7 +27,7 @@ import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
-
+import Tarining from '../domains/training/Tarining'
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -46,8 +46,8 @@ function Router() {
       <Routes>
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="users" element={<User />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
               <Route path="edit/:userId" element={<EditUser />} />
@@ -63,7 +63,9 @@ function Router() {
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
             </Route>
-
+            
+            <Route path='Tarining' element ={<Tarining/> }/>
+          
             {/* <Route path="charts" element={<Charts />} /> */}
 
             <Route path="commands" element={<Command />}>
@@ -78,9 +80,13 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
           </Route>
+         
 
         )}
         <Route path="*" element={<NoPage />} />
+           
+
+       
       </Routes>
     </BrowserRouter>
   );
