@@ -135,7 +135,7 @@ socket.emit('msgToServer', payload) */
             </Stack>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={3}>
-            <IconButton>
+            {/* <IconButton>
               <VideoCamera />
             </IconButton>
             <IconButton>
@@ -147,7 +147,7 @@ socket.emit('msgToServer', payload) */
             <Divider orientation="vertical" flexItem />
             <IconButton>
               <CaretDown />
-            </IconButton>
+            </IconButton> */}
           </Stack>
         </Stack>
       </Box>
