@@ -1,351 +1,4 @@
-// import React, { useEffect, useState } from "react";
-// import auth, { authUpdate, register } from "../store/auth";
-// import "../assets/styles/signup.css";
-// import { useDispatch, useSelector } from "react-redux";
-// import { showErrorToast, showSuccessToast } from "../utils/toast";
-// import { useTranslation } from "react-i18next";
-// import axios from "axios";
-// import Table from "@mui/material/Table";
-// import TableBody from "@mui/material/TableBody";
-// import TableCell from "@mui/material/TableCell";
-// import TableContainer from "@mui/material/TableContainer";
-// import TableRow from "@mui/material/TableRow";
-// import Paper from "@mui/material/Paper";
-
-// function Profile() {
-//   const { t, i18n } = useTranslation();
-//   const dispatch = useDispatch();
-//   const authStore = useSelector((state) => state.auth);
-//   const [user, setUser] = useState({});
-//   const [editMode, setEditMode] = useState(false);
-//   const [preview, setPreview] = useState(null);
-//   const [avatar, setAvatar] = useState(null);
-//   useEffect(() => {
-//     if (authStore.me) {
-//       setUser(authStore.me);
-//     }
-//   }, [authStore.me]);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setUser((User) => ({ ...User, [name]: value }));
-//   };
-//   const submitEditProfile = async (event) => {
-//     if (!editMode) {
-//       event.preventDefault();
-//       setEditMode(true);
-//     } else {
-//       event.preventDefault();
-//       let aux = Object.assign({}, user);
-//       if (avatar !== null) {
-//         console.log("in if");
-//         const image = new FormData();
-//         image.append("file", avatar);
-//         const response = await axios.post(
-//           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-//           image
-//         );
-//         aux.avatarId = response.data.id;
-//       }
-//       delete aux.avatar;
-//       delete aux.Media;
-//       delete aux.exp;
-//       delete aux.iat;
-//       dispatch(authUpdate(aux)).then((res) => {
-//         if (!res.error) {
-//           showSuccessToast(t("user.updated"));
-//           setEditMode(false);
-//         } else {
-//           console.log(res);
-//           showErrorToast(res.error.message);
-//         }
-//       });
-//     }
-//   };
-
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     setPreview(URL.createObjectURL(file));
-//     setAvatar(file);
-//   };
-
-//   console.log(authStore);
-
-//   const handleImageChange = (e) => {
-//     const file = e.target.files[0];
-//     setPreview(URL.createObjectURL(file));
-//     setAvatar(file);
-//   };
-//   return (
-//     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-//       <h2>Profile</h2>
-//       <form className="checkout-form" onSubmit={submitEditProfile}>
-//         <div className="d-flex flex-wrap">
-//           <div className="position-relative">
-//             <label id="image">{t("image")}</label>
-//             <div class="image-upload">
-//               <img src={preview?preview:authStore?.me?.avatar?.path} alt="" />
-
-//               {editMode && (
-//                 <input
-//                   id="image"
-//                   type="file"
-//                   accept="image/*"
-//                   onChange={handleImageChange}
-//                 />
-//               )}
-//             </div>
-//             {preview && editMode && (
-//               <button
-//                 type="button"
-//                 class="delete-button"
-//                 onClick={() => {
-//                   setPreview(null);
-//                   setAvatar(null);
-//                 }}
-//               >
-//                 X
-//               </button>
-//             )}
-//           </div>
-//           <div className="d-flex justify-content-center w-100 m-3">
-//             <TableContainer className="w-100" component={Paper}>
-//               <Table aria-label="simple table">
-//                 <TableBody>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("nameAr")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           class="form-control mt-2"
-//                           required
-//                           name="fullNameAr"
-//                           id="fullNameAr"
-//                           value={user?.fullNameAr}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.fullNameAr}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("nameEn")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           class="form-control mt-2"
-//                           required
-//                           name="fullNameAr"
-//                           id="fullNameAr"
-//                           value={user?.fullNameEn}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.fullNameEn}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("email")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           required
-//                           class="form-control mt-2"
-//                           type="email"
-//                           id="email"
-//                           name="email"
-//                           value={user?.email}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.email}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("phone")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           required
-//                           type="tel"
-//                           class="form-control mt-2"
-//                           id="tel"
-//                           name="tel"
-//                           value={user?.tel}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.tel}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("address")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           required
-//                           class="form-control mt-2"
-//                           id="address"
-//                           name="address"
-//                           value={user?.address}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.address}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("country")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           type="tel"
-//                           class="form-control mt-2"
-//                           id="country"
-//                           name="countryId"
-//                           value={user?.country?.nameAr}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.country?.nameAr}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("city")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           class="form-control mt-2"
-//                           id="city"
-//                           name="cityId"
-//                           value={user?.city?.nameAr}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.city?.nameAr}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("functionalArea")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           class="form-control mt-2"
-//                           id="functionalArea"
-//                           name="functionalAreaId"
-//                           value={user?.functionalArea?.nameAr}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.functionalArea?.nameAr}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("educationLevel")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           class="form-control"
-//                           id="educationLevel"
-//                           name="educationLevelId"
-//                           value={user?.educationLevel?.nameAr}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.educationLevel?.nameAr}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                   <TableRow
-//                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-//                   >
-//                     <TableCell className="fw-bold" align="right">
-//                       {t("jobTitle")}
-//                     </TableCell>
-//                     <TableCell align="right">
-//                       {editMode ? (
-//                         <input
-//                           class="form-control mt-2"
-//                           id="jobTitle"
-//                           name="jobTitleId"
-//                           value={user?.jobTitle?.nameAr}
-//                           onChange={handleChange}
-//                         />
-//                       ) : (
-//                         <span>{user?.jobTitle?.nameAr}</span>
-//                       )}
-//                     </TableCell>
-//                   </TableRow>
-//                 </TableBody>
-//               </Table>
-//             </TableContainer>
-//           </div>
-//         </div>
-
-//         <div className="w-100 d-flex justify-content-center">
-//           <button
-//             type="submit"
-//             className="confirm-button mt-3"
-//             onSubmit={submitEditProfile}
-//           >
-//             <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
-//           </button>
-//         </div>
-//       </form>
-//       <button className="confirm-button mt-3" onClickCapture={handleLogout}>
-//         Logout{" "}
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default Profile;
-
-import React,{useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "..//assets/styles/profile.css";
 import auth, { authUpdate, register } from "../store/auth";
 import "../assets/styles/signup.css";
@@ -353,12 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { fetchBlogs } from "../store/blog";
+import Dropdown from "react-bootstrap/Dropdown";
 import {
   MDBCol,
   MDBContainer,
@@ -367,35 +16,49 @@ import {
   MDBCardText,
   MDBCardBody,
   MDBCardImage,
-  MDBBtn,
   MDBBreadcrumb,
   MDBBreadcrumbItem,
-  MDBProgress,
-  MDBProgressBar,
   MDBIcon,
   MDBListGroup,
   MDBListGroupItem,
 } from "mdb-react-ui-kit";
 
 export default function ProfilePage() {
+
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const authStore = useSelector((state) => state.auth);
+  const blogStore = useSelector((state) => state.blog);
+  const me = useSelector((state) => state.me);
+
+  const { blogs } = blogStore;
+
   const [user, setUser] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [preview, setPreview] = useState(null);
   const [avatar, setAvatar] = useState(null);
 
   useEffect(() => {
+
     if (authStore.me) {
       setUser(authStore.me);
+      dispatch(fetchBlogs({ authorId: authStore.me.id,skip:0, take:6  }));
     }
-  }, [authStore.me]);
-
+  }, [authStore.me,dispatch]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((User) => ({ ...User, [name]: value }));
   };
+
+    function extractTextFromHTML(html) {
+    const temporaryElement = document.createElement("div");
+    temporaryElement.innerHTML = html;
+    return (
+      temporaryElement.textContent.substring(0, 100) ||
+      temporaryElement.innerText.substring(0, 100) ||
+      ""
+    );
+  }
 
   const submitEditProfile = async (event) => {
     if (!editMode) {
@@ -451,76 +114,86 @@ export default function ProfilePage() {
                   fluid
                 />
 
-                <div className="d-flex justify-content-between align-items-center p-3">
-                  <span class="material-symbols-outlined upbtn">&#128247;</span>
-                </div>
+<div className="d-flex justify-content-between align-items-center p-3">
+  <label htmlFor="upload-image">
+    <span className="material-symbols-outlined upbtn">&#128247;</span>
+  </label>
+  <input
+    id="upload-image"
+    type="file"
+    accept="image/*"
+    style={{ display: 'none' }}
+    onChange={handleImageChange}
+  />
+</div>
               </MDBCardBody>
             </MDBCard>
 
             <MDBRow>
               <MDBCol>
                 <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4 nav">
-                  <MDBBreadcrumbItem>
-                    <a href="#">Setting</a>
+                  <MDBBreadcrumbItem
+                    type="submit"
+                    className="confirm-button mt-3"
+                  >
+                    <a className="label-btn">bio</a>
                   </MDBBreadcrumbItem>
 
-                  <MDBBreadcrumbItem>
-                    <a href="#">Personal blogs</a>
+                  <MDBBreadcrumbItem
+                    type="submit"
+                    className="confirm-button mt-3"
+                  >
+                    <a className="label-btn">My blogs</a>
                   </MDBBreadcrumbItem>
 
-                  <MDBBreadcrumbItem>
-                    <a href="#">Add blog</a>
+
+                  <MDBBreadcrumbItem
+                    type="submit"
+                    className="confirm-button mt-3"
+                  >
+                    <a className="label-btn">Saved Blogs</a>
+                  </MDBBreadcrumbItem>
+                  <MDBBreadcrumbItem
+                    type="submit"
+                    className="confirm-button mt-3"
+                  >
+                    <a className="label-btn">My orders</a>
                   </MDBBreadcrumbItem>
 
-                  <MDBBreadcrumbItem>
-                    <a href="#">Saved Blogs</a>
+                  <MDBBreadcrumbItem
+                    type="submit"
+                    className="confirm-button mt-3"
+                  >
+                    <a className="label-btn">My orders history</a>
                   </MDBBreadcrumbItem>
+
+
+                  <MDBBreadcrumbItem
+                    type="submit"
+                    className="confirm-button mt-3"
+                  >
+                    <a className="label-btn">Balance</a>
+                  </MDBBreadcrumbItem>
+
+                  <MDBBreadcrumbItem
+                    type="submit"
+                    className="confirm-button mt-3"
+                  >
+                    <a className="label-btn" type="button"
+                        onClick={() => setEditMode(true)}
+                      >
+                        Setting</a>
+                  </MDBBreadcrumbItem>
+
                 </MDBBreadcrumb>
               </MDBCol>
             </MDBRow>
-            <MDBCard className="mb-4 mb-lg-0">
-              <MDBCardBody className="p-0">
-                <MDBListGroup flush className="rounded-3">
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon fas icon="globe fa-lg text-warning" />
-                    <MDBCardText>Balance</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon
-                      fab
-                      icon="github fa-lg"
-                      style={{ color: "#333333" }}
-                    />
-                    <MDBCardText>Review your order history</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon
-                      fab
-                      icon="twitter fa-lg"
-                      style={{ color: "#55acee" }}
-                    />
-                    <MDBCardText>Logout</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon
-                      fab
-                      icon="instagram fa-lg"
-                      style={{ color: "#ac2bac" }}
-                    />
-                    <MDBCardText>mdbootstrap</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon
-                      fab
-                      icon="facebook fa-lg"
-                      style={{ color: "#3b5998" }}
-                    />
-                    <MDBCardText>mdbootstrap</MDBCardText>
-                  </MDBListGroupItem>
-                </MDBListGroup>
-              </MDBCardBody>
-            </MDBCard>
+           
+
+                    
           </MDBCol>
+
+
           <MDBCol lg="8">
             <MDBCard className="mb-4">
               <MDBCardBody>
@@ -570,9 +243,117 @@ export default function ProfilePage() {
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
+
           </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+         
+          </MDBRow>
+
+        </MDBContainer>
+      <div className="blogListWrapper">
+          {blogs.items.map((blog, i) => (
+            <div
+              className="blogItemWrapper"
+              key={blog.id}
+              style={{ cursor: "pointer" }}
+            >
+              {blog.cover ? (
+                <img
+                  className="blogItemCover"
+                  src={blog.cover.path}
+                  alt="cover"
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                />
+              ) : (
+                <img
+                  className="blogItemCover"
+                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                  alt="cover"
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                />
+              )}
+              <div
+                className="chip mt-3"
+                onClick={() => navigate(`/blogs/${blog.id}`)}
+              >
+                {blog.category.nameEn}
+              </div>
+              <div
+                className="d-flex flex-column gap-2"
+                onClick={() => navigate(`/blogs/${blog.id}`)}
+              >
+                <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
+
+                <p className="blogItemDescription">
+                  {" "}
+                  <p>{extractTextFromHTML(blog.content)}</p>
+                </p>
+              </div>
+
+              <div className="blogItemFooter d-flex justify-content-between">
+                <div className="d-flex align-items-center">
+                  {blog.author.avatar ? (
+                    <img
+                      className="blogItemAuthorAvatar"
+                      src={blog.author.avatar?.path}
+                      alt="avatar"
+                    />
+                  ) : (
+                    <img
+                      className="blogItemAuthorAvatar"
+                      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                      alt="avatar"
+                    />
+                  )}
+                  <div className="d-flex flex-column">
+                    <h6 className="mt-3">{blog.author.fullNameEn}</h6>
+                    <p
+                      style={{
+                        fontSize: "0.6rem",
+                        color: "#a9a9a9",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {blog.createdAt}
+                    </p>
+                  </div>
+                </div>
+
+                
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className="ellipsis-btn dropdownToggleBlogCard"
+                    style={{ all: "unset" }}
+                  >
+                    <span>&#8942;</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu size="sm" title="">
+                    {me?.id === blog.authorId ? (
+                      <>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedId(blog.id);
+                            setBasicModal(true);
+                          }}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
+                      </>
+                    ) : (
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleCreateBookmark(blog.id);
+                        }}
+                      >
+                        Save
+                      </Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
+          ))}
+        </div>
     </section>
   );
 }

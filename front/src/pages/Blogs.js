@@ -26,7 +26,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../store/user";
 import { createBookmark } from "../store/bookmarks";
 import { fetchBlogs, fetchTrends,removeBlog } from "../store/blog";
-import Alert from "../components/Alert";
+
 
 
 function Blogs() {
@@ -48,8 +48,7 @@ function Blogs() {
   const [skip, setSkip] = useState(0);
   const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showFailure, setShowFailure] = useState(false);
+
 
   const take = 6;
 
@@ -60,7 +59,7 @@ function Blogs() {
     displayGreeting: true,
   };
 
-  const [isBlinking, setIsBlinking] = useState(false);
+
 
 
 
@@ -83,40 +82,18 @@ function Blogs() {
     setSkip((value - 1) * take);
   };
   const toggleShow = () => setBasicModal(!basicModal);
-  
   const handleRemove = (id) => {
-    dispatch(removeBlog({ id, take, skip, categoryId, authorId })).then((res) => {
-      if (!res.error) {
-        toggleShow();
-        setShowSuccess(true);
-        setTimeout(() => {
-          setShowSuccess(false);
-        }, 2000);
-      } else {
-        toggleShow();
-        setShowFailure(true);
-        setTimeout(() => {
-          setShowFailure(false);
-        }, 2000);
-      }
-  });
-};
-
+    dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
+  };
   const handleCreateBookmark = (blogId) => {
     let body = {
       blogId,
     };
     dispatch(createBookmark(body)).then((res) => {
       if (!res.error) {
-        setShowSuccess(true);
-        setTimeout(() => {
-          setShowSuccess(false);
-        }, 2000);
+        showSuccessToast("Blog has been saved");
       } else {
-        setShowFailure(true);
-        setTimeout(() => {
-          setShowFailure(false);
-        }, 2000);
+        showErrorToast("alredy saved");
       }
     });
   };
@@ -125,11 +102,6 @@ function Blogs() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
-
-        {/* Two modal components are used from the MDB React UI Kit library to display a confirmation dialog and a success message when the blog update is successful */}
-      {showFailure ? <Alert alertType="failed" /> : null}
-      {showSuccess ? <Alert alertType="success" /> : null}
-
         <Fade bottom duration={1000} distance="40px">
           <div
             style={{ alignItems: "normal", height: "600px", margin: "0 70px" }}
@@ -366,7 +338,7 @@ function Blogs() {
                 </div>
 
                 
-  <Dropdown>
+                <Dropdown>
                   <Dropdown.Toggle
                     className="ellipsis-btn dropdownToggleBlogCard"
                     style={{ all: "unset" }}

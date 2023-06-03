@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { fetchBlog, createView } from "../store/blog";
 import { useSelector } from "react-redux";
 import { fetchBlogs, removeBlog } from "../store/blog";
-import { CircleDashed } from "phosphor-react";
+
 import { createBookmark } from "../store/bookmarks";
 import {
   MDBBtn,
@@ -18,7 +18,7 @@ import {
 } from "mdb-react-ui-kit";
 import Dropdown from "react-bootstrap/Dropdown";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
-import Alert from "../components/Alert";
+
 
 const BlogDetail = () => {
   const dispatch = useDispatch();
@@ -27,8 +27,6 @@ const BlogDetail = () => {
   const [categoryId, setCategoryId] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [basicModal, setBasicModal] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showFailure, setShowFailure] = useState(false);
   const categoryStore = useSelector((state) => state.category);
   const { categories } = categoryStore;
 
@@ -58,17 +56,9 @@ const BlogDetail = () => {
   const handleRemove = (id) => {
     dispatch(removeBlog({ id, take, skip, categoryId, authorId })).then((res) => {
       if (!res.error) {
-        toggleShow();
-        setShowSuccess(true);
-        setTimeout(() => {
-          setShowSuccess(false);
-        }, 2000);
+        showSuccessToast("Blog has been saved");
       } else {
-        toggleShow();
-        setShowFailure(true);
-        setTimeout(() => {
-          setShowFailure(false);
-        }, 2000);
+        showErrorToast("alredy saved");
       }
   });
 };
@@ -80,17 +70,9 @@ const BlogDetail = () => {
     };
     dispatch(createBookmark(body)).then((res) => {
       if (!res.error) {
-
-        setShowSuccess(true);
-        setTimeout(() => {
-          setShowSuccess(false);
-        }, 2000);
+        showSuccessToast("Blog has been saved");
       } else {
-   
-        setShowFailure(true);
-        setTimeout(() => {
-          setShowFailure(false);
-        }, 2000);
+        showErrorToast("alredy saved");
       }
     });
   };
@@ -124,8 +106,7 @@ const BlogDetail = () => {
         }}
       >
         <div className="d-flex justify-content-between align-items-center">
-          {showFailure ? <Alert alertType="failed" /> : null}
-          {showSuccess ? <Alert alertType="success" /> : null}
+
           <div className="goBackLink" onClick={() => navigate(-1)}>
             <span> &#8592;</span> <span>Go Back</span>
           </div>
