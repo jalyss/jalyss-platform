@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import "..//assets/styles/profile.css";
 import auth, { authUpdate, register } from "../store/auth";
 import "../assets/styles/signup.css";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
-import { fetchBlogs } from "../store/blog";
-import Dropdown from "react-bootstrap/Dropdown";
+import Edit from "../components/Profile/Edit";
+import MyBlogs from "../components/Profile/MyBlogs";
+import MyBookmarks from "../components/Profile/MyBookmarks";
+import Bio from "../components/Profile/bio";
+
 import {
   MDBCol,
   MDBContainer,
@@ -16,81 +20,44 @@ import {
   MDBCardText,
   MDBCardBody,
   MDBCardImage,
-  MDBBreadcrumb,
-  MDBBreadcrumbItem,
-  MDBIcon,
-  MDBListGroup,
-  MDBListGroupItem,
+  MDBNavbarNav,
+  MDBNavbarItem,
+  MDBNavbarLink,
+  MDBNavbar,
 } from "mdb-react-ui-kit";
 
 export default function ProfilePage() {
-
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const authStore = useSelector((state) => state.auth);
   const blogStore = useSelector((state) => state.blog);
+  const navigate = useNavigate();
   const me = useSelector((state) => state.me);
 
-  const { blogs } = blogStore;
+  const blogs = blogStore;
 
   const [user, setUser] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [preview, setPreview] = useState(null);
   const [avatar, setAvatar] = useState(null);
 
-  useEffect(() => {
+  const [showBio, setShowBio] = useState(false);
+  const [showMyBlogs, setShowMyBlogs] = useState(false);
+  const [showMyBookmarks, setShowMyBookmarks] = useState(false);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
+  const [showBalance, setShowBalance] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
+  useEffect(() => {
     if (authStore.me) {
       setUser(authStore.me);
-      dispatch(fetchBlogs({ authorId: authStore.me.id,skip:0, take:6  }));
+      console.log(user, "lenna");
     }
-  }, [authStore.me,dispatch]);
+  }, [authStore.me]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((User) => ({ ...User, [name]: value }));
-  };
-
-    function extractTextFromHTML(html) {
-    const temporaryElement = document.createElement("div");
-    temporaryElement.innerHTML = html;
-    return (
-      temporaryElement.textContent.substring(0, 100) ||
-      temporaryElement.innerText.substring(0, 100) ||
-      ""
-    );
-  }
-
-  const submitEditProfile = async (event) => {
-    if (!editMode) {
-      event.preventDefault();
-      setEditMode(true);
-    } else {
-      event.preventDefault();
-      let aux = Object.assign({}, user);
-      if (avatar !== null) {
-        console.log("in if");
-        const image = new FormData();
-        image.append("file", avatar);
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          image
-        );
-        aux.avatarId = response.data.id;
-      }
-      delete aux.avatar;
-      delete aux.Media;
-      delete aux.exp;
-      delete aux.iat;
-      dispatch(authUpdate(aux)).then((res) => {
-        if (!res.error) {
-          showSuccessToast(t("user.updated"));
-          setEditMode(false);
-        } else {
-          console.log(res);
-          showErrorToast(res.error.message);
-        }
-      });
-    }
   };
 
   const handleImageChange = (e) => {
@@ -106,93 +73,40 @@ export default function ProfilePage() {
           <MDBCol lg="4">
             <MDBCard className="mb-4">
               <MDBCardBody className="text-center">
-                <MDBCardImage
-                  src={preview ? preview : authStore?.me?.avatar?.path}
-                  alt=" "
-                  className="rounded-circle"
-                  style={{ width: "125px" }}
-                  fluid
-                />
-
-<div className="d-flex justify-content-between align-items-center p-3">
-  <label htmlFor="upload-image">
-    <span className="material-symbols-outlined upbtn">&#128247;</span>
-  </label>
-  <input
-    id="upload-image"
-    type="file"
-    accept="image/*"
-    style={{ display: 'none' }}
-    onChange={handleImageChange}
-  />
-</div>
+                {user.avatar ? (
+                  <MDBCardImage
+                    src={preview ? preview : authStore?.me?.avatar?.path}
+                    alt=" "
+                    className="rounded-circle"
+                    style={{ width: "125px" }}
+                    fluid
+                  />
+                ) : (
+                  <MDBCardImage
+                    className="rounded-circle"
+                    style={{ width: "125px" }}
+                    src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                    alt="avatar"
+                    fluid
+                  />
+                )}
+                <div className="d-flex justify-content-between align-items-center p-3">
+                  <label htmlFor="upload-image">
+                    <span className="material-symbols-outlined upbtn">
+                      &#128247;
+                    </span>
+                  </label>
+                  <input
+                    id="upload-image"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageChange}
+                  />
+                </div>
               </MDBCardBody>
             </MDBCard>
-
-            <MDBRow>
-              <MDBCol>
-                <MDBBreadcrumb className="bg-light rounded-3 p-3 mb-4 nav">
-                  <MDBBreadcrumbItem
-                    type="submit"
-                    className="confirm-button mt-3"
-                  >
-                    <a className="label-btn">bio</a>
-                  </MDBBreadcrumbItem>
-
-                  <MDBBreadcrumbItem
-                    type="submit"
-                    className="confirm-button mt-3"
-                  >
-                    <a className="label-btn">My blogs</a>
-                  </MDBBreadcrumbItem>
-
-
-                  <MDBBreadcrumbItem
-                    type="submit"
-                    className="confirm-button mt-3"
-                  >
-                    <a className="label-btn">Saved Blogs</a>
-                  </MDBBreadcrumbItem>
-                  <MDBBreadcrumbItem
-                    type="submit"
-                    className="confirm-button mt-3"
-                  >
-                    <a className="label-btn">My orders</a>
-                  </MDBBreadcrumbItem>
-
-                  <MDBBreadcrumbItem
-                    type="submit"
-                    className="confirm-button mt-3"
-                  >
-                    <a className="label-btn">My orders history</a>
-                  </MDBBreadcrumbItem>
-
-
-                  <MDBBreadcrumbItem
-                    type="submit"
-                    className="confirm-button mt-3"
-                  >
-                    <a className="label-btn">Balance</a>
-                  </MDBBreadcrumbItem>
-
-                  <MDBBreadcrumbItem
-                    type="submit"
-                    className="confirm-button mt-3"
-                  >
-                    <a className="label-btn" type="button"
-                        onClick={() => setEditMode(true)}
-                      >
-                        Setting</a>
-                  </MDBBreadcrumbItem>
-
-                </MDBBreadcrumb>
-              </MDBCol>
-            </MDBRow>
-           
-
-                    
           </MDBCol>
-
 
           <MDBCol lg="8">
             <MDBCard className="mb-4">
@@ -203,7 +117,7 @@ export default function ProfilePage() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      Johnatan Smith
+                      {user.fullNameEn}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -214,7 +128,7 @@ export default function ProfilePage() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      example@example.com
+                      {user.email}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -225,9 +139,7 @@ export default function ProfilePage() {
                     <MDBCardText>Mobile</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      (098) 765-4321
-                    </MDBCardText>
+                    <MDBCardText className="text-muted">{user.tel}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -237,123 +149,123 @@ export default function ProfilePage() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      Bay Area, San Francisco, CA
+                      {user.address}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
-
           </MDBCol>
-         
-          </MDBRow>
+        </MDBRow>
 
-        </MDBContainer>
-      <div className="blogListWrapper">
-          {blogs.items.map((blog, i) => (
-            <div
-              className="blogItemWrapper"
-              key={blog.id}
-              style={{ cursor: "pointer" }}
-            >
-              {blog.cover ? (
-                <img
-                  className="blogItemCover"
-                  src={blog.cover.path}
-                  alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
-                />
-              ) : (
-                <img
-                  className="blogItemCover"
-                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
-                  alt="cover"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
-                />
-              )}
-              <div
-                className="chip mt-3"
-                onClick={() => navigate(`/blogs/${blog.id}`)}
-              >
-                {blog.category.nameEn}
-              </div>
-              <div
-                className="d-flex flex-column gap-2"
-                onClick={() => navigate(`/blogs/${blog.id}`)}
-              >
-                <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
+    <MDBNavbar className=" d-flex justify-content-center align-items-center bg-light rounded-3  mb-4 ">
+      <MDBNavbarNav className=" justify-content-center align-items-center ">
+        <MDBNavbarItem >
+          <MDBNavbarLink
+            to="/bio"
+            className="label-btn"
+            onClick={() => {
+              setShowBio(true);
+              setShowMyBlogs(false);
+              setShowMyBookmarks(false);
+              setShowOrderHistory(false);
+              setShowBalance(false);
+              setShowSettings(false);
+            }}
+          >
+            Bio
+          </MDBNavbarLink>
+        </MDBNavbarItem>
+        <MDBNavbarItem style={{all:"unset"}}>
+          <MDBNavbarLink
+            to="/blogs"
+            className="label-btn"
+            onClick={() => {
+              setShowBio(false);
+              setShowMyBlogs(true);
+              setShowMyBookmarks(false);
+              setShowOrderHistory(false);
+              setShowBalance(false);
+              setShowSettings(false);
+            }}
+          >
+            My Blogs
+          </MDBNavbarLink>
+        </MDBNavbarItem >
+        <MDBNavbarItem style={{all:"unset"}} >
+          <MDBNavbarLink
+            to="/saved-blogs"
+            className="label-btn"
+            onClick={() => {
+              setShowBio(false);
+              setShowMyBlogs(false);
+              setShowMyBookmarks(true);
+              setShowOrderHistory(false);
+              setShowBalance(false);
+              setShowSettings(false);
+            }}
+          >
+            Saved Blogs
+          </MDBNavbarLink>
+        </MDBNavbarItem>
+        <MDBNavbarItem style={{all:"unset"}}>
+          <MDBNavbarLink
+            to="/order-history"
+            className="label-btn"
+            onClick={() => {
+              setShowBio(false);
+              setShowMyBlogs(false);
+              setShowMyBookmarks(false);
+              setShowOrderHistory(true);
+              setShowBalance(false);
+              setShowSettings(false);
+            }}
+          >
+            My Order History
+          </MDBNavbarLink>
+        </MDBNavbarItem>
+        <MDBNavbarItem style={{all:"unset"}}>
+          <MDBNavbarLink
+            to="/balance"
+            className="label-btn"
+            onClick={() => {
+              setShowBio(false);
+              setShowMyBlogs(false);
+              setShowMyBookmarks(false);
+              setShowOrderHistory(false);
+              setShowBalance(true);
+              setShowSettings(false);
+            }}
+          >
+            Balance
+          </MDBNavbarLink>
+        </MDBNavbarItem>
+        <MDBNavbarItem style={{all:"unset"}}>
+          <MDBNavbarLink
+            className="label-btn"
+            type="button"
+            onClick={() => {
+              setShowBio(false);
+              setShowMyBlogs(false);
+              setShowMyBookmarks(false);
+              setShowOrderHistory(false);
+              setShowBalance(false);
+              setShowSettings(true);
+            }}
+          >
+            Settings
+          </MDBNavbarLink>
+        </MDBNavbarItem >
+      </MDBNavbarNav>
+    </MDBNavbar>
 
-                <p className="blogItemDescription">
-                  {" "}
-                  <p>{extractTextFromHTML(blog.content)}</p>
-                </p>
-              </div>
-
-              <div className="blogItemFooter d-flex justify-content-between">
-                <div className="d-flex align-items-center">
-                  {blog.author.avatar ? (
-                    <img
-                      className="blogItemAuthorAvatar"
-                      src={blog.author.avatar?.path}
-                      alt="avatar"
-                    />
-                  ) : (
-                    <img
-                      className="blogItemAuthorAvatar"
-                      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
-                      alt="avatar"
-                    />
-                  )}
-                  <div className="d-flex flex-column">
-                    <h6 className="mt-3">{blog.author.fullNameEn}</h6>
-                    <p
-                      style={{
-                        fontSize: "0.6rem",
-                        color: "#a9a9a9",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {blog.createdAt}
-                    </p>
-                  </div>
-                </div>
-
-                
-                <Dropdown>
-                  <Dropdown.Toggle
-                    className="ellipsis-btn dropdownToggleBlogCard"
-                    style={{ all: "unset" }}
-                  >
-                    <span>&#8942;</span>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu size="sm" title="">
-                    {me?.id === blog.authorId ? (
-                      <>
-                        <Dropdown.Item
-                          onClick={() => {
-                            setSelectedId(blog.id);
-                            setBasicModal(true);
-                          }}
-                        >
-                          Delete
-                        </Dropdown.Item>
-                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
-                      </>
-                    ) : (
-                      <Dropdown.Item
-                        onClick={() => {
-                          handleCreateBookmark(blog.id);
-                        }}
-                      >
-                        Save
-                      </Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            </div>
-          ))}
-        </div>
+        {showBio && <Bio />}
+        {showMyBlogs && <MyBlogs />}
+        {showMyBookmarks && <MyBookmarks/>}
+        {/* {showOrderHistory && <OrderHistory />} */}
+        {/* {showBalance && <Balance />} */}
+        {showSettings && <Edit />}
+      </MDBContainer>
     </section>
   );
 }

@@ -1,4 +1,90 @@
-{editMode && (<form className="checkout-form" onSubmit={submitEditProfile}>
+import React, { useEffect, useState } from "react";
+import "../../assets/styles/profile.css";
+import auth, { authUpdate, register } from "../../store/auth";
+import "../../assets/styles/signup.css";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
+import { useTranslation } from "react-i18next";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import axios from "axios";
+
+const Edit =()=> {
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const authStore = useSelector((state) => state.auth);
+  const blogStore = useSelector((state) => state.blog);
+  const navigate = useNavigate();
+  const me = useSelector((state) => state.me);
+
+  const { blogs } = blogStore;
+
+  const [user, setUser] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+
+  
+
+
+  useEffect(() => {
+    if (authStore.me) {
+      setUser(authStore.me);
+     
+      console.log(user, "lenna");
+    }
+  }, [authStore.me]);
+
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser((User) => ({ ...User, [name]: value }));
+  };
+
+
+ 
+
+  const submitEditProfile = async (event) => {
+    if (!editMode) {
+      event.preventDefault();
+      setEditMode(true);
+    } else {
+      event.preventDefault();
+      let aux = Object.assign({}, user);
+      if (avatar !== null) {
+        console.log("in if");
+        const image = new FormData();
+        image.append("file", avatar);
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          image
+        );
+        aux.avatarId = response.data.id;
+      }
+      delete aux.avatar;
+      delete aux.Media;
+      delete aux.exp;
+      delete aux.iat;
+      dispatch(authUpdate(aux)).then((res) => {
+        if (!res.error) {
+          showSuccessToast(t("user.updated"));
+          setEditMode(false);
+        } else {
+          console.log(res);
+          showErrorToast(res.error.message);
+        }
+      });
+    }
+  };
+
+  return (
+<form className="checkout-form" onSubmit={submitEditProfile}>
 <div className="d-flex flex-wrap">
   <div className="d-flex justify-content-center w-100 m-3">
     <TableContainer className="w-100" component={Paper}>
@@ -250,6 +336,10 @@
   </button>
 </div>
 </form>
-)}
 
+
+  )
+              };
+
+              export default Edit;
 

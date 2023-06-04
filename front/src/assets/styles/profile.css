@@ -28,3 +28,37 @@
 .edit-form{
     width: 735px !important;
 }
+
+
+.label-btn {
+  display: inline-block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.label-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.navbar-nav{
+    width: auto !important ;
+    display:flex !important ;
+    flex-direction:row !important;
+    flex-wrap: wrap  !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    white-space:nowrap !important;
+    }
+
+    /* @media only screen and (max-width: 800px){ 
+        .navbar-nav{
+           
+            flex-wrap: wrap !important
+    
+        }
+    } */
+   /* .nav{
+    display:  !important;
+   } */

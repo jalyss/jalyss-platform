@@ -13,6 +13,16 @@ export const fetchBookmark = createAsyncThunk("bookmarks/bookmark", async (id) =
   return response.data;
 });
 
+
+export const removeBookmark = createAsyncThunk(
+  "bookmarks/removeBookmark",
+  async (id) => {
+    const response = await axios.delete(`${config.API_ENDPOINT}/bookmarks/${id}`);
+    return response.data;
+  }
+);
+
+
 export const createBookmark = createAsyncThunk(
     "bookmarks/createBookmark",
     async (body) => {
