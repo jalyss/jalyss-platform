@@ -3,7 +3,13 @@ import axios from "axios";
 import config from "../configs";
 
 export const fetchBookmarks = createAsyncThunk("bookmarks/bookmarks", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/bookmarks/`);
+  let token = JSON.parse(localStorage.getItem("token")).Authorization;
+  let configs = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }
+  const response = await axios.get(`${config.API_ENDPOINT}/bookmarks/by-user`,{...configs});
   return response.data;
 });
 
@@ -16,8 +22,9 @@ export const fetchBookmark = createAsyncThunk("bookmarks/bookmark", async (id) =
 
 export const removeBookmark = createAsyncThunk(
   "bookmarks/removeBookmark",
-  async (id) => {
+  async (id,{dispatch}) => {
     const response = await axios.delete(`${config.API_ENDPOINT}/bookmarks/${id}`);
+dispatch(fetchBookmarks())
     return response.data;
   }
 );

@@ -31,10 +31,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("nameAr")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.fullNameAr}</span>
               </TableCell>
             </TableRow>
@@ -43,10 +43,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("nameEn")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.fullNameEn}</span>
               </TableCell>
             </TableRow>
@@ -55,10 +55,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("email")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.email}</span>
               </TableCell>
             </TableRow>
@@ -67,10 +67,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("phone")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.tel}</span>
               </TableCell>
             </TableRow>
@@ -79,10 +79,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("address")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.address}</span>
               </TableCell>
             </TableRow>
@@ -91,10 +91,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("country")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.country?.nameAr}</span>
               </TableCell>
             </TableRow>
@@ -103,10 +103,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("city")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.city?.nameAr}</span>
               </TableCell>
             </TableRow>
@@ -115,10 +115,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("functionalArea")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.functionalArea?.nameAr}</span>
               </TableCell>
             </TableRow>
@@ -127,10 +127,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("educationLevel")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.educationLevel?.nameAr}</span>
               </TableCell>
             </TableRow>
@@ -139,10 +139,10 @@ const Bio = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell className="fw-bold" align="right">
+              <TableCell className="fw-bold" align="left">
                 {t("jobTitle")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <span>{user?.jobTitle?.nameAr}</span>
               </TableCell>
             </TableRow>

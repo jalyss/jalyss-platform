@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "..//assets/styles/profile.css";
 import auth, { authUpdate, register } from "../store/auth";
 import "../assets/styles/signup.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,7 @@ import Edit from "../components/Profile/Edit";
 import MyBlogs from "../components/Profile/MyBlogs";
 import MyBookmarks from "../components/Profile/MyBookmarks";
 import Bio from "../components/Profile/bio";
+import {navBarDataProfile} from "../constants/NavBarDataProfile"
 
 import {
   MDBCol,
@@ -33,6 +34,7 @@ export default function ProfilePage() {
   const blogStore = useSelector((state) => state.blog);
   const navigate = useNavigate();
   const me = useSelector((state) => state.me);
+  const path =useLocation().pathname
 
   const blogs = blogStore;
 
@@ -64,6 +66,59 @@ export default function ProfilePage() {
     const file = e.target.files[0];
     setPreview(URL.createObjectURL(file));
     setAvatar(file);
+  };
+
+  const submitEditProfile = async (event) => {
+    event.preventDefault();
+
+    let aux = { ...user };
+
+    if (avatar !== null) {
+      const image = new FormData();
+      image.append("file", avatar);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+        image
+      );
+      aux.avatarId = response.data.id;
+    } else if (preview === null && user.avatar !== null) {
+      aux.avatarId = null;
+    }
+
+    delete aux.avatar;
+    delete aux.Media;
+    delete aux.exp;
+    delete aux.iat;
+
+    dispatch(authUpdate(aux)).then((res) => {
+      if (!res.error) {
+        showSuccessToast(t("user.updated"));
+        setEditMode(false);
+      } else {
+        console.log(res);
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+
+  const handleRemoveImage = () => {
+    let aux = { ...user };
+    setPreview(null);
+    setAvatar(null);
+
+    if (user.avatar !== null) {
+      aux.avatarId = null;
+
+      dispatch(authUpdate(aux)).then((res) => {
+        if (!res.error) {
+          showSuccessToast(t("user.updated"));
+          setEditMode(false);
+        } else {
+          console.log(res);
+          showErrorToast(res.error.message);
+        }
+      });
+    }
   };
 
   return (
@@ -103,6 +158,14 @@ export default function ProfilePage() {
                     style={{ display: "none" }}
                     onChange={handleImageChange}
                   />
+
+                  <button
+                    type="button"
+                    className="delete-button"
+                    onClick={handleRemoveImage}
+                  >
+                    Delete Image
+                  </button>
                 </div>
               </MDBCardBody>
             </MDBCard>
@@ -158,113 +221,25 @@ export default function ProfilePage() {
           </MDBCol>
         </MDBRow>
 
-    <MDBNavbar className=" d-flex justify-content-center align-items-center bg-light rounded-3  mb-4 ">
-      <MDBNavbarNav className=" justify-content-center align-items-center ">
-        <MDBNavbarItem >
-          <MDBNavbarLink
-            to="/bio"
-            className="label-btn"
-            onClick={() => {
-              setShowBio(true);
-              setShowMyBlogs(false);
-              setShowMyBookmarks(false);
-              setShowOrderHistory(false);
-              setShowBalance(false);
-              setShowSettings(false);
-            }}
-          >
-            Bio
-          </MDBNavbarLink>
-        </MDBNavbarItem>
-        <MDBNavbarItem style={{all:"unset"}}>
-          <MDBNavbarLink
-            to="/blogs"
-            className="label-btn"
-            onClick={() => {
-              setShowBio(false);
-              setShowMyBlogs(true);
-              setShowMyBookmarks(false);
-              setShowOrderHistory(false);
-              setShowBalance(false);
-              setShowSettings(false);
-            }}
-          >
-            My Blogs
-          </MDBNavbarLink>
-        </MDBNavbarItem >
-        <MDBNavbarItem style={{all:"unset"}} >
-          <MDBNavbarLink
-            to="/saved-blogs"
-            className="label-btn"
-            onClick={() => {
-              setShowBio(false);
-              setShowMyBlogs(false);
-              setShowMyBookmarks(true);
-              setShowOrderHistory(false);
-              setShowBalance(false);
-              setShowSettings(false);
-            }}
-          >
-            Saved Blogs
-          </MDBNavbarLink>
-        </MDBNavbarItem>
-        <MDBNavbarItem style={{all:"unset"}}>
-          <MDBNavbarLink
-            to="/order-history"
-            className="label-btn"
-            onClick={() => {
-              setShowBio(false);
-              setShowMyBlogs(false);
-              setShowMyBookmarks(false);
-              setShowOrderHistory(true);
-              setShowBalance(false);
-              setShowSettings(false);
-            }}
-          >
-            My Order History
-          </MDBNavbarLink>
-        </MDBNavbarItem>
-        <MDBNavbarItem style={{all:"unset"}}>
-          <MDBNavbarLink
-            to="/balance"
-            className="label-btn"
-            onClick={() => {
-              setShowBio(false);
-              setShowMyBlogs(false);
-              setShowMyBookmarks(false);
-              setShowOrderHistory(false);
-              setShowBalance(true);
-              setShowSettings(false);
-            }}
-          >
-            Balance
-          </MDBNavbarLink>
-        </MDBNavbarItem>
-        <MDBNavbarItem style={{all:"unset"}}>
-          <MDBNavbarLink
-            className="label-btn"
-            type="button"
-            onClick={() => {
-              setShowBio(false);
-              setShowMyBlogs(false);
-              setShowMyBookmarks(false);
-              setShowOrderHistory(false);
-              setShowBalance(false);
-              setShowSettings(true);
-            }}
-          >
-            Settings
-          </MDBNavbarLink>
-        </MDBNavbarItem >
-      </MDBNavbarNav>
-    </MDBNavbar>
+        <MDBNavbar className=" d-flex justify-content-center align-items-center bg-light rounded-3  mb-4 ">
+          <MDBNavbarNav className=" justify-content-center align-items-center ">
+          {navBarDataProfile.map((elem,i)=>
 
-        {showBio && <Bio />}
-        {showMyBlogs && <MyBlogs />}
-        {showMyBookmarks && <MyBookmarks/>}
-        {/* {showOrderHistory && <OrderHistory />} */}
-        {/* {showBalance && <Balance />} */}
-        {showSettings && <Edit />}
+            <MDBNavbarItem key={i} style={{backgroundColor:elem.path===path?"rgb(156 39 176 / 34%)":""}}> 
+              <MDBNavbarLink
+                onClick={() => {
+                  navigate(elem.path);
+                }}
+                className="label-btn"
+              >
+                {elem.name}
+              </MDBNavbarLink>
+            </MDBNavbarItem>
+          )} 
+          </MDBNavbarNav>
+        </MDBNavbar>
+
+        <Outlet />
       </MDBContainer>
     </section>
   );

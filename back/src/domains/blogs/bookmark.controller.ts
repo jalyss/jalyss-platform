@@ -24,9 +24,16 @@ export class BookmarksController {
   }
   
 
-  @Get(':id')
+  @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.bookmarkService.findOne(id);
+  }
+  
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
+  @Get('by-user')
+  findAllByUser(@CurrentUser()user:any){
+    return this.bookmarkService.findAllByUser(user.id)
   }
 
   @Patch(':id')
