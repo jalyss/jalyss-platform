@@ -223,6 +223,7 @@ model ChatMessage {
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
+  seen       Boolean @default(false)
 }
 
 model ConnectedUser {

@@ -25,12 +25,12 @@ export class ChatRoomController {
     return this.chatRoomService.create(createChatDto, user.id);
   }
 
-  @Get(':id')
-  findAll(@Param('id') id: string) {
-    return this.chatRoomService.findAll(id);
+  @Get(':userId')
+  findAll(@Param('userId') userId: string) {
+    return this.chatRoomService.findAll(userId);
   }
 
-  @Get(':id')
+  @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.chatRoomService.findOne(id);
   }

@@ -6,21 +6,31 @@ import { Phone, ChatCircleDots, Users, Gear } from "phosphor-react";
 
 import Conversation from "../components/chatComponents/Conversation";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 
 import ConnectedUsers from "./ConnectedUsers";
 import { SocketContext } from "../apps/Client";
 import ChatRoom from "../components/chatComponents/ChatRoom";
 import { styled } from "@mui/material/styles";
+import { fetchMessages, fetchChatRoom } from "../store/chat";
+
 
 const Chat = () => {
-  const authStore = useSelector((state) => state.auth);
+  
+  const authStore = useSelector((state) => state.auth.me?.id);
+  const chatStore = useSelector((state)=>state.chat)
+  const {chatRooms} = chatStore
+  const dispatch = useDispatch();
+
+
+
   const socket = useContext(SocketContext);
   const theme = useTheme();
   console.log(theme);
   const [chatRoomList, setChatRoomList] = useState([]);
   const [show, setShow] = useState(false);
   const [mesg, setMesg] = useState(false);
+  const [room,setRoom]=useState({})
 
   const Stack0 = styled("div")(({ theme }) => ({
     display: "flex",
@@ -66,17 +76,22 @@ const Chat = () => {
   }));
 
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:3001/api/v1/chatRoom/${"f62d33bd-9633-453f-9428-6c10368ac296"}`
-      )
-      .then((response) => {
-        let data = response.data;
-        console.log(data);
-        setChatRoomList(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    // axios
+    //   .get(
+    //     `http://localhost:3001/api/v1/chatRoom/db80e846-2f9d-4985-8811-ee2d61ccd16a`
+    //   )
+    //   .then((response) => {
+    //     let data = response.data;
+    //     console.log(data);
+    //     setChatRoomList(data);
+    //   })
+    //   .catch((err) => console.log(err));
+    dispatch(fetchChatRoom(authStore))
+    console.log("store",chatRooms.items)
+    setChatRoomList(chatRooms.items)
+  }, [
+    authStore
+  ]);
 
   return (
     <div className="d-flex chatContainer">
@@ -112,8 +127,8 @@ const Chat = () => {
         </Stack0>
       </Box1>
       {show && <ConnectedUsers socket={socket} />}
-      {mesg && <ChatRoom chatRoomList={chatRoomList} />}
-      <Conversation setChatRoomList={setChatRoomList} />
+      {mesg && <ChatRoom chatRoomList={chatRoomList} setRoom={setRoom} room={room}/>}
+      <Conversation setChatRoomList={setChatRoomList}  room={room}/>
     </div>
   );
 };

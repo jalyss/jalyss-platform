@@ -12,6 +12,7 @@ import auth from './auth'
 import blog from './blog' 
 import user from './user'
 import bookmarks from './bookmarks'
+import chat from './chat'
 
 export const store = configureStore({
   reducer: {
@@ -27,6 +28,8 @@ export const store = configureStore({
     blog, 
     bookmarks,
     user,
+    chat
+    
    
   },
   middleware: (getDefaultMiddleware) =>

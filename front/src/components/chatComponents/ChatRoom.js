@@ -14,13 +14,18 @@ import SearchIconWrapper from "../SearchIconWrapper";
 import StyledInputBase from "../SearchInputBase";
 import Icon from "../../assets/styles/profile.png";
 import StyledBadge from "../StyledBadge";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
+import { fetchOneRoom } from "../../store/chat";
 
 
 
-const ChatRoom = ({ chatRoomList }) => {
+const ChatRoom = ({ chatRoomList,setRoom,room }) => {
 
   const authStore = useSelector(state => state.auth)
+  const chatStore = useSelector((state)=>state.chat)
+  const {chat} = chatStore
+  const dispatch = useDispatch();
+
 
   const ChatElement = () => {
     return (
@@ -32,7 +37,7 @@ const ChatRoom = ({ chatRoomList }) => {
           backgroundColor: "#fff",
         }}
       >
-        {chatRoomList.map((chatRoom) => {
+        {chatRoomList.map((chatRoom,i) => {
           let name = ''
           if (chatRoom.name === null)
             name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
@@ -44,6 +49,10 @@ const ChatRoom = ({ chatRoomList }) => {
               direction="row"
               alignItems="center"
               justifyContent="space-between"
+key={i}
+onClick={()=>{
+  dispatch(fetchOneRoom(chatRoom.id))
+}}
             >
               <Stack direction="row" spacing={2}>
                 <StyledBadge

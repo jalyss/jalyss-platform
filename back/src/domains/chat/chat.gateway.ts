@@ -1,7 +1,7 @@
 import {
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer, 
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
@@ -25,9 +25,8 @@ import { CreateConnectedUserDto } from './dto/create-connectedUsers.dto';
     origin: '*',
   },
 })
-export class ChatGateway
-  
-{
+export class ChatGateway {
+  private typingUsers: string[] = [];
   constructor(
     private readonly PrismaService: PrismaService,
     private readonly UserService: UsersService,
@@ -39,66 +38,98 @@ export class ChatGateway
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('ChatGateway');
 
-  //! Send messages
-
   @SubscribeMessage('connection')
   async connect(client: Socket, payload: CreateConnectedUserDto) {
-   let connectedUser=await this.PrismaService.connectedUser.findFirst({where:{userId:payload.userId}})
-   if(!connectedUser)
-   await this.PrismaService.connectedUser.create({data:{userId:payload.userId}})
-   
-   await this.connectedUsersList()
-   setTimeout(() =>{this.disconnect(payload.userId)},1000*60*2)
+    let connectedUser = await this.PrismaService.connectedUser.findFirst({
+      where: { userId: payload.userId },
+    });
+    if (!connectedUser)
+      await this.PrismaService.connectedUser.create({
+        data: { userId: payload.userId },
+      });
 
+    await this.connectedUsersList();
+
+    this.server.emit('typingUsers', { typingUsers: this.typingUsers });
+    setTimeout(() => {
+      this.disconnect(payload.userId);
+    }, 1000 * 60 * 2);
   }
+
   @SubscribeMessage('online-users')
-  async onlineUsers(client: Socket,id:string){
-    let connectedUserList= await this.PrismaService.connectedUser.findMany({
-      include:{
-        user:{
-          select:{
-            fullNameAr:true,fullNameEn:true,avatar:true
-          }
-        }
-      }
-    })
+  async onlineUsers(client: Socket, id: string) {
+    let connectedUserList = await this.PrismaService.connectedUser.findMany({
+      include: {
+        user: {
+          select: {
+            fullNameAr: true,
+            fullNameEn: true,
+            avatar: true,
+          },
+        },
+      },
+    });
     this.server.emit(`connected-users/${id}`, connectedUserList);
   }
 
   async disconnect(id: string) {
-    let connectedUser=await this.PrismaService.connectedUser.findFirst({where:{userId:id}})
-   if(connectedUser)
-    await this.PrismaService.connectedUser.delete({where:{userId:id}})
-    this.server.emit(`disconnect/${id}`)
-    await this.connectedUsersList()
+    let connectedUser = await this.PrismaService.connectedUser.findFirst({
+      where: { userId: id },
+    });
+    if (connectedUser){
+      await this.PrismaService.connectedUser.delete({
+        where: { userId: id },
+      });
+      this.typingUsers = this.typingUsers.filter((userId) => userId !== id);
+    this.server.emit('typing', { userId: id, isTyping: false });
+  }
+    this.server.emit(`disconnect/${id}`);
+    await this.connectedUsersList();
   }
 
-private async connectedUsersList(){
-  let connectedUserList= await this.PrismaService.connectedUser.findMany({
-    include:{
-      user:{
-        select:{
-          fullNameAr:true,fullNameEn:true,avatar:true,id:true
-        }
-      }
+  private async connectedUsersList() {
+    let connectedUserList = await this.PrismaService.connectedUser.findMany({
+      include: {
+        user: {
+          select: {
+            fullNameAr: true,
+            fullNameEn: true,
+            avatar: true,
+            id: true,
+          },
+        },
+      },
+    });
+
+    for (let user of connectedUserList) {
+      this.server.emit(`connected-users/${user.userId}`, connectedUserList);
     }
-  })
-  
-  for (let user of connectedUserList) {
-    this.server.emit(`connected-users/${user.userId}`, connectedUserList);
   }
-}
-
+  @SubscribeMessage('typingState')
+  handleTypingState(client: Socket, payload: { userId: string, isTyping: boolean }) {
+    const { userId, isTyping } = payload;
+  
+    if (isTyping && !this.typingUsers.includes(userId)) {
+      this.typingUsers.push(userId);
+      this.server.emit('typing', { userId, isTyping: true });
+    } else if (!isTyping && this.typingUsers.includes(userId)) {
+      this.typingUsers = this.typingUsers.filter((id) => id !== userId);
+      this.server.emit('typing', { userId, isTyping: false });
+    }
+  }
 
   @SubscribeMessage('msgToServer')
   async handleMessage(client: Socket, payload: MessageSocketio) {
     const { userId, chatRoomId, ...rest } = payload;
-    const response = await this.MessageService.create(rest, userId, chatRoomId);
+    
+    if (!this.typingUsers.includes(userId)) {
+      this.typingUsers.push(userId);
+      this.server.emit('typing', { userId, isTyping: true });
+    }
 
+    const response = await this.MessageService.create(rest, userId, chatRoomId);
     this.server.emit(`msgToClient/${chatRoomId}`, response);
   }
-
-  //! create chatroom
 
   @SubscribeMessage('create-chat-room')
   async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
@@ -130,5 +161,4 @@ private async connectedUsersList(){
     });
   }
 
-  
 }

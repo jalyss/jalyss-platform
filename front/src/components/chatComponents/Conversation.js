@@ -24,12 +24,19 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { io } from "socket.io-client";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 import "../../assets/styles/conversation.css";
 import { loadLanguages } from "i18next";
+import { fetchMessages } from "../../store/chat";
 
-const Conversation = ({ setChatRoomList }) => {
+const Conversation = ({ setChatRoomList,room }) => {
   const authStore = useSelector((state) => state.auth);
+  const chatStore = useSelector((state)=>state.chat)
+  const {chat} = chatStore
+  const {messagess} = chatStore
+  const dispatch = useDispatch();
+
+
   const socket = io("http://localhost:3001");
 
   const [openPicker, setPicker] = useState(false);
@@ -37,11 +44,15 @@ const Conversation = ({ setChatRoomList }) => {
   const [number, setNumber] = useState(20);
   const [messages, setMessages] = useState("");
   const [inbox, setInbox] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+// console.log("participant",chat.participants?.filter(e=>e.userId !== authStore.me?.id)[0].user.fullNameEn)
+const userName = chat.participants?.filter(e=>e.userId !== authStore.me?.id)[0].user.fullNameEn 
 
   useEffect(() => {
     axios
       .get(
-        "http://localhost:3001/api/v1/messages/5f621766-a53c-4496-86d8-9befd06018ae",
+        `http://localhost:3001/api/v1/messages/${chat?.id}`,
         {
           params: {
             numberMessages: number,
@@ -52,52 +63,89 @@ const Conversation = ({ setChatRoomList }) => {
         setInbox(response.data);
       })
       .catch((err) => console.log(err));
+
+
+// dispatch(fetchMessages(chat?.id,20))
+// setInbox(messagess.items)
   }, []);
+
+
+
+  
   useEffect(() => {
     function chatRoomList(value) {
       console.log(value);
       setChatRoomList(value);
     }
-    socket.on("chat-room/f62d33bd-9633-453f-9428-6c10368ac296", chatRoomList);
+    socket.on("chat-room/db80e846-2f9d-4985-8811-ee2d61ccd16a", chatRoomList);
 
     return () => {
       socket.off(
-        "chat-room/f62d33bd-9633-453f-9428-6c10368ac296",
+        "chat-room/db80e846-2f9d-4985-8811-ee2d61ccd16a",
         chatRoomList
       );
     };
   }, [socket]);
-  useEffect(() => {
-    function getMsg(value) {
-      console.log(value);
-      setInbox((Inbox) => [...Inbox, value]);
-    }
-    socket.on("msgToClient/5f621766-a53c-4496-86d8-9befd06018ae", getMsg);
 
-    return () => {
-      socket.off("msgToClient/5f621766-a53c-4496-86d8-9befd06018ae", getMsg);
-    };
-  }, [socket]);
+
+
+ useEffect(() => {
+  function getMsg(value) {
+    console.log(value);
+    setInbox((Inbox) => [...Inbox, value]);
+  }
+  socket.on(`msgToClient/${chat?.id}`, getMsg);
+
+  socket.on("typing", (data) => {
+    setIsTyping(data.isTyping);
+  });
+
+ 
+
+  return () => {
+    socket.off(`msgToClient/${chat?.id}`, getMsg);
+    socket.off("typing");
+  
+  };
+}, [socket]);
+
+
+
   const handleSubmit = (e) => {
     if (messages.trim() !== "") {
       e.preventDefault();
-      let payload = {
-        receiverId: "0258036f-268e-43c4-ba33-1f42de18187f",
-        senderId: authStore.me.id,
-        text: messages,
-      };
-      socket.emit("create-chat-room", payload);
+      // let payload = {
+      //   receiverId: "92b9ddf5-c737-4ead-baf9-f9f4188b3c2c",
+      //   senderId: authStore.me.id,
+      //   text: messages,
+      // };
+      // socket.emit("create-chat-room", payload);
 
-      /* let payload = {
- chatRoomId: '5f621766-a53c-4496-86d8-9befd06018ae',
+       let payload = {
+ chatRoomId: 'ece345a0-9dee-4596-b6e7-754a9748dca5',
 userId: authStore.me.id,
 text: messages
  }
-socket.emit('msgToServer', payload) */
+socket.emit('msgToServer', payload) 
       setMessages("");
     } else {
       return;
     }
+  };
+
+  const handleTyping = () => {
+    let payload = {
+      isTyping : true , 
+      userId : authStore.me?.id
+    }
+    socket.emit("typing", payload);
+  };
+  const handleStopTyping = () => {
+    let payload = {
+      isTyping : false , 
+      userId : authStore.me?.id
+    }
+    socket.emit("typing", payload); 
   };
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
@@ -130,7 +178,10 @@ socket.emit('msgToServer', payload) */
               </StyledBadge>
             </Box>
             <Stack spacing={0.2}>
-              <Typography variant="subtitle2">MESTIRI</Typography>
+              <Typography variant="subtitle2">
+                {/* RANIA */}
+                {userName}
+                </Typography>
               <Typography variant="caption">Online</Typography>
             </Stack>
           </Stack>
@@ -151,40 +202,46 @@ socket.emit('msgToServer', payload) */
           </Stack>
         </Stack>
       </Box>
-
       <Box
-        sx={{
-          height: "70vh",
-          width: "100%",
-          backgroundColor: "#fff",
-          boxShadow: "0px 0px 2px",
-          overflow: "auto",
-        }}
+  sx={{
+    height: "70vh",
+    width: "100%",
+    backgroundColor: "#fff",
+    boxShadow: "0px 0px 2px",
+    overflow: "auto",
+  }}
+>
+  {inbox.map((e, i) => (
+    <div className="containerr" key={i}>
+      <div
+        className={`d-flex ${
+          e.userId !== authStore.me.id
+            ? "justify-content-start"
+            : "justify-content-end"
+        }`}
       >
-        {inbox.map((e, i) => (
-          <div className="containerr" key={i}>
-            <div
-              className={`d-flex ${
-                e.userId !== authStore.me.id
-                  ? "justify-content-start"
-                  : "justify-content-end"
-              }`}
-            >
-              {/* <img src = {e.user.avatarId}  style={{ width: '40px', height: '40px', borderRadius: '50%' }}/> */}
-              <p
-                key={i}
-                className={
-                  e.userId === authStore.me.id
-                    ? "sent-message"
-                    : "received-message"
-                }
-              >
-                {e.text}
-              </p>
-            </div>
-          </div>
-        ))}
-      </Box>
+       
+
+        {/* <img src = {e.user.avatarId}  style={{ width: '40px', height: '40px', borderRadius: '50%' }}/> */}
+        <p
+          key={i}
+          className={
+            e.userId === authStore.me.id
+              ? "sent-message"
+              : "received-message"
+          }
+        >
+          {e.text}
+        </p>
+       
+      </div>
+      <div>
+    
+    {isTyping && <p> {authStore.me.fullName} is typing...</p>}
+  </div>
+    </div>
+  ))}
+</Box>
       <Box
         p={4}
         sx={{
@@ -199,6 +256,8 @@ socket.emit('msgToServer', payload) */
           spacing={3}
           component="form"
           onSubmit={handleSubmit}
+          onFocus={handleTyping}
+          onBlur={handleStopTyping}
         >
           <Stack sx={{ width: "100%" }}>
             <StyledInput
@@ -238,7 +297,8 @@ socket.emit('msgToServer', payload) */
                 ),
               }}
               setPicker={setPicker}
-              onChange={(e) => setMessages(e.target.value)}
+              onChange={(e) => {setMessages(e.target.value)                              
+              }}
               value={messages}
             />
           </Stack>

@@ -62,9 +62,12 @@ export class ChatRoomService {
   async findOne(id: string) {
     return await this.prisma.chatRoom.findUnique({
       where: { id },
-      include: { messages: true },
+      include: { messages: true , participants: {
+        include: { user : true }  
+      }},
     });
   }
+ 
 
   async update(id: string, dto: UpdateChatDto) {
     return await this.prisma.chatRoom.update({
