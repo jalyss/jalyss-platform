@@ -4,9 +4,16 @@ import config from "../configs";
 
 
 export const fetchCommands = createAsyncThunk("commands/commands", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/commands/TUN`);
+  let token = JSON.parse(localStorage.getItem("token")).Authorization;
+  let configs = {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }
+  const response = await axios.get(`${config.API_ENDPOINT}/commands/by-user`,{...configs});
   return response.data;
   });
+
 export const fetchCommand = createAsyncThunk("commands/command", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/commands/one/${id}`);
   return response.data;

@@ -11,7 +11,7 @@ import Edit from "../components/Profile/Edit";
 import MyBlogs from "../components/Profile/MyBlogs";
 import MyBookmarks from "../components/Profile/MyBookmarks";
 import Bio from "../components/Profile/bio";
-import {navBarDataProfile} from "../constants/NavBarDataProfile"
+import { navBarDataProfile } from "../constants/NavBarDataProfile";
 
 import {
   MDBCol,
@@ -34,7 +34,7 @@ export default function ProfilePage() {
   const blogStore = useSelector((state) => state.blog);
   const navigate = useNavigate();
   const me = useSelector((state) => state.me);
-  const path =useLocation().pathname
+  const path = useLocation().pathname;
 
   const blogs = blogStore;
 
@@ -106,19 +106,22 @@ export default function ProfilePage() {
     setPreview(null);
     setAvatar(null);
 
-    if (user.avatar !== null) {
-      aux.avatarId = null;
+    delete aux.avatar;
+    delete aux.Media;
+    delete aux.exp;
+    delete aux.iat;
 
-      dispatch(authUpdate(aux)).then((res) => {
-        if (!res.error) {
-          showSuccessToast(t("user.updated"));
-          setEditMode(false);
-        } else {
-          console.log(res);
-          showErrorToast(res.error.message);
-        }
-      });
-    }
+    aux.avatarId = null;
+
+    dispatch(authUpdate(aux)).then((res) => {
+      if (!res.error) {
+        showSuccessToast(t("user.updated"));
+        setEditMode(false);
+      } else {
+        console.log(res);
+        showErrorToast(res.error.message);
+      }
+    });
   };
 
   return (
@@ -128,7 +131,7 @@ export default function ProfilePage() {
           <MDBCol lg="4">
             <MDBCard className="mb-4">
               <MDBCardBody className="text-center">
-                {user.avatar ? (
+                {user.avatar || preview ? (
                   <MDBCardImage
                     src={preview ? preview : authStore?.me?.avatar?.path}
                     alt=" "
@@ -159,14 +162,35 @@ export default function ProfilePage() {
                     onChange={handleImageChange}
                   />
 
-                  <button
-                    type="button"
-                    className="delete-button"
-                    onClick={handleRemoveImage}
-                  >
-                    Delete Image
-                  </button>
+                  {user.avatar && (
+                    <button
+                      type="button"
+                      className="delete-button"
+                      onClick={handleRemoveImage}
+                    >
+                      Delete Image
+                    </button>
+                  )}
                 </div>
+
+                {(user.avatar || preview) && (
+                  <>
+                    <button
+                      type="button"
+                      className="cancel-button"
+                      onClick={() => setEditMode(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="save-button"
+                      onClick={submitEditProfile}
+                    >
+                      Save
+                    </button>
+                  </>
+                )}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
@@ -223,19 +247,24 @@ export default function ProfilePage() {
 
         <MDBNavbar className=" d-flex justify-content-center align-items-center bg-light rounded-3  mb-4 ">
           <MDBNavbarNav className=" justify-content-center align-items-center ">
-          {navBarDataProfile.map((elem,i)=>
-
-            <MDBNavbarItem key={i} style={{backgroundColor:elem.path===path?"rgb(156 39 176 / 34%)":""}}> 
-              <MDBNavbarLink
-                onClick={() => {
-                  navigate(elem.path);
+            {navBarDataProfile.map((elem, i) => (
+              <MDBNavbarItem
+                key={i}
+                style={{
+                  backgroundColor:
+                    elem.path === path ? "rgb(156 39 176 / 34%)" : "",
                 }}
-                className="label-btn"
               >
-                {elem.name}
-              </MDBNavbarLink>
-            </MDBNavbarItem>
-          )} 
+                <MDBNavbarLink
+                  onClick={() => {
+                    navigate(elem.path);
+                  }}
+                  className="label-btn"
+                >
+                  {elem.name}
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+            ))}
           </MDBNavbarNav>
         </MDBNavbar>
 
