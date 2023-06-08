@@ -62,7 +62,6 @@ function Blogs() {
 
 
 
-
   useEffect(() => {
     dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
     dispatch(fetchTrends());

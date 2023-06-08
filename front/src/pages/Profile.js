@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "..//assets/styles/profile.css";
+import "../assets/styles/profile.css";
 import auth, { authUpdate, register } from "../store/auth";
 import "../assets/styles/signup.css";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
@@ -66,6 +66,7 @@ export default function ProfilePage() {
     const file = e.target.files[0];
     setPreview(URL.createObjectURL(file));
     setAvatar(file);
+    setEditMode(true);
   };
 
   const submitEditProfile = async (event) => {
@@ -173,7 +174,7 @@ export default function ProfilePage() {
                   )}
                 </div>
 
-                {(user.avatar || preview) && (
+                { editMode && (user.avatar || preview) && (
                   <>
                     <button
                       type="button"
