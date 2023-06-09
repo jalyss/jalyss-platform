@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
 // import Icon from "../assets/styles/profile.png";
-import { Phone, ChatCircleDots, Users, Gear } from "phosphor-react";
+import { Phone, ChatCircleDots, Users, Gear,AddressBook,Broadcast,CellSignalFull } from "phosphor-react";
 
 import Conversation from "../components/chatComponents/Conversation";
 import axios from "axios";
@@ -30,7 +30,12 @@ const Chat = () => {
   const [chatRoomList, setChatRoomList] = useState([]);
   const [show, setShow] = useState(false);
   const [mesg, setMesg] = useState(false);
-  const [room,setRoom]=useState({})
+  const [room,setRoom]=useState({});
+  const [activeComponent, setActiveComponent] = useState("conversation");
+  const [selectedUser, setSelectedUser] = useState(null);
+
+
+
 
   const Stack0 = styled("div")(({ theme }) => ({
     display: "flex",
@@ -99,18 +104,28 @@ const Chat = () => {
         <Stack0>
           <Stack1 spacing={3}>
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <ChatCircleDots onClick={() => setMesg(!mesg)} />
+              <IconButton 
+              sx={{ width: "max-content", color: "#fcfefe" }}
+              onClick={() => setActiveComponent("conversation")}
+              >
+                <ChatCircleDots  onClick={() => setMesg(!mesg)} />
               </IconButton>
             </Box>
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <Users className="users" onClick={() => setShow(!show)} />
+              <IconButton 
+              sx={{ width: "max-content", color: "#fcfefe" }}
+              onClick={() => setActiveComponent("connectedUsers")}
+              >
+                <Broadcast className="users" onClick={() => setShow(!show)} />
               </IconButton>
             </Box>
-            <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <Phone />
+            <Box p={1} 
+            sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}
+         
+            >
+              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}
+                 onClick={() => setActiveComponent("chatRoom")}>
+                <Users  />
               </IconButton>
             </Box>
             {/* <Divider sx={{ width: "48px" }} />
@@ -126,9 +141,20 @@ const Chat = () => {
           </div>
         </Stack0>
       </Box1>
-      {show && <ConnectedUsers socket={socket} />}
-      {mesg && <ChatRoom chatRoomList={chatRoomList} setRoom={setRoom} room={room}/>}
-      <Conversation setChatRoomList={setChatRoomList}  room={room}/>
+      {activeComponent === "connectedUsers" && (
+        <ConnectedUsers socket={socket}  setActiveComponent= {setActiveComponent} setSelectedUser={setSelectedUser}/>
+      )}
+      {activeComponent === "chatRoom" && (
+        <ChatRoom
+          chatRoomList={chatRoomList}
+          setRoom={setRoom}
+          room={room}
+          setActiveComponent= {setActiveComponent}
+        />
+      )}
+      {activeComponent === "conversation" && (
+        <Conversation setChatRoomList={setChatRoomList} room={room}  user={selectedUser}/>
+      )}
     </div>
   );
 };

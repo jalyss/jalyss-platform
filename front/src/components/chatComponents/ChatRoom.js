@@ -7,7 +7,7 @@ import {
   Typography,
   Badge
 } from "@mui/material";
-import { CircleDashed, MagnifyingGlass } from "phosphor-react";
+import { CircleDashed, MagnifyingGlass ,BookOpen} from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import Search from "../Search";
 import SearchIconWrapper from "../SearchIconWrapper";
@@ -19,7 +19,7 @@ import { fetchOneRoom } from "../../store/chat";
 
 
 
-const ChatRoom = ({ chatRoomList,setRoom,room }) => {
+const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent }) => {
 
   const authStore = useSelector(state => state.auth)
   const chatStore = useSelector((state)=>state.chat)
@@ -52,7 +52,9 @@ const ChatRoom = ({ chatRoomList,setRoom,room }) => {
 key={i}
 onClick={()=>{
   dispatch(fetchOneRoom(chatRoom.id))
+  setActiveComponent("conversation")
 }}
+
             >
               <Stack direction="row" spacing={2}>
                 <StyledBadge
@@ -98,9 +100,9 @@ onClick={()=>{
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">Messages</Typography>
+          <Typography variant="h5">Discussion</Typography>
           <IconButton>
-            <CircleDashed />
+            <BookOpen />
           </IconButton>
         </Stack>
         <Stack sx={{ width: "100%" }} spacing={3}>

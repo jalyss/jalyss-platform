@@ -29,14 +29,14 @@ import "../../assets/styles/conversation.css";
 import { loadLanguages } from "i18next";
 import { fetchMessages } from "../../store/chat";
 
-const Conversation = ({ setChatRoomList,room }) => {
+const Conversation = ({ setChatRoomList,room,user }) => {
   const authStore = useSelector((state) => state.auth);
   const chatStore = useSelector((state)=>state.chat)
   const {chat} = chatStore
   const {messagess} = chatStore
   const dispatch = useDispatch();
 
-
+console.log("uuuuuuuuuuuuuuser",user)
   const socket = io("http://localhost:3001");
 
   const [openPicker, setPicker] = useState(false);
@@ -47,7 +47,7 @@ const Conversation = ({ setChatRoomList,room }) => {
   const [isTyping, setIsTyping] = useState(false);
 
 // console.log("participant",chat.participants?.filter(e=>e.userId !== authStore.me?.id)[0].user.fullNameEn)
-const userName = chat.participants?.filter(e=>e.userId !== authStore.me?.id)[0].user.fullNameEn 
+const userName = user?.user.fullNameEn 
 
   useEffect(() => {
     axios
@@ -115,7 +115,7 @@ const userName = chat.participants?.filter(e=>e.userId !== authStore.me?.id)[0].
     if (messages.trim() !== "") {
       e.preventDefault();
       // let payload = {
-      //   receiverId: "92b9ddf5-c737-4ead-baf9-f9f4188b3c2c",
+      //   receiverId: "user.userId",
       //   senderId: authStore.me.id,
       //   text: messages,
       // };

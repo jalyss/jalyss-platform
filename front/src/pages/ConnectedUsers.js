@@ -6,8 +6,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { CircleDashed, MagnifyingGlass } from "phosphor-react";
-import React, { useEffect, useState } from "react";
+import { CircleDashed, MagnifyingGlass,WifiHigh,ChatText } from "phosphor-react";
+import React, { useEffect, useState,useMemo } from "react";
 import Search from "../components/Search";
 import SearchIconWrapper from "../components/SearchIconWrapper";
 import StyledInputBase from "../components/SearchInputBase";
@@ -17,10 +17,19 @@ import StyledBadge from "../components/StyledBadge";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-const ConnectedUsers = ({ socket }) => {
+const ConnectedUsers = ({ socket,setActiveComponent,setSelectedUser }) => {
   const authStore = useSelector((state) => state.auth);
 
   const [connectedUsers, setConnectedUsers] = useState([]);
+
+
+
+  const handleChatTextClick = (user) => {
+    setSelectedUser(user);
+    setActiveComponent("conversation");
+  };
+
+  
   useEffect(() => {
     if (authStore.me) {
       socket.emit("online-users", authStore.me.id);
@@ -48,7 +57,7 @@ console.log(connectedUsers);
           width: "100%",
           height: 65,
           borderRadius: 1,
-          backgroundColor: "#fff",
+         
         }}
       >
         <Stack
@@ -64,10 +73,19 @@ console.log(connectedUsers);
             >
               <Avatar src={Icon} />
             </StyledBadge>
-            <Stack>
+            <Stack  direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={19}
+              >
               <Typography variant="subtitle1">
                 {user.user.fullNameEn}
               </Typography>
+              <IconButton >
+              <ChatText color="#57385c"  onClick={() => handleChatTextClick(user)}/>
+             
+            </IconButton>
+           
             </Stack>
           </Stack>
         </Stack>
@@ -95,7 +113,7 @@ console.log(connectedUsers);
             Online Users
           </Typography>
           <IconButton>
-            <CircleDashed />
+            <WifiHigh style={{ color: "black" }}/>
           </IconButton>
         </Stack>
         <Stack sx={{ width: "100%" }} spacing={3}>
@@ -109,7 +127,7 @@ console.log(connectedUsers);
           {connectedUsers
             .filter((u) => u.userId !== authStore.me?.id)
             .map((user) => (
-              <ChatElement user={user} />
+              <ChatElement user={user} handleChatTextClick={handleChatTextClick} />
             ))}
         </Stack>
       </Stack>
