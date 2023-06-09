@@ -167,8 +167,7 @@ const BlogsForm = () => {
                 className="form-control"
                 id="formFileLg"
                 type="file"
-                onChange={handleFileChange}
-                
+                onChange={handleFileChange}               
               />
             </div>
           </div>
