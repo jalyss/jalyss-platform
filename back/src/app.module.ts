@@ -21,6 +21,7 @@ import { ChatModule } from './domains/chat/chat.module';
 import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
 import { LikesModule } from './likes/likes.module';
 import { TrainingModule } from './domains/training/training.module';
+
 @Module({
   imports: [
     MailModule,
@@ -40,6 +41,7 @@ import { TrainingModule } from './domains/training/training.module';
     BlogsModule,
     LikesModule,
     TrainingModule,
+  
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],

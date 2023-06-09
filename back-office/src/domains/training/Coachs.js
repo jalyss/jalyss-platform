@@ -9,6 +9,7 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';  
 import Button from '@mui/material/Button';
+  import { useNavigate } from 'react-router-dom';
 import {
   MDBCard,
   MDBCardImage,
@@ -66,6 +67,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
  function Coachs() {
+  const navigate = useNavigate()
+
+  const handleEditClick = () => {
+    navigate(`/coches`)
+  };
+
   return (
   <div className='serchbare'>
      <Search>
@@ -86,7 +93,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
             alt='...'
             position='top'
           />
-          <Button size="small">see More</Button>
+          <Button size="small" onClick={() => handleEditClick()}>see More</Button>
           <MDBCardBody>
             <MDBCardTitle>Name</MDBCardTitle>
             <MDBCardText>

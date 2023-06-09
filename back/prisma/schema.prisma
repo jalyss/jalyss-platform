@@ -10,6 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
 model EducationLevel {
   id        String   @id @default(uuid())
   nameAr    String
@@ -211,6 +213,7 @@ model ChatRoom {
   updatedAt    DateTime       @updatedAt
   messages     ChatMessage[]
   participants UserChatRoom[]
+  
 }
 
 model ChatMessage {

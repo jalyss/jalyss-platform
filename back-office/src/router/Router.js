@@ -23,11 +23,15 @@ import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
+
 import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
-import Tarining from '../domains/training/Tarining'
+// import Coachs from "../domains/training/Coachs";
+import Tarining from "../domains/training/Tarining";
+import Checkpoint from "../domains/training/Checkpoint";
+
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -64,7 +68,10 @@ function Router() {
               <Route path="create" element={<CreateArticle />} />
             </Route>
             
-            <Route path='Tarining' element ={<Tarining/> }/>
+            <Route path='tarining'  element ={<Tarining/> }/>
+            <Route path='/check'  element ={<Checkpoint/> }/>
+            {/* <Route path='Coachs' element ={<Coachs/> }/> */}
+            {/* <Route path='/coches' element ={<Editcoachs/> }/> */}
           
             {/* <Route path="charts" element={<Charts />} /> */}
 

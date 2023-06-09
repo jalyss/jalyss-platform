@@ -38,7 +38,7 @@ export const sidebarDataMain = [
   {
     nameEn: "Training",
     nameAr: "تمرين",
-    path: "Courses",
+    path: "tarining",
     children: [],
   },
 

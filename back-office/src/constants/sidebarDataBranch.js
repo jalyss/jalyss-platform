@@ -81,7 +81,7 @@ export const sidebarDataBranch = [
       {
       nameEn: "Trainings",
       nameAr: "المبيعات ",
-      path: "Tarining",
+      path: "tarining",
       },
     ],
   },

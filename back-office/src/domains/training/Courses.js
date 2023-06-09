@@ -60,7 +60,7 @@ import MenuItem from '@mui/material/MenuItem';
         </div>
 
           </div>
-    <div className='cart'>
+         <div className='cart'>
     
         <Card sx={{ maxWidth: 250 ,marginTop:'100px'}}>
         <CardMedia

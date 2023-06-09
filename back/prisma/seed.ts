@@ -189,6 +189,7 @@ async function main() {
       roleId: managerRole.id,
       branchId: branch.id,
       avatarId: mediasAvatarEmployee1.id,
+      
 
     }
   })

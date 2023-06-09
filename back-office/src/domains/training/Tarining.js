@@ -4,7 +4,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
-import  Courses  from '../training/Courses';
+import  Assesment  from '../training/Assesment';
 import Coachs from '../training/Coachs';
 import Tarifs from '../training/Tarifs'
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
+import Courses from './Courses';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -51,7 +52,7 @@ function a11yProps(index) {
   };
 }
 
-export default function FullWidthTabs() {
+function Tarining() {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -64,7 +65,7 @@ export default function FullWidthTabs() {
   };
 
   return (
-    <Box sx={{ bgcolor: 'background.paper', width: 1105,marginTop:'-20px', backgroundColor:'white' ,maxWidth:1005}}>
+    <Box sx={{ bgcolor: 'background.paper', width: 1105,marginTop:'-20px', backgroundColor:'white' ,maxWidth:1105}}>
     <AppBar position="static" sx={{backgroundColor:'white',color:'violet'}}>
       <Tabs
         value={value}
@@ -77,9 +78,8 @@ export default function FullWidthTabs() {
         <Tab label="courses" {...a11yProps(0)} />
         <Tab label="coches" {...a11yProps(1)} />
         <Tab label="tarifs" {...a11yProps(2)} />
-        <Tab label="ass" {...a11yProps(3)} />
-        <Tab label="Requests" {...a11yProps(4)} />
-        <Tab label="tarifs3" {...a11yProps(5)} />
+        <Tab label="ASSESMENT" {...a11yProps(3)} />
+       
       </Tabs>
     </AppBar>
     <SwipeableViews
@@ -94,19 +94,15 @@ export default function FullWidthTabs() {
                   <Coachs/>
       </TabPanel>
       <TabPanel value={value} index={2} dir={theme.direction}>
-      <Tarifs/>
+                  <Tarifs/>
       </TabPanel>
       
       <TabPanel value={value} index={3} dir={theme.direction}>
-      
+                     < Assesment />
       </TabPanel>
-      <TabPanel value={value} index={4} dir={theme.direction}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={5} dir={theme.direction}>
-        Item Three
-      </TabPanel>
+     
     </SwipeableViews>
   </Box>
   );
 }
+export default Tarining;

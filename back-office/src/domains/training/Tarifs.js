@@ -31,12 +31,12 @@ const Item = styled(Paper)(({ theme }) => ({
           aria-expanded={open ? 'true' : undefined}
           
         >
-        add new course
+        add new tarif
         </Button>
     </div>
-    <Box sx={{ width: '100%',marginTop:-10 }}>
+    <Box sx={{ width: '100%',marginTop:0 }}>
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-      <Grid item xs={6}>
+      <Grid item xs={5}>
        
     <Card sx={{ maxWidth: 345,maxHeight:500  }}>
       <CardMedia
@@ -89,7 +89,7 @@ const Item = styled(Paper)(({ theme }) => ({
       </CardActions>
     </Card>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={5}>
           
     <Card sx={{ maxWidth: 345,maxHeight:500  }}>
       <CardMedia
@@ -115,7 +115,7 @@ const Item = styled(Paper)(({ theme }) => ({
       </CardActions>
     </Card>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={5}>
             
     <Card sx={{ maxWidth: 345,maxHeight:500  }}>
       <CardMedia
