@@ -35,5 +35,12 @@ export const sidebarDataMain = [
     path: "branch",
     children: []
   },
+  {
+    nameEn: "Training",
+    nameAr: "تمرين",
+    path: "tarining",
+    children: [],
+  },
+
 
 ];

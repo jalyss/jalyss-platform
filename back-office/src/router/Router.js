@@ -23,10 +23,14 @@ import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
+import Coursdetail from "../domains/training/Coursdetail";
 import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
+import Cochesdetail from "../domains/training/Cochesdetail"
+import Tarining from "../domains/training/Tarining";
+import Checkpoint from "../domains/training/Checkpoint";
 
 import ChartTabs from "../domains/charts/ChartTabs";
 
@@ -47,8 +51,8 @@ function Router() {
       <Routes>
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="users" element={<User />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
               <Route path="edit/:userId" element={<EditUser />} />
@@ -64,7 +68,13 @@ function Router() {
               <Route path='articles-by-branch' element={<ArticleByBranchList />} />
               <Route path="create" element={<CreateArticle />} />
             </Route>
-
+            
+            <Route path='tarining'  element ={<Tarining/> }/>
+            <Route path='/check'  element ={<Checkpoint/> }/>
+            <Route path='/Coachs' element ={<Cochesdetail/> }/>
+            <Route path='Coursdetail' element ={<Coursdetail/> }/>
+            {/* <Route path='/coches' element ={<Editcoachs/> }/> */}
+          
             {/* <Route path="charts" element={<Charts />} /> */}
 
             <Route path="commands" element={<Command />}>
@@ -80,9 +90,13 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
           </Route>
+         
 
         )}
         <Route path="*" element={<NoPage />} />
+           
+
+       
       </Routes>
     </BrowserRouter>
   );
