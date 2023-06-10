@@ -11,7 +11,7 @@ import command from './command'
 import auth from './auth' 
 import blog from './blog' 
 import user from './user'
-import bookmarks from './bookmarks'
+import bookmark from './bookmarks'
 
 export const store = configureStore({
   reducer: {
@@ -25,7 +25,7 @@ export const store = configureStore({
     command,
     auth,
     blog, 
-    bookmarks,
+    bookmark,
     user,
    
   },

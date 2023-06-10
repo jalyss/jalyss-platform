@@ -83,6 +83,7 @@ private async connectedUsersList(){
       }
     }
   })
+  console.log(connectedUserList);
   
   for (let user of connectedUserList) {
     this.server.emit(`connected-users/${user.userId}`, connectedUserList);
@@ -102,7 +103,7 @@ private async connectedUsersList(){
 
   @SubscribeMessage('create-chat-room')
   async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
-    console.log('Received', payload);
+
 
     const { senderId, ...rest } = payload;
     const response = await this.ChatRoomService.create(rest, senderId);
@@ -124,7 +125,7 @@ private async connectedUsersList(){
         (a, b) =>
           b.messages[0].createdAt.getTime() - a.messages[0].createdAt.getTime(),
       );
-      console.log(sortedRooms);
+
 
       this.server.emit(`chat-room/${e.userId}`, sortedRooms);
     });

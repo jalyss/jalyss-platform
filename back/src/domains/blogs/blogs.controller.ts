@@ -45,6 +45,7 @@ export class BlogsController {
    
     return this.blogsService.update(id, updateBlogDto,user.id);
   }
+  
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Delete(':id')

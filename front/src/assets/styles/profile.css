@@ -1,0 +1,108 @@
+@media only screen and (max-width: 600px){ 
+    .nav{
+        width: 343px;
+
+    }
+}
+@media only screen and (min-width: 768px){
+    .nav{
+        width: 1117px;
+
+    }
+ }
+
+ .upbtn{
+    width: 30px !important;
+    height:  30px !important;
+    text-align: center !important;
+    border-radius: 100% !important;
+    background-color: #4a0e65 !important;
+
+  }
+
+  .upbtn:hover{
+    background-color: #3a0b5042 !important;
+    border-radius: 20px !important;
+  }
+ 
+.edit-form{
+    width: 735px !important;
+}
+
+
+.label-btn {
+  display: inline-block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.label-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.navbar-nav{
+    width: auto !important ;
+    display:flex !important ;
+    flex-direction:row !important;
+    flex-wrap: wrap  !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    white-space:nowrap !important;
+    }
+
+
+
+   /* this code is for the orders history */
+   .command-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .command-card {
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    padding: 16px;
+    margin: 16px;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .command-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .command-card p {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .command-card ul {
+    margin-top: 8px;
+    padding-left: 16px;
+  }
+  
+  .command-card li {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+  
+
+  .cancel-button{
+    display: inline-block;
+    padding: 3px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+  }
+
+  .save-button{
+    display: inline-block;
+    padding: 3px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+  }

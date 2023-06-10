@@ -25,7 +25,8 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../store/user";
 import { createBookmark } from "../store/bookmarks";
-import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
+import { fetchBlogs, fetchTrends,removeBlog } from "../store/blog";
+
 
 
 function Blogs() {
@@ -47,6 +48,8 @@ function Blogs() {
   const [skip, setSkip] = useState(0);
   const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+
+
   const take = 6;
 
   const greeting = {
@@ -55,6 +58,9 @@ function Blogs() {
       "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
     displayGreeting: true,
   };
+
+
+
 
   useEffect(() => {
     dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
@@ -331,7 +337,7 @@ function Blogs() {
                 </div>
 
                 
-  <Dropdown>
+                <Dropdown>
                   <Dropdown.Toggle
                     className="ellipsis-btn dropdownToggleBlogCard"
                     style={{ all: "unset" }}
