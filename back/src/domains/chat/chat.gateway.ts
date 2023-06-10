@@ -51,6 +51,19 @@ export class ChatGateway
    setTimeout(() =>{this.disconnect(payload.userId)},1000*60*2)
 
   }
+  @SubscribeMessage('online-users')
+  async onlineUsers(client: Socket,id:string){
+    let connectedUserList= await this.PrismaService.connectedUser.findMany({
+      include:{
+        user:{
+          select:{
+            fullNameAr:true,fullNameEn:true,avatar:true
+          }
+        }
+      }
+    })
+    this.server.emit(`connected-users/${id}`, connectedUserList);
+  }
 
   async disconnect(id: string) {
     let connectedUser=await this.PrismaService.connectedUser.findFirst({where:{userId:id}})
@@ -59,17 +72,18 @@ export class ChatGateway
     this.server.emit(`disconnect/${id}`)
     await this.connectedUsersList()
   }
+
 private async connectedUsersList(){
   let connectedUserList= await this.PrismaService.connectedUser.findMany({
     include:{
       user:{
         select:{
-          fullNameAr:true,fullNameEn:true,avatar:true
+          fullNameAr:true,fullNameEn:true,avatar:true,id:true
         }
       }
     }
   })
-
+  console.log(connectedUserList);
   
   for (let user of connectedUserList) {
     this.server.emit(`connected-users/${user.userId}`, connectedUserList);

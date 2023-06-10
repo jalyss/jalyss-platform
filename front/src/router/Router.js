@@ -33,15 +33,12 @@ import OrderHistory from "../components/Profile/OrderHistory"
 
 
 
-
-import Chatroom from "../pages/Chatroom";
+import Chat from "../pages/Chat";
 
 import { useSelector } from "react-redux";
 import UpdateBlog from "../pages/UpdateBlog";
 
-
 function Router() {
-
   return (
     <div>
       <BrowserRouter>
@@ -67,7 +64,7 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
-            <Route path="/chat" element={<Chatroom/>}/>
+            <Route path="/chat" element={<Chat />} />
             <Route path="training" element={<TrainingPage />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
@@ -79,11 +76,10 @@ function Router() {
             <Route path="PrivateZone" element={<PrivateZone />} />
             <Route path="Domiciliation" element={<Domiciliation />} />
             <Route path="ReserveCoworkin" element={<ReserveCoworkin />} />
-            <Route path="mentor" element={<MentorPage/>} />
-            <Route path="ReserveMeeting" element={<ReserveMeeting/>} />
-            <Route path="update-blog/:blogId" element={<UpdateBlog/>} />
+            <Route path="mentor" element={<MentorPage />} />
+            <Route path="ReserveMeeting" element={<ReserveMeeting />} />
+            <Route path="update-blog/:blogId" element={<UpdateBlog />} />
           </Route>
-          
         </Routes>
       </BrowserRouter>
     </div>

@@ -44,7 +44,6 @@ function UpdateBlog() {
       setNewContent(blog.content);
       setCover(blog.cover);
       setTitle(blog.title);
-      setCategoryId(blog.categoryId);
     }
   }, [blog]);
 
