@@ -14,7 +14,7 @@ import Paper from '@mui/material/Paper'
 
 
 
-function EditUser() {
+function CoachDetails() {
   const { t, i18n } = useTranslation()
  
   const [user, setUser] = useState({})
@@ -212,4 +212,4 @@ function EditUser() {
 
 }
 
-export default EditUser
+export default CoachDetails
