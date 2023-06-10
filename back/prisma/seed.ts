@@ -178,10 +178,8 @@ async function main() {
       roleId: managerRole.id,
       branchId: branch.id,
       avatarId: mediasAvatarEmployee1.id,
-      
-
-    }
-  })
+    },
+  });
   let developer1 = await prisma.employee.create({
     data: {
       fullNameAr: 'وسيم',
