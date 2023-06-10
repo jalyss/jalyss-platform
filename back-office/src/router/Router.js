@@ -32,6 +32,7 @@ import Cochesdetail from "../domains/training/Cochesdetail"
 import Tarining from "../domains/training/Tarining";
 import Checkpoint from "../domains/training/Checkpoint";
 
+import ChartTabs from "../domains/charts/ChartTabs";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -81,6 +82,7 @@ function Router() {
               <Route path="create" element={<CreateCommand />} />
               <Route path="edit/:commandId" element={< EditCommand />} />
             </Route>
+            <Route path="charts" element={<ChartTabs/>}/>
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>

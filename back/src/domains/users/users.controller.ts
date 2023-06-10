@@ -42,12 +42,14 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
-
-
+  @Get('author-list')
+  authorList(){
+    return this.usersService.authorList()
+  }
   @Post('create')
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto)

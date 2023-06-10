@@ -1,8 +1,6 @@
-import React, { useState,useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
 import { FaFire } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { blogss, trendingblogss } from "../constants/BlogsData";
 import { Fade } from "react-reveal";
 import landingPerson from "../assets/styles/landingPerson.json";
 import data from "../assets/styles/data.json";
@@ -10,41 +8,101 @@ import DisplayLottie from "./DisplayLottie";
 import DocumentMeta from "react-document-meta";
 import useMeta from "../hooks/useMeta";
 import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch} from "react-redux";
-import { fetchBlogs } from "../store/blog";
-import {useSelector} from "react-redux"
+import Pagination from "@mui/material/Pagination";
+import AutoCompleteFilter from "../components/AutoCompleteFilter";
+import Dropdown from "react-bootstrap/Dropdown";
+import {
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+} from "mdb-react-ui-kit";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUsers } from "../store/user";
+import { createBookmark } from "../store/bookmarks";
+import { fetchBlogs, fetchTrends,removeBlog } from "../store/blog";
+
 
 
 function Blogs() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    const blogs = async () => {
-      await dispatch(fetchBlogs());
-    };
-    fetchData();
-  }, [dispatch]);
-
   const navigate = useNavigate();
-  const blogs = useSelector((state) => state.blog.blogs);
-  console.log(blogs,"ahi")
-  const [trendingBlogs, setTrendingBlogs] = useState(trendingblogss);
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("blog.title"), t("blog.description"));
 
+  const me = useSelector((state) => state.auth.me);
+  const blogStore = useSelector((state) => state.blog);
+  const { blogs, trends } = blogStore;
+  const categoryStore = useSelector((state) => state.category);
+  const { categories } = categoryStore;
+  const userStore = useSelector((state) => state.user);
+  const { users } = userStore;
+
+  const [categoryId, setCategoryId] = useState([]);
+  const [authorId, setAuthorId] = useState([]);
+  const [skip, setSkip] = useState(0);
+  const [basicModal, setBasicModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+
+  const take = 6;
 
   const greeting = {
     title: "Welcome to Jalyss Blog 👋",
     subTitle:
       "where personal growth meets insightful reading! Are you looking to expand your knowledge, gain new insights, and explore your full potential? Then look no further than Jalyss Blog. Our platform offers a wide range of articles, book reviews, and personal stories .",
-    displayGreeting: true, // Set false to hide this section, defaults to true
+    displayGreeting: true,
   };
+
+
+
+
+  useEffect(() => {
+    dispatch(fetchBlogs({ take, skip, categoryId, authorId }));
+    dispatch(fetchTrends());
+    dispatch(fetchUsers());
+  }, [dispatch, authorId, categoryId, skip]);
+
+  function extractTextFromHTML(html) {
+    const temporaryElement = document.createElement("div");
+    temporaryElement.innerHTML = html;
+    return (
+      temporaryElement.textContent.substring(0, 100) ||
+      temporaryElement.innerText.substring(0, 100) ||
+      ""
+    );
+  }
+  const handleChange = (event, value) => {
+    setSkip((value - 1) * take);
+  };
+  const toggleShow = () => setBasicModal(!basicModal);
+  const handleRemove = (id) => {
+    dispatch(removeBlog({ id, take, skip, categoryId, authorId }));
+  };
+  const handleCreateBookmark = (blogId) => {
+    let body = {
+      blogId,
+    };
+    dispatch(createBookmark(body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been saved");
+      } else {
+        showErrorToast("alredy saved");
+      }
+    });
+  };
+
+ 
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
         <Fade bottom duration={1000} distance="40px">
-          <Containerr
+          <div
             style={{ alignItems: "normal", height: "600px", margin: "0 70px" }}
           >
             <div
@@ -52,402 +110,324 @@ function Blogs() {
               style={{ margin: 30 }}
             >
               <div className="col-lg-6">
-                {/* <GreetingMain> */}
-                <GreetingTextDiv style={{ margin: 20 }}>
-                  <GreetingText>
+                <div
+                  className="d-flex flex-column align-items-center"
+                  style={{ margin: 20 }}
+                >
+                  <h1 className="greetingText">
                     Welcome to Jalyss Blog <br />
                     👋
-                  </GreetingText>
+                  </h1>
 
-                  <GreetingSubTitle>{greeting.subTitle}</GreetingSubTitle>
-                  <GreetingButtonDiv>
-                    <GreetingButton $primary>
-                      {" "}
-                      <NoStyle href="#blogListWrapper">Explore &#9654;</NoStyle>
-                    </GreetingButton>
-                    <GreetingButton
+                  <p className="fs-4 lh-base" style={{ color: "#868e96" }}>
+                    {greeting.subTitle}
+                  </p>
+                  <div className="d-flex justify-content-center align-items-center mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      style={{ height: "50px", width: "172px" }}
+                    >
+                      <div
+                        onClick={() => {
+                          const element =
+                            document.querySelector(".blogListWrapper");
+                          if (element) {
+                            element.scrollIntoView({ behavior: "smooth" });
+                          }
+                        }}
+                      >
+                        Explore &#9654;
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger"
+                      style={{
+                        height: "50px",
+                        width: "172px",
+                        marginLeft: "20px",
+                      }}
                       onClick={() => {
                         navigate("/BlogsForm");
                       }}
                     >
                       Write yours
-                    </GreetingButton>
-                  </GreetingButtonDiv>
-                </GreetingTextDiv>
-                {/* </GreetingMain> */}
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className="col-lg-6">
-                <GreetingImageDiv>
-                  <LandingPerson animationData={landingPerson} />
-                </GreetingImageDiv>
+                <div className="landingPerson">
+                  <DisplayLottie animationData={landingPerson} />
+                </div>
               </div>
             </div>
-          </Containerr>
+          </div>
         </Fade>
         <Fade bottom duration={3000} distance="40px">
-          <Containerr style={{ alignItems: "normal", margin: "0 70px" }}>
+          <div style={{ alignItems: "normal", margin: "95px 70px" }}>
             <div className=" d-flex align-items-center">
-              <div className="col-lg-6">
-                <GreetingImageDivv>
-                  <LandingPerson animationData={data} />
-                </GreetingImageDivv>
+              <div className="col-lg-6" style={{ marginTop: "70px" }}>
+                <div>
+                  <DisplayLottie animationData={data} />
+                </div>
               </div>
               <div className="col-lg-6">
-                <GreetingMain>
-                  <GreetingTextDiv>
-                    <GreetingText>
+                <div className="d-flex">
+                  <div className="d-flex flex-column align-items-center">
+                    <h1
+                      className="text-center"
+                      style={{ marginBottom: "20px", fontSize: "50px" }}
+                    >
                       Trending on Jalyss <br /> <FaFire />
-                    </GreetingText>
+                    </h1>
                     <div className="d-flex flex-wrap justify-content-center">
-                      {trendingBlogs.map((blog, index) => (
-                        <BlogContainer key={blog.id}>
-                          <BlogNumber>{`${(index + 1)
-                            .toString()
-                            .padStart(2, "0")}`}</BlogNumber>
-                          <BlogAuthorAvatar
-                            src={blog.authorAvatar}
-                            alt={blog.authorName}
-                          />
-                          <BlogDetails>
-                            <BlogAuthorName>{blog.authorName}</BlogAuthorName>
-                            <BlogTitle>{blog.title}</BlogTitle>
-                            <BlogCreatedAt>{blog.createdAt}</BlogCreatedAt>
-                          </BlogDetails>
-                        </BlogContainer>
+                      {trends.map((blog, index) => (
+                        <div
+                          className="d-flex gap-2 align-items-center"
+                          style={{
+                            width: "300px",
+                            marginTop: "20px",
+                            marginBottom: "20px",
+                          }}
+                          key={blog.id}
+                        >
+                          <h3
+                            style={{
+                              color: "#a9a9a9",
+                              fontSize: "1.5rem",
+                              fontWeight: "bold",
+                            }}
+                          >{`${(index + 1).toString().padStart(2, "0")}`}</h3>
+
+                          {blog.author.avatar ? (
+                            <img
+                              style={{
+                                width: "4rem",
+                                height: "4rem",
+                                borderRadius: "50%",
+                              }}
+                              src={blog.author.avatar?.path}
+                              alt="avatar"
+                            />
+                          ) : (
+                            <img
+                              style={{
+                                width: "4rem",
+                                height: "4rem",
+                                borderRadius: "50%",
+                              }}
+                              src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                              alt="avatar"
+                            />
+                          )}
+                          <div className="d-flex flex-column ">
+                            <p style={{ fontSize: "1rem" }}>
+                              {blog.author.fullNameEn}
+                            </p>
+                            <h6 style={{ fontWeight: "bold" }}>{blog.title}</h6>
+                            <p style={{ fontSize: "0.75rem", color: "#666" }}>
+                              {blog.createdAt}
+                            </p>
+                          </div>
+                        </div>
                       ))}
                     </div>
-                  </GreetingTextDiv>
-                </GreetingMain>
+                  </div>
+                </div>
               </div>
             </div>
-          </Containerr>
+          </div>
         </Fade>
 
-        <Separator />
+        <div
+          style={{
+            borderTop: "0.5px",
+            height: "1px",
+            width: "100%",
+            backgroundColor: "#a9a9a9",
+          }}
+        />
+        <div className="d-flex flex-wrap justify-content-around mt-3">
+          <AutoCompleteFilter
+            data={categories.items}
+            valueOptionName="id"
+            labelOptionName="nameEn"
+            label="Filter by Category"
+            onChange={setCategoryId}
+          />
+          <AutoCompleteFilter
+            data={users.items}
+            valueOptionName="id"
+            labelOptionName="fullNameEn"
+            label="Filter by author"
+            onChange={setAuthorId}
+          />
+        </div>
 
-        <SearchBarWrap id="blogListWrapper">
-          <SearchForm>
-            <SearchInput type="text" placeholder="Search By Category" />
-            <GoButton>Go</GoButton>
-          </SearchForm>
-        </SearchBarWrap>
-        <BlogListWrapper>
-          {blogs.map((blog, i) => (
-            <BlogItemWrapper
+        <div className="blogListWrapper">
+          {blogs.items.map((blog, i) => (
+            <div
+              className="blogItemWrapper"
               key={blog.id}
-              onClick={() => navigate(`/blogs/${i}`)}
               style={{ cursor: "pointer" }}
             >
-              <BlogItemCover src={blog.cover} alt="cover" />
-              {/* <Chip>{blog.category}</Chip> */}
-              {/* <BlogItemTitle>{blog.title}</BlogItemTitle> */}
-              <BlogItemDescription>{blog.description}</BlogItemDescription>
-              <BlogItemFooter>
-                <BlogItemAuthor>
-                  <BlogItemAuthorAvatar src={blog.authorAvatar} alt="avatar" />
-                  <BlogItemAuthorInfo>
-                    <BlogItemAuthorName>{blog.authorName}</BlogItemAuthorName>
-                    <BlogItemAuthorDate>{blog.createdAt}</BlogItemAuthorDate>
-                  </BlogItemAuthorInfo>
-                </BlogItemAuthor>
-                {/* <BlogItemLink
-
+              {blog.cover ? (
+                <img
+                  className="blogItemCover"
+                  src={blog.cover.path}
+                  alt="cover"
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                />
+              ) : (
+                <img
+                  className="blogItemCover"
+                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                  alt="cover"
+                  onClick={() => navigate(`/blogs/${blog.id}`)}
+                />
+              )}
+              <div
+                className="chip mt-3"
+                onClick={() => navigate(`/blogs/${blog.id}`)}
               >
-                ➝
-              </BlogItemLink> */}
-              </BlogItemFooter>
-            </BlogItemWrapper>
+                {blog.category.nameEn}
+              </div>
+              <div
+                className="d-flex flex-column gap-2"
+                onClick={() => navigate(`/blogs/${blog.id}`)}
+              >
+                <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
+
+                <p className="blogItemDescription">
+                  {" "}
+                  <p>{extractTextFromHTML(blog.content)}</p>
+                </p>
+              </div>
+
+              <div className="blogItemFooter d-flex justify-content-between">
+                <div className="d-flex align-items-center">
+                  {blog.author.avatar ? (
+                    <img
+                      className="blogItemAuthorAvatar"
+                      src={blog.author.avatar?.path}
+                      alt="avatar"
+                    />
+                  ) : (
+                    <img
+                      className="blogItemAuthorAvatar"
+                      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                      alt="avatar"
+                    />
+                  )}
+                  <div className="d-flex flex-column">
+                    <h6 className="mt-3">{blog.author.fullNameEn}</h6>
+                    <p
+                      style={{
+                        fontSize: "0.6rem",
+                        color: "#a9a9a9",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {blog.createdAt}
+                    </p>
+                  </div>
+                </div>
+
+                
+                <Dropdown>
+                  <Dropdown.Toggle
+                    className="ellipsis-btn dropdownToggleBlogCard"
+                    style={{ all: "unset" }}
+                  >
+                    <span>&#8942;</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu size="sm" title="">
+                    {me?.id === blog.authorId ? (
+                      <>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setSelectedId(blog.id);
+                            setBasicModal(true);
+                          }}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
+                      </>
+                    ) : (
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleCreateBookmark(blog.id);
+                        }}
+                      >
+                        Save
+                      </Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            </div>
           ))}
-        </BlogListWrapper>
+        </div>
+
+        <>
+          <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
+            <MDBModalDialog>
+              <MDBModalContent>
+                <MDBModalHeader>
+                  <MDBModalTitle>Delete</MDBModalTitle>
+                  <MDBBtn
+                    className="btn-close"
+                    color="none"
+                    onClick={toggleShow}
+                  ></MDBBtn>
+                </MDBModalHeader>
+                <MDBModalBody>Press continue to delete this blog</MDBModalBody>
+
+                <MDBModalFooter>
+                  <button
+                    color="secondary"
+                    type="button"
+                    class="btn btn-secondary btn-sm"
+                    onClick={toggleShow}
+                  >
+                    Close
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    onClick={() => {
+                      handleRemove(selectedId);
+                      setBasicModal(false);
+                    }}
+                  >
+                    Continue
+                  </button>
+                </MDBModalFooter>
+              </MDBModalContent>
+            </MDBModalDialog>
+          </MDBModal>
+        </>
+
+        <div className="d-flex justify-content-center my-5">
+          <Pagination
+            count={
+              blogs.count % take === 0
+                ? Math.floor(blogs.count / take)
+                : Math.floor(blogs.count / take) + 1
+            }
+            color="secondary"
+            variant="outlined"
+            onChange={handleChange}
+          />
+        </div>
       </div>
     </DocumentMeta>
   );
 }
-const NoStyle = styled.a`
-  color: inherit;
-  text-decoration: none;
-  &:hover {
-    text-decoration: none;
-    color: white;
-  }
-`;
-const Row = styled.div`
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-`;
-
-const BlogContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  width: 300px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-`;
-
-const BlogNumber = styled.h3`
-  margin: 0;
-  color: #a9a9a9;
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-
-const BlogAuthorAvatar = styled.img`
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-`;
-
-const BlogDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const BlogTitle = styled.h6`
-  margin: 0;
-  // font-size: 1.25rem;
-  font-weight: bold;
-`;
-const BlogAuthorName = styled.p`
-  margin: 0;
-  font-size: 1rem;
-`;
-
-const BlogCreatedAt = styled.p`
-  margin: 0;
-  font-size: 0.75rem;
-  color: #666;
-`;
-
-const SearchBarWrap = styled.div`
-  background-color: #f0f0f0;
-  width: fit-content;
-  margin: 2.5rem auto 4rem auto;
-  padding: 0.5rem;
-  border-radius: 5px;
-`;
-
-const SearchForm = styled.form`
-  display: flex;
-  align-items: center;
-`;
-
-const SearchInput = styled.input`
-  background-color: #f0f0f0;
-  outline: none;
-  border: none;
-`;
-
-const ClearButton = styled.span`
-  padding-right: 0.5rem;
-  cursor: pointer;
-`;
-
-const GoButton = styled.button`
-  outline: none;
-  border: none;
-  padding: 0.3rem 1rem;
-  border-radius: 5px;
-  background-color: #f62966;
-  color: #fff;
-`;
-
-const BlogListWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 3rem;
-  margin: 40px 50px 0;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 600px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
-
-const BlogItemTitle = styled.h5`
-  margin: 20px;
-  flex: 1;
-`;
-
-const BlogItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    border-color: #333;
-    & ${BlogItemTitle} {
-      text-decoration: underline;
-    }
-  }
-`;
-
-const BlogItemCover = styled.img`
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  margin-bottom: 0.5rem;
-`;
-
-const BlogItemDescription = styled.p`
-  position: relative;
-  max-height: 80px;
-  overflow: hidden;
-  font-size: 0.8rem;
-  color: #a9a9a9;
-  transition: color 0.2s ease-in-out;
-  margin: 0 20px;
-  &::before {
-    position: absolute;
-    content: "...";
-    bottom: 0;
-    right: 0;
-  }
-  &:hover {
-    color: #333;
-  }
-`;
-
-const BlogItemFooter = styled.footer`
-  display: flex;
-  align-items: center;
-  margin: 20px;
-  justify-content: space-between;
-`;
-
-const BlogItemLink = styled.span`
-  text-decoration: none;
-  color: inherit;
-`;
-
-const BlogItemAuthor = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const BlogItemAuthorAvatar = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 0.5rem;
-`;
-
-const BlogItemAuthorInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const BlogItemAuthorName = styled.h6`
-  margin: 0;
-`;
-
-const BlogItemAuthorDate = styled.p`
-  font-size: 0.6rem;
-  color: #a9a9a9;
-  font-weight: 600;
-`;
-const Chip = styled.div`
-  font-size: 0.7rem;
-  background: linear-gradient(to right, #6190e8, #a7bfe8);
-  color: #fff;
-  padding: 0.3rem 0.5rem;
-  border-radius: 5px;
-  width: fit-content;
-  text-transform: capitalize;
-  margin: 0 20px;
-`;
-
-const Separator = styled.div`
-  border-top: 0.5px dashed #a9a9a9;
-`;
-const Containerr = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top:-30px
-  width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-`;
-
-const GreetingMain = styled.div`
-  display: flex;
-  // margin-left: 80px;
-`;
-
-const GreetingTextDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const GreetingText = styled.h1`
-  margin-bottom: 20px;
-  font-size: 50px;
-  // line-height: 1.1;
-  text-align: center;
-  white-space: pre-line;
-  color: #000000 @media (max-width: 768px) {
-    font-size: 30px;
-    text-align: center;
-  }
-`;
-
-const GreetingSubTitle = styled.p`
-  font-size: 29px;
-  line-height: 40px;
-  font-size: 30px;
-  line-height: 40px;
-  color: #868e96;
-
-  @media (max-width: 768px) {
-    font-size: 16px;
-    line-height: normal;
-    text-align: center;
-  }
-`;
-
-const GreetingButtonDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  width: 100%;
-`;
-
-const GreetingButton = styled.button`
-  background: ${(props) => (props.$primary ? "#f62966" : "white")};
-  color: ${(props) => (props.$primary ? "white" : "#f62966")};
-
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid ${(props) => (props.$primary ? "#f62966" : "#f62966")};
-  border-radius: 3px;
-  width: 150px;
-  height: 50px;
-`;
-
-const GreetingImageDiv = styled.div`
-  height: 100%;
-`;
-const GreetingImageDivv = styled.div`
-  margin-top: 70px;
-`;
-
-const LandingPerson = styled(DisplayLottie)`
-  max-width: 50%;
-  height: auto;
-`;
 
 export default Blogs;

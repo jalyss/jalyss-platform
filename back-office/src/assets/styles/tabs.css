@@ -1,0 +1,12 @@
+.active {
+    border-bottom: 2px solid grey;
+    cursor: pointer;
+  }
+  .tab {
+    line-height: 3em;
+    list-style: none;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+  }
+

@@ -7,4 +7,8 @@ export class CreateBlogDto {
   categoryId: string;
   @ApiProperty()
   mediaIds?: string[];
+  @ApiProperty()
+  coverId?: string;
+  @ApiProperty()
+  title: string;
 }

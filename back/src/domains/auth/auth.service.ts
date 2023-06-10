@@ -15,9 +15,11 @@ import { EmployeeLogin } from '../employee/entities/employee.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MailService } from 'src/domains/mail/mail.service';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class AuthService {
+  private connectedUsers: { [userId: string]: Socket } = {}
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
@@ -171,6 +173,17 @@ export class AuthService {
       include:{avatar:true}
     });
     return this._createToken(user)
+  }
+  trackUserConnection(userId: string, socket: Socket) {
+    this.connectedUsers[userId] = socket;
+  }
+
+  trackUserDisconnection(userId: string) {
+    delete this.connectedUsers[userId];
+  }
+
+  getConnectedUsers(): string[] {
+    return Object.keys(this.connectedUsers);
   }
 }
 

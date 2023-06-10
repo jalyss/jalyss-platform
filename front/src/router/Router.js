@@ -25,14 +25,20 @@ import Domiciliation from "../pages/Domiciliation";
 import ReserveCoworkin from "../pages/ReserveCoworkin";
 import MentorPage from "../pages/MentorPage";
 import ReserveMeeting from "../pages/ReserveMeeting";
+import MyBlogs from "../components/Profile/MyBlogs"
+import Bio from "../components/Profile/bio"
+import Edit from "../components/Profile/Edit"
+import MyBookmarks from "../components/Profile/MyBookmarks"
+import OrderHistory from "../components/Profile/OrderHistory"
 
 
-import Chatroom from "../pages/Chatroom";
+
+import Chat from "../pages/Chat";
 
 import { useSelector } from "react-redux";
+import UpdateBlog from "../pages/UpdateBlog";
 
 function Router() {
-
   return (
     <div>
       <BrowserRouter>
@@ -42,7 +48,15 @@ function Router() {
             <Route path="articles" element={<Articles />} />
             <Route path="articles/cat/:categoryId" element={<Articles />} />
             <Route path="one-article/:articleId" element={<OneArticle />} />
-            <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={<Profile />} >
+            <Route index element={<MyBlogs/>} />
+            <Route path="my-bookmarks" element={<MyBookmarks />} />
+            <Route path="edit" element={<Edit />} />
+            <Route path="bio" element={<Bio />} />
+            <Route path="orders-history" element={<OrderHistory />} />
+
+            </Route>
+
             <Route path="checkout" element={<Checkout />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
@@ -50,21 +64,22 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
             <Route path="*" element={<NoPage />} />
-            <Route path="/chat" element={<Chatroom/>}/>
+            <Route path="/chat" element={<Chat />} />
             <Route path="training" element={<TrainingPage />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="blogs/:blogId" element={<BlogsDetail />} />
             <Route path="blogsForm" element={<BlogsForm/>} />
+            <Route path="blogs/:blogId" element={<UpdateBlog/>} />
             <Route path="spaceJalyss" element={<SpaceJalyss />} />
             <Route path="CoworkingZone" element={<CoworkingZone />} />
             <Route path="MeetingZone" element={<MeetingZone />} />
             <Route path="PrivateZone" element={<PrivateZone />} />
             <Route path="Domiciliation" element={<Domiciliation />} />
             <Route path="ReserveCoworkin" element={<ReserveCoworkin />} />
-            <Route path="mentor" element={<MentorPage/>} />
-            <Route path="ReserveMeeting" element={<ReserveMeeting/>} />
+            <Route path="mentor" element={<MentorPage />} />
+            <Route path="ReserveMeeting" element={<ReserveMeeting />} />
+            <Route path="update-blog/:blogId" element={<UpdateBlog />} />
           </Route>
-          
         </Routes>
       </BrowserRouter>
     </div>

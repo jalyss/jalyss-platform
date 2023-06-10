@@ -41,9 +41,9 @@ import { TrainingModule } from './domains/training/training.module';
     BlogsModule,
     LikesModule,
     TrainingModule,
-  
+    
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],
 })
-export class AppModule { }
+export class AppModule {}

@@ -16,11 +16,16 @@ export class MessagesService {
       },
     });
   }
-
-  async getChatRoomMessages(chatRoomId: string) {
+  async getChatRoomMessages(chatRoomId: string,numberMessages:number) {
+    let take=20
+    if(numberMessages){
+      take=numberMessages
+    }
     return await this.prisma.chatMessage.findMany({
       where: { chatRoomId },
       include: { user: true },
+      take,
+      orderBy:{createdAt:'desc'}
     });
   }
 
