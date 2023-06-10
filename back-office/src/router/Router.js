@@ -23,12 +23,12 @@ import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
-
+import Coursdetail from "../domains/training/Coursdetail";
 import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
-// import Coachs from "../domains/training/Coachs";
+import Cochesdetail from "../domains/training/Cochesdetail"
 import Tarining from "../domains/training/Tarining";
 import Checkpoint from "../domains/training/Checkpoint";
 
@@ -70,7 +70,8 @@ function Router() {
             
             <Route path='tarining'  element ={<Tarining/> }/>
             <Route path='/check'  element ={<Checkpoint/> }/>
-            {/* <Route path='Coachs' element ={<Coachs/> }/> */}
+            <Route path='/Coachs' element ={<Cochesdetail/> }/>
+            <Route path='Coursdetail' element ={<Coursdetail/> }/>
             {/* <Route path='/coches' element ={<Editcoachs/> }/> */}
           
             {/* <Route path="charts" element={<Charts />} /> */}

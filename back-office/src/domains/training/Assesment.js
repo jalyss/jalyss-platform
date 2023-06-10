@@ -90,13 +90,13 @@ const bull = (
    
     </div>
     <div>
-    <Card sx={{ minWidth: 200,maxWidth:250,marginTop:10,height:150,boxShadow:'5px 10px #888888'}}>
+    <Card sx={{ minWidth: 200,maxWidth:250,marginTop:10,height:250,boxShadow:'2px 2px #888888' ,backgroundColor:'rgba(77, 5, 29, 0.872)'}}>
       <CardContent>
         
-        <Typography  sx={{ fontSize:  20 }}  variant="h2" component="div">
-         titel of book    
+        <Typography  sx={{ fontSize:  25,color:'white' }}  variant="h2" component="div">
+         Titel of book    
         </Typography>
-        <Typography  sx={{ fontSize:  10 }}  variant="h1" component="div">
+        <Typography  sx={{ fontSize:  15, color:'white'}}  variant="h1" component="div">
          description : A book is a medium for recording information in the form of writing or images, typically composed of many pages (made of papyrus, parchment, vellum, or paper) bound together and protected by a cover.   
         </Typography>
       

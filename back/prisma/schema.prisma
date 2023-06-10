@@ -386,7 +386,7 @@ model Employee {
 model Role {
   id          String     @id @default(uuid())
   nameAr      String
-  nameEn      String
+  nameEn      String  
   permissions Json
   employee    Employee[]
 }

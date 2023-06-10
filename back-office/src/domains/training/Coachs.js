@@ -70,7 +70,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   const navigate = useNavigate()
 
   const handleEditClick = () => {
-    navigate(`/coches`)
+    navigate(`/Coachs`)
   };
 
   return (

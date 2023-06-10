@@ -59,16 +59,16 @@ const Checkpoint = () => {
 		}
 	};
 	return (
-        <div>
-           <div className=' lecture'>
+    <div>
+    <div className=' lecture'>
             lecture:Name
-           </div>
-           <div className='coches'>
-            <ul>
-          <li> Name: IHEB </li>
-          <li>Email :IHEB@gmail.com </li>
-          <li> Course: hatchay</li>
-            </ul>
+    </div>
+    <div className='coches'>
+         <ul>
+          	<li> Name: IHEB </li>
+         	 <li>Email :IHEB@gmail.com </li>
+         	 <li> Course: hatchay</li>
+         </ul>
            </div>
            <div  className='body' style={{top:80}}>
 		<div className='app' style={{marginTop:10,marginRight:50}}>

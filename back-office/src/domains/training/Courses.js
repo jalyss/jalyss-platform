@@ -8,11 +8,12 @@ import Typography from '@mui/material/Typography';
 import { dividerClasses } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
+import { useNavigate } from 'react-router-dom';
 
  const Courses = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate()
   const open = Boolean(anchorEl);
   //event for button drop down 
   const handleClick = (event) => {
@@ -21,7 +22,9 @@ import MenuItem from '@mui/material/MenuItem';
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handle = () => {
+    navigate(`/Coursdetail`)
+  };
   return (
     <div>
           <div className='button category'>
@@ -62,7 +65,7 @@ import MenuItem from '@mui/material/MenuItem';
           </div>
          <div className='cart'>
     
-        <Card sx={{ maxWidth: 250 ,marginTop:'100px'}}>
+        <Card sx={{ maxWidth: 250 ,marginTop:'100px',boxShadow:20 }}>
         <CardMedia
         component="img"
         alt="green iguana"
@@ -76,10 +79,31 @@ import MenuItem from '@mui/material/MenuItem';
         <Typography variant="body2" color="text.secondary">
         Description
         </Typography>
+       
        </CardContent>
        <CardActions>
       
-        <Button size="small">see More</Button>
+        <Button size="small" onClick={() => handle()}>see More</Button>
+       </CardActions>
+       </Card>
+       <Card sx={{ maxWidth: 250 ,marginTop:'-280px',marginLeft:'300px',boxShadow:20}}>
+        <CardMedia
+        component="img"
+        alt="green iguana"
+        height="140"
+        image="https://images.pexels.com/photos/4218864/pexels-photo-4218864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      />
+         <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Titel 
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+        Description
+        </Typography>
+       </CardContent>
+       <CardActions>
+      
+        <Button size="small" onClick={() => handle()}>see More</Button>
        </CardActions>
        </Card>
        </div>
