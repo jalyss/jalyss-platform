@@ -38,14 +38,28 @@ function Header() {
   const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages])
 
   const getBrandText = () => {
+    const currentPath = location.pathname;
+  
     for (let i = 0; i < sidebarDataBranch.length; i++) {
-      if (location.pathname.indexOf(sidebarDataBranch[i].path) !== -1) {
-        if (isEng) return sidebarDataBranch[i].nameEn
-        else return sidebarDataBranch[i].nameAr
+      const item = sidebarDataBranch[i];
+  
+      if (currentPath === `/${item.path}`) {
+        return isEng ? item.nameEn : item.nameAr;
+      }
+  
+      for (let j = 0; j < item.children.length; j++) {
+        const child = item.children[j];
+  
+        if (currentPath.endsWith(`/${child.path}`)) {
+          return isEng ? child.nameEn : child.nameAr;
+        }
       }
     }
-    return 'Brand'
-  }
+  
+    return 'Brand';
+  };
+  
+  
 
   return (
     <Box

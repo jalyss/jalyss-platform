@@ -44,6 +44,7 @@ function Sidebar() {
         const isActive = isItemActive(elem.path);
         return (
           <div key={index}>
+          
             <div
               onClick={() => handleItemClick(elem.path)}
               style={{
