@@ -5,4 +5,6 @@ export class CreateLectureDto {
  title:string;
  @ApiProperty()
  content: string; 
+ @ApiProperty()
+ categoryId:string
 }

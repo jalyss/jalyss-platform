@@ -15,6 +15,8 @@
     "@material-ui/styles": "4.11.4",
     "@mui/icons-material": "5.1.1",
     "@mui/material": "^5.11.11",
+    "@nestjs/platform-socket.io": "^9.4.0",
+    "@nestjs/websockets": "^9.4.0",
     "@mui/styles": "^5.12.3",
     "@mui/x-date-pickers-pro": "^6.3.1",
     "@react-pdf/renderer": "^3.1.8",
@@ -64,6 +66,7 @@
     "react-use-cart": "^1.13.0",
     "react-whatsapp-chat-widget": "^1.1.6",
     "reactstrap": "8.8.1",
+    "socket.io-client": "^4.6.1",
     "styled-components": "^5.3.10",
     "web-vitals": "^2.1.4"
   },

@@ -5,23 +5,48 @@ import {
   IconButton,
   Stack,
   Typography,
-  Badge
 } from "@mui/material";
 import { CircleDashed, MagnifyingGlass } from "phosphor-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../components/Search";
 import SearchIconWrapper from "../components/SearchIconWrapper";
 import StyledInputBase from "../components/SearchInputBase";
 import Icon from "../assets/styles/profile.png";
 import StyledBadge from "../components/StyledBadge";
 
-const Chats = () => {
-  const ChatElement = () => {
+import { useSelector } from "react-redux";
+import axios from "axios";
+
+const ConnectedUsers = ({ socket }) => {
+  const authStore = useSelector((state) => state.auth);
+
+  const [connectedUsers, setConnectedUsers] = useState([]);
+  useEffect(() => {
+    if (authStore.me) {
+      socket.emit("online-users", authStore.me.id);
+    }
+  }, [socket, authStore.me]);
+
+  useEffect(() => {
+    if (authStore.me) {
+      function listConnectedUsers(users) {
+        console.log(users);
+        setConnectedUsers(users);
+      }
+      socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers);
+      return () => {
+        socket.off(`connected-users/${authStore.me.id}`, listConnectedUsers);
+      };
+    }
+  }, [socket, authStore.me]);
+  
+console.log(connectedUsers);
+  const ChatElement = ({ user }) => {
     return (
       <Box
         sx={{
           width: "100%",
-          height: 65 ,
+          height: 65,
           borderRadius: 1,
           backgroundColor: "#fff",
         }}
@@ -40,21 +65,16 @@ const Chats = () => {
               <Avatar src={Icon} />
             </StyledBadge>
             <Stack>
-              <Typography variant="subtitle1">Alaa Bouali</Typography>
-              <Typography variant="caption">wink cv chaamel !</Typography>
+              <Typography variant="subtitle1">
+                {user.user.fullNameEn}
+              </Typography>
             </Stack>
-            
-          </Stack>
-          <Stack spacing={2} alignItems="center">
-           <Typography sx={{fontWeight : 600}} variant="caption">
-             10:46
-           </Typography>
-          <Badge color="primary" badgeContent={2}></Badge>
           </Stack>
         </Stack>
       </Box>
     );
   };
+
   return (
     <Box
       sx={{
@@ -71,7 +91,9 @@ const Chats = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">chats</Typography>
+          <Typography variant="h5" style={{ whiteSpace: "nowrap" }}>
+            Online Users
+          </Typography>
           <IconButton>
             <CircleDashed />
           </IconButton>
@@ -84,11 +106,15 @@ const Chats = () => {
             <StyledInputBase placeholder="Search" />
           </Search>
           <Divider />
-          <ChatElement />
+          {connectedUsers
+            .filter((u) => u.userId !== authStore.me?.id)
+            .map((user) => (
+              <ChatElement user={user} />
+            ))}
         </Stack>
       </Stack>
     </Box>
   );
 };
 
-export default Chats;
+export default ConnectedUsers;

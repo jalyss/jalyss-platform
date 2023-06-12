@@ -43,6 +43,30 @@ export const iconsT = [
     },
   ]
 
+  export const awrapperMentor = [
+    {
+      
+      data: "77K",
+      title: "Students",
+    },
+  
+    {
+     
+      data: "75+",
+      title: "Customers",
+    },
+    {
+     
+      data: "20+",
+      title: "Countries",
+    },
+    {
+      
+      data: "3+",
+      title: "Languages",
+    },
+  ]
+
   export const courses = [
     {
       id: 1,

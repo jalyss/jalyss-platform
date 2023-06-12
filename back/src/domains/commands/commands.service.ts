@@ -33,14 +33,19 @@ export class CommandsService {
     });
   }
 
-  async findAll() {
+  async findAllByUserId(clientId :string) {
     return await this.prisma.command.findMany({
+      where: { clientId  },
       include: {
         commandLine: true,
         branch: true,
       },
     });
   }
+
+async findAll(){
+  return this.prisma.command.findMany()
+}
 
   async findAllByBranchIdentifier(branchId: string, filters: FilterCommand) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!

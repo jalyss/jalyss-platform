@@ -34,9 +34,30 @@ export class ChatRoomService {
     
   }
 
-  async findAll() {
-    return await this.prisma.chatRoom.findMany();
+  async findAll(id:string) {
+    const rooms = await this.prisma.chatRoom.findMany({
+      where : {
+        participants :{
+          some : {
+            userId : id
+          }
+        }
+      },
+      include: {
+        participants: { include: { user: true } },
+        messages: { orderBy: { createdAt: 'desc' }, take: 1 },
+      },
+    }
+     
+    );
+    const sortedRooms = rooms.sort(
+      (a, b) =>
+        b.messages[0].createdAt.getTime() - a.messages[0].createdAt.getTime(),
+    );
+    return sortedRooms
   }
+
+
 
   async findOne(id: string) {
     return await this.prisma.chatRoom.findUnique({

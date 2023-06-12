@@ -91,98 +91,10 @@ model User {
   commentBlog          CommentBlog[]
   replyCommentaireBlog ReplyCommentBlog[]
   bookMark             Bookmark[]
+  ConnectedUser        ConnectedUser?
 }
 
-model UserPayment {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  amount    Float
-  createdAt DateTime @default(now())
-}
-
-model Coaching {
-  id        String  @id @default(uuid())
-  user      User    @relation(fields: [userId], references: [id])
-  userId    String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
-  lectureId String
-}
-
-model SessionRequest {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  content   String
-  createdAt DateTime @default(now())
-}
-
-model TrainingBooking {
-  id             String       @id @default(uuid())
-  createdAt      DateTime     @default(now())
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String
-  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
-  sessionTarifId String
-}
-
-model SessionTarif {
-  id        String            @id @default(uuid())
-  title     String
-  price     Float
-  bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session           @relation(fields: [sessionId], references: [id])
-  sessionId String
-}
-
-model Session {
-  id          String                  @id @default(uuid())
-  title       String
-  description String
-  startDate   DateTime
-  endDate     DateTime
-  tarifs      SessionTarif[] // * one to many relation to Session Tarif
-  sessionType SessionHasSessionType[] // *many to many relation sessionType
-  lectures    SessionHasLecture[] // *many to many relation lecture 
-}
-
-//!join table between Session and SessionType
-
-model SessionHasSessionType {
-  session       Session     @relation(fields: [sessionId], references: [id])
-  sessionId     String
-  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id])
-  sessionTypeId String
-
-  @@unique(fields: [sessionId, sessionTypeId], name: "joiner")
-}
-
-//!join table between Session and Lecture
-
-model SessionHasLecture {
-  session   Session @relation(fields: [sessionId], references: [id])
-  sessionId String
-  lectures  Lecture @relation(fields: [lectureId], references: [id])
-  lectureId String
-
-  @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
-}
-
-model SessionType {
-  id       String                  @id @default(uuid())
-  title    String
-  sessions SessionHasSessionType[] //*many to many relation to Session
-}
-
-model Lecture {
-  id         String              @id @default(uuid())
-  title      String
-  content    String
-  category   ArticleCategory[]
-  sessions   SessionHasLecture[]
-  assesments Assessments[]
-  coaching   Coaching[]
-}
+//payment for what ?
 
 model ArticleCategory {
   id        String    @id @default(uuid())
@@ -191,22 +103,14 @@ model ArticleCategory {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   articles  Article[]
-  lecture   Lecture?  @relation(fields: [lectureId], references: [id])
-  lectureId String?
-  Blog      Blog[]
-}
 
-model Assessments {
-  id        String  @id @default(uuid())
-  title     String
-  content   String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
-  lectureId String
+  Blog    Blog[]
+  Lecture Lecture[]
 }
 
 model ChatRoom {
   id           String         @id @default(uuid())
-  name         String
+  name         String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   messages     ChatMessage[]
@@ -222,6 +126,13 @@ model ChatMessage {
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
+}
+
+model ConnectedUser {
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId])
 }
 
 //join table between user and chat room 
@@ -465,6 +376,105 @@ model Provider {
   Supply         Supply[]
 }
 
+//TRAINING
+model SessionRequest {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Session {
+  id          String                  @id @default(uuid())
+  title       String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  sessionType SessionHasSessionType[] // *many to many relation sessionType
+  lectures    SessionHasLecture[] // *many to many relation lecture 
+  tarifs      SessionTarif[] // * one to many relation to Session Tarif
+}
+
+//!join table between Session and SessionType
+model SessionHasSessionType {
+  session       Session     @relation(fields: [sessionId], references: [id])
+  sessionId     String
+  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id])
+  sessionTypeId String
+
+  @@unique(fields: [sessionId, sessionTypeId], name: "joiner")
+}
+
+model SessionType {
+  id       String                  @id @default(uuid())
+  title    String
+  sessions SessionHasSessionType[] //*many to many relation to Session
+}
+
+//!join table between Session and Lecture
+model SessionHasLecture {
+  session   Session @relation(fields: [sessionId], references: [id])
+  sessionId String
+  lectures  Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+
+  @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
+}
+
+model Lecture {
+  id         String              @id @default(uuid())
+  title      String
+  content    String
+  category   ArticleCategory     @relation(fields: [categoryId], references: [id])
+  categoryId String
+  sessions   SessionHasLecture[]
+  assesments Assessments[]
+  coaching   Coaching[]
+}
+
+model Coaching {
+  id        String  @id @default(uuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+}
+
+model Assessments {
+  id        String  @id @default(uuid())
+  title     String
+  content   String
+  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+}
+
+model SessionTarif {
+  id        String            @id @default(uuid())
+  title     String
+  price     Float
+  bookings  TrainingBooking[] // *one to many relation to TrainingBooking
+  session   Session           @relation(fields: [sessionId], references: [id])
+  sessionId String
+}
+
+model TrainingBooking {
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
+  sessionTarifId String
+}
+
+model UserPayment {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  amount    Float
+  createdAt DateTime @default(now())
+}
+
 //media
 model Media {
   id           String         @id @default(uuid())
@@ -500,7 +510,6 @@ model MediaArticle {
   @@unique(fields: [mediaId, articleId], name: "articleMedia")
 }
 
-// blog
 model MediaBlog {
   blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId  String
@@ -510,10 +519,12 @@ model MediaBlog {
   @@unique(fields: [blogId, mediaId], name: "blogMedia")
 }
 
+// blog
+
 model Blog {
   id          String           @id @default(uuid())
   content     String
-  cover       Media?            @relation(fields: [coverId], references: [id], onDelete: Cascade)
+  cover       Media?           @relation(fields: [coverId], references: [id], onDelete: Cascade)
   coverId     String?
   title       String
   createdAt   DateTime         @default(now())
@@ -547,13 +558,6 @@ model LikeCategory {
   type     String
   blogLike BlogLike[]
 }
-
-// model BlogCategory {
-//   id     String @id @default(uuid())
-//   nameAr String
-//   nameEn String
-//   Blog   Blog[]
-// }
 
 model CommentBlog {
   id        String             @id @default(uuid())

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bumaga/tabs": "^0.2.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@faker-js/faker": "^7.6.0",
@@ -44,6 +45,7 @@
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "react-stars": "^2.2.5",
+    "react-swipeable-views": "^0.14.0",
     "react-to-pdf": "^0.0.14",
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.1.1",

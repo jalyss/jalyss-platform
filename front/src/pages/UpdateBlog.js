@@ -35,7 +35,7 @@ function UpdateBlog() {
     dispatch(fetchBlog(blogId));
   }, [dispatch]);
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   useEffect(() => {
     if (blog) {
@@ -44,8 +44,6 @@ function UpdateBlog() {
       setNewContent(blog.content);
       setCover(blog.cover);
       setTitle(blog.title);
-      setCategoryId(blog.categoryId)
-      console.log("a",blog);
     }
   }, [blog]);
 
@@ -136,6 +134,7 @@ function UpdateBlog() {
           defaultValue={title}
           onChange={(e) => setTitle(e.target.value)}
           onClick={handleClick}
+          required
         />
       </div>
       <div className="mb-3">
@@ -150,7 +149,6 @@ function UpdateBlog() {
           />
         </div>
       </div>
-
       <>
         <div id="editor-container">
           <QuillEditor
@@ -158,6 +156,7 @@ function UpdateBlog() {
             value={newContent}
             onEditorChange={onEditorChange}
             onFilesChange={onFilesChange}
+            required
           />
         </div>
         <select
@@ -165,6 +164,7 @@ function UpdateBlog() {
           class="form-select mt-3"
           aria-label="Default select example"
           onChange={handleChange}
+          required
         >
           <option selected>{blog?.category.nameEn}</option>
           {categories.items.map((category, index) => (
