@@ -1,3 +1,9 @@
+import course1Image from "../src/img/course1.jpg";
+import course2Image from "../src/img/course2.jpg";
+import course3Image from "../src/img/course3.jpg";
+import course4Image from "../src/img/course4.jpg";
+import course5Image from "../src/img/course5.jpg";
+
 
 export const iconsT = [
     {
@@ -69,48 +75,73 @@ export const iconsT = [
 
   export const courses = [
     {
-      id: 1,
-      img: "../img/course1.jpg",
+      id: 0,
+      cover: course1Image,
       title: "Online Courses",
-price:"20$",
-      time : "6h"
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      price: "20$",
+      time: "6h",
+      category: "self develempment",
+      startTime: "9:00 AM",
+      endTime: "3:00 PM"
     },
     {
       id: 1,
-      img: "../img/course2.jpg",
+      cover:course2Image,
       title: "Earn A Certificates",
-price:"20$",
-      time : "6h"
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      price: "20$",
+      time: "6h",
+      category: "business",
+      startTime: "10:30 AM",
+      endTime: "4:30 PM"
     },
     {
-      id: 1,
-      img: "../img/course3.jpg",
+      id: 2,
+      cover: course3Image,
       title: "Learn with Expert",
-price:"20$",
-      time : "6h"
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      price: "20$",
+      time: "6h",
+      category: "business",
+      startTime: "2:00 PM",
+      endTime: "8:00 PM"
     },
     {
-      id: 1,
-      img: "../img/course4.jpg",
+      id: 3,
+      cover: course4Image,
       title: "Learn with Expert",
-price:"20$",
-      time : "6h"
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      price: "20$",
+      time: "6h",
+      category: "Category 1",
+      startTime: "9:30 AM",
+      endTime: "3:30 PM"
     },
     {
-      id: 1,
-      img: "../img/course5.jpg",
+      id: 4,
+      cover: course5Image,
       title: "Learn with Expert",
-price:"20$",
-      time : "6h"
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      price: "20$",
+      time: "6h",
+      category: "Category 2",
+      startTime: "11:00 AM",
+      endTime: "5:00 PM"
     },
     {
-      id: 1,
-      img: "../img/course1.jpg",
+      id: 5,
+      cover: course1Image,
       title: "Learn with Expert",
-price:"20$",
-      time : "6h"
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      price: "20$",
+      time: "6h",
+      category: "Category 3",
+      startTime: "3:30 PM",
+      endTime: "9:30 PM"
     }
-  ]
+  ];
+  
 
 
   export const price = [
@@ -161,6 +192,37 @@ price:"20$",
       desc: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
       cover: "https://journals.openedition.org/cinelatino/docannexe/image/3041/img-1-small580.jpg",
     },
+    {
+      id: 4,
+      name: "RANIA",
+      post: "MEZYENA",
+      desc: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
+      cover: "https://images.ctfassets.net/rz9m1rynx8pv/ha7RHuY7b6HoCLFZACaIY/8285abb4eee45b816f7a1bcbb0e23dce/article-tes-employee-centric-rtw-planning.jpg?w=1200&q=80",
+    },
+    {
+      id: 5,
+      name: "Farouk",
+      post: "beaugoss",
+      desc: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
+      cover: "https://images.ctfassets.net/rz9m1rynx8pv/ha7RHuY7b6HoCLFZACaIY/8285abb4eee45b816f7a1bcbb0e23dce/article-tes-employee-centric-rtw-planning.jpg?w=1200&q=80",
+    },
+    {
+      id: 6,
+      name: "ines",
+      post: "MEZYENA",
+      desc: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
+      cover: "https://images.ctfassets.net/rz9m1rynx8pv/ha7RHuY7b6HoCLFZACaIY/8285abb4eee45b816f7a1bcbb0e23dce/article-tes-employee-centric-rtw-planning.jpg?w=1200&q=80",
+    },
+    {
+      id: 7,
+      name: "ghada",
+      post: "MEZYENA",
+      desc: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
+      cover: "https://images.ctfassets.net/rz9m1rynx8pv/ha7RHuY7b6HoCLFZACaIY/8285abb4eee45b816f7a1bcbb0e23dce/article-tes-employee-centric-rtw-planning.jpg?w=1200&q=80",
+    }
+   
+   
+   
   ]
 
 

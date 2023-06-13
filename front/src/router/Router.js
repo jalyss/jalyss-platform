@@ -37,6 +37,7 @@ import Chat from "../pages/Chat";
 
 import { useSelector } from "react-redux";
 import UpdateBlog from "../pages/UpdateBlog";
+import SessionDetails from "../pages/SessionDetails";
 
 function Router() {
   return (
@@ -79,6 +80,7 @@ function Router() {
             <Route path="mentor" element={<MentorPage />} />
             <Route path="ReserveMeeting" element={<ReserveMeeting />} />
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
+            <Route path="sessions/:sessionId" element={<SessionDetails />} />
           </Route>
         </Routes>
       </BrowserRouter>

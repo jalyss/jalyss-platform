@@ -204,7 +204,7 @@ function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <nav class="navbar navbar-expand-lg navbar-light ">
+      <nav class="navbar navbar-expand-lg navbar-light d-lex justify-content-between">
         <div class="container-fluid">
           <button
             onClick={() => setShowItems(!showItems)}

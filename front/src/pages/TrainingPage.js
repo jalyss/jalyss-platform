@@ -12,12 +12,13 @@ function TrainingPage() {
   return (
     <Fragment>
     <TrainingHome/>
-    <TrainingAbout/>
+
+    {/* <TrainingMentor/> */}
+    {/* <TrainingAbout/> */}
     <TrainingCourses/>
-    <TrainingPricing/>
+    {/* <TrainingPricing/> */}
     <TrainingTestimonial/>
-    <TrainingCategories/>
-    <TrainingMentor/>
+    {/* <TrainingCategories/> */}
     <Faq/>
   </Fragment>
   )
