@@ -39,7 +39,7 @@ import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
-
+import Types from "../domains/training/views/sessions/Types";
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -88,7 +88,7 @@ function Router() {
                 <Route path=":coachId" element={<CoachDetails />} />
               </Route>
               <Route path="tarifs" element={<Tarifs />} />
-              <Route path="types" element={<NoPage />} />
+              <Route path="types" element={<Types />} />
             </Route>
             {/* <Route path='/coches' element ={<Editcoachs/> }/> */}
 
