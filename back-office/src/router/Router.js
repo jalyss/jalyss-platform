@@ -29,11 +29,11 @@ import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
 
 import ChartTabs from "../domains/charts/ChartTabs";
+import CreateWorkSpace from "../domains/service/CreateWorkSpace";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     let aux = localStorage.getItem("tokenAdmin");
@@ -46,8 +46,12 @@ function Router() {
     <BrowserRouter>
       <Routes>
         {auth.meAdmin ? (
-          <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
+          <Route
+            path="/"
+            element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}
+          >
             <Route path="dashboard" element={<Dashboard />} />
+              <Route path="space" element={<CreateWorkSpace />} />
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
@@ -56,12 +60,15 @@ function Router() {
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
-              <Route path="edit/:employeeId" element={< EditEmployee />} />
+              <Route path="edit/:employeeId" element={<EditEmployee />} />
             </Route>
 
             <Route path="articles" element={<Article />}>
               <Route index element={<ArticleList />} />
-              <Route path='articles-by-branch' element={<ArticleByBranchList />} />
+              <Route
+                path="articles-by-branch"
+                element={<ArticleByBranchList />}
+              />
               <Route path="create" element={<CreateArticle />} />
             </Route>
 
@@ -70,9 +77,9 @@ function Router() {
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
               <Route path="create" element={<CreateCommand />} />
-              <Route path="edit/:commandId" element={< EditCommand />} />
+              <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
-            <Route path="charts" element={<ChartTabs/>}/>
+            <Route path="charts" element={<ChartTabs />} />
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>
@@ -80,7 +87,6 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
           </Route>
-
         )}
         <Route path="*" element={<NoPage />} />
       </Routes>
