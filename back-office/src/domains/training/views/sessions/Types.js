@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 
 
 
-function StripedRowExample() {
+function Types() {
   return (
 
 
@@ -41,4 +41,4 @@ function StripedRowExample() {
   );
 }
 
-export default StripedRowExample;
+export default Types;
