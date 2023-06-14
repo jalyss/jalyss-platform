@@ -57,6 +57,44 @@ section {
   height: auto;
   width: 100%;
 }
+.rec.rec-arrow {
+  /* border-radius: 0; */
+/* margin-left: 70px; */
+
+}
+/* round buttons on hover */
+.rec.rec-arrow:hover {
+  border-radius: 50%;
+
+
+}
+/* hide disabled buttons */
+/* .rec.rec-arrow:disabled {
+  visibility: hidden;
+} */
+/* disable default outline on focused items */
+/* add custom outline on focused items */
+.rec-carousel-item:focus {
+  outline: none;
+  box-shadow: inset 0 0 1px 1px lightgrey;
+}
+.activee {
+  background-color:#edcc3f; /* Set the desired background color for the active link */
+  border-radius: 10px;
+  transition: background-color 0.3s ease-in-out;
+  color: #fff;
+
+}
+
+.activee:hover {
+  background-color:#edcc3f;
+  transform: scale(1.1); /* Set the desired background color for the active link on hover */
+}
+
+
+.activee-icon {
+  color: #f00; /* Set the desired color for the active icon */
+}
 
 .primary-btn {
   background: #f66962;
@@ -160,12 +198,13 @@ section {
   text-align: center;
 }
 #TrainingHeading h3 {
-  color: var(--main-color);
+  color:  rgb(121, 11, 224);
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 1px;
   margin-bottom: 10px;
   text-align: center;
+  padding-bottom: 10px;
 }
 #TrainingHeading h1 {
   font-size: var(--h2-font);
@@ -461,19 +500,7 @@ section {
 /* testimonial */ 
 
 
-.testimonal .items {
-  padding: 30px;
-  transition: 0.5s;
-}
 
-.testimonal .img {
-  position: relative;
-}
-.testimonal img {
-  width:140px;
-  height:140px;
-  border-radius: 50%;
-}
 
 .testimonal .name {
   margin: 25px;
@@ -483,102 +510,26 @@ section {
   margin-bottom: 5px;
 }
 .testimonal .name span {
-  color: #f66962;
+  color: rgb(121, 11, 224);
+  
 }
 .testimonal p {
-  margin-top: 20px;
   color: grey;
   transition: 0.5s;
   width: 80%;
-  
+  margin-left: 30px;
 }
-.testimonal .items:hover {
-  background-color: #f66962;
-  color: #fff;
-  cursor: pointer;
-}
-.testimonal .items:hover .epost,
-.testimonal .items:hover .desc {
-  color: #fff;
-}
+
 .testimonal ,.items:hover{
-  background-color: #fff;
-  color: #f66962;
-}
-.desc {
-  width: 80;
+  color: rgb(121, 11, 224);
 }
 
-.carousel-item {
-  margin-right: 9px; /* Adjust the value as per your requirement */
-}
 
-.contentest {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-	gap: 1rem;
-  justify-items: center;
-  justify-content: center;
-}
 
-@media (max-width: 600px) {
-  .contentest {
-    grid-template-columns: repeat(1, 1fr);
-  }
 
-  .testimonal .items {
-    padding: 20px;
-  }
 
-  .testimonal img {
-    width: 100px;
-    height: 100px;
-  }
 
-  .testimonal .name h2 {
-    font-size: 18px;
-  }
-}
 
-/* For screens between 600px and 900px wide */
-@media (min-width: 601px) and (max-width: 900px) {
-  .contentest {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .testimonal .items {
-    padding: 25px;
-  }
-
-  .testimonal img {
-    width: 120px;
-    height: 120px;
-  }
-
-  .testimonal .name h2 {
-    font-size: 18px;
-  }
-}
-
-/* For screens larger than 900px wide */
-@media (min-width: 901px) {
-  .contentest {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .testimonal .items {
-    padding: 30px;
-  }
-
-  .testimonal img {
-    width: 140px;
-    height: 140px;
-  }
-
-  .testimonal .name h2 {
-    font-size: 20px;
-  }
-}
 
 
 /* categories */ 

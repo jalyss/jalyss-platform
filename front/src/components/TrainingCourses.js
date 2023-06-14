@@ -1,7 +1,6 @@
 import React from "react";
 import { courses } from "../dummydata";
 import TrainingHeading from "./TrainingHeading";
-import bg from "../img/course3.jpg";
 import AutoCompleteFilter from "./AutoCompleteFilter";
 import { Pagination } from "@mui/material";
 import { useNavigate } from "react-router-dom";

@@ -54,7 +54,7 @@ function Card({
           </div>
         </div>
         <div style={{marginTop:"60px"}}>
-       <Dropdown/>
+       <Dropdown content1="Save" content2="Delete" content3="Edit"/>
       </div>
       </div>
     </div>

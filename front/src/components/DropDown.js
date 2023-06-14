@@ -1,7 +1,7 @@
 import React from 'react'
 import Dropdown from "react-bootstrap/Dropdown";
 
-function DropDown() {
+function DropDown({content1,content2,content3}) {
   return (
     <Dropdown>
     <Dropdown.Toggle
@@ -11,12 +11,12 @@ function DropDown() {
       <span>&#8942;</span>
     </Dropdown.Toggle>
     <Dropdown.Menu size="sm" title="">
-      <>
-        <Dropdown.Item>Delete</Dropdown.Item>
-        <Dropdown.Item>Update</Dropdown.Item>
-      </>
+   
+        <Dropdown.Item>{content1}</Dropdown.Item>
+        <Dropdown.Item>{content2}</Dropdown.Item>
+    
 
-      <Dropdown.Item>Save</Dropdown.Item>
+      <Dropdown.Item>{content3}</Dropdown.Item>
     </Dropdown.Menu>
   </Dropdown>
   )
