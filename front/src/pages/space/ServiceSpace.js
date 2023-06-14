@@ -111,10 +111,10 @@ function ServiceSpace() {
               >
                 <div className="card-body service">
                   <h1 className="card-title serviceType">{item.name}</h1>
-                  <p className="price">
+                 < div className="price">
                     Only <a className="priceNumber"> {item.price}</a>DT
                     <p className="soustitle">Capacity: {item.capacity}</p>
-                  </p>
+                  </div>
                   <p className="serviceInfo">
                     {item.description.split(",").map((desc, i) => (
                       <span key={i}>
@@ -162,7 +162,7 @@ function ServiceSpace() {
           {services.items
             .filter((item) => item.identifier !== serviceIdentifier)
             .map((elem, i) => (
-              <div className="col-md-2.5 mx-1">
+              <div className="col-md-2.5 mx-1" key={i}>
                 <img
                   src={elem.cover?.path}
                   alt={elem.cover?.alt}

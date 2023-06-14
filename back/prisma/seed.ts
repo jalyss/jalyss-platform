@@ -1285,6 +1285,7 @@ async function main() {
             path: 'https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png',
           },
         },
+        perHour:i!==2?true:false,
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
       },

@@ -39,11 +39,11 @@ export default function ShippingForm() {
     >
     
       <Typography variant="h6" align="center" sx={{ mb: 5 }}>
-  {formData.passType === "dayPass"
+  {updateFormData.passType === "dayPass"
     ? "Day Pass"
-    : formData.passType === "weekPass"
+    : updateFormData.passType === "weekPass"
     ? "Week Pass"
-    : formData.passType === "fullTime"
+    : updateFormData.passType === "fullTime"
     ? "Full Time"
     : "Coworking Zone Pass"}
 </Typography>
@@ -54,7 +54,7 @@ export default function ShippingForm() {
             <RadioGroup
                        aria-label="passType"
                        name="passType"
-                       value={formData.passType}
+                       value={updateFormData.passType}
                        onChange={handleFormChange}
                      >
             <Stack direction="row" spacing={3}>
@@ -83,7 +83,7 @@ export default function ShippingForm() {
             control={
             <Checkbox
             required
-                         checked={formData.agreeToTerms}
+                         checked={updateFormData.agreeToTerms}
                          onChange={handleFormChange}
                          name="agreeToTerms"
                        />
@@ -97,7 +97,7 @@ export default function ShippingForm() {
                      color="primary"
                      type="submit"
                      fullWidth
-                     disabled={!formData.agreeToTerms}
+                     disabled={!updateFormData.agreeToTerms}
                    >
             Submit
             </Button>
