@@ -33,6 +33,13 @@ export const fetchOneRoom = createAsyncThunk("one/chatromm", async (id) => {
 })
 
 
+export const notSeenMessages = createAsyncThunk("notSeen",async(id)=> {
+    const response = await axios.get(`${config.API_ENDPOINT}/messages/notSeen/${id}`)
+    console.log("NotSeen",response.data)
+    return response.data.length
+})
+
+
 export const chatSlice = createSlice({
     name: "chat",
     initialState: {
@@ -45,6 +52,7 @@ export const chatSlice = createSlice({
             items: [],
             count: 0,
         },
+        notSeen: 0,
         error: null,
         deleteError: null,
         saveError: null,
@@ -59,7 +67,10 @@ export const chatSlice = createSlice({
             state.chat = action.payload
         });
         builder.addCase(fetchMessages.fulfilled, (state, action) => {
-            state.messages.items = action.payload
+            state.messagess.items = action.payload
+        });
+        builder.addCase(notSeenMessages.fulfilled, (state, action) => {
+            state.notSeen = action.payload
         });
     }
 })

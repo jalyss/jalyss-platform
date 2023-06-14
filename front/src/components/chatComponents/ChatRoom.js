@@ -19,13 +19,20 @@ import { fetchOneRoom } from "../../store/chat";
 
 
 
-const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent }) => {
+const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent,setSelectedUser }) => {
 
   const authStore = useSelector(state => state.auth)
   const chatStore = useSelector((state)=>state.chat)
   const {chat} = chatStore
   const dispatch = useDispatch();
 
+  const [searchText, setSearchText] = useState("");
+  
+  const filteredChatRooms = chatRoomList.filter((chatRoom) =>{ 
+   let  name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
+    return ( name.toLowerCase().includes(searchText.toLowerCase()))}
+ 
+);
 
   const ChatElement = () => {
     return (
@@ -37,8 +44,9 @@ const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent }) => {
           backgroundColor: "#fff",
         }}
       >
-        {chatRoomList.map((chatRoom,i) => {
+        {filteredChatRooms.map((chatRoom,i) => {
           let name = ''
+          let user = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0]
           if (chatRoom.name === null)
             name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
           else {
@@ -51,10 +59,9 @@ const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent }) => {
               justifyContent="space-between"
 key={i}
 onClick={()=>{
-  dispatch(fetchOneRoom(chatRoom.id))
+  setSelectedUser(user)
   setActiveComponent("conversation")
 }}
-
             >
               <Stack direction="row" spacing={2}>
                 <StyledBadge
@@ -110,7 +117,7 @@ onClick={()=>{
             <SearchIconWrapper>
               <MagnifyingGlass color="#57385c" />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search" />
+            <StyledInputBase placeholder="Search"  onChange={(e) => setSearchText(e.target.value)}/>
           </Search>
           <Divider />
           <ChatElement />

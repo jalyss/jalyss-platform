@@ -26,7 +26,7 @@ import { CreateConnectedUserDto } from './dto/create-connectedUsers.dto';
   },
 })
 export class ChatGateway {
-  private typingUsers: string[] = [];
+  private typingUsers: { [userId: string]: boolean } = {};
   constructor(
     private readonly PrismaService: PrismaService,
     private readonly UserService: UsersService,
@@ -43,10 +43,11 @@ export class ChatGateway {
     let connectedUser = await this.PrismaService.connectedUser.findFirst({
       where: { userId: payload.userId },
     });
-    if (!connectedUser)
+    if (!connectedUser) {
       await this.PrismaService.connectedUser.create({
         data: { userId: payload.userId },
       });
+    }
 
     await this.connectedUsersList();
 
@@ -76,13 +77,13 @@ export class ChatGateway {
     let connectedUser = await this.PrismaService.connectedUser.findFirst({
       where: { userId: id },
     });
-    if (connectedUser){
+    if (connectedUser) {
       await this.PrismaService.connectedUser.delete({
         where: { userId: id },
       });
-      this.typingUsers = this.typingUsers.filter((userId) => userId !== id);
-    this.server.emit('typing', { userId: id, isTyping: false });
-  }
+      delete this.typingUsers[id];
+      this.server.emit('typing', { userId: id, isTyping: false });
+    }
     this.server.emit(`disconnect/${id}`);
     await this.connectedUsersList();
   }
@@ -105,31 +106,39 @@ export class ChatGateway {
       this.server.emit(`connected-users/${user.userId}`, connectedUserList);
     }
   }
+
   @SubscribeMessage('typingState')
   handleTypingState(client: Socket, payload: { userId: string, isTyping: boolean }) {
     const { userId, isTyping } = payload;
-  
-    if (isTyping && !this.typingUsers.includes(userId)) {
-      this.typingUsers.push(userId);
-      this.server.emit('typing', { userId, isTyping: true });
-    } else if (!isTyping && this.typingUsers.includes(userId)) {
-      this.typingUsers = this.typingUsers.filter((id) => id !== userId);
-      this.server.emit('typing', { userId, isTyping: false });
-    }
+
+    this.typingUsers[userId] = isTyping;
+    console.log(userId);
+    this.server.emit('typing', { userId, isTyping });
   }
 
   @SubscribeMessage('msgToServer')
   async handleMessage(client: Socket, payload: MessageSocketio) {
     const { userId, chatRoomId, ...rest } = payload;
-    
-    if (!this.typingUsers.includes(userId)) {
-      this.typingUsers.push(userId);
-      this.server.emit('typing', { userId, isTyping: true });
+
+    const isTyping = this.typingUsers[userId] || false;
+
+    if (isTyping) {
+      delete this.typingUsers[userId];
+      this.server.emit('typing', { userId, isTyping: false });
     }
 
     const response = await this.MessageService.create(rest, userId, chatRoomId);
     this.server.emit(`msgToClient/${chatRoomId}`, response);
   }
+
+  @SubscribeMessage('messageSeen')
+  async handleSeenMessage(client : Socket , payload : { chatRoomId : string , messageId : string,userId: string} ) {
+    const { chatRoomId, messageId, userId} = payload;
+    await this.MessageService.MessageSeen(chatRoomId, messageId);
+    this.server.to(chatRoomId).emit('msgSeen',{messageId,userId});
+  }
+
+  
 
   @SubscribeMessage('create-chat-room')
   async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
@@ -160,5 +169,4 @@ export class ChatGateway {
       this.server.emit(`chat-room/${e.userId}`, sortedRooms);
     });
   }
-
 }

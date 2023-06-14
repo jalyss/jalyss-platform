@@ -43,6 +43,14 @@ export class MessagesController {
     return this.messagesService.getChatRoomMessages(chatRoomId,+query.numberMessages);
   }
 
+  @Get('notSeen/:chatRoomId')
+  getNotSeenMessages(
+    @Param('chatRoomId') chatRoomId: string,
+  ) {
+    
+    return this.messagesService.getNootSeenMessages(chatRoomId);
+  }
+
   @Patch(':chatRoomId/:messageId')
   update(
     @Param('chatRoomId') chatRoomId: string,

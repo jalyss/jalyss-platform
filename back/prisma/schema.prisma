@@ -91,7 +91,7 @@ model User {
   commentBlog          CommentBlog[]
   replyCommentaireBlog ReplyCommentBlog[]
   bookMark             Bookmark[]
-  ConnectedUser         ConnectedUser?
+  ConnectedUser        ConnectedUser?
 }
 
 model UserPayment {
@@ -223,7 +223,7 @@ model ChatMessage {
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
-  seen       Boolean @default(false)
+  seen       Boolean  @default(false)
 }
 
 model ConnectedUser {
@@ -522,7 +522,7 @@ model MediaBlog {
 model Blog {
   id          String           @id @default(uuid())
   content     String
-  cover       Media?            @relation(fields: [coverId], references: [id], onDelete: Cascade)
+  cover       Media?           @relation(fields: [coverId], references: [id], onDelete: Cascade)
   coverId     String?
   title       String
   createdAt   DateTime         @default(now())
@@ -585,7 +585,6 @@ model ReplyCommentBlog {
   userId        String
   commentBlog   CommentBlog @relation(fields: [commentBlogId], references: [id], onDelete: Cascade)
   commentBlogId String
- 
 }
 
 model Bookmark {

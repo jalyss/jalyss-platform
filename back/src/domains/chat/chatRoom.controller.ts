@@ -34,6 +34,14 @@ export class ChatRoomController {
   findOne(@Param('id') id: string) {
     return this.chatRoomService.findOne(id);
   }
+  
+  @Get('one/:user1/:user2')
+  findChatroom(
+    @Param('user1') user1: string,
+    @Param('user2') user2: string
+    ) {
+    return this.chatRoomService.findUsersChatroom(user1, user2);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateChatDto: UpdateChatDto) {

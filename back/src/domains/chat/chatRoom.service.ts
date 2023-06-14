@@ -67,6 +67,25 @@ export class ChatRoomService {
       }},
     });
   }
+  async findUsersChatroom(userId1: string, userId2: string) {
+    const chatRoom = await this.prisma.chatRoom.findFirst({
+      where: {
+        participants: {
+          every: {
+            userId: {
+              in: [userId1, userId2],
+            },
+          },
+        },
+      },
+      include: {
+        participants: { include: { user: true } },
+        messages: { orderBy: { createdAt: 'desc' }, take: 1 },
+      },
+    });
+  
+    return chatRoom;
+  }
  
 
   async update(id: string, dto: UpdateChatDto) {

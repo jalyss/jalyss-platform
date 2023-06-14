@@ -31,7 +31,7 @@ const Chat = () => {
   const [show, setShow] = useState(false);
   const [mesg, setMesg] = useState(false);
   const [room,setRoom]=useState({});
-  const [activeComponent, setActiveComponent] = useState("conversation");
+  const [activeComponent, setActiveComponent] = useState("chatRoom");
   const [selectedUser, setSelectedUser] = useState(null);
 
 
@@ -81,19 +81,19 @@ const Chat = () => {
   }));
 
   useEffect(() => {
-    // axios
-    //   .get(
-    //     `http://localhost:3001/api/v1/chatRoom/db80e846-2f9d-4985-8811-ee2d61ccd16a`
-    //   )
-    //   .then((response) => {
-    //     let data = response.data;
-    //     console.log(data);
-    //     setChatRoomList(data);
-    //   })
-    //   .catch((err) => console.log(err));
-    dispatch(fetchChatRoom(authStore))
-    console.log("store",chatRooms.items)
-    setChatRoomList(chatRooms.items)
+    axios
+      .get(
+        `http://localhost:3001/api/v1/chatRoom/${authStore}`
+      )
+      .then((response) => {
+        let data = response.data;
+        console.log(data);
+        setChatRoomList(data);
+      })
+      .catch((err) => console.log(err));
+    // dispatch(fetchChatRoom(authStore))
+    // console.log("store",chatRooms.items)
+    // setChatRoomList(chatRooms.items)
   }, [
     authStore
   ]);
@@ -150,6 +150,7 @@ const Chat = () => {
           setRoom={setRoom}
           room={room}
           setActiveComponent= {setActiveComponent}
+          setSelectedUser={setSelectedUser}
         />
       )}
       {activeComponent === "conversation" && (
