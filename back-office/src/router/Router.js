@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { meAdmin } from "../store/auth";
 import NoPage from "../domains/noPage/NoPage";
-import Main from "../apps/Main";
 import AuthAdmin from "../apps/AuthAdmin";
 import LoginAdmin from "../pages/LoginAdmin";
 import ResetPassword from "../pages/ResetPassword";
@@ -26,10 +25,15 @@ import Dashboard from "../domains/dashboard/Dashboard";
 import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
-import EditCommand from "../domains/commands/views/EditCommand";
-
-import ChartTabs from "../domains/charts/ChartTabs";
+import EditCommand from "../domains/commands/views/EditCommand"
+// import ChartTabs from "../domains/charts/ChartTabs";
 import CreateWorkSpace from "../domains/service/CreateWorkSpace";
+import Courses from "../domains/training/views/courses/Courses";
+import Tarifs from "../domains/training/views/tarifs/Tarifs";
+import Assesment from "../domains/training/views/assements/Assesment";
+import Coachs from "../domains/training/views/coachs/Coachs";
+import CoachDetails from "../domains/training/views/coachs/CoachDetails";
+import Sessions from "../domains/training/views/sessions/Sessions";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -71,6 +75,21 @@ function Router() {
               />
               <Route path="create" element={<CreateArticle />} />
             </Route>
+
+            <Route path="training" element={<Training />}>
+              <Route index element={<Sessions />} />
+              <Route path="courses" element={<Courses />}>
+                <Route path="coursdetail" element={<Coursdetail />}>
+                  <Route path="assesments" element={<Assesment />} />
+                </Route>
+              </Route>
+              <Route path="coachs" element={<Coachs />}>
+                <Route path=":coachId" element={<CoachDetails />} />
+              </Route>
+              <Route path="tarifs" element={<Tarifs />} />
+              <Route path="types" element={<NoPage />} />
+            </Route>
+            {/* <Route path='/coches' element ={<Editcoachs/> }/> */}
 
             {/* <Route path="charts" element={<Charts />} /> */}
 

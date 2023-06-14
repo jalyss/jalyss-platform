@@ -91,99 +91,10 @@ model User {
   commentBlog          CommentBlog[]
   replyCommentaireBlog ReplyCommentBlog[]
   bookMark             Bookmark[]
-  ConnectedUser         ConnectedUser?
+  ConnectedUser        ConnectedUser?
 }
 
-model UserPayment {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  amount    Float
-  createdAt DateTime @default(now())
-}
-
-model Coaching {
-  id        String  @id @default(uuid())
-  user      User    @relation(fields: [userId], references: [id])
-  userId    String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
-  lectureId String
-}
-
-model SessionRequest {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  content   String
-  createdAt DateTime @default(now())
-}
-
-model TrainingBooking {
-  id             String       @id @default(uuid())
-  createdAt      DateTime     @default(now())
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String
-  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
-  sessionTarifId String
-}
-
-model SessionTarif {
-  id        String            @id @default(uuid())
-  title     String
-  price     Float
-  bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session           @relation(fields: [sessionId], references: [id])
-  sessionId String
-}
-
-model Session {
-  id          String                  @id @default(uuid())
-  title       String
-  description String
-  startDate   DateTime
-  endDate     DateTime
-  tarifs      SessionTarif[] // * one to many relation to Session Tarif
-  sessionType SessionHasSessionType[] // *many to many relation sessionType
-  lectures    SessionHasLecture[] // *many to many relation lecture 
-}
-
-//!join table between Session and SessionType
-
-model SessionHasSessionType {
-  session       Session     @relation(fields: [sessionId], references: [id])
-  sessionId     String
-  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id])
-  sessionTypeId String
-
-  @@unique(fields: [sessionId, sessionTypeId], name: "joiner")
-}
-
-//!join table between Session and Lecture
-
-model SessionHasLecture {
-  session   Session @relation(fields: [sessionId], references: [id])
-  sessionId String
-  lectures  Lecture @relation(fields: [lectureId], references: [id])
-  lectureId String
-
-  @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
-}
-
-model SessionType {
-  id       String                  @id @default(uuid())
-  title    String
-  sessions SessionHasSessionType[] //*many to many relation to Session
-}
-
-model Lecture {
-  id         String              @id @default(uuid())
-  title      String
-  content    String
-  category   ArticleCategory[]
-  sessions   SessionHasLecture[]
-  assesments Assessments[]
-  coaching   Coaching[]
-}
+//payment for what ?
 
 model ArticleCategory {
   id        String    @id @default(uuid())
@@ -192,17 +103,9 @@ model ArticleCategory {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   articles  Article[]
-  lecture   Lecture?  @relation(fields: [lectureId], references: [id])
-  lectureId String?
-  Blog      Blog[]
-}
 
-model Assessments {
-  id        String  @id @default(uuid())
-  title     String
-  content   String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
-  lectureId String
+  Blog    Blog[]
+  Lecture Lecture[]
 }
 
 model ChatRoom {
@@ -473,6 +376,105 @@ model Provider {
   Supply         Supply[]
 }
 
+//TRAINING
+model SessionRequest {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Session {
+  id          String                  @id @default(uuid())
+  title       String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  sessionType SessionHasSessionType[] // *many to many relation sessionType
+  lectures    SessionHasLecture[] // *many to many relation lecture 
+  tarifs      SessionTarif[] // * one to many relation to Session Tarif
+}
+
+//!join table between Session and SessionType
+model SessionHasSessionType {
+  session       Session     @relation(fields: [sessionId], references: [id])
+  sessionId     String
+  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id])
+  sessionTypeId String
+
+  @@unique(fields: [sessionId, sessionTypeId], name: "joiner")
+}
+
+model SessionType {
+  id       String                  @id @default(uuid())
+  title    String
+  sessions SessionHasSessionType[] //*many to many relation to Session
+}
+
+//!join table between Session and Lecture
+model SessionHasLecture {
+  session   Session @relation(fields: [sessionId], references: [id])
+  sessionId String
+  lectures  Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+
+  @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
+}
+
+model Lecture {
+  id         String              @id @default(uuid())
+  title      String
+  content    String
+  category   ArticleCategory     @relation(fields: [categoryId], references: [id])
+  categoryId String
+  sessions   SessionHasLecture[]
+  assesments Assessments[]
+  coaching   Coaching[]
+}
+
+model Coaching {
+  id        String  @id @default(uuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+}
+
+model Assessments {
+  id        String  @id @default(uuid())
+  title     String
+  content   String
+  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lectureId String
+}
+
+model SessionTarif {
+  id        String            @id @default(uuid())
+  title     String
+  price     Float
+  bookings  TrainingBooking[] // *one to many relation to TrainingBooking
+  session   Session           @relation(fields: [sessionId], references: [id])
+  sessionId String
+}
+
+model TrainingBooking {
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
+  sessionTarifId String
+}
+
+model UserPayment {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  amount    Float
+  createdAt DateTime @default(now())
+}
+
 //media
 model Media {
   id           String         @id @default(uuid())
@@ -488,6 +490,10 @@ model Media {
   MediaBlog    MediaBlog[]
   Employee     Employee[]
   Blog         Blog[]
+
+  MediaService MediaService[]
+
+  Service Service[]
 }
 
 model MediaUser {
@@ -508,7 +514,6 @@ model MediaArticle {
   @@unique(fields: [mediaId, articleId], name: "articleMedia")
 }
 
-// blog
 model MediaBlog {
   blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogId  String
@@ -518,10 +523,21 @@ model MediaBlog {
   @@unique(fields: [blogId, mediaId], name: "blogMedia")
 }
 
+model MediaService {
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  mediaId   String
+  media     Media   @relation(fields: [mediaId], references: [id])
+
+  @@unique([mediaId, serviceId])
+}
+
+// blog
+
 model Blog {
   id          String           @id @default(uuid())
   content     String
-  cover       Media?            @relation(fields: [coverId], references: [id], onDelete: Cascade)
+  cover       Media?           @relation(fields: [coverId], references: [id], onDelete: Cascade)
   coverId     String?
   title       String
   createdAt   DateTime         @default(now())
@@ -556,13 +572,6 @@ model LikeCategory {
   blogLike BlogLike[]
 }
 
-// model BlogCategory {
-//   id     String @id @default(uuid())
-//   nameAr String
-//   nameEn String
-//   Blog   Blog[]
-// }
-
 model CommentBlog {
   id        String             @id @default(uuid())
   content   String
@@ -584,7 +593,6 @@ model ReplyCommentBlog {
   userId        String
   commentBlog   CommentBlog @relation(fields: [commentBlogId], references: [id], onDelete: Cascade)
   commentBlogId String
- 
 }
 
 model Bookmark {
@@ -605,16 +613,16 @@ model View {
 }
 
 //workSdpace
+
 model WorkSpace {
   id          String   @id @default(uuid())
   name        String
-  image       String
-  description String
-  capacity    Int
-  amenities   String
-  price       Float
-  rating      Float
-  reviews     Int
+  capacity    String?
+  description String?
+  price       String?
+  rating      String?
+  reviews     String?
+  amenities   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   service     Service  @relation(fields: [serviceId], references: [id])
@@ -622,39 +630,72 @@ model WorkSpace {
 }
 
 model Service {
-  id        String      @id @default(uuid())
-  name      String
-  workSpace WorkSpace[]
-  tarif     Tarif[]
+  id           String         @id @default(uuid())
+  name         String
+  identifier   String         @unique()
+  perHour      Boolean        @default(true)
+  coverId      String?
+  cover        Media?         @relation(fields: [coverId], references: [id])
+  workSpace    WorkSpace[]
+  tarif        Tarif[]
+  MediaService MediaService[]
 }
 
 model Booking {
-  id        String   @id @default(uuid())
-  date      DateTime
-  startTime String
-  endTime   String
-  status    Status   @default(pending)
-  paid      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  tarif     Tarif    @relation(fields: [tarifId], references: [id])
-  tarifId   String
+  id          String   @id @default(uuid())
+  date        DateTime
+  startTime   String
+  endTime     String
+  email       String?
+  firstName   String?
+  lastName    String?
+  phoneNumber String?
+  status      Status   @default(pending)
+  paid        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+  tarif       Tarif    @relation(fields: [tarifId], references: [id])
+  tarifId     String
+  companyName String?
+  freeSpace   String?
 
   @@unique([userId, tarifId])
 }
 
 model Tarif {
   id          String    @id @default(uuid())
+  name        String?
   duration    String?
+  capacity    String?
   price       Float
+  pricePerDay Float?
   description String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   bookings    Booking[]
   service     Service   @relation(fields: [serviceId], references: [id])
   serviceId   String
+}
+
+//website Settings
+model MainComponent {
+  id           String         @id
+  SubComponent SubComponent[]
+}
+
+model SubComponent {
+  id                  String                @id
+  mainComponentId     String
+  mainComponent       MainComponent         @relation(fields: [mainComponentId], references: [id])
+  ContentSubComponent ContentSubComponent[]
+}
+
+model ContentSubComponent {
+  id             String       @id
+  subComponentId String
+  subComponent   SubComponent @relation(fields: [subComponentId], references: [id])
 }
 
 enum Status {

@@ -15,10 +15,6 @@ export default function CreateWorkSpace() {
     <input type="number" class="form-control" id="exampleFormControlInput1" />
   </div>
   <div class="form-group">
-    <label for="exampleFormControlInput1">Price</label>
-    <input type="number" class="form-control" id="exampleFormControlInput1"/>
-  </div>
-  <div class="form-group">
     <label for="exampleFormControlTextarea1">Discription</label>
     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
   </div>

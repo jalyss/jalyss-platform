@@ -1,19 +1,14 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Grid,
-  Stack,
-  TextField,
   Checkbox,
   FormControlLabel,
   Button,
-  RadioGroup,
-  Radio,
-  FormControl,
   FormLabel,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Card, CardMedia, Typography, imageGroup } from "@mui/material";
+import { Card, CardMedia, Typography } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 
@@ -21,9 +16,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import PushPinIcon from "@mui/icons-material/PushPin";
+
 import { MultiInputTimeRangeField } from "@mui/x-date-pickers-pro/MultiInputTimeRangeField";
-import VerifiedUserRoundedIcon from '@mui/icons-material/VerifiedUserRounded';
+import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
+import RegisterForm from "./RegisterForm";
+import { updateFormData } from "../forms/reducers";
 const useStyles = makeStyles((theme) => ({
   imagesGroup: {
     display: "flex",
@@ -47,28 +44,17 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 2,
   },
 }));
-const initialFormState = {
-  firstName: "",
-  lastName: "",
-  phoneNumber: "",
-  companyName: "",
-  email: "",
-  freeSpace: "",
-  agreeToTerms: false,
-  passType: "",
-};
 
 function PrivateZone() {
-  const [formData, setFormData] = useState(initialFormState);
   const [value, setValue] = useState(dayjs("2022-04-17"));
   const classes = useStyles();
-useEffect(()=>{
-  window.scrollTo(0,0);
-},[])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const handleFormChange = (event) => {
     const { name, value, type, checked } = event.target;
     const newValue = type === "checkbox" ? checked : value;
-    setFormData((prevState) => ({
+    updateFormData((prevState) => ({
       ...prevState,
       [name]: newValue,
     }));
@@ -101,7 +87,9 @@ useEffect(()=>{
         className={classes.topText}
         style={{ color: "black", marginLeft: 10 }}
       >
-        <VerifiedUserRoundedIcon style={{ color: "purple", marginLeft: 60, fontSize: 40 }} />
+        <VerifiedUserRoundedIcon
+          style={{ color: "purple", marginLeft: 60, fontSize: 40 }}
+        />
         Private offices for more autonomy
       </Typography>
       <Typography
@@ -184,7 +172,6 @@ useEffect(()=>{
           </imageGroup>
         </Grid>
       </Grid>
-      
       <Typography
         align="center"
         className={classes.bottomText}
@@ -193,98 +180,8 @@ useEffect(()=>{
         Get your private zone
       </Typography>
       <form style={{ margin: "auto", maxWidth: 900, padding: 25 }}>
-               <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} sm={6} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <TextField
-              required
-              id="firstName"
-              name="firstName"
-              label="First Name"
-              fullWidth
-              autoComplete="given-name"
-              variant="outlined"
-              size="small"
-              inputProps={{ style: { fontSize: 14 } }}
-              value={formData.firstName}
-              onChange={handleFormChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <TextField
-              required
-              id="lastName"
-              name="lastName"
-              label="Last Name"
-              fullWidth
-              autoComplete="family-name"
-              variant="outlined"
-              size="small"
-              inputProps={{ style: { fontSize: 14 } }}
-              value={formData.lastName}
-              onChange={handleFormChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <TextField
-              required
-              id="phoneNumber"
-              name="phoneNumber"
-              label="Phone Number"
-              fullWidth
-              autoComplete="tel"
-              variant="outlined"
-              size="small"
-              inputProps={{ style: { fontSize: 14 } }}
-              value={formData.phoneNumber}
-              onChange={handleFormChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <TextField
-              id="companyName"
-              name="companyName"
-              label="Company Name"
-              fullWidth
-              autoComplete="organization"
-              variant="outlined"
-              size="small"
-              inputProps={{ style: { fontSize: 14 } }}
-              value={formData.companyName}
-              onChange={handleFormChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="email"
-              name="email"
-              label="Email"
-              fullWidth
-              autoComplete="email"
-              variant="outlined"
-              size="small"
-              inputProps={{ style: { fontSize: 14 } }}
-              value={formData.email}
-              onChange={handleFormChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="freeSpace"
-              name="freeSpace"
-              label="Free Space Needed (in square meters)"
-              fullWidth
-              autoComplete="off"
-              variant="outlined"
-              size="small"
-              inputProps={{ style: { fontSize: 14 } }}
-              multiline
-              rows={4}
-              value={formData.freeSpace}
-              onChange={handleFormChange}
-            />
-          </Grid>
+        <Grid container spacing={3} justifyContent="center">
+          <RegisterForm />
           <Grid item xs={12}>
             <Select
               value={selectedValue}
@@ -331,7 +228,7 @@ useEffect(()=>{
               control={
                 <Checkbox
                   required
-                  checked={formData.agreeToTerms}
+                  checked={updateFormData.agreeToTerms}
                   onChange={handleFormChange}
                   name="agreeToTerms"
                 />
@@ -346,7 +243,7 @@ useEffect(()=>{
               color="primary"
               type="submit"
               fullWidth
-              disabled={!formData.agreeToTerms}
+              disabled={!updateFormData.agreeToTerms}
             >
               Submit
             </Button>
