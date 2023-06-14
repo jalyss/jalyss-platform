@@ -22,18 +22,25 @@ import CreateArticle from "../domains/articles/views/CreateArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
+import ChartTabs from "../domains/charts/ChartTabs";
 import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
-import EditCommand from "../domains/commands/views/EditCommand"
-// import ChartTabs from "../domains/charts/ChartTabs";
-import CreateWorkSpace from "../domains/service/CreateWorkSpace";
+import EditCommand from "../domains/commands/views/EditCommand";
+//training
+
+import Training from "../domains/training/Training";
+import Coursdetail from "../domains/training/views/courses/Coursdetail";
+import Checkpoint from "../domains/training/views/assements/Checkpoint";
+import Service from "../domains/service/Service";
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
 import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
+import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+import ServiceList from "../domains/service/views/ServiceList";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -50,12 +57,12 @@ function Router() {
     <BrowserRouter>
       <Routes>
         {auth.meAdmin ? (
-          <Route
-            path="/"
-            element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}
-          >
+          <Route path="/" element={<Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
-              <Route path="space" element={<CreateWorkSpace />} />
+            <Route path="space" element={<Service />}>
+              <Route index element={<ServiceList />} />
+              <Route path="create" element={<CreateWorkSpace />} />
+            </Route>
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
@@ -98,7 +105,7 @@ function Router() {
               <Route path="create" element={<CreateCommand />} />
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
-            <Route path="charts" element={<ChartTabs />} />
+            {/* <Route path="charts" element={<ChartTabs />} /> */}
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>

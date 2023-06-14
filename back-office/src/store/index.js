@@ -10,6 +10,7 @@ import author from './author';
 import category from './category';
 import publishingHouse from './publishingHouse';
 import command from './command';
+import service from './service'
 
 export const store = configureStore({
   reducer: {
@@ -23,7 +24,8 @@ export const store = configureStore({
     author,
     category,
     publishingHouse,
-    command
+    command,
+    service
     
   },
   middleware: (getDefaultMiddleware) =>
