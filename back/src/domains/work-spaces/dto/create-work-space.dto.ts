@@ -2,28 +2,44 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateWorkSpaceDto {
+    @ApiProperty()
     name: string;
 
+    @ApiProperty()
+    firstLine: string;
+  
+    @ApiProperty()
+    secondLine: string;
+  
+    @ApiProperty()
+    thirdLine: string;
+  
     @ApiProperty()
     image: string;
   
     @ApiProperty()
-    description: string;
+    pricingLine1: string;
   
     @ApiProperty()
-    capacity: number;
+    pricingLine2: string;
   
     @ApiProperty()
-    amenities: string;
+    pricingLine3: string;
   
     @ApiProperty()
-    price: number;
+    pricingLine4: string;
   
     @ApiProperty()
-    rating: number;
+    autresLine1: string;
   
     @ApiProperty()
-    reviews: number;
+    autresLine2: string;
+  
+    @ApiProperty()
+    autresLine3: string;
+  
+    @ApiProperty()
+    autresLine4: string;
   
     @ApiProperty()
     serviceId: string;
