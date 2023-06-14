@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DocumentMeta from "react-document-meta";
 import { useTranslation } from "react-i18next";
-import useMeta from "../hooks/useMeta";
+import useMeta from "../../hooks/useMeta";
 import {
   FaShieldAlt,
   FaRegHandshake,
@@ -14,6 +14,8 @@ import {
 } from "react-icons/fa";
 import PrivateZone from "./PrivateZone";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchServices } from "../../store/space";
 function SpaceJalyss() {
   const { t, i18n } = useTranslation();
   const meta = useMeta(
@@ -39,7 +41,8 @@ function SpaceJalyss() {
     },
   ];
   const [currentImage, setCurrentImage] = useState(0);
-
+  const dispatch = useDispatch();
+  const services = useSelector((state) => state.service.services);
   function nextImage() {
     setCurrentImage((currentImage + 1) % images.length);
   }
@@ -48,6 +51,9 @@ function SpaceJalyss() {
       nextImage();
     }, 1500);
     return () => clearInterval(intervalId);
+  }, []);
+  useEffect(() => {
+    dispatch(fetchServices());
   }, []);
 
   return (
@@ -157,192 +163,190 @@ function SpaceJalyss() {
           </div>
         </div>
 
-        <h6 className="firstLine">
-          Find the workspace that inspires you
-        </h6>
-        <h1 className="secondLine">
-          Our Services
-        </h1>
+        <h6 className="firstLine">Find the workspace that inspires you</h6>
+        <h1 className="secondLine">Our Services</h1>
 
         <div className="d-flex justify-content-center align-items-center ">
-        <div className="col-md-2.5 mx-1">
-          <img
-            src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png"
-            alt="Coworking Zone"
-            className="card-img-top"
-            style={{
-              borderRadius: 35,
-              marginBottom: -50,
-              height: 250,
-              width: 300,
-            }}
-          />
-          <div
-            className="card  headerspaceitem"
-            style={{
-              borderRadius: 25,
-              width: 250,
-              left: 26,
-              transition: "all 1.6s ease-in-out",
-            }}
-          >
-            <div className="card-body  ">
-              <h5 className="card-title">Coworking Zone</h5>
-              <button
-                className="btn btn-primary"
+          {services.items.map((elem, i) => (
+            <div className="col-md-2.5 mx-1">
+              <img
+                src={elem.cover?.path}
+                alt={elem.cover?.alt}
+                className="card-img-top"
                 style={{
-                  width: 170,
-                  marginLeft: 25,
-                  backgroundColor: "rgb(230, 229, 232)",
-                  borderRadius: 30,
-                  color: "black",
+                  borderRadius: 35,
+                  marginBottom: -50,
+                  height: 250,
+                  width: 300,
+                }}
+              />
+              <div
+                className="card  headerspaceitem"
+                style={{
+                  borderRadius: 25,
+                  width: 250,
+                  left: 26,
+                  transition: "all 1.6s ease-in-out",
                 }}
               >
-                <Link
-                  to={"/CoworkingZone"}
-                  style={{ textDecoration: "none", color: "black" }}
+                <div className="card-body  ">
+                  <h5 className="card-title">{elem.name}</h5>
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      width: 170,
+                      marginLeft: 25,
+                      backgroundColor: "rgb(230, 229, 232)",
+                      borderRadius: 30,
+                      color: "black",
+                    }}
+                  >
+                    <Link
+                      to={elem?.identifier}
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      {" "}
+                      Reserve
+                    </Link>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* <div className="col-md-2.5 mx-1">
+            <img
+              src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png"
+              alt="Coworking Zone"
+              className="card-img-top"
+              style={{
+                borderRadius: 35,
+                marginBottom: -50,
+                height: 250,
+                width: 300,
+              }}
+            />
+            <div
+              className="card  headerspaceitem"
+              style={{
+                borderRadius: 25,
+                width: 250,
+                left: 26,
+                transition: "all 1.6s ease-in-out",
+              }}
+            >
+              <div className="card-body ">
+                <h5 className="card-title">Meetings Zone</h5>
+                <button
+                  className="btn btn-primary"
+                  style={{
+                    width: 170,
+                    marginLeft: 25,
+                    backgroundColor: "rgb(230, 229, 232)",
+                    borderRadius: 30,
+                    color: "black",
+                  }}
+                >
+                  <Link
+                    to={"/MeetingZone"}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    {" "}
+                    Reserve
+                  </Link>
+                </button>
+              </div>
+            </div>
+          </div> */}
+          {/* <div className="col-md-2.5 mx-1">
+            <img
+              src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png"
+              alt="Coworking Zone"
+              className="card-img-top"
+              style={{
+                borderRadius: 35,
+                marginBottom: -50,
+                height: 250,
+                width: 300,
+              }}
+            />
+            <div
+              className="card  headerspaceitem"
+              style={{
+                borderRadius: 25,
+                width: 250,
+                left: 26,
+                transition: "all 1.6s ease-in-out",
+              }}
+            >
+              <div className="card-body ">
+                <h5 className="card-title">Private Zone</h5>
+                <button
+                  className="btn btn-primary"
+                  style={{
+                    width: 170,
+                    marginLeft: 25,
+                    backgroundColor: "rgb(230, 229, 232)",
+                    borderRadius: 30,
+                    color: "black",
+                  }}
+                >
+                  <Link
+                    to={"/PrivateZone"}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    {" "}
+                    Reserve
+                  </Link>
+                </button>
+              </div>
+            </div>
+          </div> */}
+          {/* <div className="col-md-2.5 mx-1">
+            <img
+              src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png"
+              alt="Coworking Zone"
+              className="card-img-top"
+              style={{
+                borderRadius: 35,
+                marginBottom: -50,
+                height: 250,
+                width: 300,
+              }}
+            />
+            <div
+              className="card  headerspaceitem"
+              style={{
+                borderRadius: 25,
+                width: 250,
+                left: 26,
+                transition: "all 1.6s ease-in-out",
+              }}
+            >
+              <div className="card-body ">
+                <h5 className="card-title">Domiciliation</h5>
+                <button
+                  className="btn btn-primary"
+                  style={{
+                    width: 170,
+                    marginLeft: 25,
+                    backgroundColor: "rgb(230, 229, 232)",
+                    borderRadius: 30,
+                    color: "black",
+                  }}
                 >
                   {" "}
-                  Reserve
-                </Link>
-              </button>
+                  <Link
+                    to={"/Domiciliation"}
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    {" "}
+                    Reserve
+                  </Link>
+                </button>
+              </div>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className="col-md-2.5 mx-1">
-          <img
-            src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png"
-            alt="Coworking Zone"
-            className="card-img-top"
-            style={{
-              borderRadius: 35,
-              marginBottom: -50,
-              height: 250,
-              width: 300,
-            }}
-          />
-          <div
-            className="card  headerspaceitem"
-            style={{
-              borderRadius: 25,
-              width: 250,
-              left: 26,
-              transition: "all 1.6s ease-in-out",
-            }}
-          >
-            <div className="card-body ">
-              <h5 className="card-title">Meetings Zone</h5>
-              <button
-                className="btn btn-primary"
-                style={{
-                  width: 170,
-                  marginLeft: 25,
-                  backgroundColor: "rgb(230, 229, 232)",
-                  borderRadius: 30,
-                  color: "black",
-                }}
-              >
-                <Link
-                  to={"/MeetingZone"}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  {" "}
-                  Reserve
-                </Link>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-2.5 mx-1">
-          <img
-            src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png"
-            alt="Coworking Zone"
-            className="card-img-top"
-            style={{
-              borderRadius: 35,
-              marginBottom: -50,
-              height: 250,
-              width: 300,
-            }}
-          />
-          <div
-            className="card  headerspaceitem"
-            style={{
-              borderRadius: 25,
-              width: 250,
-              left: 26,
-              transition: "all 1.6s ease-in-out",
-            }}
-          >
-            <div className="card-body ">
-              <h5 className="card-title">Private Zone</h5>
-              <button
-                className="btn btn-primary"
-                style={{
-                  width: 170,
-                  marginLeft: 25,
-                  backgroundColor: "rgb(230, 229, 232)",
-                  borderRadius: 30,
-                  color: "black",
-                }}
-              >
-                <Link
-                  to={"/PrivateZone"}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  {" "}
-                  Reserve
-                </Link>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-2.5 mx-1">
-          <img
-            src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png"
-            alt="Coworking Zone"
-            className="card-img-top"
-            style={{
-              borderRadius: 35,
-              marginBottom: -50,
-              height: 250,
-              width: 300,
-            }}
-          />
-          <div
-            className="card  headerspaceitem"
-            style={{
-              borderRadius: 25,
-              width: 250,
-              left: 26,
-              transition: "all 1.6s ease-in-out",
-            }}
-          >
-            <div className="card-body ">
-              <h5 className="card-title">Domiciliation</h5>
-              <button
-                className="btn btn-primary"
-                style={{
-                  width: 170,
-                  marginLeft: 25,
-                  backgroundColor: "rgb(230, 229, 232)",
-                  borderRadius: 30,
-                  color: "black",
-                }}
-              >
-                {" "}
-                <Link
-                  to={"/Domiciliation"}
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  {" "}
-                  Reserve
-                </Link>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
         <div
           className="card mb-4"
@@ -443,98 +447,97 @@ function SpaceJalyss() {
             />
           </div>
           <div className="d-flex justify-content-center align-items-center">
-  <div className="col-md-2.5 mx-4">
-    <div
-      className="card whyUs"
-      style={{
-        width: 120,
-        height:135,
-        borderRadius: 25,
-        transition: "all 1.7s ease-in-out",
-      }}
-    >
-      <div className="card-body ">
-        <h3>
-          <FaMapMarker style={{ color: "darkred " }} />
-        </h3>
-      </div>
-      <p>2 Espaces coworking</p>
-    </div>
-  </div>
-  <div className="col-md-2.5 mx-4">
-    <div
-      className="card whyUs"
-      style={{
-        width: 120,
-        height:135,
-        borderRadius: 25,
-        transition: "all 1.7s ease-in-out",
-      }}
-    >
-      <div className="card-body ">
-        <h3>
-          <FaCommentDots style={{ color: "darkred " }} />
-        </h3>
-      </div>
-      <p>Active Community</p>
-    </div>
-  </div>
-  <div className="col-md-2.5 mx-4 ">
-    <div
-      className="card whyUs"
-      style={{
-        width: 120,
-        height:135,
-        borderRadius: 25,
-        transition: "all 1.7s ease-in-out",
-      }}
-    >
-      <div className="card-body ">
-        <h3>
-          <FaChair style={{ color: "darkred " }} />
-        </h3>
-      </div>
-      <p>Comfortable Seating</p> 
-    </div>
-  </div>
-  <div className="col-md-2.5 mx-4">
-    <div
-      className="card whyUs"
-      style={{
-        width: 120,
-        height:135,
-        borderRadius: 25,
-        transition: "all 1.7s ease-in-out",
-      }}
-    >
-      <div className="card-body ">
-        <h3>
-          <FaWifi style={{ color: "darkred " }} />
-        </h3>
-      </div>
-      <p>Free Wi-Fi</p> 
-    </div>
-  </div>
-  <div className="col-md-2.5 mx-4">
-    <div
-      className="card whyUs"
-      style={{
-        width: 120,
-        height:135,
-        borderRadius: 25,
-        transition: "all 1.7s ease-in-out",
-      }}
-    >
-      <div className="card-body ">
-        <h3>
-          <FaCalendarAlt style={{ color: "darkred " }} />
-        </h3>
-      </div>
-      <p>Events </p> 
-    </div>
-  </div>
-</div>
-
+            <div className="col-md-2.5 mx-4">
+              <div
+                className="card whyUs"
+                style={{
+                  width: 120,
+                  height: 135,
+                  borderRadius: 25,
+                  transition: "all 1.7s ease-in-out",
+                }}
+              >
+                <div className="card-body ">
+                  <h3>
+                    <FaMapMarker style={{ color: "darkred " }} />
+                  </h3>
+                </div>
+                <p>2 Espaces coworking</p>
+              </div>
+            </div>
+            <div className="col-md-2.5 mx-4">
+              <div
+                className="card whyUs"
+                style={{
+                  width: 120,
+                  height: 135,
+                  borderRadius: 25,
+                  transition: "all 1.7s ease-in-out",
+                }}
+              >
+                <div className="card-body ">
+                  <h3>
+                    <FaCommentDots style={{ color: "darkred " }} />
+                  </h3>
+                </div>
+                <p>Active Community</p>
+              </div>
+            </div>
+            <div className="col-md-2.5 mx-4 ">
+              <div
+                className="card whyUs"
+                style={{
+                  width: 120,
+                  height: 135,
+                  borderRadius: 25,
+                  transition: "all 1.7s ease-in-out",
+                }}
+              >
+                <div className="card-body ">
+                  <h3>
+                    <FaChair style={{ color: "darkred " }} />
+                  </h3>
+                </div>
+                <p>Comfortable Seating</p>
+              </div>
+            </div>
+            <div className="col-md-2.5 mx-4">
+              <div
+                className="card whyUs"
+                style={{
+                  width: 120,
+                  height: 135,
+                  borderRadius: 25,
+                  transition: "all 1.7s ease-in-out",
+                }}
+              >
+                <div className="card-body ">
+                  <h3>
+                    <FaWifi style={{ color: "darkred " }} />
+                  </h3>
+                </div>
+                <p>Free Wi-Fi</p>
+              </div>
+            </div>
+            <div className="col-md-2.5 mx-4">
+              <div
+                className="card whyUs"
+                style={{
+                  width: 120,
+                  height: 135,
+                  borderRadius: 25,
+                  transition: "all 1.7s ease-in-out",
+                }}
+              >
+                <div className="card-body ">
+                  <h3>
+                    <FaCalendarAlt style={{ color: "darkred " }} />
+                  </h3>
+                </div>
+                <p>Events </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </DocumentMeta>

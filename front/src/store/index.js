@@ -1,17 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 
-import article from './article'
-import publishingHouse from './publishingHouse'
-import category from './category'
-import articleType from './articleType'
-import author from './author'
-import country from './country'
-import city from './city'
-import command from './command'
-import auth from './auth' 
-import blog from './blog' 
-import user from './user'
-import bookmark from './bookmarks'
+import article from "./article";
+import publishingHouse from "./publishingHouse";
+import category from "./category";
+import articleType from "./articleType";
+import author from "./author";
+import country from "./country";
+import city from "./city";
+import command from "./command";
+import auth from "./auth";
+import blog from "./blog";
+import user from "./user";
+import bookmark from "./bookmarks";
+import service from "./space";
 
 export const store = configureStore({
   reducer: {
@@ -24,13 +25,13 @@ export const store = configureStore({
     city,
     command,
     auth,
-    blog, 
+    blog,
     bookmark,
     user,
-   
+    service,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
-})
+});
