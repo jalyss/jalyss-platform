@@ -21,6 +21,7 @@ const ConnectedUsers = ({ socket,setActiveComponent,setSelectedUser }) => {
   const authStore = useSelector((state) => state.auth);
 
   const [connectedUsers, setConnectedUsers] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
 
 
@@ -121,11 +122,12 @@ console.log(connectedUsers);
             <SearchIconWrapper>
               <MagnifyingGlass color="#57385c" />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search" />
+            <StyledInputBase placeholder="Search"  onChange={(e) => setSearchText(e.target.value)}/>
           </Search>
           <Divider />
           {connectedUsers
             .filter((u) => u.userId !== authStore.me?.id)
+            .filter((u) => u.user.fullNameEn.toLowerCase().includes(searchText.toLowerCase()))
             .map((user) => (
               <ChatElement user={user} handleChatTextClick={handleChatTextClick} />
             ))}

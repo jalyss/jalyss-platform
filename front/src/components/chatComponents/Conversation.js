@@ -28,6 +28,8 @@ import { useSelector ,useDispatch} from "react-redux";
 import "../../assets/styles/conversation.css";
 import { loadLanguages } from "i18next";
 import { fetchMessages } from "../../store/chat";
+import Lottie from "lottie-react"; 
+import typing from "../../assets/typing.json"
 
 const Conversation = ({ setChatRoomList,room,user }) => {
   const authStore = useSelector((state) => state.auth?.me);
@@ -274,7 +276,12 @@ useEffect(() => {
  
     </div>
   ))}
-  {isTyping && <p> {userName} is typing...</p>}
+  {isTyping && (
+  <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+
+    <p style={{  marginLeft:"5px",marginTop: "7px" }}>{userName} is typing</p>    <Lottie animationData={typing} loop={true} style={{ width: "100px" ,marginLeft:"-34px"}} /> 
+  </div>
+)}
 </Box>
       <Box
         p={4}
