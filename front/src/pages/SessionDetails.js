@@ -5,54 +5,108 @@ import {
   lectures,
   navData,
 } from "../dummydata";
-
 import { courses } from "../dummydata";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-// import {learningTopics} from "../dummydata"
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import Nav from "react-bootstrap/Nav";
 
 import {
   MDBCard,
-  MDBCardTitle,
-  MDBCardText,
   MDBCardBody,
   MDBCardHeader,
   MDBRow,
   MDBCol,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
 } from "mdb-react-ui-kit";
-import Carousel1 from "../components/Carousel1";
 import TrainingHeading from "../components/TrainingHeading";
+import TrainingPricing from "../components/trainingComponent/TrainingPricing";
+
+import KeyValueStyled from "../components/trainingComponent/KeyValueStyled";
+import PreviousSessionGallery from "../components/trainingComponent/PreviousSessionGallery";
+import FeedBack from "../components/trainingComponent/FeedBack";
 
 function SessionDetails() {
   const { sessionId } = useParams();
   const seletedSession = courses[sessionId];
+  const [showMore, setShowMore] = useState(false);
+  const [showMoree, setShowMoree] = useState(false);
+
   const navigate = useNavigate();
-  const [activeLink, setActiveLink] = useState(""); // State to track the active link
 
-  // Function to handle click on a link
-  const handleLinkClick = (path) => {
-    setActiveLink(path);
-  };
-
-  // Split the learning topics into two columns
   const columnCount = Math.ceil(learningTopics.length / 2);
   const column1 = learningTopics.slice(0, columnCount);
   const column2 = learningTopics.slice(columnCount);
 
-  // State for managing show more/less functionality
-  const [showMore, setShowMore] = useState(false);
-
-  // Determine the number of topics to display based on showMore state
   const displayColumn1 = showMore ? column1 : column1.slice(0, 5);
   const displayColumn2 = showMore ? column2 : column2.slice(0, 5);
+  const visibleLectures = showMoree ? lectures : lectures.slice(0, 2);
   return (
     <div className="container">
       <div className="goBackLink" onClick={() => navigate(-1)}>
         <span> &#8592;</span> <span>Go Back</span>
       </div>
+      <div className="d-flex flex-wrap justify-content-around gap-5 mb-5 mt-5">
+        <div>
+          <div
+            className="fs-2 mb-2 mt-4"
+            style={{
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {seletedSession.title}
+          </div>
 
+          <KeyValueStyled label="Category" value={seletedSession.category} />
+          <KeyValueStyled label="Duration" value={seletedSession.duration} />
+
+          <KeyValueStyled label="StartAt" value={seletedSession.startTime} />
+
+          <KeyValueStyled label="endAt" value={seletedSession.endTime} />
+
+          <KeyValueStyled label="Type" value={seletedSession.type} />
+          <KeyValueStyled
+            label="Number of lectures"
+            value={seletedSession.numberOfLectures}
+          />
+
+          <KeyValueStyled
+            label=" Number of students"
+            value={seletedSession.numberOfLectures}
+          />
+          <KeyValueStyled label="Type" value={seletedSession.type} />
+          <div className="d-flex gap-3">
+            <div className="d-flex align-items-center fw-bold">Coaches:</div>
+            {seletedSession.coaches.map((coach, coachIndex) => (
+              <span
+                className="tt mt-2"
+                data-bs-placement="bottom"
+                title={coach.name}
+              >
+                <img
+                  key={coachIndex}
+                  src={coach.avatar}
+                  alt="avatar"
+                  className="rounded-circle"
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    margin: "0 5px",
+                  }}
+                />
+              </span>
+            ))}
+          </div>
+        </div>
+        <img
+          src={seletedSession.cover}
+          alt="sessionCover"
+          className="rounded img-fluid"
+          style={{ marginLeft: "70px" }}
+        />
+      </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">
         <div
           className="d-flex flex-wrap gap-4"
@@ -126,62 +180,77 @@ function SessionDetails() {
             </MDBCardBody>
           </MDBCard>
         </div>
-
-        {/* <div >
-          <Card
-            cover={seletedSession.cover}
-            category={seletedSession.category}
-            title={seletedSession.title}
-            duration={seletedSession.time}
-            startTime={seletedSession.startTime}
-            endTime={seletedSession.endTime}
-          />
-        </div> */}
       </div>
+
       <TrainingHeading
         subtitle="SESSION'S LECTURES"
         title="Explore our lectures"
+        mt={20}
+        mb={20}
       />
-      {/* {lectures.map((element, indexx) => ( */}
-      <Card className="mt-5">
-        <Card.Header>
-          <div
-            className="d-flex justify-content-between align-items-center"
-            style={{ color: "#000" }}
-          >
-            <Nav variant="pills">
-              {navData.map((elem, index) => (
-                <Nav.Item key={index}>
-                  <Nav.Link
-                    onClick={() => {
-                      navigate(
-                        `/sessions/${seletedSession.id}${elem.path}`,
-                        handleLinkClick(elem.path)
-                      );
-                    }}
-                  >
-                    <div
-                      className={`d-flex flex-column justify-content-center align-items-center ${
-                        activeLink === elem.path ? "activee" : ""
-                      }`}
-                      style={{ color: "#000", width: "190px", height: "" }}
+      <div style={{ backgroundColor: "#f5e6fe" }}>
+        {visibleLectures.map((element, indexx) => (
+          <MDBCard className="mt-2" key={indexx}>
+            <MDBCardBody>
+              <MDBCardTitle>
+                {" "}
+                <div className="text-center mb-3">{element.title}</div>
+              </MDBCardTitle>
+              <MDBCardText>
+                <KeyValueStyled label="content" value={element.content} />
+                <div className="d-flex gap-3">
+                  <div className="d-flex align-items-center fw-bold">
+                    Coaches:
+                  </div>
+                  {element.coaches.map((coach, coachIndex) => (
+                    <span
+                      className="tt mt-2"
+                      data-bs-placement="bottom"
+                      title={coach.name}
                     >
-                      <div className="d-flex justify-content-center mb-2 ">
-                        {elem.icon}
-                      </div>
-                      <div>{elem.nameEn}</div>
-                    </div>
-                  </Nav.Link>
-                </Nav.Item>
-              ))}
-            </Nav>
+                      <img
+                        key={coachIndex}
+                        src={coach.avatar}
+                        alt="avatar"
+                        className="rounded-circle"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          margin: "0 5px",
+                        }}
+                      />
+                    </span>
+                  ))}
+                </div>
+
+                <KeyValueStyled
+                  label="What you will learn"
+                  value={element.whatYouWillLearn}
+                />
+
+                <KeyValueStyled label="Date" value={element.date} />
+
+                <KeyValueStyled label="StartAt" value={element.startAt} />
+                <KeyValueStyled label="EndAt" value={element.endAt} />
+              </MDBCardText>
+            </MDBCardBody>
+          </MDBCard>
+        ))}
+        {lectures.length > 2 && (
+          <div className="text-center mt-3">
+            <button
+              className="btn btn-link"
+              style={{ color: "#000" }}
+              onClick={() => setShowMoree(!showMoree)}
+            >
+              {showMoree ? "Show Less" : "Show More"}
+            </button>
           </div>
-        </Card.Header>
-        <Card.Body>
-          <Outlet />
-        </Card.Body>
-      </Card>
-      {/* ))} */}
+        )}
+      </div>
+      <TrainingPricing />
+      <PreviousSessionGallery/>
+      <FeedBack/>
     </div>
   );
 }

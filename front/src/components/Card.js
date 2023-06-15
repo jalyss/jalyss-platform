@@ -26,7 +26,7 @@ function Card({
       )}
       <div className="chip mt-3" onClick={onClick}>{category}</div>
       <div className="d-flex flex-column gap-2" onClick={onClick}>
-        <h5 style={{ margin: "20px", flex: "1" }}>{title}</h5>
+        <h5 style={{ marginTop: "20px",marginLeft:"20px", flex: "1" }}>{title}</h5>
       </div>
       <div className="blogItemFooter d-flex justify-content-between mt-1">
         <div className="d-flex align-items-center" onClick={onClick}>
@@ -34,18 +34,6 @@ function Card({
             <img className="blogItemAuthorAvatar" src={avatar} alt="avatar" />
           )}
           <div className="d-flex flex-column">
-            {author && <h6 className="mt-3">{author?.fullNameEn}</h6>}
-            {createdAt && (
-              <p
-                style={{
-                  fontSize: "0.6rem",
-                  color: "#a9a9a9",
-                  fontWeight: "600",
-                }}
-              >
-                {createdAt}
-              </p>
-            )}
             <h6 className="courses-text mt-1">&#9203; {duration}</h6>
             <div className=" ">
               <h6 className="courses-text">Starts at: {startTime}</h6>

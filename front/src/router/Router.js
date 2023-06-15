@@ -38,10 +38,7 @@ import Chat from "../pages/Chat";
 import { useSelector } from "react-redux";
 import UpdateBlog from "../pages/UpdateBlog";
 import SessionDetails from "../pages/SessionDetails";
-import DescriptionLecture from "../components/DescriptionLecture";
-import LecturesSection from "../components/LecturesSection";
-import Coachs from "../components/Coachs";
-import WhatYouWillLearn from "../components/WhatYouWillLearn";
+
 
 function Router() {
   return (
@@ -84,12 +81,8 @@ function Router() {
             <Route path="mentor" element={<MentorPage />} />
             <Route path="ReserveMeeting" element={<ReserveMeeting />} />
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
-            <Route path="sessions/:sessionId" element={<SessionDetails />}>
-              <Route index element={<DescriptionLecture />}/>
-              <Route path="sections" element={<LecturesSection />}/>
-              <Route path="coatchs" element={<Coachs/>}/>
-              <Route path="what-you-will-learn" element={<WhatYouWillLearn />}/>
-            </Route>
+            <Route path="sessions/:sessionId" element={<SessionDetails />}/>
+    
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,5 +1,5 @@
 import React from 'react'
-import TrainingHeading from './TrainingHeading'
+import TrainingHeading from '../TrainingHeading'
 import Marquee from "react-fast-marquee";
 
 

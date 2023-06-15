@@ -1,6 +1,7 @@
 import React from "react";
-import "../assets/styles/training.css";
-import bg from "../img/home.png";
+import "../../assets/styles/training.css"
+
+import bg from "../../img/home.png";
 import { Tilt } from "react-tilt";
 import { useNavigate } from 'react-router-dom';
 

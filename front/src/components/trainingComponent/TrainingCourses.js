@@ -1,10 +1,10 @@
 import React from "react";
-import { courses } from "../dummydata";
-import TrainingHeading from "./TrainingHeading";
-import AutoCompleteFilter from "./AutoCompleteFilter";
+import { courses } from "../../dummydata";
+import TrainingHeading from "../TrainingHeading";
+import AutoCompleteFilter from "../AutoCompleteFilter";
 import { Pagination } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Card from "../components/Card";
+import Card from "../Card";
 
 const TrainingCourses = () => {
   const navigate = useNavigate();

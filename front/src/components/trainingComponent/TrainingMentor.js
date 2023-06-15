@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import bg from "../img/cta-bg.png";
-import banner from "../img/cta-banner.jpg";
+import bg from "../../img/cta-bg.png";
+import banner from "../../img/cta-banner.jpg";
 import { useNavigate } from "react-router-dom";
 
 const TrainingMentor = () => {

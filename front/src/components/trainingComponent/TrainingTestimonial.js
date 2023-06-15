@@ -1,8 +1,8 @@
 import React from "react";
 
-import { testimonal } from "../dummydata";
-import TrainingHeading from "./TrainingHeading";
-import Carousel1 from "./Carousel1.js";
+import { testimonal } from "../../dummydata";
+import TrainingHeading from "../TrainingHeading";
+import Carousel1 from "../Carousel1.js";
 
 const TrainingTestimonial = () => {
 

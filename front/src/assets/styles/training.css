@@ -86,15 +86,14 @@ section {
 
 }
 
-.activee:hover {
-  background-color:#edcc3f;
-  transform: scale(1.1); /* Set the desired background color for the active link on hover */
-}
 
 
-.activee-icon {
-  color: #f00; /* Set the desired color for the active icon */
-}
+
+
+
+
+
+
 
 .primary-btn {
   background: #f66962;
@@ -395,107 +394,28 @@ section {
 }
 
 /* pricing */ 
+.rounded-lg{
+  border-radius: 1rem;
+  transition: transform 0.3s ease-in-out;
+}
+.rounded-lg:hover{
+  border-radius: 1rem;
+  transform: scale(1.05);
 
-.price .items {
-  padding: 40px;
-  text-align: center;
 }
-.price h1 {
-  font-size: 50px;
-  margin: 20px 0;
-  color: #f66962;
+ .text-small{
+  font-size: 0.9rem;
+ }
+.custom-seperator{
+  width: 5rem;
+  height: 6px;
+  border-radius: 1rem;
 }
-.price h1 span {
-  font-size: 20px;
-  margin-right: 5px;
-  color: #000;
-}
-.price p {
-  color: grey;
-  margin: 40px 0;
-}
-.know {
-  font-size: 3rem;
+.text-uppercase{
+  letter-spacing: 0.2em;
 }
 
-.price {
-  margin-top: 12px;
-}
-
-@media (max-width: 600px) {
-  .price .items {
-    padding: 20px;
-  }
-
-  .price h1 {
-    font-size: 30px;
-    margin: 10px 0;
-  }
-
-  .price h1 span {
-    font-size: 16px;
-    margin-right: 5px;
-  }
-
-  .price p {
-    margin: 20px 0;
-  }
-
-  .know {
-    font-size: 2rem;
-  }
-}
-
-/* For screens between 600px and 900px wide */
-@media (min-width: 601px) and (max-width: 900px) {
-  .price .items {
-    padding: 30px;
-  }
-
-  .price h1 {
-    font-size: 40px;
-    margin: 15px 0;
-  }
-
-  .price h1 span {
-    font-size: 18px;
-    margin-right: 5px;
-  }
-
-  .price p {
-    margin: 30px 0;
-  }
-
-  .know {
-    font-size: 2.5rem;
-  }
-}
-
-/* For screens larger than 900px wide */
-@media (min-width: 901px) {
-  .price .items {
-    padding: 40px;
-  }
-
-  .price h1 {
-    font-size: 50px;
-    margin: 20px 0;
-  }
-
-  .price h1 span {
-    font-size: 20px;
-    margin-right: 5px;
-  }
-
-  .price p {
-    margin: 40px 0;
-  }
-
-  .know {
-    font-size: 3rem;
-  }
-}
-
+/* 
 
 /* testimonial */ 
 
@@ -1241,4 +1161,52 @@ section {
     left: 40%;
     margin: 0;
   }
+}
+/*feedback*/
+.containerrr{
+	background-color: #f5e6fe;
+}
+
+
+.second{
+	width: 70%;
+	background-color: white;
+	border-radius: 4px;
+	box-shadow: 10px 10px 5px #aaaaaa;
+}
+
+.text2{
+	font-size: 13px;
+    font-weight: 500;
+    margin-left: 6px;
+    color: #56575b;
+}
+.text3{
+	font-size: 13px;
+    font-weight: 500;
+    margin-right: 4px;
+    color: #828386;
+}
+.text3o{
+	color: #00a5f4 !important;
+
+}
+.text4{
+	font-size: 13px;
+    font-weight: 500;
+    color: #828386;
+}
+.text4i{
+	color: #00a5f4;
+}
+.text4o{
+	color: white;
+}
+.thumbup{
+	font-size: 13px;
+    font-weight: 500;
+    margin-right: 5px;
+}
+.thumbupo{
+	color: #17a2b8;
 }

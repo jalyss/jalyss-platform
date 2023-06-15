@@ -1,8 +1,8 @@
 import React from 'react'
-import "../assets/styles/training.css"
-import bg from '../img/about.png'
-import { iconsT } from '../dummydata'
-import { awrapper } from '../dummydata'
+import "../../assets/styles/training.css"
+import bg from '../../img/about.png'
+import { iconsT } from '../../dummydata'
+import { awrapper } from '../../dummydata'
 
 const TrainingAbout = () => {
   return (
