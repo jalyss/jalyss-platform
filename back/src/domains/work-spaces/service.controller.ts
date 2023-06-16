@@ -22,9 +22,9 @@ export class ServiceController {
     return this.serviceService.findAll();
   }
 
-  @Get('one/:name')
-  findOne(@Param('name') name: string) {
-    return this.serviceService.findOne(name);
+  @Get('one/:id')
+  findOne(@Param('id') id: string) {
+    return this.serviceService.findOne(id);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() UpdateServiceDto: UpdateServiceDto) {

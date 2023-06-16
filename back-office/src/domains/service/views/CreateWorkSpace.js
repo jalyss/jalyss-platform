@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../../../assets/styles/WorkSpaceCreation.css";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 // import { showErrorToast, showSuccessToast } from "../../";
 import axios from "axios";
 import { createWorkSpace, fetchWorkSpaces } from "../../../store/workSpace";
@@ -10,12 +10,16 @@ import { createWorkSpace, fetchWorkSpaces } from "../../../store/workSpace";
 export default function CreateWorkSpace() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const params = useParams();
+
 
   const [name, setName] = useState("");
   const [capacity, setCapacity] = useState("");
   const [description, setDescription] = useState("");
   const [amenities, setAmenities] = useState("");
   const [image, setImage] = useState(null);
+  const [price, setPrice] = useState("");
+  const serviceId=params.id
 
   const workSpaceStore = useSelector((state) => state.workSpace);
 
@@ -28,8 +32,10 @@ export default function CreateWorkSpace() {
     let body = {
       name,
       capacity,
+      price,
       description,
       amenities,
+      serviceId,
     };
 
     if (image !== null) {
@@ -50,7 +56,8 @@ export default function CreateWorkSpace() {
 
     dispatch(createWorkSpace(body)).then((res) => {
       if (!res.error) {
-        showSuccessToast("workSpace has been created");
+        // showSuccessToast("workSpace has been created");
+        console.log("workSpace has been created");
         navigate(-1);
       } else {
         // showErrorToast(res.error.message);
@@ -79,6 +86,16 @@ export default function CreateWorkSpace() {
             className="form-control"
             id="exampleFormControlInput2"
             onChange={(e) => setCapacity(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="exampleFormControlInput2">Price</label>
+          <input
+            type="number"
+            className="form-control"
+            id="exampleFormControlInput2"
+            onChange={(e) => setPrice(e.target.value)}
             required
           />
         </div>

@@ -17,9 +17,9 @@ export class WorkSpacesController {
     return this.workSpacesService.create(dto);
   }
 
-  @Get()
-  findAll() {
-    return this.workSpacesService.findAll();
+  @Get('all/:id')
+  findAll(@Param('id') id: string) {
+    return this.workSpacesService.findAll(id);
   }
 
   @Get('one/:id')
