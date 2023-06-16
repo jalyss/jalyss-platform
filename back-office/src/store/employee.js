@@ -47,6 +47,7 @@ export const editEmployee = createAsyncThunk("employees/editEmployee", async (ar
  
   const response = await axios.patch(`${config.API_ENDPOINT}/employees/${id}`, args,configs);
   dispatch(fetchEmployee(id))
+  console.log("teeeeeeeeeeemchyyyyyy",response.data)
   return response.data;
 });
 
