@@ -80,7 +80,7 @@ export class ChatRoomService {
       },
       include: {
         participants: { include: { user: true } },
-        messages: { orderBy: { createdAt: 'desc' }, take: 1 },
+        messages:true,
       },
     });
   

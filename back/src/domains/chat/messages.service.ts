@@ -45,11 +45,12 @@ export class MessagesService {
     });
   }
 
-  async MessageSeen(chatRoomId: string, messageId: string) {
+  async MessageSeen(chatRoomId: string,userId:string) {
     return await this.prisma.chatMessage.updateMany({
       where: {
         chatRoomId,
-        id: messageId,
+        seen:false,
+       
       },
       data: {
         seen: true,

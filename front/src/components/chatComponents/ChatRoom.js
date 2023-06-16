@@ -7,32 +7,42 @@ import {
   Typography,
   Badge
 } from "@mui/material";
-import { CircleDashed, MagnifyingGlass ,BookOpen} from "phosphor-react";
+import { CircleDashed, MagnifyingGlass, BookOpen, Checks } from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import Search from "../Search";
 import SearchIconWrapper from "../SearchIconWrapper";
 import StyledInputBase from "../SearchInputBase";
 import Icon from "../../assets/styles/profile.png";
 import StyledBadge from "../StyledBadge";
-import { useSelector ,useDispatch} from "react-redux";
-import { fetchOneRoom } from "../../store/chat";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 
 
 
-const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent,setSelectedUser }) => {
+const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelectedUser ,screen}) => {
 
-  const authStore = useSelector(state => state.auth)
-  const chatStore = useSelector((state)=>state.chat)
-  const {chat} = chatStore
+  const authStore = useSelector(state => state.auth?.me)
+  const chatStore = useSelector((state) => state.chat)
+  const { notSeen } = chatStore
+  let number = notSeen
   const dispatch = useDispatch();
 
   const [searchText, setSearchText] = useState("");
-  
-  const filteredChatRooms = chatRoomList.filter((chatRoom) =>{ 
-   let  name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
-    return ( name.toLowerCase().includes(searchText.toLowerCase()))}
- 
-);
+  const [identifier, setIdentifier] = useState("")
+
+
+
+
+  useEffect(() => {
+    dispatch(notSeenMessages(identifier))
+  }, [number])
+
+  const filteredChatRooms = chatRoomList.filter((chatRoom) => {
+    let name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
+    return (name.toLowerCase().includes(searchText.toLowerCase()))
+  }
+
+  );
 
   const ChatElement = () => {
     return (
@@ -44,7 +54,10 @@ const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent,setSelectedUser
           backgroundColor: "#fff",
         }}
       >
-        {filteredChatRooms.map((chatRoom,i) => {
+        {filteredChatRooms.map((chatRoom, i) => {
+          setIdentifier(chatRoom.id);
+
+
           let name = ''
           let user = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0]
           if (chatRoom.name === null)
@@ -57,11 +70,12 @@ const ChatRoom = ({ chatRoomList,setRoom,room,setActiveComponent,setSelectedUser
               direction="row"
               alignItems="center"
               justifyContent="space-between"
-key={i}
-onClick={()=>{
-  setSelectedUser(user)
-  setActiveComponent("conversation")
-}}
+              key={i}
+              onClick={() => {
+                setSelectedUser(user)
+                if (screen === 'md')
+                setActiveComponent("conversation")
+              }}
             >
               <Stack direction="row" spacing={2}>
                 <StyledBadge
@@ -79,9 +93,15 @@ onClick={()=>{
               </Stack>
               <Stack spacing={2} alignItems="center">
                 <Typography sx={{ fontWeight: 600 }} variant="caption">
-                 {chatRoom.messages[0].createdAt.slice(11,16)}
+                  {chatRoom.messages[0].createdAt.slice(11, 16)}
                 </Typography>
-                <Badge color="primary" badgeContent={2}></Badge>
+                {chatRoom.messages[0].userId === authStore?.id ? (<Checks size={25} weight="thin" color="green" />) :
+
+                  (
+                    <Checks size={25} weight="light" color="blue" />
+
+                  )}
+                {/* <Badge color="primary" badgeContent={number}></Badge> */}
               </Stack>
             </Stack>
           )
@@ -96,7 +116,7 @@ onClick={()=>{
       sx={{
         position: "relative",
         height: "100vh",
-        width: 320,
+        width: '100%',
         backgroundColor: "#F8FAFF",
         boxShadow: "0px 0px 2px",
       }}
@@ -117,7 +137,7 @@ onClick={()=>{
             <SearchIconWrapper>
               <MagnifyingGlass color="#57385c" />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search"  onChange={(e) => setSearchText(e.target.value)}/>
+            <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
           </Search>
           <Divider />
           <ChatElement />

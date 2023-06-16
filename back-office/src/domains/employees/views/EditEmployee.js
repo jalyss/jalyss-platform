@@ -118,10 +118,11 @@ function EditEmployee() {
                 ref={cropperRef}
               /></DialogContent>      
          </Dialog> */}
-        <div className="d-flex flex-wrap">
-        <label id="image">{t('image')}</label>
+        <div className="d-flex flex-wrap justify-content-center">
+        {/* <label id="image">{t('image')}</label> */}
             <div class="image-upload">
              
+            <img src={preview?preview:employee?.avatar?.path} alt="taswira" />
 
               { editMode && (
                 <input

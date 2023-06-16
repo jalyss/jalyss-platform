@@ -73,7 +73,7 @@ export class ChatGateway {
     this.server.emit(`connected-users/${id}`, connectedUserList);
   }
 
-  async disconnect(id: string) {
+  private async disconnect(id: string) {
     let connectedUser = await this.PrismaService.connectedUser.findFirst({
       where: { userId: id },
     });
@@ -131,10 +131,14 @@ export class ChatGateway {
     this.server.emit(`msgToClient/${chatRoomId}`, response);
   }
 
-  @SubscribeMessage('messageSeen')
+
+
+
+  @SubscribeMessage('msgSeen')
   async handleSeenMessage(client : Socket , payload : { chatRoomId : string , messageId : string,userId: string} ) {
     const { chatRoomId, messageId, userId} = payload;
-    await this.MessageService.MessageSeen(chatRoomId, messageId);
+    await this.MessageService.MessageSeen(chatRoomId,userId);
+    console.log(messageId,userId);
     this.server.to(chatRoomId).emit('msgSeen',{messageId,userId});
   }
 
