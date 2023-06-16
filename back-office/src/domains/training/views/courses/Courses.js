@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{  useEffect}from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -9,13 +9,22 @@ import { dividerClasses } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchcours } from '../../../../store/courses';
 
  const Courses = () => {
-
+  const coursStore= useSelector((state)=>state.courses.courses.items)
+const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate()
   const open = Boolean(anchorEl);
   //event for button drop down 
+
+  useEffect(()=>{
+    dispatch(fetchcours()) 
+    }, [])
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -25,6 +34,12 @@ import { useNavigate } from 'react-router-dom';
   const handle = () => {
     navigate(`/Coursdetail`)
   };
+
+
+  
+
+
+
   return (
     <div>
           <div className='button category'>
@@ -63,21 +78,23 @@ import { useNavigate } from 'react-router-dom';
         </div>
 
           </div>
-         <div className='cart'>
-    
-        <Card sx={{ maxWidth: 250 ,marginTop:'100px',boxShadow:20 }}>
+         <div className='cart'  style={{ marginLeft:30, marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3 ,1fr)',gap:'20px'}}>
+        {coursStore.map((el,i)=>(
+        <Card style={{width:300}}>
         <CardMedia
         component="img"
         alt="green iguana"
         height="140"
-        image="https://images.pexels.com/photos/4443160/pexels-photo-4443160.jpeg?auto=compress&cs=tinysrgb&w=600"
+        image="https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600"
       />
          <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Titel 
+        
+        titel : {el.title}
+         
         </Typography>
         <Typography variant="body2" color="text.secondary">
-        Description
+       category :{el.category.nameAr}
         </Typography>
        
        </CardContent>
@@ -85,27 +102,8 @@ import { useNavigate } from 'react-router-dom';
       
         <Button size="small" onClick={() => handle()}>see More</Button>
        </CardActions>
-       </Card>
-       <Card sx={{ maxWidth: 250 ,marginTop:'-280px',marginLeft:'300px',boxShadow:20}}>
-        <CardMedia
-        component="img"
-        alt="green iguana"
-        height="140"
-        image="https://images.pexels.com/photos/4218864/pexels-photo-4218864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      />
-         <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Titel 
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-        Description
-        </Typography>
-       </CardContent>
-       <CardActions>
+       </Card>))}
       
-        <Button size="small" onClick={() => handle()}>see More</Button>
-       </CardActions>
-       </Card>
        </div>
        </div> 
   )

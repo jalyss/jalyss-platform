@@ -10,6 +10,11 @@ import author from './author';
 import category from './category';
 import publishingHouse from './publishingHouse';
 import command from './command';
+import sessions from './sessions';
+import courses from './courses';
+import coches from './coches';
+import sessiontyps from './sessiontyps';
+import tarif from './tarif';
 
 export const store = configureStore({
   reducer: {
@@ -23,8 +28,13 @@ export const store = configureStore({
     author,
     category,
     publishingHouse,
-    command
-    
+    command,
+    sessions,
+    courses,
+    coches,
+    sessiontyps,
+    tarif
+
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -16,7 +16,7 @@ import { size } from 'draft-js/lib/DefaultDraftBlockRenderMap';
 
 function UserList() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
+  const [elementId, setElementId]= useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const columns = [

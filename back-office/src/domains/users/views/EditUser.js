@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { showErrorToast, showSuccessToast } from '../../../utils/toast'

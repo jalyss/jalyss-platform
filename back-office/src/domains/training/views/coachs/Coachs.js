@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,7 +9,9 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';  
 import Button from '@mui/material/Button';
-  import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux';
+
 import {
   MDBCard,
   MDBCardImage,
@@ -19,6 +21,7 @@ import {
   MDBRow,
   MDBCol
 } from 'mdb-react-ui-kit';
+import { fetchcoaches } from '../../../../store/coches';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -67,13 +70,24 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
  function Coachs() {
+  const coacheStore= useSelector((state)=>state.coches.coaches.items)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
+useEffect(()=>{
+  dispatch(fetchcoaches())
+ },[])
+
+
+  
   const handleEditClick = () => {
     navigate(`/Coachs`)
   };
+  // {console.log('lzem tji daata',coacheStore)}
 
+ 
   return (
+    <div>
   <div className='serchbare'>
      <Search>
             <SearchIconWrapper>
@@ -83,86 +97,31 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />
-          </Search> 
-    <div className='crdcoches' style={{maxWidth:1005,}}>
+          </Search>
+           </div>
+    <div className='crdcoches' style={{marginLeft:'20px', marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'20px'}}>
+      {coacheStore.map((el,key)=>(
     <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
-      <MDBCol>
+      <MDBCol style={{width:300}}>
         <MDBCard>
           <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
+            src='https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
             alt='...'
             position='top'
           />
           <Button size="small" onClick={() => handleEditClick()}>see More</Button>
           <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
+            <MDBCardTitle>Name:{el.user.fullNameEn}</MDBCardTitle>
             <MDBCardText>
-             Email:
+           Email: {el.user.email}
             </MDBCardText>
             <MDBCardText>
-             Cours:
+           Tel: {el.user.tel}
             </MDBCardText >
           </MDBCardBody>
         </MDBCard>
       </MDBCol>
-      <MDBCol>
-        <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
-            alt='...'
-            position='top'
-          />
-            <Button size="small">see More</Button>
-          <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
-            <MDBCardText>
-             Email:
-            </MDBCardText>
-            <MDBCardText>
-             Cours:
-            </MDBCardText >
-          </MDBCardBody>
-        </MDBCard>
-      </MDBCol>
-      <MDBCol>
-        <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
-            alt='...'
-            position='top'
-          />
-           <Button size="small">see More</Button>
-          <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
-            <MDBCardText>
-             Email:
-            </MDBCardText>
-            <MDBCardText>
-             Cours:
-            </MDBCardText >
-          </MDBCardBody>
-        </MDBCard>
-      </MDBCol>
-      <MDBCol>
-        <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
-            alt='...'
-            position='top'
-          />
-          <Button size="small">see More</Button>
-          <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
-            <MDBCardText>
-             Email:
-            </MDBCardText>
-            <MDBCardText>
-             Cours:
-            </MDBCardText >
-          </MDBCardBody>
-        </MDBCard>
-      </MDBCol>
-    </MDBRow>
+    </MDBRow>))}
     </div>
     </div>
   );

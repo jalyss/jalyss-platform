@@ -1,10 +1,21 @@
+import React,{useEffect} from 'react';
 import Table from 'react-bootstrap/Table';
-
+import {useDispatch,useSelector} from 'react-redux';
+import { fetchsessionstypes } from '../../../../store/sessiontyps';
 
 
 
 
 function Types() {
+  const typeStore= useSelector((state)=>state.sessiontyps.types.items)
+  const dispatch = useDispatch()
+  
+
+  useEffect(()=>{
+    dispatch(fetchsessionstypes())
+   },[])
+
+  {console.log('heyy',typeStore)}
   return (
 
 
@@ -19,23 +30,14 @@ function Types() {
         </tr>
       </thead>
       <tbody>
+        {typeStore.map((el,key)=>(
         <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td colSpan={2}>Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
+          <td>{key}</td>
+          <td>{el.id}</td>
+          <td>{el.title}</td>
+          <td>{el.sessions}</td>
+        </tr>))}
+       
       </tbody>
     </Table>
   );
