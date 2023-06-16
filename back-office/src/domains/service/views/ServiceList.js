@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchServices } from "../../../store/service";
 import { Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 export default function ServiceList() {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export default function ServiceList() {
   return (
     <div>
       <Link to="create-service">
-        <button>Create a new service</button>{" "}
+        <Button>Create a new service</Button>
       </Link>
       <div class="card mb-3">
         {servicesStore.items.map((elem, i) => (
@@ -37,7 +38,7 @@ export default function ServiceList() {
                   longer.
                 </p>
               </div>
-              <Link to={`detail/${elem.id}`}>Go to Details</Link>
+              <Link to={`service/${elem.id}`}>Go to Details</Link>
             </div>
           </div>
         ))}

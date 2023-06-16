@@ -3,17 +3,6 @@ import axios from "axios";
 import config from "../configs";
 
 
-
-export const fetchspaces = createAsyncThunk("spaces/fetchSpaces", async (args) => {
-    const response = await axios.get(`${config.API_ENDPOINT}/spaces`, {
-      params: {
-        ...args,
-      },
-    });
-    return response.data;
-});
-
-
 // Async thunk for fetching spaces
 export const fetchSpaces = createAsyncThunk("work-spaces/work-spaces", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/work-spaces`);
@@ -21,23 +10,44 @@ export const fetchSpaces = createAsyncThunk("work-spaces/work-spaces", async () 
 });
 
 // Async thunk for fetching multiple spaces by ID
-export const fetchSpacesById = createAsyncThunk("work-spaces/fetchSpacesById",async (id) => {
+export const fetchSpacesById = createAsyncThunk("work-spaces/fetchSpacesById",async (serviceId) => {
       const response = await axios.get(
-        `${config.API_ENDPOINT}/work-spaces/all/${id}`
+        `${config.API_ENDPOINT}/work-spaces/all/${serviceId}`
       );
       return response.data;
   }
 );
 
 
-export const createService = createAsyncThunk(
-  "spaces/createSpace",
-  async (body) => {
-    const response = await axios.post(`${config.API_ENDPOINT}/work-spaces`, body);
-
+// Async thunk for fetching WorkSpaces
+export const fetchWorkSpaces = createAsyncThunk("workSpaces/workSpaces", async () => {
+    const response = await axios.get(`${config.API_ENDPOINT}/workSpaces`);
     return response.data;
-  }
-);
+  });
+  
+  // Async thunk for fetching a single WorkSpace by ID
+  export const fetchWorkSpace = createAsyncThunk(
+    "workSpaces/fetchWorkSpace",
+    async (id) => {
+
+        const response = await axios.get(
+          `${config.API_ENDPOINT}/workSpace/all/${id}`
+        );
+
+        return response.data;
+      
+    }
+  );
+  
+  export const createWorkSpace = createAsyncThunk(
+    "workSpaces/createWorkSpace",
+    async (body, { dispatch }) => {
+      const response = await axios.post(`${config.API_ENDPOINT}/work-spaces`, body);
+      dispatch(fetchWorkSpace(response.data));
+      return response.data;
+    }
+  );
+  
 
 // Create a slice for managing spaces
 export const spaceSlice = createSlice({

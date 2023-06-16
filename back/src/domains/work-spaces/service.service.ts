@@ -18,7 +18,12 @@ export class ServiceService {
   async findAll() {
     return this.prisma.service.findMany({
       include: {
-        workSpace: true,
+        workSpace: {
+          include: {
+            image: true,
+            MediaWorkSpace: { include: { media: true } },
+          },
+        },
         tarif: true,
         cover: true,
       },
@@ -32,7 +37,7 @@ export class ServiceService {
         OR: [{ id }, { identifier: id }],
       },
       include: {
-        workSpace: true,
+        workSpace: { include: { image: true } },
         tarif: true,
         MediaService: { include: { media: true } },
         cover: true,

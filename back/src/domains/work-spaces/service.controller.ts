@@ -21,6 +21,7 @@ export class ServiceController {
   findAll() {
     return this.serviceService.findAll();
   }
+  
 
   @Get('one/:id')
   findOne(@Param('id') id: string) {

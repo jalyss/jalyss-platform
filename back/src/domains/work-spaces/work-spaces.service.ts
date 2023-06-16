@@ -13,12 +13,11 @@ export class WorkSpacesService {
     });
   }
 
-  findAll(id: string) {
+  findAll() {
     return this.prisma.workSpace.findMany({
-      where: {
-        id,
-      },
+      include:{MediaWorkSpace:true},
     });
+
   }
 
   async findOne(id: string) {

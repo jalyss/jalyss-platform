@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 // import { showErrorToast, showSuccessToast } from "../../";
 import axios from "axios";
-import { createWorkSpace, fetchWorkSpaces } from "../../../store/workSpace";
+import { createWorkSpace, fetchWorkSpaces } from "../../../store/space";
 
 export default function CreateWorkSpace() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const params = useParams();
+  const {serviceId} = useParams();
 
 
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ export default function CreateWorkSpace() {
   const [amenities, setAmenities] = useState("");
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState("");
-  const serviceId=params.id
+
 
   const workSpaceStore = useSelector((state) => state.workSpace);
 

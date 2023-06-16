@@ -24,9 +24,7 @@ export class BlogsController {
   }
 
   @Get()
-  findAll( @Query() filters:FilterBlog
-
-  ){
+  findAll( @Query() filters:FilterBlog){
     return this.blogsService.findAll(filters)
   }
  

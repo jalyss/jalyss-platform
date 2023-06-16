@@ -41,8 +41,9 @@ import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
 import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
 import ServiceList from "../domains/service/views/ServiceList";
-import CreateService from "../domains/service/views/CreateService";
+import OneService from "../domains/service/views/OneService";
 import ServiceDetails from "../domains/service/views/ServiceDetails";
+import CreateService from "../domains/service/views/CreateService";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -64,8 +65,10 @@ function Router() {
             <Route path="space" element={<Service />}>
               <Route index element={<ServiceList />} />
               <Route path="create-service" element={<CreateService />} />
-              <Route path="detail/:id" element={<ServiceDetails/>} />
-              <Route path="create/:id" element={<CreateWorkSpace />} />
+              <Route path="service/:serviceId" element={<OneService/>}>
+                <Route index  element={<ServiceDetails />}/>
+                <Route path="create-workspace" element={<CreateWorkSpace />} />
+              </Route>
             </Route>
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />

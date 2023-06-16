@@ -1,33 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { fetchServiceById } from "../../../store/service";
 
-import { useNavigate } from "react-router-dom";
-import { fetchSpacesById } from "../../../store/space";
+import AddButton from "../../../components/buttons/AddButton";
+import { BsPersonWorkspace } from "react-icons/bs";
 
 // import CreateWorkSpace from '../views/CreateWorkSpace';
 
 export default function ServiceDetails() {
-  const dispatch = useDispatch();
-  const store = useSelector((state) => state.service.service);
-  // const spacesStore = useSelector((state) => state.space.spaces);
-  
-  const params = useParams();
+  const { serviceId } = useParams();
   const navigate = useNavigate();
-  const service = store;
-  const id = params.id;
+  const dispatch = useDispatch();
+  const service = useSelector((state) => state.service.service);
+
   useEffect(() => {
-    dispatch(fetchServiceById(id));
-    dispatch(fetchSpacesById(id));
+    dispatch(fetchServiceById(serviceId));
+    // dispatch(fetchSpacesById(id));
   }, [dispatch]);
 
-
-  // console.log(spacesStore, "spaces");
+  // console.log(serviceW,"lol")
 
   return (
-    <div>
+    <div className="view">
       <div class="card mb-3">
         {service && (
           <div class="row no-gutters">
@@ -47,39 +44,43 @@ export default function ServiceDetails() {
           </div>
         )}
       </div>
-
-      <button onClick={() => navigate(`/space/create/` + `${params.id}`)}>
-        Create space
-      </button>
-
-      {/* <div class="card" style="width: 18rem;">
-  {spacesStore.items.map((elem, i) => (
-    <div key={i}>
-      <img class="card-img-top" src="..." alt="Card image cap" />
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
+      <div className="d-flex justify-content-end">
+        <AddButton
+          onClick={() => navigate(`create-workspace`)}
+          content="Create space"
+          startIcon
+          Icon={<BsPersonWorkspace />}
+        />
       </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">Cras justo odio</li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Vestibulum at eros</li>
-      </ul>
-      <div class="card-body">
-        <a href="#" class="card-link">
-          Card link
-        </a>
-        <a href="#" class="card-link">
-          Another link
-        </a>
-      </div>
-    </div>
-  ))}
-</div> */}
 
+      <div class="card">
+        {service?.workSpace.map((elem, i) => (
+          <div key={i}>
+            <img
+              class="card-img-top"
+              src={elem.image?.path}
+              alt={elem.image?.alt}
+            />
+            <div class="card-body">
+              <h5 class="card-title">{elem.name}</h5>
+              <p class="card-text">{elem.description}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+            <div class="card-body">
+              <a href="#" class="card-link">
+                Card link
+              </a>
+              <a href="#" class="card-link">
+                Another link
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

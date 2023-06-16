@@ -1255,7 +1255,7 @@ async function main() {
   }
 
   // create dummy services
-  let serviceIds = [];
+  let serviceIds: string[] = [];
 
   const serviceNames = ['Private Space', 'Meeting Space', 'Co-Working Zone'];
   let MediaServiceIds = [];
@@ -1285,7 +1285,7 @@ async function main() {
             path: 'https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png',
           },
         },
-        perHour:i!==2?true:false,
+        perHour: i !== 2 ? true : false,
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
       },
@@ -1295,18 +1295,25 @@ async function main() {
   }
 
   console.log(serviceIds);
-
+  let coverWorkSpace = await prisma.media.create({
+    data: {
+      alt: 'bureau Sfax',
+      extension: 'jpg',
+      type: 'image',
+      path: 'https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png',
+    },
+  });
   let workSpacePrivateSpace = await prisma.workSpace.create({
     data: {
-      name: 'bureau sfax',
-
       serviceId: serviceIds[0],
+      name: 'bureau sfax',
+      imageId: coverWorkSpace.id,
     },
   });
   let workSpaceMeetingSpace = await prisma.workSpace.create({
     data: {
       name: 'salle de reunion sfax',
-
+      imageId: coverWorkSpace.id,
       serviceId: serviceIds[1],
     },
   });
@@ -1314,7 +1321,7 @@ async function main() {
   let workSpaceCoworkingSpace = await prisma.workSpace.create({
     data: {
       name: 'open space sfax',
-
+      imageId: coverWorkSpace.id,
       serviceId: serviceIds[2],
     },
   });
@@ -1431,26 +1438,28 @@ async function main() {
   }
 
   // create dummy blogs
-  
+
   for (let i = 0; i < 50; i++) {
     const newBlog = await prisma.blog.create({
       data: {
         content: 'hello from the other side.',
-        title: 'My Blog Post '+i,
-        authorId: users[Math.floor(Math.random()*users.length)].id,
-        categoryId: articleCategoryIds[Math.floor(Math.random()*articleCategoryIds.length)],
-        confirm:i%2===0?true:false
+        title: 'My Blog Post ' + i,
+        authorId: users[Math.floor(Math.random() * users.length)].id,
+        categoryId:
+          articleCategoryIds[
+            Math.floor(Math.random() * articleCategoryIds.length)
+          ],
+        confirm: i % 2 === 0 ? true : false,
       },
     });
-    for(let i=0;i<Math.floor(Math.random()*10);i++){
+    for (let i = 0; i < Math.floor(Math.random() * 10); i++) {
       await prisma.view.create({
-        data:{
-          blogId:newBlog.id
-        }
-      })
+        data: {
+          blogId: newBlog.id,
+        },
+      });
     }
   }
-  
 }
 
 // execute the main function
