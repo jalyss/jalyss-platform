@@ -65,7 +65,7 @@ Price :{el.price}
 
         </Typography>
         <Typography variant="body2" color="text.secondary">
-       {el.duration}
+      Duration: {el.duration}
 
 
         </Typography>

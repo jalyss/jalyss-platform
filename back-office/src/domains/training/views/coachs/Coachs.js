@@ -88,7 +88,7 @@ useEffect(()=>{
  
   return (
     <div>
-  <div className='serchbare'>
+  <div className='serchbare' >
      <Search>
             <SearchIconWrapper>
               <SearchIcon />
