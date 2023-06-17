@@ -29,6 +29,7 @@ import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
 
 import ChartTabs from "../domains/charts/ChartTabs";
+import Profile from "../pages/Profile";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -48,6 +49,7 @@ function Router() {
         {auth.meAdmin ? (
           <Route path="/" element={auth.meAdmin.isAdmin ? <Main /> : <Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
