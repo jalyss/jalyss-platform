@@ -39,6 +39,9 @@ import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
+import Blogs from "../domains/blogs/Blogs";
+import BlogsList from "../domains/blogs/views/BlogsList";
+import DetailBlog from "../domains/blogs/views/DetailBlog";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -66,6 +69,11 @@ function Router() {
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
               <Route path="edit/:employeeId" element={<EditEmployee />} />
+            </Route>
+
+            <Route path="blogs" element={<Blogs />}>
+              <Route index element={<BlogsList/>} />
+              <Route path="detail" element={<DetailBlog />} />
             </Route>
 
             <Route path="articles" element={<Article />}>
