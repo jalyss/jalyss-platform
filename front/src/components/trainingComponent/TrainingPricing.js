@@ -13,7 +13,7 @@ const TrainingPricing = () => {
         mb={40}
       />
 
-<div className="d-flex flex-wrap justify-content-center align-items-center gap-5 container mb-5">
+<div className="d-flex flex-wrap justify-content-center align-items-center container gap-5 mb-5" >
   {price.map((elem, i) => (
     <div className="text-center" key={i}>
       <div className="bg-white p-5 rounded-lg shadow">
@@ -41,9 +41,9 @@ const TrainingPricing = () => {
             </li>
           ))}
         </ul>
-        <a className="btn btn-block p-2 shadow rounded-pill" style={{backgroundColor:"#48184c",color:"#fff"}}>
+        <button className="btn btn-block p-2 shadow rounded-pill " style={{backgroundColor:"#48184c",color:"#fff",width:"200px"}}>
           Subscribe
-        </a>
+        </button>
       </div>
     </div>
   ))}

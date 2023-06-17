@@ -35,7 +35,6 @@ function FeedBack() {
                       width="35"
                       style={{ marginBottom: '10px', marginLeft: '10px' }}
                       alt="Like"
-                      onClick={()=>{ }}
                     />
                   </span>
                   <span className={`text4 mx-2 ${elem.isUpvoted ? 'text3o' : ''}` }>{elem.upvotes}</span>

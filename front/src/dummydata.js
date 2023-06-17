@@ -125,8 +125,8 @@ export const courses = [
     description: "Learn the basics of Python programming language.",
     duration: "2 hours",
     category: "Programming",
-    startTime: "2023-06-15 09:00:00",
-    endTime: "2023-06-15 11:00:00",
+    startTime: "2023-06-15",
+    endTime: "2023-06-15",
     type: "Live",
     numberOfLectures: 1,
     numberOfStudents: 50,
@@ -151,8 +151,8 @@ export const courses = [
       "Explore the essentials of web development using HTML, CSS, and JavaScript.",
     duration: "3 hours",
     category: "Web Development",
-    startTime: "2023-06-17 14:00:00",
-    endTime: "2023-06-17 17:00:00",
+    startTime: "2023-06-17",
+    endTime: "2023-06-17",
     type: "Recorded",
     numberOfLectures: 1,
     numberOfStudents: 75,
@@ -171,8 +171,8 @@ export const courses = [
     description: "Discover the basics of data science and its applications.",
     duration: "2.5 hours",
     category: "Data Science",
-    startTime: "2023-06-20 10:30:00",
-    endTime: "2023-06-20 13:00:00",
+    startTime: "2023-06-20 ",
+    endTime: "2023-06-20 ",
     type: "Live",
     numberOfLectures: 1,
     numberOfStudents: 40,
@@ -196,8 +196,8 @@ export const courses = [
     description: "Learn various techniques and principles of graphic design.",
     duration: "2 hours",
     category: "Design",
-    startTime: "2023-06-22 18:00:00",
-    endTime: "2023-06-22 20:00:00",
+    startTime: "2023-06-22",
+    endTime: "2023-06-22 ",
     type: "Live",
     numberOfLectures: 1,
     numberOfStudents: 30,
@@ -217,8 +217,8 @@ export const courses = [
       "Explore the fundamentals of machine learning algorithms and concepts.",
     duration: "2.5 hours",
     category: "Machine Learning",
-    startTime: "2023-06-25 15:00:00",
-    endTime: "2023-06-25 17:30:00",
+    startTime: "2023-06-25 ",
+    endTime: "2023-06-25 ",
     type: "Recorded",
     numberOfLectures: 1,
     numberOfStudents: 60,
@@ -477,50 +477,7 @@ export const lectures = [
     endAt: "12:00 PM",
     date: "2023-06-22",
   },
-  {
-    id: 3,
-    title: "Public Speaking Mastery",
-    content:
-      "Master the art of public speaking and deliver impactful presentations.",
-    coaches: [
-      {
-        name: "Emily Anderson",
-        avatar:
-          "https://media.licdn.com/dms/image/C4E03AQEG_lZQT3STbg/profile-displayphoto-shrink_800_800/0/1654324442718?e=2147483647&v=beta&t=BKW8PpuZXxQBUz10Grb6xHtN1-4DXKUMSUUsUXG9MBI",
-      },
-    ],
-    whatYouWillLearn: [
-      "Overcoming stage fright and building confidence",
-      "Crafting engaging presentations",
-      "Developing effective body language and vocal techniques",
-      "Engaging with the audience and handling Q&A sessions",
-    ],
-    startAt: "2:00 PM",
-    endAt: "4:00 PM",
-    date: "2023-06-23",
-  },
-  {
-    id: 4,
-    title: "Time Management Techniques",
-    content:
-      "Learn time management strategies to enhance productivity and achieve goals.",
-    coaches: [
-      {
-        name: "Michael Johnson",
-        avatar:
-          "https://i.pinimg.com/564x/2f/30/5e/2f305eb98bf63ddedb556d383443c7ad.jpg",
-      },
-    ],
-    whatYouWillLearn: [
-      "Setting clear goals and priorities",
-      "Planning and organizing tasks effectively",
-      "Delegating and outsourcing when necessary",
-      "Managing distractions and staying focused",
-    ],
-    startAt: "11:00 AM",
-    endAt: "1:00 PM",
-    date: "2023-06-24",
-  },
+  
 ];
 
 export const navData = [

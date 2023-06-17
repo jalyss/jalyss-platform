@@ -39,7 +39,6 @@ const TrainingCourses = () => {
                 cover={course.cover}
                 category={course.category}
                 title={course.title}
-                duration={course.time}
                 startTime={course.startTime}
                 endTime={course.endTime}
                 onClick={() => navigate(`/sessions/${course.id}`)} 

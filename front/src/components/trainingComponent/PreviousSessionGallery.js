@@ -17,7 +17,8 @@ function PreviousSessionGallery() {
     'https://www.cidj.com/sites/default/files/2021-11/l-offre-de-formation-2022-du-cidj_3.png',
     'https://www.benin.campusfrance.org/sites/pays/files/benin/styles/mobile_visuel_principal_page/public/formations%20pro.jpg?itok=Fb6u0xbO'
   ]} 
- 
+ br={"20px"}
+ height={"450px"}
   />
   </div>
   )
