@@ -2,11 +2,11 @@ import React from "react";
 import Dropdown from "../components/DropDown";
 import start from "../img/start.png";
 import end from "../img/end.png";
+import cardCover from "../img/cardCover.jpg"
 function Card({
   cover,
   category,
   title,
-  author,
   avatar,
   createdAt,
   startTime,
@@ -25,7 +25,7 @@ function Card({
       ) : (
         <img
           className="blogItemCover"
-          src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+          src={cardCover}
           alt="cover"
           onClick={onClick}
         />

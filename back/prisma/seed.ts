@@ -1318,7 +1318,67 @@ async function main() {
     }
   }
   
+//create session 
+  let lectures=[]
+  let sessions=[]
+  let sHL = []
+
+  const search = (s,l) => {
+    return (
+  sHL.filter(e=>e.sessionId === s && e.lectureId === l).length === 0)
 }
+
+
+for (let i = 0; i < 50; i++) {
+  lectures.push(await prisma.lecture.create({
+    data: {
+      title: 'My Lecture ' + i,
+      content: 'Hello, this is a new lecture',
+    }
+  }));
+
+ sessions.push( await prisma.session.create({
+    data: {
+      title: 'My Session Post ' + i,
+      description: 'Hello, this is a new session',
+      startDate: new Date("2022-01-01"),
+      endDate: new Date("2022-02-02"),
+      categoryId: articleCategoryIds[Math.floor(Math.random() * articleCategoryIds.length)],
+      
+    },
+  }));
+  const newCoach = await prisma.coaching.create({
+    data: {
+      userId:users[Math.floor(Math.random() * users.length)].id,
+      lectureId:lectures[Math.floor(Math.random() * lectures.length)].id,
+    }
+  })
+  if(lectures.length && sessions.length){
+    let lectId = lectures[Math.floor(Math.random() * lectures.length)].id
+    let sesId = sessions[Math.floor(Math.random() * sessions.length)].id
+if(search(sesId,lectId)) {
+  sHL.push(await prisma.sessionHasLecture.create({
+      data : {sessionId:sesId , lectureId:lectId}
+    }))
+}
+    
+  }
+ 
+
+}
+
+
+
+
+
+
+
+
+
+
+}
+
+
 
 // execute the main function
 main()

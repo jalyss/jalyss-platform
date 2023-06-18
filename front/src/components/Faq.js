@@ -27,7 +27,7 @@ const Faq = () => {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography sx={{ width: '33%', flexShrink: 0 }}>
+              <Typography sx={{ width: '33%', flexShrink: 0, fontSize: '1.3rem' }}>
               {e.title}
               </Typography>
             </AccordionSummary>

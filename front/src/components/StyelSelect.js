@@ -13,6 +13,7 @@ function StyelSelect({ items, label }) {
         id="demo-simple-select"
         label={label}
         size="lg"
+        style={{width:"220px"}}
       >
         {items.map((item) => (
           <MenuItem key={item.value} value={item.value}>

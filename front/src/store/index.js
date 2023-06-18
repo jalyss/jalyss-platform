@@ -12,7 +12,7 @@ import auth from './auth'
 import blog from './blog' 
 import user from './user'
 import bookmark from './bookmarks'
-
+import session from './session'
 export const store = configureStore({
   reducer: {
     article,
@@ -27,6 +27,7 @@ export const store = configureStore({
     blog, 
     bookmark,
     user,
+    session
    
   },
   middleware: (getDefaultMiddleware) =>

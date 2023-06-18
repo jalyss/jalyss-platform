@@ -15,14 +15,27 @@ import KeyValueStyled from "../components/trainingComponent/KeyValueStyled";
 import PreviousSessionGallery from "../components/trainingComponent/PreviousSessionGallery";
 import FeedBack from "../components/trainingComponent/FeedBack";
 import SessionLecture from "../components/trainingComponent/SessionLecture";
+import cardCover from "../img/cardCover.jpg";
+import { fetchSession } from "../store/session";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function SessionDetails() {
   const [showMore, setShowMore] = useState(false);
   const { sessionId } = useParams();
-
-  const seletedSession = courses[sessionId];
+  const sessionStore = useSelector((state) => state.session);
+  const { session } = sessionStore;
+  const seletedSession = session;
+  const lec = seletedSession?.lectures
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchSession(sessionId));
+  }, [sessionId]);
+
+  console.log("sessio", session);
 
   const columnCount = Math.ceil(learningTopics.length / 2);
   const column1 = learningTopics.slice(0, columnCount);
@@ -36,13 +49,22 @@ function SessionDetails() {
         <span> &#8592;</span> <span>Go Back</span>
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-5 mb-5 mt-5">
-      <div className="d-flex justify-content-center align-items-center">
-          {" "}
-          <img
-            src={seletedSession.cover}
-            alt="sessionCover"
-            className="rounded img-fluid"
-          />
+        <div className="d-flex justify-content-center align-items-center">
+          {seletedSession?.cover ? (
+            <img
+              src={seletedSession.cover}
+              alt="sessionCover"
+              className="rounded img-fluid"
+            />
+          ) : (
+            <img
+              src={cardCover}
+              alt="sessionCover"
+              className="rounded img-fluid"
+              height={400}
+              width={600}
+            />
+          )}
         </div>
         <div>
           <div
@@ -51,64 +73,62 @@ function SessionDetails() {
               fontWeight: 600,
             }}
           >
-            {seletedSession.title}
+            {seletedSession?.title}
           </div>
 
-          <KeyValueStyled label="Category" value={seletedSession.category} />
-          <KeyValueStyled label="Duration" value={seletedSession.duration} />
+          <KeyValueStyled
+            label="Category"
+            value={seletedSession?.category?.nameEn}
+          />
+          {/* <KeyValueStyled label="Duration" value={seletedSession?.duration?} /> */}
 
-          <KeyValueStyled label="Type" value={seletedSession.type} />
+          {/* <KeyValueStyled label="Type" value={seletedSession?.type?} /> */}
           <KeyValueStyled
             label="Number of lectures"
-            value={seletedSession.numberOfLectures}
+            value={seletedSession?.lectures?.length}
           />
 
-          <KeyValueStyled
+          {/* <KeyValueStyled
             label=" Number of students"
-            value={seletedSession.numberOfLectures}
-          />
-          <KeyValueStyled label="Type" value={seletedSession.type} />
+            value={seletedSession?.numberOfLectures?}
+          /> */}
+          {/* <KeyValueStyled label="Type" value={seletedSession?.type?} /> */}
           <div className="d-flex gap-3">
             <div className="d-flex align-items-center fw-bold">Coaches:</div>
-            {seletedSession.coaches.map((coach, coachIndex) => (
-              <span
-                className="tt mt-2"
-                data-bs-placement="bottom"
-                title={coach.name}
-              >
-                <img
-                  key={coachIndex}
-                  src={coach.avatar}
-                  alt="avatar"
-                  className="rounded-circle"
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    margin: "0 5px",
-                  }}
-                />
-              </span>
-            ))}
+            {seletedSession?.lectures?.map((lecture, lectureIndex) =>
+              lecture.lectures.coaching.map((coach, coachIndex) => (
+                <span
+                  className="tt mt-2"
+                  data-bs-placement="bottom"
+                  title={coach.user.fullNameEn}
+                >
+                  {" "}
+                  <img
+                    key={coachIndex}
+                    src={coach.user.avatar?.path}
+                    alt="avatar"
+                    className="rounded-circle"
+                    style={{ width: "50px", height: "50px", margin: "0 5px" }}
+                  />{" "}
+                </span>
+              ))
+            )}
           </div>
           <div className="d-flex  justify-content-between mt-3">
             <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">
               {" "}
               <img src={start} height="20" width="20" alt="icon" />{" "}
-              <div>{seletedSession.startTime}</div>
+              <div>{seletedSession?.startDate.slice(0,10)}</div>
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center gap-2">
               <img src={end} height="20" width="20" alt="icon" />{" "}
-              <div>{seletedSession.endTime}</div>
+              <div>{seletedSession?.endDate.slice(0,10)}</div>
             </div>
           </div>
         </div>
-       
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">
-        <div
-          className="d-flex  gap-4"
-          style={{ display: "flex", flex: 1 }}
-        >
+        <div className="d-flex  gap-4" style={{ display: "flex", flex: 1 }}>
           <MDBCard
             className="text-white mb-3"
             style={{ alignSelf: "start", flex: 1 }}
@@ -179,7 +199,7 @@ function SessionDetails() {
         </div>
       </div>
 
-      <SessionLecture />
+      <SessionLecture lectures={lec} />
       <TrainingPricing />
       <PreviousSessionGallery />
       <FeedBack />

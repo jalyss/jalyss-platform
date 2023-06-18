@@ -103,9 +103,8 @@ model ArticleCategory {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   articles  Article[]
-
-  Blog    Blog[]
-  Lecture Lecture[]
+  Blog      Blog[]
+  Session   Session[]
 }
 
 model ChatRoom {
@@ -386,15 +385,41 @@ model SessionRequest {
 }
 
 model Session {
-  id          String                  @id @default(uuid())
-  title       String
-  description String
-  startDate   DateTime
-  endDate     DateTime
-  sessionType SessionHasSessionType[] // *many to many relation sessionType
-  lectures    SessionHasLecture[] // *many to many relation lecture 
-  tarifs      SessionTarif[] // * one to many relation to Session Tarif
+  id                String                  @id @default(uuid())
+  title             String
+  description       String
+  createdAt DateTime @default(now())
+  updatedAt      DateTime      @updatedAt
+  startDate         DateTime
+  endDate           DateTime
+  category          ArticleCategory         @relation(fields: [categoryId], references: [id])
+  categoryId        String
+  previousSesion    Session?                @relation(name: "prevSession", fields: [previousSessionId], references: [id])
+  previousSessionId String?
+  prevSession       Session[]               @relation("prevSession")
+  nextSesion        Session?                @relation(name: "nextSession", fields: [nextSessionId], references: [id])
+  nextSessionId     String?
+  nextSession       Session[]               @relation("nextSession")
+  sessionType       SessionHasSessionType[] // *many to many relation sessionType
+  lectures          SessionHasLecture[] // *many to many relation lecture 
+  tarifs            SessionTarif[] // * one to many relation to Session Tarif
+  whatYouWillLearn  WhatYouWillLearn[]
+  prerequire        Prerequire[]
+  media             Media[]
 }
+
+model WhatYouWillLearn {
+  id      String    @id @default(uuid())
+  content String
+  session Session[]
+}
+
+model Prerequire {
+  id      String    @id @default(uuid())
+  content String
+  session Session[]
+}
+
 
 //!join table between Session and SessionType
 model SessionHasSessionType {
@@ -426,8 +451,6 @@ model Lecture {
   id         String              @id @default(uuid())
   title      String
   content    String
-  category   ArticleCategory     @relation(fields: [categoryId], references: [id])
-  categoryId String
   sessions   SessionHasLecture[]
   assesments Assessments[]
   coaching   Coaching[]
@@ -490,6 +513,8 @@ model Media {
   MediaBlog    MediaBlog[]
   Employee     Employee[]
   Blog         Blog[]
+  Session      Session[]     
+
 }
 
 model MediaUser {

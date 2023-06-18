@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from "react";
 import MentorHome from "../components/MentorHome";
-import MentorDes from "../components/MentorDes";
-import MentorSteps from "../components/MentorSteps";
+
 import {
   MDBContainer,
   MDBRow,
@@ -41,8 +40,7 @@ function MentorPage() {
   return (
     <Fragment>
       <MentorHome />
-      {/* <MentorDes/>
-    <MentorSteps/> */}
+
       <MDBContainer fluid>
         <MDBRow className="justify-content-center align-items-center m-5">
           <MDBCard className="w-50">
@@ -62,13 +60,13 @@ function MentorPage() {
               />
 
               <MDBRow className="mt-4">
-                <MDBCol md="6" className="d-flex flex-wrap gap-3">
+                <MDBCol md="6" className="d-flex flex-wrap">
                   <FaBirthdayCake
-                    style={{ height: "20px", width: "20px" }}
+                    style={{ height: "20px", width: "20px"}}
                     className="mt-2 mx-2"
                   />
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <div >
+                    <div style={{width:"220px"}}>
                       <DatePicker
                         value={selectedDate}
                         onChange={handleDateChange}
@@ -77,7 +75,7 @@ function MentorPage() {
                   </LocalizationProvider>
                 </MDBCol>
 
-                <MDBCol md="6" className="d-flex flex-wrap mt-3">
+                <MDBCol md="6" className="d-flex flex-wrap ">
                   <FaTransgenderAlt
                     style={{ height: "20px", width: "20px" }}
                     className=" mx-2 mb-2"
@@ -110,6 +108,7 @@ function MentorPage() {
                   </div>
                 </MDBCol>
               </MDBRow>
+             
               <CustomMDBRow
                 Icon1={FaEnvelope}
                 Icon2={FaPhoneAlt}
@@ -118,38 +117,37 @@ function MentorPage() {
               />
 
               <MDBRow className="mt-4">
-              
-                
                 <MDBCol md="6" className="d-flex flex-wrap gap-3">
-        <FaMapMarkerAlt
-          style={{ height: "20px", width: "20px" }}
-          className="mt-2 "
-        />
-        <StyledInput label="adress"  />
-      </MDBCol>
-      <MDBCol md="6" className="d-flex flex-wrap gap-3 ">
+                  <FaMapMarkerAlt
+                    style={{ height: "20px", width: "20px" }}
+                    className="mt-2 "
+                  />
+                  <StyledInput label="adress" />
+                </MDBCol>
+                <MDBCol md="6" className="d-flex flex-wrap gap-3 ">
+                 
                   <FaCalendarAlt
                     style={{ height: "20px", width: "20px" }}
                     className="mt-2 mx-2"
-                  />{" "}
-               
-                    <StyelSelect
-                      items={[
-                        { value: 10, label: "Ten" },
-                        { value: 20, label: "Twenty" },
-                        { value: 30, label: "Thirty" },
-                      ]}
-                      label={"Age"}
-                    
-                    />
-              
+                  />
+                  <StyelSelect
+                    items={[
+                      { value: 10, label: "Ten" },
+                      { value: 20, label: "Twenty" },
+                      { value: 30, label: "Thirty" },
+                    ]}
+                    label={"Age"}
+                  />
                 </MDBCol>
               </MDBRow>
 
-              <div className="fs-5 mt-5" style={{ fontWeight: "50px" }}>
+              <div className=" fs-5 mt-5" style={{ fontWeight: "50px" }}>
                 What is the best time to contact you?
                 <hr style={{ left: 0, bottom: 0, marginTop: "5px" }} />
-                <div className="d-flex  flex-wrap gap-3" style={{ marginTop: "30px" }}>
+                <div
+                  className="d-flex flex-wrap gap-3"
+                  style={{ marginTop: "30px" }}
+                >
                   {" "}
                   <FaClock
                     style={{ height: "20px", width: "20px" }}
