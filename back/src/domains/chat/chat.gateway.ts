@@ -87,6 +87,7 @@ export class ChatGateway {
     this.server.emit(`disconnect/${id}`);
     await this.connectedUsersList();
   }
+ 
 
   private async connectedUsersList() {
     let connectedUserList = await this.PrismaService.connectedUser.findMany({
@@ -146,7 +147,7 @@ export class ChatGateway {
 
   @SubscribeMessage('create-chat-room')
   async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
-    console.log('Received', payload);
+
 
     const { senderId, ...rest } = payload;
     const response = await this.ChatRoomService.create(rest, senderId);
@@ -168,7 +169,7 @@ export class ChatGateway {
         (a, b) =>
           b.messages[0].createdAt.getTime() - a.messages[0].createdAt.getTime(),
       );
-      console.log(sortedRooms);
+
 
       this.server.emit(`chat-room/${e.userId}`, sortedRooms);
     });

@@ -24,8 +24,6 @@ function EditUser() {
   const [editMode, setEditMode] = useState(false)
   const [avatar, setAvatar] = useState(null)
   const { userId } = useParams()
-
-
   const [preview, setPreview] = useState(null)
   const [openCrop, setOpenCrop] = useState(false);
   const [opp, setOpp] = useState(null);

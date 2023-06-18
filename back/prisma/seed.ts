@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { Domain, create } from 'domain';
 import * as bcrypt from 'bcrypt';
-import { domainToUnicode } from 'url';
+
 // initialize Prisma Client
 const prisma = new PrismaClient();
 
@@ -1258,17 +1257,37 @@ async function main() {
   // create dummy services
   let serviceIds = [];
 
-  const serviceNames = [
-    'Domicilation',
-    'Private Space',
-    'Meeting Space',
-    'Co-Working Zone',
-  ];
+  const serviceNames = ['Private Space', 'Meeting Space', 'Co-Working Zone'];
+  let MediaServiceIds = [];
 
+  for (let i = 0; i < 6; i++) {
+    let media = await prisma.media.create({
+      data: {
+        path: 'https://coworker.imgix.net/photos/tunisia/tunis/work-zone/7-1560519620.jpg?w=800&h=0&q=90&auto=format,compress&fit=crop&mark=/template/img/wm_icon.png&markscale=5&markalign=center,middle',
+        extension: 'jpg',
+        type: 'image',
+      },
+    });
+
+    MediaServiceIds.push(media.id);
+  }
   for (let i = 0; i < serviceNames.length; i++) {
     let service = await prisma.service.create({
       data: {
+        MediaService: {
+          create: MediaServiceIds.map((mediaId) => ({ mediaId })),
+        },
+        cover: {
+          create: {
+            alt: serviceNames[i],
+            extension: 'jpg',
+            type: 'image',
+            path: 'https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png',
+          },
+        },
+        perHour:i!==2?true:false,
         name: serviceNames[i],
+        identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
       },
     });
 
@@ -1276,6 +1295,120 @@ async function main() {
   }
 
   console.log(serviceIds);
+
+  let workSpacePrivateSpace = await prisma.workSpace.create({
+    data: {
+      name: 'bureau sfax',
+
+      serviceId: serviceIds[0],
+    },
+  });
+  let workSpaceMeetingSpace = await prisma.workSpace.create({
+    data: {
+      name: 'salle de reunion sfax',
+
+      serviceId: serviceIds[1],
+    },
+  });
+
+  let workSpaceCoworkingSpace = await prisma.workSpace.create({
+    data: {
+      name: 'open space sfax',
+
+      serviceId: serviceIds[2],
+    },
+  });
+  let tarifPrivateSpace1 = await prisma.tarif.create({
+    data: {
+      duration: 'trimestre(299DT)',
+      price: 299,
+      description: 'aaaaaaaaaa',
+      serviceId: serviceIds[0],
+    },
+  });
+
+  let tarifPrivateSpace2 = await prisma.tarif.create({
+    data: {
+      duration: 'YEAR',
+      price: 2777,
+      description:
+        'We provide several coworking spaces with flexible access that extends to 24 hours and 7 days a week for freelancers, business owners, and team members.By deciding on the number of workdays every month, you can further customize your experience.To grow your business in a setting that is both professional and social, reserve a spot in one of our coworking spaces.',
+      serviceId: serviceIds[0],
+    },
+  });
+  let tarifMeetingSpace1 = await prisma.tarif.create({
+    data: {
+      name: 'Meeting Room',
+      capacity: '2 to 4 people',
+      price: 25,
+      pricePerDay: 159,
+      description: 'Optical fiber , Smart TV , White board',
+      serviceId: serviceIds[1],
+    },
+  });
+  let tarifMeetingSpace2 = await prisma.tarif.create({
+    data: {
+      name: 'Meeting Room',
+      capacity: '6 to 8 people',
+      price: 30,
+      pricePerDay: 189,
+      description: 'Optical fiber , Smart TV , White board',
+      serviceId: serviceIds[1],
+    },
+  });
+  let tarifMeetingSpace3 = await prisma.tarif.create({
+    data: {
+      name: 'Training Room',
+      capacity: '15 people',
+      price: 40,
+      pricePerDay: 259,
+      description: 'Optical fiber , Video Projector, White board',
+      serviceId: serviceIds[1],
+    },
+  });
+  let tarifCoWorkingZone1 = await prisma.tarif.create({
+    data: {
+      name: 'Day Pass',
+      duration: 'Day',
+      capacity: 'per persone',
+      price: 25,
+      description: 'Wifi , Café, Imprimante,Call box privée',
+      serviceId: serviceIds[2],
+    },
+  });
+  let tarifCoWorkingZone2 = await prisma.tarif.create({
+    data: {
+      name: 'Week Pass',
+      duration: 'Week',
+      capacity: 'per persone',
+      price: 99,
+      description:
+        'Accès 24 hrs / 7 jrs , 2 sites de coworking, Salle de réunion a -40% ,Call box privée ,Accès au WorkZone Events ,Café',
+      serviceId: serviceIds[2],
+    },
+  });
+  let tarifCoWorkingZone3 = await prisma.tarif.create({
+    data: {
+      name: 'Full time ',
+      duration: 'Month',
+      capacity: 'per persone',
+      price: 299,
+      description:
+        'Accès 24 hrs / 7 jrs , 2 sites de coworking, Salle de réunion a -40% ,Call box privée ,Accès au WorkZone Events ,Café',
+      serviceId: serviceIds[2],
+    },
+  });
+
+  let bookingTarifPrivateSpace1 = await prisma.booking.create({
+    data: {
+      date: new Date('01/05/2023'),
+      startTime: '8',
+      endTime: '10',
+      userId: users[0].id,
+      tarifId: tarifPrivateSpace1.id,
+      freeSpace: 'hello',
+    },
+  });
 
   console.log(users);
   console.log(articles);

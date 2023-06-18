@@ -14,6 +14,7 @@ import { fetchCountries } from '../store/country'
 import { fetchCities } from '../store/city'
 
 
+
 function Checkout({ }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -22,7 +23,8 @@ function Checkout({ }) {
   const countryStore = useSelector((state) => state.country)
   const cityStore = useSelector((state) => state.city)
   const commandStore = useSelector((state) => state.command)
-  const { items, cartTotal, updateItemQuantity, emptyCart } = useCart()
+  const authStore = useSelector((state)=> state.auth)
+    const { items, cartTotal, updateItemQuantity, emptyCart } = useCart()
 
   const [command, setCommand] = useState({ hasDelivery: true })
 
@@ -39,7 +41,7 @@ function Checkout({ }) {
       articleByBranchId: item.id,
       quantity: item.quantity
     }))
-    setCommand({ ...command, commandLine })
+    setCommand({ ...command, clientId:authStore.me?  authStore.me.id : "", commandLine })
   }, [items])
   const handleChange = (e) => {
     const { name, value } = e.target

@@ -55,7 +55,7 @@ export const removeBlog = createAsyncThunk(
   "blogs/deleteBlog",
   async (args, { dispatch }) => {
     const { id, ...queries } = args;
-    let token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem("token"));
     const configs = {
       headers: {
         Authorization: "Bearer " + token.Authorization,
