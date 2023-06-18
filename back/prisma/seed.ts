@@ -1325,6 +1325,15 @@ async function main() {
       serviceId: serviceIds[2],
     },
   });
+  let tarifPrivateSpace33= await prisma.tarif.create({
+    data: {
+      duration: 'trimestre(299DT)',
+      price:299,
+      description: 'aaaaaaaaaa',
+      serviceId: serviceIds[0],
+      pricePerDay:5
+    },
+  });
   let tarifPrivateSpace1 = await prisma.tarif.create({
     data: {
       duration: 'trimestre(299DT)',
@@ -1363,16 +1372,17 @@ async function main() {
       serviceId: serviceIds[1],
     },
   });
-  let tarifMeetingSpace3 = await prisma.tarif.create({
-    data: {
-      name: 'Training Room',
-      capacity: '15 people',
-      price: 40,
-      pricePerDay: 259,
-      description: 'Optical fiber , Video Projector, White board',
-      serviceId: serviceIds[1],
-    },
-  });
+ let tarifMeetingSpace3 = await prisma.tarif.create({
+  data: {
+    name: 'Training Room',
+    capacity: '15 people',
+    price: 40,
+    pricePerDay: 5.5,
+    description: 'Optical fiber, Video Projector, White board',
+    serviceId: serviceIds[1],
+  },
+});
+
   let tarifCoWorkingZone1 = await prisma.tarif.create({
     data: {
       name: 'Day Pass',

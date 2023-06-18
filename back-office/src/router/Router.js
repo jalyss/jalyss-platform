@@ -44,6 +44,7 @@ import ServiceList from "../domains/service/views/ServiceList";
 import OneService from "../domains/service/views/OneService";
 import ServiceDetails from "../domains/service/views/ServiceDetails";
 import CreateService from "../domains/service/views/CreateService";
+import CreateTarif from "../domains/service/views/CreateTarif";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -67,7 +68,9 @@ function Router() {
               <Route path="create-service" element={<CreateService />} />
               <Route path="service/:serviceId" element={<OneService/>}>
                 <Route index  element={<ServiceDetails />}/>
-                <Route path="create-workspace" element={<CreateWorkSpace />} />
+                <Route path="create-workspace" element={<CreateWorkSpace/>} />
+                <Route path="create-Tarif" element={<CreateTarif/>} />
+
               </Route>
             </Route>
             <Route path="users" element={<User />}>

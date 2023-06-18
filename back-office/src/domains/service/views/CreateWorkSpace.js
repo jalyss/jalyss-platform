@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../../../assets/styles/WorkSpaceCreation.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useParams } from 'react-router-dom';
-// import { showErrorToast, showSuccessToast } from "../../";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { createWorkSpace, fetchWorkSpaces } from "../../../store/space";
 
 export default function CreateWorkSpace() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {serviceId} = useParams();
-
+  const { serviceId } = useParams();
 
   const [name, setName] = useState("");
   const [capacity, setCapacity] = useState("");
@@ -19,7 +17,6 @@ export default function CreateWorkSpace() {
   const [amenities, setAmenities] = useState("");
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState("");
-
 
   const workSpaceStore = useSelector((state) => state.workSpace);
 
@@ -56,11 +53,9 @@ export default function CreateWorkSpace() {
 
     dispatch(createWorkSpace(body)).then((res) => {
       if (!res.error) {
-        // showSuccessToast("workSpace has been created");
-        console.log("workSpace has been created");
+        console.log("WorkSpace has been created");
         navigate(-1);
       } else {
-        // showErrorToast(res.error.message);
         console.log(res.error.message);
       }
     });
@@ -68,7 +63,7 @@ export default function CreateWorkSpace() {
 
   return (
     <div className="container">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="exampleFormControlInput1">Name</label>
           <input
@@ -106,6 +101,7 @@ export default function CreateWorkSpace() {
             id="exampleFormControlTextarea1"
             rows="3"
             onChange={(e) => setDescription(e.target.value)}
+            required
           ></textarea>
         </div>
         <div className="form-group">
@@ -115,6 +111,7 @@ export default function CreateWorkSpace() {
             id="exampleFormControlTextarea2"
             rows="3"
             onChange={(e) => setAmenities(e.target.value)}
+            required
           ></textarea>
         </div>
         <div className="form-group">
@@ -124,9 +121,13 @@ export default function CreateWorkSpace() {
             className="form-control-file"
             id="exampleFormControlFile1"
             onChange={(e) => setImage(e.target.files[0])}
+            required
           />
         </div>
-        <button type="submit" className="btn btn-primary mb" onClick={handleSubmit}>
+        <button
+          type="submit"
+          className="btn btn-primary mb"
+        >
           Add the Space
         </button>
       </form>

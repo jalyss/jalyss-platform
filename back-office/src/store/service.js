@@ -28,6 +28,30 @@ export const createService = createAsyncThunk(
   }
 );
 
+export const removeservice = createAsyncThunk(
+  "services/deleteservice",
+  async (args) => {
+    const { id } = args;
+
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/services/${id}`
+    );
+    return response.data;
+  }
+);
+
+export const editservice = createAsyncThunk(
+  "services/editservice",
+  async (args)=>{
+    const {id,body}=args
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/services/${id}`,
+      body,
+    );
+    return response.data;
+  }
+);
+
 // Create a slice for managing services
 export const serviceSlice = createSlice({
   name: "service",

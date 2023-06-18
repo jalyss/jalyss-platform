@@ -11,6 +11,8 @@ import category from './category';
 import publishingHouse from './publishingHouse';
 import command from './command';
 import service from './service'
+import space from './space';
+import tarif from './tarif';
 
 export const store = configureStore({
   reducer: {
@@ -25,7 +27,9 @@ export const store = configureStore({
     category,
     publishingHouse,
     command,
-    service
+    service,
+    space,
+    tarif,
     
   },
   middleware: (getDefaultMiddleware) =>
