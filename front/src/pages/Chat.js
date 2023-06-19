@@ -110,41 +110,55 @@ const Chat = () => {
   }));
 
   useEffect(() => {
-    if(authStore) // did u finish ur phone call ? farouk ? if u have some stuff to do it now ,let's do meet later ... see u later 
-    axios
-      .get(
-        `http://localhost:3001/api/v1/chatRoom/${authStore}`
-      )
-      .then((response) => {
-        let data = response.data;
-        console.log(data);
-        setChatRoomList(data);
-        setSelectedUser(data[0].participants.filter(particip=>particip.user.id !== authStore)[0])
-      })
-      .catch((err) => console.log(err));
+    if (authStore) // did u finish ur phone call ? farouk ? if u have some stuff to do it now ,let's do meet later ... see u later 
+      axios
+        .get(
+          `http://localhost:3001/api/v1/chatRoom/${authStore}`
+        )
+        .then((response) => {
+          let data = response.data;
+          console.log(data);
+          setChatRoomList(data);
+          setSelectedUser(data[0].participants.filter(particip => particip.user.id !== authStore)[0])
+        })
+        .catch((err) => console.log(err));
     // dispatch(fetchChatRoom(authStore))
     // console.log("store",chatRooms.items)
     // setChatRoomList(chatRooms.items)
   }, [
     authStore
   ]);
+  useEffect(() => {
+    function chatRoomList(value) {
+      console.log(value);
+      setChatRoomList(value);
+    }
+    socket.on(`chat-room/${authStore}`, chatRoomList);
+
+    return () => {
+      socket.off(
+        `chat-room/${authStore}`,
+        chatRoomList
+      );
+    };
+  }, [socket]);
 
   return (
     <div className="d-flex chatContainer">
       <Box1 >
         <Stack0>
           <Stack1 spacing={3}>
-            {/* <BoxDiscussion  >
+            <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }} >
               <IconButton
                 sx={{ width: "max-content", color: "#fcfefe" }}
                 onClick={() => {
-                  handleChangeComponent("conversation")
+                  handleChangeComponent("chatRoom")
 
                 }}
               >
                 <ChatCircleDots onClick={() => setMesg(!mesg)} />
               </IconButton>
-            </BoxDiscussion> */}
+            </Box>
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
               <IconButton
                 sx={{ width: "max-content", color: "#fcfefe" }}
@@ -157,7 +171,7 @@ const Chat = () => {
                 <Broadcast className="users" onClick={() => setShow(!show)} />
               </IconButton>
             </Box>
-            <Box p={1}
+            {/* <Box p={1}
               sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}
 
             >
@@ -168,7 +182,7 @@ const Chat = () => {
                 }}>
                 <Users />
               </IconButton>
-            </Box>
+            </Box> */}
             {/* <Divider sx={{ width: "48px" }} />
             <IconButton>
               <Gear />
@@ -207,7 +221,7 @@ const Chat = () => {
       }
 
       <BoxLgConversation>
-        <Conversation setChatRoomList={setChatRoomList} room={room} user={selectedUser} />
+        <Conversation setChatRoomList={setChatRoomList} room={room} user={selectedUser} socket={socket} />
       </BoxLgConversation>
 
       {
@@ -236,7 +250,7 @@ const Chat = () => {
       {
         activeComponentMd === "conversation" && (
           <BoxMd>
-            <Conversation setChatRoomList={setChatRoomList} room={room} user={selectedUser} />
+            <Conversation setChatRoomList={setChatRoomList} room={room} user={selectedUser} socket={socket} />
           </BoxMd>
         )
       }

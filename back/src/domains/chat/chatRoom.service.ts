@@ -32,6 +32,7 @@ export class ChatRoomService {
       }
     });
     
+    
   }
 
   async findAll(id:string) {
@@ -45,6 +46,11 @@ export class ChatRoomService {
       },
       include: {
         participants: { include: { user: true } },
+        _count: {
+          select: {
+            messages: { where: { seen: false, userId: { not: id} } },
+          },
+        },
         messages: { orderBy: { createdAt: 'desc' }, take: 1 },
       },
     }

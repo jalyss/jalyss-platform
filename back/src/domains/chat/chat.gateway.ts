@@ -29,10 +29,10 @@ export class ChatGateway {
   private typingUsers: { [userId: string]: boolean } = {};
   constructor(
     private readonly PrismaService: PrismaService,
-    private readonly UserService: UsersService,
+    private readonly userService: UsersService,
     private readonly MessageService: MessagesService,
     private readonly ChatRoomService: ChatRoomService,
-    private readonly ConnectedUsersService: ConnectedUsersService,
+    private readonly connectedUsersService: ConnectedUsersService,
   ) {}
 
   @WebSocketServer() server: Server;
@@ -73,6 +73,50 @@ export class ChatGateway {
     this.server.emit(`connected-users/${id}`, connectedUserList);
   }
 
+  @SubscribeMessage('is-typing')
+  async handleTypingState(
+    client: Socket,
+    payload: { userId: string; chatRoomId: string },
+  ) {
+    const { userId, chatRoomId } = payload;
+    const user = await this.userService.findOne(userId);
+
+    this.server.emit(`typing/${chatRoomId}`, user);
+    setTimeout(() => this.server.emit(`no-typing/${chatRoomId}`, user), 5000);
+  }
+
+  @SubscribeMessage('create-chat-room')
+  async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
+    const { senderId, ...rest } = payload;
+    const response = await this.ChatRoomService.create(rest, senderId);
+    await this.chatRoomList(response.participants);
+  }
+
+  @SubscribeMessage('msgToServer')
+  async handleMessage(client: Socket, payload: MessageSocketio) {
+    const { userId, chatRoomId, ...rest } = payload;
+
+    const response = await this.MessageService.create(rest, userId, chatRoomId);
+    this.server.emit(`msg-to-client/${chatRoomId}`, response);
+    this.server.emit(`no-typing/${chatRoomId}`, { userId });
+    const chatRoom = await this.ChatRoomService.findOne(chatRoomId);
+
+    await this.chatRoomList(chatRoom.participants);
+  }
+
+  @SubscribeMessage('msgSeen')
+  async handleSeenMessage(
+    client: Socket,
+    payload: { chatRoomId: string; userId: string,num:number },
+  ) {
+    const { chatRoomId, userId,num } = payload;
+    await this.MessageService.MessageSeen(chatRoomId, userId);
+    const chatRoom = await this.ChatRoomService.findOne(chatRoomId);
+    await this.chatRoomList(chatRoom.participants);
+    const messages=this.MessageService.getChatRoomMessages(chatRoomId,num)
+    this.server.emit(`messages/${chatRoomId}`,messages)
+  }
+
   private async disconnect(id: string) {
     let connectedUser = await this.PrismaService.connectedUser.findFirst({
       where: { userId: id },
@@ -87,8 +131,15 @@ export class ChatGateway {
     this.server.emit(`disconnect/${id}`);
     await this.connectedUsersList();
   }
- 
 
+  private async chatRoomList(participants: any) {
+    await Promise.all(
+      participants.forEach(async (e) => {
+        const rooms = await this.ChatRoomService.findAll(e.userId);
+        this.server.emit(`chat-room/${e.userId}`, rooms);
+      }),
+    );
+  }
   private async connectedUsersList() {
     let connectedUserList = await this.PrismaService.connectedUser.findMany({
       include: {
@@ -106,72 +157,5 @@ export class ChatGateway {
     for (let user of connectedUserList) {
       this.server.emit(`connected-users/${user.userId}`, connectedUserList);
     }
-  }
-
-  @SubscribeMessage('typingState')
-  handleTypingState(client: Socket, payload: { userId: string, isTyping: boolean }) {
-    const { userId, isTyping } = payload;
-
-    this.typingUsers[userId] = isTyping;
-    console.log(userId);
-    this.server.emit('typing', { userId, isTyping });
-  }
-
-  @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, payload: MessageSocketio) {
-    const { userId, chatRoomId, ...rest } = payload;
-
-    const isTyping = this.typingUsers[userId] || false;
-
-    if (isTyping) {
-      delete this.typingUsers[userId];
-      this.server.emit('typing', { userId, isTyping: false });
-    }
-
-    const response = await this.MessageService.create(rest, userId, chatRoomId);
-    this.server.emit(`msgToClient/${chatRoomId}`, response);
-  }
-
-
-
-
-  @SubscribeMessage('msgSeen')
-  async handleSeenMessage(client : Socket , payload : { chatRoomId : string , messageId : string,userId: string} ) {
-    const { chatRoomId, messageId, userId} = payload;
-    await this.MessageService.MessageSeen(chatRoomId,userId);
-    console.log(messageId,userId);
-    this.server.to(chatRoomId).emit('msgSeen',{messageId,userId});
-  }
-
-  
-
-  @SubscribeMessage('create-chat-room')
-  async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
-
-
-    const { senderId, ...rest } = payload;
-    const response = await this.ChatRoomService.create(rest, senderId);
-    response.participants.forEach(async (e) => {
-      const rooms = await this.PrismaService.chatRoom.findMany({
-        where: {
-          participants: {
-            some: {
-              userId: e.userId,
-            },
-          },
-        },
-        include: {
-          participants: { include: { user: true } },
-          messages: { orderBy: { createdAt: 'desc' }, take: 1 },
-        },
-      });
-      const sortedRooms = rooms.sort(
-        (a, b) =>
-          b.messages[0].createdAt.getTime() - a.messages[0].createdAt.getTime(),
-      );
-
-
-      this.server.emit(`chat-room/${e.userId}`, sortedRooms);
-    });
   }
 }

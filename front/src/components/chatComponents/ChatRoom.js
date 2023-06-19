@@ -33,12 +33,9 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
 
 
 
-  useEffect(() => {
-    dispatch(notSeenMessages(identifier))
-  }, [number])
 
   const filteredChatRooms = chatRoomList.filter((chatRoom) => {
-    let name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
+    let name = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0].user.fullNameEn
     return (name.toLowerCase().includes(searchText.toLowerCase()))
   }
 
@@ -59,9 +56,9 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
 
 
           let name = ''
-          let user = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0]
+          let user = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0]
           if (chatRoom.name === null)
-            name = chatRoom.participants.filter(p => p.userId !== authStore.me?.id)[0].user.fullNameEn
+            name = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0].user.fullNameEn
           else {
             name = chatRoom.name
           }
@@ -95,13 +92,13 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
                 <Typography sx={{ fontWeight: 600 }} variant="caption">
                   {chatRoom.messages[0].createdAt.slice(11, 16)}
                 </Typography>
-                {chatRoom.messages[0].userId === authStore?.id ? (<Checks size={25} weight="thin" color="green" />) :
+                {/* {chatRoom._count !== 0 ? (<Checks size={25} weight="thin" color="green" />) :
 
                   (
                     <Checks size={25} weight="light" color="blue" />
 
-                  )}
-                {/* <Badge color="primary" badgeContent={number}></Badge> */}
+                  )} */}
+                <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge>
               </Stack>
             </Stack>
           )

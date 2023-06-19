@@ -22,7 +22,7 @@ import {
 import StyledInput from "../StyledInput";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { io } from "socket.io-client";
+
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import "../../assets/styles/conversation.css";
@@ -31,25 +31,25 @@ import { fetchMessages } from "../../store/chat";
 import Lottie from "lottie-react";
 import typing from "../../assets/typing.json"
 
-const Conversation = ({ setChatRoomList, room, user }) => {
+const Conversation = ({ setChatRoomList, room, user, socket }) => {
   const authStore = useSelector((state) => state.auth?.me);
 
 
   const dispatch = useDispatch();
 
 
-  const socket = io("http://localhost:3001");
+
 
 
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [openPicker, setPicker] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [isConnected, setIsConnected] = useState(socket.connected);
+
   const [number, setNumber] = useState(20);
   const [messages, setMessages] = useState("");
   const [inbox, setInbox] = useState([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [exist, setExist] = useState([])
+  const [isTyping, setIsTyping] = useState([]);
+  const [exist, setExist] = useState(null)
   const [lastSeenMessageId, setLastSeenMessageId] = useState('')
 
 
@@ -58,48 +58,47 @@ const Conversation = ({ setChatRoomList, room, user }) => {
   useEffect(() => {
     axios.get(`http://localhost:3001/api/v1/chatRoom/one/${user?.userId}/${authStore?.id}`)
       .then(res => {
-        console.log("there is chatrom", res.data.id)
         setExist(res.data.id)
-        axios
-          .get(
-            `http://localhost:3001/api/v1/messages/${res.data.id}`,
-            {
-              params: {
-                numberMessages: number,
-              },
-            }
-          )
-          .then((response) => {
-            setInbox(response.data);
-          })
-          .catch((err) => console.log(err));
+
       })
       .catch(err => console.log(err))
-  }, [messages.length])
+  }, [])
 
 
   useEffect(() => {
-    // dispatch(fetchMessages(chat?.id,20))
-    // setInbox(messagess.items)
-  }, []);
-
-
-
-
-  useEffect(() => {
-    function chatRoomList(value) {
-      console.log(value);
-      setChatRoomList(value);
+    if (exist) {
+      axios
+        .get(
+          `http://localhost:3001/api/v1/messages/${exist}`,
+          {
+            params: {
+              numberMessages: number,
+            },
+          }
+        )
+        .then((response) => {
+          setInbox(response.data);
+        })
+        .catch((err) => console.log(err));
     }
-    socket.on(`chat-room/${authStore?.id}`, chatRoomList);
 
-    return () => {
-      socket.off(
-        `chat-room/${authStore?.id}`,
-        chatRoomList
-      );
-    };
-  }, [socket]);
+  }, [exist]);
+
+
+  useEffect(() => {
+    if (exist && inbox.length) {
+      const payload = {
+        chatRoomId: exist.id,
+        userId: user.userId,
+        num: number
+      };
+      socket.emit('msgSeen', payload);
+    }
+  }, [exist, authStore?.id,inbox.length]);
+
+
+
+
 
 
 
@@ -108,30 +107,49 @@ const Conversation = ({ setChatRoomList, room, user }) => {
       console.log(value);
       setInbox((Inbox) => [...Inbox, value]);
     }
-    socket.on(`msgToClient/${exist}`, getMsg);
 
-    socket.on("typing", (data) => {
-      if (data.userId !== authStore?.id) { setIsTyping(data.isTyping) }
-    });
+    function getIsTyping(data) {
+      if (data.id !== authStore?.id) {
+        let aux = isTyping.slice()
+        let typing = false
+        for (let i = 0; i < aux.length; i++) {
+          if (aux[i].id === data.id) typing = true
+        }
+        if (!typing) {
+          aux.push(data);
+          setIsTyping(aux)
+        }
+
+      }
+    }
+    function removeIsTyping(data) {
+      if (data.id !== authStore?.id) {
+        let aux = isTyping.slice()
+        aux.filter(e => e.id !== data.id);
+        setIsTyping(aux)
+      }
+    }
+    function getInbox(data) {
+
+      setInbox(data)
+
+    }
+
+    socket.on(`msg-to-client/${exist}`, getMsg);
+    socket.on(`typing/${exist}`, getIsTyping);
+    socket.on(`no-typing/${exist}`, removeIsTyping);
+    socket.on(`messages/${exist}`, getInbox);
+
     return () => {
-      socket.off(`msgToClient/${exist}`, getMsg);
-      socket.off("typing");
+      socket.off(`msg-to-client/${exist}`, getMsg);
+      socket.off(`typing/${exist}`, getIsTyping);
+      socket.off(`no-typing/${exist}`, removeIsTyping);
+      socket.off(`messages/${exist}`, getInbox);
 
     };
   }, [socket]);
 
-  useEffect(() => {
-    socket.on('msgSeen', (data) => {
-      const { messageId, userId } = data;
-      if (messageId === inbox[inbox.length - 1]?.id && userId === authStore?.id) {
-        setLastSeenMessageId(messageId);
-      }
-    });
-
-    return () => {
-      socket.off('msgSeen');
-    };
-  }, [inbox, authStore?.id]);
+ 
 
 
 
@@ -155,15 +173,7 @@ const Conversation = ({ setChatRoomList, room, user }) => {
         };
         socket.emit("create-chat-room", payload);
       }
-      const lastMessage = inbox[inbox.length - 1];
-      console.log("last message", lastMessage)
-      if (lastMessage.id) {
-        const payload = {
-          messageId: lastMessage.id,
-          userId: user.userId,
-        };
-        socket.emit('msgSeen', payload);
-      }
+
       setMessages("");
       ;
     } else {
@@ -172,12 +182,13 @@ const Conversation = ({ setChatRoomList, room, user }) => {
   };
 
   const handleTyping = () => {
-    socket.emit("typingState", { userId: authStore?.id, isTyping: true });
+    socket.emit(`is-typing`, { userId: authStore?.id, chatRoomId: exist });
   };
 
   const handleStopTyping = () => {
-    socket.emit("typingState", { userId: authStore?.id, isTyping: false });
+    socket.emit(`is-typing`, { userId: authStore?.id, chatRoomId: exist });
   };
+
 
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
@@ -247,8 +258,8 @@ const Conversation = ({ setChatRoomList, room, user }) => {
           <div className="containerr" key={i}>
             <div
               className={`d-flex ${e.userId !== authStore?.id
-                  ? "justify-content-start"
-                  : "justify-content-end"
+                ? "justify-content-start"
+                : "justify-content-end"
                 }`}
             >
 
@@ -268,20 +279,20 @@ const Conversation = ({ setChatRoomList, room, user }) => {
             </div>
             <div>
               {
-                e.id === lastSeenMessageId && (
-                  <p>Seen...</p>
+                i === inbox.length - 1 && e.seen&&(
+                  <p>Seen at {e.updatedAt}</p>
                 )}
 
             </div>
 
           </div>
         ))}
-        {isTyping && (
+        {isTyping.length ? (
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
 
-            <p style={{ marginLeft: "5px", marginTop: "7px" }}>{userName} is typing</p>    <Lottie animationData={typing} loop={true} style={{ width: "100px", marginLeft: "-34px" }} />
+            <p style={{ marginLeft: "5px", marginTop: "7px" }}>{isTyping.map(elem => elem.fullNameEn + ' ')} is typing</p>    <Lottie animationData={typing} loop={true} style={{ width: "100px", marginLeft: "-34px" }} />
           </div>
-        )}
+        ) : null}
       </Box>
       <Box
         p={4}
@@ -296,8 +307,9 @@ const Conversation = ({ setChatRoomList, room, user }) => {
           alignItems="center"
           spacing={3}
           component="form"
-          onFocus={handleTyping}
-          onBlur={handleStopTyping}
+          onKeyDown={handleTyping}
+          // onFocus={handleTyping}
+          // onBlur={handleStopTyping}
           onSubmit={handleSubmit}
 
         >

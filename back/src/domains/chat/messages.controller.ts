@@ -38,7 +38,7 @@ export class MessagesController {
     @Param('chatRoomId') chatRoomId: string,
     @Query() query: any,
   ) {
-    console.log(query);
+   
     
     return this.messagesService.getChatRoomMessages(chatRoomId,+query.numberMessages);
   }
