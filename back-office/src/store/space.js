@@ -52,8 +52,8 @@ export const createWorkSpace = createAsyncThunk(
 
 export const removeSpace = createAsyncThunk(
   "spaces/deleteSpace",
-  async (args) => {
-    const { id } = args;
+  async (id) => {  
+    // const { id } = args;
     const response = await axios.delete(`${config.API_ENDPOINT}/work-spaces/${id}`);
     return response.data;
   }

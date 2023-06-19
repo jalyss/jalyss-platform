@@ -9,7 +9,12 @@ import tarif, { removeTarif } from "../../../store/tarif";
 import Dropdown from "react-bootstrap/Dropdown";
 import AddButton from "../../../components/buttons/AddButton";
 import { BsPersonWorkspace } from "react-icons/bs";
+import { BiDetail} from 'react-icons/bi';
 import { MdOutlinePayments } from "react-icons/md";
+import { GrDocumentUpdate } from "react-icons/gr";
+import { MdDeleteOutline } from "react-icons/md";
+       
+MdDeleteOutline
 import {
   MDBBtn,
   MDBModal,
@@ -28,12 +33,9 @@ export default function ServiceDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [tarifId, setTarifId] = useState(null);
 
-
-  const toggleShow = () => setBasicModal(!basicModal);
   const service = useSelector((state) => state.service.service);
 
   useEffect(() => {
@@ -44,25 +46,16 @@ export default function ServiceDetails() {
   console.log(tarifId ,"tarifID");
   console.log(selectedId, "selectedId");
 
-console.log(service,"serrrrr")
 
-
-  const handleRemove = (selectedId, serviceId,tarifId) => {
-    if (selectedId !== null) {
-      dispatch(removeSpace(selectedId));
-      setSelectedId(null);
-    }
-    if (tarifId !== null) {
-      dispatch(removeTarif(tarifId));
-      setTarifId(null)
-    }
-  
-   else if (serviceId !== null && selectedId === null &&  tarifId === null) {
-      dispatch(removeservice(serviceId));
-    }
+  const handleRemoveTarif = (id) => {
+      dispatch(removeTarif(id));
+      dispatch(fetchServiceById(serviceId));
   }
 
-
+  const handleRemoveSpace = (id) => {
+    dispatch(removeSpace(id));
+    dispatch(fetchServiceById(serviceId));
+}
 
   return (
     <div className="view">
@@ -121,78 +114,30 @@ console.log(service,"serrrrr")
           Icon={<BsPersonWorkspace />}
         />
       </div>
+      <table class="table table-sm">
+  <thead>
+    <tr>
 
-      <div className="spaceListWrapper">
-        {service?.workSpace.map((elem, i) => (
-          <div
-            key={elem.id}
-            className="spaceItemWrapper"
-            style={{ cursor: "pointer" }}
-          >
-            {elem.image ? (
-              <img
-                className="spaceItemCover"
-                src={elem.image?.path}
-                alt={elem.image?.alt}
-              />
-            ) : (
-              <img
-                className="spaceItemCover"
-                src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
-                alt="cover"
-              />
-            )}
-            <div className="d-flex flex-column">
-              <h5 style={{ margin: "20px", flex: "1" }}>{elem.name}</h5>
+      <th scope="col">Name</th>
+      <th scope="col">Show</th>
+      <th scope="col">Update</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+      {service?.workSpace.map((elem, i) => (
+  <tbody key={elem.id}>
+    <tr>
 
-              <h7 style={{ margin: "20px", flex: "1" }}>{elem.description}</h7>
+      <td>{elem.name}</td>
+      <td><BiDetail/></td>
+      <td><GrDocumentUpdate/></td>
+      <td onClick={()=>{console.log("wiw",elem.id);handleRemoveSpace(elem.id)}}><MdDeleteOutline/></td>
+      
+    </tr>
+  </tbody>
+   ))}
+</table>
 
-              <h8 style={{ margin: "20px", flex: "1" }}>{elem.amenities}</h8>
-            </div>
-
-            <div className="spaceItemFooter d-flex justify-content-between">
-              <div className="d-flex align-items-center">
-                <div className="d-flex flex-column">
-                  <h5 className="mt-3">Price: {elem.price}</h5>
-                  <p
-                    style={{
-                      fontSize: "0.6rem",
-                      color: "#a9a9a9",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Capacity: {elem.capacity}
-                  </p>
-                </div>
-              </div>
-
-              <Dropdown>
-                <Dropdown.Toggle
-                  className="ellipsis-btn dropdownToggleBlogCard"
-                  style={{ all: "unset" }}
-                >
-                  <span>&#8942;</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu size="sm" title="">
-                  <>
-                    <Dropdown.Item
-                      onClick={() => {
-                        setSelectedId(elem.id);
-                        setBasicModal(true);
-                      }}
-                    >
-                      Delete
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => navigate("")}>
-                      Update
-                    </Dropdown.Item>
-                  </>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          </div>
-        ))}
-      </div>
       <div className="d-flex justify-content-end">
         <AddButton
           onClick={() => navigate(`create-Tarif`)}
@@ -201,95 +146,38 @@ console.log(service,"serrrrr")
           Icon={<MdOutlinePayments />}
         />
       </div>
+
       <div className="d-flex justify-content-center align-items-center">
-        {service?.tarif.map((item, index) => (
-          <div className="col-md-2.5 mx-1" key={index}>
-            <div
-              className="card serviceCard"
-              style={{
-                borderRadius: 25,
-                transition: "all 1.6s ease-in-out",
-              }}
-            >
-              <div className="card-body service">
-                <h1 className="card-title serviceType">{item.name}</h1>
-                <p className="soustitle">Capacity: {item.capacity}</p>
-                <p>{item.description}</p>
-                <p>Duration:{item.duration}</p>
+       
+       <table class="table table-sm">
+  <thead>
+    <tr>
 
-                <div className="price">
-                  Only <a className="priceNumber"> {item.price}</a>DT
-                  <p>Price per day:{item.pricePerDay}</p>
-                </div>
-                <div className="d-flex align-items-center">
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      className="ellipsis-btn dropdownToggleBlogCard"
-                      style={{ all: "unset" }}
-                    >
-                      <span>&#8942;</span>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu size="sm" title="">
-                      <>
-                        <Dropdown.Item
-                          onClick={() => {
-                            setTarifId(elem.id);
-                            setBasicModal(true);
-                          }}
-                        >
-                          Delete
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={() => navigate("")}>
-                          Update
-                        </Dropdown.Item>
-                      </>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <>
-          <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
-            <MDBModalDialog>
-              <MDBModalContent>
-                <MDBModalHeader>
-                  <MDBModalTitle>Delete</MDBModalTitle>
-                  <MDBBtn
-                    className="btn-close"
-                    color="none"
-                    onClick={toggleShow}
-                  ></MDBBtn>
-                </MDBModalHeader>
-                <MDBModalBody>Press continue to delete</MDBModalBody>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Show</th>
+      <th scope="col">Update</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+      {service?.tarif.map((elem, i) => (
+  <tbody key={elem.id}>
+    <tr>
 
-                <MDBModalFooter>
-                  <button
-                    color="secondary"
-                    type="button"
-                    class="btn btn-secondary btn-sm"
-                    onClick={toggleShow}
-                  >
-                    Close
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-sm"
-                    onClick={() => {
-                      handleRemove(selectedId, serviceId,tarifId);
-                      setBasicModal(false);
-                    }}
-                  >
-                    Continue
-                  </button>
-                </MDBModalFooter>
-              </MDBModalContent>
-            </MDBModalDialog>
-          </MDBModal>
-        </>
+    <td>{elem.name}</td>
+      <td>{elem.price}</td>
+      <td onClick={() =>{ navigate(`tarif-details/${elem.id}`)}}><BiDetail/></td>
+      <td ><GrDocumentUpdate/></td>
+     <td onClick={() => { console.log("wiw",elem.id);
+    ;
+    handleRemoveTarif(elem.id)
+      }} ><MdDeleteOutline/></td>
+      
+    </tr>
+  </tbody>
+   ))}
+</table>
+    </div>
     </div>
   );
 }

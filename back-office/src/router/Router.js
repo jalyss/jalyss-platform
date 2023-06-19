@@ -28,7 +28,6 @@ import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
 //training
-
 import Training from "../domains/training/Training";
 import Coursdetail from "../domains/training/views/courses/Coursdetail";
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
@@ -45,6 +44,7 @@ import OneService from "../domains/service/views/OneService";
 import ServiceDetails from "../domains/service/views/ServiceDetails";
 import CreateService from "../domains/service/views/CreateService";
 import CreateTarif from "../domains/service/views/CreateTarif";
+import TarifDetails from "../domains/service/views/TarifDetails";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -70,6 +70,8 @@ function Router() {
                 <Route index  element={<ServiceDetails />}/>
                 <Route path="create-workspace" element={<CreateWorkSpace/>} />
                 <Route path="create-Tarif" element={<CreateTarif/>} />
+                <Route path="tarif-details/:tarifId" element={<TarifDetails/>} />
+
 
               </Route>
             </Route>
@@ -116,6 +118,7 @@ function Router() {
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
             {/* <Route path="charts" element={<ChartTabs />} /> */}
+
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>

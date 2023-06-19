@@ -13,11 +13,12 @@ export const createTarif = createAsyncThunk(
 
 export const removeTarif = createAsyncThunk(
   "tarifs/deleteTarif",
-  async (args) => {
-    const { id } = args;
+  async (idi) => {
+    // const { id } = args;
     const response = await axios.delete(
-      `${config.API_ENDPOINT}/tarifs/${id}`
+      `${config.API_ENDPOINT}/tarifs/${idi}`
     );
+    console.log("hmd",response.data);
     return response.data;
   }
 );
@@ -45,7 +46,7 @@ export const fetchtarifs = createAsyncThunk(
 export const fetchTarifById = createAsyncThunk(
   "tarifs/fetchTarifById",
   async (id) => {
-    const response = await axios.get(`${config.API_ENDPOINT}/tarifs/${id}`);
+    const response = await axios.get(`${config.API_ENDPOINT}/tarifs/one/${id}`);
     return response.data;
   }
 );

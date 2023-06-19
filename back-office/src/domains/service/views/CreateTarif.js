@@ -97,7 +97,7 @@ export default function CreateTarif() {
           className="form-control"
           id="tarifPrice"
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => setPrice(+e.target.value)}
           required
         />
       </div>
@@ -108,7 +108,7 @@ export default function CreateTarif() {
           className="form-control"
           id="tarifPricePerDay"
           value={pricePerDay}
-          onChange={(e) => setPricePerDay(e.target.value)}
+          onChange={(e) => setPricePerDay(+e.target.value)}
           required
         />
       </div>
