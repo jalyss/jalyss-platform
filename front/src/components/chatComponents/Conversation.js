@@ -26,169 +26,171 @@ import Picker from "@emoji-mart/react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import "../../assets/styles/conversation.css";
-import { loadLanguages } from "i18next";
+
 import { fetchMessages } from "../../store/chat";
 import Lottie from "lottie-react";
-import typing from "../../assets/typing.json"
+import typing from "../../assets/typing.json";
+import { useRef } from "react";
 
 const Conversation = ({ setChatRoomList, room, user, socket }) => {
-  const authStore = useSelector((state) => state.auth?.me);
-
+  const myId = useSelector((state) => state.auth.me?.id);
 
   const dispatch = useDispatch();
-
-
-
-
 
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [openPicker, setPicker] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
 
   const [number, setNumber] = useState(20);
-  const [messages, setMessages] = useState("");
+  const [message, setMessage] = useState("");
   const [inbox, setInbox] = useState([]);
   const [isTyping, setIsTyping] = useState([]);
-  const [exist, setExist] = useState(null)
-  const [lastSeenMessageId, setLastSeenMessageId] = useState('')
+  const [exist, setExist] = useState(null);
 
+  const userName = user?.user?.fullNameEn;
+  const messagesEndRef = useRef(null);
 
-  const userName = user?.user?.fullNameEn
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [inbox]);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/v1/chatRoom/one/${user?.userId}/${authStore?.id}`)
-      .then(res => {
-        setExist(res.data.id)
-
+    axios
+      .get(
+        `http://localhost:3001/api/v1/chatRoom/by-participants/${user?.userId}/${myId}`
+      )
+      .then((res) => {
+        setExist(res.data.id);
       })
-      .catch(err => console.log(err))
-  }, [])
-
+      .catch((err) => console.log(err));
+  }, [myId]);
 
   useEffect(() => {
     if (exist) {
       axios
-        .get(
-          `http://localhost:3001/api/v1/messages/${exist}`,
-          {
-            params: {
-              numberMessages: number,
-            },
-          }
-        )
+        .get(`http://localhost:3001/api/v1/messages/${exist}`, {
+          params: {
+            numberMessages: number,
+          },
+        })
         .then((response) => {
-          setInbox(response.data);
+          let aux = [];
+          for (let i = response.data.length - 1; i >= 0; i--) {
+            aux.push(response.data[i]);
+          }
+          console.log(aux[aux.length - 1]);
+
+          setInbox(aux);
         })
         .catch((err) => console.log(err));
     }
-
   }, [exist]);
 
-
   useEffect(() => {
-    if (exist && inbox.length) {
-      const payload = {
-        chatRoomId: exist.id,
-        userId: user.userId,
-        num: number
-      };
-      socket.emit('msgSeen', payload);
+    if (
+      inbox[inbox.length - 1]?.chatRoomId === exist &&
+      !inbox[inbox.length - 1]?.seen
+    ) {
+      if (inbox[inbox.length - 1]?.userId !== myId) {
+        const payload = {
+          chatRoomId: inbox[inbox.length - 1]?.chatRoomId,
+          userId: myId,
+          num: number,
+        };
+        socket.emit("msg-seen", payload);
+      }
     }
-  }, [exist, authStore?.id,inbox.length]);
-
-
-
-
-
-
+  }, [exist, inbox]);
 
   useEffect(() => {
     function getMsg(value) {
-      console.log(value);
       setInbox((Inbox) => [...Inbox, value]);
+      if (value.userId !== myId) {
+        const payload = {
+          chatRoomId: value.chatRoomId,
+          userId: myId,
+          num: number,
+        };
+        socket.emit("msg-seen", payload);
+      }
     }
 
     function getIsTyping(data) {
-      if (data.id !== authStore?.id) {
-        let aux = isTyping.slice()
-        let typing = false
+      if (data.id !== myId) {
+        let aux = isTyping.slice();
+        let typing = false;
         for (let i = 0; i < aux.length; i++) {
-          if (aux[i].id === data.id) typing = true
+          if (aux[i].id === data.id) typing = true;
         }
         if (!typing) {
           aux.push(data);
-          setIsTyping(aux)
+          setIsTyping(aux);
         }
-
       }
     }
     function removeIsTyping(data) {
-      if (data.id !== authStore?.id) {
-        let aux = isTyping.slice()
-        aux.filter(e => e.id !== data.id);
-        setIsTyping(aux)
+      if (data.id !== myId) {
+        let aux = isTyping.slice();
+        aux.filter((e) => e.id !== data.id);
+        setIsTyping(aux);
       }
     }
     function getInbox(data) {
-
-      setInbox(data)
-
+      setInbox(data);
     }
-
+    function getChatRoomCreated(data) {
+      setExist(data.id);
+    }
     socket.on(`msg-to-client/${exist}`, getMsg);
     socket.on(`typing/${exist}`, getIsTyping);
     socket.on(`no-typing/${exist}`, removeIsTyping);
     socket.on(`messages/${exist}`, getInbox);
+    socket.on(`chat-room-created/${myId}`, getChatRoomCreated);
 
     return () => {
       socket.off(`msg-to-client/${exist}`, getMsg);
       socket.off(`typing/${exist}`, getIsTyping);
       socket.off(`no-typing/${exist}`, removeIsTyping);
       socket.off(`messages/${exist}`, getInbox);
-
+      socket.off(`chat-room-created/${myId}`, getChatRoomCreated);
     };
-  }, [socket]);
-
- 
-
-
-
+  }, [socket, exist, myId]);
 
   const handleSubmit = (e) => {
-    if (messages.trim() !== "") {
-      e.preventDefault();
+    e.preventDefault();
+    if (message.trim() !== "") {
       if (exist) {
         let payload = {
           chatRoomId: exist,
-          userId: authStore?.id,
-          text: messages
-        }
-        socket.emit('msgToServer', payload)
-      }
-      else {
+          userId: myId,
+          text: message,
+        };
+        socket.emit("msg-to-server", payload);
+      } else {
         let payload = {
           receiverId: user.userId,
-          senderId: authStore?.id,
-          text: messages,
+          senderId: myId,
+          text: message,
         };
         socket.emit("create-chat-room", payload);
       }
 
-      setMessages("");
-      ;
+      setMessage("");
     } else {
       return;
     }
   };
 
   const handleTyping = () => {
-    socket.emit(`is-typing`, { userId: authStore?.id, chatRoomId: exist });
+    socket.emit(`is-typing`, { userId: myId, chatRoomId: exist });
   };
 
   const handleStopTyping = () => {
-    socket.emit(`is-typing`, { userId: authStore?.id, chatRoomId: exist });
+    socket.emit(`is-typing`, { userId: myId, chatRoomId: exist });
   };
-
 
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
@@ -217,7 +219,10 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
                 }}
                 variant="dot"
               >
-                <Avatar alt="profile picture" src={user?.user?.avatar ? user.user.avatar.path : Icon} />
+                <Avatar
+                  alt="profile picture"
+                  src={user?.user?.avatar ? user.user.avatar.path : Icon}
+                />
               </StyledBadge>
             </Box>
             <Stack spacing={0.2}>
@@ -251,46 +256,53 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
           width: "100%",
           backgroundColor: "#fff",
           boxShadow: "0px 0px 2px",
-          overflow: "auto",
+          overflowY: "scroll",
+          scrollBehavior: "unset",
         }}
+        ref={messagesEndRef}
       >
         {inbox.map((e, i) => (
           <div className="containerr" key={i}>
             <div
-              className={`d-flex ${e.userId !== authStore?.id
-                ? "justify-content-start"
-                : "justify-content-end"
-                }`}
+              className={`d-flex ${
+                e.userId !== myId
+                  ? "justify-content-start"
+                  : "justify-content-end"
+              }`}
             >
-
-
               {/* <img src = {e.user.avatarId}  style={{ width: '40px', height: '40px', borderRadius: '50%' }}/> */}
               <p
                 key={i}
                 className={
-                  e.userId === authStore?.id
-                    ? "sent-message"
-                    : "received-message"
+                  e.userId === myId ? "sent-message" : "received-message"
                 }
               >
                 {e.text}
               </p>
-
             </div>
             <div>
-              {
-                i === inbox.length - 1 && e.seen&&(
-                  <p>Seen at {e.updatedAt}</p>
-                )}
-
+              {i === inbox.length - 1 && e.seen && e.userId === myId && (
+                <p>Seen at {e.updatedAt}</p>
+              )}
             </div>
-
           </div>
         ))}
         {isTyping.length ? (
-          <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-
-            <p style={{ marginLeft: "5px", marginTop: "7px" }}>{isTyping.map(elem => elem.fullNameEn + ' ')} is typing</p>    <Lottie animationData={typing} loop={true} style={{ width: "100px", marginLeft: "-34px" }} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <p style={{ marginLeft: "5px", marginTop: "7px" }}>
+              {isTyping.map((elem) => elem.fullNameEn + " ")} is typing
+            </p>{" "}
+            <Lottie
+              animationData={typing}
+              loop={true}
+              style={{ width: "100px", marginLeft: "-34px" }}
+            />
           </div>
         ) : null}
       </Box>
@@ -311,7 +323,6 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
           // onFocus={handleTyping}
           // onBlur={handleStopTyping}
           onSubmit={handleSubmit}
-
         >
           <Stack sx={{ width: "100%" }}>
             <StyledInput
@@ -347,7 +358,7 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
                           data={data}
                           onEmojiSelect={(emoji) => {
                             setSelectedEmoji(emoji.native);
-                            setMessages(`${messages}${emoji.native}`);
+                            setMessage(`${message}${emoji.native}`);
                             setPickerOpen(false);
                           }}
                         />
@@ -359,9 +370,9 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
               }}
               setPickerOpen={setPickerOpen}
               onChange={(e) => {
-                setMessages(`${e.target.value}`);
+                setMessage(`${e.target.value}`);
               }}
-              value={messages}
+              value={message}
             />
           </Stack>
           <Box

@@ -35,7 +35,7 @@ export class ChatRoomController {
     return this.chatRoomService.findOne(id);
   }
   
-  @Get('one/:user1/:user2')
+  @Get('by-participants/:user1/:user2')
   findChatroom(
     @Param('user1') user1: string,
     @Param('user2') user2: string

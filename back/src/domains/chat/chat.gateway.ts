@@ -89,32 +89,38 @@ export class ChatGateway {
   async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
     const { senderId, ...rest } = payload;
     const response = await this.ChatRoomService.create(rest, senderId);
+    this.server.emit(`chat-room-created/${senderId}`,response)
     await this.chatRoomList(response.participants);
   }
 
-  @SubscribeMessage('msgToServer')
+  @SubscribeMessage('msg-to-server')
   async handleMessage(client: Socket, payload: MessageSocketio) {
     const { userId, chatRoomId, ...rest } = payload;
+    
 
     const response = await this.MessageService.create(rest, userId, chatRoomId);
+   console.log(response);
+   
     this.server.emit(`msg-to-client/${chatRoomId}`, response);
     this.server.emit(`no-typing/${chatRoomId}`, { userId });
     const chatRoom = await this.ChatRoomService.findOne(chatRoomId);
-
     await this.chatRoomList(chatRoom.participants);
   }
 
-  @SubscribeMessage('msgSeen')
+  @SubscribeMessage('msg-seen')
   async handleSeenMessage(
     client: Socket,
-    payload: { chatRoomId: string; userId: string,num:number },
+    payload: { chatRoomId: string; userId: string; num: number },
   ) {
-    const { chatRoomId, userId,num } = payload;
+    const { chatRoomId, userId, num } = payload;
+    console.log(chatRoomId);
+    
     await this.MessageService.MessageSeen(chatRoomId, userId);
     const chatRoom = await this.ChatRoomService.findOne(chatRoomId);
     await this.chatRoomList(chatRoom.participants);
-    const messages=this.MessageService.getChatRoomMessages(chatRoomId,num)
-    this.server.emit(`messages/${chatRoomId}`,messages)
+    
+    const messages = await this.MessageService.getChatRoomMessages(chatRoomId, num);
+    this.server.emit(`messages/${chatRoomId}`, messages);
   }
 
   private async disconnect(id: string) {
@@ -132,14 +138,16 @@ export class ChatGateway {
     await this.connectedUsersList();
   }
 
+
   private async chatRoomList(participants: any) {
-    await Promise.all(
-      participants.forEach(async (e) => {
-        const rooms = await this.ChatRoomService.findAll(e.userId);
-        this.server.emit(`chat-room/${e.userId}`, rooms);
-      }),
-    );
+   await participants.forEach(async (e: any,i:number) => {
+      const rooms = await this.ChatRoomService.findAll(e.userId);
+      console.log(`room of ${i}`,e.userId);
+      
+      this.server.emit(`chat-rooms/${e.userId}`, rooms);
+    });
   }
+
   private async connectedUsersList() {
     let connectedUserList = await this.PrismaService.connectedUser.findMany({
       include: {
