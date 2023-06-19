@@ -46,7 +46,6 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
   const [inbox, setInbox] = useState([]);
   const [isTyping, setIsTyping] = useState([]);
   const [exist, setExist] = useState(null);
-  const [lastSeenMessageId, setLastSeenMessageId] = useState("");
 
   const userName = user?.user?.fullNameEn;
   const messagesEndRef = useRef(null);
@@ -67,7 +66,7 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
         setExist(res.data.id);
       })
       .catch((err) => console.log(err));
-  }, [myId,user]);
+  }, [myId]);
 
   useEffect(() => {
     if (exist) {
@@ -82,6 +81,8 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
           for (let i = response.data.length - 1; i >= 0; i--) {
             aux.push(response.data[i]);
           }
+          console.log(aux[aux.length - 1]);
+
           setInbox(aux);
         })
         .catch((err) => console.log(err));
@@ -89,25 +90,32 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
   }, [exist]);
 
   useEffect(() => {
-    if (exist && inbox.length) {
-      const payload = {
-        chatRoomId: exist,
-        userId: user.userId,
-        num: number,
-      };
-      socket.emit("msg-seen", payload);
+    if (
+      inbox[inbox.length - 1]?.chatRoomId === exist &&
+      !inbox[inbox.length - 1]?.seen
+    ) {
+      if (inbox[inbox.length - 1]?.userId !== myId) {
+        const payload = {
+          chatRoomId: inbox[inbox.length - 1]?.chatRoomId,
+          userId: myId,
+          num: number,
+        };
+        socket.emit("msg-seen", payload);
+      }
     }
-  }, [exist]);
+  }, [exist, inbox]);
 
   useEffect(() => {
     function getMsg(value) {
       setInbox((Inbox) => [...Inbox, value]);
-      const payload = {
-        chatRoomId: exist,
-        userId: user.userId,
-        num: number,
-      };
-      socket.emit("msg-seen", payload);
+      if (value.userId !== myId) {
+        const payload = {
+          chatRoomId: value.chatRoomId,
+          userId: myId,
+          num: number,
+        };
+        socket.emit("msg-seen", payload);
+      }
     }
 
     function getIsTyping(data) {
@@ -248,8 +256,8 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
           width: "100%",
           backgroundColor: "#fff",
           boxShadow: "0px 0px 2px",
-          overflowY:"scroll",
-          scrollBehavior:"unset"
+          overflowY: "scroll",
+          scrollBehavior: "unset",
         }}
         ref={messagesEndRef}
       >
@@ -273,7 +281,9 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
               </p>
             </div>
             <div>
-              {i === inbox.length - 1 && e.seen && e.userId===myId && <p>Seen at {e.updatedAt}</p>}
+              {i === inbox.length - 1 && e.seen && e.userId === myId && (
+                <p>Seen at {e.updatedAt}</p>
+              )}
             </div>
           </div>
         ))}
