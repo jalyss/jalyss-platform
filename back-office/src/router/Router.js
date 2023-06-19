@@ -73,7 +73,7 @@ function Router() {
 
             <Route path="blogs" element={<Blogs />}>
               <Route index element={<BlogsList/>} />
-              <Route path="detail" element={<DetailBlog />} />
+              <Route path="detail/:blogId" element={<DetailBlog />} />
             </Route>
 
             <Route path="articles" element={<Article />}>
