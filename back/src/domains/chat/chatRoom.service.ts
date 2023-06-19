@@ -32,6 +32,7 @@ export class ChatRoomService {
       }
     });
     
+    
   }
 
   async findAll(id:string) {
@@ -45,6 +46,11 @@ export class ChatRoomService {
       },
       include: {
         participants: { include: { user: true } },
+        _count: {
+          select: {
+            messages: { where: { seen: false, userId: { not: id} } },
+          },
+        },
         messages: { orderBy: { createdAt: 'desc' }, take: 1 },
       },
     }
@@ -62,9 +68,31 @@ export class ChatRoomService {
   async findOne(id: string) {
     return await this.prisma.chatRoom.findUnique({
       where: { id },
-      include: { messages: true },
+      include: { messages: true , participants: {
+        include: { user : true }  
+      }},
     });
   }
+  async findUsersChatroom(userId1: string, userId2: string) {
+    const chatRoom = await this.prisma.chatRoom.findFirst({
+      where: {
+        participants: {
+          every: {
+            userId: {
+              in: [userId1, userId2],
+            },
+          },
+        },
+      },
+      include: {
+        participants: { include: { user: true } },
+        messages:true,
+      },
+    });
+  
+    return chatRoom;
+  }
+ 
 
   async update(id: string, dto: UpdateChatDto) {
     return await this.prisma.chatRoom.update({

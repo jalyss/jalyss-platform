@@ -7,7 +7,7 @@ const TrainingMentor = () => {
 
   const navigate = useNavigate();
   return (
-    <section className="sectioncta" aria-label="workshop">
+    <section className="sectioncta" aria-label="workshop"  id="mentoring">
     <div className="containerCTA">
 
       <div className="cta-content">

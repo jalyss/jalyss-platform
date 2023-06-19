@@ -18,5 +18,4 @@ yarn migrate:reset <!-- drop database and deploy all migration  and run the seed
 yarn migrate:dev:create <!-- create migration without deploy-->
 
 # for running seed
-
 yarn seed <!-- run seed -->

@@ -21,7 +21,7 @@ function Login() {
     dispatch(login({ email: email, password: password }))
       .then(res => {
         if (!res.error) {
-          navigate(`/profile`)
+         window.location.pathname='/profile'
         } else {
           showErrorToast(res.error.message)
         }

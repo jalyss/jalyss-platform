@@ -57,6 +57,7 @@ function Router() {
         {auth.meAdmin ? (
           <Route path="/" element={<Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />

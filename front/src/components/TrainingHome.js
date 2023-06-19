@@ -13,11 +13,11 @@ function TrainingHome() {
 			<h1> More action you take,more progress you make</h1>
 			<p>Knowledge is power, start learning new skills.</p>
             <div className='buttonContainer'>
-              <button className='primary-btn'>
-                GET STARTED NOW 	
+              <button className='primary-btn' >
+                <a href="#mentoring" className='href'>GET STARTED NOW </a>
               </button>
-              <button className='btnn'>
-              SEE COURSES 
+              <button className='btnn' >
+             <a href="#courses" className='href'>SEE COURSES</a> 
               </button>
 		</div>
         </div>
