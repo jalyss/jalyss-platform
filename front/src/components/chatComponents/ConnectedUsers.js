@@ -15,7 +15,7 @@ import Icon from "../../assets/styles/profile.png";
 import StyledBadge from "../StyledBadge";
 
 import { useSelector } from "react-redux";
-import axios from "axios";
+
 
 const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen }) => {
   const authStore = useSelector((state) => state.auth);
@@ -41,7 +41,7 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
   useEffect(() => {
     if (authStore.me) {
       function listConnectedUsers(users) {
-        console.log(users);
+      
         setConnectedUsers(users);
       }
       socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers);
@@ -51,7 +51,7 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
     }
   }, [socket, authStore.me]);
 
-  console.log(connectedUsers);
+
   const ChatElement = ({ user }) => {
     return (
       <Box
