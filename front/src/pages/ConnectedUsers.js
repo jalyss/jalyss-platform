@@ -8,11 +8,11 @@ import {
 } from "@mui/material";
 import { CircleDashed, MagnifyingGlass } from "phosphor-react";
 import React, { useEffect, useState } from "react";
-import Search from "../components/Search";
-import SearchIconWrapper from "../components/SearchIconWrapper";
-import StyledInputBase from "../components/SearchInputBase";
+import Search from "../components/Commun/Search";
+import SearchIconWrapper from "../components/Commun/SearchIconWrapper";
+import StyledInputBase from "../components/Commun/inputs/SearchInputBase";
 import Icon from "../assets/styles/profile.png";
-import StyledBadge from "../components/StyledBadge";
+import StyledBadge from "../components/Commun/StyledBadge";
 
 import { useSelector } from "react-redux";
 import axios from "axios";

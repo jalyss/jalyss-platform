@@ -11,7 +11,7 @@ import {
 import start from "../img/start.png";
 import end from "../img/end.png";
 import TrainingPricing from "../components/trainingComponent/TrainingPricing";
-import KeyValueStyled from "../components/trainingComponent/KeyValueStyled";
+import KeyValueStyled from "../components/Commun/KeyValueStyled";
 import PreviousSessionGallery from "../components/trainingComponent/PreviousSessionGallery";
 import FeedBack from "../components/trainingComponent/FeedBack";
 import SessionLecture from "../components/trainingComponent/SessionLecture";

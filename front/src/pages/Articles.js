@@ -11,7 +11,7 @@ import { fetchCategories } from '../store/category'
 import { fetchPublishingHouses } from '../store/publishingHouse'
 import { fetchAuthors } from '../store/author'
 import { identifier } from '../constants/identifier/identifier'
-import Accordion from '../components/Accordion'
+import Accordion from '../components/Commun/Accordion'
 import '../assets/styles/filters.css'
 import useMeta from '../hooks/useMeta'
 import DocumentMeta from 'react-document-meta'
@@ -20,7 +20,7 @@ import 'rc-tooltip/assets/bootstrap.css'
 import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
 import 'rc-slider/assets/index.css'
 import { groupBy, isEmpty, map } from 'lodash'
-import HorizontalMenu from '../components/DragContainter'
+import HorizontalMenu from '../components/Commun/DragContainter'
 
 function Articles() {
   const dispatch = useDispatch()

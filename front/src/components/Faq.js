@@ -1,5 +1,5 @@
 import React ,{  useState }from 'react'
-import TrainingHeading from './TrainingHeading'
+import TrainingHeading from './Commun/TrainingHeading'
 import { faq } from '../dummydata'
 
 import Accordion from '@mui/material/Accordion';

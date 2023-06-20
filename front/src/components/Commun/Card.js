@@ -1,8 +1,8 @@
 import React from "react";
-import Dropdown from "../components/DropDown";
-import start from "../img/start.png";
-import end from "../img/end.png";
-import cardCover from "../img/cardCover.jpg"
+import Dropdown from "./DropDown";
+import start from "../../img/start.png";
+import end from "../../img/end.png";
+import cardCover from "../../img/cardCover.jpg"
 function Card({
   cover,
   category,

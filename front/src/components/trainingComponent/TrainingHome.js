@@ -4,11 +4,18 @@ import bg from "../../img/home.png";
 import { Tilt } from "react-tilt";
 import { useNavigate } from 'react-router-dom';
 
+import ButtonWithTransformAndHover from "../Commun/buttons/ButtonWithTransformAndHover";
+
 function TrainingHome() {
   const navigate=useNavigate()
   return (
     <>
-      <section class="home" id="home">
+      <section class="d-flex flex-wrap gap-5 align-items-center">
+      <div class="home-img">
+          <Tilt options={{ max: 35, scale: 1 }}>
+            <img src={bg} className="img-fluid" />
+          </Tilt>
+        </div>
         <div class="home-text">
           <h6>Knowledge Unites: Share or Receive, Ignite Growth !</h6>
           <h2>Empower. Mentor. Learn. Grow. Join Today!</h2>
@@ -17,16 +24,12 @@ function TrainingHome() {
             "Elevate Your Journey: Be a Mentor or Embrace Learning as a
             Student!"
           </p>
-          <div className="buttonContainer">
-            <button className="primary-btn" onClick={() => navigate(`/mentor`)}>Become Mentor</button>
-            <button className="btnn">Join Session</button>
+          <div className="d-flex">
+            <ButtonWithTransformAndHover onClick={() => navigate(`/mentor`)} title={"Become mentor"} full={true}/>
+            <ButtonWithTransformAndHover title={"Join Session"} /> 
           </div>
         </div>
-        <div class="home-img">
-          <Tilt options={{ max: 35, scale: 1 }}>
-            <img src={bg} />
-          </Tilt>
-        </div>
+     
       </section>
     </>
   );

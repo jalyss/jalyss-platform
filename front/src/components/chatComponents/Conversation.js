@@ -8,7 +8,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import StyledBadge from "../StyledBadge";
+import StyledBadge from "../Commun/StyledBadge";
 import Icon from "../../assets/styles/profile.png";
 import {
   CaretDown,
@@ -19,7 +19,7 @@ import {
   Smiley,
   VideoCamera,
 } from "phosphor-react";
-import StyledInput from "../StyledInput";
+import StyledInput from "../Commun/inputs/StyledInput";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { io } from "socket.io-client";

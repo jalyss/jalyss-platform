@@ -1,8 +1,8 @@
 import React from 'react'
 import { ScrollMenu } from 'react-horizontal-scrolling-menu'
 import 'react-horizontal-scrolling-menu/dist/styles.css'
-import '../assets/styles/horizontalMenu.css'
-import useDrag from '../hooks/useDrag'
+import '../../assets/styles/horizontalMenu.css'
+import useDrag from '../../hooks/useDrag'
 
 function HorizontalMenu({ children }) {
   // NOTE: for drag by mouse

@@ -1,10 +1,10 @@
 import React from "react";
 import { courses } from "../../dummydata";
-import TrainingHeading from "../TrainingHeading";
-import AutoCompleteFilter from "../AutoCompleteFilter";
+import TrainingHeading from "../Commun/TrainingHeading";
+import AutoCompleteFilter from "../Commun/AutoCompleteFilter";
 import { Pagination } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Card from "../Card";
+import Card from "../Commun/Card";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSessions } from "../../store/session";
 import { useEffect } from "react";

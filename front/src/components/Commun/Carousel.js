@@ -1,6 +1,6 @@
 import React from 'react'
 import Carousel from 'react-bootstrap/Carousel'
-import '../assets/styles/carousel.css'
+import '../../assets/styles/carousel.css'
 
 
 function CarouselImages({ images,height,br }) {

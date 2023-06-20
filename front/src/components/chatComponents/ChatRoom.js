@@ -9,12 +9,13 @@ import {
 } from "@mui/material";
 import { CircleDashed, MagnifyingGlass } from "phosphor-react";
 import React, { useEffect, useState } from "react";
-import Search from "../Search";
-import SearchIconWrapper from "../SearchIconWrapper";
-import StyledInputBase from "../SearchInputBase";
+import Search from "../Commun/Search";
+import SearchIconWrapper from "../Commun/SearchIconWrapper";
+import StyledInputBase from "../Commun/inputs/SearchInputBase";
 import Icon from "../../assets/styles/profile.png";
-import StyledBadge from "../StyledBadge";
+
 import { useSelector } from "react-redux";
+import StyledBadge from './../Commun/StyledBadge';
 
 
 

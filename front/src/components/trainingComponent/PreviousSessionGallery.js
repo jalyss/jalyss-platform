@@ -1,6 +1,6 @@
 import React from 'react'
-import CarouselImages from '../Carousel'
-import TrainingHeading from '../TrainingHeading'
+import CarouselImages from '../Commun/Carousel'
+import TrainingHeading from '../Commun/TrainingHeading'
 function PreviousSessionGallery() {
   return (
     <div className='mb-5'>

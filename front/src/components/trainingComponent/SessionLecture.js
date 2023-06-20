@@ -6,8 +6,8 @@ import {
   MDBCardText,
 } from "mdb-react-ui-kit";
 // import { lectures } from "../../dummydata";
-import TrainingHeading from "../../components/TrainingHeading";
-import KeyValueStyled from "../../components/trainingComponent/KeyValueStyled";
+import TrainingHeading from "../../components/Commun/TrainingHeading";
+import KeyValueStyled from "../../components/Commun/KeyValueStyled";
 import start from "../../img/start.png";
 import end from "../../img/end.png";
 import { Pagination } from "@mui/material";

@@ -1,6 +1,6 @@
 import React from "react";
 import { price } from "../../dummydata";
-import TrainingHeading from "../TrainingHeading";
+import TrainingHeading from "../Commun/TrainingHeading";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
 const TrainingPricing = () => {

@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import MentorHome from "../components/MentorHome";
+
 
 import {
   MDBContainer,
@@ -9,9 +9,9 @@ import {
   MDBCardBody,
   MDBRadio,
 } from "mdb-react-ui-kit";
-import StyledInput from "../components/StyledInput";
+import StyledInput from "../components/Commun/inputs/StyledInput";
 
-import StyelSelect from "../components/StyelSelect.js";
+import StyelSelect from "../components/Commun/inputs/StyelSelect";
 import {
   FaUser,
   FaBirthdayCake,
@@ -29,7 +29,9 @@ import { Button } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import CustomMDBRow from "../components/CustomMDBRow";
+import CustomMDBRow from './../components/Commun/inputs/CustomMDBRow';
+import MentorHome from './../components/trainingComponent/MentorHome';
+
 
 function MentorPage() {
   const [selectedDate, setSelectedDate] = useState(null);

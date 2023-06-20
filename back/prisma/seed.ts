@@ -1356,6 +1356,7 @@ for (let i = 0; i < 50; i++) {
   if(lectures.length && sessions.length){
     let lectId = lectures[Math.floor(Math.random() * lectures.length)].id
     let sesId = sessions[Math.floor(Math.random() * sessions.length)].id
+ 
 if(search(sesId,lectId)) {
   sHL.push(await prisma.sessionHasLecture.create({
       data : {sessionId:sesId , lectureId:lectId}

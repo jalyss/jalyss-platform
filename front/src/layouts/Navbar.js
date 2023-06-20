@@ -4,7 +4,7 @@ import { RxAvatar } from 'react-icons/rx'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCategories } from '../store/category'
-import WhiteSelect from '../components/WhiteSelect'
+import WhiteSelect from '../components/Commun/inputs/WhiteSelect'
 
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'

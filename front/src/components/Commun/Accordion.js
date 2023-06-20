@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import '../assets/styles/filters.css'
+import '../../assets/styles/filters.css'
 import { IoIosArrowDropdown } from 'react-icons/io'
 
 function Accordion({ title, content }) {
