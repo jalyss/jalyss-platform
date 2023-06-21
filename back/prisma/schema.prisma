@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["filteredRelationCount"]
 }
 
 datasource db {
@@ -125,6 +126,7 @@ model ChatMessage {
   userId     String
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
   chatRoomId String
+  seen       Boolean  @default(false)
 }
 
 model ConnectedUser {
@@ -504,7 +506,7 @@ model Media {
   path         String
   type         String
   alt          String?
-  extension    String
+  extension    String?
   description  String?
   MediaUser    MediaUser[]
   MediaArticle MediaArticle[]
@@ -514,7 +516,8 @@ model Media {
   Employee     Employee[]
   Blog         Blog[]
   Session      Session[]     
-
+  MediaService MediaService[]
+  Service Service[]
 }
 
 model MediaUser {
@@ -542,6 +545,15 @@ model MediaBlog {
   mediaId String
 
   @@unique(fields: [blogId, mediaId], name: "blogMedia")
+}
+
+model MediaService {
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  mediaId   String
+  media     Media   @relation(fields: [mediaId], references: [id])
+
+  @@unique([mediaId, serviceId])
 }
 
 // blog
@@ -625,16 +637,16 @@ model View {
 }
 
 //workSdpace
+
 model WorkSpace {
   id          String   @id @default(uuid())
   name        String
-  image       String
-  description String
-  capacity    Int
-  amenities   String
-  price       Float
-  rating      Float
-  reviews     Int
+  capacity    String?
+  description String?
+  price       String?
+  rating      String?
+  reviews     String?
+  amenities   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   service     Service  @relation(fields: [serviceId], references: [id])
@@ -642,39 +654,72 @@ model WorkSpace {
 }
 
 model Service {
-  id        String      @id @default(uuid())
-  name      String
-  workSpace WorkSpace[]
-  tarif     Tarif[]
+  id           String         @id @default(uuid())
+  name         String
+  identifier   String         @unique()
+  perHour      Boolean        @default(true)
+  coverId      String?
+  cover        Media?         @relation(fields: [coverId], references: [id])
+  workSpace    WorkSpace[]
+  tarif        Tarif[]
+  MediaService MediaService[]
 }
 
 model Booking {
-  id        String   @id @default(uuid())
-  date      DateTime
-  startTime String
-  endTime   String
-  status    Status   @default(pending)
-  paid      Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  tarif     Tarif    @relation(fields: [tarifId], references: [id])
-  tarifId   String
+  id          String   @id @default(uuid())
+  date        DateTime
+  startTime   String
+  endTime     String
+  email       String?
+  firstName   String?
+  lastName    String?
+  phoneNumber String?
+  status      Status   @default(pending)
+  paid        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+  tarif       Tarif    @relation(fields: [tarifId], references: [id])
+  tarifId     String
+  companyName String?
+  freeSpace   String?
 
   @@unique([userId, tarifId])
 }
 
 model Tarif {
   id          String    @id @default(uuid())
+  name        String?
   duration    String?
+  capacity    String?
   price       Float
+  pricePerDay Float?
   description String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   bookings    Booking[]
   service     Service   @relation(fields: [serviceId], references: [id])
   serviceId   String
+}
+
+//website Settings
+model MainComponent {
+  id           String         @id
+  SubComponent SubComponent[]
+}
+
+model SubComponent {
+  id                  String                @id
+  mainComponentId     String
+  mainComponent       MainComponent         @relation(fields: [mainComponentId], references: [id])
+  ContentSubComponent ContentSubComponent[]
+}
+
+model ContentSubComponent {
+  id             String       @id
+  subComponentId String
+  subComponent   SubComponent @relation(fields: [subComponentId], references: [id])
 }
 
 enum Status {

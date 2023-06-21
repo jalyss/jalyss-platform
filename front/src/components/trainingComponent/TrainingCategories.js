@@ -8,7 +8,7 @@ const TrainingCategories = () => {
 
   return (
     <>
-    <section className="categoriess">
+    <section className="categoriess" id="categories">
     <TrainingHeading subtitle='CATEGORIES' title='Browse Top Categories' />
     <Marquee >
     <section>

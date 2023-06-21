@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
 
 import article from './article'
 import publishingHouse from './publishingHouse'
@@ -13,6 +13,10 @@ import blog from './blog'
 import user from './user'
 import bookmark from './bookmarks'
 import session from './session'
+import chat from './chat'
+
+import service from "./space";
+
 export const store = configureStore({
   reducer: {
     article,
@@ -24,14 +28,15 @@ export const store = configureStore({
     city,
     command,
     auth,
-    blog, 
+    blog,
     bookmark,
     user,
-    session
-   
+    session,
+    chat,
+    service,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
-})
+});

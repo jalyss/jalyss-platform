@@ -85,7 +85,7 @@ export class EmployeeService {
     return this.prisma.employee.update({
       where: { id },
       data,
-      include:{avatar:true}
+      include:{role:true,branch:true,avatar:true} 
     });
   }
 
