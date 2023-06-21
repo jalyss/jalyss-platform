@@ -22,83 +22,176 @@ import {
 import StyledInput from "../StyledInput";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import { io } from "socket.io-client";
+
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "../../assets/styles/conversation.css";
-import { loadLanguages } from "i18next";
 
-const Conversation = ({ setChatRoomList }) => {
-  const authStore = useSelector((state) => state.auth);
-  const socket = io("http://localhost:3001");
+import { fetchMessages } from "../../store/chat";
+import Lottie from "lottie-react";
+import typing from "../../assets/typing.json";
+import { useRef } from "react";
 
+const Conversation = ({ setChatRoomList, room, user, socket }) => {
+  const myId = useSelector((state) => state.auth.me?.id);
+
+  const dispatch = useDispatch();
+
+  const [selectedEmoji, setSelectedEmoji] = useState("");
   const [openPicker, setPicker] = useState(false);
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   const [number, setNumber] = useState(20);
-  const [messages, setMessages] = useState("");
+  const [message, setMessage] = useState("");
   const [inbox, setInbox] = useState([]);
+  const [isTyping, setIsTyping] = useState([]);
+  const [exist, setExist] = useState(null);
+
+  const userName = user?.user?.fullNameEn;
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [inbox]);
 
   useEffect(() => {
     axios
       .get(
-        "http://localhost:3001/api/v1/messages/5f621766-a53c-4496-86d8-9befd06018ae",
-        {
+        `http://localhost:3001/api/v1/chatRoom/by-participants/${user?.userId}/${myId}`
+      )
+      .then((res) => {
+        setExist(res.data.id);
+      })
+      .catch((err) => console.log(err));
+  }, [myId]);
+
+  useEffect(() => {
+    if (exist) {
+      axios
+        .get(`http://localhost:3001/api/v1/messages/${exist}`, {
           params: {
             numberMessages: number,
           },
-        }
-      )
-      .then((response) => {
-        setInbox(response.data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-  useEffect(() => {
-    function chatRoomList(value) {
-      console.log(value);
-      setChatRoomList(value);
-    }
-    socket.on("chat-room/f62d33bd-9633-453f-9428-6c10368ac296", chatRoomList);
+        })
+        .then((response) => {
+          let aux = [];
+          for (let i = response.data.length - 1; i >= 0; i--) {
+            aux.push(response.data[i]);
+          }
+          console.log(aux[aux.length - 1]);
 
-    return () => {
-      socket.off(
-        "chat-room/f62d33bd-9633-453f-9428-6c10368ac296",
-        chatRoomList
-      );
-    };
-  }, [socket]);
+          setInbox(aux);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [exist]);
+
+  useEffect(() => {
+    if (
+      inbox[inbox.length - 1]?.chatRoomId === exist &&
+      !inbox[inbox.length - 1]?.seen
+    ) {
+      if (inbox[inbox.length - 1]?.userId !== myId) {
+        const payload = {
+          chatRoomId: inbox[inbox.length - 1]?.chatRoomId,
+          userId: myId,
+          num: number,
+        };
+        socket.emit("msg-seen", payload);
+      }
+    }
+  }, [exist, inbox]);
+
   useEffect(() => {
     function getMsg(value) {
-      console.log(value);
       setInbox((Inbox) => [...Inbox, value]);
+      if (value.userId !== myId) {
+        const payload = {
+          chatRoomId: value.chatRoomId,
+          userId: myId,
+          num: number,
+        };
+        socket.emit("msg-seen", payload);
+      }
     }
-    socket.on("msgToClient/5f621766-a53c-4496-86d8-9befd06018ae", getMsg);
+
+    function getIsTyping(data) {
+      if (data.id !== myId) {
+        let aux = isTyping.slice();
+        let typing = false;
+        for (let i = 0; i < aux.length; i++) {
+          if (aux[i].id === data.id) typing = true;
+        }
+        if (!typing) {
+          aux.push(data);
+          setIsTyping(aux);
+        }
+      }
+    }
+    function removeIsTyping(data) {
+      if (data.id !== myId) {
+        let aux = isTyping.slice();
+        aux.filter((e) => e.id !== data.id);
+        setIsTyping(aux);
+      }
+    }
+    function getInbox(data) {
+      setInbox(data);
+    }
+    function getChatRoomCreated(data) {
+      setExist(data.id);
+    }
+    socket.on(`msg-to-client/${exist}`, getMsg);
+    socket.on(`typing/${exist}`, getIsTyping);
+    socket.on(`no-typing/${exist}`, removeIsTyping);
+    socket.on(`messages/${exist}`, getInbox);
+    socket.on(`chat-room-created/${myId}`, getChatRoomCreated);
 
     return () => {
-      socket.off("msgToClient/5f621766-a53c-4496-86d8-9befd06018ae", getMsg);
+      socket.off(`msg-to-client/${exist}`, getMsg);
+      socket.off(`typing/${exist}`, getIsTyping);
+      socket.off(`no-typing/${exist}`, removeIsTyping);
+      socket.off(`messages/${exist}`, getInbox);
+      socket.off(`chat-room-created/${myId}`, getChatRoomCreated);
     };
-  }, [socket]);
-  const handleSubmit = (e) => {
-    if (messages.trim() !== "") {
-      e.preventDefault();
-      let payload = {
-        receiverId: "0258036f-268e-43c4-ba33-1f42de18187f",
-        senderId: authStore.me.id,
-        text: messages,
-      };
-      socket.emit("create-chat-room", payload);
+  }, [socket, exist, myId]);
 
-      /* let payload = {
- chatRoomId: '5f621766-a53c-4496-86d8-9befd06018ae',
-userId: authStore.me.id,
-text: messages
- }
-socket.emit('msgToServer', payload) */
-      setMessages("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (message.trim() !== "") {
+      if (exist) {
+        let payload = {
+          chatRoomId: exist,
+          userId: myId,
+          text: message,
+        };
+        socket.emit("msg-to-server", payload);
+      } else {
+        let payload = {
+          receiverId: user.userId,
+          senderId: myId,
+          text: message,
+        };
+        socket.emit("create-chat-room", payload);
+      }
+
+      setMessage("");
     } else {
       return;
     }
   };
+
+  const handleTyping = () => {
+    socket.emit(`is-typing`, { userId: myId, chatRoomId: exist });
+  };
+
+  const handleStopTyping = () => {
+    socket.emit(`is-typing`, { userId: myId, chatRoomId: exist });
+  };
+
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
       <Box
@@ -126,16 +219,22 @@ socket.emit('msgToServer', payload) */
                 }}
                 variant="dot"
               >
-                <Avatar alt="profile picture" src={Icon} />
+                <Avatar
+                  alt="profile picture"
+                  src={user?.user?.avatar ? user.user.avatar.path : Icon}
+                />
               </StyledBadge>
             </Box>
             <Stack spacing={0.2}>
-              <Typography variant="subtitle2">MESTIRI</Typography>
+              <Typography variant="subtitle2">
+                {/* RANIA */}
+                {userName}
+              </Typography>
               <Typography variant="caption">Online</Typography>
             </Stack>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={3}>
-            <IconButton>
+            {/* <IconButton>
               <VideoCamera />
             </IconButton>
             <IconButton>
@@ -147,25 +246,26 @@ socket.emit('msgToServer', payload) */
             <Divider orientation="vertical" flexItem />
             <IconButton>
               <CaretDown />
-            </IconButton>
+            </IconButton> */}
           </Stack>
         </Stack>
       </Box>
-
       <Box
         sx={{
           height: "70vh",
           width: "100%",
           backgroundColor: "#fff",
           boxShadow: "0px 0px 2px",
-          overflow: "auto",
+          overflowY: "scroll",
+          scrollBehavior: "unset",
         }}
+        ref={messagesEndRef}
       >
         {inbox.map((e, i) => (
           <div className="containerr" key={i}>
             <div
               className={`d-flex ${
-                e.userId !== authStore.me.id
+                e.userId !== myId
                   ? "justify-content-start"
                   : "justify-content-end"
               }`}
@@ -174,16 +274,37 @@ socket.emit('msgToServer', payload) */
               <p
                 key={i}
                 className={
-                  e.userId === authStore.me.id
-                    ? "sent-message"
-                    : "received-message"
+                  e.userId === myId ? "sent-message" : "received-message"
                 }
               >
                 {e.text}
               </p>
             </div>
+            <div>
+              {i === inbox.length - 1 && e.seen && e.userId === myId && (
+                <p>Seen at {e.updatedAt}</p>
+              )}
+            </div>
           </div>
         ))}
+        {isTyping.length ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <p style={{ marginLeft: "5px", marginTop: "7px" }}>
+              {isTyping.map((elem) => elem.fullNameEn + " ")} is typing
+            </p>{" "}
+            <Lottie
+              animationData={typing}
+              loop={true}
+              style={{ width: "100px", marginLeft: "-34px" }}
+            />
+          </div>
+        ) : null}
       </Box>
       <Box
         p={4}
@@ -198,6 +319,9 @@ socket.emit('msgToServer', payload) */
           alignItems="center"
           spacing={3}
           component="form"
+          onKeyDown={handleTyping}
+          // onFocus={handleTyping}
+          // onBlur={handleStopTyping}
           onSubmit={handleSubmit}
         >
           <Stack sx={{ width: "100%" }}>
@@ -218,28 +342,37 @@ socket.emit('msgToServer', payload) */
                   <InputAdornment>
                     <IconButton
                       onClick={() => {
-                        setPicker((prev) => !prev);
+                        setPickerOpen(!pickerOpen);
                       }}
                     >
                       <Box
                         sx={{
-                          display: openPicker ? "inline" : "none",
+                          display: pickerOpen ? "inline" : "none",
                           zIndex: 10,
                           position: "absolute",
                           bottom: 50,
                           right: 10,
                         }}
                       >
-                        <Picker data={data} onEmojiSelect={console.log} />
+                        <Picker
+                          data={data}
+                          onEmojiSelect={(emoji) => {
+                            setSelectedEmoji(emoji.native);
+                            setMessage(`${message}${emoji.native}`);
+                            setPickerOpen(false);
+                          }}
+                        />
                       </Box>
                       <Smiley />
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
-              setPicker={setPicker}
-              onChange={(e) => setMessages(e.target.value)}
-              value={messages}
+              setPickerOpen={setPickerOpen}
+              onChange={(e) => {
+                setMessage(`${e.target.value}`);
+              }}
+              value={message}
             />
           </Stack>
           <Box

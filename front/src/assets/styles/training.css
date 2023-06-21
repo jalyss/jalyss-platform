@@ -70,6 +70,7 @@ section {
   margin: 0.5rem;
   font-size: 0.8rem;
   cursor: pointer;
+  
 }
 .primary-btn:hover {
   box-shadow: 0px 17px 16px -11px #f66962;
@@ -83,13 +84,21 @@ section {
   border-radius: 1rem;
   box-shadow: 0px 13px 24px -7px #f66962;
   font-size: 0.8rem;
+
 }
 .btnn:hover {
   border: 1.5px solid #f66962;
   transform: scale(1.06);
   color: #f66962;
 }
-
+.href {
+  text-decoration: none;
+  color:inherit
+}
+.href:hover {
+  text-decoration: none;
+  color:inherit
+}
 @media (max-width: 1410px) {
   section {
     padding: 70px 3%;

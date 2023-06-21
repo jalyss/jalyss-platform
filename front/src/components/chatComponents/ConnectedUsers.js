@@ -6,21 +6,32 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { CircleDashed, MagnifyingGlass } from "phosphor-react";
-import React, { useEffect, useState } from "react";
-import Search from "../components/Search";
-import SearchIconWrapper from "../components/SearchIconWrapper";
-import StyledInputBase from "../components/SearchInputBase";
-import Icon from "../assets/styles/profile.png";
-import StyledBadge from "../components/StyledBadge";
+import { CircleDashed, MagnifyingGlass, WifiHigh, ChatText } from "phosphor-react";
+import React, { useEffect, useState, useMemo } from "react";
+import Search from "../Search";
+import SearchIconWrapper from "../SearchIconWrapper";
+import StyledInputBase from "../SearchInputBase";
+import Icon from "../../assets/styles/profile.png";
+import StyledBadge from "../StyledBadge";
 
 import { useSelector } from "react-redux";
-import axios from "axios";
 
-const ConnectedUsers = ({ socket }) => {
+
+const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen }) => {
   const authStore = useSelector((state) => state.auth);
 
   const [connectedUsers, setConnectedUsers] = useState([]);
+  const [searchText, setSearchText] = useState("");
+
+
+
+  const handleChatTextClick = (user) => {
+    setSelectedUser(user);
+    if (screen === 'md')
+      setActiveComponent("conversation");
+  };
+
+
   useEffect(() => {
     if (authStore.me) {
       socket.emit("online-users", authStore.me.id);
@@ -30,7 +41,7 @@ const ConnectedUsers = ({ socket }) => {
   useEffect(() => {
     if (authStore.me) {
       function listConnectedUsers(users) {
-        console.log(users);
+      
         setConnectedUsers(users);
       }
       socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers);
@@ -39,8 +50,8 @@ const ConnectedUsers = ({ socket }) => {
       };
     }
   }, [socket, authStore.me]);
-  
-console.log(connectedUsers);
+
+
   const ChatElement = ({ user }) => {
     return (
       <Box
@@ -48,7 +59,7 @@ console.log(connectedUsers);
           width: "100%",
           height: 65,
           borderRadius: 1,
-          backgroundColor: "#fff",
+
         }}
       >
         <Stack
@@ -64,10 +75,19 @@ console.log(connectedUsers);
             >
               <Avatar src={Icon} />
             </StyledBadge>
-            <Stack>
+            <Stack direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={19}
+            >
               <Typography variant="subtitle1">
                 {user.user.fullNameEn}
               </Typography>
+              <IconButton >
+                <ChatText color="#57385c" onClick={() => handleChatTextClick(user)} />
+
+              </IconButton>
+
             </Stack>
           </Stack>
         </Stack>
@@ -80,7 +100,7 @@ console.log(connectedUsers);
       sx={{
         position: "relative",
         height: "100vh",
-        width: 320,
+        width: '100%',
         backgroundColor: "#F8FAFF",
         boxShadow: "0px 0px 2px",
       }}
@@ -95,7 +115,7 @@ console.log(connectedUsers);
             Online Users
           </Typography>
           <IconButton>
-            <CircleDashed />
+            <WifiHigh style={{ color: "black" }} />
           </IconButton>
         </Stack>
         <Stack sx={{ width: "100%" }} spacing={3}>
@@ -103,13 +123,14 @@ console.log(connectedUsers);
             <SearchIconWrapper>
               <MagnifyingGlass color="#57385c" />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search" />
+            <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
           </Search>
           <Divider />
           {connectedUsers
             .filter((u) => u.userId !== authStore.me?.id)
+            .filter((u) => u.user.fullNameEn.toLowerCase().includes(searchText.toLowerCase()))
             .map((user) => (
-              <ChatElement user={user} />
+              <ChatElement user={user} handleChatTextClick={handleChatTextClick} />
             ))}
         </Stack>
       </Stack>
