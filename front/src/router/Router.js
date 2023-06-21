@@ -41,6 +41,7 @@ import OrderHistory from "../components/Profile/OrderHistory";
 import Chat from "../pages/Chat";
 
 import SessionDetails from "../pages/SessionDetails";
+import Conversation from "../components/chatComponents/Conversation";
 
 
 
@@ -70,7 +71,10 @@ function Router() {
             <Route path="new-password" element={<NewPassword />} />
             
             <Route path="*" element={<NoPage />} />
-            <Route path="/chat" element={<Chat />} />
+            <Route path="/chat" element={<Chat />}>
+            <Route path="/chat/:userId" element={<Conversation />} />
+
+            </Route>
             <Route path="training" element={<TrainingPage />} />
             <Route path="mentor" element={<MentorPage />} />
             <Route path="blogs" element={<Blogs />} />
