@@ -39,6 +39,7 @@ import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
+import Profile from "../pages/Profile";
 
 function Router() {
   const auth = useSelector((state) => state.auth);

@@ -13,14 +13,16 @@ import Search from "../Commun/Search";
 import SearchIconWrapper from "../Commun/SearchIconWrapper";
 import StyledInputBase from "../Commun/inputs/SearchInputBase";
 import Icon from "../../assets/styles/profile.png";
-import StyledBadge from './../Commun/StyledBadge';
+import StyledBadge from "../Commun/StyledBadge";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeenMessages } from "../../store/chat";
+import { useNavigate } from "react-router-dom";
 
 
 
 const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelectedUser ,screen}) => {
 
+  const navigate=useNavigate()
   const authStore = useSelector(state => state.auth?.me)
   const chatStore = useSelector((state) => state.chat)
   const { notSeen } = chatStore
@@ -70,8 +72,11 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
               key={i}
               onClick={() => {
                 setSelectedUser(user)
+                
                 if (screen === 'md')
                 setActiveComponent("conversation")
+                navigate(`/chat/${user?.userId}`)
+
               }}
             >
               <Stack direction="row" spacing={2}>
@@ -92,13 +97,14 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
                 <Typography sx={{ fontWeight: 600 }} variant="caption">
                   {chatRoom.messages[0].createdAt.slice(11, 16)}
                 </Typography>
-                {/* {chatRoom._count !== 0 ? (<Checks size={25} weight="thin" color="green" />) :
+                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0].userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
 
                   (
                     <Checks size={25} weight="light" color="blue" />
 
-                  )} */}
-                <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge>
+                  )}
+                 
+                {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
               </Stack>
             </Stack>
           )

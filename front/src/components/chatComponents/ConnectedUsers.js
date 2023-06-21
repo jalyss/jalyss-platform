@@ -6,35 +6,33 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import {
-  CircleDashed,
-  MagnifyingGlass,
-  WifiHigh,
-  ChatText,
-} from "phosphor-react";
+import { CircleDashed, MagnifyingGlass, WifiHigh, ChatText } from "phosphor-react";
 import React, { useEffect, useState, useMemo } from "react";
 import Search from "../Commun/Search";
 import SearchIconWrapper from "../Commun/SearchIconWrapper";
 import StyledInputBase from "../Commun/inputs/SearchInputBase";
 import Icon from "../../assets/styles/profile.png";
-import StyledBadge from "./../Commun/StyledBadge";
-import { useSelector } from "react-redux";
+import StyledBadge from "../Commun/StyledBadge";
 
-const ConnectedUsers = ({
-  socket,
-  setActiveComponent,
-  setSelectedUser,
-  screen,
-}) => {
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+
+const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen }) => {
   const authStore = useSelector((state) => state.auth);
 
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const navigate=useNavigate()
+
 
   const handleChatTextClick = (user) => {
     setSelectedUser(user);
-    if (screen === "md") setActiveComponent("conversation");
+    if (screen === 'md')
+      setActiveComponent("conversation");
+      navigate(`/chat/${user?.userId}`)
   };
+
 
   useEffect(() => {
     if (authStore.me) {
@@ -45,6 +43,7 @@ const ConnectedUsers = ({
   useEffect(() => {
     if (authStore.me) {
       function listConnectedUsers(users) {
+      
         setConnectedUsers(users);
       }
       socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers);
@@ -54,6 +53,7 @@ const ConnectedUsers = ({
     }
   }, [socket, authStore.me]);
 
+
   const ChatElement = ({ user }) => {
     return (
       <Box
@@ -61,6 +61,7 @@ const ConnectedUsers = ({
           width: "100%",
           height: 65,
           borderRadius: 1,
+
         }}
       >
         <Stack
@@ -76,8 +77,7 @@ const ConnectedUsers = ({
             >
               <Avatar src={Icon} />
             </StyledBadge>
-            <Stack
-              direction="row"
+            <Stack direction="row"
               alignItems="center"
               justifyContent="space-between"
               spacing={19}
@@ -85,12 +85,11 @@ const ConnectedUsers = ({
               <Typography variant="subtitle1">
                 {user.user.fullNameEn}
               </Typography>
-              <IconButton>
-                <ChatText
-                  color="#57385c"
-                  onClick={() => handleChatTextClick(user)}
-                />
+              <IconButton >
+                <ChatText color="#57385c" onClick={() => handleChatTextClick(user)} />
+
               </IconButton>
+
             </Stack>
           </Stack>
         </Stack>
@@ -103,7 +102,7 @@ const ConnectedUsers = ({
       sx={{
         position: "relative",
         height: "100vh",
-        width: "100%",
+        width: '100%',
         backgroundColor: "#F8FAFF",
         boxShadow: "0px 0px 2px",
       }}
@@ -126,22 +125,14 @@ const ConnectedUsers = ({
             <SearchIconWrapper>
               <MagnifyingGlass color="#57385c" />
             </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search"
-              onChange={(e) => setSearchText(e.target.value)}
-            />
+            <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
           </Search>
           <Divider />
           {connectedUsers
             .filter((u) => u.userId !== authStore.me?.id)
-            .filter((u) =>
-              u.user.fullNameEn.toLowerCase().includes(searchText.toLowerCase())
-            )
+            .filter((u) => u.user.fullNameEn.toLowerCase().includes(searchText.toLowerCase()))
             .map((user) => (
-              <ChatElement
-                user={user}
-                handleChatTextClick={handleChatTextClick}
-              />
+              <ChatElement user={user} handleChatTextClick={handleChatTextClick} />
             ))}
         </Stack>
       </Stack>

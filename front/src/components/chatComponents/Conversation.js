@@ -7,7 +7,7 @@ import {
   Divider,
   InputAdornment,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import StyledBadge from "../Commun/StyledBadge";
 import Icon from "../../assets/styles/profile.png";
 import {
@@ -18,6 +18,7 @@ import {
   Phone,
   Smiley,
   VideoCamera,
+  Checks
 } from "phosphor-react";
 import StyledInput from "../Commun/inputs/StyledInput";
 import data from "@emoji-mart/data";
@@ -31,10 +32,16 @@ import { fetchMessages } from "../../store/chat";
 import Lottie from "lottie-react";
 import typing from "../../assets/typing.json";
 import { useRef } from "react";
+import { SocketContext } from "../../apps/Client";
+import { useParams } from "react-router-dom";
+import { fetchUser } from "../../store/user";
 
-const Conversation = ({ setChatRoomList, room, user, socket }) => {
+const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const myId = useSelector((state) => state.auth.me?.id);
-
+  const userStore = useSelector((state) => state.user)
+  const { user } = userStore
+  console.log("hahaa", userr)
+  // const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
   const [selectedEmoji, setSelectedEmoji] = useState("");
@@ -47,9 +54,10 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
   const [isTyping, setIsTyping] = useState([]);
   const [exist, setExist] = useState(null);
 
-  const userName = user?.user?.fullNameEn;
+  const userName = user ? user.fullNameEn : userr?.user?.fullNameEn;
   const messagesEndRef = useRef(null);
-
+  const { userId } = useParams()
+  console.log("uu", userId);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
@@ -57,16 +65,21 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
     scrollToBottom();
   }, [inbox]);
 
+
+  useEffect(() => {
+    dispatch(fetchUser(userId))
+  }, [userId, userr?.userId])
+
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/api/v1/chatRoom/by-participants/${user?.userId}/${myId}`
-      )
+        `http://localhost:3001/api/v1/chatRoom/by-participants/${userId ? userId : userr?.userId}/${myId}`)
       .then((res) => {
+        console.log(res.data)
         setExist(res.data.id);
       })
       .catch((err) => console.log(err));
-  }, [myId]);
+  }, [myId, userId]);
 
   useEffect(() => {
     if (exist) {
@@ -108,14 +121,8 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
   useEffect(() => {
     function getMsg(value) {
       setInbox((Inbox) => [...Inbox, value]);
-      if (value.userId !== myId) {
-        const payload = {
-          chatRoomId: value.chatRoomId,
-          userId: myId,
-          num: number,
-        };
-        socket.emit("msg-seen", payload);
-      }
+
+
     }
 
     function getIsTyping(data) {
@@ -171,7 +178,10 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
         socket.emit("msg-to-server", payload);
       } else {
         let payload = {
-          receiverId: user.userId,
+          receiverId:
+            //  user.userId
+            userId ? userId : userr?.userId
+          ,
           senderId: myId,
           text: message,
         };
@@ -221,7 +231,7 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
               >
                 <Avatar
                   alt="profile picture"
-                  src={user?.user?.avatar ? user.user.avatar.path : Icon}
+                  src={Icon}
                 />
               </StyledBadge>
             </Box>
@@ -264,13 +274,13 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
         {inbox.map((e, i) => (
           <div className="containerr" key={i}>
             <div
-              className={`d-flex ${
-                e.userId !== myId
+              className={`d-flex  ${e.userId !== myId
                   ? "justify-content-start"
                   : "justify-content-end"
-              }`}
+                }`}
             >
-              {/* <img src = {e.user.avatarId}  style={{ width: '40px', height: '40px', borderRadius: '50%' }}/> */}
+              <img src={e.user.avatar ? e.user.avatar.path : Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+             <div>
               <p
                 key={i}
                 className={
@@ -279,12 +289,14 @@ const Conversation = ({ setChatRoomList, room, user, socket }) => {
               >
                 {e.text}
               </p>
-            </div>
-            <div>
+              <div>
               {i === inbox.length - 1 && e.seen && e.userId === myId && (
-                <p>Seen at {e.updatedAt}</p>
+                <p><Checks size={25} weight="thin" color="green" /> at {e.updatedAt.slice(11, 16)}</p>
               )}
             </div>
+            </div>
+            </div>
+           
           </div>
         ))}
         {isTyping.length ? (
