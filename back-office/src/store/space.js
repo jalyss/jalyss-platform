@@ -10,11 +10,11 @@ export const fetchSpaces = createAsyncThunk(
   }
 );
 
-export const fetchSpacesById = createAsyncThunk(
+export const fetchSpaceById = createAsyncThunk(
   "work-spaces/fetchSpacesById",
   async (serviceId) => {
     const response = await axios.get(
-      `${config.API_ENDPOINT}/work-spaces/all/${serviceId}`
+      `${config.API_ENDPOINT}/work-spaces/one/${serviceId}`
     );
     return response.data;
   }
@@ -28,15 +28,7 @@ export const fetchWorkSpaces = createAsyncThunk(
   }
 );
 
-export const fetchWorkSpace = createAsyncThunk(
-  "workSpaces/fetchWorkSpace",
-  async (id) => {
-    const response = await axios.get(
-      `${config.API_ENDPOINT}/work-spaces/all/${id}`
-    );
-    return response.data;
-  }
-);
+
 
 export const createWorkSpace = createAsyncThunk(
   "workSpaces/createWorkSpace",
@@ -62,7 +54,7 @@ export const removeSpace = createAsyncThunk(
 export const editSpace = createAsyncThunk(
   "spaces/editSpace",
   async (args) => {
-    const { id, body } = args;
+    const { id,...body } = args;
     const response = await axios.patch(
       `${config.API_ENDPOINT}/work-spaces/${id}`,
       body
@@ -90,7 +82,7 @@ export const spaceSlice = createSlice({
         state.spaces.items = action.payload.items;
         state.spaces.count = action.payload.count;
       })
-     builder.addCase(fetchSpacesById.fulfilled, (state, action) => {
+     builder.addCase(fetchSpaceById.fulfilled, (state, action) => {
         state.service = action.payload;
       });
   },

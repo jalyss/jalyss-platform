@@ -45,6 +45,11 @@ import ServiceDetails from "../domains/service/views/ServiceDetails";
 import CreateService from "../domains/service/views/CreateService";
 import CreateTarif from "../domains/service/views/CreateTarif";
 import TarifDetails from "../domains/service/views/TarifDetails";
+import SpaceDetails from "../domains/service/views/SpaceDetails";
+import EditTarif from "../domains/service/views/EditTarif";
+import EditWorkSpace from "../domains/service/views/EditWorkSpace";
+
+
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -71,6 +76,13 @@ function Router() {
                 <Route path="create-workspace" element={<CreateWorkSpace/>} />
                 <Route path="create-Tarif" element={<CreateTarif/>} />
                 <Route path="tarif-details/:tarifId" element={<TarifDetails/>} />
+                <Route path="space-details/:spaceId" element={<SpaceDetails />} />
+                <Route path="edit-space/:spaceId" element={<EditWorkSpace/>} />
+                <Route path="edit-tarif/:tarifId" element={<EditTarif/>} />
+
+
+
+
 
 
               </Route>

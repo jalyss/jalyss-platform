@@ -1,77 +1,89 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSpaceById } from "../../../store/space";
 
-export default function spaceDetails() {
+export default function SpaceDetails() {
+  const dispatch = useDispatch();
+  const { spaceId } = useParams();
+
+  const space = useSelector((state) => state.space?.service);
+
+  useEffect(() => {
+    dispatch(fetchSpaceById(spaceId));
+  }, [dispatch]);
+
+  const navigate = useNavigate();
+  const [galleryImages, setGalleryImages] = useState([]);
+
+  const handleDeleteImage = (index) => {
+    const updatedGallery = [...galleryImages];
+    updatedGallery.splice(index, 1);
+    setGalleryImages(updatedGallery);
+  };
+
+  const handleAddImage = (e) => {
+    const newImage = e.target.files[0];
+    setGalleryImages([...galleryImages, newImage]);
+  };
+
   return (
-         {/* <div className="spaceListWrapper">
-        {service?.workSpace.map((elem, i) => (
-          <div
-            key={elem.id}
-            className="spaceItemWrapper"
-            style={{ cursor: "pointer" }}
-          >
-            {elem.image ? (
+    <div className="spaceDetailsWrapper">
+      <div className="spaceImageWrapper">
+        {space?.image ? (
+          <img
+            className="spaceImage"
+            src={space?.image?.path}
+            alt={space?.image?.alt}
+          />
+        ) : (
+          <img
+            className="spaceImage"
+            src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+            alt="cover"
+          />
+        )}
+      </div>
+
+      <div className="galleryWrapper">
+        {galleryImages.length > 0 &&
+          galleryImages.map((image, index) => (
+            <div key={index} className="galleryImageWrapper">
               <img
-                className="spaceItemCover"
-                src={elem.image?.path}
-                alt={elem.image?.alt}
+                className="galleryImage"
+                src={URL.createObjectURL(image)}
+                alt={`gallery-image-${index}`}
               />
-            ) : (
-              <img
-                className="spaceItemCover"
-                src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
-                alt="cover"
-              />
-            )}
-            <div className="d-flex flex-column">
-              <h5 style={{ margin: "20px", flex: "1" }}>{elem.name}</h5>
-
-              <h7 style={{ margin: "20px", flex: "1" }}>{elem.description}</h7>
-
-              <h8 style={{ margin: "20px", flex: "1" }}>{elem.amenities}</h8>
+              <button
+                className="deleteButton"
+                onClick={() => handleDeleteImage(index)}
+              >
+                Delete
+              </button>
             </div>
+          ))}
+        <input
+          type="file"
+          className="galleryInput"
+          onChange={handleAddImage}
+        />
+        <button className="addButton" onClick={navigate(-1)}>
+          Add Images
+        </button>
+      </div>
 
-            <div className="spaceItemFooter d-flex justify-content-between">
-              <div className="d-flex align-items-center">
-                <div className="d-flex flex-column">
-                  <h5 className="mt-3">Price: {elem.price}</h5>
-                  <p
-                    style={{
-                      fontSize: "0.6rem",
-                      color: "#a9a9a9",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Capacity: {elem.capacity}
-                  </p>
-                </div>
-              </div>
-
-              <Dropdown>
-                <Dropdown.Toggle
-                  className="ellipsis-btn dropdownToggleBlogCard"
-                  style={{ all: "unset" }}
-                >
-                  <span>&#8942;</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu size="sm" title="">
-                  <>
-                    <Dropdown.Item
-                      onClick={() => {
-                        setSelectedId(elem.id);
-                        setBasicModal(true);
-                      }}
-                    >
-                      Delete
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => navigate("")}>
-                      Update
-                    </Dropdown.Item>
-                  </>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
+      <div className="spaceDetails">
+        <h5 className="spaceName">{space?.name}</h5>
+        <p className="spaceDescription">{space?.description}</p>
+        <p className="spaceAmenities">{space?.amenities}</p>
+        <div className="spaceFooter">
+          <div className="spacePrice">
+            <h5>Price: {space?.price}</h5>
+            <p className="capacity">Capacity: {space?.capacity}</p>
           </div>
-        ))}
-      </div> */}
-  )
+        </div>
+      </div>
+    </div>
+  );
 }

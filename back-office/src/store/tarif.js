@@ -26,7 +26,7 @@ export const removeTarif = createAsyncThunk(
 export const editTarif = createAsyncThunk(
   "tarifs/editTarif",
   async (args) => {
-    const { id, body } = args;
+    const { id, ...body } = args;
     const response = await axios.patch(
       `${config.API_ENDPOINT}/tarifs/${id}`,
       body

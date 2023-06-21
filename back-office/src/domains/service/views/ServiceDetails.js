@@ -1,32 +1,22 @@
-import React, { useEffect,useState} from "react";
-import "../../../assets/styles/WorkSpaceDetails.css";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchServiceById, removeservice } from "../../../store/service";
 import { removeSpace } from "../../../store/space";
 import tarif, { removeTarif } from "../../../store/tarif";
-import Dropdown from "react-bootstrap/Dropdown";
-import AddButton from "../../../components/buttons/AddButton";
+import { DataGrid } from "@mui/x-data-grid";
 import { BsPersonWorkspace } from "react-icons/bs";
-import { BiDetail} from 'react-icons/bi';
+import { BiDetail } from "react-icons/bi";
 import { MdOutlinePayments } from "react-icons/md";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { MdDeleteOutline } from "react-icons/md";
-       
-MdDeleteOutline
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-} from "mdb-react-ui-kit";
 
-// import CreateWorkSpace from '../views/CreateWorkSpace';
+import "../../../assets/styles/WorkSpaceDetails.css";
+
+import AddButton from "../../../components/buttons/AddButton";
+
+
 
 export default function ServiceDetails() {
   const { serviceId } = useParams();
@@ -42,63 +32,98 @@ export default function ServiceDetails() {
     dispatch(fetchServiceById(serviceId));
   }, [dispatch]);
 
-  console.log(serviceId, "SerID");
-  console.log(tarifId ,"tarifID");
-  console.log(selectedId, "selectedId");
-
-
   const handleRemoveTarif = (id) => {
-      dispatch(removeTarif(id));
-      dispatch(fetchServiceById(serviceId));
-  }
+    dispatch(removeTarif(id));
+    dispatch(fetchServiceById(serviceId));
+  };
 
   const handleRemoveSpace = (id) => {
     dispatch(removeSpace(id));
     dispatch(fetchServiceById(serviceId));
-}
+  };
+
+  const workspaceColumns = [
+    { field: "name", headerName: "Name", width: 200 },
+    {
+      field: "show",
+      headerName: "Show",
+      width: 100,
+      renderCell: (params) => (
+        <BiDetail onClick={() => navigate(`space-details/${params.row.id}`)} />
+      ),
+    },
+    {
+      field: "update",
+      headerName: "Update",
+      width: 100,
+      renderCell: (params) =>(  <GrDocumentUpdate onClick={() => navigate(`edit-space/${params.row.id}`)}/>),
+    },
+    {
+      field: "delete",
+      headerName: "Delete",
+      width: 100,
+      renderCell: (params) => (
+        <MdDeleteOutline
+          onClick={() => handleRemoveSpace(params.row.id)}
+        />
+      ),
+    },
+  ];
+
+  const tarifColumns = [
+    { field: "name", headerName: "Name", width: 200 },
+    { field: "price", headerName: "Price", width: 120 },
+    {
+      field: "show",
+      headerName: "Show",
+      width: 100,
+      renderCell: (params) => (
+        <BiDetail onClick={() => navigate(`tarif-details/${params.row.id}`)} />
+      ),
+    },
+    {
+      field: "update",
+      headerName: "Update",
+      width: 100,
+      renderCell: (params) => (
+        <GrDocumentUpdate onClick={() => navigate(`edit-tarif/${params.row.id}`)} />
+      ),
+    },
+    {
+      field: "delete",
+      headerName: "Delete",
+      width: 100,
+      renderCell: (params) => (
+        <MdDeleteOutline
+          onClick={() => handleRemoveTarif(params.row.id)}
+        />
+      ),
+    },
+  ];
+
+  const workspaceRows = service?.workSpace.map((elem) => ({
+    id: elem.id,
+    name: elem.name,
+  }));
+
+  const tarifRows = service?.tarif.map((elem) => ({
+    id: elem.id,
+    name: elem.name,
+    price: elem.price,
+  }));
 
   return (
     <div className="view">
       {service && (
-        <div class="card mb-3">
+        <div className="card mb-3">
           <img
-            class="card-img-top"
+            className="card-img-top"
             src={service.cover?.path}
             alt="Card image cap"
           />
-          <div class="card-body">
-            <div class="lightbox">
-              <div class="multi-carousel">
-                <div class="multi-carousel-inner">
-                  <div class="multi-carousel-item">
-                    <img
-                      src={service.MediaService?.media?.path}
-                      alt={service.MediaService?.media?.alt}
-                      class="w-100"
-                    />
-                  </div>
-                </div>
-              </div>
-              <button
-      class="carousel-control-prev"
-      type="button"
-      tabindex="0"
-      data-mdb-slide="prev"
-    >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      tabindex="0"
-      data-mdb-slide="next"
-    >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </button>
-            </div>
-
-            <h5 class="card-title">{service.name}</h5>
-            <p class="card-text">
+          <div className="card-body">
+            <h5 className="card-title">{service.name}</h5>
+            <p className="card-text">
               This is a wider card with supporting text below as a natural
               lead-in to additional content. This content is a little bit
               longer.
@@ -114,30 +139,13 @@ export default function ServiceDetails() {
           Icon={<BsPersonWorkspace />}
         />
       </div>
-      <table class="table table-sm">
-  <thead>
-    <tr>
-
-      <th scope="col">Name</th>
-      <th scope="col">Show</th>
-      <th scope="col">Update</th>
-      <th scope="col">Delete</th>
-    </tr>
-  </thead>
-      {service?.workSpace.map((elem, i) => (
-  <tbody key={elem.id}>
-    <tr>
-
-      <td>{elem.name}</td>
-      <td><BiDetail/></td>
-      <td><GrDocumentUpdate/></td>
-      <td onClick={()=>{console.log("wiw",elem.id);handleRemoveSpace(elem.id)}}><MdDeleteOutline/></td>
-      
-    </tr>
-  </tbody>
-   ))}
-</table>
-
+      <div style={{ height: 400, width: "100%", marginBottom: "20px" }}>
+        <DataGrid
+          columns={workspaceColumns}
+          rows={workspaceRows}
+          pageSize={5}
+        />
+      </div>
       <div className="d-flex justify-content-end">
         <AddButton
           onClick={() => navigate(`create-Tarif`)}
@@ -146,38 +154,9 @@ export default function ServiceDetails() {
           Icon={<MdOutlinePayments />}
         />
       </div>
-
-      <div className="d-flex justify-content-center align-items-center">
-       
-       <table class="table table-sm">
-  <thead>
-    <tr>
-
-      <th scope="col">Name</th>
-      <th scope="col">Price</th>
-      <th scope="col">Show</th>
-      <th scope="col">Update</th>
-      <th scope="col">Delete</th>
-    </tr>
-  </thead>
-      {service?.tarif.map((elem, i) => (
-  <tbody key={elem.id}>
-    <tr>
-
-    <td>{elem.name}</td>
-      <td>{elem.price}</td>
-      <td onClick={() =>{ navigate(`tarif-details/${elem.id}`)}}><BiDetail/></td>
-      <td ><GrDocumentUpdate/></td>
-     <td onClick={() => { console.log("wiw",elem.id);
-    ;
-    handleRemoveTarif(elem.id)
-      }} ><MdDeleteOutline/></td>
-      
-    </tr>
-  </tbody>
-   ))}
-</table>
-    </div>
+      <div style={{ height: 400, width: "100%" }}>
+        <DataGrid columns={tarifColumns} rows={tarifRows} pageSize={5} />
+      </div>
     </div>
   );
 }

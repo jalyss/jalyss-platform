@@ -1,47 +1,33 @@
-import React, { useEffect,useState} from "react";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { fetchTarifById} from "../../../store/tarif";
-
+import { useParams } from "react-router-dom";
+import { fetchTarifById } from "../../../store/tarif";
 
 export default function TarifDetails() {
-    const dispatch = useDispatch();
-    const { tarifId } = useParams();
+  const dispatch = useDispatch();
+  const { tarifId } = useParams();
+  const tarif = useSelector((state) => state.tarif?.tarif);
 
-    const tarif = useSelector((state) => state.tarif?.tarif);
-
-console.log(tarif,"loli");
-
-    useEffect(() => {
-        dispatch(fetchTarifById(tarifId));
-      }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchTarifById(tarifId));
+  }, [dispatch, tarifId]);
 
   return (
-    <div className="d-flex justify-content-center align-items-center">
-
-        <div className="col-md-2.5 mx-1" >
-          <div
-            className="card serviceCard"
-            style={{
-              borderRadius: 25,
-              transition: "all 1.6s ease-in-out",
-            }}
-          >
-            <div className="card-body service">
-              <h1 className="card-title serviceType">{tarif.name}</h1>
-              <p className="soustitle">Capacity: {tarif.capacity}</p>
-              <p>{tarif.description}</p>
-              <p>Duration:{tarif.duration}</p>
-
-              <div className="price">
-                Only <a className="priceNumber"> {tarif.price}</a>DT
-                <p>Price per day:{tarif.pricePerDay}</p>
-              </div>
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6 mx-auto">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title">{tarif?.name}</h1>
+              <p className="card-text">Capacity: {tarif?.capacity}</p>
+              <p className="card-text">{tarif?.description}</p>
+              <p className="card-text">Duration: {tarif?.duration}</p>
+              <p className="card-text">Price: {tarif?.price} DT</p>
+              <p className="card-text">Price per day: {tarif?.pricePerDay} DT</p>
             </div>
           </div>
         </div>
+      </div>
     </div>
   );
 }
