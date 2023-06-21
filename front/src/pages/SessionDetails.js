@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { learningTopics, additionalInformation, courses } from "../dummydata";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -20,6 +20,8 @@ import { fetchSession } from "../store/session";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
+import ButtonWithTransformAndHover from "../components/Commun/buttons/ButtonWithTransformAndHover";
+
 function SessionDetails() {
   const [showMore, setShowMore] = useState(false);
   const { sessionId } = useParams();
@@ -28,14 +30,17 @@ function SessionDetails() {
   const seletedSession = session;
   const lec = seletedSession?.lectures
   const dispatch = useDispatch();
-
+  const ref = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchSession(sessionId));
   }, [sessionId]);
 
-  console.log("sessio", session);
+  
+  const handleClick = () => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const columnCount = Math.ceil(learningTopics.length / 2);
   const column1 = learningTopics.slice(0, columnCount);
@@ -125,6 +130,8 @@ function SessionDetails() {
               <div>{seletedSession?.endDate.slice(0,10)}</div>
             </div>
           </div>
+          <ButtonWithTransformAndHover title={"Price Discovery"} full={true} onClick={handleClick}/>
+
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">
@@ -200,7 +207,7 @@ function SessionDetails() {
       </div>
 
       <SessionLecture lectures={lec} />
-      <TrainingPricing />
+      <TrainingPricing  ref={ref}/>
       <PreviousSessionGallery />
       <FeedBack />
     </div>

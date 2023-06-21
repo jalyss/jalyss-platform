@@ -31,7 +31,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CustomMDBRow from './../components/Commun/inputs/CustomMDBRow';
 import MentorHome from './../components/trainingComponent/MentorHome';
-
+import DisplayLottie from './DisplayLottie';
+import request from "../constants/request.json"
 
 function MentorPage() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -41,27 +42,31 @@ function MentorPage() {
   };
   return (
     <Fragment>
-      <MentorHome />
+      {/* <MentorHome /> */}
+      {/* <div className="d-flex "> */}
+        {/* <div className="col-lg-6 d-flex requestStyle" >
+    <DisplayLottie animationData={request}/>
 
-      <MDBContainer fluid>
-        <MDBRow className="justify-content-center align-items-center m-5">
-          <MDBCard className="w-50">
+        </div> */}
+
+        <div className=" col-lg-6 d-flex justify-content-center align-items-center m-5">
+          <MDBCard className="">
             <MDBCardBody className="px-4 ">
               <h3 className="fw-bold text-center mb-5 mt-4">
-                Registration Form
+                Request Mentor
               </h3>
               <div className="fs-5" style={{ fontWeight: "50px" }}>
-                Personal Information
+              Availability and Commitment:
                 <hr style={{ left: 0, bottom: 0, marginTop: "5px" }} />
               </div>
-              <CustomMDBRow
+              {/* <CustomMDBRow
                 Icon1={FaUser}
                 Icon2={FaIdCard}
                 label1="Username"
                 label2="Lastname"
-              />
+              /> */}
 
-              <MDBRow className="mt-4">
+              {/* <MDBRow className="mt-4">
                 <MDBCol md="6" className="d-flex flex-wrap">
                   <FaBirthdayCake
                     style={{ height: "20px", width: "20px"}}
@@ -109,16 +114,16 @@ function MentorPage() {
                     </div>
                   </div>
                 </MDBCol>
-              </MDBRow>
+              </MDBRow> */}
              
-              <CustomMDBRow
+              {/* <CustomMDBRow
                 Icon1={FaEnvelope}
                 Icon2={FaPhoneAlt}
                 label1="Email"
                 label2="Phone Number"
-              />
+              /> */}
 
-              <MDBRow className="mt-4">
+              {/* <MDBRow className="mt-4">
                 <MDBCol md="6" className="d-flex flex-wrap gap-3">
                   <FaMapMarkerAlt
                     style={{ height: "20px", width: "20px" }}
@@ -141,11 +146,11 @@ function MentorPage() {
                     label={"Age"}
                   />
                 </MDBCol>
-              </MDBRow>
-
-              <div className=" fs-5 mt-5" style={{ fontWeight: "50px" }}>
-                What is the best time to contact you?
-                <hr style={{ left: 0, bottom: 0, marginTop: "5px" }} />
+              </MDBRow> */}
+{/* Are you available for in-person meetings, virtual meetings, or both? */}
+              <div className=" fs-5" style={{ fontWeight: "50px" }}>
+              How many hours per week can you dedicate to mentoring?
+                {/* <hr style={{ left: 0, bottom: 0, marginTop: "5px" }} /> */}
                 <div
                   className="d-flex flex-wrap gap-3"
                   style={{ marginTop: "30px" }}
@@ -165,9 +170,13 @@ function MentorPage() {
                   />
                 </div>
               </div>
+              <div className="fs-5" style={{ fontWeight: "50px" }}>
+              Mentoring Experience:
 
+                <hr style={{ left: 0, bottom: 0, marginTop: "5px" }} />
+              </div>
               <div className="fs-5 mt-5" style={{ fontWeight: "50px" }}>
-                Have you worked for Company before?
+              Have you previously been a mentor?
                 <hr style={{ left: 0, bottom: 0, marginTop: "5px" }} />
                 <div className="mt-5 mx-2">
                   <MDBRadio
@@ -212,8 +221,8 @@ function MentorPage() {
               </Button>
             </MDBCardBody>
           </MDBCard>
-        </MDBRow>
-      </MDBContainer>
+        </div>
+      {/* </div> */}
     </Fragment>
   );
 }
