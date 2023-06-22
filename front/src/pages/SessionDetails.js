@@ -50,6 +50,7 @@ function SessionDetails() {
 
   return (
     <div className="container">
+      
       <div className="goBackLink" onClick={() => navigate(-1)}>
         <span> &#8592;</span> <span>Go Back</span>
       </div>
