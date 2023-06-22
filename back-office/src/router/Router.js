@@ -42,6 +42,17 @@ import Sessions from "../domains/training/views/sessions/Sessions";
 import Blogs from "../domains/blogs/Blogs";
 import BlogsList from "../domains/blogs/views/BlogsList";
 import DetailBlog from "../domains/blogs/views/DetailBlog";
+import Providers from "../domains/provider/Providers";
+import ProvidersList from "../domains/provider/view/ProvidersList";
+import CreateProvider from "../domains/provider/view/CreateProvider";
+import EditProvider from "../domains/provider/view/EditProvider";
+import DetailProvider from "../domains/provider/view/DetailProvider";
+import Profile from "../pages/Profile";
+import Author from "../domains/author/Author";
+import AuthorList from "../domains/author/views/AuthorList";
+import EditAuthor from "../domains/author/views/EditAuthor";
+import DetailAuthor from "../domains/author/views/DetailAuthor";
+import CreateAuthor from "../domains/author/views/CreateAuthor";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -75,6 +86,21 @@ function Router() {
             <Route path="blogs" element={<Blogs />}>
               <Route index element={<BlogsList/>} />
               <Route path="detail/:blogId" element={<DetailBlog />} />
+            </Route>
+
+            <Route path="provider" element={<Providers />}>
+              <Route index element={<ProvidersList/>} />
+              <Route path="edit/:providerId" element={<EditProvider />} />
+              <Route path="detail/:providerId" element={<DetailProvider />} />
+              <Route path="create" element={<CreateProvider />} />
+
+            </Route>
+            <Route path="author" element={<Author />}>
+              <Route index element={<AuthorList/>} />
+              <Route path="edit/:authorId" element={<EditAuthor />} />
+              <Route path="detail/:authorId" element={<DetailAuthor />} />
+              <Route path="create" element={<CreateAuthor />} />
+
             </Route>
 
             <Route path="articles" element={<Article />}>

@@ -1,7 +1,7 @@
 import { GridActionsCellItem } from '@mui/x-data-grid'
 import React, { useState } from 'react'
 import { AiFillDelete, AiOutlineEye } from 'react-icons/ai'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux';
 import isEnglish from '../../../helpers/isEnglish';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { rows } from "../../../constants/blogData"
-import { MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem } from 'mdb-react-ui-kit';
 
 function BlogsList() {
   const [show, setShow] = useState(false);
@@ -24,25 +23,13 @@ function BlogsList() {
     color: 'white',
     borderRadius: '5px',
   };
-  console.log("ros",rows);
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 150, editable: true },
-    { field: 'blogTitle', headerName: 'Blog Title', width: 150, editable: true },
-    { field: 'articleCategory', headerName: 'Category', width: 150, editable: true },
-    { field: 'date', headerName: 'Date', width: 150, editable: true },
-    { field: 'situation', headerName: 'Situation', width: 150, editable: true },
-    // {
-
-    //   field: 'ArticleCategory ',
-    //   width: 150,
-    //   valueGetter: (params) => (
-
-    //     params.row.category?.nameAr
-
-    //   ),
-    // },
-    
+    { field: 'name', headerName: 'Name', width: 150, editable: false },
+    { field: 'blogTitle', headerName: 'Blog Title', width: 150, editable: false },
+    { field: 'articleCategory', headerName: 'Category', width: 150, editable: false },
+    { field: 'date', headerName: 'Date', width: 150, editable: false },
+    { field: 'situation', headerName: 'Situation', width: 150, editable: false },
     {
       field: 'actions',
       type: 'actions',
@@ -57,18 +44,15 @@ function BlogsList() {
             label="Add"
             className="textPrimary"
             onClick={() => handleAddClick(id)}
-            color="success"
+            color="success" />,
 
-
-          />,
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
 
             onClick={() => { handleDeleteClick(id) }}
             // should open popup to ask are u sure delete this user (yes/no)
-            color="error"
-          />,
+            color="error"/>,
 
         ];
       },
@@ -77,13 +61,6 @@ function BlogsList() {
 
   const isEng = isEnglish()
   const Navigate = useNavigate()
-  // const rows = [
-  //   { id: 1, Name: 'jalyss6', BlogTitle: 'My Blog Post 30', ArticleCategory: 'وعي', Date: '26-07-2023', Situation: 'Accept' },
-  //   { id: 2, Name: 'jalyss3', BlogTitle: 'My Blog Post 28', ArticleCategory: 'ادارة الاعمال', Date: '26-07-2023', Situation: 'Refuse' },
-  //   { id: 3, Name: 'jalyss9', BlogTitle: 'My Blog Post 16', ArticleCategory: 'تنمية بشرية', Date: '26-07-2023', Situation: 'Waiting' },
-
-  // ];
-
   const handleDeleteClick = (id) => {
 
     dispatch(removeBlog(id)).then(res => {
@@ -96,7 +73,6 @@ function BlogsList() {
 
   };
   const handleAddClick = (blogId) => {
-   
     Navigate(`detail/${blogId}`)
   };
   return (
@@ -127,10 +103,6 @@ function BlogsList() {
           disableRowSelectionOnClick
         />
       </Box>
-
-
-
-
     </div>
     </div>
   )
