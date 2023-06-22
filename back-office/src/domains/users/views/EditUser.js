@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { editUser, fetchUser, fetchUsers, removeUser } from '../../../store/user';
 import { useParams } from 'react-router-dom'
+import CropEasy from '../../../components/CropEasy'
 
 
 function EditUser() {
@@ -23,11 +24,16 @@ function EditUser() {
   const [avatar, setAvatar] = useState(null)
   const { userId } = useParams()
   const [preview, setPreview] = useState(null)
+  const [openCrop, setOpenCrop] = useState(false);
+  const [opp, setOpp] = useState(null);
+
   const userStore = useSelector((state) => state.user)
 
   useEffect(() => {
+    
     dispatch(fetchUser(userId))
   }, [])
+
   useEffect(() => {
     if (userStore.user)
       setUser(userStore.user)
@@ -46,22 +52,54 @@ function EditUser() {
     } else {
       event.preventDefault()
       let aux = Object.assign({}, user)
+   
 
+      if (avatar !== null) {
+        console.log('in if')
+        const image = new FormData()
+        image.append('file', avatar)
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          image
+        )
+
+       
+        
+        console.log("yraje3",response.data)
+        aux.avatarId = response.data.id
+
+      }
+      
+      delete aux.avatar;
       dispatch(editUser(aux))
+    console.log("userrr",user);
+
+
+      console.log("aux",aux);
 
       setEditMode(false)
     }
   }
 
-  return (
+  const handleImageChange = (e) => {
+
+    const file = e.target.files[0]
+    setOpp(file);
+    setPreview(URL.createObjectURL(file))
+
+    setOpenCrop(true)
+    setAvatar(opp)
+  }
+
+  return (!openCrop?(
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
     
       <h2>Profile User </h2>
       <form className="checkout-form" onSubmit={submitEditProfile}>
-        <div className="d-flex flex-wrap">
-        <label id="image">{t('image')}</label>
+        <div className="d-flex flex-wrap justify-content-center">
+        {/* <label id="image">{t('image')}</label> */}
             <div class="image-upload">
-             
+            <img src={preview?preview:user?.avatar?.path} alt="taswira" />
 
               { editMode && (
                 <input
@@ -314,7 +352,7 @@ function EditUser() {
           </button>
         </div>
       </form>
-    </div>
+    </div>):<CropEasy {...{ preview, setOpenCrop, setPreview,setOpp, setAvatar,avatar }}/>
   )
 
 }

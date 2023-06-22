@@ -8,7 +8,7 @@ export const fetchUsers = createAsyncThunk("users/users", async () => {
   return response.data;
 });
 export const fetchUser = createAsyncThunk("users/user", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/users/${id}`);
+  const response = await axios.get(`${config.API_ENDPOINT}/users/one/${id}`);
   return response.data;
 });
 
@@ -36,7 +36,7 @@ export const removeUser = createAsyncThunk("users/deleteUser", async (id,{dispat
 });
 
 export const editUser = createAsyncThunk("users/editUser", async (args, { dispatch }) => {
-  let token = JSON.parse(localStorage.getItem('token'))
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
   const configs = {
     headers: {
       Authorization: 'Bearer ' + token.Authorization
@@ -46,6 +46,7 @@ export const editUser = createAsyncThunk("users/editUser", async (args, { dispat
   delete args.id
   const response = await axios.patch(`${config.API_ENDPOINT}/users/${id}`, args,configs);
   dispatch(fetchUsers(id))
+  console.log("alllllllllllllllllllllllllllllllllllllllllllll",response.data)
   return response.data;
 });
 

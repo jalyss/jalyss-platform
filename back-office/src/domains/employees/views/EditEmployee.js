@@ -20,6 +20,7 @@ import axios from "axios";
 import  Cropper ,{ReactCropperElement}  from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { Dialog, DialogContent } from '@mui/material'
+import CropEasy from '../../../components/CropEasy'
 
 
  
@@ -38,11 +39,17 @@ function EditEmployee() {
 
   const [preview, setPreview] = useState(null)
   const [open,setOpen]=useState(false)
-  const cropperRef = useRef(null);
-  const onCrop = () => {
-    const cropper =cropperRef.current?.cropper;
-    console.log(cropper.getCroppedCanvas().toDataURL());
-  };
+  const [openCrop, setOpenCrop] = useState(false);
+  const [opp, setOpp] = useState(null);
+  
+  
+  
+  
+  // const cropperRef = useRef(null);
+  // const onCrop = () => {
+  //   const cropper =cropperRef.current?.cropper;
+  //   console.log(cropper.getCroppedCanvas().toDataURL());
+  // };
   
   useEffect(() => {
     dispatch(fetchBranches())
@@ -71,11 +78,12 @@ function EditEmployee() {
     if (!editMode) {
       event.preventDefault()
       setEditMode(true)
+      
     } else {
       event.preventDefault()
       let aux = Object.assign({}, employee)
       if (avatar !== null) {
-        console.log('in if')
+        console.log("befor crop",avatar)
         const image = new FormData()
         image.append('file', avatar)
         const response = await axios.post(
@@ -84,8 +92,8 @@ function EditEmployee() {
         )
         aux.avatarId = response.data.id
       }
-      delete aux.branch 
-      delete aux.role
+      delete aux.branch;
+      delete aux.role;
       delete aux.avatar;
       delete aux.Media;
       dispatch(editEmployee(aux))
@@ -93,14 +101,19 @@ function EditEmployee() {
     }
   }
   const handleImageChange = (e) => {
+
     const file = e.target.files[0]
+    console.log("hetha el file",avatar)
+    setOpp(file);
     setPreview(URL.createObjectURL(file))
-    setAvatar(file)
+
+    setOpenCrop(true)
+    setAvatar(opp)
   }
   console.log("emmpp",employee);
   console.log("employeeStore",employeeStore);
 
-  return (
+  return ( !openCrop? (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile Employee</h2>
      
@@ -118,11 +131,12 @@ function EditEmployee() {
                 ref={cropperRef}
               /></DialogContent>      
          </Dialog> */}
-        <div className="d-flex flex-wrap">
-        <label id="image">{t('image')}</label>
+        <div className="d-flex flex-wrap justify-content-center">
+        {/* <label id="image">{t('image')}</label> */}
             <div class="image-upload">
              
-
+            <img src={preview?preview:employee?.avatar?.path} alt="taswira" />
+            console.log("opa",preview)
               { editMode && (
                 <input
                   id="image"
@@ -130,6 +144,7 @@ function EditEmployee() {
                   accept="image/*"
                   onChange={handleImageChange}
                 />
+              
               )}
               </div>
               {preview && editMode && (
@@ -331,7 +346,7 @@ function EditEmployee() {
           </button>
         </div>
       </form>
-    </div>
+    </div>) : <CropEasy {...{ preview, setOpenCrop, setPreview, setOpp,setAvatar,avatar}}/>
   )
 }
 

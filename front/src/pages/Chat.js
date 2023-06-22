@@ -2,25 +2,71 @@ import React, { useContext, useEffect, useState } from "react";
 import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
 // import Icon from "../assets/styles/profile.png";
-import { Phone, ChatCircleDots, Users, Gear } from "phosphor-react";
+import {
+  Phone,
+  ChatCircleDots,
+  Users,
+  Gear,
+  AddressBook,
+  Broadcast,
+  CellSignalFull,
+} from "phosphor-react";
 
 import Conversation from "../components/chatComponents/Conversation";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import ConnectedUsers from "./ConnectedUsers";
+import ConnectedUsers from "../components/chatComponents/ConnectedUsers";
 import { SocketContext } from "../apps/Client";
 import ChatRoom from "../components/chatComponents/ChatRoom";
 import { styled } from "@mui/material/styles";
+import { fetchMessages, fetchChatRoom } from "../store/chat";
 
 const Chat = () => {
-  const authStore = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   const theme = useTheme();
-  console.log(theme);
+
+  const myId = useSelector((state) => state.auth.me?.id);
+
   const [chatRoomList, setChatRoomList] = useState([]);
-  const [show, setShow] = useState(false);
-  const [mesg, setMesg] = useState(false);
+  const [room, setRoom] = useState({});
+  const [activeComponentMd, setActiveComponentMd] = useState("chatRoom");
+  const [activeComponentLg, setActiveComponentLg] = useState("chatRoom");
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  useEffect(() => {
+    if (myId)
+      axios
+        .get(`http://localhost:3001/api/v1/chatRoom/${myId}`)
+        .then((response) => {
+          let data = response.data;
+          console.log(data);
+          setChatRoomList(data);
+          setSelectedUser(
+            data[0].participants.filter(
+              (particip) => particip.user.id !== myId
+            )[0]
+          );
+        })
+        .catch((err) => console.log(err));
+  }, [myId]);
+  useEffect(() => {
+    function chatRoomList(value) {
+      
+      setChatRoomList(value);
+    }
+    socket.on(`chat-rooms/${myId}`, chatRoomList);
+
+    return () => {
+      socket.off(`chat-rooms/${myId}`, chatRoomList);
+    };
+  }, [socket,myId]);
+
+  const handleChangeComponent = (string) => {
+    setActiveComponentLg(string);
+    setActiveComponentMd(string);
+  };
 
   const Stack0 = styled("div")(({ theme }) => ({
     display: "flex",
@@ -37,7 +83,7 @@ const Chat = () => {
     width: "max-content",
     alignItems: "center",
     display: "flex",
-    gap:10,
+    gap: 10,
     [theme.breakpoints.down("md")]: {
       flexDirection: "row",
     },
@@ -48,13 +94,13 @@ const Chat = () => {
     flexDirection: "column",
     alignItems: "center",
     height: "100%",
-    gap:10,
+    gap: 10,
     [theme.breakpoints.down("md")]: {
       flexDirection: "row",
     },
   }));
   const Box1 = styled("div")(({ theme }) => ({
-    padding:10,
+    padding: 10,
     backgroundColor: "white",
     height: "100vh",
     boxShadow: "0px 0px 2px",
@@ -64,40 +110,70 @@ const Chat = () => {
       height: 60,
     },
   }));
-
-  useEffect(() => {
-    axios
-      .get(
-        `http://localhost:3001/api/v1/chatRoom/${"f62d33bd-9633-453f-9428-6c10368ac296"}`
-      )
-      .then((response) => {
-        let data = response.data;
-        console.log(data);
-        setChatRoomList(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  const BoxDiscussion = styled("div")(({ theme }) => ({
+    backgroundColor: "#57385c",
+    borderRadius: 6,
+    padding: 8,
+    [theme.breakpoints.up("md")]: {
+      display: "none",
+    },
+  }));
+  const BoxLg = styled("div")(({ theme }) => ({
+    width: 500,
+    [theme.breakpoints.down("md")]: {
+      display: "none",
+    },
+  }));
+  const BoxMd = styled("div")(({ theme }) => ({
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      display: "none",
+    },
+  }));
+  const BoxLgConversation = styled("div")(({ theme }) => ({
+    width: "100%",
+    [theme.breakpoints.down("md")]: {
+      display: "none",
+    },
+  }));
 
   return (
     <div className="d-flex chatContainer">
-      <Box1 >
+      <Box1>
         <Stack0>
           <Stack1 spacing={3}>
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <ChatCircleDots onClick={() => setMesg(!mesg)} />
+              <IconButton
+                sx={{ width: "max-content", color: "#fcfefe" }}
+                onClick={() => {
+                  handleChangeComponent("chatRoom");
+                }}
+              >
+                <ChatCircleDots  />
               </IconButton>
             </Box>
             <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <Users className="users" onClick={() => setShow(!show)} />
+              <IconButton
+                sx={{ width: "max-content", color: "#fcfefe" }}
+                onClick={() => {
+                  handleChangeComponent("connectedUsers");
+                }}
+              >
+                <Broadcast className="users"  />
               </IconButton>
             </Box>
-            <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}>
-                <Phone />
+            {/* <Box p={1}
+              sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}
+
+            >
+              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}
+                onClick={() => {
+                  handleChangeComponent("chatRoom")
+
+                }}>
+                <Users />
               </IconButton>
-            </Box>
+            </Box> */}
             {/* <Divider sx={{ width: "48px" }} />
             <IconButton>
               <Gear />
@@ -111,9 +187,70 @@ const Chat = () => {
           </div>
         </Stack0>
       </Box1>
-      {show && <ConnectedUsers socket={socket} />}
-      {mesg && <ChatRoom chatRoomList={chatRoomList} />}
-      <Conversation setChatRoomList={setChatRoomList} />
+      {activeComponentLg === "connectedUsers" && (
+        <BoxLg>
+          <ConnectedUsers
+            socket={socket}
+            setActiveComponent={handleChangeComponent}
+            setSelectedUser={setSelectedUser}
+            screen={"lg"}
+          />
+        </BoxLg>
+      )}
+      {activeComponentLg === "chatRoom" && (
+        <BoxLg>
+          <ChatRoom
+            chatRoomList={chatRoomList}
+            setRoom={setRoom}
+            room={room}
+            setActiveComponent={handleChangeComponent}
+            setSelectedUser={setSelectedUser}
+            screen={"lg"}
+          />
+        </BoxLg>
+      )}
+
+      <BoxLgConversation>
+        <Conversation
+          setChatRoomList={setChatRoomList}
+          room={room}
+          user={selectedUser}
+          socket={socket}
+        />
+      </BoxLgConversation>
+
+      {activeComponentMd === "connectedUsers" && (
+        <BoxMd>
+          <ConnectedUsers
+            socket={socket}
+            setActiveComponent={handleChangeComponent}
+            setSelectedUser={setSelectedUser}
+            screen={"md"}
+          />
+        </BoxMd>
+      )}
+      {activeComponentMd === "chatRoom" && (
+        <BoxMd>
+          <ChatRoom
+            chatRoomList={chatRoomList}
+            setRoom={setRoom}
+            room={room}
+            setActiveComponent={handleChangeComponent}
+            setSelectedUser={setSelectedUser}
+            screen={"md"}
+          />
+        </BoxMd>
+      )}
+      {activeComponentMd === "conversation" && (
+        <BoxMd>
+          <Conversation
+            setChatRoomList={setChatRoomList}
+            room={room}
+            user={selectedUser}
+            socket={socket}
+          />
+        </BoxMd>
+      )}
     </div>
   );
 };
