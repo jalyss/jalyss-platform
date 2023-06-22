@@ -1,9 +1,14 @@
-@media only screen and (max-width:  900px) {
-    .chatContainer{
-        flex-direction: column !important;
-    }
-    .optionChat{
-        justify-content: end !important;
-        align-items: center !important;
-    }
+@media only screen and (max-width: 900px) {
+  .chatContainer {
+    flex-direction: column !important;
+  }
+  .optionChat {
+    justify-content: end !important;
+    align-items: center !important;
+  }
+}
+@media only screen and (min-width: 900px) {
+  .imageCoverTrainings {
+    max-width: 400px !important;
+  }
 }

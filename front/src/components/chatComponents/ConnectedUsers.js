@@ -8,13 +8,14 @@ import {
 } from "@mui/material";
 import { CircleDashed, MagnifyingGlass, WifiHigh, ChatText } from "phosphor-react";
 import React, { useEffect, useState, useMemo } from "react";
-import Search from "../Search";
-import SearchIconWrapper from "../SearchIconWrapper";
-import StyledInputBase from "../SearchInputBase";
+import Search from "../Commun/Search";
+import SearchIconWrapper from "../Commun/SearchIconWrapper";
+import StyledInputBase from "../Commun/inputs/SearchInputBase";
 import Icon from "../../assets/styles/profile.png";
-import StyledBadge from "../StyledBadge";
+import StyledBadge from "../Commun/StyledBadge";
 
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen }) => {
@@ -22,13 +23,14 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
 
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
-
+  const navigate=useNavigate()
 
 
   const handleChatTextClick = (user) => {
     setSelectedUser(user);
     if (screen === 'md')
       setActiveComponent("conversation");
+      navigate(`/chat/${user?.userId}`)
   };
 
 

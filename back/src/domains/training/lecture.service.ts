@@ -16,7 +16,7 @@ export class LectureService {
   async findAll() {
     return await this.prisma.lecture.findMany({
       include: {
-        category: true,
+
         sessions: true,
         coaching: true,
         assesments: true,

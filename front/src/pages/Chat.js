@@ -214,7 +214,7 @@ const Chat = () => {
         <Conversation
           setChatRoomList={setChatRoomList}
           room={room}
-          user={selectedUser}
+          userr={selectedUser}
           socket={socket}
         />
       </BoxLgConversation>
@@ -241,12 +241,13 @@ const Chat = () => {
           />
         </BoxMd>
       )}
-      {activeComponentMd === "conversation" && (
+      {
+      activeComponentMd === "conversation" && (
         <BoxMd>
           <Conversation
             setChatRoomList={setChatRoomList}
             room={room}
-            user={selectedUser}
+            userr={selectedUser}
             socket={socket}
           />
         </BoxMd>

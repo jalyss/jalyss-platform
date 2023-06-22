@@ -1,26 +1,18 @@
-import React , { Fragment } from 'react'
-import TrainingHome from '../components/TrainingHome'
-import TrainingAbout from '../components/TrainingAbout'
-import TrainingCourses from '../components/TrainingCourses'
-import TrainingPricing from '../components/TrainingPricing'
-import TrainingTestimonial from '../components/TrainingTestimonial'
-import TrainingCategories from '../components/TrainingCategories'
-import TrainingMentor from '../components/TrainingMentor'
-import Faq from '../components/Faq'
+import React, { Fragment } from "react";
+import TrainingHome from "../components/trainingComponent/TrainingHome";
+import TrainingCourses from "../components/trainingComponent/TrainingCourses";
+import TrainingTestimonial from "../components/trainingComponent/TrainingTestimonial";
+import Faq from "../components/Faq";
 
 function TrainingPage() {
   return (
     <Fragment>
-    <TrainingHome/>
-    <TrainingAbout/>
-    <TrainingCourses/>
-    <TrainingPricing/>
-    <TrainingTestimonial/>
-    <TrainingCategories/>
-    <TrainingMentor/>
-    <Faq/>
-  </Fragment>
-  )
+      <TrainingHome />
+      <TrainingCourses />
+      <TrainingTestimonial />
+      <Faq />
+    </Fragment>
+  );
 }
 
-export default TrainingPage
+export default TrainingPage;

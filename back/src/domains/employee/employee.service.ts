@@ -19,6 +19,7 @@ export interface FormatLoginAdmin extends Partial<Employee> {
   branchId: string;
   roleId: string;
   
+  
 }
 
 @Injectable()
