@@ -71,7 +71,7 @@ export class AppController {
     })
   }))
   async uploadMultiple (@UploadedFiles() files: Array<Express.Multer.File>, @Body() dto: any) {
-    console.log("files",files);
+    console.log("filessss",files);
     const mediaData = files.map(file => ({
       description: dto.description,
       alt: dto.alt,

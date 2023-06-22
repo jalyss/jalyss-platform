@@ -23,10 +23,10 @@ export default function ServiceDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [selectedId, setSelectedId] = useState(null);
-  const [tarifId, setTarifId] = useState(null);
+
 
   const service = useSelector((state) => state.service.service);
+console.log(service);
 
   useEffect(() => {
     dispatch(fetchServiceById(serviceId));
@@ -140,11 +140,11 @@ export default function ServiceDetails() {
         />
       </div>
       <div style={{ height: 400, width: "100%", marginBottom: "20px" }}>
-        <DataGrid
+        {workspaceRows&&<DataGrid
           columns={workspaceColumns}
           rows={workspaceRows}
           pageSize={5}
-        />
+        />}
       </div>
       <div className="d-flex justify-content-end">
         <AddButton
@@ -155,7 +155,7 @@ export default function ServiceDetails() {
         />
       </div>
       <div style={{ height: 400, width: "100%" }}>
-        <DataGrid columns={tarifColumns} rows={tarifRows} pageSize={5} />
+       {tarifRows&&<DataGrid columns={tarifColumns} rows={tarifRows} pageSize={5} />}
       </div>
     </div>
   );

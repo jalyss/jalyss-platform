@@ -25,6 +25,7 @@ export class WorkSpacesService {
       where: {
         id,
       },
+      include:{MediaWorkSpace:true}
     });
   }
 

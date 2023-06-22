@@ -18,6 +18,7 @@ export default function EditWorkSpace() {
   const workSpaceStore = useSelector((state) => state.space?.service);
 
 const id = spaceId;
+const service = serviceId
 
   useEffect(() => {
     dispatch(fetchSpaceById(spaceId));
@@ -44,7 +45,6 @@ const id = spaceId;
         price,
         description,
         amenities,
-        serviceId,
         image,
       }
     dispatch(editSpace({id,...body})
