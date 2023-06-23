@@ -10,12 +10,14 @@ import TrainingHeading from "../../components/Commun/TrainingHeading";
 import KeyValueStyled from "../../components/Commun/KeyValueStyled";
 import start from "../../img/start.png";
 import end from "../../img/end.png";
-import { Pagination } from "@mui/material";
+
 
 
 function SessionLecture({lectures}) {
  console.log("waaaaaaaaaaaaaaaaaaaha",lectures)
+ const [showMore, setShowMore] = useState(false);
 
+let displayLec = showMore? lectures : lectures?.slice(0,2)
   return (
     <div>
       <TrainingHeading
@@ -30,7 +32,7 @@ function SessionLecture({lectures}) {
           <div class="col-md-12">
             <div id="content">
               <ul class="timeline-1 text-black">
-                {lectures?.map((element, indexx) => (
+                {displayLec?.map((element, indexx) => (
                   <li class="event" 
                   // data-date={element.date}
                   >
@@ -42,6 +44,7 @@ function SessionLecture({lectures}) {
                         {element.lectures.title}
                       </span>
                     </div>
+
 
                     <KeyValueStyled label="content" value={element.lectures.content} />
                     <div className="d-flex gap-3">
@@ -69,10 +72,15 @@ function SessionLecture({lectures}) {
                       ))}
                     </div>
 
-                    {/* <KeyValueStyled
+                    <KeyValueStyled
                       label="What you will learn"
-                      value={element?.whatYouWillLearn}
-                    /> */}
+                      value={element.lectures.LectureHasWhatYouWillLearn?.map((el)=>{
+                      console.log("elmmmmmm",el);
+                       return( <div>{el.WhatYouWillLearn.content
+                       }</div>)
+                      })
+                      }
+                    />
                     {/* <div className="d-flex  justify-content-between mt-3">
                         <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">   <img src={start} height="20" width="20" alt="icon" />{" "}
                       <div>{element.startAt}</div></div>
@@ -82,10 +90,24 @@ function SessionLecture({lectures}) {
                     </div> */}
                   </li>
                 ))}
+                
               </ul>
+             
+                
+                <div className="text-center mt-3">
+                  <button
+                    className="btn btn-link"
+                    style={{ color: "#48184c" }}
+                    onClick={() => setShowMore(!showMore)}
+                  >
+                    {showMore? "Show Less" : "Show More"}
+                  </button>
+                </div>
+              
+             
             
         <div className="d-flex justify-content-center align-items-center mt-5">
-          <Pagination count={10} variant="outlined" color="secondary" />
+           
         </div>
 
             </div>

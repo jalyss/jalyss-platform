@@ -37,16 +37,20 @@ function SessionDetails() {
     dispatch(fetchSession(sessionId));
   }, [sessionId]);
 
-  
+  console.log("sessionss",session);
   const handleClick = () => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
+console.log("sessi",session);
+ 
+  const columnCount=Math.ceil(session?.SessionHasWhatYouWillLearn.length/2)
+  console.log("columnCount",columnCount);
 
-  const columnCount = Math.ceil(learningTopics.length / 2);
-  const column1 = learningTopics.slice(0, columnCount);
-  const column2 = learningTopics.slice(columnCount);
-  const displayColumn1 = showMore ? column1 : column1.slice(0, 5);
-  const displayColumn2 = showMore ? column2 : column2.slice(0, 5);
+  const column1 = session?.SessionHasWhatYouWillLearn?.slice(0,columnCount)
+  const column2 = session?.SessionHasWhatYouWillLearn?.slice(columnCount)
+  const displayColumn1 = showMore ? column1 : column1?.slice(0, 5);
+  const displayColumn2 = showMore ? column2 : column2?.slice(0, 5);
+ 
 
   return (
     <div className="container">
@@ -147,23 +151,25 @@ function SessionDetails() {
             <MDBCardBody style={{ color: "#000" }}>
               <MDBRow>
                 <MDBCol>
-                  {displayColumn1.map((topic, index) => (
-                    <React.Fragment key={index}>
-                      <span>&#10003; {topic}</span>
+                  {displayColumn1?.map((topic, index) => (
+                      <div key={index} className="d-flex gap-2 mt-2">
+                      <span>&#10003; </span>
+                      <div className="">{topic.WhatYouWillLearn.content}</div>
                       <br />
-                    </React.Fragment>
+                    </div>
                   ))}
                 </MDBCol>
                 <MDBCol>
-                  {displayColumn2.map((topic, index) => (
-                    <React.Fragment key={index}>
-                      <span>&#10003; {topic}</span>
+                  {displayColumn2?.map((topic, index) => (
+                    <div key={index} className="d-flex gap-2 mt-2">
+                      <span>&#10003; </span>
+                      <div>{topic.WhatYouWillLearn.content}</div>
                       <br />
-                    </React.Fragment>
+                    </div>
                   ))}
                 </MDBCol>
               </MDBRow>
-              {!showMore && (column1.length > 5 || column2.length > 5) && (
+              {!showMore && (column1?.length > 5 || column2?.length > 5) && (
                 <div className="text-center mt-3">
                   <button
                     className="btn btn-link"
@@ -197,9 +203,9 @@ function SessionDetails() {
               Prérequis
             </MDBCardHeader>
             <MDBCardBody style={{ color: "#000" }}>
-              {additionalInformation.map((info, index) => (
+              {session?.sessionHasPrerequire.map((info, index) => (
                 <p key={index}>
-                  <span style={{ fontSize: "1.2rem" }}>&#8226;</span> {info}
+                  <span style={{ fontSize: "1.2rem" }}>&#8226;</span> {info.prerequire.content}
                 </p>
               ))}
             </MDBCardBody>
@@ -210,7 +216,7 @@ function SessionDetails() {
       <SessionLecture lectures={lec} />
       <TrainingPricing  ref={ref}/>
       <PreviousSessionGallery />
-      <FeedBack />
+      <FeedBack session={session}/>
     </div>
   );
 }

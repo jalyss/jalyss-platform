@@ -80,7 +80,10 @@ if (!['take', 'skip'].includes(key)) {
       include:{
         category:true,
         sessionType:true,
-        lectures:{include:{lectures:{include:{coaching:{include:{user:{include:{avatar:true}}}}}}}}
+        lectures:{include:{lectures:{include:{coaching:{include:{user:{include:{avatar:true}}}},LectureHasWhatYouWillLearn:{include:{WhatYouWillLearn:true}}}}}},
+        sessionHasPrerequire:{include:{prerequire:true}},
+        SessionHasWhatYouWillLearn:{include:{WhatYouWillLearn:true}},
+        sessionFeedback:{include:{User:{include:{avatar:true}}}}
       }
     });
   }
