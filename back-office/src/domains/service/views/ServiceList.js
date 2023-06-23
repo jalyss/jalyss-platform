@@ -21,7 +21,7 @@ export default function ServiceList() {
       </Link>
       <div class="card mb-3">
         {servicesStore.items.map((elem, i) => (
-          <div class="row no-gutters">
+          <div class="row no-gutters" key={i}>
             <div class="col-md-4">
               <img
                 src={elem.cover?.path}
@@ -39,6 +39,9 @@ export default function ServiceList() {
                 </p>
               </div>
               <Link to={`service/${elem.id}`}>Go to Details</Link>
+              
+              <Link to={`edit-service/${elem.id}`}>Edit this service</Link>
+              
             </div>
           </div>
         ))}

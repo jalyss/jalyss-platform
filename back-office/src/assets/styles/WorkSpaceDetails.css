@@ -1,10 +1,18 @@
-.imageGallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+.grid {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px; /* Add a margin between the images */
+}
 
-  .imageGallery img {
-    height: 100px;
-    cursor: pointer;
-  }
+.deleteButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.grid:hover .deleteButton {
+  display: block;
+  background: rgba(245, 238, 238, 0.516);
+}

@@ -48,6 +48,7 @@ import TarifDetails from "../domains/service/views/TarifDetails";
 import SpaceDetails from "../domains/service/views/SpaceDetails";
 import EditTarif from "../domains/service/views/EditTarif";
 import EditWorkSpace from "../domains/service/views/EditWorkSpace";
+import EditService from "../domains/service/views/EditService";
 
 
 
@@ -79,6 +80,8 @@ function Router() {
                 <Route path="space-details/:spaceId" element={<SpaceDetails />} />
                 <Route path="edit-space/:spaceId" element={<EditWorkSpace/>} />
                 <Route path="edit-tarif/:tarifId" element={<EditTarif/>} />
+
+                <Route path="edit-service/:serviceId" element={<EditService/>} />
 
 
 

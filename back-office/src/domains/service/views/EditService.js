@@ -14,12 +14,14 @@ export default function EditService() {
 
   const serviceStore = useSelector((state) => state.service);
 
+  console.log(serviceStore,"lol");
+
   useEffect(() => {
     dispatch(fetchServiceById(serviceId));
   }, [dispatch, serviceId]);
 
   useEffect(() => {
-    // Set the initial values of the input fields when the service data is fetched
+
     if (serviceStore.service) {
       const { name, identifier } = serviceStore.service;
       setName(name);
