@@ -22,6 +22,8 @@ code {
 @import url('./assets//styles/training.css');
 @import url('./assets/styles/blogs.css');
 @import url('./assets/styles/mediaScreensStyles.css');
+@import url('./assets/styles/space.css');
+@import url('./assets/styles/Navbar.css');
 
 .react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
   display: none;
