@@ -8,79 +8,63 @@ import axios from "axios";
 export default function SpaceDetails() {
   const [files, setFiles] = useState([]);
 
+  const dispatch = useDispatch();
+  const { spaceId } = useParams();
+
+  const space = useSelector((state) => state.space.space);
+  const [refresh, setRefresh] = useState(false);
+
+  console.log(space)
+
+  useEffect(() => {
+    dispatch(fetchSpaceById(spaceId));
+  }, [dispatch, spaceId, refresh]);
+
+  const navigate = useNavigate();
+
   const onChange = (e) => {
     const fileList = Array.from(e.target.files);
     setFiles(fileList);
   };
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    files.forEach((file) => {
-      formData.append("uploadImages", file);
-    });
-    console.log("form", formData);
-  
+
+    const galleryData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      galleryData.append("files", files[i]);
+    }
+
+    let auxMedia = [];
     try {
       const res = await axios.post(
         `${process.env.REACT_APP_API_ENDPOINT}/uploads`,
-        formData,
+        galleryData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         }
       );
-      console.log(res, "ressssss");
+      auxMedia = res.data.map((elem) => elem.id);
     } catch (err) {
       console.log(err);
     }
-  };
-  
-  const dispatch = useDispatch();
-  const { spaceId } = useParams();
-
-  const space = useSelector((state) => state.space?.service);
-  const id = spaceId;
-
-  console.log(space, "");
-
-  useEffect(() => {
-    dispatch(fetchSpaceById(spaceId));
-  }, [dispatch, spaceId]);
-
-  const navigate = useNavigate();
-  const [galleryImages, setGalleryImages] = useState([]);
-
-  const handleDeleteImage = (index) => {
-    const updatedGallery = [...galleryImages];
-    updatedGallery.splice(index, 1);
-    setGalleryImages(updatedGallery);
-  };
-
-  const handleAddImage = (e) => {
-    const newImage = e.target.files[0];
-    setGalleryImages([...galleryImages, newImage]);
-  };
-
-  const handleSubmit = () => {
-    const newMediaWorkspaces = galleryImages.map((image) => ({
-      workspaceId: spaceId,
-      mediaId: image.id,
-    }));
-
-    dispatch(editSpace({ id, ...{ MediaWorkSpace: newMediaWorkspaces } }));
-
-    setGalleryImages([]);
-    navigate(-1);
+    await axios
+      .post(
+        `${process.env.REACT_APP_API_ENDPOINT}/work-spaces/images/${spaceId}`,
+        auxMedia
+      )
+      .then((res) => setRefresh(!refresh));
   };
 
   return (
-    <div className="spaceDetailsWrapper">
-      <div className="spaceImageWrapper">
-        {space?.image ? (
+    <div className="view">
+      <div className="card mb-3">
+        {space?.image? (
           <img
-            className="spaceImage"
+            className="card-img-top"
             src={space?.image?.path}
             alt={space?.image?.alt}
           />
@@ -93,42 +77,6 @@ export default function SpaceDetails() {
         )}
       </div>
 
-      {/* <div className="galleryWrapper">
-        {galleryImages.length > 0 &&
-          galleryImages.map((image, index) => (
-            <div key={index} className="galleryImageWrapper">
-              <img
-                className="galleryImage"
-                src={URL.createObjectURL(image)}
-                alt={`gallery-image-${index}`}
-              />
-              <button
-                className="deleteButton"
-                onClick={() => handleDeleteImage(index)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        <input type="file" className="galleryInput" onChange={handleAddImage} />
-        <button className="addButton" onClick={handleSubmit}>
-          Add Images
-        </button>
-      </div> */}
-
-      <form onSubmit={onSubmit}>
-        <div>
-          <input
-            type="file"
-            id="file"
-            name="uploadImages"
-            multiple
-            onChange={onChange}
-          />
-        </div>
-        <input type="submit" value="Upload" />
-      </form>
-
       <div className="spaceDetails">
         <h5 className="spaceName">{space?.name}</h5>
         <p className="spaceDescription">{space?.description}</p>
@@ -139,7 +87,23 @@ export default function SpaceDetails() {
             <p className="capacity">Capacity: {space?.capacity}</p>
           </div>
         </div>
+  
+        <form onSubmit={onSubmit}>
+          <div>
+            <input
+              type="file"
+              id="file"
+              name="uploadImages"
+              multiple
+              onChange={onChange}
+            />
+          </div>
+          <input type="submit" value="Upload" />
+        </form>
       </div>
+      {space?.MediaWorkSpace?.map((elem, i) => (
+        <img alt="" src={elem.media.path} key={i} style={{height:100}}/>
+      ))}
     </div>
   );
 }

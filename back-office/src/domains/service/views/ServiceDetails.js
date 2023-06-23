@@ -12,7 +12,7 @@ import { MdOutlinePayments } from "react-icons/md";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { MdDeleteOutline } from "react-icons/md";
 
-import "../../../assets/styles/WorkSpaceDetails.css";
+import "../../../assets/styles/ServiceDetails.css";
 
 import AddButton from "../../../components/buttons/AddButton";
 

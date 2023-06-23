@@ -37,7 +37,7 @@ export const createWorkSpace = createAsyncThunk(
       `${config.API_ENDPOINT}/work-spaces`,
       body
     );
-    dispatch(fetchWorkSpace(response.data));
+    // dispatch(fetchWorkSpaces(response.data));
     return response.data;
   }
 );
@@ -83,7 +83,7 @@ export const spaceSlice = createSlice({
         state.spaces.count = action.payload.count;
       })
      builder.addCase(fetchSpaceById.fulfilled, (state, action) => {
-        state.service = action.payload;
+        state.space = action.payload;
       });
   },
 });

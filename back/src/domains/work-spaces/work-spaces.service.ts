@@ -15,9 +15,8 @@ export class WorkSpacesService {
 
   findAll() {
     return this.prisma.workSpace.findMany({
-      include:{MediaWorkSpace:true},
+      include: { MediaWorkSpace: true },
     });
-
   }
 
   async findOne(id: string) {
@@ -25,7 +24,15 @@ export class WorkSpacesService {
       where: {
         id,
       },
-      include:{MediaWorkSpace:true}
+      include: { 
+        image: true,
+        MediaWorkSpace:{
+          include:{
+            media:true
+
+          }
+          }
+         },
     });
   }
 
@@ -35,5 +42,14 @@ export class WorkSpacesService {
 
   async remove(id: string) {
     return await this.prisma.workSpace.delete({ where: { id } });
+  }
+
+  async createImages(id: string, dto: string[]) {
+    return await this.prisma.mediaWorkSpace.createMany({
+      data: dto.map((elem) => ({
+        mediaId: elem,
+        workspaceId: id,
+      })),
+    });
   }
 }

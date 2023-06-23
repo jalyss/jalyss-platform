@@ -15,7 +15,9 @@ export default function EditWorkSpace() {
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState("");
 
-  const workSpaceStore = useSelector((state) => state.space?.service);
+  const workSpaceStore = useSelector((state) => state.space.space);
+
+  console.log(workSpaceStore);
 
 const id = spaceId;
 const service = serviceId
