@@ -14,7 +14,7 @@ import user from './user'
 import bookmark from './bookmarks'
 import session from './session'
 import chat from './chat'
-
+import faq from "./Faq"
 import service from "./space";
 
 export const store = configureStore({
@@ -33,7 +33,8 @@ export const store = configureStore({
     user,
     session,
     chat,
-    service,
+    faq,
+ 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

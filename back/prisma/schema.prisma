@@ -705,7 +705,6 @@ model WorkSpace {
   id          String   @id @default(uuid())
   name        String
   capacity    String?
-  description String?
   price       String?
   rating      String?
   reviews     String?
@@ -718,7 +717,8 @@ model WorkSpace {
 
 model Service {
   id           String         @id @default(uuid())
-  name         String
+  name         String?
+
   identifier   String         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
