@@ -5,6 +5,8 @@ import { fetchServices } from "../../../store/service";
 import { Navigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import AddButton from "../../../components/buttons/AddButton";
+
 
 export default function ServiceList() {
   const dispatch = useDispatch();
@@ -17,7 +19,7 @@ export default function ServiceList() {
   return (
     <div>
       <Link to="create-service">
-        <Button>Create a new service</Button>
+        <AddButton content={"Create a new service"} />
       </Link>
       <div class="card mb-3">
         {servicesStore.items.map((elem, i) => (
@@ -39,9 +41,10 @@ export default function ServiceList() {
                 </p>
               </div>
               <Link to={`service/${elem.id}`}>Go to Details</Link>
-              
-              <Link to={`edit-service/${elem.id}`}>Edit this service</Link>
-              
+              <div>
+                <Link to={`edit-service/${elem.id}`}>Edit this service</Link>
+              </div>
+         
             </div>
           </div>
         ))}

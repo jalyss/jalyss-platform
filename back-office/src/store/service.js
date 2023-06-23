@@ -9,15 +9,15 @@ export const fetchServices = createAsyncThunk("services/services", async () => {
 });
 
 // Async thunk for fetching a single service by ID
-export const fetchServiceById = createAsyncThunk("services/service", async (id) => {
-
-      const response = await axios.get(
-        `${config.API_ENDPOINT}/services/one/${id}`
-      );
-      return response.data;
-    });
-      
-
+export const fetchServiceById = createAsyncThunk(
+  "services/service",
+  async (id) => {
+    const response = await axios.get(
+      `${config.API_ENDPOINT}/services/one/${id}`
+    );
+    return response.data;
+  }
+);
 
 export const createService = createAsyncThunk(
   "services/createService",
@@ -28,10 +28,9 @@ export const createService = createAsyncThunk(
   }
 );
 
-export const removeservice = createAsyncThunk(
+export const removeService = createAsyncThunk(
   "services/deleteservice",
-  async (args) => {
-    const { id } = args;
+  async (id) => {
 
     const response = await axios.delete(
       `${config.API_ENDPOINT}/services/${id}`
@@ -40,13 +39,13 @@ export const removeservice = createAsyncThunk(
   }
 );
 
-export const editservice = createAsyncThunk(
+export const editService = createAsyncThunk(
   "services/editservice",
-  async (args)=>{
-    const {id,body}=args
+  async (args) => {
+    const { id, body } = args;
     const response = await axios.patch(
       `${config.API_ENDPOINT}/services/${id}`,
-      body,
+      body
     );
     return response.data;
   }

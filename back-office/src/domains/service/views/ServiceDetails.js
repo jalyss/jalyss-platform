@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchServiceById, removeservice } from "../../../store/service";
+import { fetchServiceById, removeService } from "../../../store/service";
 import { removeSpace } from "../../../store/space";
 import tarif, { removeTarif } from "../../../store/tarif";
 import { DataGrid } from "@mui/x-data-grid";
@@ -11,6 +11,8 @@ import { BiDetail } from "react-icons/bi";
 import { MdOutlinePayments } from "react-icons/md";
 import { GrDocumentUpdate } from "react-icons/gr";
 import { MdDeleteOutline } from "react-icons/md";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+
 
 import "../../../assets/styles/ServiceDetails.css";
 
@@ -23,7 +25,7 @@ export default function ServiceDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
+const id = serviceId
 
   const service = useSelector((state) => state.service.service);
 console.log(service);
@@ -33,13 +35,36 @@ console.log(service);
   }, [dispatch]);
 
   const handleRemoveTarif = (id) => {
-    dispatch(removeTarif(id));
-    dispatch(fetchServiceById(serviceId));
+    dispatch(removeTarif(id)).then((res) => {
+      dispatch(fetchServiceById(serviceId));
+      if (!res.error) {
+        showSuccessToast("Tarif has been deleted");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
   };
 
   const handleRemoveSpace = (id) => {
-    dispatch(removeSpace(id));
-    dispatch(fetchServiceById(serviceId));
+    dispatch(removeSpace(id)).then((res) => {
+      dispatch(fetchServiceById(serviceId))
+      if (!res.error) {
+        showSuccessToast("WorkSpace has been deleted");
+        
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+
+  const handleRemoveService = (id) => {
+    dispatch(removeService(id)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Service has been deleted");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
   };
 
   const workspaceColumns = [
@@ -129,16 +154,20 @@ console.log(service);
               longer.
             </p>
           </div>
+          <button onClick={()=>{handleRemoveService(service.id),navigate(-1)} } > Delete Service</button>
         </div>
       )}
-      <div className="d-flex justify-content-end">
-        <AddButton
-          onClick={() => navigate(`create-workspace`)}
-          content="Create space"
-          startIcon
-          Icon={<BsPersonWorkspace />}
-        />
-      </div>
+   <div className="d-flex justify-content-between align-items-center">
+  <h3>WorkSpace list:</h3>
+  <div>
+    <AddButton
+      onClick={() => navigate(`create-workspace`)}
+      content="Create space"
+      startIcon
+      Icon={<BsPersonWorkspace />}
+    />
+  </div>
+</div>
       <div style={{ height: 400, width: "100%", marginBottom: "20px" }}>
         {workspaceRows&&<DataGrid
           columns={workspaceColumns}
@@ -146,7 +175,8 @@ console.log(service);
           pageSize={5}
         />}
       </div>
-      <div className="d-flex justify-content-end">
+      <div className="d-flex justify-content-between align-items-center">
+      <h3 >Tarif's list:</h3>
         <AddButton
           onClick={() => navigate(`create-Tarif`)}
           content="Create new tarif"

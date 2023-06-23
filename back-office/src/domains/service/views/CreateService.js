@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { createService, fetchServices } from "../../../store/service";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+
 
 export default function CreateService() {
   const navigate = useNavigate();
@@ -50,10 +52,10 @@ export default function CreateService() {
 
     dispatch(createService(body)).then((res) => {
       if (!res.error) {
-        console.log("Service has been created");
+        showSuccessToast("Service has been created");
         navigate(-1);
       } else {
-        console.log(res.error.message);
+        showErrorToast(res.error.message);
       }
     });
   };

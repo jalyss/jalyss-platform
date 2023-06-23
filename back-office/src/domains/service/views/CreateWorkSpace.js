@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { createWorkSpace, fetchWorkSpaces } from "../../../store/space";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+
 
 export default function CreateWorkSpace() {
   const navigate = useNavigate();
@@ -53,10 +55,10 @@ export default function CreateWorkSpace() {
 
     dispatch(createWorkSpace(body)).then((res) => {
       if (!res.error) {
-        console.log("WorkSpace has been created");
+        showSuccessToast("WorkSpace has been created");
         navigate(-1);
       } else {
-        console.log(res.error.message);
+        showSuccessError(res.error.message);
       }
     });
   };

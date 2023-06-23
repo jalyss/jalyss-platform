@@ -200,8 +200,17 @@ export default function SpaceDetails() {
         `${process.env.REACT_APP_API_ENDPOINT}/work-spaces/images/${spaceId}`,
         auxMedia
       )
-      .then((res) => setRefresh(!refresh));
-  };
+      .then((res) => {
+        setRefresh(!refresh)
+        if (!res.error) {
+          showSuccessToast("image added");
+          navigate(-1);
+        } else {
+          showErrorToast(res.error.message);
+        }
+      });
+    };
+
 
 
   const deleteImg = async (path) => {

@@ -50,8 +50,6 @@ import EditTarif from "../domains/service/views/EditTarif";
 import EditWorkSpace from "../domains/service/views/EditWorkSpace";
 import EditService from "../domains/service/views/EditService";
 
-
-
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -70,25 +68,21 @@ function Router() {
           <Route path="/" element={<Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="space" element={<Service />}>
+            <Route path="edit-service/:serviceId" element={<EditService />} />
+
               <Route index element={<ServiceList />} />
               <Route path="create-service" element={<CreateService />} />
-              <Route path="service/:serviceId" element={<OneService/>}>
-                <Route index  element={<ServiceDetails />}/>
-                <Route path="create-workspace" element={<CreateWorkSpace/>} />
-                <Route path="create-Tarif" element={<CreateTarif/>} />
-                <Route path="tarif-details/:tarifId" element={<TarifDetails/>} />
-                <Route path="space-details/:spaceId" element={<SpaceDetails />} />
-                <Route path="edit-space/:spaceId" element={<EditWorkSpace/>} />
-                <Route path="edit-tarif/:tarifId" element={<EditTarif/>} />
-
-                <Route path="edit-service/:serviceId" element={<EditService/>} />
-
-
-
-
-
-
+              <Route path="service/:serviceId" element={<OneService />} >
+              <Route index element={<ServiceDetails />} />
+              <Route path="create-workspace" element={<CreateWorkSpace />} />
+              <Route path="create-Tarif" element={<CreateTarif />} />
+              <Route path="tarif-details/:tarifId" element={<TarifDetails />} />
+              <Route path="space-details/:spaceId" element={<SpaceDetails />} />
+              <Route path="edit-space/:spaceId" element={<EditWorkSpace />} />
+              <Route path="edit-tarif/:tarifId" element={<EditTarif />} />
               </Route>
+
+
             </Route>
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
@@ -133,7 +127,6 @@ function Router() {
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
             {/* <Route path="charts" element={<ChartTabs />} /> */}
-
           </Route>
         ) : (
           <Route path="/" element={<AuthAdmin />}>

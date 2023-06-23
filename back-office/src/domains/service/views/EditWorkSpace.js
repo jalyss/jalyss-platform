@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSpaceById, editSpace } from "../../../store/space";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+
 
 export default function EditWorkSpace() {
   const dispatch = useDispatch();
@@ -52,10 +54,10 @@ const service = serviceId
     dispatch(editSpace({id,...body})
     ).then((res) => {
       if (!res.error) {
-        console.log("WorkSpace has been edited");
+        showSuccessToast("WorkSpace has been edited");
         navigate(-1);
       } else {
-        console.log(res.error.message);
+        showErrorToast(res.error.message);
       }
     });
   };

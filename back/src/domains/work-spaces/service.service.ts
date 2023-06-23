@@ -59,35 +59,35 @@ export class ServiceService {
       data: dto,
     });
   }
-
-  // Remove a service by ID
   async remove(id: string) {
     const service = await this.prisma.service.findUnique({
       where: { id },
       include: { workSpace: true, tarif: true },
     });
-
-    // Throw a NotFoundException if the service is not found
+  
     if (!service) {
       throw new NotFoundException(`Service with id ${id} not found`);
     }
-
+  
     const workSpaces = service.workSpace;
     const tarifs = service.tarif;
-
+  
     if (workSpaces && workSpaces.length > 0) {
       for (const workSpace of workSpaces) {
+        await this.prisma.mediaWorkSpace.deleteMany({
+          where: { workspaceId: workSpace.id },
+        });
         await this.prisma.workSpace.delete({ where: { id: workSpace.id } });
       }
     }
-
+  
     if (tarifs && tarifs.length > 0) {
       for (const tariff of tarifs) {
         await this.prisma.booking.deleteMany({ where: { tarifId: tariff.id } });
         await this.prisma.tarif.delete({ where: { id: tariff.id } });
       }
     }
-
+  
     await this.prisma.service.delete({ where: { id } });
   }
-}
+}  

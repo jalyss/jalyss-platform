@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchServiceById, fetchServices } from "../../../store/service";
+import { fetchServiceById, editService } from "../../../store/service";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { showErrorToast } from "../../../utils/toast";
 
 export default function EditService() {
   const navigate = useNavigate();
@@ -11,17 +12,16 @@ export default function EditService() {
   const [name, setName] = useState("");
   const [identifier, setIdentifier] = useState("");
   const [cover, setCover] = useState(null);
-
+  const id = serviceId;
   const serviceStore = useSelector((state) => state.service);
 
-  console.log(serviceStore,"lol");
+  console.log(serviceStore, "lol");
 
   useEffect(() => {
     dispatch(fetchServiceById(serviceId));
   }, [dispatch, serviceId]);
 
   useEffect(() => {
-
     if (serviceStore.service) {
       const { name, identifier } = serviceStore.service;
       setName(name);
@@ -54,13 +54,13 @@ export default function EditService() {
 
         body.coverId = response.data.id;
       } catch (error) {
-        console.error("Error uploading cover image:", error);
+        showErrorToast("Error uploading cover image:", error);
       }
     }
 
-    dispatch(createService(body)).then((res) => {
+    dispatch(editService({ id, body })).then((res) => {
       if (!res.error) {
-        console.log("Service has been created");
+        showSuccessToast("Service has been updated");
         navigate(-1);
       } else {
         console.log(res.error.message);
