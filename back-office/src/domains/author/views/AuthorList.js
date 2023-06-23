@@ -9,10 +9,16 @@ import { AiFillDelete, AiFillEdit, AiOutlineEye } from 'react-icons/ai'
 import isEnglish from '../../../helpers/isEnglish'
 import { useNavigate } from 'react-router-dom'
 import { showErrorToast, showSuccessToast } from '../../../utils/toast'
-
+import AddButton from '../../../components/Commun/buttons/AddButton'
+import Modal from "../../../components/Commun/Modal"
 function AuthorList() {
     const [show, setShow] = useState(false);
     const [elementId, setElementId] = useState(null);
+    const [basicModal,setBasicModal]=useState(false)
+
+    const toggleShow=()=>{
+      setBasicModal(!basicModal)
+    }
     const columns = [
       { field: 'id', headerName: 'ID', width: 90 },
       { field: 'nameAr', headerName: 'Name AR', width: 150, editable: false },
@@ -48,7 +54,7 @@ function AuthorList() {
               icon={<AiFillDelete />}
               label="Delete"
   
-              onClick={() => { handleDeleteClick(id) }}
+              onClick={toggleShow}
               // should open popup to ask are u sure delete this user (yes/no)
               color="error" />,
   
@@ -57,15 +63,15 @@ function AuthorList() {
       },
     ]
     const isEng = isEnglish()
-    const Navigate = useNavigate()
-    const handleDeleteClick = (id) => {
+    const navigate = useNavigate()
+    // const handleDeleteClick = (id) => {
       
-    };
+    // };
     const handleAddClick = (authorId) => {
-      Navigate(`detail/${authorId}`)
+      navigate(`detail/${authorId}`)
     };
     const handleEditClick = (id) => {
-      Navigate(`edit/${id}`)
+      navigate(`edit/${id}`)
     };
     
     return (
@@ -80,6 +86,7 @@ function AuthorList() {
                         Add Author
                     </span>
                 </Button>
+                <AddButton title={"Add author"} mb={20} onClick={()=>{navigate("create")}}/>
                 <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
                         rows={rows}
@@ -96,6 +103,7 @@ function AuthorList() {
                         disableRowSelectionOnClick
                     />
                 </Box>
+                <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} />
             </div>
         </div>
 
