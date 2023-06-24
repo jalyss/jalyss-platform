@@ -149,9 +149,7 @@ console.log(service);
           <div className="card-body">
             <h5 className="card-title">{service.name}</h5>
             <p className="card-text">
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
+     { service.description}
             </p>
           </div>
           <button onClick={()=>{handleRemoveService(service.id),navigate(-1)} } > Delete Service</button>

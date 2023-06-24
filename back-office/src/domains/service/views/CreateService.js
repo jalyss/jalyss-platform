@@ -11,7 +11,7 @@ export default function CreateService() {
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
-  const [identifier, setIdentifier] = useState("");
+  const [description, setDescription] = useState("");
   const [cover, setCover] = useState(null);
 
   const serviceStore = useSelector((state) => state.service);
@@ -24,14 +24,14 @@ export default function CreateService() {
     e.preventDefault();
 
     // Check if all required fields are filled
-    if (!name || !identifier || !cover) {
+    if (!name || !description || !cover) {
       console.log("Please fill in all required fields");
       return;
     }
 
     let body = {
       name,
-      identifier,
+      description,
     };
 
     if (cover !== null) {
@@ -82,8 +82,8 @@ export default function CreateService() {
               className="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               required
             ></textarea>
           </div>

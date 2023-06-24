@@ -6,9 +6,5 @@ export class CreateServiceDto {
   name: string;
 
   @ApiProperty()
-  identifier?
-  : string;
-
-  @ApiProperty()
   description: string;
 }

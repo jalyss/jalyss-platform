@@ -632,7 +632,7 @@ model Service {
   identifier   String?        @unique()
   perHour      Boolean        @default(true)
   coverId      String?
-  description  String?
+  description  String
   cover        Media?         @relation(fields: [coverId], references: [id])
   workSpace    WorkSpace[]
   tarif        Tarif[]

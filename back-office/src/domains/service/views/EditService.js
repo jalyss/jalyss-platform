@@ -10,8 +10,10 @@ export default function EditService() {
   const dispatch = useDispatch();
   const { serviceId } = useParams();
   const [name, setName] = useState("");
-  const [identifier, setIdentifier] = useState("");
-  const [cover, setCover] = useState(null);
+  const [description, setDescription] = useState("");
+  const [filename, setFileName] = useState("");
+  const [filenamesplitted, setFileNamesplitted] = useState("");
+  const [cover, setCover] = useState("");
   const id = serviceId;
   const serviceStore = useSelector((state) => state.service);
 
@@ -23,23 +25,27 @@ export default function EditService() {
 
   useEffect(() => {
     if (serviceStore.service) {
-      const { name, identifier } = serviceStore.service;
+      const { name, description, cover } = serviceStore.service;
+      // const {cover} = serviceStore.cover
       setName(name);
-      setIdentifier(identifier);
+      setDescription(description);
+      setFileName(cover.path);
+      deleteImg(filename)
+      setCover();
     }
   }, [serviceStore.service]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !identifier || !cover) {
+    if (!name || !description || !cover) {
       console.log("Please fill in all required fields");
       return;
     }
 
     let body = {
       name,
-      identifier,
+      description,
     };
 
     if (cover !== null) {
@@ -68,6 +74,13 @@ export default function EditService() {
     });
   };
 
+  const deleteImg = async (path) => {
+    const pathElements = path.split('/');
+    const name = pathElements[pathElements.length - 1];
+  console.log(name,'ggg')
+  setFileNamesplitted(name)
+  };
+
   return (
     <div>
       <div className="container">
@@ -85,13 +98,13 @@ export default function EditService() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="exampleFormControlTextarea1">Identifier</label>
+            <label htmlFor="exampleFormControlTextarea1">description</label>
             <textarea
               className="form-control"
               id="exampleFormControlTextarea1"
               rows="1"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               required
             ></textarea>
           </div>
@@ -105,6 +118,7 @@ export default function EditService() {
               onChange={(e) => setCover(e.target.files[0])}
               required
             />
+            {/* {filenamesplitted && <p>Selected file: {filenamesplitted}</p>} */}
           </div>
           <button type="submit" className="btn btn-primary mb">
             Add the service
