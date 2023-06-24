@@ -204,7 +204,7 @@ function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <nav class="navbar navbar-expand-lg navbar-light d-lex justify-content-between">
+      {/* <nav class="navbar navbar-expand-lg navbar-light d-lex justify-content-between">
         <div class="container-fluid">
           <button
             onClick={() => setShowItems(!showItems)}
@@ -264,15 +264,11 @@ function NavBar() {
                   {t('navbar.blogs')}
                 </a>
               </li>
-              {/* <li class="nav-item active">
-                <a class="nav-link" href="/chat">
-                  {t('chat')}
-                </a>
-              </li> */}
+              
             </ul>
           </div>
         </div>
-      </nav>
+      </nav> */}
     </>
   )
 }

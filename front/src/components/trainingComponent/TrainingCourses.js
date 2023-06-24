@@ -51,10 +51,10 @@ console.log("count",sessions.count);
         </div>
 
         <div className="blogListWrapper">
-          {sessions.items.map((course) => (
+          {sessions?.items.map((course) => (
             <div key={course.id}>
               <Card
-                cover={course.cover}
+                cover={course.cover.path}
                 category={course.category.nameEn}
                 title={course.title}
                 startTime={course.startDate.slice(0,10)}

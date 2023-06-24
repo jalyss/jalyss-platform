@@ -536,6 +536,23 @@ model Assessments {
   lectureId String
 }
 
+model Feature {
+  id          String  @id @default(uuid())
+  label       String
+  isAvailable Boolean
+
+  SessionTarifHasFeatures SessionTarifHasFeatures[]
+}
+
+model SessionTarifHasFeatures {
+  feature      Feature      @relation(fields: [featureId], references: [id])
+  featureId    String
+  sessionTarif SessionTarif @relation(fields: [sessionId], references: [id])
+  sessionId    String
+
+  @@unique(fields: [featureId, sessionId], name: "sessionTarifHasFeatures")
+}
+
 model SessionTarif {
   id        String            @id @default(uuid())
   title     String
@@ -543,6 +560,7 @@ model SessionTarif {
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
   session   Session           @relation(fields: [sessionId], references: [id])
   sessionId String
+  features SessionTarifHasFeatures[]
 }
 
 model TrainingBooking {
@@ -702,22 +720,22 @@ model View {
 //workSdpace
 
 model WorkSpace {
-  id          String   @id @default(uuid())
-  name        String
-  capacity    String?
-  price       String?
-  rating      String?
-  reviews     String?
-  amenities   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  service     Service  @relation(fields: [serviceId], references: [id])
-  serviceId   String
+  id        String   @id @default(uuid())
+  name      String
+  capacity  String?
+  price     String?
+  rating    String?
+  reviews   String?
+  amenities String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  service   Service  @relation(fields: [serviceId], references: [id])
+  serviceId String
 }
 
 model Service {
-  id           String         @id @default(uuid())
-  name         String?
+  id   String  @id @default(uuid())
+  name String?
 
   identifier   String         @unique()
   perHour      Boolean        @default(true)
