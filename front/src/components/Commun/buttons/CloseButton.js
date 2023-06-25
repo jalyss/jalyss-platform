@@ -1,6 +1,6 @@
 import React from "react";
 
-function CloseButton({ onClick, mt, mb }) {
+function CloseButton({ onClick, mt, mb,title }) {
   return (
     <button
       class="full "
@@ -13,7 +13,7 @@ function CloseButton({ onClick, mt, mb }) {
       }}
       onClick={onClick}
     >
-      Close
+     {title ? title : "close"} 
     </button>
   );
 }

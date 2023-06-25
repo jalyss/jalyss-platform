@@ -1,6 +1,6 @@
 import React from "react";
 
-const SaveButton = ({ onClick, mt, mb }) => {
+const SaveButton = ({ onClick, mt, mb ,title}) => {
   return (
     <div>
       <button
@@ -14,7 +14,7 @@ const SaveButton = ({ onClick, mt, mb }) => {
         }}
         onClick={onClick}
       >
-       Save
+      {title? title :"Save"} 
       </button>
     </div>
   );
