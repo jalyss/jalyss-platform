@@ -6,43 +6,30 @@ export class CreateWorkSpaceDto {
     name: string;
 
     @ApiProperty()
-    firstLine: string;
+    capacity?: string;
   
     @ApiProperty()
-    secondLine: string;
+   description?: string;
   
     @ApiProperty()
-    thirdLine: string;
+    amenities?: string;
   
     @ApiProperty()
-    image: string;
+    price? : string;
   
     @ApiProperty()
-    pricingLine1: string;
+    rating? :string;
   
     @ApiProperty()
-    pricingLine2: string;
+    reviews?   :  string;
   
     @ApiProperty()
-    pricingLine3: string;
+    imageId? :string;
+
   
     @ApiProperty()
-    pricingLine4: string;
-  
-    @ApiProperty()
-    autresLine1: string;
-  
-    @ApiProperty()
-    autresLine2: string;
-  
-    @ApiProperty()
-    autresLine3: string;
-  
-    @ApiProperty()
-    autresLine4: string;
-  
-    @ApiProperty()
-    serviceId: string;
+    serviceId? : string;
+
 }
 
 
