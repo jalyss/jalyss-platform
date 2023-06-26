@@ -1,10 +1,11 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors,Body,UploadedFiles } from '@nestjs/common';
+import {Param, Controller, Get, Post, UploadedFile, UseInterceptors,Body,UploadedFiles, Delete } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor ,FilesInterceptor} from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { MediasService } from './domains/medias/medias.service';
+import { unlinkSync } from 'fs';
 
 
   const multerConfig = {
@@ -13,8 +14,24 @@ import { MediasService } from './domains/medias/medias.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService,private readonly mediaService: MediasService) {}
-  
+  constructor(
+    private readonly appService: AppService,
+    private readonly mediaService: MediasService,
+  ) {}  
+
+  @Delete('/work-spaces/delete-images/:name')
+  deleteImage(@Param('name') name: string, cb:any) {
+    const filePath = `C:/Users/user/Desktop/Nouveau dossier/jalyss-platform/back/upload/${name}`;
+
+    try {
+      unlinkSync(filePath);
+      return { message: 'File deleted successfully' };
+    } catch (error) {
+      console.error('Failed to delete the file:', error);
+      return { error: 'Failed to delete the file' };
+    }
+  }
+
   @Get()
   getHello(): string {
     return this.appService.getHello();
@@ -71,7 +88,7 @@ export class AppController {
     })
   }))
   async uploadMultiple (@UploadedFiles() files: Array<Express.Multer.File>, @Body() dto: any) {
-    console.log("files",files);
+    console.log("filessss",files);
     const mediaData = files.map(file => ({
       description: dto.description,
       alt: dto.alt,
@@ -82,5 +99,4 @@ export class AppController {
     return this.mediaService.createMany(mediaData);
   }
 }
-
 
