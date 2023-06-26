@@ -19,17 +19,95 @@ async function main() {
     },
   });
   // create 10 dummy users
+
+  let mediasAvatarUser1 = await prisma.media.create({
+    data: {
+      path: 'https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+
+  let mediasAvatarUser2 = await prisma.media.create({
+    data: {
+      path: 'https://stylesatlife.com/wp-content/uploads/2022/12/Haircuts-for-School-Boys-11.jpg.webp',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+
+  let mediasAvatarUser3 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1351445167/photo/happy-male-youngster-smiling-at-the-camera-outdoors.jpg?b=1&s=170667a&w=0&k=20&c=iebfRFHi1ncG_CNCZLmOSLnRI_TO0D4rACMbarHsADc=',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser4 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1159801546/photo/portrait-of-handsome-boy-posing-in-photo-studio.jpg?s=612x612&w=0&k=20&c=YLyXwo6WaVWv8j80fLEyPjOmp3--6VlVYRU-Eyco5eQ=',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser5 = await prisma.media.create({
+    data: {
+      path: 'https://blog.hootsuite.com/wp-content/uploads/2020/02/Image-copyright-556x556.png',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser6 = await prisma.media.create({
+    data: {
+      path: 'https://pixlr.com/images/index/remove-bg.webp',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser7 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser8 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser9 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser10 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });  
+
+  let userMedia = [mediasAvatarUser1.id,mediasAvatarUser2.id,mediasAvatarUser3.id,mediasAvatarUser4.id,mediasAvatarUser5.id,mediasAvatarUser6.id,mediasAvatarUser7.id,mediasAvatarUser8.id,mediasAvatarUser9.id,mediasAvatarUser10.id]
+
+
   const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
     users.push(
       await prisma.user.create({
         data: {
-          email: 'jaliss' + i + '@gmail.com',
+          email: 'jalyss' + i + '@gmail.com',
           fullNameAr: `جليس ${i}`,
           fullNameEn: `jalyss${i}`,
           address: 'sfax',
           tel: '123456789',
           password: await bcrypt.hash('1234', salt),
+          avatarId:userMedia[i]
         },
       }),
     );
@@ -1622,7 +1700,10 @@ async function main() {
       });
 
 let preRequireIds = []
-let prerequis=["alooooooooo","im prereqq","ok","how are yoy","fine ","i love farouk"]
+
+let prerequis=["front-end skills","back-end","challenger","SQL experience","pythons killer","Get up and move","Get enough sleep","eat the rigth food","find other steams of income","track expenses","live in harmony"]
+
+
 let sessionPrerequis = await prisma.prerequire.create({
   data: {
     content:prerequis[Math.floor(Math.random() * prerequis.length)],

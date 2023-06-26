@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 import ButtonWithTransformAndHover from "../components/Commun/buttons/ButtonWithTransformAndHover";
-
+ // const duration = (seletedSession?.endDate.getTime() - seletedSession?.startDate.getTime())/(1000*3600) get duration in hours 
 function SessionDetails() {
   const [showMore, setShowMore] = useState(false);
   const { sessionId } = useParams();
@@ -136,7 +136,7 @@ console.log("sessi",session);
             </div>
           </div>
           <ButtonWithTransformAndHover title={"Price Discovery"} full={true} onClick={handleClick}/>
-
+ 
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">

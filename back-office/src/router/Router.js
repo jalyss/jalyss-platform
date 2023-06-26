@@ -54,6 +54,7 @@ import EditAuthor from "../domains/author/views/EditAuthor";
 import DetailAuthor from "../domains/author/views/DetailAuthor";
 import CreateAuthor from "../domains/author/views/CreateAuthor";
 
+
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -71,7 +72,7 @@ function Router() {
         {auth.meAdmin ? (
           <Route path="/" element={<Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={<Profile/>} />
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
