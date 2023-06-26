@@ -7,4 +7,13 @@ export class CreateServiceDto {
 
   @ApiProperty()
   description: string;
+  identifier: string;
+
+  @ApiProperty({ type: () => [CreateWorkSpaceDto] })
+  workspaces: CreateWorkSpaceDto[];
+
+  @ApiProperty({ type: () => [CreateTarifDto] })
+  tarifs: CreateTarifDto[];
 }
+  
+

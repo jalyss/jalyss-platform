@@ -126,19 +126,23 @@ export default function SpaceDetails() {
             <p className="capacity">Capacity: {space?.capacity}</p>
           </div>
         </div>
-
         <form onSubmit={onSubmit}>
           <div>
-            <input
+            <input className="form-input" style={{ display: 'block', visibility: 'visible' }}
               type="file"
               id="file"
-              name="uploadImages"
+              content="upload Images"
               multiple
-              onChange={onChange}
+              onClick={(e)=>onChange(e)}
             />
           </div>
-          <input type="submit" value="Upload" />
+          <AddButton type="submit" content="Upload" />
         </form>
+          <div>
+          {uploadProgress > 0 && (
+            <progress value={uploadProgress} max="100" />
+          )}
+          </div>
           <div>
           {uploadProgress > 0 && (
             <progress value={uploadProgress} max="100" />

@@ -16,3 +16,8 @@
   display: block;
   background: rgba(245, 238, 238, 0.516);
 }
+
+.form-input{
+  display: block;
+  visibility: 'visible';
+}

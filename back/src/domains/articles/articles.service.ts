@@ -17,9 +17,17 @@ export class ArticleService {
   ) {}
 
   async create(dto: CreateArticleDto, branchId: string) {
+    const { authorIds, ...rest } = dto;
     return await this.prisma.article.create({
       data: {
-        ...dto,
+        ...rest,
+        ArticleByAuthor: {
+          create: authorIds.map((authorId) => {
+            return {
+              authorId,
+            };
+          }),
+        },
       },
     });
   }
@@ -165,7 +173,7 @@ export class ArticleService {
             articleByBranchId: elem.id,
           },
         });
-        
+
         if (rating.length && rating[0]._sum?.rate)
           return {
             ...elem,

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Navbar, Container} from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { sidebarDataBranch } from '../constants/sidebarDataBranch'
 import isEnglish from '../helpers/isEnglish'
 import Typography from '@mui/material/Typography'
@@ -18,6 +18,7 @@ function Header() {
   const { t, i18n } = useTranslation()
   const currentLanguage = useLanguage()
   const [anchorElUser, setAnchorElUser] = React.useState(null)
+  const navigate = useNavigate()
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget)
   }
@@ -55,11 +56,8 @@ function Header() {
         }
       }
     }
-  
-    return 'No item selectedre';
-  };
-  
-  
+    return 'MasterKnowledgeAcademy'
+  }
 
   return (
     <Box
@@ -133,7 +131,9 @@ function Header() {
             >
               <MenuItem onClick={handleCloseUserMenu}>
                 <MenuItem>
-                  <Typography textAlign="center">
+                  <Typography textAlign="center" onClick={()=>{
+                    navigate("/profile")
+                  }}>
                     <span className="no-icon">Profile</span>
                   </Typography>
                 </MenuItem>

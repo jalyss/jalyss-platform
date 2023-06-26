@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../assets/styles/profile.css";
 import auth, { authUpdate, register } from "../store/auth";
-import "../assets/styles/signup.css";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../utils/toast";

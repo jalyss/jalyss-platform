@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchServiceById, editService } from "../../../store/service";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { showErrorToast } from "../../../utils/toast";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+
 
 export default function EditService() {
   const navigate = useNavigate();

@@ -14,21 +14,38 @@ import { MdDeleteOutline } from "react-icons/md";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 
-import "../../../assets/styles/ServiceDetails.css";
 
 import AddButton from "../../../components/buttons/AddButton";
-
-
+import {
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+} from "mdb-react-ui-kit";
+import "../../../assets/styles/ServiceDetails.css";
 
 export default function ServiceDetails() {
   const { serviceId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [selectedId, setSelectedId] = useState(null);
+  const [basicModal, setBasicModal] = useState(false);
+  const [deleteType, setDeleteType] = useState("");
+  const [deleteId, setDeleteId] = useState(null);
 
-const id = serviceId
+  const toggleShow = (type, id) => {
+    setDeleteType(type);
+    setDeleteId(id);
+    setBasicModal(!basicModal);
+    
+  };
 
+  const id = serviceId;
   const service = useSelector((state) => state.service.service);
-console.log(service);
 
   useEffect(() => {
     dispatch(fetchServiceById(serviceId));
@@ -47,20 +64,20 @@ console.log(service);
 
   const handleRemoveSpace = (id) => {
     dispatch(removeSpace(id)).then((res) => {
-      dispatch(fetchServiceById(serviceId))
+      dispatch(fetchServiceById(serviceId));
       if (!res.error) {
         showSuccessToast("WorkSpace has been deleted");
-        
       } else {
         showErrorToast(res.error.message);
       }
     });
   };
 
-  const handleRemoveService = (id) => {
-    dispatch(removeService(id)).then((res) => {
+  const handleRemoveService = (serviceId) => {
+    dispatch(removeService(serviceId)).then((res) => {
       if (!res.error) {
         showSuccessToast("Service has been deleted");
+        navigate(-1);
       } else {
         showErrorToast(res.error.message);
       }
@@ -81,7 +98,11 @@ console.log(service);
       field: "update",
       headerName: "Update",
       width: 100,
-      renderCell: (params) =>(  <GrDocumentUpdate onClick={() => navigate(`edit-space/${params.row.id}`)}/>),
+      renderCell: (params) => (
+        <GrDocumentUpdate
+          onClick={() => navigate(`edit-space/${params.row.id}`)}
+        />
+      ),
     },
     {
       field: "delete",
@@ -89,7 +110,7 @@ console.log(service);
       width: 100,
       renderCell: (params) => (
         <MdDeleteOutline
-          onClick={() => handleRemoveSpace(params.row.id)}
+          onClick={() => toggleShow("space", params.row.id)}
         />
       ),
     },
@@ -111,7 +132,9 @@ console.log(service);
       headerName: "Update",
       width: 100,
       renderCell: (params) => (
-        <GrDocumentUpdate onClick={() => navigate(`edit-tarif/${params.row.id}`)} />
+        <GrDocumentUpdate
+          onClick={() => navigate(`edit-tarif/${params.row.id}`)}
+        />
       ),
     },
     {
@@ -119,9 +142,7 @@ console.log(service);
       headerName: "Delete",
       width: 100,
       renderCell: (params) => (
-        <MdDeleteOutline
-          onClick={() => handleRemoveTarif(params.row.id)}
-        />
+        <MdDeleteOutline onClick={() => toggleShow("tarif", params.row.id)} />
       ),
     },
   ];
@@ -137,6 +158,17 @@ console.log(service);
     price: elem.price,
   }));
 
+  const handleConfirmDelete = () => {
+    if (deleteType === "space") {
+      handleRemoveSpace(deleteId);
+    } else if (deleteType === "tarif") {
+      handleRemoveTarif(deleteId);
+    } else if (deleteType === "service") {
+      handleRemoveService(deleteId);
+    }
+    setBasicModal(false);
+  };
+
   return (
     <div className="view">
       {service && (
@@ -148,33 +180,31 @@ console.log(service);
           />
           <div className="card-body">
             <h5 className="card-title">{service.name}</h5>
-            <p className="card-text">
-     { service.description}
-            </p>
+            <p className="card-text">{service.description}</p>
           </div>
-          <button onClick={()=>{handleRemoveService(service.id),navigate(-1)} } > Delete Service</button>
+          <button onClick={() => toggleShow("service", service.id)}>
+            Delete Service
+          </button>
         </div>
       )}
-   <div className="d-flex justify-content-between align-items-center">
-  <h3>WorkSpace list:</h3>
-  <div>
-    <AddButton
-      onClick={() => navigate(`create-workspace`)}
-      content="Create space"
-      startIcon
-      Icon={<BsPersonWorkspace />}
-    />
-  </div>
-</div>
+      <div className="d-flex justify-content-between align-items-center">
+        <h3>WorkSpace list:</h3>
+        <div>
+          <AddButton
+            onClick={() => navigate(`create-workspace`)}
+            content="Create space"
+            startIcon
+            Icon={<BsPersonWorkspace />}
+          />
+        </div>
+      </div>
       <div style={{ height: 400, width: "100%", marginBottom: "20px" }}>
-        {workspaceRows&&<DataGrid
-          columns={workspaceColumns}
-          rows={workspaceRows}
-          pageSize={5}
-        />}
+        {workspaceRows && (
+          <DataGrid columns={workspaceColumns} rows={workspaceRows} pageSize={5} />
+        )}
       </div>
       <div className="d-flex justify-content-between align-items-center">
-      <h3 >Tarif's list:</h3>
+        <h3>Tarif's list:</h3>
         <AddButton
           onClick={() => navigate(`create-Tarif`)}
           content="Create new tarif"
@@ -183,8 +213,42 @@ console.log(service);
         />
       </div>
       <div style={{ height: 400, width: "100%" }}>
-       {tarifRows&&<DataGrid columns={tarifColumns} rows={tarifRows} pageSize={5} />}
+        {tarifRows && (
+          <DataGrid columns={tarifColumns} rows={tarifRows} pageSize={5} />
+        )}
       </div>
+      <MDBModal show={basicModal} setShow={setBasicModal} tabIndex="-1">
+        <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Delete</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={() => setBasicModal(false)}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>Press continue to delete</MDBModalBody>
+            <MDBModalFooter>
+              <button
+                color="secondary"
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => setBasicModal(false)}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={handleConfirmDelete}
+              >
+                Continue
+              </button>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
     </div>
   );
 }

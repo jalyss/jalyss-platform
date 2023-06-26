@@ -1,5 +1,4 @@
-import Rating from '../components/Rating'
-
+import Rating from '../components/Commun/Rating'
 import { FiEye } from 'react-icons/fi'
 import { BsBag } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'

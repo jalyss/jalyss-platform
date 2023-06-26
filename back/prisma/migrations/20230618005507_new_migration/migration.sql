@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Tarif" ALTER COLUMN "duration" DROP NOT NULL,
-ALTER COLUMN "name" DROP NOT NULL;
