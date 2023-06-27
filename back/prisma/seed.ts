@@ -1334,7 +1334,7 @@ async function main() {
   }
 
   // create dummy services
-  let serviceIds = [];
+  let serviceIds: string[] = [];
 
   const serviceNames = ['Private Space', 'Meeting Space', 'Co-Working Zone'];
   let MediaServiceIds = [];
@@ -1367,6 +1367,9 @@ async function main() {
         perHour: i !== 2 ? true : false,
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
+
+        description: "The Creation of Adam is a fresco painting by Italian artist Michelangelo, which forms part of the Sistine Chapel's ceiling, painted c. 1508 1512. It illustrates the Biblical creation narrative from the Book ."
+
       },
     });
 
@@ -1374,18 +1377,25 @@ async function main() {
   }
 
   console.log(serviceIds);
-
+  let coverWorkSpace = await prisma.media.create({
+    data: {
+      alt: 'bureau Sfax',
+      extension: 'jpg',
+      type: 'image',
+      path: 'https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png',
+    },
+  });
   let workSpacePrivateSpace = await prisma.workSpace.create({
     data: {
-      name: 'bureau sfax',
-
       serviceId: serviceIds[0],
+      name: 'bureau sfax',
+      imageId: coverWorkSpace.id,
     },
   });
   let workSpaceMeetingSpace = await prisma.workSpace.create({
     data: {
       name: 'salle de reunion sfax',
-
+      imageId: coverWorkSpace.id,
       serviceId: serviceIds[1],
     },
   });
@@ -1393,15 +1403,24 @@ async function main() {
   let workSpaceCoworkingSpace = await prisma.workSpace.create({
     data: {
       name: 'open space sfax',
-
+      imageId: coverWorkSpace.id,
       serviceId: serviceIds[2],
+    },
+  });
+  let tarifPrivateSpace33= await prisma.tarif.create({
+    data: {
+      duration: 'trimestre(299DT)',
+      price:299,
+      description: 'aaaaaaaaaa',
+      serviceId: serviceIds[0],
+      pricePerDay:5
     },
   });
   let tarifPrivateSpace1 = await prisma.tarif.create({
     data: {
       duration: 'trimestre(299DT)',
       price: 299,
-      description: 'aaaaaaaaaa',
+      description: 'salle de reunion sfax',
       serviceId: serviceIds[0],
     },
   });
@@ -1411,7 +1430,7 @@ async function main() {
       duration: 'YEAR',
       price: 2777,
       description:
-        'We provide several coworking spaces with flexible access that extends to 24 hours and 7 days a week for freelancers, business owners, and team members.By deciding on the number of workdays every month, you can further customize your experience.To grow your business in a setting that is both professional and social, reserve a spot in one of our coworking spaces.',
+        'salle de reunion  sfax ',
       serviceId: serviceIds[0],
     },
   });
@@ -1435,16 +1454,17 @@ async function main() {
       serviceId: serviceIds[1],
     },
   });
-  let tarifMeetingSpace3 = await prisma.tarif.create({
-    data: {
-      name: 'Training Room',
-      capacity: '15 people',
-      price: 40,
-      pricePerDay: 259,
-      description: 'Optical fiber , Video Projector, White board',
-      serviceId: serviceIds[1],
-    },
-  });
+ let tarifMeetingSpace3 = await prisma.tarif.create({
+  data: {
+    name: 'Training Room',
+    capacity: '15 people',
+    price: 40,
+    pricePerDay: 5.5,
+    description: 'Optical fiber, Video Projector, White board',
+    serviceId: serviceIds[1],
+  },
+});
+
   let tarifCoWorkingZone1 = await prisma.tarif.create({
     data: {
       name: 'Day Pass',

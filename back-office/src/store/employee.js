@@ -7,6 +7,7 @@ export const fetchEmployees = createAsyncThunk("employees/employees", async () =
   const response = await axios.get(`${config.API_ENDPOINT}/employees/all`);
   return response.data;
 });
+
 export const fetchEmployee = createAsyncThunk("employees/employee", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/employees/one/${id}`);
   return response.data;
