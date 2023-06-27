@@ -741,8 +741,10 @@ model View {
 
 
 model Service {
-  id   String  @id @default(uuid())
-  name String?
+  id           String         @id @default(uuid())
+
+  name         String
+  
 
   identifier   String         @unique()
   perHour      Boolean        @default(true)

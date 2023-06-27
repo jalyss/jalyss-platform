@@ -17,8 +17,7 @@
   align-items: center;
   color: white;
 }
-.sidebarFooter {
-}
+
 .header {
   height: 70px;
   width: 100%;
@@ -27,8 +26,7 @@
   margin-left: 300px;
   margin-right: 300px;
 }
-.headerMiddle {
-}
+
 .headerRight {
   margin: 10px;
 }
