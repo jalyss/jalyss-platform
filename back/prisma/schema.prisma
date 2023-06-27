@@ -644,7 +644,7 @@ model Blog {
   updatedAt   DateTime         @updatedAt
   author      User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
-  confirm     Boolean          @default(false)
+  confirm     StatusBlog   @default(pending)
   category    ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String
   MediaBlog   MediaBlog[]
@@ -816,6 +816,12 @@ model ContentSubComponent {
 }
 
 enum Status {
+  confirmed
+  pending
+  refused
+}
+
+enum StatusBlog {
   confirmed
   pending
   refused

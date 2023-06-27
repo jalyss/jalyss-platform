@@ -102,7 +102,6 @@ export class BlogsService {
       },
     });
   }
-
   async update(id: string, dto: UpdateBlogDto, userId: string) {
     await this.prisma.$transaction(async (prisma) => {
       let blog = await prisma.blog.findFirstOrThrow({ where: { id } });

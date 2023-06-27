@@ -1,23 +1,45 @@
 import { GridActionsCellItem } from '@mui/x-data-grid'
-import React, { useState } from 'react'
+import React, { useState,useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux";
 import { AiFillDelete, AiOutlineEye } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
-import { useDispatch } from 'react-redux';
 import isEnglish from '../../../helpers/isEnglish';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { rows } from "../../../constants/blogData"
+import {fetchBlogs} from '../../../store/blogs'
 
 function BlogsList() {
   const [show, setShow] = useState(false);
   const [elementId, setElementId] = useState(null);
-
+  const [skip, setSkip] = useState(0);
+  const take = 50;
+  const trend= 0;
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch()
   const colorReference = '#48184c';
+
+  const blogs = useSelector((state) => state.blogs.blogs.items);
+console.log(blogs,'omar')
+//   const blogss = blogs?.map((elem) => ({
+//     id: elem.id,
+//     content: elem.content,
+//   }));
+const rows =blogs?.map((elem) => ({
+
+  id: elem.id, name: elem.author.fullNameEn
+  , blogTitle: elem.title, articleCategory: elem.category.nameEn , date: elem.createdAt ,content:elem.content, situation: elem.confirm ,
+
+}))
+
+  useEffect(()=>{
+    dispatch(fetchBlogs({take,skip}))
+  },[dispatch,skip])
+
+
   const buttonStyle = {
     backgroundColor: colorReference,
     color: 'white',
@@ -72,9 +94,11 @@ function BlogsList() {
     })
 
   };
+  
   const handleAddClick = (blogId) => {
     Navigate(`detail/${blogId}`)
   };
+
   return (
     <div>
     <div className='container'>
@@ -94,11 +118,11 @@ function BlogsList() {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 10,
               },
             },
           }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[10]}
 
           disableRowSelectionOnClick
         />
