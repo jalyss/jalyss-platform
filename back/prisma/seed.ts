@@ -1289,7 +1289,9 @@ async function main() {
         perHour: i !== 2 ? true : false,
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
+
         description: "The Creation of Adam is a fresco painting by Italian artist Michelangelo, which forms part of the Sistine Chapel's ceiling, painted c. 1508 1512. It illustrates the Biblical creation narrative from the Book ."
+
       },
     });
 
@@ -1340,7 +1342,7 @@ async function main() {
     data: {
       duration: 'trimestre(299DT)',
       price: 299,
-      description: 'aaaaaaaaaa',
+      description: 'salle de reunion sfax',
       serviceId: serviceIds[0],
     },
   });
@@ -1350,7 +1352,7 @@ async function main() {
       duration: 'YEAR',
       price: 2777,
       description:
-        'We provide several coworking spaces with flexible access that extends to 24 hours and 7 days a week for freelancers, business owners, and team members.By deciding on the number of workdays every month, you can further customize your experience.To grow your business in a setting that is both professional and social, reserve a spot in one of our coworking spaces.',
+        'salle de reunion  sfax ',
       serviceId: serviceIds[0],
     },
   });

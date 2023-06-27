@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Client from "../apps/Client";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+
 import ResetPassword from "../pages/ResetPassword";
 import NewPassword from "../pages/NewPassword";
 import Home from "../pages/Home";
@@ -23,13 +24,10 @@ import BlogsForm from "../pages/BlogsForm";
 import UpdateBlog from "../pages/UpdateBlog";
 
 import SpaceJalyss from "../pages/space/SpaceJalyss";
-import CoworkingZone from "../pages/space/CoworkingZone";
-import MeetingZone from "../pages/space/MeetingZone";
-import PrivateZone from "../pages/space/PrivateZone";
-import ReserveCoworkin from "../pages/space/ReserveCoworkin";
-import ReserveMeeting from "../pages/space/ReserveMeeting";
+
 import RegisterForm from "../pages/space/RegisterForm";
 import ServiceSpace from "../pages/space/ServiceSpace";
+import SpaceReservation from "../pages/space/SpaceReservation";
 
 import Profile from "../pages/Profile";
 import MyBlogs from "../components/Profile/MyBlogs";
@@ -70,6 +68,8 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
             
+            
+
             <Route path="*" element={<NoPage />} />
             <Route path="/chat" element={<Chat />}>
             <Route path="/chat/:userId" element={<Conversation />} />
@@ -87,19 +87,17 @@ function Router() {
               path="spaceJalyss/:serviceIdentifier"
               element={<ServiceSpace />}
             />
-            <Route path="CoworkingZone" element={<CoworkingZone />} />
-            <Route path="MeetingZone" element={<MeetingZone />} />
-            <Route path="PrivateZone" element={<PrivateZone />} />
-            {/* <Route path="Domiciliation" element={<Domiciliation />} /> */}
-            <Route path="ReserveCoworkin" element={<ReserveCoworkin />} />
            
+
             <Route path="ReserveMeeting" element={<ReserveMeeting />} />
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />}/>
     
 
             <Route path="ReserveMeeting" element={<ReserveMeeting />} />
+
             <Route path="RegisterForm" element={<RegisterForm />} />
+            <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
@@ -108,3 +106,4 @@ function Router() {
 }
 
 export default Router;
+

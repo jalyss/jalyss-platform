@@ -27,6 +27,8 @@ export const login = createAsyncThunk(
     let aux = JSON.stringify(response.data);
     localStorage.setItem("token", aux);
    ;
+   dispatch(me(response.data.Authorization));
+
     return response.data;
   }
 );
@@ -109,6 +111,7 @@ export const authUpdate = createAsyncThunk(
   }
 );
 
+
 export const AuthSlice = createSlice({
   name: "auth",
   initialState: {
@@ -121,9 +124,12 @@ export const AuthSlice = createSlice({
   },
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(me.fulfilled, (state, action) => {
-      state.me = action.payload;
-    });
+    builder
+      .addCase(me.fulfilled, (state, action) => {
+        state.me = action.payload;
+      })
+     
   },
 });
+
 export default AuthSlice.reducer;
