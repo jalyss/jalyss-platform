@@ -1,253 +1,173 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button } from '@mui/material'
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import { useDispatch, useSelector } from 'react-redux'
-import isEnglish from '../../../helpers/isEnglish';
-import { useNavigate } from 'react-router-dom';
-import { GiConfirmed, GiCancel } from 'react-icons/gi';
-import { AiOutlineEye } from 'react-icons/ai';
-import { FcCancel } from 'react-icons/fc';
-import { GrAdd } from 'react-icons/gr';
-import { TbTruckDelivery } from 'react-icons/tb';
+import React, { useEffect, useState } from "react";
+import "../../../assets/styles/WorkSpaceDetails.css";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchServiceById, removeservice } from "../../../store/service";
+import { removeSpace } from "../../../store/space";
+import tarif, { removeTarif } from "../../../store/tarif";
+import Dropdown from "react-bootstrap/Dropdown";
+import AddButton from "../../../components/buttons/AddButton";
+import { BsPersonWorkspace } from "react-icons/bs";
+import { BiDetail } from "react-icons/bi";
+import { MdOutlinePayments } from "react-icons/md";
+import { GrDocumentUpdate } from "react-icons/gr";
+import { MdDeleteOutline } from "react-icons/md";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 
-import { showErrorToast, showSuccessToast } from '../../../utils/toast';
-import Modal from 'react-bootstrap/Modal';
-import { fetchCommands } from '../../../store/command';
+export default function ServiceDetails() {
+  const { serviceId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const [selectedId, setSelectedId] = useState(null);
+  const [tarifId, setTarifId] = useState(null);
 
+  const service = useSelector((state) => state.service.service);
 
-function CommandList() {
-  const [show, setShow] = useState(false);
-  const [confirm, setConfirm] = useState(false);
-  const [delivery, setDelivery] = useState(false);
-  const [paid, setPaid] = useState(false);
-  const [confirmId, setConfirmId] = useState(null);
-  const [deliveryId, setDeliveryId] = useState(null);
-  const [paidId, setPaidId] = useState(null);
-  
+  useEffect(() => {
+    dispatch(fetchServiceById(serviceId));
+  }, [dispatch]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const columns = [
+  console.log(serviceId, "SerID");
+  console.log(tarifId, "tarifID");
+  console.log(selectedId, "selectedId");
+
+  const handleRemoveTarif = (id) => {
+    dispatch(removeTarif(id));
+    dispatch(fetchServiceById(serviceId));
+  };
+
+  const handleRemoveSpace = (id) => {
+    dispatch(removeSpace(id));
+    dispatch(fetchServiceById(serviceId));
+  };
+
+  const columnsWorkSpace = [
+    { field: "name", headerName: "Name", flex: 1 },
     {
-      field: 'id', headerName: 'ID', width: 90
+      field: "show",
+      headerName: "Show",
+      flex: 0.5,
+      renderCell: (params) => (
+        <GridActionsCellItem
+          icon={<BiDetail />}
+          onClick={() => navigate(`space-details/${params.row.id}`)}
+        />
+      ),
     },
     {
-      field: '',
-      headerName: 'TOTAL',
-      width: 100,
-      sortable: true,
-
-
+      field: "update",
+      headerName: "Update",
+      flex: 0.5,
+      renderCell: () => <GrDocumentUpdate />,
     },
     {
-      field: 'clientName',
-      headerName: 'NAME CLIENT',
-      width: 150,
-      editable: true,
-
-    },
-    {
-      field: 'clientTel',
-      headerName: 'PHONE CLIENT ',
-      width: 150,
-      sortable: false,
-      
-
-    },
-
-    {
-      field: 'paid',
-      type: 'actions',
-      headerName: 'PAYMENT STATUS',
-      width: 130,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-
-        return [
-          <GridActionsCellItem
-            icon={paid ? <GiConfirmed size={20} color='#3cb371' /> : <FcCancel size={15} />}
-
-            label="confirmPaid"
-            className="textPrimary"
-            onClick={() => handlePaid(id)}
-            color="inherit"
-          />,
-        ];
-
-      },
-    },
-
-    {
-      field: 'hasDelivery',
-      headerName: '	HAS DELIVERY',
-      width: 150,
-      sortable: true,
-    },
-    {
-      field: 'confirm',
-      type: 'actions',
-      headerName: 'CONFIRM',
-      width: 100,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={confirm ? <GiConfirmed size={20} color='#3cb371' /> : <FcCancel size={15} />}
-            label="confirm"
-            className="textPrimary"
-            onClick={() => handleConfirm(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={confirm ? <GiConfirmed size={20} color='#3cb371' /> : <FcCancel size={15} />}
-            label="confirm"
-            className="textPrimary"
-            onClick={() => handleConfirm(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-    {
-      field: 'delivered',
-      type: 'actions',
-      headerName: 'DELIVERY STATUS',
-      width: 130,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={delivery ? <GiCancel color='red' size={15} /> : <TbTruckDelivery size={20} />}
-            label="delivered"
-            className="textPrimary"
-            onClick={() => handleDelivery(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<TbTruckDelivery size={20} />}
-            label="delivered"
-            className="textPrimary"
-            onClick={() => handleDelivery(id)}
-            color="inherit"
-          />,
-
-
-        ];
-
-      },
-    },
-    {
-      field: 'createdAt',
-      headerName: 'DATE',
-      width: 100,
-      sortable: true,
-
-
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'ACTIONS',
-      width: 90,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-
-        return [
-          <GridActionsCellItem
-            icon={<AiOutlineEye color='#8b008b' size={15} />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-
-
-        ];
-
-      },
+      field: "delete",
+      headerName: "Delete",
+      flex: 0.5,
+      renderCell: (params) => (
+        <GridActionsCellItem
+          icon={<MdDeleteOutline />}
+          onClick={() => handleRemoveSpace(params.row.id)}
+        />
+      ),
     },
   ];
 
-  const commandStore = useSelector((state) => state.command)
-  const dispatch = useDispatch()
-  const isEng = isEnglish()
-  const navigate = useNavigate()
-  const [rows, setRows] = useState([])
-  useEffect(() => {
-    dispatch(fetchCommands())
+  const columnsTarif = [
+    { field: "name", headerName: "Name", flex: 1 },
+    { field: "price", headerName: "Price", flex: 1 },
+    {
+      field: "show",
+      headerName: "Show",
+      flex: 0.5,
+      renderCell: (params) => (
+        <GridActionsCellItem
+          icon={<BiDetail />}
+          onClick={() => navigate(`tarif-details/${params.row.id}`)}
+        />
+      ),
+    },
+    {
+      field: "update",
+      headerName: "Update",
+      flex: 0.5,
+      renderCell: (params) => (
+        <GridActionsCellItem
+          icon={<GrDocumentUpdate />}
+          onClick={() => navigate(`edit-tarif/${params.row.id}`)}
+        />
+      ),
+    },
+    {
+      field: "delete",
+      headerName: "Delete",
+      flex: 0.5,
+      renderCell: (params) => (
+        <GridActionsCellItem
+          icon={<MdDeleteOutline />}
+          onClick={() => handleRemoveTarif(params.row.id)}
+        />
+      ),
+    },
+  ];
 
-  }, [])
-  useEffect(() => {
-    if (commandStore.commands.items.length) {
-      let aux = commandStore.commands.items.map(e => {
-
-        return {
-          ...e, createdAt: e.createdAt.slice(0, 10),
-
-        }
-
-      })
-      console.log(aux);
-      setRows(aux)
-    }
-  }, [commandStore.commands.items])
-
-  const handleConfirm = (confirmId) => {
-    setConfirm(!confirm)
-
-  };
-  const handlePaid = () => {
-    setPaid(!paid)
-
-  };
-  const handleDelivery = () => {
-    setDelivery(!delivery)
-
-  };
-
-  const handleEditClick = (id) => {
-    console.log(id);
-    navigate(`edit/${id}`)
-
-  };
   return (
-
-
-    <div>
-
-
-      <div>
-        <Button type='button' href='command/create' variant="outlined" endIcon={<GrAdd />} >
-          <span className='btn btn-sm '>
-            Add Order
-          </span>
-        </Button>
-      </div>
-      <div className='position-relative'>Orders List
-        <Box sx={{ height: 600, width: '100%' }}>
-
-          <DataGrid
-
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 10,
-                },
-              },
-            }}
-
-            pageSizeOptions={[5]}
-            checkboxSelection
-            disableRowSelectionOnClick
+    <div className="view">
+      {service && (
+        <div class="card mb-3">
+          <img
+            class="card-img-top"
+            src={service.cover?.path}
+            alt="Card image cap"
           />
-        </Box>
+          <div class="card-body">
+            <h5 class="card-title">{service.name}</h5>
+            <p class="card-text">
+              This is a wider card with supporting text below as a natural
+              lead-in to additional content. This content is a little bit
+              longer.
+            </p>
+          </div>
+        </div>
+      )}
+      <div className="d-flex justify-content-end">
+        <AddButton
+          onClick={() => navigate(`create-workspace`)}
+          content="Create space"
+          startIcon
+          Icon={<BsPersonWorkspace />}
+        />
+      </div>
+      <div style={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={service?.workSpace}
+          columns={columnsWorkSpace}
+          autoHeight
+          disableColumnMenu
+        />
+      </div>
 
+      <div className="d-flex justify-content-end">
+        <AddButton
+          onClick={() => navigate(`create-Tarif`)}
+          content="Create new tarif"
+          startIcon
+          Icon={<MdOutlinePayments />}
+        />
+      </div>
+
+      <div className="d-flex justify-content-center align-items-center">
+        <div style={{ height: 400, width: "100%" }}>
+          <DataGrid
+            rows={service?.tarif}
+            columns={columnsTarif}
+            autoHeight
+            disableColumnMenu
+          />
+        </div>
       </div>
     </div>
-  )
+  );
 }
-
-export default CommandList

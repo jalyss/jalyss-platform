@@ -28,17 +28,41 @@ import CommandList from "../domains/commands/views/CommandList";
 import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
 //training
-
 import Training from "../domains/training/Training";
 import Coursdetail from "../domains/training/views/courses/Coursdetail";
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
-
+import Service from "../domains/service/Service";
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
 import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
+import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+import ServiceList from "../domains/service/views/ServiceList";
+import OneService from "../domains/service/views/OneService";
+import ServiceDetails from "../domains/service/views/ServiceDetails";
+import CreateService from "../domains/service/views/CreateService";
+import CreateTarif from "../domains/service/views/CreateTarif";
+import TarifDetails from "../domains/service/views/TarifDetails";
+import SpaceDetails from "../domains/service/views/SpaceDetails";
+import EditTarif from "../domains/service/views/EditTarif";
+import EditWorkSpace from "../domains/service/views/EditWorkSpace";
+import EditService from "../domains/service/views/EditService";
+import Blogs from "../domains/blogs/Blogs";
+import BlogsList from "../domains/blogs/views/BlogsList";
+import DetailBlog from "../domains/blogs/views/DetailBlog";
+import Providers from "../domains/provider/Providers";
+import ProvidersList from "../domains/provider/view/ProvidersList";
+import CreateProvider from "../domains/provider/view/CreateProvider";
+import EditProvider from "../domains/provider/view/EditProvider";
+import DetailProvider from "../domains/provider/view/DetailProvider";
+import Profile from "../pages/Profile";
+import Author from "../domains/author/Author";
+import AuthorList from "../domains/author/views/AuthorList";
+import EditAuthor from "../domains/author/views/EditAuthor";
+import DetailAuthor from "../domains/author/views/DetailAuthor";
+import CreateAuthor from "../domains/author/views/CreateAuthor";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -57,6 +81,24 @@ function Router() {
         {auth.meAdmin ? (
           <Route path="/" element={<Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="space" element={<Service />}>
+            <Route path="edit-service/:serviceId" element={<EditService />} />
+
+              <Route index element={<ServiceList />} />
+              <Route path="create-service" element={<CreateService />} />
+              <Route path="service/:serviceId" element={<OneService />} >
+              <Route index element={<ServiceDetails />} />
+              <Route path="create-workspace" element={<CreateWorkSpace />} />
+              <Route path="create-Tarif" element={<CreateTarif />} />
+              <Route path="tarif-details/:tarifId" element={<TarifDetails />} />
+              <Route path="space-details/:spaceId" element={<SpaceDetails />} />
+              <Route path="edit-space/:spaceId" element={<EditWorkSpace />} />
+              <Route path="edit-tarif/:tarifId" element={<EditTarif />} />
+              </Route>
+
+
+            </Route>
+            <Route path="profile" element={<Profile />} />
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
@@ -66,6 +108,26 @@ function Router() {
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
               <Route path="edit/:employeeId" element={<EditEmployee />} />
+            </Route>
+
+            <Route path="blogs" element={<Blogs />}>
+              <Route index element={<BlogsList/>} />
+              <Route path="detail/:blogId" element={<DetailBlog />} />
+            </Route>
+
+            <Route path="provider" element={<Providers />}>
+              <Route index element={<ProvidersList/>} />
+              <Route path="edit/:providerId" element={<EditProvider />} />
+              <Route path="detail/:providerId" element={<DetailProvider />} />
+              <Route path="create" element={<CreateProvider />} />
+
+            </Route>
+            <Route path="author" element={<Author />}>
+              <Route index element={<AuthorList/>} />
+              <Route path="edit/:authorId" element={<EditAuthor />} />
+              <Route path="detail/:authorId" element={<DetailAuthor />} />
+              <Route path="create" element={<CreateAuthor />} />
+
             </Route>
 
             <Route path="articles" element={<Article />}>

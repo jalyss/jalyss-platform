@@ -6,13 +6,19 @@
   background: white;
 }
 .sidebarHeader {
-  height: 70px;
+  padding: 20px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .sidebarContent {
   text-decoration: none;
   overflow-y:scroll;
   height: 100%;
-  padding-top: 50px;
+  position: relative;
+  padding-bottom: 150px;
+ 
 
 }
 .sidebarContent::-webkit-scrollbar{

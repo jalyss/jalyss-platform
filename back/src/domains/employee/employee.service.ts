@@ -19,6 +19,7 @@ export interface FormatLoginAdmin extends Partial<Employee> {
   branchId: string;
   roleId: string;
   
+  
 }
 
 @Injectable()
@@ -84,7 +85,7 @@ export class EmployeeService {
     return this.prisma.employee.update({
       where: { id },
       data,
-      include:{avatar:true}
+      include:{role:true,branch:true,avatar:true} 
     });
   }
 

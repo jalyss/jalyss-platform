@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RxAvatar } from "react-icons/rx";
@@ -11,6 +12,7 @@ import Cart from "../components/Cart";
 import { useCart } from "react-use-cart";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useNavigate } from "react-router-dom";
+
 
 import { ChatCircleDots } from "phosphor-react";
 import { IconButton } from "@mui/material";
@@ -275,6 +277,7 @@ function NavBar() {
                   <p className="m-0">{totalItems}</p>
                 </div>
               </div>
+
               <div className="text-white mx-2">
                 <p className="m-0 text-right">{t("navbar.cart")}</p>
                 <p className="m-0">
@@ -282,6 +285,7 @@ function NavBar() {
                 </p>
               </div>
             </div>
+
           </div>
         </Navbar.Collapse>
       </Navbar>

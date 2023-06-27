@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Navbar, Container} from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { sidebarDataBranch } from '../constants/sidebarDataBranch'
 import isEnglish from '../helpers/isEnglish'
 import Typography from '@mui/material/Typography'
@@ -18,6 +18,7 @@ function Header() {
   const { t, i18n } = useTranslation()
   const currentLanguage = useLanguage()
   const [anchorElUser, setAnchorElUser] = React.useState(null)
+  const navigate = useNavigate()
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget)
   }
@@ -38,13 +39,24 @@ function Header() {
   const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages])
 
   const getBrandText = () => {
+    const currentPath = location.pathname;
+  
     for (let i = 0; i < sidebarDataBranch.length; i++) {
-      if (location.pathname.indexOf(sidebarDataBranch[i].path) !== -1) {
-        if (isEng) return sidebarDataBranch[i].nameEn
-        else return sidebarDataBranch[i].nameAr
+      const item = sidebarDataBranch[i];
+  
+      if (currentPath === `/${item.path}`) {
+        return isEng ? item.nameEn : item.nameAr;
+      }
+  
+      for (let j = 0; j < item.children.length; j++) {
+        const child = item.children[j];
+  
+        if (currentPath.endsWith(`/${child.path}`)) {
+          return isEng ? child.nameEn : child.nameAr;
+        }
       }
     }
-    return 'Brand'
+    return 'MasterKnowledgeAcademy'
   }
 
   return (
@@ -119,7 +131,9 @@ function Header() {
             >
               <MenuItem onClick={handleCloseUserMenu}>
                 <MenuItem>
-                  <Typography textAlign="center">
+                  <Typography textAlign="center" onClick={()=>{
+                    navigate("/profile")
+                  }}>
                     <span className="no-icon">Profile</span>
                   </Typography>
                 </MenuItem>

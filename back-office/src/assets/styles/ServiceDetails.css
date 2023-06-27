@@ -1,0 +1,168 @@
+.spaceListWrapper {
+    display: flex;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 3rem;
+    margin: 40px 50px 0;
+    overflow-x: auto;
+    
+  }
+
+  .spaceListWrapper::-webkit-scrollbar {
+width: 0;
+  }
+
+  .spaceItemWrapper {
+    background-color: #fff;
+  }
+
+  .dropdownTogglespaceCard:after{
+    display: none !important;
+  }
+  .dropdownTogglespaceCard {
+    width: 30px !important;
+    height:  30px !important;
+    text-align: center !important;
+  }
+  .dropdownTogglespaceCard:hover{
+    background-color: #65049242 !important;
+    border-radius: 20px !important;
+  }
+  
+  
+  
+  
+  @media (max-width: 1200px) {
+    .spaceListWrapper {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .spaceListWrapper {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  
+  @keyframes blinking {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .ellipsis-btn:hover {
+    background-color: #7915a7;
+  }
+  
+  .dropdown-toggle {
+    white-space: nowrap;
+  }
+  
+  .spaceItemWrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .spaceItemWrapper:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border-color: #333;
+  }
+  
+  .spaceItemWrapper:hover .spaceItemTitle {
+    text-decoration: underline;
+  }
+  
+  .spaceItemCover {
+    width: 100%;
+    height: 345px;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+  
+  .chip {
+    font-size: 0.7rem;
+    background: linear-gradient(to right, #6190e8, #a7bfe8);
+    color: #fff;
+    padding: 0.3rem 0.5rem;
+    border-radius: 5px;
+    width: fit-content;
+    text-transform: capitalize;
+    margin: 0 20px;
+  }
+  .spaceItemDescription {
+    max-height: 100px;
+    overflow: hidden;
+    font-size: 0.8rem;
+    color: #a9a9a9;
+    transition: color 0.2s ease-in-out;
+    margin: 0 20px;
+  }
+  
+  .spaceItemDescription:hover {
+    color: #333;
+  }
+  .spaceItemFooter {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    justify-content: space-between;
+  }
+
+
+  .spaceListWrapper {
+    display: flex;
+    overflow-x: auto;
+    margin: 40px 50px 0;
+    padding-bottom: 20px; /* Add padding to the bottom to ensure scrollbar visibility */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #7915a7 #f5f5f5; /* For Firefox */
+    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+  }
+  
+  .spaceItemWrapper {
+    flex: 0 0 auto;
+    background-color: #fff;
+    margin-right: 20px; /* Add some margin between items */
+  }
+  
+  /* Hide scrollbar for Chrome, Safari, and Edge */
+  .spaceListWrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  /* Style scrollbar track for Firefox */
+  .spaceListWrapper::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+  }
+  
+  /* Style scrollbar thumb for Firefox */
+  .spaceListWrapper::-webkit-scrollbar-thumb {
+    background-color: #7915a7;
+    border-radius: 10px;
+  }
+  
+  @media (max-width: 1200px) {
+    .spaceListWrapper {
+      flex-wrap: wrap; /* Wrap items on smaller screens instead of scrolling */
+      justify-content: center; /* Center items when wrapping */
+      overflow-x: auto; /* Enable horizontal scrolling on small screens */
+    }
+    .spaceItemWrapper {
+      margin-right: 0; /* Remove margin between items when wrapping */
+      margin-bottom: 20px; /* Add margin-bottom for spacing */
+      flex-basis: 50%; /* Make each item take 50% of the container width on smaller screens */
+    }
+  }
+  
+  
+  
+
+ 

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { Question } from './../src/domains/questions/entities/question.entity';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -1255,7 +1256,7 @@ async function main() {
   }
 
   // create dummy services
-  let serviceIds = [];
+  let serviceIds: string[] = [];
 
   const serviceNames = ['Private Space', 'Meeting Space', 'Co-Working Zone'];
   let MediaServiceIds = [];
@@ -1285,10 +1286,12 @@ async function main() {
             path: 'https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png',
           },
         },
-        perHour:i!==2?true:false,
+        perHour: i !== 2 ? true : false,
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
-        
+
+        description: "The Creation of Adam is a fresco painting by Italian artist Michelangelo, which forms part of the Sistine Chapel's ceiling, painted c. 1508 1512. It illustrates the Biblical creation narrative from the Book ."
+
       },
     });
 
@@ -1296,18 +1299,25 @@ async function main() {
   }
 
   console.log(serviceIds);
-
+  let coverWorkSpace = await prisma.media.create({
+    data: {
+      alt: 'bureau Sfax',
+      extension: 'jpg',
+      type: 'image',
+      path: 'https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png',
+    },
+  });
   let workSpacePrivateSpace = await prisma.workSpace.create({
     data: {
-      name: 'bureau sfax',
-
       serviceId: serviceIds[0],
+      name: 'bureau sfax',
+      imageId: coverWorkSpace.id,
     },
   });
   let workSpaceMeetingSpace = await prisma.workSpace.create({
     data: {
       name: 'salle de reunion sfax',
-
+      imageId: coverWorkSpace.id,
       serviceId: serviceIds[1],
     },
   });
@@ -1315,8 +1325,17 @@ async function main() {
   let workSpaceCoworkingSpace = await prisma.workSpace.create({
     data: {
       name: 'open space sfax',
-
+      imageId: coverWorkSpace.id,
       serviceId: serviceIds[2],
+    },
+  });
+  let tarifPrivateSpace33= await prisma.tarif.create({
+    data: {
+      duration: 'trimestre(299DT)',
+      price:299,
+      description: 'aaaaaaaaaa',
+      serviceId: serviceIds[0],
+      pricePerDay:5
     },
   });
   let tarifPrivateSpace1 = await prisma.tarif.create({
@@ -1357,16 +1376,17 @@ async function main() {
       serviceId: serviceIds[1],
     },
   });
-  let tarifMeetingSpace3 = await prisma.tarif.create({
-    data: {
-      name: 'Training Room',
-      capacity: '15 people',
-      price: 40,
-      pricePerDay: 259,
-      description: 'Optical fiber , Video Projector, White board',
-      serviceId: serviceIds[1],
-    },
-  });
+ let tarifMeetingSpace3 = await prisma.tarif.create({
+  data: {
+    name: 'Training Room',
+    capacity: '15 people',
+    price: 40,
+    pricePerDay: 5.5,
+    description: 'Optical fiber, Video Projector, White board',
+    serviceId: serviceIds[1],
+  },
+});
+
   let tarifCoWorkingZone1 = await prisma.tarif.create({
     data: {
       name: 'Day Pass',
@@ -1431,27 +1451,260 @@ async function main() {
     );
   }
 
-  // create dummy blogs
-  
+  let data = [
+    "Understanding React's component-based architecture",
+    'Working with JSX syntax',
+    'Managing state and props',
+    'Handling events in React',
+  ];
+  let whatYouWillLearnIds = [];
+  for (let i = 0; i < data.length; i++) {
+    const whatYouWillLearn = await prisma.whatYouWillLearn.create({
+      data: {
+        content: data[i],
+      },
+    });
+    whatYouWillLearnIds.push(whatYouWillLearn.id);
+  }
+
+  // create session type
+  let sessionTypeIds = [];
+  let titles = ['online', 'surSite'];
+  for (let i = 0; i < 2; i++) {
+    let sessionType = await prisma.sessionType.create({
+      data: {
+        title: titles[Math.floor(Math.random() * titles.length)],
+      },
+    });
+
+    sessionTypeIds.push(sessionType.id);
+  }
+
+  // create cover session
+  let mediaSessionIds = [];
+
+  for (let i = 0; i < 10; i++) {
+    let media = await prisma.media.create({
+      data: {
+        alt: 'image',
+        description: 'image',
+        path: 'https://i.pravatar.cc/',
+        extension: 'jpg',
+        type: 'image',
+      },
+    });
+
+    mediaSessionIds.push(media.id);
+  }
+
   for (let i = 0; i < 50; i++) {
     const newBlog = await prisma.blog.create({
       data: {
         content: 'hello from the other side.',
-        title: 'My Blog Post '+i,
-        authorId: users[Math.floor(Math.random()*users.length)].id,
-        categoryId: articleCategoryIds[Math.floor(Math.random()*articleCategoryIds.length)],
-        confirm:i%2===0?true:false
+        title: 'My Blog Post ' + i,
+        authorId: users[Math.floor(Math.random() * users.length)].id,
+        categoryId:
+          articleCategoryIds[
+            Math.floor(Math.random() * articleCategoryIds.length)
+          ],
+        confirm: i % 2 === 0 ? true : false,
       },
     });
-    for(let i=0;i<Math.floor(Math.random()*10);i++){
+    for (let i = 0; i < Math.floor(Math.random() * 10); i++) {
       await prisma.view.create({
-        data:{
-          blogId:newBlog.id
-        }
-      })
+        data: {
+          blogId: newBlog.id,
+        },
+      });
     }
   }
+
+  //create session
+  let lectures = [];
+  let sessions = [];
+  let sHL = [];
+  let sessionIds = [];
+  let shT = [];
+  let shW=[]
+  let lhw=[]
+  let sHp = [] // session has prerequire elements
+
+
+  const search = (s, l) => {
+    return (
+      sHL.filter((e) => e.sessionId === s && e.lectureId === l).length === 0
+    );
+  };
+  const search2 = (s, l) => {
+    return (
+      shT.filter((e) => e.sessionId === s && e.sessionTypeId === l).length === 0
+    );
+  };
+
+  const search3 = (s, l) => {
+    return (
+      shW.filter((e) => e.sessionId === s && e.WhatYouWillLearnId === l).length === 0
+    );
+  };
+  const search4 = (s, l) => {
+    return (
+      lhw.filter((e) => e.lectureId === s && e.WhatYouWillLearnId === l).length === 0
+    );
+  };
+
+  const search5 = (s, l) => {
+    return (
+      sHp.filter((e) => e.sessionId  === s && e.prerequireId === l).length === 0
+    );
+  };
+
+  for (let i = 0; i < 50; i++) {
+    const lecture = await prisma.lecture.create({
+      data: {
+        title: 'My Lecture ' + i,
+        content: 'Hello, this is a new lecture',
+        startAt: new Date(Date.now()),
+        endAt: new Date(Date.now()),
+      },
+    });
+    lectures.push(lecture);
+
+    let l = lecture.id;
+    let l2 =  whatYouWillLearnIds[Math.floor(Math.random() * whatYouWillLearnIds.length)];
+    if (search4(l, l2)) {
+      shT.push(
+        await prisma.lectureHasWhatYouWillLearn.create({
+          data: {
+            lectureId: l,
+            WhatYouWillLearnId: l2,
+          },
+        }),
+      );
+    }
+    const session = await prisma.session.create({
+      data: {
+        title: 'My Session Post ' + i,
+        description: 'Hello, this is a new session',
+        startDate: new Date('2022-01-01'),
+        endDate: new Date('2022-02-02'),
+        categoryId:
+          articleCategoryIds[
+            Math.floor(Math.random() * articleCategoryIds.length)
+          ],
+        coverId:
+          mediaSessionIds[Math.floor(Math.random() * mediaSessionIds.length)],
+      
+      },
+    });
+    sessions.push(session);
+    sessionIds.push(session.id);
+    if (sessionIds.length && sessionTypeIds.length) {
+      let l = sessionIds[Math.floor(Math.random() * sessionIds.length)];
+      let l2 =  sessionTypeIds[Math.floor(Math.random() * sessionTypeIds.length)];
+      if (search2(l, l2)) {
+        shT.push(
+          await prisma.sessionHasSessionType.create({
+            data: {
+              sessionId: l,
+              sessionTypeId: l2,
+            },
+          }),
+        );
+      }
+      let q=sessionIds[Math.floor(Math.random() * sessionIds.length)];
+      let q2=whatYouWillLearnIds[Math.floor(Math.random() * whatYouWillLearnIds.length)];
+      if (search3(q, q2)) {
+       
+        shW.push(
+          await prisma.sessionHasWhatYouWillLearn.create({
+            data: {
+              sessionId:q,
+              WhatYouWillLearnId:q2,
+            },
+          }),
+        );
+      }
+
+    }
+      let feedBack = [
+        'The session provided a matter. The content was well-organized and easy to follow. I particularly enjoyed the hands-on exercises that helped solidify my understanding!',
+        'I found the session to be extremely helpful in bridging my knowledge gap.',
+        'Attending this session was a game-changer for me. The instructors expertise and teaching style were outstanding. I appreciated the interactive approach,',
+        'I highly recommend this session to anyone interested in the topic. The content was delivered in a clear and concise manner!',
+        'The session was truly eye-opening. The instructors passion and expertise were evident throughout.',
+      ];
+      let sessionFeedback = await prisma.sessionFeedback.create({
+        data: {
+          content: feedBack[Math.floor(Math.random() * feedBack.length)],
+          sessionId: session.id,
+          userId: users[Math.floor(Math.random() * users.length)].id,
+        },
+      });
+
+let preRequireIds = []
+let prerequis=["alooooooooo","im prereqq","ok","how are yoy","fine ","i love farouk"]
+let sessionPrerequis = await prisma.prerequire.create({
+  data: {
+    content:prerequis[Math.floor(Math.random() * prerequis.length)],
+  },
+});
+preRequireIds.push(sessionPrerequis.id)
+
+let w=sessionIds[Math.floor(Math.random() * sessionIds.length)];
+  let w2=preRequireIds[Math.floor(Math.random() * preRequireIds.length)];
+if (search5(w, w2)) {
   
+  sHp.push(
+    await prisma.sessionHasPrerequire.create({
+      data: {
+        sessionId: w,
+        prerequireId : w2,
+      },
+    }),
+  );
+}
+  
+
+    const newCoach = await prisma.coaching.create({
+      data: {
+        userId: users[Math.floor(Math.random() * users.length)].id,
+        lectureId: lectures[Math.floor(Math.random() * lectures.length)].id,
+      },
+    });
+    if (lectures.length && sessions.length) {
+      let lectId = lectures[Math.floor(Math.random() * lectures.length)].id;
+      let sesId = sessions[Math.floor(Math.random() * sessions.length)].id;
+
+      if (search(sesId, lectId)) {
+        sHL.push(
+          await prisma.sessionHasLecture.create({
+            data: { sessionId: sesId, lectureId: lectId },
+          }),
+        );
+      }
+    }
+  }
+
+  // create dummy FrequenclyAsked
+  let questions = [
+    'How to Enroll This Online Courses?',
+    'Where It is hidden by default, until the collapse?',
+    'Where It is hidden by default, until the collapse?',
+    'How to Enline Courses?',
+    'Wherefault, until the collapse?',
+    'How It is hidden by default, until the collapse?',
+  ];
+  let answer = ['ey', 'le', 'ey', 'maha2h', 'google it', 'bethabet'];
+  for (let i = 0; i < 6; i++) {
+    let Freq = await prisma.frequentilyQuestion.create({
+      data: {
+        question: questions[i],
+        answer: answer[i],
+      },
+    });
+  }
+
+  // create feedbacks
 }
 
 // execute the main function

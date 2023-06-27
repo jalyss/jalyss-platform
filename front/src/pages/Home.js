@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import CarouselImages from '../components/Carousel'
-import HorizontalMenu from '../components/DragContainter'
+import CarouselImages from '../components/Commun/Carousel'
+import HorizontalMenu from '../components/Commun/DragContainter'
 import { MDBFooter, MDBContainer, MDBRow, MDBCol } from 'mdb-react-ui-kit'
 import { fetchPublishingHouses } from '../store/publishingHouse'
 import { fetchArticlesByBranch } from '../store/article'
 import { identifier } from '../constants/identifier/identifier'
 import ArticleCard from '../components/ArticleCard'
-import TrainingHeading from '../components/TrainingHeading'
+import TrainingHeading from '../components/Commun/TrainingHeading'
 
 function Home() {
   const { t, i18n } = useTranslation()
