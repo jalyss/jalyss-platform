@@ -133,7 +133,7 @@ function ArticleList() {
         <div>
             
             <div>
-                <Button type='button' href='articles/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
+                <Button type='button' onClick={()=>navigate('create')} variant="outlined" endIcon={<IoIosPersonAdd />} >
                     <span className='btn btn-sm '>
                         Add Article
                     </span>

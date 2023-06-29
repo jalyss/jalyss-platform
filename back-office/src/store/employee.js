@@ -7,6 +7,7 @@ export const fetchEmployees = createAsyncThunk("employees/employees", async () =
   const response = await axios.get(`${config.API_ENDPOINT}/employees/all`);
   return response.data;
 });
+
 export const fetchEmployee = createAsyncThunk("employees/employee", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/employees/one/${id}`);
   return response.data;
@@ -42,11 +43,8 @@ export const editEmployee = createAsyncThunk("employees/editEmployee", async (ar
       Authorization: 'Bearer ' + token.Authorization
     }
   }
-  let id=args.id
-  delete args.id
- 
-  const response = await axios.patch(`${config.API_ENDPOINT}/employees/${id}`, args,configs);
-  dispatch(fetchEmployee(id))
+  const { id, ...body } = args
+  const response = await axios.patch(`${config.API_ENDPOINT}/employees/${id}`, body, configs);
   return response.data;
 });
 
@@ -69,6 +67,9 @@ export const employeeSlice = createSlice({
       state.employees.items = action.payload;
     });
     builder.addCase(fetchEmployee.fulfilled, (state, action) => {
+      state.employee = action.payload;
+    });
+    builder.addCase(editEmployee.fulfilled, (state, action) => {
       state.employee = action.payload;
     });
   },

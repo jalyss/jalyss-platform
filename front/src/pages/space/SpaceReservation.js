@@ -47,9 +47,9 @@ const SpaceReservation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Do something with the form data
+  
     console.log("Form submitted");
-    dispatch(updateFormData()); // Reset form
+    dispatch(updateFormData()); 
   };
 
   useEffect(() => {

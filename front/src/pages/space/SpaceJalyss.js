@@ -166,154 +166,111 @@ function SpaceJalyss() {
         <h6 className="firstLine">Find the workspace that inspires you</h6>
         <h1 className="secondLine">Our Services</h1>
 
-        <div className="d-flex justify-content-center align-items-center ">
-          {services.items.map((elem, i) => (
-            <div className="col-md-2.5 mx-1">
-              <img
-                src={elem.cover?.path}
-                alt={elem.cover?.alt}
-                className="card-img-top"
-                style={{
-                  borderRadius: 35,
-                  marginBottom: -50,
-                  height: 250,
-                  width: 300,
-                }}
-              />
-              <div
-                className="card  headerspaceitem"
-                style={{
-                  borderRadius: 25,
-                  width: 250,
-                  left: 26,
-                  transition: "all 1.6s ease-in-out",
-                }}
-              >
-                <div className="card-body  ">
-                  <h5 className="card-title">{elem.name}</h5>
-                  <button
-                    className="btn btn-primary"
-                    style={{
-                      width: 170,
-                      marginLeft: 25,
-                      backgroundColor: "rgb(230, 229, 232)",
-                      borderRadius: 30,
-                      color: "black",
-                    }}
-                  >
-                    <Link
-                      to={elem?.identifier}
-                      style={{ textDecoration: "none", color: "black" }}
-                    >
-                      {" "}
-                      Reserve
-                    </Link>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="d-flex justify-content-center align-items-center flex-wrap" >
+  {services.items.map((elem, i) => (
+    <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mx-1" >
+      <div className="card headerspaceitem" style={{ borderRadius: "38px" , backgroundColor: "pink"}}>
+         <div className="overlay"> 
+          <div className="card-img-top-container">
+         <img
+            src={elem.cover?.path}
+            alt={elem.cover?.alt}
+            className="card-img-top img-responsive img-rounded"
+            style={{ borderRadius: "35px", height: "200px", width: "100%" }}
+          />
          
+          <div className="card-body">
+          <h5 className="card-title">{elem.name}</h5>
+          <button className="btn btn-primary btn-reserve" style={{ backgroundColor: "purple " }}>
+  <Link
+    to={elem?.identifier}
+    style={{ borderRadius: "35px", textDecoration: "none", color: "white" }}
+  >
+    Reserve
+  </Link>
+</button>
         </div>
+           
+          </div>
+        </div>
+       
+      </div>
+    </div>
+  ))}
+</div>
+
+
+
+
+
+
 
         <div
           className="card mb-4"
-          style={{ marginTop: 50, backgroundColor: "rgb(240, 240, 240)" }}
+          style={{ marginTop: 20, backgroundColor: "rgb(240, 240, 240)" }}
         >
-          <img
-            decoding="async"
-            width="1498"
-            height="300"
-            src="https://o.remove.bg/downloads/b06c6746-f3fe-4039-97d6-0fc0f05ae263/lightbulb-moment-royalty-free-image-176565702-1563363264-removebg-preview.png"
-            class="attachment-full size-full responsive-img"
-            alt=""
-            loading="lazy"
-            srcset="https://o.remove.bg/downloads/b06c6746-f3fe-4039-97d6-0fc0f05ae263/lightbulb-moment-royalty-free-image-176565702-1563363264-removebg-preview.png 177w, https://o.remove.bg/downloads/b06c6746-f3fe-4039-97d6-0fc0f05ae263/lightbulb-moment-royalty-free-image-176565702-1563363264-removebg-preview.png 113w"
-            sizes="(max-width: 177px) 100vw, 177px"
-            style={{
-              borderRadius: 20,
-            }}
-          />
-          <div className="card-body d-flex justify-content-around">
-            <img
-              decoding="async"
-              width="198"
-              height="471"
-              src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
-              class="attachment-full size-full responsive-img"
-              alt=""
-              loading="lazy"
-              srcset="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
-              sizes="(max-width: 177px) 100vw, 177px"
-              style={{
-                borderRadius: 20,
-              }}
-            />
+        <div className="row">
+  <div className="col-md-4 mb-4">
+    <img
+      decoding="async"
+      src="https://o.remove.bg/downloads/b06c6746-f3fe-4039-97d6-0fc0f05ae263/lightbulb-moment-royalty-free-image-176565702-1563363264-removebg-preview.png"
+      alt=""
+      className="attachment-full size-full img-fluid"
+      style={{
+        borderRadius: 20,
+      }}
+    />
+  </div>
+  <div className="col-md-4 mb-4">
+    <div
+      className="card p-1 whyUs"
+      style={{
+        position: "relative",
+        borderRadius: 23,
+        transition: "all 1.8s ease-in-out",
+      }}
+    >
+      <div className="d-flex justify-content-between align-items-center">
+        <span>
+          <h6 className="my-2 text-start" style={{ fontSize: "1.2rem", color: "red" }}>
+            Why....?
+          </h6>
+          <h3 className="mx-5 mb-4" style={{ fontSize: "3.2rem", color: "darkred" }}>
+            JalyssCom
+          </h3>
+        </span>
+      </div>
 
-            <div
-              class="card p-1 whyUs"
-              style={{
-                position: "relative",
-                borderRadius: 23,
-                transition: "all 1.8s ease-in-out",
-              }}
-            >
-              <div class="d-flex justify-content-between align-items-center ">
-                <span>
-                  <h6
-                    className="my-2 text-start"
-                    style={{ fontSize: "1.2rem", color: "red" }}
-                  >
-                    Why....?
-                  </h6>
-                  <h3
-                    className=" mx-5 mb-4"
-                    style={{ fontSize: "3.2rem", color: "darkred" }}
-                  >
-                    JalyssCom
-                  </h3>
-                </span>
-              </div>
+      <p className="my-2 text-start" style={{ fontSize: "1.5rem" }}>
+        At JalyssCom We value adaptability and initiative in whatever we do as business owners.
+        <br />
+        Our offers can be tailored to your needs and financial situation.
+        <br />
+        Our workspaces encourage collaboration, promote performance, and inspire creativity.
+        <br />
+        They were designed with these goals in mind. Our spaces are secured
+        <br />
+        and available around-the-clock,
+        <br />
+        include natural light that is good for your staff's wellbeing, and are located in a high-rise building in the middle of a renowned business district.
+        <br />
+        JalyssCom is another place for planned events. Whether it's a workshop, seminar, or other type of training, JalyssCom is always active!
+      </p>
+    </div>
+  </div>
+  <div className="col-md-4 mb-4">
+    <img
+      decoding="async"
+      src="https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock"
+      alt=""
+      className="attachment-full size-full img-fluid"
+      style={{
+        borderRadius: 20,
+      }}
+    />
+  </div>
+</div>
 
-              <p class="my-2 text-start " style={{ fontSize: "1.5rem" }}>
-                At JalyssCom We value adaptability and initiative in whatever we
-                do as business owners.
-                <br />
-                Our offers can be tailored to your needs and financial
-                situation.
-                <br />
-                Our workspaces encourage collaboration, promote performance, and
-                inspire creativity.
-                <br />
-                They were designed with these goals in mind. Our spaces are
-                secured <br />
-                and available around-the-clock,
-                <br />
-                include natural light that is good for your staff's wellbeing,
-                and are located in a high-rise building in the middle of a
-                renowned business district.
-                <br />
-                JalyssCom is another place for planned events. Whether it's a
-                workshop, seminar, or other type of training, JalyssCom is
-                always active!
-              </p>
-            </div>
-
-            <img
-              decoding="async"
-              width="198"
-              height="471"
-              src="https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock"
-              class="attachment-full size-full responsive-img"
-              alt=""
-              loading="lazy"
-              srcset="https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock 172w, https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock 108w"
-              sizes="(max-width: 172px) 100vw, 172px"
-              style={{
-                borderRadius: 20,
-              }}
-            />
-          </div>
           <div className="d-flex justify-content-center align-items-center">
             <div className="col-md-2.5 mx-4">
               <div

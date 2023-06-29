@@ -30,3 +30,7 @@
 .headerRight {
   margin: 10px;
 }
+
+.hidden-padding {
+  padding: 24px !important;
+}
