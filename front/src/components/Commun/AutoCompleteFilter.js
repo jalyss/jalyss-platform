@@ -23,6 +23,7 @@ function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName,lab
         onChange={(event, newValue) => {
          onChange(newValue.map(v=>v[valueOptionName]));
         }}
+      required
       />
     </Stack>
   );

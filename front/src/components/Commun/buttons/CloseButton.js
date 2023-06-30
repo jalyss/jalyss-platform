@@ -1,6 +1,6 @@
 import React from "react";
 
-function CloseButton({ onClick, mt, mb,title }) {
+function CloseButton({ onClick, mt, mb,title,fs }) {
   return (
     <button
       class="full "
@@ -9,9 +9,11 @@ function CloseButton({ onClick, mt, mb,title }) {
         marginBottom: mb,
         backgroundColor:"#f5e6fe",
         color:"#48184c",
-        fontWeight:"bold"
+        fontWeight:"bold",
+        fontSize:fs
       }}
       onClick={onClick}
+    
     >
      {title ? title : "close"} 
     </button>

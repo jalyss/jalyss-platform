@@ -1910,7 +1910,7 @@ let pathMedia2 = [
     'Wherefault, until the collapse?',
     'How It is hidden by default, until the collapse?',
   ];
-  let answer = ['ey', 'le', 'ey', 'maha2h', 'google it', 'bethabet'];
+  let answer = ['Choose a course: Start by identifying the online course you want to enroll in. Consider factors such as the subject, duration, cost, and the reputation of the course provider.', 'Research the course provider: Look for reviews or information about the institution or platform offering the course. Ensure that it is a legitimate and reputable source of online education', 'Visit the course website: Go to the website of the course provider to gather more details about the course. Look for information regarding enrollment, prerequisites, course content, and any specific requirements', 'Review the course requirements: Check if there are any prerequisites or specific requirements for enrolling in the course. Ensure that you meet these requirements or are willing to fulfill them before proceeding', 'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a "Sign Up" or "Create an Account" option on the website and provide the necessary information to register', 'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a Sign Up or "Create an Account" option on the website and provide the necessary information to register'];
   for (let i = 0; i < 6; i++) {
     let Freq = await prisma.frequentilyQuestion.create({
       data: {

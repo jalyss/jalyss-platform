@@ -16,7 +16,7 @@ import session from './session'
 import chat from './chat'
 import faq from "./Faq"
 import service from "./space";
-
+import mentorRequest from "./mentorRequest";
 export const store = configureStore({
   reducer: {
     article,
@@ -34,6 +34,7 @@ export const store = configureStore({
     session,
     chat,
     faq,
+    mentorRequest
  
   },
   middleware: (getDefaultMiddleware) =>

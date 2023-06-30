@@ -380,11 +380,14 @@ model Provider {
 
 //TRAINING
 model SessionRequest {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
   content   String
   createdAt DateTime @default(now())
+  resume    Media    @relation(fields: [resumeId], references: [id])
+  resumeId  String
 }
 
 model MediaSession {
@@ -554,13 +557,13 @@ model SessionTarifHasFeatures {
 }
 
 model SessionTarif {
-  id        String            @id @default(uuid())
+  id        String                    @id @default(uuid())
   title     String
   price     Float
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session           @relation(fields: [sessionId], references: [id])
+  session   Session                   @relation(fields: [sessionId], references: [id])
   sessionId String
-  features SessionTarifHasFeatures[]
+  features  SessionTarifHasFeatures[]
 }
 
 model TrainingBooking {
@@ -599,10 +602,12 @@ model Media {
 
   MediaWorkSpace MediaWorkSpace[]
 
-  MediaService MediaService[]
-  Service      Service[]
-  MediaSession MediaSession[]
-  Session      Session[]
+  MediaService   MediaService[]
+  Service        Service[]
+  MediaSession   MediaSession[]
+  Session        Session[]
+  SessionRequest SessionRequest[]
+ 
 }
 
 model MediaUser {
@@ -739,7 +744,6 @@ model View {
 
 // }
 
-
 model Service {
   id           String         @id @default(uuid())
 
@@ -773,8 +777,6 @@ model WorkSpace {
   service        Service?         @relation(fields: [serviceId], references: [id])
   MediaWorkSpace MediaWorkSpace[]
 }
-
-
 
 model Tarif {
   id          String    @id @default(uuid())
@@ -813,8 +815,6 @@ model Booking {
 
   @@unique([userId, tarifId])
 }
-
-
 
 //website Settings
 model MainComponent {

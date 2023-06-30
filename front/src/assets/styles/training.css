@@ -352,9 +352,7 @@ section {
   font-family: Raleway;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 10px 10px 5px 0px rgba(124,104,124,0.75);
-  -webkit-box-shadow: 10px 10px 5px 0px rgba(124,104,124,0.75);
-  -moz-box-shadow: 10px 10px 5px 0px rgba(124,104,124,0.75);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }
 h1 {
   text-align: center;
@@ -367,10 +365,10 @@ input {
   font-family: Raleway;
   border: 1px solid #aaaaaa;
 }
-input.invalid {
+/* input.invalid {
   background-color: #ffdddd;
   border: 1px solid #ff0000;
-}
+} */
 .tab {
   display: none;
 }
@@ -411,3 +409,8 @@ button {
   margin-bottom: 30px;
 }
 
+.coaches {
+  display:grid ;
+  grid-template-columns: repeat(4,1fr);
+
+}

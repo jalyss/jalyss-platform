@@ -64,13 +64,15 @@ function SessionDetails() {
       <div className="goBackLink" onClick={() => navigate(-1)}>
         <span> &#8592;</span> <span>Go Back</span>
       </div>
-      <div className="d-flex flex-wrap justify-content-around gap-5 mb-5 mt-5">
-        <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex flex-wrap justify-content-around  mb-5 mt-5">
+        <div className="d-flex flex-wrap justify-content-center align-items-center">
           {seletedSession?.cover ? (
             <img
               src={seletedSession.cover.path}
               alt="sessionCover"
               className="rounded img-fluid"
+              height={900}
+              width={600}
             />
           ) : (
             <img
@@ -82,7 +84,7 @@ function SessionDetails() {
             />
           )}
         </div>
-        <div>
+        <div className="w-30">
           <div
             className="fs-2 mb-2 mt-4"
             style={{
@@ -117,24 +119,24 @@ function SessionDetails() {
             ) }
           />
 
-          <div className="d-flex gap-3">
-            <div className="d-flex align-items-center fw-bold">Coaches:</div>
+          <div className="coaches gap-3 ">
+            <div className="d-flex align-items-center fw-bold" >Coaches:</div>
             {seletedSession?.lectures?.map((lecture, lectureIndex) =>
               lecture.lectures.coaching.map((coach, coachIndex) => (
-                <span
-                  className="tt mt-2"
-                  data-bs-placement="bottom"
+                <div
+                  className="coachZone mt-2 "
+                  // data-bs-placement="bottom"
                   title={coach.user.fullNameEn}
                 >
-                  {" "}
+            
                   <img
                     key={coachIndex}
                     src={coach.user.avatar?.path}
                     alt="avatar"
-                    className="rounded-circle"
-                    style={{ width: "50px", height: "50px", margin: "0 5px" }}
-                  />{" "}
-                </span>
+                    className="rounded-circle col-8"
+                    style={{ width: "50px", height: "50px", margin: "0 5px"  }}
+                  />
+                </div>
               ))
             )}
           </div>
@@ -149,11 +151,11 @@ function SessionDetails() {
               <div>{seletedSession?.endDate.slice(0, 10)}</div>
             </div>
           </div>
-          <ButtonWithTransformAndHover
-            title={"Price Discovery"}
-            full={true}
-            onClick={handleClick}
-          />
+          
+          <div className="d-flex justify-content-center">
+          <button className=" btn mt-3" style={{ backgroundColor: "#48184c",alignItems:"center" ,color:"#fff" }} onClick={handleClick}>Price Discovery</button>
+
+             </div>
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">
