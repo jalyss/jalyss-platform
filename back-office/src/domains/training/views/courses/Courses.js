@@ -10,11 +10,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchcours } from '../../../../store/courses';
+import { deletcours, fetchcours } from '../../../../store/courses';
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
+
 
  const Courses = () => {
   const coursStore= useSelector((state)=>state.courses.courses.items)
-const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate()
   const open = Boolean(anchorEl);
@@ -31,40 +33,21 @@ const dispatch = useDispatch()
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handle = () => {
-    navigate(`/Coursdetail`)
+ 
+  const handleDeletecoursClick=(id) => {
+    dispatch(deletcours(id))
+    .then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('tarif has been deleted')
+      }
+    })
   };
-
-
-  
-
-
 
   return (
     <div>
           <div className='button category'>
-          <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-      Category
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={handleClose}> Category1</MenuItem>
-        <MenuItem onClick={handleClose}> Category2</MenuItem>
-        <MenuItem onClick={handleClose}> Category3</MenuItem>
-      </Menu> 
       <div  className='button add'>
         <Button sx={{marginTop:'-70px',marginLeft:'900px'}}
           id="basic-button"
@@ -100,9 +83,10 @@ const dispatch = useDispatch()
        </CardContent>
        <CardActions>
       
-        <Button size="small" onClick={() => handle()}>see More</Button>
+        <Button size="small" onClick={()=>{handleDeletecoursClick(el.id)} } >Delete</Button>
+        <Button size="small" onClick={() =>navigate(`/training/courses/${el.id}`)}>Update</Button>
        </CardActions>
-       </Card>))}
+       </Card>))}   
       
        </div>
        </div> 

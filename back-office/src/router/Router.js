@@ -30,7 +30,7 @@ import EditCommand from "../domains/commands/views/EditCommand";
 //training
 
 import Training from "../domains/training/Training";
-import Coursdetail from "../domains/training/views/courses/Coursdetail";
+
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
 
 import Courses from "../domains/training/views/courses/Courses";
@@ -40,6 +40,12 @@ import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
 import Types from "../domains/training/views/sessions/Types";
+import Updatetarif from "../domains/training/views/tarifs/Updatetarif"
+import Profile from "../pages/Profile";
+import Updatesessions from "../domains/training/views/sessions/SessionsUpdate";
+import SessionsUpdate from "../domains/training/views/sessions/SessionsUpdate";
+import Coursdetail from "../domains/training/views/courses/Coursdetail";
+
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -79,19 +85,22 @@ function Router() {
             </Route>
 
             <Route path="training" element={<Training />}>
-              <Route index element={<Sessions />} />
-              <Route path="courses" element={<Courses />}>
-                <Route path="coursdetail" element={<Coursdetail />}>
-                  <Route path="assesments" element={<Assesment />} />
-                </Route>
-              </Route>
-              <Route path="coachs" element={<Coachs />}>
-                <Route path=":coachId" element={<CoachDetails />} />
+              
+              <Route index element={<Sessions/>}/>
+              <Route  path="/training/:sessionsId"  element={<SessionsUpdate/>}/> 
+                           
+              <Route path="courses" element={<Courses />}/>
+              <Route path="courses/:coursId" element={<Coursdetail/>}/>
+            
+                
+                <Route path="coachs" element={<Coachs />}/>
+                <Route path="coachs/:coachId" element={<CoachDetails/>}>
               </Route>
               <Route path="tarifs" element={<Tarifs />} />
+              <Route path="tarifs/:tarifId" element={<Updatetarif />} />
               <Route path="types" element={<Types />} />
             </Route>
-            {/* <Route path='/coches' element ={<Editcoachs/> }/> */}
+
 
             {/* <Route path="charts" element={<Charts />} /> */}
 

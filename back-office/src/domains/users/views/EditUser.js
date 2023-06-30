@@ -41,7 +41,7 @@ function EditUser() {
   }, [userStore.user])
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const {name,value} = e.target
     setUser((User) => ({ ...User, [name]: value }))
   }
 

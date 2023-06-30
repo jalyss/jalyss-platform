@@ -12,7 +12,7 @@ import publishingHouse from './publishingHouse';
 import command from './command';
 import sessions from './sessions';
 import courses from './courses';
-import coches from './coches';
+import coach from './coach';
 import sessiontyps from './sessiontyps';
 import tarif from './tarif';
 
@@ -31,7 +31,7 @@ export const store = configureStore({
     command,
     sessions,
     courses,
-    coches,
+    coach,
     sessiontyps,
     tarif
 

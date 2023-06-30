@@ -11,8 +11,9 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { red } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchtarif } from '../../../../store/tarif';
-
+import { delettarif, fetchtarif } from '../../../../store/tarif';
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
+import { useNavigate } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -25,13 +26,28 @@ const Item = styled(Paper)(({ theme }) => ({
  function Tarifs() {
   const tarifStore= useSelector((state)=>state.tarif.tarifs.items)
   const dispatch = useDispatch()
-
+  const navigate=useNavigate()
 
 
 useEffect(()=>{
   dispatch(fetchtarif()) 
+  
   }, [])
-{console.log( tarifStore)}
+{console.log(tarifStore)}
+
+const handleDeletetarifClick=(id) => {
+  dispatch(delettarif(id))
+  .then(res => {
+    if (res.error) {
+      showErrorToast(res.error.message)
+    } else {
+      showSuccessToast('tarif has been deleted')
+    }
+  })
+};
+
+
+
   return ( <div>
     <div>
     <Button sx={{marginLeft:'900px',top:20 }}
@@ -60,7 +76,7 @@ useEffect(()=>{
 Price :{el.price}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-       {el.description}
+       {el.title}
 
 
         </Typography>
@@ -71,8 +87,8 @@ Price :{el.price}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">DELETE</Button>
-        <Button size="small">UPDATE</Button>
+        <Button size="small" onClick={()=>{handleDeletetarifClick(el.id)}}>DELETE</Button>
+        <Button size="small" onClick={()=>{ navigate(`${el.id}`)}}>UPDATE</Button>
       </CardActions>
     </Card>
   </Box>))}

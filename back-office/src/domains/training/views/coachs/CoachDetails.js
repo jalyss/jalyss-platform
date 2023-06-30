@@ -1,196 +1,170 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect, useState } from "react";
 // import '../../../assets/styles/signup.css'
-import { useDispatch, useSelector } from 'react-redux'
-
-import { useTranslation } from 'react-i18next'
-
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { editCoach, fetchCoach } from "../../../../store/coach";
+import { useParams } from "react-router-dom";
 
 function CoachDetails() {
-  const { t, i18n } = useTranslation()
- 
-  const [user, setUser] = useState({})
-  const [editMode, setEditMode] = useState(false)
-  const [avatar, setAvatar] = useState(null)
-  
-  const [preview, setPreview] = useState(null)
+  const coach = useSelector((state) => state.coach.coach);
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
+  const [auxCoach, setAuxCoach] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const { coachId } = useParams();
 
+  console.log("coache here", coach);
+  console.log("auxCoach", auxCoach);
 
- 
+  useEffect(() => {
+    dispatch(fetchCoach(coachId));
+  }, [dispatch]);
+  useEffect(() => {
+    setAuxCoach(coach);
+  }, [coach]);
 
+  const handlecoacheChange = (e) => {
+    const { name, value } = e.target;
+    setAuxCoach((coach) => ({
+      ...coach,
+      [name]: value ? parseFloat(value) : null,
+    }));
+  };
 
-//   const submitEditProfile = async (event) => {
-//     if (!editMode) {
-//       event.preventDefault()
-//       setEditMode(true)
-//     } else {
-//       event.preventDefault()
-//       let aux = Object.assign({}, user)
-
-//       dispatch(editUser(aux))
-
-//       setEditMode(false)
-//     }
-//   }
+  const submitEditcoache = async (event) => {
+    if (!editMode) {
+      event.preventDefault();
+      setEditMode(true);
+    } 
+ else {
+      event.preventDefault();
+      let coch = Object.assign({}, auxCoach);
+      dispatch(editCoach(coch));
+      setEditMode(false);
+    }
+  };
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-    
-      <h2>Profile coches </h2>
-      <form className="checkout-form" >
+      <h2>Profile coches</h2>
+      <form className="checkout-form">
         <div className="d-flex flex-wrap">
-        <label id="image">{t('image')}</label>
-            <div class="image-upload">
-             
+          <label id="image">{t("image")}</label>
 
-              { editMode && (
-                <input
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              )}
-              </div>
-              {preview && editMode && (
-              <button
-                type="button"
-                class="delete-button"
-                onClick={() => {
-                  setPreview(null);
-                  setAvatar(null);
-                }}
-              >
-                X
-              </button>
-            )}
-      
+          <div class="image-upload">
+            <input id="image" type="file" accept="image/*" />
+          </div>
+
+          <button
+            type="button"
+            class="delete-button"
+            onClick={() => {
+              setPreview(null);
+              setAvatar(null);
+            }}
+          >
+            X
+          </button>
+
           <div className="d-flex justify-content-center w-100 m-3">
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('nameAr')}
+                      {t("nameAr")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
                         <input
-                          class="form-control mt-2"
-                          required
-                          name="fullNameAr"
-                          id="fullNameAr"
-                        
-                          onChange={handleChange}
+                          id="fullNameEn"
+                          value={coach?.user.fullNameEn}
+                          name="fullNameEn"
+                          type="text"
+                          className="form-control"
+                          onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{user?.fullNameAr}</span>
-                      )
-                      }
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t('nameEn')}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          class="form-control mt-2"
-                          required
-                          name="fullNameAr"
-                          id="fullNameAr"
-                          
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <span>fullNameEn</span>
+                        <span> {coach?.user.fullNameEn}</span>
                       )}
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('email')}
+                      {t("nameEn")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
                         <input
-                          required
-                          class="form-control mt-2"
-                          type="email"
-                          id="email"
                           name="email"
-                         
-                          onChange={handleChange}
+                          value={coach?.user.email}
+                          type="text"
+                          className="form-control"
+                          onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>email</span>
+                        <span>{coach?.user.email}</span>
                       )}
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t('phone')}
+                      {t("email")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
                         <input
-                          required
-                          type="tel"
-                          class="form-control mt-2"
-                          id="tel"
-                          name="tel"
-                       
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <span>tel</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      العنوان
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          required
-                          class="form-control mt-2"
-                          id="address"
+                      
                           name="address"
-                          
-                          onChange={handleChange}
+                           value={coach?.user.address}
+                          type="text"
+                          className="form-control"
+                          onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>address</span>
+                        <span>{coach?.user.address}</span>
                       )}
                     </TableCell>
                   </TableRow>
                   <TableRow
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    
+                    <TableCell className="fw-bold" align="right">
+                      {t("phone")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+            
+                          name="tel"
+                          value={coach?.user.tel}
+                          type="tel"
+                          className="form-control"
+                          onChange={handlecoacheChange}
+                        />
+                      ) : (
+                        <span>{coach?.user.tel}</span>
+                      )}
+                    </TableCell>
                   </TableRow>
-                
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -201,15 +175,14 @@ function CoachDetails() {
           <button
             type="submit"
             className="confirm-button mt-3"
-            
+            onClick={submitEditcoache}
           >
-            <span className="label-btn">{editMode ? 'حفظ' : 'تعديل'}</span>
+            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
           </button>
         </div>
       </form>
     </div>
-  )
-
+  );
 }
 
-export default CoachDetails
+export default CoachDetails;

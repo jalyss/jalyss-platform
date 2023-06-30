@@ -21,7 +21,7 @@ import {
   MDBRow,
   MDBCol
 } from 'mdb-react-ui-kit';
-import { fetchcoaches } from '../../../../store/coches';
+import { fetchCoachs } from '../../../../store/coach';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -70,19 +70,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
  function Coachs() {
-  const coacheStore= useSelector((state)=>state.coches.coaches.items)
+  const coacheStore= useSelector((state)=>state.coach.coachs.items)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
 useEffect(()=>{
-  dispatch(fetchcoaches())
+  dispatch(fetchCoachs())
  },[])
 
 
   
-  const handleEditClick = () => {
-    navigate(`/Coachs`)
-  };
+
   // {console.log('lzem tji daata',coacheStore)}
 
  
@@ -109,7 +107,7 @@ useEffect(()=>{
             alt='...'
             position='top'
           />
-          <Button size="small" onClick={() => handleEditClick()}>see More</Button>
+          <Button size="small" onClick={() =>navigate(`${el.id}`)}>see More</Button>
           <MDBCardBody>
             <MDBCardTitle>Name:{el.user.fullNameEn}</MDBCardTitle>
             <MDBCardText>
