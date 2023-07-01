@@ -2,31 +2,47 @@ import React, { useState,useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { purple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { editcours, fetchOnecouse } from "../../../../store/courses";
-
-
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 
 const Coursdetail = () => {
-  const Coursestore=useSelector((state)=>state.courses)
-  const[cours,setCours]=useState({})
-  const [editMode, setEditMode] = useState(false)
+  const lecture =useSelector((state)=>state.courses.cours)
   const  dispatch=useDispatch()
-  const {id}=useParams()
+  const[cours,setCours]=useState({})
+  const { t, i18n } = useTranslation();
+  const [editMode, setEditMode] = useState(false)
+  const [auxCours, setAuxCours] = useState({});
   
+  const {coursId}=useParams()
+  
+  console.log('heyy',lecture)
+  console.log('aa',cours)
 
  useEffect(()=>{
-  dispatch(fetchOnecouse(id)) 
-  setCours(Coursestore.cours)
-  }, [id])
+  dispatch(fetchOnecouse(coursId)) 
+  }, [coursId])
+
+  useEffect(()=>{
+    setAuxCours(cours)
+  },[cours])
 
   const handlecoursChange = (e) => {
     const { name, value } = e.target;
-    setCours((cours) => ({ ...cours, [name]: value ? parseFloat(value) : null }));
+    setCours((lecture) => ({ 
+      ...lecture,
+       [name]: value ? parseFloat(value) : null }));
   };
 
+
+  
   
   const submitEditcours=async(event)=>{
     if(!editMode){
@@ -34,7 +50,7 @@ const Coursdetail = () => {
       setEditMode(true)
     }else{
       event.preventDefault()
-        let courss= Object.assign({},cours)
+        let courss= Object.assign({},auxCours)
       
         dispatch(editcours(courss) )
       setEditMode(false)
@@ -44,53 +60,127 @@ const Coursdetail = () => {
 
     
   return (
-    <div className="container d-flex justify-content-center" style={{ height: '100vh' }}  >
-      <div className="card my-auto" style={{ maxWidth: '400px' }}>
-        <div className="card-body">
-          <h3 className="card-title mb-4">Update sessions</h3>
-          <form  className="d-flex flex-column">
-            <div className="mb-3">
-              <label 
-               className="form-label">Title:</label>
-               {editMode ?(
-              <input id="title"
-               name='title'
-               value={cours?.titel}
-               type="text"          
-               className="form-control"
-               onChange={handlecoursChange }
-               />) 
-               : ( <span>{cours?.titel}</span>
-               )}
-               
-            </div>
-            <div className="mb-3">
-              <label 
-             
-              className="form-label">  Category:</label> 
-              {editMode ?( 
-              <input id=" category" 
-              name=" category"
-              value={cours?.category}
-              type="text" 
-              onChange={ handlecoursChange }
-              className="form-control" />) 
-              : <span>{cours?.category}</span>}
-            </div>
+    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
+      <h2> Courses</h2>
+      <form className="checkout-form">
+        <div className="d-flex flex-wrap">
+       
+
+     
+        
+        
+
          
-      
+
+          <div className="d-flex justify-content-center w-100 m-3">
+            <TableContainer className="w-100" component={Paper}>
+              <Table aria-label="simple table">
+                <TableBody>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("titel")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                          id="titel"
+                           value={lecture?.titel}
+                          name="titel"
+                          type="text"
+                          className="form-control"
+                          onChange={handlecoursChange}
+                        />
+                      ) : (
+                        <span>{lecture?.titel} </span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("description")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                          name="description"
+                          value={lecture?.description}
+                          type="text"
+                          className="form-control"
+                          onChange={handlecoursChange}
+                        />
+                      ) : (
+                        <span>{lecture?.description}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("start")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                      
+                          name="start"
+                        value={lecture?.startDate}
+                          type="text"
+                          className="form-control"
+                          onChange={handlecoursChange}
+                        />
+                      ) : (
+                        <span>{lecture?.startDate}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("end")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
             
-            <button
-             type="submit"  
-             style={{
-               backgroundColor:purple,
-                borderColor: purple
-                }}
-               onClick={submitEditcours}
-                >{editMode?"confirm":"update"}</button>
-          </form>
+                          name="End"
+                          value={lecture?.endDate}
+                          type="tel"
+                          className="form-control"
+                          onChange={handlecoursChange}
+                        />
+                      ) : (
+                        <span>{lecture?.endDate}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
         </div>
-      </div>
+
+        <div className="w-100 d-flex justify-content-center">
+          <button
+            type="submit"
+            className="confirm-button mt-3"
+     
+          >
+            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

@@ -4,27 +4,35 @@ import { purple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { editsession, fetchOnesession } from "../../../../store/sessions";
 import { useParams } from "react-router-dom";
-
-
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { useTranslation } from "react-i18next";
 
 
 const SessionsUpdate = () => {
-    const sessionsStore=useSelector((state)=>state.sessions)
-    // const {session}=sessionsStore
+    const sessions=useSelector((state)=>state.sessions.session)
+    const { t, i18n } = useTranslation();
     const dispatch=useDispatch()
     const[session,setSession]=useState({})  
     const [editMode, setEditMode] = useState(false)
-    const {id}=useParams()
+    const {sessionsId}=useParams()
 
-  
+  console.log(sessions)
     useEffect(()=>{
-        dispatch(fetchOnesession(id))
-        setSession(sessionsStore.session)
-    },[id])
+        dispatch(fetchOnesession(sessionsId))
+    },[dispatch])
+
+    useEffect(()=>{
+      setSession(session)
+    },[session])
 
     const handlesessionChange = (e) => {
       const { name, value } = e.target;
-      setSession((session) => ({ ...session, [name]: value ? parseFloat(value) : null }));
+      setSession((sessions) => ({ ...sessions, [name]: value ? parseFloat(value) : null }));
     };
 
 
@@ -43,76 +51,122 @@ const SessionsUpdate = () => {
 
 
   return (
-    <div className="container d-flex justify-content-center" style={{ height: '100vh' }}  >
-      <div className="card my-auto" style={{ maxWidth: '400px' }}>
-        <div className="card-body">
-          <h3 className="card-title mb-4">Update sessions</h3>
-          <form  className="d-flex flex-column">
-            <div className="mb-3">
-              <label 
-               className="form-label">Title:</label>
-               {editMode ?(
-              <input id="title"
-               name='title'
-               value={session?.titel}
-               type="text"          
-               className="form-control"
-               onChange={handlesessionChange}
-               />) 
-               : ( <span>{session?.titel}</span>
-               )}
-               
-            </div>
-            <div className="mb-3">
-              <label 
-             
-              className="form-label"> description:</label> 
-              {editMode ?( 
-              <input id=" description" 
-              name=" description"
-              type="text" 
-              onChange={handlesessionChange}
-              className="form-control" />) 
-              : <span>{session?.description}</span>}
-            </div>
-            <div className="mb-3">
-              <label 
-              className="form-label">Start sessions:</label>
-              {editMode ?(
-              <input 
-              type="date"
-              id="Start sessions" 
-              name="Start sessions"
-              onChange={handlesessionChange}
-               
-              className="form-control" />) 
-              :<span>{session?.startDate}</span>}
-            </div>
-              <div className="mb-3">
-              <label 
-              className="form-label">End sessions:</label>
-              {editMode ? (
-              <input 
-              type="date"
-              id=" End sessions" 
-              name="End sessions"
-             onChange={handlesessionChange}
-              className="form-control" />)
-              :(<span>{session?.endDate}</span>)}
-            </div>
-      
+    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
+      <h2>Profile coches</h2>
+      <form className="checkout-form">
+        <div className="d-flex flex-wrap">
+        
+
+          <div className="d-flex justify-content-center w-100 m-3">
+            <TableContainer className="w-100" component={Paper}>
+              <Table aria-label="simple table">
+                <TableBody>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("titel")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                        name='title'
+                        value={sessions?.titel}
+                        type="text"          
+                        className="form-control"
+                        onChange={handlesessionChange}
+                        />
+                      ) : (
+                        <span> {sessions?.titel}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t(" description")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                        name=" description"
+                        type="text" 
+                        value={sessions?.description}
+                        onChange={handlesessionChange}
+                        className="form-control" 
+                        />
+                      ) : (
+                        <span>{sessions?.description}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("start-Date")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                      
+                        type="date"
+                        id="Start sessions" 
+                        name="Start sessions"
+                        onChange={handlesessionChange}
+                         valure={sessions?.startDate}
+                        className="form-control" 
+                        />
+                      ) : (
+                        <span>{sessions?.startDate}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t(" End sessions")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
             
-            <button
-             type="submit"  
-             style={{
-               backgroundColor:purple,
-                borderColor: purple
-                }}
-               onClick={submitEditsession}
-                >{editMode?"confirm":"update"}</button>
-          </form>
+                        type="date"
+                        id=" End sessions" 
+                        name="End sessions"
+                        value={sessions?.endDate}
+                        onChange={handlesessionChange}
+                        className="form-control" 
+                        />
+                      ) : (
+                        <span>{sessions?.endDate}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
         </div>
-      </div>
+
+        <div className="w-100 d-flex justify-content-center">
+          <button
+            type="submit"
+            className="confirm-button mt-3"
+            onClick={submitEditsession}
+          >
+            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

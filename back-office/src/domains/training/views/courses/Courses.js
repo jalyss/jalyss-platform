@@ -49,7 +49,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
     <div>
           <div className='button category'>
       <div  className='button add'>
-        <Button sx={{marginTop:'-70px',marginLeft:'900px'}}
+        <Button sx={{marginLeft:'900px'}}
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"

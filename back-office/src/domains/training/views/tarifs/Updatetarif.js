@@ -5,12 +5,17 @@ import {useDispatch,useSelector} from 'react-redux';
 import { editTarif, fetchOneTarif } from "../../../../store/tarif";
 import { useParams } from "react-router-dom";
 import Tarifs from "./Tarifs";
-
-
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { useTranslation } from "react-i18next";
 const UpdateForm = () => {
   const tarifStore= useSelector((state)=>state.tarif)
   // const {tarif}=tarifStore
-
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch()
   const [tarif,setTarif]=useState({})
   const [editMode, setEditMode] = useState(false)
@@ -50,16 +55,24 @@ const submitEditTarif=async(event)=>{
 }
 
   return (
-    <div className="container d-flex justify-content-center" style={{ height: '100vh' }} 
-    >
-      <div className="card my-auto" style={{ maxWidth: '400px' }}>
-        <div className="card-body">
-          <h3 className="card-title mb-4">Update Tarif</h3>
-          <form  className="d-flex flex-column">
-            <div className="mb-3">
-              <label 
-               className="form-label">Title:</label>
-               { editMode ? (   
+    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
+      <h2>Tarifs</h2>
+      <form className="checkout-form">
+        <div className="d-flex flex-wrap">
+        
+
+          <div className="d-flex justify-content-center w-100 m-3">
+            <TableContainer className="w-100" component={Paper}>
+              <Table aria-label="simple table">
+                <TableBody>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("titel")}
+                    </TableCell>
+                    <TableCell align="right">
+                    { editMode ? (   
               <input id="title"
                name='title'
                type="text" 
@@ -70,39 +83,49 @@ const submitEditTarif=async(event)=>{
                />):(
                 <span>{tarif?.title}</span>
                )} 
-            </div>
-            <div className="mb-3">
-
-              <label 
-              className="form-label">Price:</label>
-          { editMode?( <input id="price" 
-          name="price"
-              type="text" 
-              value={tarif?.price || ""}
-              onChange={handleTarifChange} className="form-control" />):(
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t(" description")}
+                    </TableCell>
+                    <TableCell align="right">
+                    { editMode?( <input id="price" 
+                        name="price"
+                         type="text" 
+                        value={tarif?.price || ""}
+                        onChange={handleTarifChange} 
+                        className="form-control" />):(
                 <span>{tarif?.price}</span>
               )}
-             
-            </div>
-            {/* <div className="mb-3">
-              <label 
-               className="form-label">Description:</label>
-              <textarea id="description" 
-              // value={description}
-               onChange={handlecoacheChange}
-                className="form-control" />
-            </div> */}
-            <button
-             type="submit" 
-             style={{
-               backgroundColor:purple,
-                borderColor: purple
-                }}
-                onClick={submitEditTarif}
-                >{editMode?"confirm":"update"}</button>
-          </form>
+                    </TableCell>
+                  </TableRow>
+               
+              
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  ></TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
         </div>
-      </div>
+
+        <div className="w-100 d-flex justify-content-center">
+          <button
+            type="submit"
+            className="confirm-button mt-3"
+            onClick={submitEditTarif}
+          >
+            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

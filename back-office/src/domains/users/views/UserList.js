@@ -107,6 +107,7 @@ function UserList() {
   const isEng = isEnglish()
   const navigate = useNavigate()
   const [rows, setRows] = useState([])
+  
   useEffect(() => {
     dispatch(fetchUsers())
   }, [])

@@ -19,23 +19,27 @@ function CoachDetails() {
   const [editMode, setEditMode] = useState(false);
   const { coachId } = useParams();
 
-  console.log("coache here", coach);
-  console.log("auxCoach", auxCoach);
+  console.log('hello',coach)
+  console.log('aya',auxCoach)
 
   useEffect(() => {
     dispatch(fetchCoach(coachId));
-  }, [dispatch]);
+  }, [dispatch,coachId]);
+
   useEffect(() => {
+    if(coach)
     setAuxCoach(coach);
-  }, [coach]);
+  },[coach]);
+
 
   const handlecoacheChange = (e) => {
     const { name, value } = e.target;
-    setAuxCoach((coach) => ({
-      ...coach,
-      [name]: value ? parseFloat(value) : null,
+    setAuxCoach((auxCoach) => ({
+      ...auxCoach ,
+      [name]: value 
     }));
   };
+
 
   const submitEditcoache = async (event) => {
     if (!editMode) {
@@ -86,14 +90,14 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           id="fullNameEn"
-                          value={coach?.user.fullNameEn}
+                          value={auxCoach?.user.fullNameEn}
                           name="fullNameEn"
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span> {coach?.user.fullNameEn}</span>
+                        <span> {auxCoach?.user.fullNameEn}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -107,13 +111,13 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           name="email"
-                          value={coach?.user.email}
+                          value={auxCoach?.user.email}
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{coach?.user.email}</span>
+                        <span>{auxCoach?.user.email}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -128,13 +132,13 @@ function CoachDetails() {
                         <input
                       
                           name="address"
-                           value={coach?.user.address}
+                           value={auxCoach?.address}
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{coach?.user.address}</span>
+                        <span>{auxCoach?.user.address}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -149,13 +153,13 @@ function CoachDetails() {
                         <input
             
                           name="tel"
-                          value={coach?.user.tel}
+                          value={auxCoach?.user.tel}
                           type="tel"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{coach?.user.tel}</span>
+                        <span>{auxCoach?.user.tel}</span>
                       )}
                     </TableCell>
                   </TableRow>
