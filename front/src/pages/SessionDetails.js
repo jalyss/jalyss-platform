@@ -20,7 +20,7 @@ import { fetchSession } from "../store/session";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
-import ButtonWithTransformAndHover from "../components/Commun/buttons/ButtonWithTransformAndHover";
+
 
 function SessionDetails() {
   const [showMore, setShowMore] = useState(false);
@@ -38,27 +38,23 @@ function SessionDetails() {
     dispatch(fetchSession(sessionId));
     window.scrollTo(0, 0);
   }, [sessionId]);
-    
 
-
-  console.log("prevsession", session?.previousSesion);
-  console.log("sessions", session);
   const handleClick = () => {
     var elem = document.getElementById("ele");
     elem.scrollIntoView();
   };
-  console.log("sessi", session);
+
 
   const columnCount = Math.ceil(
     session?.SessionHasWhatYouWillLearn?.length / 2
   );
-  console.log("columnCount", columnCount);
+
 
   const column1 = session?.SessionHasWhatYouWillLearn?.slice(0, columnCount);
   const column2 = session?.SessionHasWhatYouWillLearn?.slice(columnCount);
   const displayColumn1 = showMore ? column1 : column1?.slice(0, 5);
   const displayColumn2 = showMore ? column2 : column2?.slice(0, 5);
-
+  const currentDate = new Date();
   return (
     <div className="container">
       <div className="goBackLink" onClick={() => navigate(-1)}>
@@ -116,11 +112,11 @@ function SessionDetails() {
             value={seletedSession?.tarifs.reduce(
               (acc, currentValue) => acc + currentValue.bookings.length,
               0
-            ) }
+            )}
           />
 
           <div className="coaches gap-3 ">
-            <div className="d-flex align-items-center fw-bold" >Coaches:</div>
+            <div className="d-flex align-items-center fw-bold">Coaches:</div>
             {seletedSession?.lectures?.map((lecture, lectureIndex) =>
               lecture.lectures.coaching.map((coach, coachIndex) => (
                 <div
@@ -128,13 +124,12 @@ function SessionDetails() {
                   // data-bs-placement="bottom"
                   title={coach.user.fullNameEn}
                 >
-            
                   <img
                     key={coachIndex}
                     src={coach.user.avatar?.path}
                     alt="avatar"
                     className="rounded-circle col-8"
-                    style={{ width: "50px", height: "50px", margin: "0 5px"  }}
+                    style={{ width: "50px", height: "50px", margin: "0 5px" }}
                   />
                 </div>
               ))
@@ -151,11 +146,20 @@ function SessionDetails() {
               <div>{seletedSession?.endDate.slice(0, 10)}</div>
             </div>
           </div>
-          
-          <div className="d-flex justify-content-center">
-          <button className=" btn mt-3" style={{ backgroundColor: "#48184c",alignItems:"center" ,color:"#fff" }} onClick={handleClick}>Price Discovery</button>
 
-             </div>
+          <div className="d-flex justify-content-center">
+            <button
+              className=" btn mt-3"
+              style={{
+                backgroundColor: "#48184c",
+                alignItems: "center",
+                color: "#fff",
+              }}
+              onClick={handleClick}
+            >
+              Price Discovery
+            </button>
+          </div>
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">
@@ -234,13 +238,24 @@ function SessionDetails() {
       </div>
 
       <SessionLecture lectures={lec} />
-      <TrainingPricing session={session} ref={ref}/>
-      {session?.previousSesion && (
-        <PreviousSessionGallery previousSesion={session.previousSesion} />
-      )}
-      {session?.previousSesion && (
-        <FeedBack previousSesion={session.previousSesion} />
-      )}
+      <TrainingPricing session={session} ref={ref} />
+      {session?.previousSesion &&
+        currentDate < new Date(session?.startDate) && (
+          <PreviousSessionGallery previousSesion={session.previousSesion}  subtitle="Previous Session Gallery" />
+        )}
+
+      {session?.previousSesion &&
+        currentDate > new Date(session?.startDate) && (
+          <PreviousSessionGallery previousSesion={session}  subtitle="Session Gallery"/>
+        )}
+
+      {session?.previousSesion && currentDate < new Date(session?.startDate) && (
+          <FeedBack previousSesion={session.previousSesion} subtitle="Previous Session Feedback"/>
+        )}
+
+{session?.previousSesion && currentDate > new Date(session?.startDate) && (
+          <FeedBack previousSesion={session} subtitle="Session Feedback"/>
+        )}
     </div>
   );
 }

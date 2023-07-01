@@ -3,7 +3,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
-function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName,label }) {
+function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName,label,required }) {
   return (
     <Stack spacing={1} sx={{ width: 500 }}>
       <Autocomplete
@@ -23,7 +23,7 @@ function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName,lab
         onChange={(event, newValue) => {
          onChange(newValue.map(v=>v[valueOptionName]));
         }}
-      required
+      required={required}
       />
     </Stack>
   );

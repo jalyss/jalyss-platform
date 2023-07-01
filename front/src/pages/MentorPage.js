@@ -1,8 +1,7 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import one from "../img/mentor6.png";
 import two from "../img/mentor4.png";
 import success from "../img/success.png";
-// import { Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { DropzoneArea } from "material-ui-dropzone";
@@ -19,9 +18,11 @@ function MentorPage() {
   const { categories } = categoriesStore;
   const [categoryId, setCategoryId] = useState([]);
   const [pdfFile, setPdfFile] = useState(null);
-  const [viewContractModal, setViewContractModal] = useState(false);
+
   const [shown, setShown] = useState(false);
-  const [formValidated, setFormValidated] = useState(false); 
+  const [formValidated, setFormValidated] = useState(false);
+  const [submitCheck,setSubmitCheck] = useState(false);
+
   const me = useSelector((state) => state.auth.me);
 
   const dispatch = useDispatch();
@@ -33,25 +34,27 @@ function MentorPage() {
       },
     })
   );
-  console.log("categ", categories);
 
   const classes = useStyles();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // TODO: Add your form submission logic here
-    setFormSubmitted(true);
-  };
-
-  const handleSubmit2 = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitCheck(true)
+    const form = e.target;
+    console.log("form",form);
+    const isFormValid =
+      form.checkValidity() && categoryId.length > 0 && pdfFile !== undefined;
+console.log("isformvalid",isFormValid);
+console.log("pdfFile",pdfFile);
+    if (isFormValid) {
+      let body = {
+        userId: me.id,
+        content: categoryId.join(),
+      };
 
-    let body = {
-      userId: me.id,
-      content: categoryId.join(),
-    };
-    if (pdfFile !== null) {
       try {
+    setFormValidated(true);
+
         const formData = new FormData();
         formData.append("file", pdfFile);
 
@@ -61,43 +64,36 @@ function MentorPage() {
         );
 
         body.resumeId = response.data.id;
+
+        dispatch(createRequest(body)).then((res) => {
+          if (!res.error) {
+            showSuccessToast("Request has been posted");
+            setFormSubmitted(true);
+          } else {
+            showErrorToast(res.error.message);
+          }
+        });
       } catch (error) {
         console.error("Error uploading resume file:", error);
       }
     }
-
-    dispatch(createRequest(body)).then((res) => {
-      if (!res.error) {
-        showSuccessToast("Blog has been created");
-      } else {
-        showErrorToast(res.error.message);
-      }
-    });
-    setFormSubmitted(true);
   };
 
   const handleDropzoneChange = (files) => {
     setPdfFile(files[0]);
-    setFormValidated(true);
+    // setFormValidated(true);
   };
 
   const modalBody = () => (
     <div
       style={{
         backgroundColor: "#fff",
-
-        /* Fixed position */
         left: 0,
         position: "fixed",
         top: 0,
-
-        /* Take full size */
         height: "100%",
         width: "100%",
-
-        /* Displayed on top of other elements */
         zIndex: 9999,
-
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -117,6 +113,7 @@ function MentorPage() {
       <CloseButton onClick={() => setShown(false)} fs="20px" />
     </div>
   );
+
   return (
     <Fragment>
       <div
@@ -132,7 +129,7 @@ function MentorPage() {
         <div className="container m-3">
           <div className="row d-flex justify-content-center align-items-center">
             <div className="col-lg-9 col-md-12">
-              <div id="regForm" onSubmit={handleSubmit}>
+              <div id="regForm">
                 <h1 id="register">{!formSubmitted ? "Request Mentor" : ""}</h1>
                 {formSubmitted ? (
                   <div className="d-flex flex-column justify-content-center align-items-center">
@@ -144,8 +141,9 @@ function MentorPage() {
                     </span>
                   </div>
                 ) : (
-                  <div
-                    onSubmit={handleSubmit2}
+                  <form
+                    onSubmit={handleSubmit}
+                   
                   >
                     <div className="tabcontent mt-5">
                       <AutoCompleteFilter
@@ -154,7 +152,13 @@ function MentorPage() {
                         labelOptionName="nameEn"
                         label="Filter by Category"
                         onChange={setCategoryId}
+                        required
                       />
+                      {!formValidated && categoryId.length === 0 && submitCheck &&(
+                        <div className="text-danger">
+                          Please select a category.
+                        </div>
+                      )}
                     </div>
                     <div className="mt-5">
                       <label htmlFor="formFileLg" className="form-label">
@@ -172,9 +176,10 @@ function MentorPage() {
                         }}
                         previewText="Selected files"
                         onChange={handleDropzoneChange}
+                        required
                       />
-                      {formValidated && pdfFile === null && (
-                        <div className="invalid-feedback">
+                      {!formValidated && pdfFile === undefined && submitCheck && (
+                        <div className="text-danger">
                           Please upload your resume.
                         </div>
                       )}
@@ -185,7 +190,10 @@ function MentorPage() {
                         {pdfFile ? (
                           <CloseButton
                             title="View Your Resume "
-                            onClick={() => setShown(true)}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              setShown(true);
+                            }}
                           />
                         ) : (
                           "no Resume"
@@ -193,11 +201,12 @@ function MentorPage() {
                       </div>
                     </div>
 
-                    {shown && ReactDOM.createPortal(modalBody(), document.body)}
+                    {shown &&
+                      ReactDOM.createPortal(modalBody(), document.body)}
 
                     <div className="d-flex justify-content-center align-items-center gap-2">
                       <button
-                        onClick={handleSubmit2}
+                        type="submit"
                         className="full"
                         style={{
                           backgroundColor: "#48184c",
@@ -208,7 +217,7 @@ function MentorPage() {
                         Submit
                       </button>
                     </div>
-                  </div>
+                  </form>
                 )}
               </div>
             </div>
@@ -225,4 +234,4 @@ function MentorPage() {
   );
 }
 
-export default MentorPage;
+export default MentorPage

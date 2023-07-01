@@ -38,7 +38,7 @@ console.log("count",sessions.count);
 
   return (
     <>
-      <section className="courses" id="courses">
+      <section className="courses " id="joinSession">
         <TrainingHeading subtitle="SESSIONS" title="Explore our sessions" />
         <div className="mt-4 d-flex justify-content-center align-items-center">
           <AutoCompleteFilter

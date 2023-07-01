@@ -8,7 +8,10 @@ import ButtonWithTransformAndHover from "../Commun/buttons/ButtonWithTransformAn
 
 function TrainingHome() {
   const navigate = useNavigate();
-
+  const handleClick = () => {
+    var elem = document.getElementById("joinSession");
+    elem.scrollIntoView();
+  };
   return (
     <div className="container p-4">
       <div className="  d-flex justify-content-center flex-wrap p-3 ">
@@ -44,7 +47,7 @@ function TrainingHome() {
                 title={"Become mentor"}
                 full={true}
               />
-              <ButtonWithTransformAndHover title={"Join Session"} />
+              <ButtonWithTransformAndHover title={"Join Session"} onClick={handleClick}/>
             </div>
           </div>
         </div>

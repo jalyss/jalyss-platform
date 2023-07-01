@@ -29,6 +29,8 @@ export const fetchSessionsFeedbacks = createAsyncThunk(
   }
 );
 
+
+
 export const fetchSession = createAsyncThunk("sessions/session", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/session/${id}`);
   console.log("alooo", response.data);

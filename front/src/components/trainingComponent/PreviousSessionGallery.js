@@ -1,7 +1,7 @@
 import React from 'react'
 import CarouselImages from '../Commun/Carousel'
 import TrainingHeading from '../Commun/TrainingHeading'
-function PreviousSessionGallery({previousSesion}) {
+function PreviousSessionGallery({previousSesion,subtitle}) {
 console.log("preGaaal",previousSesion);
 
 
@@ -15,7 +15,7 @@ console.log(gal,"gall");
   return (
     <div className='mb-5'>
     <TrainingHeading
-    subtitle="Previous Session Gallery"
+    subtitle={subtitle}
     title="Best moments"
     mt={20}
     mb={40}

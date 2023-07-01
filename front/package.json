@@ -41,6 +41,7 @@
     "material-ui": "0.20.2",
     "material-ui-dropzone": "^3.5.0",
     "mdb-react-ui-kit": "^6.1.0",
+   
     "mui-blox": "0.4.2",
     "pdfjs-dist": "2.15.349",
     "phosphor-react": "^1.4.1",
