@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import config from "../configs";
-import { Bookmarks } from "phosphor-react";
+import config from "../configs/index";
+
 
 export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (args) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs`, {
@@ -32,7 +32,7 @@ export const fetchBlog = createAsyncThunk("blogs/fetchBlog", async (id) => {
 export const createBlog = createAsyncThunk(
   "blogs/createBlog",
   async (body, { dispatch }) => {
-    const token = JSON.parse(localStorage.getItem("token")).Authorization;
+    const token = JSON.parse(localStorage.getItem("tokenAdmin")).Authorization;
 
     const configs = {
       headers: {
@@ -57,7 +57,7 @@ export const removeBlog = createAsyncThunk(
   "blogs/deleteBlog",
   async (args, { dispatch }) => {
     const { id, ...queries } = args;
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
       headers: {
         Authorization: "Bearer " + token.Authorization,
@@ -76,7 +76,7 @@ export const editBlog = createAsyncThunk(
   "blogs/editBlog",
   async (args)=>{
     const {id,body}=args
-    let token = JSON.parse(localStorage.getItem("token"));
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
       headers: {
         Authorization: "Bearer " + token.Authorization,

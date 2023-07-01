@@ -2,17 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { rows } from "../../../constants/blogData";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBlog, editBlog } from "../../../store/blogs";
+import blogs, { fetchBlog, editBlog } from "../../../store/blogs";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 function DetailBlog() {
   const [action, setAction] = useState("");
   const dispatch = useDispatch();
   const { blogId } = useParams();
-  const id = blogId
-  const blog = useSelector((state) => state?.blogs?.blog);
-  console.log(blog, "bloggg");
+  const [confirm , setConfirm] = useState(false);
 
+  
+  const blog = useSelector((state) => state?.blogs?.blog);
+  console.log(blogId, "bloggg");
+  
   function extractTextFromHTML(html) {
     const temporaryElement = document.createElement("div");
     temporaryElement.innerHTML = html;
@@ -20,31 +22,50 @@ function DetailBlog() {
       temporaryElement.textContent.substring(0, 100) ||
       temporaryElement.innerText.substring(0, 100) ||
       ""
-    );
-  }
+      );
+    }
+    
+    useEffect(() => {
+      dispatch(fetchBlog(blogId));
+    }, [dispatch,blogId]);
+    
+    const acceptBlogFun = async (e) => {
+      e.preventDefault();
+      setConfirm(true)
+      let id = blogId;
 
-  useEffect(() => {
-    dispatch(fetchBlog(blogId));
-  }, [dispatch]);
-
-  const acceptBlogFun = () => {
-
-    let confirm = true;
     let body = {
       confirm,
     };
    
-    dispatch(editBlog(id,body));
+    dispatch(editBlog({id,body})).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been updated");
+        navigate(-1);
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
   };
-  const refuseBlogFun = () => {
-    let confirm = !true;
+
+  const refuseBlogFun = async (e) => {
+    e.preventDefault();
+    setConfirm(!true)
+    let id = blogId;
     let body = {
       confirm,
     };
-    dispatch(editBlog({id, body}));
+    dispatch(editBlog({id,body})).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Blog has been updated");
+        navigate(-1);
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
   };
   return (
-    <div class="container">
+    <div class="container" >
       <h5> {blog?.category.nameEn}</h5>
       <div class="card mb-3" style={{ width: 1000 }}>
         <div class="row g-0">
