@@ -32,13 +32,14 @@ import Training from "../domains/training/Training";
 import Coursdetail from "../domains/training/views/courses/Coursdetail";
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
 import Service from "../domains/service/Service";
+
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
 import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
-import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+
 import ServiceList from "../domains/service/views/ServiceList";
 import OneService from "../domains/service/views/OneService";
 import ServiceDetails from "../domains/service/views/ServiceDetails";
@@ -63,6 +64,9 @@ import AuthorList from "../domains/author/views/AuthorList";
 import EditAuthor from "../domains/author/views/EditAuthor";
 import DetailAuthor from "../domains/author/views/DetailAuthor";
 import CreateAuthor from "../domains/author/views/CreateAuthor";
+import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+
+
 
 
 function Router() {

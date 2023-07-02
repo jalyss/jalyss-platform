@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { rows } from '../../../constants/providerData'
+import UpdateButton from '../../../components/Commun/buttons/UpdateButton'
 
 function EditProvider() {
   const { providerId } = useParams()
@@ -50,12 +51,9 @@ function EditProvider() {
                 </div>
               </div>
               
-              <div className="w-100 d-flex justify-content-center">
-                <button
-                  type="submit"
-                  className="confirm-button mt-5   mb-3">
-                  <span className="label-btn"> Edit Provider </span>
-                </button>
+              <div className="   d-flex justify-content-center">
+                
+                <UpdateButton mb={15} mt={20}/>
               </div>
             </form>
           </div>

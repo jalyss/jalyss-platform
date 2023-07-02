@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { rows } from '../../../constants/authorData'
-
+import UpdateButton from '../../../components/Commun/buttons/UpdateButton'
 function EditAuthor() {
     const { authorId } = useParams()
   const author = rows[authorId]
@@ -29,7 +29,7 @@ function EditAuthor() {
                 <textarea class="form-control mt-2 mb-3"  rows="3">{author.biographyEn}</textarea>
             </div>
             <div className='d-flex  justify-content-center'>
-        <button className='btn btn-primary mb-3 '> Edit Author</button>
+        <UpdateButton mb={15}/>
             </div>
         </form>
         </div>

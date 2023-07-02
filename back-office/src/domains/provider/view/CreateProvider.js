@@ -1,5 +1,6 @@
 import React from 'react'
 import { Form } from 'react-router-dom'
+import SaveButton from '../../../components/Commun/buttons/SaveButton'
 
 function CreateProvider() {
   return (
@@ -44,11 +45,8 @@ function CreateProvider() {
 
 
             <div className="w-100 d-flex justify-content-center">
-              <button
-                type="submit"
-                className="confirm-button mt-5   mb-3">
-                <span className="label-btn"> Add Provider </span>
-              </button>
+              
+              <SaveButton  mt={20} mb={15}/>
             </div>
           </form>
         </div>

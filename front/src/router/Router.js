@@ -40,8 +40,8 @@ import Chat from "../pages/Chat";
 import Conversation from "../components/chatComponents/Conversation";
 
 import SessionDetails from "../pages/SessionDetails";
-
-
+import Conversation from "../components/chatComponents/Conversation";
+import ReserveMeeting from "../pages/space/SpaceReservation"
 
 
 function Router() {
@@ -69,8 +69,6 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
             
-            
-
             <Route path="*" element={<NoPage />} />
             <Route path="/chat" element={<Chat />}>
             <Route path="/chat/:userId" element={<Conversation />} />
@@ -90,13 +88,16 @@ function Router() {
             />
            
 
-            <Route path="ReserveMeeting" element={<ReserveMeeting />} />
+          
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />}/>
     
 
-            <Route path="ReserveMeeting" element={<ReserveMeeting />} />
+           
 
+
+        
+       
             <Route path="RegisterForm" element={<RegisterForm />} />
             <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
           </Route>
