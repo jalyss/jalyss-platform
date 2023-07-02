@@ -5,4 +5,7 @@ export class CreateSessionRequestDto {
     content : string ; 
      @ApiProperty()
      userId : string ; 
+     @ApiProperty()
+     resumeId : string
+
 }

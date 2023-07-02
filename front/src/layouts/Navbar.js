@@ -84,7 +84,7 @@ function NavBar() {
           </Offcanvas>
 
           <div className="position-absolute bottom-50 rounded-circle px-1 bg-yellow">
-            <p className="m-0">{totalItems}</p>
+            <p className="">{totalItems}</p>
           </div>
         </div>
 
