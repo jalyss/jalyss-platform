@@ -1,11 +1,11 @@
-@media only screen and (max-width: 900px) {
-  .chatContainer {
-    flex-direction: column !important;
-  }
-  .optionChat {
-    justify-content: end !important;
-    align-items: center !important;
-  }
+@media only screen and (max-width:  900px) {
+    .chatContainer{
+        flex-direction: column !important;
+    }
+    .optionChat{
+        justify-content: end !important;
+        align-items: center !important;
+    }
 }
 @media only screen and (min-width: 900px) {
   .imageCoverTrainings {
@@ -36,5 +36,45 @@
   .mentor6 {
     max-width: 0% !important; /* Adjust the desired width here */
     height: auto !important;
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .imageCoverTrainings {
+    max-width: 400px !important;
+  }
+}
+@media (min-width: 992px) {
+  .lg-hide {
+    display: none !important;
+
+  }
+  .hidden-padding{
+    padding: 0px !important;
+  }
+}
+@media (max-width: 992px) {
+  .md-hide {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .imageCoverTrainings {
+    max-width: 400px !important;
+  }
+}
+@media (min-width: 992px) {
+  .lg-hide {
+    display: none !important;
+
+  }
+  .hidden-padding{
+    padding: 0px !important;
+  }
+}
+@media (max-width: 992px) {
+  .md-hide {
+    display: none !important;
   }
 }
