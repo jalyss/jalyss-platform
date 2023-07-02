@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto, UpdateUserStatusDto } from './dto/update-user.dto';
 import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -29,7 +29,7 @@ export interface FormatLogin extends Partial<User> {
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: CreateUserDto) {
     const salt = await bcrypt.genSalt();
@@ -40,18 +40,38 @@ export class UsersService {
     });
   }
 
-
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true },
+      include: { Media: true, avatar: true },
+    });
+  }
+  authorList() {
+    return this.prisma.user.findMany({
+      where: {
+        Blog: {
+          some: {
+            confirm: true,
+          }
+          ,
+        },
+      },
+      
+      select:{fullNameEn:true,fullNameAr:true,id:true,avatar:true}
     });
   }
 
   findOne(id: string) {
-    return this.prisma.user.findUniqueOrThrow({ where: { id: id } });
+    return this.prisma.user.findUniqueOrThrow({ where: { id: id },include:{avatar:true } } );
   }
 
   update(id: string, data: UpdateUserDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  updateUserStatus(id: string, data: UpdateUserStatusDto) {
     return this.prisma.user.update({
       where: { id },
       data,
@@ -65,7 +85,7 @@ export class UsersService {
       where: { email },
       include: {
         Media: true,
-        avatar: true
+        avatar: true,
       },
     });
 
@@ -84,16 +104,15 @@ export class UsersService {
     return rest;
   }
   async findByPayload({ email }: any): Promise<any> {
-    let user = {}
+    let user = {};
     user = await this.prisma.user.findFirst({
       where: { email },
     });
     if (!user)
       user = await this.prisma.employee.findFirst({
-        where: { email }
-      })
-    return user
-
+        where: { email },
+      });
+    return user;
   }
   async updatePassword(payload: UpdatePasswordDto, id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({

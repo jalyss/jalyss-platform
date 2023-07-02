@@ -7,12 +7,16 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags,ApiSecurity } from '@nestjs/swagger';
 import { CommandsService } from './commands.service';
 import { CreateCommandDto } from './dto/create-command.dto';
 import { UpdateCommandDto } from './dto/update-command.dto';
 import { FilterCommand } from './types';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CurrentUser } from '../auth/decorators/currentUser';
+
 
 @ApiTags('commands')
 @Controller('commands')
@@ -31,6 +35,16 @@ export class CommandsController {
   findAll() {
     return this.commandsService.findAll();
   }
+
+
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
+  @Get('/by-user')
+  findAllByUserId(@CurrentUser()user:any) {
+    return this.commandsService.findAllByUserId(user.id);
+  }
+
+
   @Get(':branchId')
   findAllByBranchId(@Param('branchId') branchId: string,
   @Query() filters:FilterCommand) {
@@ -41,6 +55,10 @@ export class CommandsController {
   findOne(@Param('id') id: string) {
     return this.commandsService.findOne(id);
   }
+@Get('commandLine/all')
+findAllCommanLIne(){
+  return this.commandsService.findAllCommandLIne();
+}
 
   @Patch(':id')
   update(@Param('id') id: string, 

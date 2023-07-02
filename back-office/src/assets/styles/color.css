@@ -1,0 +1,23 @@
+.bg-darkPurple {
+  background-color: #48184c;
+}
+
+.bg-lightPurple {
+  background-color: #b5a2b7;
+}
+
+.bg-yellow {
+  background-color: #edcc3f;
+}
+
+.text-color-grey {
+  color: #bfbfbf;
+}
+
+.text-color-white {
+  color: #ffffff;
+}
+
+.text-color-black {
+  color: #000000 !important;
+}

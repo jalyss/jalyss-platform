@@ -33,14 +33,19 @@ export class CommandsService {
     });
   }
 
-  async findAll() {
+  async findAllByUserId(clientId :string) {
     return await this.prisma.command.findMany({
+      where: { clientId  },
       include: {
         commandLine: true,
         branch: true,
       },
     });
   }
+
+async findAll(){
+  return this.prisma.command.findMany()
+}
 
   async findAllByBranchIdentifier(branchId: string, filters: FilterCommand) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
@@ -95,6 +100,15 @@ export class CommandsService {
     });
   }
 
+async findAllCommandLIne(){
+  return await this.prisma.commandLine.findMany({
+    include :{
+      articleByBranch:{include:{article:{include:{category:true}},branch:true}}
+    }
+  })
+
+}
+
   async update(id: string, dto: UpdateCommandDto) {
     const branchId = (await this.prisma.command.findFirstOrThrow({
       where: {
@@ -127,4 +141,6 @@ export class CommandsService {
   remove(id: string) {
     return `This action removes a #${id} command`;
   }
+
+
 }

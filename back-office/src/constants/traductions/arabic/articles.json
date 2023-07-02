@@ -1,0 +1,9 @@
+{
+    "filter": {
+        "articleType": " نوع المنتج",
+        "publishingHouse": " ديار النشر ",
+        "category": "الفئة",
+        "author": "المؤلفون"
+    },
+    "title": "Title"
+}

@@ -1,5 +1,4 @@
-import Rating from '../components/Rating'
-
+import Rating from '../components/Commun/Rating'
 import { FiEye } from 'react-icons/fi'
 import { BsBag } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +8,6 @@ import { useCart } from 'react-use-cart';
 function ArticleCard({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate()
-  console.log(article);
 
   return (
 

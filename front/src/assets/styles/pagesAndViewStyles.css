@@ -29,6 +29,22 @@
   transform: translateX(-50%);
 }
 
+
+
+.ql-align-center {
+  text-align: center;
+}
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-toolbar input.ql-image[type=file],
+.ql-toolbar input.ql-image[type=file] {
+  display: none;
+}
+
+
+
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
@@ -90,3 +106,12 @@
     margin-top: 0;
   }
 }
+.ql-syntax {
+  background-color: #23241f;
+  color: #f8f8f2;
+  overflow: visible;
+}
+
+
+
+

@@ -10,10 +10,10 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 function Signup() {
-  const { t , i18n} = useTranslation()
+  const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
-  const navigate=useNavigate()
-  
+  const navigate = useNavigate()
+
 
   const [isShowPassword, setIsShowPassword] = useState(false)
   const [preview, setPreview] = useState(null)
@@ -28,12 +28,12 @@ function Signup() {
   const submitSignup = async (event) => {
     event.preventDefault();
     let aux = Object.assign({}, user)
-    if (avatar!==null) {
+    if (avatar !== null) {
       console.log('in if');
       const image = new FormData()
       image.append('file', avatar)
-      const response=await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/upload`, image)
-        aux.avatarId=response.data.id
+      const response = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/upload`, image)
+      aux.avatarId = response.data.id
     }
 
     dispatch(register(aux))
@@ -58,7 +58,7 @@ function Signup() {
     // reader.onloadend = () => {
     //   setPreview(reader.result)
     // }
-    setPreview( URL.createObjectURL(file))
+    setPreview(URL.createObjectURL(file))
     setAvatar(file)
 
   }
@@ -74,8 +74,8 @@ function Signup() {
             <div class="image-upload">
               <img
                 src={
-                  preview ?preview:
-                  'http://tsr-industrie.fr/wp-content/uploads/2016/04/ef3-placeholder-image.jpg'
+                  preview ? preview :
+                    'http://tsr-industrie.fr/wp-content/uploads/2016/04/ef3-placeholder-image.jpg'
                 }
                 alt=""
               />
@@ -88,7 +88,7 @@ function Signup() {
             </div>
             {preview && (
               <button
-              type='button'
+                type='button'
                 class="delete-button"
                 onClick={() => {
                   setPreview(null)
@@ -119,7 +119,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="fullNameEn">
-                {t('nameEn')}<span style={{ color: 'red' }}>*</span>
+                  {t('nameEn')}<span style={{ color: 'red' }}>*</span>
                 </label>
 
                 <input
@@ -127,7 +127,7 @@ function Signup() {
                   required
                   id="fullNameEn"
                   name="fullNameEn"
-                  pattern="^(\w\w+)\s(\w+)$"
+                 // pattern="^(\w\w+)\s(\w+)$"
                   value={user?.fullNameEn}
                   onChange={handleChange}
                 />
@@ -137,7 +137,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="email">
-                {t('email')}<span style={{ color: 'red' }}>*</span>
+                  {t('email')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -151,7 +151,7 @@ function Signup() {
               </div>
               <div class="col mb-3 ">
                 <label for="tel">
-                {t('phone')}<span style={{ color: 'red' }}>*</span>
+                  {t('phone')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required
@@ -167,7 +167,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="password">
-                {t('password')}<span style={{ color: 'red' }}>*</span>
+                  {t('password')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <div className=" d-flex  " >
                   <input
@@ -203,7 +203,7 @@ function Signup() {
             <div class="row">
               <div class="col mb-3 ">
                 <label for="address">
-                {t('yy')}<span style={{ color: 'red' }}>*</span>
+                  {t('yy')}<span style={{ color: 'red' }}>*</span>
                 </label>
                 <input
                   required

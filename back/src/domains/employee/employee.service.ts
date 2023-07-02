@@ -7,16 +7,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Employee } from '@prisma/client';
 
+
 export interface FormatLoginAdmin extends Partial<Employee> {
   id: string;
-  nameAr: string;
-  nameEn: string;
+  fullNameAr: string;
+  fullNameEn: string;
   email: string;
   address: string;
   tel: string;
   isAdmin: boolean;
   branchId: string;
   roleId: string;
+  
+  
 }
 
 @Injectable()
@@ -29,13 +32,16 @@ export class EmployeeService {
 
     return this.prisma.employee.create({
       data,
+      include:{avatar:true},
+    
     });
 
   }
 
   async findByLogin({ email, password }: EmployeeLogin) {
     const emlpoyee = await this.prisma.employee.findFirst({
-      where: { email }
+      where: { email },
+      include:{avatar:true}
     });
     if (!emlpoyee) {
       throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
@@ -68,17 +74,18 @@ export class EmployeeService {
   }
 
   findAll() {
-    return this.prisma.employee.findMany();
+    return this.prisma.employee.findMany({include:{role:true,branch:true,avatar:true} ,orderBy:{createdAt:"asc"}});
   }
 
   findOne(id: string) {
-    return this.prisma.employee.findUniqueOrThrow({ where: { id: id } });
+    return this.prisma.employee.findUniqueOrThrow({ where: { id: id },include:{role:true,branch:true,avatar:true} });
   }
 
   update(id: string, data: UpdateEmployeeDto) {
     return this.prisma.employee.update({
       where: { id },
       data,
+      include:{role:true,branch:true,avatar:true} 
     });
   }
 

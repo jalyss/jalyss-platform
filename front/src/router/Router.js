@@ -1,24 +1,49 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Admin from "../apps/Admin";
+
 import Client from "../apps/Client";
-import Articles from "../pages/Articles";
-import Home from "../pages/Home";
 import Login from "../pages/Login";
-import NoPage from "../pages/NoPage";
-import OneArticle from "../pages/OneArticle";
-import Profile from "../pages/Profile";
 import Signup from "../pages/Signup";
-import Checkout from "../pages/Checkout";
-import Invoice from "../pages/Invoice";
+
 import ResetPassword from "../pages/ResetPassword";
 import NewPassword from "../pages/NewPassword";
-import Loginadmin from "../pages/loginadmin";
-import Createuser from "../pages/createuser";
-import { useSelector } from "react-redux";
+import Home from "../pages/Home";
+import Articles from "../pages/Articles";
+import OneArticle from "../pages/OneArticle";
+import Checkout from "../pages/Checkout";
+import Invoice from "../pages/Invoice";
+
+import NoPage from "../pages/NoPage";
+
+import TrainingPage from "../pages/TrainingPage";
+import MentorPage from "../pages/MentorPage";
+
+import Blogs from "../pages/Blogs";
+import BlogsDetail from "../pages/BlogsDetail";
+import BlogsForm from "../pages/BlogsForm";
+import UpdateBlog from "../pages/UpdateBlog";
+
+import SpaceJalyss from "../pages/space/SpaceJalyss";
+
+import RegisterForm from "../pages/space/RegisterForm";
+import ServiceSpace from "../pages/space/ServiceSpace";
+import SpaceReservation from "../pages/space/SpaceReservation";
+
+import Profile from "../pages/Profile";
+import MyBlogs from "../components/Profile/MyBlogs";
+import Bio from "../components/Profile/bio";
+import Edit from "../components/Profile/Edit";
+import MyBookmarks from "../components/Profile/MyBookmarks";
+import OrderHistory from "../components/Profile/OrderHistory";
+
+import Chat from "../pages/Chat";
+
+import SessionDetails from "../pages/SessionDetails";
+import Conversation from "../components/chatComponents/Conversation";
+import ReserveMeeting from "../pages/space/SpaceReservation"
+
 
 function Router() {
-  const auth = useSelector((state) => state.auth);
   return (
     <div>
       <BrowserRouter>
@@ -28,22 +53,48 @@ function Router() {
             <Route path="articles" element={<Articles />} />
             <Route path="articles/cat/:categoryId" element={<Articles />} />
             <Route path="one-article/:articleId" element={<OneArticle />} />
-            <Route path="profile" element={<Profile />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="invoice/:invoiceId" element={<Invoice />} />
+            <Route path="profile" element={<Profile />}>
+              <Route index element={<MyBlogs />} />
+              <Route path="my-bookmarks" element={<MyBookmarks />} />
+              <Route path="edit" element={<Edit />} />
+              <Route path="bio" element={<Bio />} />
+              <Route path="orders-history" element={<OrderHistory />} />
+            </Route>
+
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
-            <Route path="invoice/:invoiceId" element={<Invoice />} />
+            
+            
+
             <Route path="*" element={<NoPage />} />
-          </Route>
-          {auth.meAdmin ? (
-            <Route path="admin" element={<Admin />}>
-              <Route path="create-user" element={<Createuser />} />
+            <Route path="/chat" element={<Chat />}>
+            <Route path="/chat/:userId" element={<Conversation />} />
+
             </Route>
-          ) : (
-            <Route path="admin" element={<Loginadmin />} />
-          )}
+            <Route path="training" element={<TrainingPage />} />
+            <Route path="mentor" element={<MentorPage />} />
+            <Route path="blogs" element={<Blogs />} />
+            <Route path="blogs/:blogId" element={<BlogsDetail />} />
+            <Route path="blogsForm" element={<BlogsForm />} />
+            <Route path="blogs/:blogId" element={<UpdateBlog />} />
+            <Route path="update-blog/:blogId" element={<UpdateBlog />} />
+            <Route path="spaceJalyss" element={<SpaceJalyss />} />
+            <Route
+              path="spaceJalyss/:serviceIdentifier"
+              element={<ServiceSpace />}
+            />
+           
+
+            <Route path="update-blog/:blogId" element={<UpdateBlog />} />
+            <Route path="sessions/:sessionId" element={<SessionDetails />}/>
+
+            <Route path="RegisterForm" element={<RegisterForm />} />
+            <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>
@@ -51,3 +102,4 @@ function Router() {
 }
 
 export default Router;
+

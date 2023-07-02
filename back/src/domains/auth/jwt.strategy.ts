@@ -1,36 +1,33 @@
-import {PassportStrategy} from '@nestjs/passport';
-import {ExtractJwt, Strategy} from 'passport-jwt';
-import {AuthService} from "./auth.service";
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
-import { Media} from '@prisma/client';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { AuthService } from './auth.service';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Media } from '@prisma/client';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(private readonly authService: AuthService) {
-        super({
-            jwtFromRequest:   
-            ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: true,
-            secretOrKey: process.env.SECRETKEY,
+  constructor(private readonly authService: AuthService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: true,
+      secretOrKey: process.env.SECRETKEY,
+    });
+  }
 
-        });
+  async validate(payload: JwtPayload): Promise<any> {
+    const user = await this.authService.validateUser(payload);
+    if (!user) {
+      throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
-
-    async validate(payload: JwtPayload): Promise<any> {
-        const user = await this.authService.validateUser(payload);
-        if (!user) {
-            throw new HttpException('Invalid token', 
-                HttpStatus.UNAUTHORIZED);
-        }
-        return user;
-    }
+    return user;
+  }
 }
 
-export interface JwtPayload {  
-    email: string
-    name:string
-    Media:Media
-    country:string
-    city:string
-    dateOfBirth:string
+export interface JwtPayload {
+  email: string;
+  name: string;
+  Media: Media;
+  country: string;
+  city: string;
+  dateOfBirth: string;
 }

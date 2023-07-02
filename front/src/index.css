@@ -11,6 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 @import url('./assets/styles/color.css');
 @import url('./assets/styles/standardStyle.css');
 @import url('./assets/styles/pagesAndViewStyles.css');
@@ -18,5 +19,17 @@ code {
 @import url('./assets/styles/invoice.css');
 @import url('./assets/styles/signup.css');
 @import url('./assets/styles/layoutStyles.css');
+@import url('./assets//styles/training.css');
+@import url('./assets/styles/blogs.css');
+@import url('./assets/styles/mediaScreensStyles.css');
+@import url('./assets/styles/space.css');
+@import url('./assets/styles/Navbar.css');
 
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
+  display: none;
+}
 
+.react-horizontal-scrolling-menu--scroll-container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

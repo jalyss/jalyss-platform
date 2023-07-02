@@ -1,0 +1,38 @@
+.cart-container {
+  width: 40%;
+}
+
+.checkout-form {
+  /* width: 60%; */
+  /* margin-left: 2rem; */
+}
+
+.confirm-button {
+  border: 1px solid #edcc3f;
+  border-radius: 5px;
+  padding: 10px 150px;
+  background-color: rgba(127, 136, 46, 0.119);
+  color: rgb(0, 0, 0);
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.confirm-button:hover {
+  background-color: #edcc3f;
+  transition: 0.7s;
+  color: rgb(255, 255, 255);
+}
+
+.disab-confirm-button {
+  border: 1px solid #edcc3f;
+  border-radius: 5px;
+  padding: 10px 150px;
+  background-color: rgba(127, 136, 46, 0.119);
+  color: rgb(0, 0, 0);
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+

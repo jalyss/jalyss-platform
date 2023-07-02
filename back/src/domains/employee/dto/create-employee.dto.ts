@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateEmployeeDto {
     @ApiProperty({ required: true })
-    nameAr: string
+    fullNameAr: string
     @ApiProperty({ required: true })
-    nameEn: string
+    fullNameEn: string
     @ApiProperty({ required: true })
     email: string
     @ApiProperty({ required: true })
@@ -19,4 +19,6 @@ export class CreateEmployeeDto {
     branchId: string
     @ApiProperty({ required: false })
     roleId: string
+    @ApiProperty({ required: false })
+    avatarId: string
 }
