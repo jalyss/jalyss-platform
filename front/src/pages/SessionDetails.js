@@ -20,51 +20,55 @@ import { fetchSession } from "../store/session";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
-import ButtonWithTransformAndHover from "../components/Commun/buttons/ButtonWithTransformAndHover";
+
 
 function SessionDetails() {
   const [showMore, setShowMore] = useState(false);
+
   const { sessionId } = useParams();
   const sessionStore = useSelector((state) => state.session);
   const { session } = sessionStore;
   const seletedSession = session;
-  const lec = seletedSession?.lectures
+  const lec = seletedSession?.lectures;
   const dispatch = useDispatch();
   const ref = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchSession(sessionId));
+    window.scrollTo(0, 0);
   }, [sessionId]);
 
-  console.log("sessionss",session);
   const handleClick = () => {
-    ref.current?.scrollIntoView({ behavior: 'smooth' });
+    var elem = document.getElementById("ele");
+    elem.scrollIntoView();
   };
-console.log("sessi",session);
- 
-  const columnCount=Math.ceil(session?.SessionHasWhatYouWillLearn.length/2)
-  console.log("columnCount",columnCount);
 
-  const column1 = session?.SessionHasWhatYouWillLearn?.slice(0,columnCount)
-  const column2 = session?.SessionHasWhatYouWillLearn?.slice(columnCount)
+
+  const columnCount = Math.ceil(
+    session?.SessionHasWhatYouWillLearn?.length / 2
+  );
+
+
+  const column1 = session?.SessionHasWhatYouWillLearn?.slice(0, columnCount);
+  const column2 = session?.SessionHasWhatYouWillLearn?.slice(columnCount);
   const displayColumn1 = showMore ? column1 : column1?.slice(0, 5);
   const displayColumn2 = showMore ? column2 : column2?.slice(0, 5);
- 
-
+  const currentDate = new Date();
   return (
     <div className="container">
-      
       <div className="goBackLink" onClick={() => navigate(-1)}>
         <span> &#8592;</span> <span>Go Back</span>
       </div>
-      <div className="d-flex flex-wrap justify-content-around gap-5 mb-5 mt-5">
-        <div className="d-flex justify-content-center align-items-center">
+      <div className="d-flex flex-wrap justify-content-around  mb-5 mt-5">
+        <div className="d-flex flex-wrap justify-content-center align-items-center">
           {seletedSession?.cover ? (
             <img
-              src={seletedSession.cover}
+              src={seletedSession.cover.path}
               alt="sessionCover"
               className="rounded img-fluid"
+              height={900}
+              width={600}
             />
           ) : (
             <img
@@ -76,7 +80,7 @@ console.log("sessi",session);
             />
           )}
         </div>
-        <div>
+        <div className="w-30">
           <div
             className="fs-2 mb-2 mt-4"
             style={{
@@ -92,35 +96,42 @@ console.log("sessi",session);
           />
           {/* <KeyValueStyled label="Duration" value={seletedSession?.duration?} /> */}
 
-          {/* <KeyValueStyled label="Type" value={seletedSession?.type?} /> */}
+          <KeyValueStyled
+            label="Type"
+            value={seletedSession?.sessionType
+              ?.map((elem) => elem.sessiontype.title)
+              .join(", ")}
+          />
           <KeyValueStyled
             label="Number of lectures"
             value={seletedSession?.lectures?.length}
           />
 
-          {/* <KeyValueStyled
-            label=" Number of students"
-            value={seletedSession?.numberOfLectures?}
-          /> */}
-          {/* <KeyValueStyled label="Type" value={seletedSession?.type?} /> */}
-          <div className="d-flex gap-3">
+          <KeyValueStyled
+            label=" Number of student"
+            value={seletedSession?.tarifs.reduce(
+              (acc, currentValue) => acc + currentValue.bookings.length,
+              0
+            )}
+          />
+
+          <div className="coaches gap-3 ">
             <div className="d-flex align-items-center fw-bold">Coaches:</div>
             {seletedSession?.lectures?.map((lecture, lectureIndex) =>
               lecture.lectures.coaching.map((coach, coachIndex) => (
-                <span
-                  className="tt mt-2"
-                  data-bs-placement="bottom"
+                <div
+                  className="coachZone mt-2 "
+                  // data-bs-placement="bottom"
                   title={coach.user.fullNameEn}
                 >
-                  {" "}
                   <img
                     key={coachIndex}
                     src={coach.user.avatar?.path}
                     alt="avatar"
-                    className="rounded-circle"
+                    className="rounded-circle col-8"
                     style={{ width: "50px", height: "50px", margin: "0 5px" }}
-                  />{" "}
-                </span>
+                  />
+                </div>
               ))
             )}
           </div>
@@ -128,15 +139,27 @@ console.log("sessi",session);
             <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">
               {" "}
               <img src={start} height="20" width="20" alt="icon" />{" "}
-              <div>{seletedSession?.startDate.slice(0,10)}</div>
+              <div>{seletedSession?.startDate.slice(0, 10)}</div>
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center gap-2">
               <img src={end} height="20" width="20" alt="icon" />{" "}
-              <div>{seletedSession?.endDate.slice(0,10)}</div>
+              <div>{seletedSession?.endDate.slice(0, 10)}</div>
             </div>
           </div>
-          <ButtonWithTransformAndHover title={"Price Discovery"} full={true} onClick={handleClick}/>
 
+          <div className="d-flex justify-content-center">
+            <button
+              className=" btn mt-3"
+              style={{
+                backgroundColor: "#48184c",
+                alignItems: "center",
+                color: "#fff",
+              }}
+              onClick={handleClick}
+            >
+              Price Discovery
+            </button>
+          </div>
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">
@@ -152,7 +175,7 @@ console.log("sessi",session);
               <MDBRow>
                 <MDBCol>
                   {displayColumn1?.map((topic, index) => (
-                      <div key={index} className="d-flex gap-2 mt-2">
+                    <div key={index} className="d-flex gap-2 mt-2">
                       <span>&#10003; </span>
                       <div className="">{topic.WhatYouWillLearn.content}</div>
                       <br />
@@ -205,7 +228,8 @@ console.log("sessi",session);
             <MDBCardBody style={{ color: "#000" }}>
               {session?.sessionHasPrerequire.map((info, index) => (
                 <p key={index}>
-                  <span style={{ fontSize: "1.2rem" }}>&#8226;</span> {info.prerequire.content}
+                  <span style={{ fontSize: "1.2rem" }}>&#8226;</span>{" "}
+                  {info.prerequire.content}
                 </p>
               ))}
             </MDBCardBody>
@@ -214,9 +238,24 @@ console.log("sessi",session);
       </div>
 
       <SessionLecture lectures={lec} />
-      <TrainingPricing  ref={ref}/>
-      <PreviousSessionGallery />
-      <FeedBack session={session}/>
+      <TrainingPricing session={session} ref={ref} />
+      {session?.previousSesion &&
+        currentDate < new Date(session?.startDate) && (
+          <PreviousSessionGallery previousSesion={session.previousSesion}  subtitle="Previous Session Gallery" />
+        )}
+
+      {session?.previousSesion &&
+        currentDate > new Date(session?.startDate) && (
+          <PreviousSessionGallery previousSesion={session}  subtitle="Session Gallery"/>
+        )}
+
+      {session?.previousSesion && currentDate < new Date(session?.startDate) && (
+          <FeedBack previousSesion={session.previousSesion} subtitle="Previous Session Feedback"/>
+        )}
+
+{session?.previousSesion && currentDate > new Date(session?.startDate) && (
+          <FeedBack previousSesion={session} subtitle="Session Feedback"/>
+        )}
     </div>
   );
 }

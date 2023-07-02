@@ -3,6 +3,7 @@ import { CreateSessionDto } from './dto/create-Session.dto';
 import { UpdateSessionDto } from './dto/update-Session.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterSession, FilterSessionExample } from './entities/training.entity';
+import { features } from 'process';
 
 @Injectable()
 export class SessionService {
@@ -59,7 +60,8 @@ if (!['take', 'skip'].includes(key)) {
           tarifs: true,
           sessionType: true,
           lectures: true,
-          category:true
+          category:true,
+          cover:true
         },
         orderBy,
         take,
@@ -79,11 +81,17 @@ if (!['take', 'skip'].includes(key)) {
       where: { id },
       include:{
         category:true,
-        sessionType:true,
         lectures:{include:{lectures:{include:{coaching:{include:{user:{include:{avatar:true}}}},LectureHasWhatYouWillLearn:{include:{WhatYouWillLearn:true}}}}}},
         sessionHasPrerequire:{include:{prerequire:true}},
         SessionHasWhatYouWillLearn:{include:{WhatYouWillLearn:true}},
-        sessionFeedback:{include:{User:{include:{avatar:true}}}}
+        sessionFeedback:{include:{User:{include:{avatar:true}}}},
+        previousSesion:{include:{sessionFeedback:{include:{User:{include:{avatar:true}}}},MediaSession:{include:{media:true}}}},
+        tarifs:{include:{features:{include:{feature:true}},bookings:{include:{user:true}}}},
+        cover:true,
+        sessionType:{include:{sessiontype:true}}
+        
+       
+        
       }
     });
   }

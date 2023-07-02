@@ -11,4 +11,10 @@ export class CreateSessionDto {
     endDate:Date ;
     @ApiProperty()
     categoryId:string ;
+    @ApiProperty()
+
+    previousSessionId:string;
+    
+    @ApiProperty()
+    nextSessionId:string
 }

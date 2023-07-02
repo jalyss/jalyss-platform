@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { RxAvatar } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/category";
-import WhiteSelect from "../components/WhiteSelect";
+import WhiteSelect from "../components/Commun/inputs/WhiteSelect";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { BiCartAdd, BiCartDownload } from "react-icons/bi";
@@ -84,7 +84,7 @@ function NavBar() {
           </Offcanvas>
 
           <div className="position-absolute bottom-50 rounded-circle px-1 bg-yellow">
-            <p className="m-0">{totalItems}</p>
+            <p className="">{totalItems}</p>
           </div>
         </div>
 
