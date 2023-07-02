@@ -13,6 +13,7 @@ async function bootstrap() {
   
   app.useStaticAssets('upload',{prefix:'/upload'})
   app.useStaticAssets(join(__dirname, '../../../front', 'build'))
+  app.useStaticAssets(join(__dirname, '../../../back-office', 'build'))
   
   
   app.setGlobalPrefix('/api/v1');

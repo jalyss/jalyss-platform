@@ -49,12 +49,23 @@ import { join } from 'path';
     SessionFeedbacksModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../../front', 'build'),
+      serveRoot: '/',
       serveStaticOptions: {
         maxAge: 604800, // one week
         cacheControl: false,
         etag: false,
         
       },
+    }),
+    ServeStaticModule.forRoot({
+      serveStaticOptions: {
+        maxAge: 604800, // one week
+        cacheControl: false,
+        etag: false,
+        
+      },
+      serveRoot: '/back-office',
+      rootPath: join(__dirname, '../../../back-office', 'build'),
     }),
   ],
   controllers: [AppController],
