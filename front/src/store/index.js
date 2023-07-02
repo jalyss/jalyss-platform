@@ -34,6 +34,7 @@ export const store = configureStore({
     session,
     chat,
     faq,
+    service,
  
   },
   middleware: (getDefaultMiddleware) =>

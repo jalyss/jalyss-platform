@@ -32,14 +32,14 @@ import Training from "../domains/training/Training";
 import Coursdetail from "../domains/training/views/courses/Coursdetail";
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
 import Service from "../domains/service/Service";
-import Service from "../domains/service/Service";
+
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
 import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
-import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+
 import ServiceList from "../domains/service/views/ServiceList";
 import OneService from "../domains/service/views/OneService";
 import ServiceDetails from "../domains/service/views/ServiceDetails";
@@ -65,30 +65,8 @@ import EditAuthor from "../domains/author/views/EditAuthor";
 import DetailAuthor from "../domains/author/views/DetailAuthor";
 import CreateAuthor from "../domains/author/views/CreateAuthor";
 import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
-import ServiceList from "../domains/service/views/ServiceList";
-import OneService from "../domains/service/views/OneService";
-import ServiceDetails from "../domains/service/views/ServiceDetails";
-import CreateService from "../domains/service/views/CreateService";
-import CreateTarif from "../domains/service/views/CreateTarif";
-import TarifDetails from "../domains/service/views/TarifDetails";
-import SpaceDetails from "../domains/service/views/SpaceDetails";
-import EditTarif from "../domains/service/views/EditTarif";
-import EditWorkSpace from "../domains/service/views/EditWorkSpace";
-import EditService from "../domains/service/views/EditService";
-import Blogs from "../domains/blogs/Blogs";
-import BlogsList from "../domains/blogs/views/BlogsList";
-import DetailBlog from "../domains/blogs/views/DetailBlog";
-import Providers from "../domains/provider/Providers";
-import ProvidersList from "../domains/provider/view/ProvidersList";
-import CreateProvider from "../domains/provider/view/CreateProvider";
-import EditProvider from "../domains/provider/view/EditProvider";
-import DetailProvider from "../domains/provider/view/DetailProvider";
-import Profile from "../pages/Profile";
-import Author from "../domains/author/Author";
-import AuthorList from "../domains/author/views/AuthorList";
-import EditAuthor from "../domains/author/views/EditAuthor";
-import DetailAuthor from "../domains/author/views/DetailAuthor";
-import CreateAuthor from "../domains/author/views/CreateAuthor";
+
+
 
 function Router() {
   const auth = useSelector((state) => state.auth);
