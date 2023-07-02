@@ -607,7 +607,6 @@ model Media {
   MediaSession   MediaSession[]
   Session        Session[]
   SessionRequest SessionRequest[]
- 
 }
 
 model MediaUser {
@@ -737,19 +736,10 @@ model View {
 
 //JalyssSpace
 
-// model Service {
-//   id           String         @id @default(uuid())
-//   name         String
-//   identifier   String?        @unique()
-
-// }
-
 model Service {
-  id           String         @id @default(uuid())
-
-  name         String
-  
-
+  id String @id @default(uuid())
+  name        String
+  description String
   identifier   String         @unique()
   perHour      Boolean        @default(true)
   coverId      String?

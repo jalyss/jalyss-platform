@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { Question } from './../src/domains/questions/entities/question.entity';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
