@@ -12,6 +12,12 @@ export const fetchauthor = createAsyncThunk("authors/author", async (id) => {
   return response.data;
 });
 
+export const createAuthor = createAsyncThunk("authors/createAuthor", async (body, { dispatch }) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/authors`, body);
+  dispatch(fetchauthor(response.data.id))
+  return response.data;
+});
+
 export const authorSlice = createSlice({
   name: "author",
   initialState: {

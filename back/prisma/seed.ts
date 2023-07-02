@@ -1403,13 +1403,13 @@ async function main() {
     data: {
       serviceId: serviceIds[0],
       name: 'bureau sfax',
-      imageId: coverWorkSpace.id,
+      // imageId: coverWorkSpace.id,
     },
   });
   let workSpaceMeetingSpace = await prisma.workSpace.create({
     data: {
       name: 'salle de reunion sfax',
-      imageId: coverWorkSpace.id,
+      // imageId: coverWorkSpace.id,
       serviceId: serviceIds[1],
     },
   });
@@ -1417,7 +1417,7 @@ async function main() {
   let workSpaceCoworkingSpace = await prisma.workSpace.create({
     data: {
       name: 'open space sfax',
-      imageId: coverWorkSpace.id,
+      // imageId: coverWorkSpace.id,
       serviceId: serviceIds[2],
     },
   });

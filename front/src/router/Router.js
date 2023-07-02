@@ -89,12 +89,8 @@ function Router() {
             />
            
 
-            <Route path="ReserveMeeting" element={<ReserveMeeting />} />
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />}/>
-    
-
-            {/* <Route path="ReserveMeeting" element={<ReserveMeeting />} /> */}
 
             <Route path="RegisterForm" element={<RegisterForm />} />
             <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
