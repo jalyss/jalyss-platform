@@ -40,7 +40,7 @@ import Chat from "../pages/Chat";
 
 import SessionDetails from "../pages/SessionDetails";
 import Conversation from "../components/chatComponents/Conversation";
-
+import ReserveMeeting from "../pages/space/SpaceReservation"
 
 
 function Router() {

@@ -464,6 +464,21 @@ CREATE TABLE "Assessments" (
 );
 
 -- CreateTable
+CREATE TABLE "Feature" (
+    "id" TEXT NOT NULL,
+    "label" TEXT NOT NULL,
+    "isAvailable" BOOLEAN NOT NULL,
+
+    CONSTRAINT "Feature_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SessionTarifHasFeatures" (
+    "featureId" TEXT NOT NULL,
+    "sessionId" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "SessionTarif" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -762,6 +777,9 @@ CREATE UNIQUE INDEX "SessionHasSessionType_sessionId_sessionTypeId_key" ON "Sess
 CREATE UNIQUE INDEX "SessionHasLecture_sessionId_lectureId_key" ON "SessionHasLecture"("sessionId", "lectureId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_sessionId_key" ON "SessionTarifHasFeatures"("featureId", "sessionId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "MediaUser_mediaId_userId_key" ON "MediaUser"("mediaId", "userId");
 
 -- CreateIndex
@@ -973,6 +991,12 @@ ALTER TABLE "Coaching" ADD CONSTRAINT "Coaching_lectureId_fkey" FOREIGN KEY ("le
 
 -- AddForeignKey
 ALTER TABLE "Assessments" ADD CONSTRAINT "Assessments_lectureId_fkey" FOREIGN KEY ("lectureId") REFERENCES "Lecture"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "SessionTarif"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SessionTarif" ADD CONSTRAINT "SessionTarif_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

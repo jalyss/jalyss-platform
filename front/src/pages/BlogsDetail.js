@@ -46,6 +46,7 @@ const BlogDetail = () => {
 
   useEffect(() => {
     if (blog)
+      
       dispatch(fetchBlogs({ take: 5, skip: 0, authorId: blog.authorId }));
   }, [dispatch, blog]);
 
