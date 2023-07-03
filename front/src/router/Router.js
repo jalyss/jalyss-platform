@@ -40,7 +40,7 @@ import Chat from "../pages/Chat";
 
 import SessionDetails from "../pages/SessionDetails";
 import Conversation from "../components/chatComponents/Conversation";
-
+import ReserveMeeting from "../pages/space/SpaceReservation"
 
 
 function Router() {
@@ -91,7 +91,7 @@ function Router() {
 
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />}/>
-  
+
             <Route path="RegisterForm" element={<RegisterForm />} />
             <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
           </Route>
