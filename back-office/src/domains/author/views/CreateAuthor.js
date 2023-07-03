@@ -13,23 +13,15 @@ function CreateAuthor() {
     const [author, setAuthor] = useState({})
     const authorStore = useSelector((state) => state.author)
 
-    useEffect(() => {
-        if (authorStore.author.items.length) {
-          let aux = authorStore.author.items.map(e => {
-            return { ...e, fullName: isEng ? e.fullNameEn : e.fullNameAr,
-               phone: e.tel,
-                Branch: e?.branch?.name,
-                 Role: e?.role?.nameAr,
-                  avatarurl: e.avatarurl }
-          })
-          console.log(aux);
-          setRows(aux)
-        }
-      }, [authorStore.author.items])
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setAuthor((Author) => ({ ...Author, [name]: value }));
+      };
+
 
     const submitCreate = async (event) => {
         event.preventDefault();
-        let aux = Object.assign({}, author)
+        let aux = Object.assign({},author)
         dispatch(createAuthor(aux))
           .then(res => {
             if (!res.error) {
@@ -40,8 +32,7 @@ function CreateAuthor() {
             }
           }
           )
-    
-      }
+        }
 
     return (
         <div>
@@ -52,19 +43,47 @@ function CreateAuthor() {
                             <form className='checkout-form' onSubmit={submitCreate}>
                                 <div class="form-group mt-3">
                                     <label >Name AR</label>
-                                    <input type="text" class="form-control mt-2 " style={{ width: 300 }} placeholder="باللغة العربية" name="nameAr" id="nameAr" value={author?.nameAr} />
+                                    <input type="text"
+                                     class="form-control mt-2 "
+                                      style={{ width: 300 }} 
+                                      placeholder="باللغة العربية"
+                                       name="nameAr" 
+                                       id="nameAr"                   
+                                        onChange={handleChange}
+                                      value={author?.nameAr} />
                                 </div>
                                 <div class="form-group mt-3">
                                     <label >Biography AR</label>
-                                    <textarea class="form-control mt-2" rows="3" placeholder='Biography' name='biographyAr' id='biographyAr' value={author?.biographyAr} ></textarea>
+                                    <textarea class="form-control mt-2"
+                                     rows="3" 
+                                     placeholder=' السيرة' 
+                                     name='biographyAr' 
+                                     id='biographyAr'
+                                     onChange={ handleChange}
+                                      value={author?.biographyAr} 
+                                      ></textarea>
                                 </div>
                                 <div class="form-group mt-3">
                                     <label >Name EN</label>
-                                    <input type="text" class="form-control mt-2" style={{ width: 300 }} placeholder="English language" name='nameEn' id='nameEn' value={author?.nameEn} />
+                                    <input type="text"
+                                     class="form-control mt-2"
+                                      style={{ width: 300 }}
+                                       placeholder="English language" 
+                                       name='nameEn' 
+                                       id='nameEn'
+                                       onChange={ handleChange}
+                                       value={author?.nameEn} />
                                 </div>
                                 <div class="form-group mt-3">
                                     <label >biography EN</label>
-                                    <textarea class="form-control mt-2 mb-3" rows="3" placeholder='السيرة' name='biographyEn' id='biographyEn' value={author?.biographyEn}></textarea>
+                                    <textarea class="form-control mt-2 mb-3"
+                                     rows="3" 
+                                     placeholder='Biography'
+                                      name='biographyEn'
+                                       id='biographyEn'
+                                       onChange={ handleChange}
+                                       value={author?.biographyEn}>
+                                       </textarea>
                                 </div>
                                 <div className=" d-flex justify-content-center">
                                 <SaveButton mb={15} onClick={submitCreate}/>

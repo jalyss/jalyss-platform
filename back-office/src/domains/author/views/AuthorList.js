@@ -9,42 +9,64 @@ import AddButton from '../../../components/Commun/buttons/AddButton';
 import Modal from "../../../components/Commun/Modal";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchAuthors } from '../../../store/author';
+import { fetchAuthors, removAuthor } from '../../../store/author';
+import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 function AuthorList() {
+  
     const [show, setShow] = useState(false);
-    const [elementId, setElementId] = useState(null);
+    const [authorId, setAuthorId] = useState(null);
     const [basicModal,setBasicModal]=useState(false)
     const authorStore = useSelector((state) => state.author)
     const dispatch = useDispatch()
     const isEng = isEnglish()
     const navigate = useNavigate()
     const [rows, setRows] = useState([])
-    const handleAddClick = (authorId) => {
-      navigate(`detail/${authorId}`)
-    };
+
+    // const handleAddClick = (authorId) => {
+    //   navigate(`detail/${authorId}`)
+    // };
+
+    useEffect(() => {
+      dispatch(fetchAuthors())
+  },[] );
+
     const handleEditClick = (id) => {
       navigate(`edit/${id}`)
     };
-    
-    const toggleShow=()=>{
-      setBasicModal(!basicModal)
-    }
-    useEffect(() => {
-      dispatch(fetchAuthors())
-  }, );
 
+    // const toggleShow=()=>{
+    //   setBasicModal(!basicModal)
+
+    // }
+    
+    const handleDeleteauthorClick = (id) => {
+      dispatch(removAuthor(id)).then(res => {
+        if (res.error) {
+          showErrorToast(res.error.message)
+        } else {
+          showSuccessToast('Author has been deleted')
+        }
+      })
+    };
+    
+    
+ 
+
+
+   
   useEffect(() => {
-    if (authorStore.authors.items.length) {
+    if (authorStore?.authors.items) {
         let aux = authorStore.authors.items.map(e => {
             return {
                 ...e,
                 
             }
         })
-        // console.log(aux);
+        console.log(aux);
         setRows(aux)
     }
 }, [authorStore.authors.items])
+
     const columns = [
       { field: 'id', headerName: 'ID', width: 90 },
       { field: 'nameAr', headerName: 'Name AR', width: 150, editable: false },
@@ -73,14 +95,14 @@ function AuthorList() {
               icon={<AiOutlineEye />}
               label="Add"
               className="textPrimary"
-              onClick={() => handleAddClick(id)}
+              onClick={() => navigate(`detail/${id}`)}
               color="success" />,
   
             <GridActionsCellItem
               icon={<AiFillDelete />}
               label="Delete"
   
-              onClick={toggleShow}
+              onClick={() => {handleDeleteauthorClick(id)}}
               // should open popup to ask are u sure delete this user (yes/no)
               color="error" />,
   
@@ -123,7 +145,8 @@ function AuthorList() {
                         disableRowSelectionOnClick
                     />
                 </Box>
-                <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} />
+              
+                {/* <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} onClick={() => {handleDeleteauthorClick(authorId)}} /> */}
             </div>
         </div>
 

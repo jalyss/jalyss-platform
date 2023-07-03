@@ -12,11 +12,50 @@ export const fetchauthor = createAsyncThunk("authors/author", async (id) => {
   return response.data;
 });
 
+// export const createAuthor = createAsyncThunk("authors/createAuthor", async (body, { dispatch }) => {
+//   const response = await axios.post(`${config.API_ENDPOINT}/authors`, body);
+//   dispatch(fetchauthor(response.data.id))
+//   return response.data;
+// });
+
 export const createAuthor = createAsyncThunk("authors/createAuthor", async (body, { dispatch }) => {
-  const response = await axios.post(`${config.API_ENDPOINT}/authors`, body);
-  dispatch(fetchauthor(response.data.id))
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  }
+  const response = await axios.post(`${config.API_ENDPOINT}/authors`, body, configs);
+  dispatch(fetchauthor())
   return response.data;
 });
+
+export const removAuthor = createAsyncThunk("authors/deleteAuthor", async (id, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token.Authorization
+    }
+  }
+  const response = await axios.delete(`${config.API_ENDPOINT}/authors/${id}`, configs);
+  dispatch(fetchAuthors())
+  return response.data;
+});
+
+
+export const editAuthor = createAsyncThunk("authors/editAuthor", async (args, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token.Authorization
+    }
+  }
+  const { id, ...body } = args
+  const response = await axios.patch(`${config.API_ENDPOINT}/authors/${id}`, body, configs);
+  return response.data;
+});
+
+
 
 export const authorSlice = createSlice({
   name: "author",

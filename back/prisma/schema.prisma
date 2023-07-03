@@ -215,7 +215,7 @@ model Author {
 model ArticleByAuthor {
   article   Article @relation(fields: [articleId], references: [id])
   articleId String
-  author    Author  @relation(fields: [authorId], references: [id])
+  author    Author  @relation(fields: [authorId], references: [id],onDelete: Cascade)
   authorId  String
 
   @@unique([authorId, articleId])
