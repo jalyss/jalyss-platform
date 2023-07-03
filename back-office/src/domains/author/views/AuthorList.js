@@ -30,10 +30,6 @@ function AuthorList() {
       dispatch(fetchAuthors())
   },[] );
 
-  const toggleShow=()=>{
-    setBasicModal(!basicModal)
-  }
-
     const handleEditClick = (id) => {
       navigate(`edit/${id}`)
     };
@@ -105,9 +101,8 @@ function AuthorList() {
             <GridActionsCellItem
               icon={<AiFillDelete />}
               label="Delete"
-              onClick={toggleShow}
-
-              // onClick={() => {handleDeleteauthorClick(id)}}
+  
+              onClick={() => {handleDeleteauthorClick(id)}}
               // should open popup to ask are u sure delete this user (yes/no)
               color="error" />,
   
@@ -151,7 +146,7 @@ function AuthorList() {
                     />
                 </Box>
               
-                { <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} onClick={() => {handleDeleteauthorClick(id)}}/> }
+                {/* <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} onClick={() => {handleDeleteauthorClick(authorId)}} /> */}
             </div>
         </div>
 
