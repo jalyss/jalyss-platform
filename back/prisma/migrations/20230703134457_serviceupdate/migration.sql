@@ -333,6 +333,7 @@ CREATE TABLE "SessionRequest" (
     "userId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "resumeId" TEXT NOT NULL,
 
     CONSTRAINT "SessionRequest_pkey" PRIMARY KEY ("id")
 );
@@ -628,11 +629,11 @@ CREATE TABLE "View" (
 -- CreateTable
 CREATE TABLE "Service" (
     "id" TEXT NOT NULL,
-    "name" TEXT,
-    "identifier" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "identifier" TEXT,
     "perHour" BOOLEAN NOT NULL DEFAULT true,
     "coverId" TEXT,
-    "description" TEXT,
 
     CONSTRAINT "Service_pkey" PRIMARY KEY ("id")
 );
@@ -928,6 +929,9 @@ ALTER TABLE "Supply" ADD CONSTRAINT "Supply_articleId_fkey" FOREIGN KEY ("articl
 
 -- AddForeignKey
 ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_resumeId_fkey" FOREIGN KEY ("resumeId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaSession" ADD CONSTRAINT "MediaSession_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
