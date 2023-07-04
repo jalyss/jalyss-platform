@@ -5,15 +5,15 @@ import SaveButton from '../../../components/Commun/buttons/SaveButton'
 function CreateProvider() {
   return (
     <div className='container'>
-     
+
       <div className='card'>
         <div className='container'>
 
           <form>
-          {/* <div class="mb-3">
-  <label for="formFile" class="form-label">Default file input example</label>
-  <input class="form-control" type="file" id="formFile"/>
-</div> */}
+            <div class=" mt-3">
+              <label for="formFile" class="form-label"> Choose a logo</label>
+              <input class="form-control" type="file" id="formFile" />
+            </div>
 
             <div class="row">
               <div class="form-group col-6 mt-3">
@@ -45,8 +45,8 @@ function CreateProvider() {
 
 
             <div className="w-100 d-flex justify-content-center">
-              
-              <SaveButton  mt={20} mb={15}/>
+
+              <SaveButton mt={20} mb={15} />
             </div>
           </form>
         </div>

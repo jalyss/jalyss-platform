@@ -1,0 +1,97 @@
+import React from 'react'
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import isEnglish from '../../../helpers/isEnglish';
+import { useNavigate } from 'react-router-dom';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import { AiFillDelete, AiFillEdit, AiOutlineEye } from 'react-icons/ai';
+import AddButton from '../../../components/Commun/buttons/AddButton';
+import { Box } from '@mui/material';
+import { rows } from '../../../constants/typeData';
+
+function TypesList() {
+    const [show, setShow] = useState(false);
+    const [authorId, setAuthorId] = useState(null);
+    const [basicModal,setBasicModal]=useState(false)
+    const dispatch = useDispatch()
+    const isEng = isEnglish()
+    const navigate = useNavigate()
+    const handleEditClick = (id) => {
+        navigate(`edit/${id}`)
+      };
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 90 },
+        { field: 'nameAr', headerName: 'Name AR', width: 150, editable: false },
+        { field: 'nameEn', headerName: 'Name EN', width: 150, editable: false },
+        
+        
+        {
+          field: 'actions',
+          type: 'actions',
+          headerName: 'Actions',
+          width: 150,
+          cellClassName: 'actions',
+          getActions: ({ id }) => {
+    
+            return [
+              <GridActionsCellItem
+                icon={<AiFillEdit />}
+                label="Edit"
+                className="textPrimary"
+                onClick={() => handleEditClick(id)}
+                color="inherit"
+    
+              />,
+              <GridActionsCellItem
+                icon={<AiOutlineEye />}
+                label="Add"
+                className="textPrimary"
+                onClick={() => navigate(`detail/${id}`)}
+                color="success" />,
+    
+              <GridActionsCellItem
+                icon={<AiFillDelete />}
+                label="Delete"
+    
+                onClick={() => {handleDeleteauthorClick(id)}}
+                // should open popup to ask are u sure delete this user (yes/no)
+                color="error" />,
+    
+            ];
+          },
+        },
+      ];
+
+
+
+  return (
+    <div>
+      <div className='container'>
+                <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List Types</h2>
+                <hr></hr>
+                
+                <AddButton title={"Add Type"} mb={20} onClick={()=>{navigate("create")}}/>
+                <Box sx={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        initialStats={{
+                            pagination: {
+                                paginationModel: {
+                                    pageSize: 5,
+                                },
+                            },
+                        }}
+                        pageSizeOptions={[5]}
+
+                        disableRowSelectionOnClick
+                    />
+                </Box>
+              
+                {/* <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} onClick={() => {handleDeleteauthorClick(authorId)}} /> */}
+            </div>
+    </div>
+  )
+}
+
+export default TypesList

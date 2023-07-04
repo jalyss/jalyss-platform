@@ -21,6 +21,7 @@ function AuthorList() {
     const isEng = isEnglish()
     const navigate = useNavigate()
     const [rows, setRows] = useState([])
+    const [selectedAuthorId ,  setSelectedAuthorId] = useState("")
 
     // const handleAddClick = (authorId) => {
     //   navigate(`detail/${authorId}`)
@@ -34,10 +35,10 @@ function AuthorList() {
       navigate(`edit/${id}`)
     };
 
-    // const toggleShow=()=>{
-    //   setBasicModal(!basicModal)
+     const toggleShow=()=>{
+       setBasicModal(!basicModal)
 
-    // }
+     }
     
     const handleDeleteauthorClick = (id) => {
       dispatch(removAuthor(id)).then(res => {
@@ -102,7 +103,8 @@ function AuthorList() {
               icon={<AiFillDelete />}
               label="Delete"
   
-              onClick={() => {handleDeleteauthorClick(id)}}
+              onClick={() => { toggleShow()
+              setSelectedAuthorId(id) }  }
               // should open popup to ask are u sure delete this user (yes/no)
               color="error" />,
   
@@ -146,7 +148,7 @@ function AuthorList() {
                     />
                 </Box>
               
-                {/* <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} onClick={() => {handleDeleteauthorClick(authorId)}} /> */}
+                 <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} confirm={() => handleDeleteauthorClick(selectedAuthorId)} /> 
             </div>
         </div>
 

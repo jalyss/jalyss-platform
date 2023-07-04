@@ -215,7 +215,7 @@ model Author {
 model ArticleByAuthor {
   article   Article @relation(fields: [articleId], references: [id])
   articleId String
-  author    Author  @relation(fields: [authorId], references: [id],onDelete: Cascade)
+  author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   @@unique([authorId, articleId])
@@ -607,7 +607,6 @@ model Media {
   MediaSession   MediaSession[]
   Session        Session[]
   SessionRequest SessionRequest[]
- 
 }
 
 model MediaUser {
@@ -746,13 +745,12 @@ model View {
 
 model Service {
   id           String         @id @default(uuid())
-
-  name         String
+  name         String?
   
-
   identifier   String         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
+  description  String?
   cover        Media?         @relation(fields: [coverId], references: [id])
   workSpace    WorkSpace[]
   tarif        Tarif[]
