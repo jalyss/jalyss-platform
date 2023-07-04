@@ -43,7 +43,7 @@ function SpaceJalyss() {
   const [currentImage, setCurrentImage] = useState(0);
   const dispatch = useDispatch();
   const services = useSelector((state) => state.service.services);
-  
+  console.log(services,'iiiiiiiiiii')
   useEffect(() => {
     dispatch(fetchServices());
   }, []);
