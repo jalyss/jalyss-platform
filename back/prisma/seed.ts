@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { Question } from './../src/domains/questions/entities/question.entity';
+
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -20,6 +20,92 @@ async function main() {
     },
   });
   // create 10 dummy users
+  let mediasAvatarUser1 = await prisma.media.create({
+    data: {
+      path: 'https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+
+  let mediasAvatarUser2 = await prisma.media.create({
+    data: {
+      path: 'https://stylesatlife.com/wp-content/uploads/2022/12/Haircuts-for-School-Boys-11.jpg.webp',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+
+  let mediasAvatarUser3 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1351445167/photo/happy-male-youngster-smiling-at-the-camera-outdoors.jpg?b=1&s=170667a&w=0&k=20&c=iebfRFHi1ncG_CNCZLmOSLnRI_TO0D4rACMbarHsADc=',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser4 = await prisma.media.create({
+    data: {
+      path: 'https://media.istockphoto.com/id/1159801546/photo/portrait-of-handsome-boy-posing-in-photo-studio.jpg?s=612x612&w=0&k=20&c=YLyXwo6WaVWv8j80fLEyPjOmp3--6VlVYRU-Eyco5eQ=',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser5 = await prisma.media.create({
+    data: {
+      path: 'https://blog.hootsuite.com/wp-content/uploads/2020/02/Image-copyright-556x556.png',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser6 = await prisma.media.create({
+    data: {
+      path: 'https://pixlr.com/images/index/remove-bg.webp',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser7 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser8 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser9 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+  let mediasAvatarUser10 = await prisma.media.create({
+    data: {
+      path: 'https://www.adobe.com/content/dam/cc/us/en/creativecloud/photography/discover/cut-out-an-image/thumbnail.jpeg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+
+  let userMedia = [
+    mediasAvatarUser1.id,
+    mediasAvatarUser2.id,
+    mediasAvatarUser3.id,
+    mediasAvatarUser4.id,
+    mediasAvatarUser5.id,
+    mediasAvatarUser6.id,
+    mediasAvatarUser7.id,
+    mediasAvatarUser8.id,
+    mediasAvatarUser9.id,
+    mediasAvatarUser10.id,
+  ];
+
   const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
     
@@ -31,6 +117,7 @@ async function main() {
           address: 'sfax',
           tel: '123456789',
           password: await bcrypt.hash('1234', salt),
+          avatarId: userMedia[i],
         },
       })
 
@@ -1295,7 +1382,7 @@ async function main() {
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
 
-        description: "The Creation of Adam is a fresco painting by Italian artist Michelangelo, which forms part of the Sistine Chapel's ceiling, painted c. 1508 1512. It illustrates the Biblical creation narrative from the Book ."
+       
 
       },
     });
@@ -1607,13 +1694,24 @@ async function main() {
 
 
 let pathMedia2 = [
- "https://www.monterail.com/hs-fs/hubfs/blog/Blog%20body%20images/Mentoring,P20--,P20vector,P20image.jpg,qwidth=8000,aname=Mentoring,P20--,P20vector,P20image.jpg.pagespeed.ce.lakjJrmpt2.jpg",
- "https://www.monterail.com/hubfs/blog/featured/compressed/What%20is%20mentoring%20and%20how%20can%20it%20improve%20your%20self-development%20--%20featured%20image.jpg",
- "https://www.monterail.com/hubfs/xDISCOVERY.jpg.pagespeed.ic.FSRY6_idFk.jpg",
- "https://classplusapp.com/growth/wp-content/uploads/2022/05/How-to-Be-a-good-Mentor-in-10-Ways-10.jpg",
- "https://images.ctfassets.net/joi3nje8wm6a/1kANI01c6mDHfDQ30f2BHA/fb366e115a82562284340a3bc3633a9e/4How_to_be_a_great_mentor.jpg?fm=webp",
- "https://emottawablog.com/wp-content/uploads/2018/11/490858-636130640007207441-16x9.jpg",
- "https://www.acamstoday.org/wp-content/uploads/2018/06/connection-062018-1.jpg"
+ "https://cdn.explara.com/tempuploads/interactive-business-mentoring-session-820210706121141.jpg",
+ "https://www.district32.com.au/wp-content/uploads/2023/03/Business-Mentoring.png",
+ "https://static.wixstatic.com/media/316e68_3f56dee9bdb54f23ba7dcd3bbd885105~mv2.png/v1/fill/w_438,h_620,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Mentorship_Mentor.png",
+ "https://www.process.st/wp-content/uploads/2022/05/Benefits-of-mentoring-new-employees6-1024x1024.png",
+ "https://media.licdn.com/dms/image/C5622AQEl4Ai6P5OOsg/feedshare-shrink_800/0/1673415000723?e=1690416000&v=beta&t=PEKjsJZY4OGfc0EtGXRCEbi0fGiJisMStYkedS3KmW4",
+ "https://s4769.pcdn.co/wp-content/uploads/2020/03/Roundtable_mt_v3_MentoringWorkplace-scaled.jpg",
+ "https://lh5.googleusercontent.com/LECgNkEUM257nb9KLx6GEFCupRZCnvl424v6ZUnO8REGaXp350Y0pEHUJFMSorbhzSYw4cWwcpQSka4PfkAMkNvcgEHPs9LtbUM2dtDmSs1Oijx107ItummU5E8QVmBLI7bWd0zm",
+ "https://miro.medium.com/v2/resize:fit:1200/1*gaq5hWubLxmyylgTC8WqRw.jpeg",
+ "https://odgers-prod-neu-cdn-tm-endpoint.azureedge.net/media/10904/odgers-berndtson-eye-on-the-c-suite-series-hero.png?anchor=center&mode=crop&width=335&height=289&rnd=132767937190000000",
+"https://fs.hubspotusercontent00.net/hubfs/41809/social-suggested-images/engagedly.comwp-contentuploads20180910-Things-To-Look-For-In-A-Goal-Setting-Software-Nov-18-2021-02-52-40-07-PM.jpg",
+"https://leadershipmanagement.com.au/wp-content/uploads/2016/11/Following-the-Leaders_LEAD-Whitepaper-Nov-16-Thumbnail.png",
+"https://ospe.on.ca/wp-content/uploads/2019/04/Mentorship-2.jpg",
+"https://sidecarglobal.com/wp-content/uploads/2021/11/Everything-You-Need-to-Know-About-Being-a-Mentor-e1637009976672.png",
+"https://www.bulcode.com/assets/img/blog/mentorship_program/blog_mentorship_program.jpg",
+"https://www.sreb.org/sites/main/files/imagecache/thumbnail/main-images/2022_publication_cover.png?1666788264",
+"https://media.licdn.com/dms/image/C5612AQGsYnJAD56WxA/article-cover_image-shrink_600_2000/0/1580266364378?e=2147483647&v=beta&t=uwk6-vDPqvl7LUHtuZo6AvjQnbPnkOvQAML08zrmQUA",
+"https://minutes.co/wp-content/uploads/2022/03/shutterstock_1851240808-1000x600.jpg"
+
 ]
 
 
@@ -1747,14 +1845,27 @@ let pathMedia2 = [
       },
     });
 
-let preRequireIds = []
-let prerequis=["alooooooooo","im prereqq","ok","how are yoy","fine ","i love farouk"]
-let sessionPrerequis = await prisma.prerequire.create({
-  data: {
-    content:prerequis[Math.floor(Math.random() * prerequis.length)],
-  },
-});
-preRequireIds.push(sessionPrerequis.id)
+    let preRequireIds = [];
+    let prerequis = [
+      'front-end skills',
+      'back-end',
+      'challenger',
+      'SQL experience',
+      'pythons killer',
+      'Get up and move',
+      'Get enough sleep',
+      'eat the rigth food',
+      'find other steams of income',
+      'track expenses',
+      'live in harmony',
+    ];
+
+    let sessionPrerequis = await prisma.prerequire.create({
+      data: {
+        content: prerequis[Math.floor(Math.random() * prerequis.length)],
+      },
+    });
+    preRequireIds.push(sessionPrerequis.id);
 
     let w = sessionIds[Math.floor(Math.random() * sessionIds.length)];
     let w2 = preRequireIds[Math.floor(Math.random() * preRequireIds.length)];

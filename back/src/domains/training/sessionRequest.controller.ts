@@ -6,20 +6,24 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { SessionRequestService } from './sessionRequest.service';
 import { UpdateSessionRequestDto } from './dto/update-SessionRequest.dto';
 import { CreateSessionRequestDto } from './dto/create-SessionRequest.dto';
+import { CurrentUser } from '../auth/decorators/currentUser';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('SessionRequest')
 @Controller('SessionRequest')
 export class SessionRequestController {
   constructor(private readonly sessionRequestService: SessionRequestService) {}
-
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createSessionRequestDto: CreateSessionRequestDto) {
-    return this.sessionRequestService.create(createSessionRequestDto);
+  create(@Body() createSessionRequestDto: CreateSessionRequestDto,@CurrentUser() user:any) {
+    return this.sessionRequestService.create(createSessionRequestDto,user.id);
   }
 
   @Get()

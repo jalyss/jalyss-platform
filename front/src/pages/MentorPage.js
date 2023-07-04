@@ -48,7 +48,6 @@ console.log("isformvalid",isFormValid);
 console.log("pdfFile",pdfFile);
     if (isFormValid) {
       let body = {
-        userId: me.id,
         content: categoryId.join(),
       };
 
@@ -128,7 +127,7 @@ console.log("pdfFile",pdfFile);
         />
         <div className="container m-3">
           <div className="row d-flex justify-content-center align-items-center">
-            <div className="col-lg-9 col-md-12">
+            <div className="col-lg-9 col-md-12"  >
               <div id="regForm">
                 <h1 id="register">{!formSubmitted ? "Request Mentor" : ""}</h1>
                 {formSubmitted ? (
@@ -143,9 +142,9 @@ console.log("pdfFile",pdfFile);
                 ) : (
                   <form
                     onSubmit={handleSubmit}
-                   
+                    className="d-flex flex-column justify-content-center"
                   >
-                    <div className="tabcontent mt-5">
+                    <div className="d-flex flex-wrap  mt-5">
                       <AutoCompleteFilter
                         data={categories.items}
                         valueOptionName="nameEn"
@@ -154,13 +153,14 @@ console.log("pdfFile",pdfFile);
                         onChange={setCategoryId}
                         required
                       />
-                      {!formValidated && categoryId.length === 0 && submitCheck &&(
+                    
+                    </div>
+                    {!formValidated && categoryId.length === 0 && submitCheck &&(
                         <div className="text-danger">
                           Please select a category.
                         </div>
                       )}
-                    </div>
-                    <div className="mt-5">
+                    <div className="mt-4">
                       <label htmlFor="formFileLg" className="form-label">
                         Upload your Resume
                       </label>

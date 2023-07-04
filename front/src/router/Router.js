@@ -37,11 +37,12 @@ import MyBookmarks from "../components/Profile/MyBookmarks";
 import OrderHistory from "../components/Profile/OrderHistory";
 
 import Chat from "../pages/Chat";
-import Conversation from "../components/chatComponents/Conversation";
+
 
 import SessionDetails from "../pages/SessionDetails";
-import Conversation from "../components/chatComponents/Conversation";
+
 import ReserveMeeting from "../pages/space/SpaceReservation"
+import Conversation from "../components/chatComponents/Conversation";
 
 
 function Router() {
