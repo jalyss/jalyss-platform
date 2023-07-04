@@ -135,6 +135,7 @@ function EmployeeList() {
     dispatch(fetchEmployees())
    
   }, [])
+  
   useEffect(() => {
     if (employeeStore.employees.items.length) {
       let aux = employeeStore.employees.items.map(e => {
