@@ -95,7 +95,7 @@
   }
 }
 
-@media all and (min-width: 992px) {
+/* @media all and (min-width: 992px) { */
   .navbar .nav-item .dropdown-menu {
     display: none;
   }
@@ -105,7 +105,7 @@
   .navbar .nav-item .dropdown-menu {
     margin-top: 0;
   }
-}
+/* } */
 .ql-syntax {
   background-color: #23241f;
   color: #f8f8f2;

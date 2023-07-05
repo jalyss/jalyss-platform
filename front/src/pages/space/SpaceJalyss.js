@@ -15,7 +15,7 @@ import {
 
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchServices } from "../../store/space";
+import { fetchServices } from "../../store/service";
 function SpaceJalyss() {
   const { t, i18n } = useTranslation();
   const meta = useMeta(
@@ -43,7 +43,7 @@ function SpaceJalyss() {
   const [currentImage, setCurrentImage] = useState(0);
   const dispatch = useDispatch();
   const services = useSelector((state) => state.service.services);
-  
+  console.log(services,'iiiiiiiiiii')
   useEffect(() => {
     dispatch(fetchServices());
   }, []);
@@ -293,8 +293,8 @@ function SpaceJalyss() {
                 and are located in a high-rise building in the middle of a
                 renowned business district.
                 <br />
-                JalyssCom is another place for planned events. Whether it's a
-                workshop, seminar, or other type of training, JalyssCom is
+                JalyssCom is another place for planned events. Whether it's a
+                workshop, seminar, or other type of training, JalyssCom is
                 always active!
               </p>
             </div>
