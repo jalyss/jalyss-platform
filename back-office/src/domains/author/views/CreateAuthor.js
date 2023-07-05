@@ -3,9 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { createAuthor } from '../../../store/author'
 import { showErrorToast, showSuccessToast } from '../../../utils/toast'
-import UpdateButton from '../../../components/Commun/buttons/UpdateButton'
 import SaveButton from '../../../components/Commun/buttons/SaveButton'
-import { useEffect } from 'react'
 
 function CreateAuthor() {
     const { t, i18n } = useTranslation()

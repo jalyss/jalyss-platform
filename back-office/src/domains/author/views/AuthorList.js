@@ -23,10 +23,6 @@ function AuthorList() {
     const [rows, setRows] = useState([])
     const [selectedAuthorId ,  setSelectedAuthorId] = useState("")
 
-    // const handleAddClick = (authorId) => {
-    //   navigate(`detail/${authorId}`)
-    // };
-
     useEffect(() => {
       dispatch(fetchAuthors())
   },[] );
@@ -46,14 +42,11 @@ function AuthorList() {
           showErrorToast(res.error.message)
         } else {
           showSuccessToast('Author has been deleted')
+          toggleShow()
         }
       })
     };
     
-    
- 
-
-
    
   useEffect(() => {
     if (authorStore?.authors.items) {
@@ -113,17 +106,7 @@ function AuthorList() {
       },
     ];
     
-   
-    // const handleDeleteClick = (id) => {
-      
-    // };
-
-   
-  // console.log(authorStore.authors.items,'test');
-
-
     return (
-
 
         <div>
             <div className='container'>
@@ -148,11 +131,9 @@ function AuthorList() {
                     />
                 </Box>
               
-                 <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} confirm={() => handleDeleteauthorClick(selectedAuthorId)} /> 
+                 <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={() => handleDeleteauthorClick(selectedAuthorId)} /> 
             </div>
         </div>
-
-
     )
 }
 
