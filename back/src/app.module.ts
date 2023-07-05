@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -25,6 +30,7 @@ import { QuestionsModule } from './domains/questions/questions.module';
 import { SessionFeedbacksModule } from './domains/session-feedbacks/session-feedbacks.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+// import { FrontendMiddleware } from './middlewere/front.middlewere';
 
 @Module({
   imports: [
@@ -48,27 +54,23 @@ import { join } from 'path';
     QuestionsModule,
     SessionFeedbacksModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../../front', 'build'),
-      serveRoot: '/',
       serveStaticOptions: {
         maxAge: 604800, // one week
         cacheControl: false,
         etag: false,
-        
       },
-    }),
-    ServeStaticModule.forRoot({
-      serveStaticOptions: {
-        maxAge: 604800, // one week
-        cacheControl: false,
-        etag: false,
-        
-      },
-      serveRoot: '/back-office',
       rootPath: join(__dirname, '../../../back-office', 'build'),
+      // serveRoot: '/back-office',
+      // renderPath: '/back-office',
     }),
+    
+    
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+  //   consumer.apply(FrontendMiddleware).forRoutes('*');
+  }
+}
