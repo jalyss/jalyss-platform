@@ -64,14 +64,26 @@ import AuthorList from "../domains/author/views/AuthorList";
 import EditAuthor from "../domains/author/views/EditAuthor";
 import DetailAuthor from "../domains/author/views/DetailAuthor";
 import CreateAuthor from "../domains/author/views/CreateAuthor";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6a9d4468fedfd03d3f82ef8aa5175d3985b8994a
 import Types from "../domains/type/Types";
 import TypesList from "../domains/type/views/TypesList";
 import EditType from "../domains/type/views/EditType";
 import DetailType from "../domains/type/views/DetailType";
 import CreateType from "../domains/type/views/CreateType";
+<<<<<<< HEAD
 import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
 
 
+=======
+
+import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+
+
+
+>>>>>>> 6a9d4468fedfd03d3f82ef8aa5175d3985b8994a
 
 function Router() {
   const auth = useSelector((state) => state.auth);

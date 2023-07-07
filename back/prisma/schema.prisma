@@ -745,10 +745,12 @@ model View {
 
 model Service {
   id           String         @id @default(uuid())
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6a9d4468fedfd03d3f82ef8aa5175d3985b8994a
   name         String
   description  String? 
-
   identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
