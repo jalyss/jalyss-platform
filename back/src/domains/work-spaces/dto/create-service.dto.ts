@@ -7,7 +7,7 @@ export class CreateServiceDto {
 
   @ApiProperty()
   description: string;
-  identifier: string;
+ 
 
   @ApiProperty({ type: () => [CreateWorkSpaceDto] })
   workspaces: CreateWorkSpaceDto[];

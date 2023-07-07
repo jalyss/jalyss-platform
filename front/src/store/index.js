@@ -35,8 +35,8 @@ export const store = configureStore({
     session,
     chat,
     faq,
-    mentorRequest,
-    sessionFeedback,
+    service,
+ 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

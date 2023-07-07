@@ -37,7 +37,7 @@ function EditAuthor() {
     let aut = { ...auth };
     dispatch(editAuthor(aut)).then((res) => {
       if (!res.error) {
-        showSuccessToast(t('employee.created'));
+        showSuccessToast(t('author.created'));
       } else {
         console.log(res);
         showErrorToast(res.error.message);

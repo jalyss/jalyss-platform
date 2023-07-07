@@ -745,12 +745,13 @@ model View {
 
 model Service {
   id           String         @id @default(uuid())
-  name         String?
-  
-  identifier   String         @unique()
+
+  name         String
+  description  String? 
+
+  identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
-  description  String?
   cover        Media?         @relation(fields: [coverId], references: [id])
   workSpace    WorkSpace[]
   tarif        Tarif[]

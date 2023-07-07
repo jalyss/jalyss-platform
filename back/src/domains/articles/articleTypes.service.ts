@@ -28,6 +28,7 @@ export class ArticleTypeService {
       where: {
         id,
       },
+      include: {articles:{select:{title:true}}}
     });
   }
 

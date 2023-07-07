@@ -629,11 +629,11 @@ CREATE TABLE "View" (
 -- CreateTable
 CREATE TABLE "Service" (
     "id" TEXT NOT NULL,
-    "name" TEXT,
-    "identifier" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "identifier" TEXT,
     "perHour" BOOLEAN NOT NULL DEFAULT true,
     "coverId" TEXT,
-    "description" TEXT,
 
     CONSTRAINT "Service_pkey" PRIMARY KEY ("id")
 );

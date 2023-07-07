@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -8,14 +8,57 @@ import { AiFillDelete, AiFillEdit, AiOutlineEye } from 'react-icons/ai';
 import AddButton from '../../../components/Commun/buttons/AddButton';
 import { Box } from '@mui/material';
 import { rows } from '../../../constants/typeData';
+import { fetchArticleTypes, removType } from '../../../store/articleType';
+import { showErrorToast, showSuccessToast } from '../../../utils/toast';
+import { useEffect } from 'react';
+import Modal from "../../../components/Commun/Modal";
 
 function TypesList() {
     const [show, setShow] = useState(false);
-    const [authorId, setAuthorId] = useState(null);
+    const [type, setType] = useState({})
     const [basicModal,setBasicModal]=useState(false)
+    const articleTypeStore = useSelector((state) => state.articleType)
     const dispatch = useDispatch()
     const isEng = isEnglish()
     const navigate = useNavigate()
+    const [rows, setRows] = useState([])
+    const [selectedTypeId ,  setSelectedTypeId] = useState("")
+
+    useEffect(() => {
+      dispatch(fetchArticleTypes())
+  },[] );
+
+  const toggleShow=()=>{
+    setBasicModal(!basicModal)
+
+  }
+
+  const handleDeletetypeClick = (id) => {
+    dispatch(removType(id)).then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('Type has been deleted')
+        toggleShow()
+      }
+    })
+  };
+
+
+  useEffect(() => {
+    if (articleTypeStore?.articleTypes.items) {
+        let aux = articleTypeStore.articleTypes.items.map(e => {
+            return {
+                ...e,
+                
+            }
+        })
+        console.log(aux);
+        setRows(aux)
+    }
+}, [articleTypeStore.articleTypes.items])
+
+
     const handleEditClick = (id) => {
         navigate(`edit/${id}`)
       };
@@ -52,8 +95,9 @@ function TypesList() {
               <GridActionsCellItem
                 icon={<AiFillDelete />}
                 label="Delete"
-    
-                onClick={() => {handleDeleteauthorClick(id)}}
+                onClick={() => { toggleShow()
+                  setSelectedTypeId(id) } }
+               
                 // should open popup to ask are u sure delete this user (yes/no)
                 color="error" />,
     
@@ -88,7 +132,7 @@ function TypesList() {
                     />
                 </Box>
               
-                {/* <Modal  bodOfDelete={"are"} basicModal={basicModal}  ofDelete={true} onClick={() => {handleDeleteauthorClick(authorId)}} /> */}
+                <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={() => handleDeletetypeClick(selectedTypeId)} /> 
             </div>
     </div>
   )
