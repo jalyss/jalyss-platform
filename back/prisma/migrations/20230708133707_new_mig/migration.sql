@@ -109,8 +109,16 @@ CREATE TABLE "ConnectedUser" (
 
 -- CreateTable
 CREATE TABLE "UserChatRoom" (
+    "id" TEXT NOT NULL,
+    "chatRoomId" TEXT NOT NULL,
+
+    CONSTRAINT "UserChatRoom_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Participants" (
     "userId" TEXT NOT NULL,
-    "chatRoomId" TEXT NOT NULL
+    "userChatRoomId" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -333,6 +341,7 @@ CREATE TABLE "SessionRequest" (
     "userId" TEXT NOT NULL,
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "resumeId" TEXT NOT NULL,
 
     CONSTRAINT "SessionRequest_pkey" PRIMARY KEY ("id")
 );
@@ -494,6 +503,7 @@ CREATE TABLE "TrainingBooking" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" TEXT NOT NULL,
     "sessionTarifId" TEXT NOT NULL,
+    "paid" BOOLEAN DEFAULT false,
 
     CONSTRAINT "TrainingBooking_pkey" PRIMARY KEY ("id")
 );
@@ -628,11 +638,10 @@ CREATE TABLE "View" (
 -- CreateTable
 CREATE TABLE "Service" (
     "id" TEXT NOT NULL,
-    "name" TEXT,
+    "name" TEXT NOT NULL,
     "identifier" TEXT NOT NULL,
     "perHour" BOOLEAN NOT NULL DEFAULT true,
     "coverId" TEXT,
-    "description" TEXT,
 
     CONSTRAINT "Service_pkey" PRIMARY KEY ("id")
 );
@@ -726,7 +735,10 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "ConnectedUser_userId_key" ON "ConnectedUser"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserChatRoom_userId_chatRoomId_key" ON "UserChatRoom"("userId", "chatRoomId");
+CREATE UNIQUE INDEX "UserChatRoom_chatRoomId_key" ON "UserChatRoom"("chatRoomId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Participants_userChatRoomId_userId_key" ON "Participants"("userChatRoomId", "userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Article_code_key" ON "Article"("code");
@@ -778,6 +790,9 @@ CREATE UNIQUE INDEX "SessionHasLecture_sessionId_lectureId_key" ON "SessionHasLe
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_sessionId_key" ON "SessionTarifHasFeatures"("featureId", "sessionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "TrainingBooking_userId_sessionTarifId_key" ON "TrainingBooking"("userId", "sessionTarifId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "MediaUser_mediaId_userId_key" ON "MediaUser"("mediaId", "userId");
@@ -837,16 +852,19 @@ ALTER TABLE "User" ADD CONSTRAINT "User_cityId_fkey" FOREIGN KEY ("cityId") REFE
 ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_chatRoomId_fkey" FOREIGN KEY ("chatRoomId") REFERENCES "ChatRoom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_chatRoomId_fkey" FOREIGN KEY ("chatRoomId") REFERENCES "ChatRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ConnectedUser" ADD CONSTRAINT "ConnectedUser_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserChatRoom" ADD CONSTRAINT "UserChatRoom_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserChatRoom" ADD CONSTRAINT "UserChatRoom_chatRoomId_fkey" FOREIGN KEY ("chatRoomId") REFERENCES "ChatRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserChatRoom" ADD CONSTRAINT "UserChatRoom_chatRoomId_fkey" FOREIGN KEY ("chatRoomId") REFERENCES "ChatRoom"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Participants" ADD CONSTRAINT "Participants_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Participants" ADD CONSTRAINT "Participants_userChatRoomId_fkey" FOREIGN KEY ("userChatRoomId") REFERENCES "UserChatRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Article" ADD CONSTRAINT "Article_coverId_fkey" FOREIGN KEY ("coverId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -928,6 +946,9 @@ ALTER TABLE "Supply" ADD CONSTRAINT "Supply_articleId_fkey" FOREIGN KEY ("articl
 
 -- AddForeignKey
 ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_resumeId_fkey" FOREIGN KEY ("resumeId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaSession" ADD CONSTRAINT "MediaSession_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

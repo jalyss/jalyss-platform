@@ -85,7 +85,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   variant="dot"
                 >
-                  <Avatar src={Icon} />
+                  <Avatar src={user.user.avatar?user.user.avatar.path:Icon} />
                 </StyledBadge>
                 <Stack>
                   <Typography variant="subtitle1">{name}</Typography>
