@@ -128,7 +128,7 @@ function MentorPage() {
         />
         <div className="container m-3">
           <div className="row d-flex justify-content-center align-items-center">
-            <div className="col-lg-9 col-md-12">
+            <div className="col-lg-9 col-md-12"  >
               <div id="regForm">
                 <h1 id="register">{!formSubmitted ? "Request Mentor" : ""}</h1>
                 {formSubmitted ? (
@@ -150,7 +150,7 @@ function MentorPage() {
            
                       <AutoCompleteFilter
                         data={categories.items}
-                        valueOptionName="nameEn"
+                        valueOptionName="id"
                         labelOptionName="nameEn"
                         label="Filter by Category"
                         onChange={setCategoryId}

@@ -14,7 +14,7 @@ import {
 } from "../../store/sessionFeedback";
 import { Box, IconButton, TextareaAutosize, Typography } from "@mui/material";
 import CloseButton from './../Commun/buttons/CloseButton';
-import AddButton from './../Commun/buttons/AddButton';
+import AddButton from './../Commun/buttons/AddButton'; 
 function FeedBack({ previousSesion, subtitle }) {
  console.log("session",previousSesion);
   const [feedBackk, setFeedBackk] = useState("");
