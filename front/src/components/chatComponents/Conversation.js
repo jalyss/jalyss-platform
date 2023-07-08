@@ -180,7 +180,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
         let payload = {
           receiverId:
             //  user.userId
-            userId ? userId : userr?.userId
+           [ userId ? userId : userr?.userId ]
           ,
           senderId: myId,
           text: message,
@@ -231,7 +231,8 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
               >
                 <Avatar
                   alt="profile picture"
-                  src={Icon}
+                  src={user ? user.avatar.path : userr?.user?.avatar? userr?.user?.avatar.path : Icon }
+
                 />
               </StyledBadge>
             </Box>
@@ -279,8 +280,14 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
                   : "justify-content-end"
                 }`}
             >
-              <img src={e.user.avatar ? e.user.avatar.path : Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-             <div>
+              <span 
+               className="tt"
+               data-bs-placement="bottom"
+               title={e.user?.fullNameEn}
+              >
+              <img src={ e.user?.avatar ? e.user.avatar.path : Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+           </span>  
+           <div>
               <p
                 key={i}
                 className={
