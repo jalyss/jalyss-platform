@@ -22,7 +22,7 @@ async function main() {
   // create 10 dummy users
   let mediasAvatarUser1 = await prisma.media.create({
     data: {
-      path: 'https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg',
+      path: 'https://p5.storage.canalblog.com/50/89/1228697/127715041.jpg',
       type: 'image',
       extension: 'jpg',
     },
@@ -1382,7 +1382,7 @@ async function main() {
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
 
-       
+     
 
       },
     });

@@ -29,6 +29,7 @@ function SessionDetails() {
   const sessionStore = useSelector((state) => state.session);
   const { session } = sessionStore;
   const seletedSession = session;
+  console.log("sel",seletedSession);
   const lec = seletedSession?.lectures;
   const dispatch = useDispatch();
   const ref = useRef(null);
@@ -57,7 +58,7 @@ function SessionDetails() {
   const currentDate = new Date();
   return (
     <div className="container">
-      <div className="goBackLink" onClick={() => navigate(-1)}>
+      <div className="goBackLink mt-2" onClick={() => navigate(-1)}>
         <span> &#8592;</span> <span>Go Back</span>
       </div>
       <div className="d-flex flex-wrap justify-content-around  mb-5 mt-5">
@@ -66,9 +67,13 @@ function SessionDetails() {
             <img
               src={seletedSession.cover.path}
               alt="sessionCover"
-              className="rounded img-fluid"
-              height={900}
+              className="img-fluid rounded"
+              height={400}
               width={600}
+              // style={{
+              //   objectFit: "contain",
+              
+              // }}
             />
           ) : (
             <img
@@ -107,13 +112,13 @@ function SessionDetails() {
             value={seletedSession?.lectures?.length}
           />
 
-          <KeyValueStyled
-            label=" Number of student"
-            value={seletedSession?.tarifs.reduce(
-              (acc, currentValue) => acc + currentValue.bookings.length,
-              0
-            )}
-          />
+<KeyValueStyled
+  label="Number of students"
+  value={seletedSession?.tarifs.reduce((totalBookings, tarif) => {
+    const paidBookings = tarif.bookings.filter(booking => booking.paid === true);
+    return totalBookings + paidBookings.length;
+  }, 0)}
+/>
 
           <div className="coaches gap-3 ">
             <div className="d-flex align-items-center fw-bold">Coaches:</div>

@@ -50,36 +50,36 @@ model JobTitle {
 }
 
 model User {
-  id                   String             @id @default(uuid())
+  id                   String                @id @default(uuid())
   fullNameEn           String
   fullNameAr           String
-  email                String             @unique
+  email                String                @unique
   address              String
   tel                  String
   password             String
-  avatar               Media?             @relation(fields: [avatarId], references: [id])
+  avatar               Media?                @relation(fields: [avatarId], references: [id])
   avatarId             String?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
   accountBalance       Float?
-  category             UserCategory?      @relation(fields: [categoryId], references: [id])
+  category             UserCategory?         @relation(fields: [categoryId], references: [id])
   categoryId           String?
-  educationLevel       EducationLevel?    @relation(fields: [educationLevelId], references: [id])
+  educationLevel       EducationLevel?       @relation(fields: [educationLevelId], references: [id])
   educationLevelId     String?
-  functionalArea       FunctionalArea?    @relation(fields: [functionalAreaId], references: [id])
+  functionalArea       FunctionalArea?       @relation(fields: [functionalAreaId], references: [id])
   functionalAreaId     String?
-  jobTitle             JobTitle?          @relation(fields: [jobTitleId], references: [id])
+  jobTitle             JobTitle?             @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
-  country              Country?           @relation(fields: [countryId], references: [id])
+  country              Country?              @relation(fields: [countryId], references: [id])
   countryId            String?
-  city                 City?              @relation(fields: [cityId], references: [id])
+  city                 City?                 @relation(fields: [cityId], references: [id])
   cityId               String?
   confirmkey           String?
-  isActive             Boolean            @default(true)
+  isActive             Boolean               @default(true)
   Media                MediaUser[]
   Rating               Rating[]
-  IntermediateCommands Command[]          @relation("intermediate")
-  clientCommands       Command[]          @relation("clientCommand")
+  IntermediateCommands Command[]             @relation("intermediate")
+  clientCommands       Command[]             @relation("clientCommand")
   Blog                 Blog[]
   BlogLike             BlogLike[]
   chatRooms            UserChatRoom[] // *many to many relationships user&chatRoom
@@ -118,16 +118,18 @@ model ChatRoom {
   participants UserChatRoom[]
 }
 
+
+
 model ChatMessage {
-  id         String   @id @default(uuid())
-  text       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
-  chatRoomId String
-  seen       Boolean  @default(false)
+  id               String          @id @default(uuid())
+  text             String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  user             User            @relation(fields: [userId], references: [id])
+  userId           String
+  chatRoom         ChatRoom        @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId       String
+  seen             Boolean         @default(false)
 }
 
 model ConnectedUser {
@@ -142,11 +144,13 @@ model ConnectedUser {
 model UserChatRoom {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId String
 
   @@unique(fields: [userId, chatRoomId], name: "joinerRoom")
 }
+
+
 
 model UserCategory {
   id        String   @id @default(uuid())
@@ -573,6 +577,9 @@ model TrainingBooking {
   userId         String
   sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
   sessionTarifId String
+  paid           Boolean?     @default(false)
+
+  @@unique(fields: [userId, sessionTarifId], name: "trainingBooking")
 }
 
 model UserPayment {
@@ -607,7 +614,6 @@ model Media {
   MediaSession   MediaSession[]
   Session        Session[]
   SessionRequest SessionRequest[]
- 
 }
 
 model MediaUser {
@@ -745,12 +751,12 @@ model View {
 // }
 
 model Service {
-  id           String         @id @default(uuid())
+  id String @id @default(uuid())
 
   name         String
-  
+  description  String? 
 
-  identifier   String         @unique()
+  identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
   cover        Media?         @relation(fields: [coverId], references: [id])

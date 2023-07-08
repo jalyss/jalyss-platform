@@ -44,7 +44,11 @@ export class ChatRoomService {
         }
       },
       include: {
-        participants: { include: { user: true } },
+        participants: { include: { user: {
+          include : {
+            avatar : true
+          }
+        }} },
         _count: {
           select: {
             messages: { where: { seen: false, userId: { not: id} } },
@@ -68,7 +72,11 @@ export class ChatRoomService {
     return await this.prisma.chatRoom.findUnique({
       where: { id },
       include: { messages: true , participants: {
-        include: { user : true }  
+        include: { user : {
+          include : {
+            avatar : true
+          }
+        } }  
       }},
     });
   }
@@ -84,7 +92,11 @@ export class ChatRoomService {
         },
       },
       include: {
-        participants: { include: { user: true } },
+        participants: { include: { user: {
+          include : {
+            avatar : true
+          }
+        }} },
         messages:true,
       },
     });

@@ -24,12 +24,13 @@ function FeedBack({ previousSesion, subtitle }) {
   const me = useSelector((state) => state.auth.me);
   const dispatch = useDispatch();
 
-  
+  console.log("feed",feedbacks);
 
   const subscribedIds=[]
 previousSesion.tarifs.forEach(element => {
-  element.bookings.map((elem)=>{
+  element.bookings.filter(el=>el.paid===true ).map((elem)=>{
     subscribedIds.push(elem.userId)
+
   })
 });
 console.log("subscribedIds",subscribedIds);
@@ -81,7 +82,7 @@ console.log("subscribedIds",subscribedIds);
             </div>
           ))}
         </div>
-        {subscribedIds.includes(me?.id) && subtitle!=="Previous Session Feedback" ? (
+        {subscribedIds.includes(me?.id) && subtitle!=="Previous Session Feedback"  ? (
           
            <div className="mt-5 d-flex justify-content-center">
             <div class="d-flex " style={{width:"70%"}}>

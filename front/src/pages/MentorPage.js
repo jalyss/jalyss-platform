@@ -11,6 +11,7 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 import axios from "axios";
 import ReactDOM from "react-dom";
 import CloseButton from "./../components/Commun/buttons/CloseButton";
+import { Stack } from "@mui/material";
 
 function MentorPage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -21,7 +22,7 @@ function MentorPage() {
 
   const [shown, setShown] = useState(false);
   const [formValidated, setFormValidated] = useState(false);
-  const [submitCheck,setSubmitCheck] = useState(false);
+  const [submitCheck, setSubmitCheck] = useState(false);
 
   const me = useSelector((state) => state.auth.me);
 
@@ -39,20 +40,20 @@ function MentorPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitCheck(true)
+    setSubmitCheck(true);
     const form = e.target;
-    console.log("form",form);
+    console.log("form", form);
     const isFormValid =
       form.checkValidity() && categoryId.length > 0 && pdfFile !== undefined;
-console.log("isformvalid",isFormValid);
-console.log("pdfFile",pdfFile);
+    console.log("isformvalid", isFormValid);
+    console.log("pdfFile", pdfFile);
     if (isFormValid) {
       let body = {
         content: categoryId.join(),
       };
 
       try {
-    setFormValidated(true);
+        setFormValidated(true);
 
         const formData = new FormData();
         formData.append("file", pdfFile);
@@ -140,11 +141,13 @@ console.log("pdfFile",pdfFile);
                     </span>
                   </div>
                 ) : (
+             
                   <form
                     onSubmit={handleSubmit}
                     className="d-flex flex-column justify-content-center"
                   >
-                    <div className="d-flex flex-wrap  mt-5">
+                 
+           
                       <AutoCompleteFilter
                         data={categories.items}
                         valueOptionName="id"
@@ -152,10 +155,15 @@ console.log("pdfFile",pdfFile);
                         label="Filter by Category"
                         onChange={setCategoryId}
                         required
+                        fullWidth={true}
+                        
                       />
                     
-                    </div>
-                    {!formValidated && categoryId.length === 0 && submitCheck &&(
+                
+                   
+                    {!formValidated &&
+                      categoryId.length === 0 &&
+                      submitCheck && (
                         <div className="text-danger">
                           Please select a category.
                         </div>
@@ -178,11 +186,13 @@ console.log("pdfFile",pdfFile);
                         onChange={handleDropzoneChange}
                         required
                       />
-                      {!formValidated && pdfFile === undefined && submitCheck && (
-                        <div className="text-danger">
-                          Please upload your resume.
-                        </div>
-                      )}
+                      {!formValidated &&
+                        pdfFile === undefined &&
+                        submitCheck && (
+                          <div className="text-danger">
+                            Please upload your resume.
+                          </div>
+                        )}
                       <div className="d-flex align-items-center gap-3 mt-3">
                         <p className="card-text m-0">
                           <span className="text-muted">Resume:</span>{" "}
@@ -201,8 +211,7 @@ console.log("pdfFile",pdfFile);
                       </div>
                     </div>
 
-                    {shown &&
-                      ReactDOM.createPortal(modalBody(), document.body)}
+                    {shown && ReactDOM.createPortal(modalBody(), document.getElementById("portal"))}
 
                     <div className="d-flex justify-content-center align-items-center gap-2">
                       <button
@@ -231,7 +240,8 @@ console.log("pdfFile",pdfFile);
         />
       </div>
     </Fragment>
+
   );
 }
 
-export default MentorPage
+export default MentorPage;
