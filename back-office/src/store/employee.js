@@ -7,12 +7,14 @@ export const fetchEmployees = createAsyncThunk("employees/employees", async () =
   const response = await axios.get(`${config.API_ENDPOINT}/employees/all`);
   return response.data;
 });
+
 export const fetchEmployee = createAsyncThunk("employees/employee", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/employees/one/${id}`);
   return response.data;
 });
 
-export const createEmployee = createAsyncThunk("employees/createEmployee", async (body, { dispatch }) => {
+export const 
+createEmployee = createAsyncThunk("employees/createEmployee", async (body, { dispatch }) => {
   let token = JSON.parse(localStorage.getItem('tokenAdmin'))
   const configs = {
     headers: {

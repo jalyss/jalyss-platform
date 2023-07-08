@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "40%",
-    // Add other styling properties as needed
+    
   },
   media: {
     height: 0,
 
-    paddingTop: "50%", // 16:9 aspect ratio
+    paddingTop: "50%",
   },
 
   topText: {
@@ -36,6 +36,7 @@ function ServiceSpace() {
   const { service,services } = serviceStore;
 
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(fetchService(serviceIdentifier));
     dispatch(fetchServices());
@@ -88,16 +89,16 @@ function ServiceSpace() {
           </Grid>
         </Grid>
         <p className="firstLine">PRICING</p>
-        <p className="secondLine">'Price per unit'</p>
+        <p className="secondLine">Price per unit</p>
         <p className="thirdLine">
-          'We provide several coworking spaces with flexible access that extends
+          We provide several coworking spaces with flexible access that extends
           to 24 hours and 7 days a week for freelancers, business owners, and
           team members.By deciding on the number of workdays every month, you
-          can further customize your experience.'
+          can further customize your experience.
         </p>
         <p className="fourthLine">
-          'To grow your business in a setting that is both professional and
-          social, reserve a spot in one of our coworking spaces.'
+         To grow your business in a setting that is both professional and
+          social, reserve a spot in one of our coworking spaces.
         </p>
         <div className="d-flex justify-content-center align-items-center">
           {service?.tarif.map((item, index) => (
@@ -135,7 +136,7 @@ function ServiceSpace() {
                     }}
                   >
                     <Link
-                      to={"/ReserveMeeting"}
+                      to={"/SpaceReservation"}
                       style={{ textDecoration: "none", color: "black" }}
                     >
                       Reserve
@@ -147,15 +148,15 @@ function ServiceSpace() {
           ))}
         </div>
         <p className="firstLine">Autres Service</p>
-        <p className="secondLine">'ALL IN ONE PLACE .'</p>
+        <p className="secondLine">ALL IN ONE PLACE .</p>
         <p className="thirdLine">
-          'We provide practical solutions to help you advance your project. A
+          We provide practical solutions to help you advance your project. A
           wide range of options are available to you, from domiciliation to
-          installation in one of our offices.'
+          installation in one of our offices.
         </p>
         <p className="fourthLine">
-          'Look for a workspace that works for you and pick a service that meets
-          your needs.'
+          Look for a workspace that works for you and pick a service that meets
+          your needs.
         </p>
 
         <div className="d-flex justify-content-center align-items-center ">

@@ -18,6 +18,7 @@ export class SessionFeedbacksService {
 
  async findAll() {
    return await this.prisma.sessionFeedback.findMany({
+    include:{User:{include:{avatar:true}}}
    })
  }
 

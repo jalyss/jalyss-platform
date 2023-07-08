@@ -1,10 +1,10 @@
 import React from 'react'
 
-function ButtonWithTransformAndHover({title,onClick,style,full}) {
+function ButtonWithTransformAndHover({title,onClick,mt,full}) {
   return (
     <div>
     <button className={full ? "full transformHover " : "outline transformHover"} 
-     style={{ backgroundColor: full ? "#790BE0" : "" }}  onClick={onClick}>{title}</button>
+     style={{ backgroundColor: full ? "#790BE0" : "",marginTop:mt }}  onClick={onClick}>{title}</button>
 </div>
   )
 }

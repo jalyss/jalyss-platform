@@ -38,12 +38,12 @@ export class SessionController {
     return this.sessionService.findOne(sessionId);
   }
 
-  @Patch(':sessionId')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateSessionDto) {
     return this.sessionService.update(id, dto);
   }
 
-  @Delete(':sessionId')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.sessionService.remove(id);
   }

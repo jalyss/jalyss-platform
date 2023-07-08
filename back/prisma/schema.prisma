@@ -379,11 +379,14 @@ model Provider {
 
 //TRAINING
 model SessionRequest {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
   content   String
   createdAt DateTime @default(now())
+  resume    Media    @relation(fields: [resumeId], references: [id])
+  resumeId  String
 }
 
 model MediaSession {
@@ -535,13 +538,31 @@ model Assessments {
   lectureId String
 }
 
+model Feature {
+  id          String  @id @default(uuid())
+  label       String
+  isAvailable Boolean
+
+  SessionTarifHasFeatures SessionTarifHasFeatures[]
+}
+
+model SessionTarifHasFeatures {
+  feature      Feature      @relation(fields: [featureId], references: [id])
+  featureId    String
+  sessionTarif SessionTarif @relation(fields: [sessionId], references: [id])
+  sessionId    String
+
+  @@unique(fields: [featureId, sessionId], name: "sessionTarifHasFeatures")
+}
+
 model SessionTarif {
-  id        String            @id @default(uuid())
+  id        String                    @id @default(uuid())
   title     String
   price     Float
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session           @relation(fields: [sessionId], references: [id])
+  session   Session                   @relation(fields: [sessionId], references: [id])
   sessionId String
+  features  SessionTarifHasFeatures[]
 }
 
 model TrainingBooking {
@@ -576,10 +597,16 @@ model Media {
   MediaBlog    MediaBlog[]
   Employee     Employee[]
   Blog         Blog[]
-  MediaService MediaService[]
-  Service      Service[]
-  MediaSession MediaSession[]
-  Session      Session[]
+  WorkSpace    WorkSpace[]
+
+  MediaWorkSpace MediaWorkSpace[]
+
+  MediaService   MediaService[]
+  Service        Service[]
+  MediaSession   MediaSession[]
+  Session        Session[]
+  SessionRequest SessionRequest[]
+ 
 }
 
 model MediaUser {
@@ -616,6 +643,15 @@ model MediaService {
   media     Media   @relation(fields: [mediaId], references: [id])
 
   @@unique([mediaId, serviceId])
+}
+
+model MediaWorkSpace {
+  workspaceId String
+  workspace   WorkSpace @relation(fields: [workspaceId], references: [id])
+  mediaId     String
+  media       Media     @relation(fields: [mediaId], references: [id])
+
+  @@unique([mediaId, workspaceId])
 }
 
 // blog
@@ -698,33 +734,61 @@ model View {
   blogId    String
 }
 
-//workSdpace
+//JalyssSpace
 
-model WorkSpace {
-  id        String   @id @default(uuid())
-  name      String
-  capacity  String?
-  price     String?
-  rating    String?
-  reviews   String?
-  amenities String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  service   Service  @relation(fields: [serviceId], references: [id])
-  serviceId String
-}
+// model Service {
+//   id           String         @id @default(uuid())
+//   name         String
+//   identifier   String?        @unique()
+
+// }
 
 model Service {
-  id   String  @id @default(uuid())
-  name String?
+  id           String         @id @default(uuid())
 
-  identifier   String         @unique()
+  name         String
+  description  String? 
+
+  identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
   cover        Media?         @relation(fields: [coverId], references: [id])
   workSpace    WorkSpace[]
   tarif        Tarif[]
   MediaService MediaService[]
+}
+
+model WorkSpace {
+  id             String           @id @default(uuid())
+  name           String
+  capacity       String?
+  description    String?
+  price          String?
+  rating         String?
+  reviews        String?
+  amenities      String?
+  imageId        String?
+  image          Media?           @relation(fields: [imageId], references: [id])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  serviceId      String?
+  service        Service?         @relation(fields: [serviceId], references: [id])
+  MediaWorkSpace MediaWorkSpace[]
+}
+
+model Tarif {
+  id          String    @id @default(uuid())
+  name        String?
+  duration    String?
+  capacity    String?
+  price       Float
+  pricePerDay Float?
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+  service     Service   @relation(fields: [serviceId], references: [id])
+  serviceId   String
 }
 
 model Booking {
@@ -748,21 +812,6 @@ model Booking {
   freeSpace   String?
 
   @@unique([userId, tarifId])
-}
-
-model Tarif {
-  id          String    @id @default(uuid())
-  name        String?
-  duration    String?
-  capacity    String?
-  price       Float
-  pricePerDay Float?
-  description String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  bookings    Booking[]
-  service     Service   @relation(fields: [serviceId], references: [id])
-  serviceId   String
 }
 
 //website Settings
