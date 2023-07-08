@@ -147,7 +147,7 @@ console.log("pdfFile",pdfFile);
                     <div className="d-flex flex-wrap  mt-5">
                       <AutoCompleteFilter
                         data={categories.items}
-                        valueOptionName="nameEn"
+                        valueOptionName="id"
                         labelOptionName="nameEn"
                         label="Filter by Category"
                         onChange={setCategoryId}

@@ -15,11 +15,10 @@ export class ChatRoomService {
           create: [
             {
               userId: senderId,
-            },
-            {
-              userId: dto.receiverId,
-            },
-          ],
+            }
+          ].concat(dto.receiverId.map(id=>({
+            userId:id
+          }))),
         },
         messages:{create:{
           text:dto.text,
