@@ -41,8 +41,14 @@ import EditCategory from "../domains/category/view/editCategory";
 import PublishingHouse from "../domains/publishingHouse/PublishingHouse";
 import PublishHouseList from "../domains/publishingHouse/view/publishHouseList";
 import EditPublishHouseList from "../domains/publishingHouse/view/editPublishingHouse";
-import DetailPublishHouse from "../domains/publishingHouse/view/detailsPublishingHouse"
-import CreatePublishingHouse from "../domains/publishingHouse/view/createPublishingHouse"
+import DetailPublishHouse from "../domains/publishingHouse/view/detailsPublishingHouse";
+import CreatePublishingHouse from "../domains/publishingHouse/view/createPublishingHouse";
+
+import Chat from "../domains/chat/chat";
+import ChatList from "../domains/chat/view/ChatList";
+import ChatDetails from "../domains/chat/view/ChatDetails.js";
+import CreateChat from "../domains/chat/view/CreateChat";
+import EditChat from "../domains/chat/view/EditChat";
 
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
@@ -109,15 +115,20 @@ function Router() {
               <Route index element={<CategoryList />} />
               <Route path="createCategory" element={<CreateCategory />} />
               <Route path="editCategory/:id" element={<EditCategory />} />
-
             </Route>
 
             <Route path="publishing-house" element={<PublishingHouse />}>
-            <Route index element={<PublishHouseList />} />
-            <Route path="edit/:id" element={<EditPublishHouseList />} />
+              <Route index element={<PublishHouseList />} />
+              <Route path="edit/:id" element={<EditPublishHouseList />} />
               <Route path="detail/:id" element={<DetailPublishHouse />} />
               <Route path="create" element={<CreatePublishingHouse />} />
+            </Route>
 
+            <Route path="Chat" element={<Chat />}>
+              <Route index element={<ChatList />} />
+              <Route path="detail/:id" element={<ChatDetails />} />
+              <Route path="create" element={<CreateChat />} />
+              <Route path="edit/:id" element={<EditChat />} />
             </Route>
 
             <Route path="author" element={<Author />}>
@@ -161,11 +172,12 @@ function Router() {
             {/* <Route path="charts" element={<ChartTabs />} /> */}
           </Route>
         ) : (
-          <Route path="/" element={<AuthAdmin />}>
-            <Route index element={<LoginAdmin />} />
-            <Route path="reset-password" element={<ResetPassword />} />
-            <Route path="new-password" element={<NewPassword />} />
-          </Route>
+          <Route path="Chat" element={<Chat />}>
+          <Route index element={<ChatList />} />
+          <Route path="detail/:id" element={<ChatDetails />} />
+          <Route path="create" element={<CreateChat />} />
+          <Route path="edit/:id" element={<EditChat />} />
+        </Route>
         )}
         <Route path="*" element={<NoPage />} />
       </Routes>
