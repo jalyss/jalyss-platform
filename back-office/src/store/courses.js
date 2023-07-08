@@ -13,6 +13,7 @@ export const fetchcours = createAsyncThunk("cours/couses",async ()=>{
 
 export const fetchOnecouse= createAsyncThunk("cours/courseOne",async (id)=>{
   const response =await axios.get(`${config.API_ENDPOINT}/lecture/${id}`)
+  console.log('response.data',response.data)
   return response.data;
 })
 
@@ -65,7 +66,7 @@ export const coursSlice = createSlice({
       builder.addCase(fetchcours.fulfilled, (state, action) => {
         state.courses.items = action.payload;
       });
-     builder.addCase( fetchOnecouse.fulfilled,(state,action)=>{
+     builder.addCase(fetchOnecouse.fulfilled,(state,action)=>{
       state.cours=action.payload
      })
     },

@@ -3,7 +3,7 @@ import axios from "axios";
 import config from "../configs";
 
 export const fetchCategories = createAsyncThunk("categories/categories", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/categories/`);
+  const response = await axios.get(`${config.API_ENDPOINT}/categories`);
   return response.data;
 });
 

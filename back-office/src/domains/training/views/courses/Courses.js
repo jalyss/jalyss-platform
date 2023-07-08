@@ -20,7 +20,8 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate()
   const open = Boolean(anchorEl);
-  //event for button drop down 
+  
+  console.log('heyyy',coursStore)
 
   useEffect(()=>{
     dispatch(fetchcours()) 
@@ -54,7 +55,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
-          
+          onClick={()=>{navigate('SessionAdd')}}
         >
         add new course
         </Button>
@@ -77,7 +78,10 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
          
         </Typography>
         <Typography variant="body2" color="text.secondary">
-       category :{el.category.nameAr}
+        Start-At :{el.startAt}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+        End-At :{el.endAt}
         </Typography>
        
        </CardContent>

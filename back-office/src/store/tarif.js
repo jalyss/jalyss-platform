@@ -34,10 +34,16 @@ export const editTarif = createAsyncThunk("tarif/Updtarifs", async (args, { disp
       Authorization: 'Bearer ' + token
     }
   }
+
  
   const response = await axios.patch(`${config.API_ENDPOINT}/sessionTarif/${id}`,body,configs);
   console.log("body",body);
   dispatch(fetchtarif(id))
+  return response.data;
+});
+export const CreateNeswTarif = createAsyncThunk("tarif/addtarifs", async (body, {dispatch  }) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/sessionTarif`, body);
+  dispatch(fetchtarif())  
   return response.data;
 });
 

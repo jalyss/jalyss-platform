@@ -45,7 +45,9 @@ const handleDeletetarifClick=(id) => {
     }
   })
 };
-
+const handeladd=()=>{
+  navigate("addtarif")
+}
 
 
   return ( <div>
@@ -55,6 +57,7 @@ const handleDeletetarifClick=(id) => {
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
+          onClick={handeladd}
           
         >
         add new tarif
@@ -81,14 +84,14 @@ Price :{el.price}
 
         </Typography>
         <Typography variant="body2" color="text.secondary">
-      Duration: {el.duration}
+      Duration: {el.durtion}
 
 
         </Typography>
       </CardContent>
       <CardActions>
         <Button size="small" onClick={()=>{handleDeletetarifClick(el.id)}}>DELETE</Button>
-        <Button size="small" onClick={()=>{ navigate(`${el.id}`)}}>UPDATE</Button>
+        <Button size="small" onClick={()=>{navigate('tarifs/up/:tarifId')}}>UPDATE</Button>
       </CardActions>
     </Card>
   </Box>))}

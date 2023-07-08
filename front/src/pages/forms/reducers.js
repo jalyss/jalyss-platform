@@ -8,7 +8,7 @@ const initialFormState = {
   email: '',
   freeSpace: '',
   agreeToTerms: false,
-  passType: "",
+  passType: '',
 };
 
 const formReducer = (state = initialFormState, action) => {

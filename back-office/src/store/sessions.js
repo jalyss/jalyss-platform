@@ -4,11 +4,18 @@ import config from "../configs";
 
 
 
-export const fetchsessions = createAsyncThunk("session/sessions",async ()=>{
-    const response =await axios.get(`${config.API_ENDPOINT}/session`)
-    return response.data;
+export const fetchsessions = createAsyncThunk(
+  'session/fetchsessions',
+  async ({ take, skip }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${config.API_ENDPOINT}/session/${take}/${skip}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
-})
 export const fetchOnesession= createAsyncThunk("session/session",async (id)=>{
   const response =await axios.get(`${config.API_ENDPOINT}/session/${id}`)
   return response.data;
@@ -39,6 +46,12 @@ export const editsession = createAsyncThunk("sessions/Updtsessions", async (args
 
   const response = await axios.patch(`${config.API_ENDPOINT}/session/${id}`,body,configs);
   dispatch(fetchtarif(id))
+  return response.data;
+});
+
+export const CreateNeswSession = createAsyncThunk("session/addsession", async (body, {dispatch  }) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/session`, body);
+  dispatch(fetchsessions())  
   return response.data;
 });
 

@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateArticleDto {
-
   @ApiProperty({ required: true })
   title: string;
   @ApiProperty({ required: false })
@@ -22,5 +21,6 @@ export class CreateArticleDto {
   publishingHouseId: string;
   @ApiProperty({ required: true })
   typeId: string;
-
+  @ApiProperty({ required: true })
+  authorIds: string[];
 }

@@ -14,10 +14,11 @@ import { useParams } from "react-router-dom";
 function CoachDetails() {
   const coach = useSelector((state) => state.coach.coach);
   const dispatch = useDispatch();
+
   const { t, i18n } = useTranslation();
   const [auxCoach, setAuxCoach] = useState({});
   const [editMode, setEditMode] = useState(false);
-  const { coachId } = useParams();
+  const {coachId} = useParams();
 
   console.log('hello',coach)
   console.log('aya',auxCoach)
@@ -27,7 +28,6 @@ function CoachDetails() {
   }, [dispatch,coachId]);
 
   useEffect(() => {
-    if(coach)
     setAuxCoach(coach);
   },[coach]);
 
@@ -90,14 +90,14 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           id="fullNameEn"
-                          value={auxCoach?.user.fullNameEn}
+                          value={coach?.user.fullNameEn}
                           name="fullNameEn"
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span> {auxCoach?.user.fullNameEn}</span>
+                        <span>{coach?.user.fullNameEn}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -111,13 +111,13 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           name="email"
-                          value={auxCoach?.user.email}
+                          value={coach?.user.email}
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{auxCoach?.user.email}</span>
+                        <span>{coach?.user.email}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -132,13 +132,13 @@ function CoachDetails() {
                         <input
                       
                           name="address"
-                           value={auxCoach?.address}
+                           value={coach?.address}
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{auxCoach?.user.address}</span>
+                        <span>{coach?.user.address}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -153,13 +153,13 @@ function CoachDetails() {
                         <input
             
                           name="tel"
-                          value={auxCoach?.user.tel}
+                          value={coach?.user.tel}
                           type="tel"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{auxCoach?.user.tel}</span>
+                        <span>{coach?.user.tel}</span>
                       )}
                     </TableCell>
                   </TableRow>

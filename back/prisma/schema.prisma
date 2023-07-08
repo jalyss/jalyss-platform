@@ -93,6 +93,7 @@ model User {
   replyCommentaireBlog ReplyCommentBlog[]
   bookMark             Bookmark[]
   ConnectedUser        ConnectedUser?
+  SessionFeedBack      SessionFeedback[]
 }
 
 //payment for what ?
@@ -104,9 +105,8 @@ model ArticleCategory {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   articles  Article[]
-
-  Blog    Blog[]
-  Lecture Lecture[]
+  Blog      Blog[]
+  Session   Session[]
 }
 
 model ChatRoom {
@@ -387,15 +387,99 @@ model SessionRequest {
   createdAt DateTime @default(now())
 }
 
+model MediaSession {
+  media     Media   @relation(fields: [mediaId], references: [id])
+  mediaId   String
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId String
+
+  @@unique(fields: [mediaId, sessionId], name: "sessionMedia")
+}
+
 model Session {
-  id          String                  @id @default(uuid())
-  title       String
-  description String
-  startDate   DateTime
-  endDate     DateTime
-  sessionType SessionHasSessionType[] // *many to many relation sessionType
-  lectures    SessionHasLecture[] // *many to many relation lecture 
-  tarifs      SessionTarif[] // * one to many relation to Session Tarif
+  id                String                  @id @default(uuid())
+  title             String
+  description       String
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  startDate         DateTime
+  endDate           DateTime
+  category          ArticleCategory         @relation(fields: [categoryId], references: [id])
+  categoryId        String
+  previousSesion    Session?                @relation(name: "prevSession", fields: [previousSessionId], references: [id])
+  previousSessionId String?
+  prevSession       Session[]               @relation("prevSession")
+  nextSesion        Session?                @relation(name: "nextSession", fields: [nextSessionId], references: [id])
+  nextSessionId     String?
+  nextSession       Session[]               @relation("nextSession")
+  sessionType       SessionHasSessionType[] // *many to many relation sessionType
+  lectures          SessionHasLecture[] // *many to many relation lecture 
+  tarifs            SessionTarif[] // * one to many relation to Session Tarif
+
+  MediaSession    MediaSession[]
+  cover           Media?            @relation(fields: [coverId], references: [id])
+  coverId         String?
+  sessionFeedback SessionFeedback[]
+
+  sessionHasPrerequire sessionHasPrerequire[]
+
+  SessionHasWhatYouWillLearn SessionHasWhatYouWillLearn[]
+}
+
+model SessionFeedback {
+  id        String   @id @default(uuid())
+  content   String
+  Session   Session? @relation(fields: [sessionId], references: [id])
+  sessionId String?
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model frequentilyQuestion {
+  id       String @id @default(uuid())
+  question String
+  answer   String
+}
+
+model WhatYouWillLearn {
+  id                         String                       @id @default(uuid())
+  content                    String
+  SessionHasWhatYouWillLearn SessionHasWhatYouWillLearn[]
+  LectureHasWhatYouWillLearn LectureHasWhatYouWillLearn[]
+}
+
+model SessionHasWhatYouWillLearn {
+  session            Session          @relation(fields: [sessionId], references: [id])
+  sessionId          String
+  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
+  WhatYouWillLearnId String
+
+  @@unique(fields: [sessionId, WhatYouWillLearnId], name: "joinerr")
+}
+
+model LectureHasWhatYouWillLearn {
+  lecture            Lecture          @relation(fields: [lectureId], references: [id])
+  lectureId          String
+  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
+  WhatYouWillLearnId String
+
+  @@unique(fields: [lectureId, WhatYouWillLearnId], name: "joinerrr")
+}
+
+model Prerequire {
+  id                   String                 @id @default(uuid())
+  content              String
+  sessionHasPrerequire sessionHasPrerequire[]
+}
+
+model sessionHasPrerequire {
+  session      Session    @relation(fields: [sessionId], references: [id])
+  sessionId    String
+  prerequire   Prerequire @relation(fields: [prerequireId], references: [id])
+  prerequireId String
+
+  @@unique(fields: [sessionId, prerequireId], name: "joiner")
 }
 
 //!join table between Session and SessionType
@@ -425,14 +509,15 @@ model SessionHasLecture {
 }
 
 model Lecture {
-  id         String              @id @default(uuid())
-  title      String
-  content    String
-  category   ArticleCategory     @relation(fields: [categoryId], references: [id])
-  categoryId String
-  sessions   SessionHasLecture[]
-  assesments Assessments[]
-  coaching   Coaching[]
+  id                         String                       @id @default(uuid())
+  title                      String
+  content                    String
+  startAt                    DateTime?
+  endAt                      DateTime?
+  sessions                   SessionHasLecture[]
+  assesments                 Assessments[]
+  coaching                   Coaching[]
+  LectureHasWhatYouWillLearn LectureHasWhatYouWillLearn[]
 }
 
 model Coaching {
@@ -492,10 +577,14 @@ model Media {
   MediaBlog    MediaBlog[]
   Employee     Employee[]
   Blog         Blog[]
+  WorkSpace    WorkSpace[]
+
+  MediaWorkSpace MediaWorkSpace[]
 
   MediaService MediaService[]
-
-  Service Service[]
+  Service      Service[]
+  MediaSession MediaSession[]
+  Session      Session[]
 }
 
 model MediaUser {
@@ -532,6 +621,15 @@ model MediaService {
   media     Media   @relation(fields: [mediaId], references: [id])
 
   @@unique([mediaId, serviceId])
+}
+
+model MediaWorkSpace {
+  workspaceId String
+  workspace   WorkSpace @relation(fields: [workspaceId], references: [id])
+  mediaId     String
+  media       Media     @relation(fields: [mediaId], references: [id])
+
+  @@unique([mediaId, workspaceId])
 }
 
 // blog
@@ -614,33 +712,65 @@ model View {
   blogId    String
 }
 
-//workSdpace
+//JalyssSpace
 
-model WorkSpace {
-  id          String   @id @default(uuid())
-  name        String
-  capacity    String?
-  description String?
-  price       String?
-  rating      String?
-  reviews     String?
-  amenities   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  service     Service  @relation(fields: [serviceId], references: [id])
-  serviceId   String
-}
+// model Service {
+//   id           String         @id @default(uuid())
+//   name         String
+//   identifier   String?        @unique()
+
+// }
+
 
 model Service {
   id           String         @id @default(uuid())
+
   name         String
+  description  String?
+
   identifier   String         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
+ 
   cover        Media?         @relation(fields: [coverId], references: [id])
   workSpace    WorkSpace[]
   tarif        Tarif[]
   MediaService MediaService[]
+}
+
+model WorkSpace {
+  id             String           @id @default(uuid())
+  name           String
+  capacity       String?
+  description    String?
+  price          String?
+  rating         String?
+  reviews        String?
+  amenities      String?
+  imageId        String?
+  image          Media?           @relation(fields: [imageId], references: [id])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  serviceId      String?
+  service        Service?         @relation(fields: [serviceId], references: [id])
+  MediaWorkSpace MediaWorkSpace[]
+}
+
+
+
+model Tarif {
+  id          String    @id @default(uuid())
+  name        String?
+  duration    String?
+  capacity    String?
+  price       Float
+  pricePerDay Float?
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+  service     Service   @relation(fields: [serviceId], references: [id])
+  serviceId   String
 }
 
 model Booking {
@@ -666,20 +796,7 @@ model Booking {
   @@unique([userId, tarifId])
 }
 
-model Tarif {
-  id          String    @id @default(uuid())
-  name        String?
-  duration    String?
-  capacity    String?
-  price       Float
-  pricePerDay Float?
-  description String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  bookings    Booking[]
-  service     Service   @relation(fields: [serviceId], references: [id])
-  serviceId   String
-}
+
 
 //website Settings
 model MainComponent {

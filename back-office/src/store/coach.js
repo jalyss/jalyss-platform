@@ -43,7 +43,17 @@ export const deleteCoach = createAsyncThunk("coache/deletcoache", async (id, { d
  
   return response.data;
 });
-
+export const CreateNeswcoach = createAsyncThunk("coach/addcoach", async (body, {dispatch  }) => {
+  let token = JSON.parse(localStorage.getItem('token'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token  
+    } 
+  }
+  const response = await axios.post(`${config.API_ENDPOINT}/coaching`, body, configs);
+  dispatch(fetchCoachs())  
+  return response.data;
+});
 
 export const coachesSlice = createSlice({
     name: "coach",

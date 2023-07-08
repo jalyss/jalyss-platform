@@ -24,6 +24,7 @@ import {
 import { fetchCoachs } from '../../../../store/coach';
 
 
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -70,18 +71,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
  function Coachs() {
+
   const coacheStore= useSelector((state)=>state.coach.coachs.items)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
 useEffect(()=>{
   dispatch(fetchCoachs())
- },[])
+ },[dispatch])
 
 
   
 
-  // {console.log('lzem tji daata',coacheStore)}
+  console.log('lzem tji daata',coacheStore)
 
  
   return (
@@ -116,6 +118,7 @@ useEffect(()=>{
             <MDBCardText>
            Tel: {el.user.tel}
             </MDBCardText >
+            
           </MDBCardBody>
         </MDBCard>
       </MDBCol>

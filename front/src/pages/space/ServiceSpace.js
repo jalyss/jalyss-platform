@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "40%",
-    // Add other styling properties as needed
+    
   },
   media: {
     height: 0,
 
-    paddingTop: "50%", // 16:9 aspect ratio
+    paddingTop: "50%",
   },
 
   topText: {
@@ -36,6 +36,7 @@ function ServiceSpace() {
   const { service,services } = serviceStore;
 
   const dispatch = useDispatch();
+  
   useEffect(() => {
     dispatch(fetchService(serviceIdentifier));
     dispatch(fetchServices());
@@ -88,7 +89,7 @@ function ServiceSpace() {
           </Grid>
         </Grid>
         <p className="firstLine">PRICING</p>
-        <p className="secondLine">'Price per unit'</p>
+        <p className="secondLine">Price per unit</p>
         <p className="thirdLine">
           'We provide several coworking spaces with flexible access that extends
           to 24 hours and 7 days a week for freelancers, business owners, and
@@ -135,7 +136,7 @@ function ServiceSpace() {
                     }}
                   >
                     <Link
-                      to={"/ReserveMeeting"}
+                      to={"/SpaceReservation"}
                       style={{ textDecoration: "none", color: "black" }}
                     >
                       Reserve

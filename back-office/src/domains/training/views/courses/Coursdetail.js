@@ -14,30 +14,31 @@ import Paper from "@mui/material/Paper";
 
 
 const Coursdetail = () => {
-  const lecture =useSelector((state)=>state.courses.cours)
+const lecture=useSelector((state)=>state.courses.cours
+)
   const  dispatch=useDispatch()
   const[cours,setCours]=useState({})
   const { t, i18n } = useTranslation();
   const [editMode, setEditMode] = useState(false)
-  const [auxCours, setAuxCours] = useState({});
+
+  console.log('cours is here ',lecture)
+
+
+  const {lectureId}=useParams()
   
-  const {coursId}=useParams()
-  
-  console.log('heyy',lecture)
-  console.log('aa',cours)
 
  useEffect(()=>{
-  dispatch(fetchOnecouse(coursId)) 
-  }, [coursId])
+  dispatch(fetchOnecouse(lectureId)) 
+  }, [lectureId])
 
   useEffect(()=>{
-    setAuxCours(cours)
+    setCours(cours)
   },[cours])
 
   const handlecoursChange = (e) => {
     const { name, value } = e.target;
-    setCours((lecture) => ({ 
-      ...lecture,
+    setCours((cours) => ({ 
+      ...cours,
        [name]: value ? parseFloat(value) : null }));
   };
 
@@ -50,8 +51,7 @@ const Coursdetail = () => {
       setEditMode(true)
     }else{
       event.preventDefault()
-        let courss= Object.assign({},auxCours)
-      
+        let courss= Object.assign({},cours)
         dispatch(editcours(courss) )
       setEditMode(false)
     }
@@ -64,14 +64,6 @@ const Coursdetail = () => {
       <h2> Courses</h2>
       <form className="checkout-form">
         <div className="d-flex flex-wrap">
-       
-
-     
-        
-        
-
-         
-
           <div className="d-flex justify-content-center w-100 m-3">
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
@@ -126,9 +118,8 @@ const Coursdetail = () => {
                     <TableCell align="right">
                       {editMode ? (
                         <input
-                      
                           name="start"
-                        value={lecture?.startDate}
+                          value={lecture?.startDate}
                           type="text"
                           className="form-control"
                           onChange={handlecoursChange}
@@ -175,7 +166,7 @@ const Coursdetail = () => {
           <button
             type="submit"
             className="confirm-button mt-3"
-     
+            onClick={submitEditcours}
           >
             <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
           </button>

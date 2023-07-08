@@ -63,7 +63,7 @@ function CreateUser() {
                   name='fullNameAr'
                   id="fullNameAr"
                   value={user?.fullNameAr}
-                  onChange={handleChange}
+                  onChange={(e)=>{handleChange}}
                 />
               </div>
             </div>
