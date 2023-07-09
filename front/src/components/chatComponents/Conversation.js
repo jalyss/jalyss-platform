@@ -279,7 +279,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
                   : "justify-content-end"
                 }`}
             >
-              <img src={e.user.avatar ? e.user.avatar.path : Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+              <img src={e.user.avatar? Icon: Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
              <div>
               <p
                 key={i}

@@ -17,6 +17,7 @@ import StyledBadge from "../Commun/StyledBadge";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
 
 
 
@@ -31,8 +32,24 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
 
   const [searchText, setSearchText] = useState("");
   const [identifier, setIdentifier] = useState("")
+  const [users ,setUsers ] = useState(true)
+  const [groups ,setGroups ] = useState(false)
 
-
+  // const handleButtonClickGroups = () => {
+  //   setGroups(!groups);
+  // };
+  // const handleButtonClickUsers = () => {
+  //   setUsers(!users);
+  // };
+  const handleButtonClick = (stack) => {
+    if (stack === 'users') {
+      setUsers(true);
+      setGroups(false);
+    } else if (stack === 'groups') {
+      setUsers(false);
+      setGroups(true);
+    }
+  };
 
 
 
@@ -66,6 +83,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
           }
           return (
             <Stack
+           
               direction="row"
               alignItems="center"
               justifyContent="space-between"
@@ -79,6 +97,8 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
 
               }}
             >
+              {users &&(
+              < >
               <Stack direction="row" spacing={2}>
                 <StyledBadge
                   overlap="circular"
@@ -106,7 +126,15 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
                  
                 {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
               </Stack>
+              </>)}
+     { groups && (
+        <Stack>
+          <Typography>yeeeeeeeeeeee</Typography>
+        </Stack>
+       )}
+              
             </Stack>
+       
           )
         }
 
@@ -142,6 +170,10 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
             </SearchIconWrapper>
             <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
           </Search>
+          <div className="row">
+          <Button variant="h5" className="col" onClick={() => handleButtonClick('users')}>USERS</Button>
+          <Button variant="h5" className="col" onClick={() => handleButtonClick('groups')}>GROUPS</Button>
+</div>
           <Divider />
           <ChatElement />
         </Stack>
