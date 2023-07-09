@@ -178,7 +178,11 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
   <Button
     variant="h5"
     className={`col buttonBB ${isHovering === 'users' ? 'hovering' : ''}`}
-    style={{ color: "purple", borderColor: isHovering === 'users' && 'purple' }}
+    style={{
+      color: isHovering === 'users' ? 'white' : 'purple',
+      backgroundColor: isHovering === 'users' && 'purple' ,
+      borderColor: isHovering === 'users' && 'purple'
+    }}
     onClick={() => handleButtonClick('users')}
     onMouseEnter={() => handleMouseEnter('users')}
     onMouseLeave={handleMouseLeave}
@@ -187,8 +191,12 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
   </Button>
   <Button
     variant="h5"
-    className={`col buttonBB ${isHovering === 'groups' ? 'hovering' : ''}`}
-    style={{ color: "purple", borderColor: isHovering === 'groups' &&  'purple' }}
+    className={`col buttonBB ${isHovering === 'groups' && 'hovering' }`}
+    style={{
+      color: isHovering === 'groups' ? 'white' : 'purple',
+      backgroundColor: isHovering === 'groups' && 'purple',
+      borderColor: isHovering === 'groups' && 'purple'
+    }}
     onClick={() => handleButtonClick('groups')}
     onMouseEnter={() => handleMouseEnter('groups')}
     onMouseLeave={handleMouseLeave}
@@ -196,6 +204,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
     GROUPS
   </Button>
 </div>
+
 
 
           <Divider />
