@@ -100,9 +100,9 @@ function ServiceSpace() {
          To grow your business in a setting that is both professional and
           social, reserve a spot in one of our coworking spaces.
         </p>
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="d-flex flex-wrap justify-content-between align-items-center">
           {service?.tarif.map((item, index) => (
-            <div className="col-md-2.5 mx-1" key={index}>
+            <div className=" p-3" key={index}>
               <div
                 className="card serviceCard"
                 style={{
@@ -148,7 +148,7 @@ function ServiceSpace() {
           ))}
         </div>
         <p className="firstLine">Autres Service</p>
-        <p className="secondLine">ALL IN ONE PLACE .</p>
+        <p className="secondLine">ALL IN ONE PLACE </p>
         <p className="thirdLine">
           We provide practical solutions to help you advance your project. A
           wide range of options are available to you, from domiciliation to
@@ -159,7 +159,7 @@ function ServiceSpace() {
           your needs.
         </p>
 
-        <div className="d-flex justify-content-center align-items-center ">
+        <div className="d-flex flex-wrap justify-content-center align-items-center ">
           {services.items
             .filter((item) => item.identifier !== serviceIdentifier)
             .map((elem, i) => (
@@ -196,13 +196,13 @@ function ServiceSpace() {
                         color: "black",
                       }}
                     >
-                      <NavLink
+                      <Link
                         href={`/spaceJalyss/${elem?.identifier}`}
                         style={{ textDecoration: "none", color: "black" }}
                       >
                         {" "}
                         Reserve
-                      </NavLink>
+                      </Link>
                     </button>
                   </div>
                 </div>

@@ -16,11 +16,12 @@ spaceJalyssCom
     width: 1460px;
      height: 650px;
     margin-bottom: -100px;
+    
   }
   .responsive-img {
     max-width: 100%;
      height: auto;
-    border-radius: 20px; /* Add border-radius if needed */
+    border-radius: 20px; 
   }
   .firstLine{
   font-size: 1.3rem;
