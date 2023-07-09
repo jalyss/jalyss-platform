@@ -23,7 +23,11 @@ export class MessagesService {
     }
     return await this.prisma.chatMessage.findMany({
       where: { chatRoomId },
-      include: { user: true },
+      include: { user: {
+        include : {
+          avatar : true
+        }
+      }},
       take,
       orderBy: { createdAt: 'desc' },
     });
