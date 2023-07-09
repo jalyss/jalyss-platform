@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
-import "../../assets/styles/conversation.css"
+
 
 
 
@@ -177,7 +177,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
           <div className="row">
   <Button
     variant="h5"
-    className={`col buttonBB ${isHovering === 'users' ? 'hovering' : ''}`}
+    className={`col  ${isHovering === 'users' ? 'hovering' : ''}`}
     style={{
       color: isHovering === 'users' ? 'white' : 'purple',
       backgroundColor: isHovering === 'users' && 'purple' ,
@@ -191,7 +191,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
   </Button>
   <Button
     variant="h5"
-    className={`col buttonBB ${isHovering === 'groups' && 'hovering' }`}
+    className={`col  ${isHovering === 'groups' && 'hovering' }`}
     style={{
       color: isHovering === 'groups' ? 'white' : 'purple',
       backgroundColor: isHovering === 'groups' && 'purple',

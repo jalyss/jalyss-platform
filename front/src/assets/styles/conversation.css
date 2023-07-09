@@ -25,7 +25,3 @@ min-width: 200px;
   align-items:end ;
   justify-content: center;
 }
-
-.buttonBB:hover {
-color: "red" !important
-}
