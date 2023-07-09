@@ -73,13 +73,23 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/api/v1/chatRoom/by-participants/${userId ? userId : userr?.userId}/${myId}`)
+        `http://localhost:3001/api/v1/chatRoom/by-participants/${userId?userId:userr?.userId}/${myId}`)
       .then((res) => {
-        console.log(res.data)
+    
+        setExist(res.data.id);
+      })
+      .catch((err) => console.log("je error", err));
+  }, [myId, userId]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:3001/api/v1/chatRoom/one/${userId?userId:userr?.userId}`)
+      .then((res) => {
         setExist(res.data.id);
       })
       .catch((err) => console.log(err));
-  }, [myId, userId]);
+  }, [userId]);
 
   useEffect(() => {
     if (exist) {
@@ -91,11 +101,10 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
         })
         .then((response) => {
           let aux = [];
-          for (let i = response.data.length - 1; i >= 0; i--) {
+          for (let i = response.data.length - 1; i >= 0; i--){
             aux.push(response.data[i]);
           }
           console.log(aux[aux.length - 1]);
-
           setInbox(aux);
         })
         .catch((err) => console.log(err));
