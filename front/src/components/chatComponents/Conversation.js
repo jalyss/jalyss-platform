@@ -18,7 +18,9 @@ import {
   Phone,
   Smiley,
   VideoCamera,
-  Checks
+  Checks,
+  UserList,
+  Plugs
 } from "phosphor-react";
 import StyledInput from "../Commun/inputs/StyledInput";
 import data from "@emoji-mart/data";
@@ -35,8 +37,11 @@ import { useRef } from "react";
 import { SocketContext } from "../../apps/Client";
 import { useParams } from "react-router-dom";
 import { fetchUser } from "../../store/user";
+import Modal from "../Commun/Modal"
 
 const Conversation = ({ setChatRoomList, room, userr, socket }) => {
+  const [basicModal,setBasicModal]=useState(false)
+  const [basicModal2,setBasicModal2]=useState(false)
   const myId = useSelector((state) => state.auth.me?.id);
   const userStore = useSelector((state) => state.user)
   const { user } = userStore
@@ -53,11 +58,19 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const [inbox, setInbox] = useState([]);
   const [isTyping, setIsTyping] = useState([]);
   const [exist, setExist] = useState(null);
+  const [groupeChatName,setGroupeChatName] = useState(null)
+  const [participants, setParticipants] = useState([])
 
   const userName = user ? user.fullNameEn : userr?.user?.fullNameEn;
   const messagesEndRef = useRef(null);
   const { userId } = useParams()
   console.log("uu", userId);
+  const toggleShow=()=>{
+    setBasicModal(!basicModal)
+  }
+  const toggleShow2=()=>{
+    setBasicModal2(!basicModal2)
+  }
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
@@ -87,6 +100,8 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
         `http://localhost:3001/api/v1/chatRoom/one/${userId?userId:userr?.userId}`)
       .then((res) => {
         setExist(res.data.id);
+        setGroupeChatName(res.data.name)
+        setParticipants(res.data.participants)
       })
       .catch((err) => console.log(err));
   }, [userId]);
@@ -247,20 +262,28 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
             </Box>
             <Stack spacing={0.2}>
               <Typography variant="subtitle2">
-                {/* RANIA */}
-                {userName}
+             
+                {groupeChatName?groupeChatName:userName}
               </Typography>
               <Typography variant="caption">Online</Typography>
             </Stack>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={3}>
+            <span
+             className="tt"
+             title="See all members">
+            <IconButton>
+              <UserList onClick={toggleShow}/>
+            </IconButton>
+            </span>
+            <span
+             className="tt"
+             title="Leave the groupe">
+            <IconButton>
+              <Plugs  onClick={toggleShow2} />
+            </IconButton>
+            </span>
             {/* <IconButton>
-              <VideoCamera />
-            </IconButton>
-            <IconButton>
-              <Phone />
-            </IconButton>
-            <IconButton>
               <MagnifyingGlass />
             </IconButton>
             <Divider orientation="vertical" flexItem />
@@ -416,11 +439,39 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
               alignItems="center"
               justifyContent="center"
             >
-              <IconButton onSubmit={handleSubmit}>
+              <IconButton onClick={handleSubmit}>
                 <PaperPlaneTilt color="#fff" />
               </IconButton>
             </Stack>
           </Box>
+          <Modal basicModal={basicModal} setBasicModal={setBasicModal} normal={true} toggleShow={toggleShow} withoutSave={true} body={
+            <Stack sx={{display:"grid" , gridTemplateColumns:"repeat(3,1fr)"}}>
+            {participants?.map((elem)=>{
+              return(<Stack
+                sx={{ height: "100%", width: "100%",marginBottom:"12px" }}
+                alignItems="center"
+                justifyContent="center"
+                spacing={10}
+              >
+              <Avatar  src = {elem.user.avatar?elem.user.avatar.path:Icon}/>
+              {elem.user.fullNameEn}
+              
+              
+              </Stack>)
+            })}
+         
+            </Stack>
+          } 
+          title = "See all Members"/>
+                <Modal basicModal={basicModal2} setBasicModal={setBasicModal2} ofDelete={true} toggleShow={toggleShow2}  bodOfDelete={
+                  <>
+                  Are you sure to leave the groupe ? 
+                  </>
+                }
+           
+         
+       
+          title = "leave the groupe"/>
         </Stack>
       </Box>
     </Stack>
