@@ -22,8 +22,6 @@ const lecture=useSelector((state)=>state.courses.cours
   const [editMode, setEditMode] = useState(false)
 
   console.log('cours is here ',lecture)
-
-
   const {lectureId}=useParams()
   
 
@@ -37,8 +35,8 @@ const lecture=useSelector((state)=>state.courses.cours
 
   const handlecoursChange = (e) => {
     const { name, value } = e.target;
-    setCours((cours) => ({ 
-      ...cours,
+    setCours((Cours) => ({ 
+      ...Cours,
        [name]: value ? parseFloat(value) : null }));
   };
 
@@ -78,14 +76,14 @@ const lecture=useSelector((state)=>state.courses.cours
                       {editMode ? (
                         <input
                           id="titel"
-                           value={lecture?.titel}
+                           value={cours?.titel}
                           name="titel"
                           type="text"
                           className="form-control"
                           onChange={handlecoursChange}
                         />
                       ) : (
-                        <span>{lecture?.titel} </span>
+                        <span>{cours?.titel} </span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -99,13 +97,13 @@ const lecture=useSelector((state)=>state.courses.cours
                       {editMode ? (
                         <input
                           name="description"
-                          value={lecture?.description}
+                          value={cours?.description}
                           type="text"
                           className="form-control"
                           onChange={handlecoursChange}
                         />
                       ) : (
-                        <span>{lecture?.description}</span>
+                        <span>{cours?.description}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -119,13 +117,13 @@ const lecture=useSelector((state)=>state.courses.cours
                       {editMode ? (
                         <input
                           name="start"
-                          value={lecture?.startDate}
-                          type="text"
+                          value={cours?.startDate}
+                          type="date"
                           className="form-control"
                           onChange={handlecoursChange}
                         />
                       ) : (
-                        <span>{lecture?.startDate}</span>
+                        <span>{cours?.startDate}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -140,13 +138,13 @@ const lecture=useSelector((state)=>state.courses.cours
                         <input
             
                           name="End"
-                          value={lecture?.endDate}
-                          type="tel"
+                          value={cours?.endDate}
+                          type="date"
                           className="form-control"
                           onChange={handlecoursChange}
                         />
                       ) : (
-                        <span>{lecture?.endDate}</span>
+                        <span>{cours?.endDate}</span>
                       )}
                     </TableCell>
                   </TableRow>

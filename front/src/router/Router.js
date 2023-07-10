@@ -40,7 +40,7 @@ import Chat from "../pages/Chat";
 
 import SessionDetails from "../pages/SessionDetails";
 import Conversation from "../components/chatComponents/Conversation";
-
+import ReserveMeeting from "../pages/space/SpaceReservation"
 
 
 function Router() {
@@ -68,8 +68,6 @@ function Router() {
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="new-password" element={<NewPassword />} />
             
-            
-
             <Route path="*" element={<NoPage />} />
             <Route path="/chat" element={<Chat />}>
             <Route path="/chat/:userId" element={<Conversation />} />

@@ -33,13 +33,14 @@ import SessionsUpdate from "../domains/training/views/sessions/SessionsUpdate";
 import Coursdetail from "../domains/training/views/courses/Coursdetail"
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
 import Service from "../domains/service/Service";
+
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
 import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
 import Sessions from "../domains/training/views/sessions/Sessions";
-import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+
 import ServiceList from "../domains/service/views/ServiceList";
 import OneService from "../domains/service/views/OneService";
 import ServiceDetails from "../domains/service/views/ServiceDetails";
@@ -69,6 +70,10 @@ import Updatetarif from '../domains/training/views/tarifs/Updatetarif'
 import Addtarif from "../domains/training/views/tarifs/Addtarif";
 import Newsession from'../domains/training/views/sessions/Newsession'
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
+import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
+import AddNewCours from "../domains/training/views/courses/Addnewcours";
+
+
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -153,7 +158,7 @@ function Router() {
                            
               <Route path="courses" element={<Courses />}/>
               <Route path="courses/:lectureId" element={<Coursdetail/>}/>
-              <Route path="SessionAdd" element={<Addnewcours/>}/>
+              <Route path="SessionAdd" element={<AddNewCours/>}/>
             
                 
                 <Route path="coachs" element={<Coachs />}/>

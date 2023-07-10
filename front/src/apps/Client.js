@@ -46,6 +46,7 @@ function Client() {
       <SocketContext.Provider value={socket}>
         <CartProvider>
           <Navbar />
+          
           <Outlet />
           <Footer />
         </CartProvider>

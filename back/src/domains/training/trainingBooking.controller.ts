@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { TrainingBookingService } from './trainingBooking.service';
 import { CreateTrainingBookingDto } from './dto/create-TrainingBooking.dto';
 import { UpdateTrainingBookingDto } from './dto/update-TrainingBooking.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from '../auth/decorators/currentUser';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 
 @ApiTags('TrainingBooking')
@@ -10,9 +12,11 @@ import { ApiTags } from '@nestjs/swagger';
 export class TrainingBookingController {
   constructor(private readonly trainingBookingService: TrainingBookingService) {}
 
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() dto: CreateTrainingBookingDto) {
-    return this.trainingBookingService.create(dto);
+  create(@Body() dto: CreateTrainingBookingDto , @CurrentUser() user:any) {
+    return this.trainingBookingService.create(dto,user.id);
   }
 
   @Get()

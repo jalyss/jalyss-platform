@@ -90,14 +90,14 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           id="fullNameEn"
-                          value={coach?.user.fullNameEn}
+                          value={coach?.user?.fullNameEn  || ''}
                           name="fullNameEn"
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{coach?.user.fullNameEn}</span>
+                        <span>{coach?.user?.fullNameEn}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -111,13 +111,13 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           name="email"
-                          value={coach?.user.email}
+                          value={coach?.user?.email || ''}
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{coach?.user.email}</span>
+                        <span>{coach?.user?.email}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -132,13 +132,13 @@ function CoachDetails() {
                         <input
                       
                           name="address"
-                           value={coach?.address}
+                           value={coach?.user?.address || ''}
                           type="text"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{coach?.user.address}</span>
+                        <span>{coach?.user?.address}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -153,13 +153,13 @@ function CoachDetails() {
                         <input
             
                           name="tel"
-                          value={coach?.user.tel}
+                          value={coach?.user?.tel || ''}
                           type="tel"
                           className="form-control"
                           onChange={handlecoacheChange}
                         />
                       ) : (
-                        <span>{coach?.user.tel}</span>
+                        <span>{coach?.user?.tel}</span>
                       )}
                     </TableCell>
                   </TableRow>

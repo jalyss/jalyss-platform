@@ -25,7 +25,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 
   useEffect(()=>{
     dispatch(fetchcours()) 
-    }, [])
+    }, [dispatch])
 
 
   const handleClick = (event) => {
@@ -41,7 +41,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
       if (res.error) {
         showErrorToast(res.error.message)
       } else {
-        showSuccessToast('tarif has been deleted')
+        showSuccessToast('COURS has been deleted')
       }
     })
   };
@@ -55,7 +55,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
-          onClick={()=>{navigate('SessionAdd')}}
+          onClick={()=>{navigate('WSessionAdd')}}
         >
         add new course
         </Button>
@@ -87,10 +87,11 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
        </CardContent>
        <CardActions>
       
-        <Button size="small" onClick={()=>{handleDeletecoursClick(el.id)} } >Delete</Button>
-        <Button size="small" onClick={() =>navigate(`/training/courses/${el.id}`)}>Update</Button>
+        <Button size="small" onClick={()=>handleDeletecoursClick(el.id)} >Delete</Button>
+        <Button size="small" onClick={() =>navigate(`${el.id}`)}>Update</Button>
        </CardActions>
-       </Card>))}   
+       </Card>
+       ))}   
       
        </div>
        </div> 

@@ -13,10 +13,23 @@ export const fetchSessions = createAsyncThunk(
         },
       }
     );
-console.log("sessionfromStore",response.data);
+   
     return response.data;
   }
 );
+
+export const fetchSessionsFeedbacks = createAsyncThunk(
+  "sessions/sessionsFeedbacks",
+  async () => {
+    const response = await axios.get(
+      `${config.API_ENDPOINT}/session-feedbacks`
+    );
+   
+    return response.data;
+  }
+);
+
+
 
 export const fetchSession = createAsyncThunk("sessions/session", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/session/${id}`);
@@ -31,6 +44,11 @@ export const sessionSlice = createSlice({
     sessions: {
       items: [],
       count: 0,
+
+    },
+    feedback : {
+      items : [],
+      count : 0
     },
     error: null,
     deleteError: null,
@@ -45,6 +63,9 @@ export const sessionSlice = createSlice({
     });
     builder.addCase(fetchSession.fulfilled, (state, action) => {
       state.session = action.payload;
+    });
+    builder.addCase(fetchSessionsFeedbacks.fulfilled, (state, action) => {
+      state.feedback.items = action.payload;
     });
   },
 });

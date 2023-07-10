@@ -22,11 +22,11 @@ export const deletcours = createAsyncThunk("cours/deletcours", async (id, { disp
   const configs = {
     headers: {
       Authorization: 'Bearer ' + token
-    }
+    } 
   };
-  const response = await axios.delete(`${config.API_ENDPOINT}/lecture/${id}`, configs);
+  const response = await axios.delete(`${config.API_ENDPOINT}/Lecture/${id}`, configs);
   dispatch(fetchcours());
- 
+ console.log(response.data)
   return response.data;
 });
 

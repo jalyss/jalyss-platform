@@ -7,6 +7,4 @@ export class CreateSessionFeedbackDto {
   content: string;
   @ApiProperty()
   sessionId: string;
-  @ApiProperty()
-  userId : string
 }

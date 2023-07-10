@@ -36,19 +36,17 @@ export const deletsessions = createAsyncThunk("session/deletsessions", async (id
 
 export const editsession = createAsyncThunk("sessions/Updtsessions", async (args, { dispatch }) => {
   const {id,...body} = args
-
   let token = JSON.parse(localStorage.getItem('token'))
   const configs = {
     headers: {
       Authorization: 'Bearer ' + token
     }
   }
-
-  const response = await axios.patch(`${config.API_ENDPOINT}/session/${id}`,body,configs);
-  dispatch(fetchtarif(id))
+  const response = await axios.patch(`${config.API_ENDPOINT}/Session/${id}`,body,configs);
+  dispatch(fetchsessions(id))
   return response.data;
 });
-
+   
 export const CreateNeswSession = createAsyncThunk("session/addsession", async (body, {dispatch  }) => {
   const response = await axios.post(`${config.API_ENDPOINT}/session`, body);
   dispatch(fetchsessions())  
