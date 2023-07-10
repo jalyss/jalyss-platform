@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
-
+import "../../assets/styles/conversation.css";
 
 
 
@@ -227,34 +227,23 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
             <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
           </Search>
           <div className="row">
-  <Button
+  <button
     variant="h5"
-    className={`col  ${isHovering === 'users' ? 'hovering' : ''}`}
-    style={{
-      color: isHovering === 'users' ? 'white' : 'purple',
-      backgroundColor: isHovering === 'users' && 'purple' ,
-      borderColor: isHovering === 'users' && 'purple'
-    }}
+    className={"col purple-buttonn "}
+    
     onClick={() => handleButtonClick('users')}
-    onMouseEnter={() => handleMouseEnter('users')}
-    onMouseLeave={handleMouseLeave}
+    
   >
     USERS
-  </Button>
-  <Button
+  </button>
+  <button
     variant="h5"
-    className={`col  ${isHovering === 'groups' && 'hovering' }`}
-    style={{
-      color: isHovering === 'groups' ? 'white' : 'purple',
-      backgroundColor: isHovering === 'groups' && 'purple',
-      borderColor: isHovering === 'groups' && 'purple'
-    }}
+    className={"col purple-buttonn "}
     onClick={() => handleButtonClick('groups')}
-    onMouseEnter={() => handleMouseEnter('groups')}
-    onMouseLeave={handleMouseLeave}
+    
   >
     GROUPS
-  </Button>
+  </button>
 </div>
 
 

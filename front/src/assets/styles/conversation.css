@@ -25,3 +25,18 @@ min-width: 200px;
   align-items:end ;
   justify-content: center;
 }
+.purple-buttonn {
+  background-color: transparent;
+  border: 2px solid rgb(227, 172, 227);
+  border-radius: 5px;
+  color: purple;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.purple-buttonn:hover {
+  background-color: rgb(156, 6, 156);
+  color: rgb(255, 255, 255);
+  border-color: 2px solid rgb(111, 0, 111);
+  transition: background-color 0.3s, color 0.3s;
+  
+}
