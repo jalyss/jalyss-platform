@@ -23,7 +23,12 @@ import { SocketContext } from "../../../apps/Client";
   const ConnectedUsers = ({ setActiveComponent, setSelectedUser, screen }) => {
     const authStore = useSelector((state) => state.auth) || {}
   
-    const [connectedUsers, setConnectedUsers] = useState([]);
+    const [connectedUsers, setConnectedUsers] = useState([{
+      userId: 'fakeUserId',
+      user: {
+        fullNameEn: 'John Doe'
+      }
+    }]);
     const [searchText, setSearchText] = useState("");
     const navigate=useNavigate()
   

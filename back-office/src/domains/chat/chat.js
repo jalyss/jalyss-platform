@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
 // import Icon from "../assets/styles/profile.png";
@@ -11,29 +11,28 @@ import {
   Broadcast,
   CellSignalFull,
 } from "phosphor-react";
-
+import "../../assets/styles/chat.css";
 import Conversation from "../chat/chatComponents/conversation";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import Modal from "../../modals/Modal"
 import ConnectedUsers from "../chat/chatComponents/connectedUser";
 import { SocketContext } from "../../apps/Client";
 import ChatRoom from "../chat/chatComponents/chatRoom";
 import { styled } from "@mui/material/styles";
-import { fetchMessages, fetchChatRoom } from "../../store/chatStore";
-
 const Chat = () => {
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
   const theme = useTheme();
 
   const myId = useSelector((state) => state.auth.me?.id);
+  const [authorId, setAuthorId] = useState([]);
 
   const [chatRoomList, setChatRoomList] = useState([]);
   const [room, setRoom] = useState({});
   const [activeComponentMd, setActiveComponentMd] = useState("chatRoom");
   const [activeComponentLg, setActiveComponentLg] = useState("chatRoom");
   const [selectedUser, setSelectedUser] = useState(null);
+
 
   useEffect(() => {
     if (myId)
@@ -58,7 +57,7 @@ const Chat = () => {
     //socket.on(`chat-rooms/${myId}`, chatRoomList);
 
     return () => {
-    //  socket.off(`chat-rooms/${myId}`, chatRoomList);
+      //  socket.off(`chat-rooms/${myId}`, chatRoomList);
     };
   }, [socket, myId]);
 
@@ -136,6 +135,7 @@ const Chat = () => {
     },
   }));
 
+
   return (
     <div className="d-flex chatContainer">
       <Box1>
@@ -161,7 +161,6 @@ const Chat = () => {
                 <Broadcast className="users" />
               </IconButton>
             </Box>
-      <Modal/>
 
             {/* <Box p={1}
               sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}

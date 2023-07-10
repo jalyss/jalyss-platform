@@ -29,7 +29,10 @@
     margin-left: 4px;
     cursor: pointer;
   }
-  
+  .autocomplete-container {
+    position: relative;
+    z-index: 9999; /* Set a higher value */
+  }
   .member-tag {
     display: inline-block;
     background-color: #f0f0f0;
