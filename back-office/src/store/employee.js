@@ -13,7 +13,8 @@ export const fetchEmployee = createAsyncThunk("employees/employee", async (id) =
   return response.data;
 });
 
-export const createEmployee = createAsyncThunk("employees/createEmployee", async (body, { dispatch }) => {
+export const 
+createEmployee = createAsyncThunk("employees/createEmployee", async (body, { dispatch }) => {
   let token = JSON.parse(localStorage.getItem('tokenAdmin'))
   const configs = {
     headers: {

@@ -7,10 +7,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class TrainingBookingService  {
   constructor(private readonly prisma:PrismaService) {}
-   async create(dto: CreateTrainingBookingDto) {
+   async create(dto: CreateTrainingBookingDto,userId:string) {
     return await this.prisma.trainingBooking.create({
       data : {
-        ...dto
+        ...dto,
+        userId
       }
     });
   }

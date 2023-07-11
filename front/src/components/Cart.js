@@ -17,7 +17,6 @@ function Cart({handleClose}) {
 const navigate=useNavigate()
 const { t, i18n } = useTranslation()
 
-  
   return (
     <div>
       <div className="mini-body-offCanvas">

@@ -16,6 +16,8 @@ import { SessionRequestService } from './sessionRequest.service';
 import { SessionService } from './session.service';
 import { LectureService } from './lecture.service';
 import { CoachingService } from './coaching.service';
+import { SessionFeedbacksController } from './session-feedbacks.controller';
+import { SessionFeedbacksService } from './session-feedbacks.service';
 
 @Module({
   controllers: [
@@ -27,6 +29,7 @@ import { CoachingService } from './coaching.service';
     SessionController,
     LectureController,
     CoachingController,
+    SessionFeedbacksController
   ],
   providers: [
     UserPaymentService,
@@ -38,6 +41,7 @@ import { CoachingService } from './coaching.service';
     LectureService,
     CoachingService,
     PrismaService,
+    SessionFeedbacksService
   ],
 })
 export class TrainingModule {}

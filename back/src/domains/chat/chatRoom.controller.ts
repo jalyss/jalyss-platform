@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ChatRoomService } from './chatRoom.service';
 import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
@@ -17,8 +17,10 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('chatRoom')
 @Controller('chatRoom')
+
 export class ChatRoomController {
   constructor(private readonly chatRoomService: ChatRoomService) {}
+  @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createChatDto: CreateChatRoomDto, @CurrentUser() user: any) {

@@ -6,10 +6,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
-  constructor(
-    private readonly prisma: PrismaService,
-
-  ) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateCategoryDto) {
     return await this.prisma.articleCategory.create({
@@ -32,7 +29,10 @@ export class CategoryService {
   }
 
   async update(id: string, dto: UpdateCategoryDto) {
-    return await this.prisma.articleCategory.update({ where: { id }, data: dto });
+    return await this.prisma.articleCategory.update({
+      where: { id },
+      data: dto,
+    });
   }
 
   async remove(id: string) {

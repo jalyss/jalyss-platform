@@ -8,10 +8,17 @@ import { useNavigate } from 'react-router-dom';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import { IoIosPersonAdd } from 'react-icons/io';
 import { Button } from 'react-bootstrap';
+import AddButton from '../../../components/Commun/buttons/AddButton';
+import Modal from "../../../components/Commun/Modal"
 
 function ProvidersList() {
   const [show, setShow] = useState(false);
   const [elementId, setElementId] = useState(null);
+  const [basicModal,setBasicModal]=useState(false)
+
+  const toggleShow=()=>{
+    setBasicModal(!basicModal)
+  }
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
     { field: 'logo', headerName: 'Logo', width: 150, editable: false },
@@ -49,8 +56,7 @@ function ProvidersList() {
             icon={<AiFillDelete />}
             label="Delete"
 
-            onClick={() => { handleDeleteClick(id) }}
-            // should open popup to ask are u sure delete this user (yes/no)
+            onClick={toggleShow}            // should open popup to ask are u sure delete this user (yes/no)
             color="error" />,
 
         ];
@@ -58,14 +64,14 @@ function ProvidersList() {
     },
   ]
   const isEng = isEnglish()
-  const Navigate = useNavigate()
-  const handleDeleteClick = (id) => {
-  };
+  const navigate = useNavigate()
+  // const handleDeleteClick = (id) => {
+  // };
   const handleAddClick = (providerId) => {
-    Navigate(`detail/${providerId}`)
+    navigate(`detail/${providerId}`)
   };
   const handleEditClick = (id) => {
-    Navigate(`edit/${id}`)
+    navigate(`edit/${id}`)
   };
   return (
     <div>
@@ -73,11 +79,7 @@ function ProvidersList() {
         <div className='container'>
           <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List providers</h2>
           <hr></hr>
-          <Button type='button' href='provider/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
-            <span className='btn btn-sm '>
-              Add Provider
-            </span>
-          </Button>
+          <AddButton title={"Add Provider"} mb={20} onClick={()=>{navigate("create")}}/>
           <Box sx={{ height: 400, width: '100%' }}>
             <DataGrid
               rows={rows}
@@ -94,6 +96,8 @@ function ProvidersList() {
               disableRowSelectionOnClick
             />
           </Box>
+          <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true}/>
+
         </div>
       </div>
     </div>

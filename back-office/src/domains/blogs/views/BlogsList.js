@@ -10,6 +10,9 @@ import isEnglish from '../../../helpers/isEnglish';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { rows } from "../../../constants/blogData"
 import {fetchBlogs} from '../../../store/blogs'
+import Modal from "../../../components/Commun/Modal"
+import DropDown from '../../../components/Commun/DropDown';
+
 
 function BlogsList() {
   const [show, setShow] = useState(false);
@@ -17,6 +20,9 @@ function BlogsList() {
   const [skip, setSkip] = useState(0);
   const take = 50;
   const trend= 0;
+  const [basicModal,setBasicModal]=useState(false)
+
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch()
@@ -45,6 +51,9 @@ const rows =blogs?.map((elem) => ({
     color: 'white',
     borderRadius: '5px',
   };
+  const toggleShow=()=>{
+    setBasicModal(!basicModal)
+  }
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
     { field: 'name', headerName: 'Name', width: 150, editable: false },
@@ -72,7 +81,7 @@ const rows =blogs?.map((elem) => ({
             icon={<AiFillDelete />}
             label="Delete"
 
-            onClick={() => { handleDeleteClick(id) }}
+            onClick={toggleShow}
             // should open popup to ask are u sure delete this user (yes/no)
             color="error"/>,
 
@@ -83,18 +92,11 @@ const rows =blogs?.map((elem) => ({
 
   const isEng = isEnglish()
   const Navigate = useNavigate()
-  const handleDeleteClick = (id) => {
-
-    dispatch(removeBlog(id)).then(res => {
-      if (res.error) {
-        showErrorToast(res.error.message)
-      } else {
-        showSuccessToast('Blog has been deleted')
-      }
-    })
+  // const handleDeleteClick = (id) => {
 
   };
   
+  // };
   const handleAddClick = (blogId) => {
     Navigate(`detail/${blogId}`)
   };
@@ -104,12 +106,12 @@ const rows =blogs?.map((elem) => ({
     <div className='container'>
       <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List of people who create blogs</h2>
       <hr></hr>
-     
-    <DropdownButton style={buttonStyle} id="dropdownMenuButton" className='mb-3' title="Choose a situation ">
+     <DropDown content1={'Accept'} content2={'Refuse'} content3={'Waiting'}/>
+    {/* <DropdownButton style={buttonStyle} id="dropdownMenuButton" className='mb-3' title="Choose a situation ">
         <Dropdown.Item href="#">Accept</Dropdown.Item>
         <Dropdown.Item href="#">Refuse</Dropdown.Item>
         <Dropdown.Item href="#">Waiting</Dropdown.Item>
-      </DropdownButton>
+      </DropdownButton> */}
      
       <Box sx={{ height: 400, width: '100%' }}>
         <DataGrid
@@ -127,9 +129,10 @@ const rows =blogs?.map((elem) => ({
           disableRowSelectionOnClick
         />
       </Box>
+      <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} />
     </div>
     </div>
   )
-}
+
 
 export default BlogsList
