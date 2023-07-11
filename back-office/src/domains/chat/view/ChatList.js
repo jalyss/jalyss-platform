@@ -19,13 +19,11 @@ import { useSelector, useDispatch } from "react-redux";
 import ConnectedUsers from "../chatComponents/connectedUser";
 
 import ChatRoom from "../chatComponents/chatRoom";
-import { SocketContext } from "../../../apps/Client";
 import { styled } from "@mui/material/styles";
 import { fetchMessages, fetchChatRoom } from "../../../store/chatStore";
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const socket = useContext(SocketContext);
   const theme = useTheme();
 
   const myId = useSelector((state) => state.auth.me?.id);
@@ -52,17 +50,7 @@ const Chat = () => {
         })
         .catch((err) => console.log(err));
   }, [myId]);
-  useEffect(() => {
-    function chatRoomList(value) {
-      
-      setChatRoomList(value);
-    }
-    socket.on(`chat-rooms/${myId}`, chatRoomList);
 
-    return () => {
-      socket.off(`chat-rooms/${myId}`, chatRoomList);
-    };
-  }, [socket,myId]);
 
   const handleChangeComponent = (string) => {
     setActiveComponentLg(string);
@@ -191,7 +179,6 @@ const Chat = () => {
       {activeComponentLg === "connectedUsers" && (
         <BoxLg>
           <ConnectedUsers
-            socket={socket}
             setActiveComponent={handleChangeComponent}
             setSelectedUser={setSelectedUser}
             screen={"lg"}
@@ -216,14 +203,12 @@ const Chat = () => {
           setChatRoomList={setChatRoomList}
           room={room}
           userr={selectedUser}
-          socket={socket}
         />
       </BoxLgConversation>
 
       {activeComponentMd === "connectedUsers" && (
         <BoxMd>
           <ConnectedUsers
-            socket={socket}
             setActiveComponent={handleChangeComponent}
             setSelectedUser={setSelectedUser}
             screen={"md"}
@@ -249,7 +234,6 @@ const Chat = () => {
             setChatRoomList={setChatRoomList}
             room={room}
             userr={selectedUser}
-            socket={socket}
           />
         </BoxMd>
       )}

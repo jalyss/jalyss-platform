@@ -23,10 +23,6 @@ export default function App({
   bodOfDelete
 }) {
   return (
-    <div   style={{
-
-      zIndex: 9999   
-    }}>
       <MDBModal
         show={basicModal}
         setShow={setBasicModal}
@@ -90,6 +86,5 @@ export default function App({
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
-    </div>
   );
 }

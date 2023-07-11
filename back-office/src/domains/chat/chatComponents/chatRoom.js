@@ -24,8 +24,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeen } from "../.././../store/chatStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import App from "../../../components/Commun/Modal";
-import AppEdit from "../../../components/Commun/Modal";
+import Modal from "../../../components/Commun/Modal";
+import ModalEdit from "../../../components/Commun/Modal";
 import { Add } from "@mui/icons-material";
 import zIndex from "@mui/material/styles/zIndex";
 import { TbUsersPlus } from "react-icons/tb";
@@ -282,7 +282,7 @@ const ChatRoom = ({
 
   return (
     <>
-      <App
+      <Modal
         toggleShow={toggleShow}
         basicModal={basicModal}
         setBasicEditModal={setBasicModal}
@@ -334,7 +334,7 @@ const ChatRoom = ({
         ofDelete={false}
         bodOfDelete={null}
       />
- <AppEdit
+ <ModalEdit
         toggleShow={toggleShowEdit}
         basicModal={basicModalEdit}
         setBasicModal={setBasicModalEdit}

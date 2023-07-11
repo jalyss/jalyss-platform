@@ -8,8 +8,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-
-import StyledBadge from "../../../assets/styles/StyleBadge";
+import StyledBadge from "../../../components/Commun/StyledBadge";
 
 import Icon from "../../../assets/logo.jpg";
 import {
@@ -22,7 +21,7 @@ import {
   VideoCamera,
   Checks,
 } from "phosphor-react";
-import StyledInput from "../../../assets/styles/StyledInput";
+import StyledInput from "../../../components/Commun/inputs/StyledInput";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
@@ -32,20 +31,17 @@ import "../../../assets/styles/conversation.css";
 
 import { fetchMessages } from "../../../store/chatStore";
 import Lottie from "lottie-react";
-import typing from "../../../assets/styles/typing.json";
+import typing from "../../../components/typing.json";
 import { useRef } from "react";
-import { SocketContext } from "../../../apps/Client";
 import { useParams } from "react-router-dom";
 import { fetchUser } from "../../../store/user";
 
 const Conversation = ({ setChatRoomList, room, userr }) => {
-  const socket = useContext(SocketContext);
 
   let myId = "2";
   const userStore = useSelector((state) => state.user) || {};
   const { user } = userStore || {};
   console.log("hahaa", myId), "my";
-  // const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
   const [selectedEmoji, setSelectedEmoji] = useState("");
@@ -136,57 +132,10 @@ const Conversation = ({ setChatRoomList, room, userr }) => {
           userId: myId,
           num: number,
         };
-        // socket.emit("msg-seen", payload);
       }
     }
   }, [exist, inbox]);
 
-  // useEffect(() => {
-  //   function getMsg(value) {
-  //     setInbox((Inbox) => [...Inbox, value]);
-
-  //   }
-
-  //   function getIsTyping(data) {
-  //     if (data.id !== myId) {
-  //       let aux = isTyping.slice();
-  //       let typing = false;
-  //       for (let i = 0; i < aux.length; i++) {
-  //         if (aux[i].id === data.id) typing = true;
-  //       }
-  //       if (!typing) {
-  //         aux.push(data);
-  //         setIsTyping(aux);
-  //       }
-  //     }
-  //   }
-  //   function removeIsTyping(data) {
-  //     if (data.id !== myId) {
-  //       let aux = isTyping.slice();
-  //       aux.filter((e) => e.id !== data.id);
-  //       setIsTyping(aux);
-  //     }
-  //   }
-  //   function getInbox(data) {
-  //     setInbox(data);
-  //   }
-  //   function getChatRoomCreated(data) {
-  //     setExist(data.id);
-  //   }
-  //   socket.on(`msg-to-client/${exist}`, getMsg);
-  //   socket.on(`typing/${exist}`, getIsTyping);
-  //   socket.on(`no-typing/${exist}`, removeIsTyping);
-  //   socket.on(`messages/${exist}`, getInbox);
-  //   socket.on(`chat-room-created/${myId}`, getChatRoomCreated);
-
-  //   return () => {
-  //     socket.off(`msg-to-client/${exist}`, getMsg);
-  //     socket.off(`typing/${exist}`, getIsTyping);
-  //     socket.off(`no-typing/${exist}`, removeIsTyping);
-  //     socket.off(`messages/${exist}`, getInbox);
-  //     socket.off(`chat-room-created/${myId}`, getChatRoomCreated);
-  //   };
-  // }, [socket, exist, myId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -197,7 +146,6 @@ const Conversation = ({ setChatRoomList, room, userr }) => {
           userId: myId,
           text: message,
         };
-        //   socket.emit("msg-to-server", payload);
       } else {
         let payload = {
           receiverId:
@@ -206,7 +154,6 @@ const Conversation = ({ setChatRoomList, room, userr }) => {
           senderId: myId,
           text: message,
         };
-        //   socket.emit("create-chat-room", payload);
       }
 
       setMessage("");
@@ -215,13 +162,6 @@ const Conversation = ({ setChatRoomList, room, userr }) => {
     }
   };
 
-  const handleTyping = () => {
-    //  socket.emit(`is-typing`, { userId: myId, chatRoomId: exist });
-  };
-
-  const handleStopTyping = () => {
-    // socket.emit(`is-typing`, { userId: myId, chatRoomId: exist });
-  };
 
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
@@ -262,19 +202,7 @@ const Conversation = ({ setChatRoomList, room, userr }) => {
             </Stack>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={3}>
-            {/* <IconButton>
-                <VideoCamera />
-              </IconButton>
-              <IconButton>
-                <Phone />
-              </IconButton>
-              <IconButton>
-                <MagnifyingGlass />
-              </IconButton>
-              <Divider orientation="vertical" flexItem />
-              <IconButton>
-                <CaretDown />
-              </IconButton> */}
+ 
           </Stack>
         </Stack>
       </Box>
@@ -355,9 +283,6 @@ const Conversation = ({ setChatRoomList, room, userr }) => {
           alignItems="center"
           spacing={3}
           component="form"
-          onKeyDown={handleTyping}
-          // onFocus={handleTyping}
-          // onBlur={handleStopTyping}
           onSubmit={handleSubmit}
         >
           <Stack sx={{ width: "100%" }}>

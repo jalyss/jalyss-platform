@@ -46,9 +46,6 @@ import CreatePublishingHouse from "../domains/publishingHouse/view/createPublish
 
 import Chat from "../domains/chat/chat";
 import ChatList from "../domains/chat/view/ChatList";
-import ChatDetails from "../domains/chat/view/ChatDetails.js";
-import CreateChat from "../domains/chat/view/CreateChat";
-import EditChat from "../domains/chat/view/EditChat";
 
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
@@ -157,9 +154,6 @@ function Router() {
 
             <Route path="Chat" element={<Chat />}>
               <Route index element={<ChatList />} />
-              <Route path="detail/:id" element={<ChatDetails />} />
-              <Route path="create" element={<CreateChat />} />
-              <Route path="edit/:id" element={<EditChat />} />
             </Route>
 
             <Route path="author" element={<Author />}>

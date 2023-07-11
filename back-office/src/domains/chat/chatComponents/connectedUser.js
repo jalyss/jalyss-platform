@@ -17,7 +17,6 @@ import {
 
   import { useSelector } from "react-redux";
   import { useNavigate } from "react-router-dom";
-import { SocketContext } from "../../../apps/Client";
 
   
   const ConnectedUsers = ({ setActiveComponent, setSelectedUser, screen }) => {
@@ -32,7 +31,6 @@ import { SocketContext } from "../../../apps/Client";
     const [searchText, setSearchText] = useState("");
     const navigate=useNavigate()
   
-    const socket = useContext(SocketContext);
   
     const handleChatTextClick = (user) => {
       setSelectedUser(user);
@@ -40,27 +38,7 @@ import { SocketContext } from "../../../apps/Client";
         setActiveComponent("conversation");
         navigate(`/chat/${user?.userId}`)
     };
-  
-  
-    // useEffect(() => {
-    //   if (authStore.me) {
-    //   //  socket.emit("online-users", authStore.me.id);
-    //   }
-    // }, [socket, authStore.me]);
-  
-    // useEffect(() => {
-    //   if (authStore.me) {
-    //     function listConnectedUsers(users) {
-        
-    //       setConnectedUsers(users);
-    //     }
-    //     socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers);
-    //     return () => {
-    //       socket.off(`connected-users/${authStore.me.id}`, listConnectedUsers);
-    //     };
-    //   }
-    // }, [socket, authStore.me]);
-  
+
   
     const ChatElement = ({ user }) => {
       return (

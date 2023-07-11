@@ -1,31 +1,20 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { Avatar, Box, IconButton, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
 // import Icon from "../assets/styles/profile.png";
 import {
-  Phone,
   ChatCircleDots,
-  Users,
-  Gear,
-  AddressBook,
   Broadcast,
-  CellSignalFull,
 } from "phosphor-react";
-import "../../assets/styles/chat.css";
 import Conversation from "../chat/chatComponents/conversation";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import ConnectedUsers from "../chat/chatComponents/connectedUser";
-import { SocketContext } from "../../apps/Client";
 import ChatRoom from "../chat/chatComponents/chatRoom";
 import { styled } from "@mui/material/styles";
 const Chat = () => {
-  const dispatch = useDispatch();
-  const socket = useContext(SocketContext);
-  const theme = useTheme();
 
   const myId = useSelector((state) => state.auth.me?.id);
-  const [authorId, setAuthorId] = useState([]);
 
   const [chatRoomList, setChatRoomList] = useState([]);
   const [room, setRoom] = useState({});
@@ -54,12 +43,10 @@ const Chat = () => {
     function chatRoomList(value) {
       setChatRoomList(value);
     }
-    //socket.on(`chat-rooms/${myId}`, chatRoomList);
 
     return () => {
-      //  socket.off(`chat-rooms/${myId}`, chatRoomList);
     };
-  }, [socket, myId]);
+  }, [myId]);
 
   const handleChangeComponent = (string) => {
     setActiveComponentLg(string);
@@ -190,7 +177,6 @@ const Chat = () => {
       {activeComponentLg === "connectedUsers" && (
         <BoxLg>
           <ConnectedUsers
-            socket={socket}
             setActiveComponent={handleChangeComponent}
             setSelectedUser={setSelectedUser}
             screen={"lg"}
@@ -215,14 +201,12 @@ const Chat = () => {
           setChatRoomList={setChatRoomList}
           room={room}
           userr={selectedUser}
-          socket={socket}
         />
       </BoxLgConversation>
 
       {activeComponentMd === "connectedUsers" && (
         <BoxMd>
           <ConnectedUsers
-            socket={socket}
             setActiveComponent={handleChangeComponent}
             setSelectedUser={setSelectedUser}
             screen={"md"}
@@ -247,7 +231,6 @@ const Chat = () => {
             setChatRoomList={setChatRoomList}
             room={room}
             userr={selectedUser}
-            socket={socket}
           />
         </BoxMd>
       )}
