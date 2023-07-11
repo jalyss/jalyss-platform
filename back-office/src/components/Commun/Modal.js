@@ -20,7 +20,8 @@ export default function App({
   body,
   normal,
   ofDelete,
-  bodOfDelete
+  bodOfDelete,
+  confirm,
 }) {
   return (
     <>
@@ -74,7 +75,7 @@ export default function App({
                 </>
               ) : (
                 <>
-                  <button className="full bg-danger">Yes</button>
+                  <button className="full bg-danger" onClick={confirm}>Yes</button>
                   <button
                     type="button"
                     className="btn btn-outline-danger"

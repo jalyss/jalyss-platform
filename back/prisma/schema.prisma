@@ -219,7 +219,7 @@ model Author {
 model ArticleByAuthor {
   article   Article @relation(fields: [articleId], references: [id])
   articleId String
-  author    Author  @relation(fields: [authorId], references: [id])
+  author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   @@unique([authorId, articleId])
@@ -377,7 +377,7 @@ model Provider {
   address        String
   tel            String
   accountBalance Float
-  logo           String
+  logo           String?
   email          String   @unique
   Supply         Supply[]
 }
@@ -751,11 +751,9 @@ model View {
 // }
 
 model Service {
-  id String @id @default(uuid())
-
+  id           String         @id @default(uuid())
   name         String
   description  String? 
-
   identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
