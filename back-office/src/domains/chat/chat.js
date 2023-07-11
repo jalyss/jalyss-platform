@@ -2,18 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { Avatar, Box, IconButton, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
 // import Icon from "../assets/styles/profile.png";
-import {
-  ChatCircleDots,
-  Broadcast,
-} from "phosphor-react";
+import { ChatCircleDots, Broadcast } from "phosphor-react";
 import Conversation from "../chat/chatComponents/conversation";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import ConnectedUsers from "../chat/chatComponents/connectedUser";
 import ChatRoom from "../chat/chatComponents/chatRoom";
 import { styled } from "@mui/material/styles";
-const Chat = () => {
+import { TbUsersPlus } from "react-icons/tb";
+import { users } from "../../constants/users";
+import Modal from "../../components/Commun/Modal";
+import Select from "react-select";
+import SaveModal from "../../components/Commun/Modal";
 
+const Chat = () => {
   const myId = useSelector((state) => state.auth.me?.id);
 
   const [chatRoomList, setChatRoomList] = useState([]);
@@ -21,7 +23,8 @@ const Chat = () => {
   const [activeComponentMd, setActiveComponentMd] = useState("chatRoom");
   const [activeComponentLg, setActiveComponentLg] = useState("chatRoom");
   const [selectedUser, setSelectedUser] = useState(null);
-
+  const [basicModal, setBasicModal] = useState(false);
+  const [basicModalsave, setBasicModalsave] = useState(false);
 
   useEffect(() => {
     if (myId)
@@ -44,13 +47,23 @@ const Chat = () => {
       setChatRoomList(value);
     }
 
-    return () => {
-    };
+    return () => {};
   }, [myId]);
 
   const handleChangeComponent = (string) => {
     setActiveComponentLg(string);
     setActiveComponentMd(string);
+  };
+
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
+  const toggleShowSave = () => {
+    setBasicModal(false)
+    setTimeout(()=>{
+
+      setBasicModalsave(!basicModalsave);
+    },1000)
   };
 
   const Stack0 = styled("div")(({ theme }) => ({
@@ -122,9 +135,75 @@ const Chat = () => {
     },
   }));
 
-
   return (
     <div className="d-flex chatContainer">
+   <SaveModal
+        toggleShow={toggleShowSave}
+        basicModal={basicModalsave}
+        setBasicModal={setBasicModalsave}
+        title="Save changes ?"
+        body="Are you sure !"
+        normal={true}
+        ofDelete={!true}
+        bodOfDelete={null}
+      />
+
+
+      <Modal
+        toggleShow={toggleShow}
+        basicModal={basicModal}
+        setBasicEditModal={setBasicModal}
+        title="Group Discussion"
+        fn={()=>{toggleShowSave()}}
+        body={
+          <>
+            <label>
+              <span>Name:</span>
+              <input
+                type="text"
+                placeholder="name"
+                style={{ width: "185%", marginTop: "5px" }}
+              />
+            </label>
+
+            <label style={{ width: "100%", marginTop: "5px" }}>
+              <span>Members:</span>
+              <div>
+                <Select placeholder="Select members" options={users} isMulti />
+              </div>
+            </label>
+
+            <label>
+              <span>Logo:</span>
+              <div
+                style={{
+                  width: "160%",
+                  height: "130px",
+                  background: `url(https://fontawesome.com/social/cloud-arrow-down?f=&s=)`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  borderRadius: 5,
+                  marginTop: "5px",
+                }}
+              >
+                <input
+                  type="file"
+                  placeholder="Input 3"
+                  style={{
+                    opacity: 0,
+                    width: "100%",
+                    height: "100%",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            </label>
+          </>
+        }
+        normal={true}
+        ofDelete={false}
+        bodOfDelete={null}
+      />
       <Box1>
         <Stack0>
           <Stack1 spacing={3}>
@@ -149,6 +228,16 @@ const Chat = () => {
               </IconButton>
             </Box>
 
+            <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
+              <IconButton
+                onClick={() => {
+                  toggleShow();
+                }}
+                sx={{ width: "max-content", color: "#fcfefe" }}
+              >
+                <TbUsersPlus />
+              </IconButton>
+            </Box>
             {/* <Box p={1}
               sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}
 

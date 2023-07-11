@@ -3,13 +3,8 @@ import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
 import { useTheme } from "@emotion/react";
 // import Icon from "../assets/styles/profile.png";
 import {
-  Phone,
   ChatCircleDots,
-  Users,
-  Gear,
-  AddressBook,
   Broadcast,
-  CellSignalFull,
 } from "phosphor-react";
 
 import Conversation from "../chatComponents/conversation";

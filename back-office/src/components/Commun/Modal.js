@@ -20,7 +20,8 @@ export default function App({
   body,
   normal,
   ofDelete,
-  bodOfDelete
+  bodOfDelete,
+  fn
 }) {
   return (
       <MDBModal
@@ -68,7 +69,7 @@ export default function App({
               {normal ? (
                 <>
                   <CloseButton onClick={toggleShow} />
-                  <SaveButton />
+                  <SaveButton onClick={fn} />
                 </>
               ) : (
                 <>

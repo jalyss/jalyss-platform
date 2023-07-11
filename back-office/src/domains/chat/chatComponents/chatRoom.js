@@ -24,12 +24,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeen } from "../.././../store/chatStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import Modal from "../../../components/Commun/Modal";
 import ModalEdit from "../../../components/Commun/Modal";
+import DeleteModal from "../../../components/Commun/Modal";
+import SaveModal from "../../../components/Commun/Modal";
 import { Add } from "@mui/icons-material";
 import zIndex from "@mui/material/styles/zIndex";
-import { TbUsersPlus } from "react-icons/tb";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import Select from "react-select";
 
 const ChatRoom = ({
   chatRoomList,
@@ -48,19 +49,25 @@ const ChatRoom = ({
 
   const [searchText, setSearchText] = useState("");
   const [identifier, setIdentifier] = useState("");
-  const [filteredMembers, setFilteredMembers] = useState([]);
-  const [selectedMembers, setSelectedMembers] = useState([]); // Updated state for multiple members
   const [basicModalEdit, setBasicModalEdit] = useState(false);
-  const [basicModal, setBasicModal] = useState(false);
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
+  const [basicModalsave, setBasicModalsave] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [hoveredChatRoom, setHoveredChatRoom] = useState(null);
   const [isButtonVisible, setisButtonVisible] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
   const handleMouseEnter = (chatRoomId) => {
     setHoveredChatRoom(chatRoomId);
   };
 
   const handleMouseLeave = () => {
     setHoveredChatRoom(null);
+    setOpen(false);
   };
 
   // const filteredChatRooms = chatRoomList.filter((chatRoom) => {
@@ -69,6 +76,7 @@ const ChatRoom = ({
   //   )[0].user.fullNameEn;
   //   return name.toLowerCase().includes(searchText.toLowerCase());
   // });
+
   const filteredChatRooms = [
     {
       id: "chatRoomId1",
@@ -100,76 +108,21 @@ const ChatRoom = ({
     },
   ];
 
-  const handleMemberInputChange = (event) => {
-    const { value } = event.target;
-
-    const filtered = users.filter((user) =>
-      user.name.toLowerCase().startsWith(value.toLowerCase())
-    );
-    setFilteredMembers(filtered);
-  };
-
-  const handleMemberSelection = (name) => {
-    setSelectedMembers((prevMembers) => [...prevMembers, name]);
-    setFilteredMembers([]);
-  };
-  const handleRemoveMember = (name) => {
-    setSelectedMembers((prevMembers) =>
-      prevMembers.filter((member) => member !== name)
-    );
-  };
-
-  const toggleShow = () => {
-    setBasicModal(!basicModal);
-  }
-   const toggleShowEdit = () => {
+  const toggleShowEdit = () => {
     setBasicModalEdit(!basicModalEdit);
+    handleMouseLeave();
   };
-  const renderMembers = () => {
-    return (
-      <>
-        <input
-          type="text"
-          style={{ width: "168%", marginTop: "5px" }}
-          placeholder={
-            selectedMembers?.length > 1
-              ? selectedMembers.join(" ")
-              : "select members"
-          } // Display selected members as a space-separated string
-          onChange={handleMemberInputChange}
-        />
-        {filteredMembers.length > 0 && (
-          <ul className="user-list">
-            {filteredMembers.map((user) => (
-              <li
-                key={user.name}
-                onClick={() => handleMemberSelection(user.name)}
-              >
-                {user.name}
-              </li>
-            ))}
-          </ul>
-        )}
-        {selectedMembers.length > 0 && (
-          <div>
-            <ul>
-              {selectedMembers.map((member) => (
-                <li key={member}>
-                  {member}
-                  <button
-                    type="button"
-                    className="remove-button"
-                    onClick={() => handleRemoveMember(member)}
-                  >
-                    X
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </>
-    );
+  const toggleShowDelete = () => {
+    setBasicModalDelete(!basicModalDelete);
+    handleMouseLeave();
+  };
+  const toggleShowSave = () => {
+    setOpen(false);
+    handleMouseLeave();
+    setBasicModalEdit(false);
+    setTimeout(() => {
+      setBasicModalsave(!basicModalsave);
+    }, 1000);
   };
 
   const ChatElement = () => {
@@ -254,23 +207,52 @@ const ChatRoom = ({
                   {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
                 </Stack>
                 {hoveredChatRoom === chatRoom.id ? (
-                  <button
-                    onClick={() => toggleShowEdit()}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: "30px",
-                      height: "65.5px",
-                      border: "none",
-                      backgroundColor: "grey",
-                      cursor: "pointer",
-                      borderRadius: "0 10px 10px 0",
-                      color:"white"
-                    }}
-                  >
-                   <BiDotsVerticalRounded/>
-                  </button>
+                  <>
+                    <button
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "30px",
+                        height: "65.5px",
+                        border: "none",
+                        backgroundColor: "grey",
+                        cursor: "pointer",
+                        borderRadius: "0 10px 10px 0",
+                        color: "white",
+                      }}
+                      onClick={handleOpen}
+                    >
+                      <div>
+                        <BiDotsVerticalRounded />
+                      </div>
+                    </button>
+                    {open ? (
+                      <ul
+                        class="list-group"
+                        style={{
+                          position: "fixed",
+                          marginLeft: "180px",
+                          marginTop: "150px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <li
+                          class="list-group-item"
+                          onClick={() => toggleShowEdit()}
+                        >
+                          Edit chat
+                        </li>
+                        <li
+                          class="list-group-item"
+                          onClick={() => toggleShowDelete()}
+                          style={{ color: "red" }}
+                        >
+                          Delete chat
+                        </li>
+                      </ul>
+                    ) : null}
+                  </>
                 ) : null}
               </Stack>
             );
@@ -282,59 +264,29 @@ const ChatRoom = ({
 
   return (
     <>
-      <Modal
-        toggleShow={toggleShow}
-        basicModal={basicModal}
-        setBasicEditModal={setBasicModal}
-        titleEdit="Group Discussion"
-        body={
-          <>
-            <label>
-              <span>Name:</span>
-              <input
-                type="text"
-                placeholder="name"
-                style={{ width: "185%", marginTop: "5px" }}
-              />
-            </label>
-
-            <label>
-              <span>Members:</span>
-              <>{renderMembers()}</>
-            </label>
-
-            <label>
-              <span>Logo:</span>
-              <div
-                style={{
-                  width: "160%",
-                  height: "130px",
-                  background: `url(https://fontawesome.com/social/cloud-arrow-down?f=&s=)`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  borderRadius: 5,
-                  marginTop: "5px",
-                }}
-              >
-                <input
-                  type="file"
-                  placeholder="Input 3"
-                  style={{
-                    opacity: 0,
-                    width: "100%",
-                    height: "100%",
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
-            </label>
-          </>
-        }
+      <SaveModal
+        toggleShow={toggleShowSave}
+        basicModal={basicModalsave}
+        setBasicModal={setBasicModalsave}
+        title="Save changes ?"
+        body="Are you sure !"
         normal={true}
-        ofDelete={false}
+        ofDelete={!true}
         bodOfDelete={null}
       />
- <ModalEdit
+
+      <DeleteModal
+        toggleShow={toggleShowDelete}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        title="Delete chat ?"
+        body="Are you sure !"
+        normal={true}
+        ofDelete={true}
+        bodOfDelete={null}
+      />
+
+      <ModalEdit
         toggleShow={toggleShowEdit}
         basicModal={basicModalEdit}
         setBasicModal={setBasicModalEdit}
@@ -350,9 +302,11 @@ const ChatRoom = ({
               />
             </label>
 
-            <label>
+            <label style={{ width: "100%", marginTop: "5px" }}>
               <span>Members:</span>
-              <>{renderMembers()}</>
+              <div>
+                <Select placeholder="Edit members" options={users} isMulti />
+              </div>
             </label>
 
             <label>
@@ -385,6 +339,9 @@ const ChatRoom = ({
         normal={true}
         ofDelete={false}
         bodOfDelete={null}
+        fn={() => {
+          toggleShowSave();
+        }}
       />
       <Box
         sx={{
@@ -402,23 +359,6 @@ const ChatRoom = ({
             justifyContent="space-between"
           >
             <Typography variant="h5">Discussion</Typography>
-            <button
-              type="button"
-              onClick={() => {
-                toggleShow();
-              }}
-              className="create-button"
-              style={{
-                backgroundColor: "#57385c", // Example background color
-                color: "#fff",
-                border: "none",
-                padding: "6px 8px",
-                borderRadius: "100%",
-                fontSize: "1rem",
-              }}
-            >
-              <TbUsersPlus />
-            </button>
 
             <IconButton>
               <BookOpen />

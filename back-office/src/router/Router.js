@@ -44,8 +44,10 @@ import EditPublishHouseList from "../domains/publishingHouse/view/editPublishing
 import DetailPublishHouse from "../domains/publishingHouse/view/detailsPublishingHouse";
 import CreatePublishingHouse from "../domains/publishingHouse/view/createPublishingHouse";
 
+
 import Chat from "../domains/chat/chat";
 import ChatList from "../domains/chat/view/ChatList";
+
 
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";

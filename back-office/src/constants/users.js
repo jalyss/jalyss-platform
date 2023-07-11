@@ -1,23 +1,32 @@
 export  const users = [
     {
-      name: "John Doe",
-      image: "https://example.com/user1.jpg",
+      value: "John Doe",
+      label: "John Doe",
     },
     {
-      name: "Jane Smith",
-      image: "https://example.com/user2.jpg",
+      value: "Jane Smith",
+      label: "Jane Smith",
     },
     {
-      name: "Michael Johnson",
-      image: "https://example.com/user3.jpg",
+      value: "Michael Johnson",
+      label: "Michael Johnson",
     },
     {
-      name: "Emily Davis",
-      image: "https://example.com/user4.jpg",
+      value: "Emily Davis",
+      label: "Emily Davis",
     },
     {
-      name: "Robert Brown",
-      image: "https://example.com/user5.jpg",
+      value: "Robert Brown",
+      label: "Robert Brown",
     },
   ];
+  /*
+  const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' }
+]
+
+
+  */
   
