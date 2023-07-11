@@ -1,0 +1,5 @@
+export  const rows = [
+    { id: 0, logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1lJaYrVdW2CsFMVnq8f7LaxF7Si7whD1bxQ&usqp=CAU",name: 'جرير', address: 'Sfax', updatedAt: '2023-01-02' ,createdAt:'2023-01-02', article: 'Book1', },
+    { id: 1, logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1lJaYrVdW2CsFMVnq8f7LaxF7Si7whD1bxQ&usqp=CAU" ,name: 'ملهمون', address: 'Sfax', updatedAt: '2023-01-02',createdAt:'2023-01-02', article: 'Book2', },
+    { id: 2,logo:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fdaralkhayal.com%2Fwp-content%2Fuploads%2F2021%2F03%2Fdar-al-khayal-logo.png&tbnid=wfAuUioUF9rTbM&vet=12ahUKEwjW7qin-tH_AhXdnycCHUI5C8MQMygAegUIARCxAQ..i&imgrefurl=https%3A%2F%2Fdaralkhayal.com%2F&docid=JIjEchYlIYnWVM&w=292&h=151&q=%D8%A7%D9%84%D8%AE%D9%8A%D8%A7%D9%84%20%D9%84%D8%A7%D9%84%D9%86%D8%B4%D8%B1%20&ved=2ahUKEwjW7qin-tH_AhXdnycCHUI5C8MQMygAegUIARCxAQ", name: 'الخيال', address: 'Sfax', updatedAt: '2023-01-02 ',createdAt:'2023-01-02', article: 'Book3' , },
+  ];

@@ -3,7 +3,8 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["filteredRelationCount"]
+    previewFeatures = ["filteredRelationCount"]
+
 }
 
 datasource db {
@@ -194,7 +195,7 @@ model Article {
   longDescriptionAr  String?            @map("long_desc_ar")
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  category           ArticleCategory    @relation(fields: [categoryId], references: [id])
+  category           ArticleCategory    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId         String
   publishingHouse    PublishingHouse    @relation(fields: [publishingHouseId], references: [id])
   publishingHouseId  String
