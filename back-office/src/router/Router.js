@@ -33,6 +33,22 @@ import Coursdetail from "../domains/training/views/courses/Coursdetail";
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
 import Service from "../domains/service/Service";
 
+import Category from "../domains/category/category";
+import CategoryList from "../domains/category/view/categoryList";
+import CreateCategory from "../domains/category/view/createCategory";
+import EditCategory from "../domains/category/view/editCategory";
+
+import PublishingHouse from "../domains/publishingHouse/PublishingHouse";
+import PublishHouseList from "../domains/publishingHouse/view/publishHouseList";
+import EditPublishHouseList from "../domains/publishingHouse/view/editPublishingHouse";
+import DetailPublishHouse from "../domains/publishingHouse/view/detailsPublishingHouse";
+import CreatePublishingHouse from "../domains/publishingHouse/view/createPublishingHouse";
+
+
+import Chat from "../domains/chat/chat";
+import ChatList from "../domains/chat/view/ChatList";
+
+
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/tarifs/Tarifs";
 import Assesment from "../domains/training/views/assements/Assesment";
@@ -116,23 +132,38 @@ function Router() {
             </Route>
 
             <Route path="blogs" element={<Blogs />}>
-              <Route index element={<BlogsList/>} />
+              <Route index element={<BlogsList />} />
               <Route path="detail/:blogId" element={<DetailBlog />} />
             </Route>
 
             <Route path="provider" element={<Providers />}>
-              <Route index element={<ProvidersList/>} />
+              <Route index element={<ProvidersList />} />
               <Route path="edit/:providerId" element={<EditProvider />} />
               <Route path="detail/:providerId" element={<DetailProvider />} />
               <Route path="create" element={<CreateProvider />} />
-
             </Route>
+            <Route path="category" element={<Category />}>
+              <Route index element={<CategoryList />} />
+              <Route path="createCategory" element={<CreateCategory />} />
+              <Route path="editCategory/:id" element={<EditCategory />} />
+            </Route>
+
+            <Route path="publishing-house" element={<PublishingHouse />}>
+              <Route index element={<PublishHouseList />} />
+              <Route path="edit/:id" element={<EditPublishHouseList />} />
+              <Route path="detail/:id" element={<DetailPublishHouse />} />
+              <Route path="create" element={<CreatePublishingHouse />} />
+            </Route>
+
+            <Route path="Chat" element={<Chat />}>
+              <Route index element={<ChatList />} />
+            </Route>
+
             <Route path="author" element={<Author />}>
-              <Route index element={<AuthorList/>} />
+              <Route index element={<AuthorList />} />
               <Route path="edit/:authorId" element={<EditAuthor />} />
               <Route path="detail/:authorId" element={<DetailAuthor />} />
               <Route path="create" element={<CreateAuthor />} />
-
             </Route>
 
             <Route path="articles" element={<Article />}>
