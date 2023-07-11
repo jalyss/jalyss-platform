@@ -40,3 +40,4 @@ export class ArticleTypeService {
     return await this.prisma.type.delete({ where: { id } });
   }
 }
+

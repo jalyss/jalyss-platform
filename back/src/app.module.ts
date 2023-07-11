@@ -23,6 +23,7 @@ import { LikesModule } from './likes/likes.module';
 import { TrainingModule } from './domains/training/training.module';
 import { QuestionsModule } from './domains/questions/questions.module';
 import { SessionFeedbacksModule } from './domains/session-feedbacks/session-feedbacks.module';
+import { ProvidersModule } from './domains/providers/providers.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { SessionFeedbacksModule } from './domains/session-feedbacks/session-feed
     LikesModule,
     TrainingModule,
     QuestionsModule,
-    SessionFeedbacksModule
+    SessionFeedbacksModule,
+    ProvidersModule
     
   ],
   controllers: [AppController],
