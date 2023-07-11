@@ -25,6 +25,7 @@ import { fetchOneRoom, notSeen } from "../.././../store/chatStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import App from "../../../components/Commun/Modal";
+import AppEdit from "../../../components/Commun/Modal";
 import { Add } from "@mui/icons-material";
 import zIndex from "@mui/material/styles/zIndex";
 import { TbUsersPlus } from "react-icons/tb";
@@ -49,6 +50,7 @@ const ChatRoom = ({
   const [identifier, setIdentifier] = useState("");
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]); // Updated state for multiple members
+  const [basicModalEdit, setBasicModalEdit] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [hoveredChatRoom, setHoveredChatRoom] = useState(null);
@@ -119,6 +121,9 @@ const ChatRoom = ({
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
+  }
+   const toggleShowEdit = () => {
+    setBasicModalEdit(!basicModalEdit);
   };
   const renderMembers = () => {
     return (
@@ -250,7 +255,7 @@ const ChatRoom = ({
                 </Stack>
                 {hoveredChatRoom === chatRoom.id ? (
                   <button
-                    onClick={() => toggleShow()}
+                    onClick={() => toggleShowEdit()}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -280,8 +285,8 @@ const ChatRoom = ({
       <App
         toggleShow={toggleShow}
         basicModal={basicModal}
-        setBasicModal={setBasicModal}
-        title="Group Discussion"
+        setBasicEditModal={setBasicModal}
+        titleEdit="Group Discussion"
         body={
           <>
             <label>
@@ -329,7 +334,58 @@ const ChatRoom = ({
         ofDelete={false}
         bodOfDelete={null}
       />
+ <AppEdit
+        toggleShow={toggleShowEdit}
+        basicModal={basicModalEdit}
+        setBasicModal={setBasicModalEdit}
+        title="Group Discussion (Edit)"
+        body={
+          <>
+            <label>
+              <span>Name:</span>
+              <input
+                type="text"
+                placeholder="name"
+                style={{ width: "185%", marginTop: "5px" }}
+              />
+            </label>
 
+            <label>
+              <span>Members:</span>
+              <>{renderMembers()}</>
+            </label>
+
+            <label>
+              <span>Logo:</span>
+              <div
+                style={{
+                  width: "160%",
+                  height: "130px",
+                  background: `url(https://fontawesome.com/social/cloud-arrow-down?f=&s=)`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  borderRadius: 5,
+                  marginTop: "5px",
+                }}
+              >
+                <input
+                  type="file"
+                  placeholder="Input 3"
+                  style={{
+                    opacity: 0,
+                    width: "100%",
+                    height: "100%",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            </label>
+          </>
+        }
+        normal={true}
+        ofDelete={false}
+        bodOfDelete={null}
+      />
       <Box
         sx={{
           position: "relative",

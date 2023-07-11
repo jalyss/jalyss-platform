@@ -203,12 +203,11 @@ function Router() {
             {/* <Route path="charts" element={<ChartTabs />} /> */}
           </Route>
         ) : (
-          <Route path="Chat" element={<Chat />}>
-          <Route index element={<ChatList />} />
-          <Route path="detail/:id" element={<ChatDetails />} />
-          <Route path="create" element={<CreateChat />} />
-          <Route path="edit/:id" element={<EditChat />} />
-        </Route>
+          <Route path="/" element={<AuthAdmin />}>
+            <Route index element={<LoginAdmin />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="new-password" element={<NewPassword />} />
+          </Route>
         )}
         <Route path="*" element={<NoPage />} />
       </Routes>
