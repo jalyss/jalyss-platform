@@ -80,7 +80,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
           backgroundColor: "#fff",
         }}
       >
-        {filteredChatRooms.map((chatRoom, i) => {
+        {filteredChatRooms.filter(e=>e.participants.length === 2).map((chatRoom, i) => {
           setIdentifier(chatRoom.id);
   
           let name = "";
@@ -136,12 +136,64 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
             </Stack>
           );
         })}
+        {filteredChatRooms.filter(e=>e.participants.length > 2).map((chatRoom, i) => {
+          setIdentifier(chatRoom.id);
   
-        {groups && (
-          <Stack>
-            <Typography>yeeeeeeeeeeee</Typography>
-          </Stack>
-        )}
+          let name = "";
+          let user = chatRoom.participants.filter(
+            (p) => p.userId !== authStore?.id
+          )[0];
+          if (chatRoom.name === null) name = user.user.fullNameEn;
+          else {
+            name = chatRoom.name;
+          }
+          return (
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              key={i}
+              onClick={() => {
+                setSelectedUser(user);
+  
+                if (screen === "md") setActiveComponent("conversation");
+                navigate(`/chat/${identifier}`);
+              }}
+            >
+              { groups && (
+                <>
+                  <Stack direction="row" spacing={2}>
+                    <StyledBadge
+                      overlap="circular"
+                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                      variant="dot"
+                    >
+                      <Avatar src={user.user.avatar ? user.user.avatar.path : Icon} />
+                    </StyledBadge>
+                    <Stack>
+                      <Typography variant="subtitle1">{name}</Typography>
+                      <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
+                    </Stack>
+                  </Stack>
+                  <Stack spacing={2} alignItems="center">
+                    <Typography sx={{ fontWeight: 600 }} variant="caption">
+                      {chatRoom.messages[0].createdAt.slice(11, 16)}
+                    </Typography>
+                    {chatRoom?._count?.messages ? (
+                      <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge>
+                    ) : chatRoom.messages[0].userId !== authStore.id ? (
+                      <Checks size={25} weight="thin" color="green" />
+                    ) : (
+                      <Checks size={25} weight="light" color="blue" />
+                    )}
+                  </Stack>
+                </>
+              )}
+            </Stack>
+          );
+        })}
+  
+       
       </Box>
     );
   };
