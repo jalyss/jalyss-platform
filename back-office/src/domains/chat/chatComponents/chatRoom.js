@@ -31,6 +31,9 @@ import { Add } from "@mui/icons-material";
 import zIndex from "@mui/material/styles/zIndex";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Select from "react-select";
+import { BsFillPersonLinesFill } from "react-icons/bs";
+import { MdOutlineGroups } from "react-icons/md";
+import "../../../assets/styles/chatRoom.css";
 
 const ChatRoom = ({
   chatRoomList,
@@ -56,6 +59,18 @@ const ChatRoom = ({
   const [hoveredChatRoom, setHoveredChatRoom] = useState(null);
   const [isButtonVisible, setisButtonVisible] = useState(false);
   const [open, setOpen] = React.useState(false);
+  const [isPersonIconActive, setIsPersonIconActive] = useState(false);
+  const [isGroupIconActive, setIsGroupIconActive] = useState(false);
+
+  const handlePersonIconClick = () => {
+    setIsPersonIconActive(true);
+    setIsGroupIconActive(false);
+  };
+
+  const handleGroupIconClick = () => {
+    setIsPersonIconActive(false);
+    setIsGroupIconActive(true);
+  };
 
   const handleOpen = () => {
     setOpen(!open);
@@ -67,7 +82,7 @@ const ChatRoom = ({
 
   const handleMouseLeave = () => {
     setHoveredChatRoom(null);
-    setOpen(false);
+    setOpen(!open)
   };
 
   // const filteredChatRooms = chatRoomList.filter((chatRoom) => {
@@ -189,7 +204,11 @@ const ChatRoom = ({
                     </Typography>
                   </Stack>
                 </Stack>
-                <Stack spacing={2} alignItems="center">
+                <Stack
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="flex-end"
+                >
                   <Typography sx={{ fontWeight: 600 }} variant="caption">
                     {chatRoom.messages[0].createdAt.slice(11, 16)}
                   </Typography>
@@ -213,18 +232,26 @@ const ChatRoom = ({
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: "30px",
-                        height: "65.5px",
+                        width: "20px",
+                        marginTop: "10px",
                         border: "none",
-                        backgroundColor: "grey",
+                        backgroundColor: "white",
                         cursor: "pointer",
-                        borderRadius: "0 10px 10px 0",
-                        color: "white",
+                        color: "black",
                       }}
                       onClick={handleOpen}
                     >
-                      <div>
-                        <BiDotsVerticalRounded />
+                      <div
+                        className="btnicon"
+                        style={{
+                          height: "25px",
+                          borderRadius: "50px",
+                          display:'flex',
+                          justifyContent:"center",
+                          alignItems:"center"
+                        }}
+                      >
+                        <BiDotsVerticalRounded style={{ fontSize: 25 }} />
                       </div>
                     </button>
                     {open ? (
@@ -233,8 +260,9 @@ const ChatRoom = ({
                         style={{
                           position: "fixed",
                           marginLeft: "180px",
-                          marginTop: "150px",
+                          marginTop: "120px",
                           cursor: "pointer",
+                          zIndex:999
                         }}
                       >
                         <li
@@ -279,11 +307,9 @@ const ChatRoom = ({
         toggleShow={toggleShowDelete}
         basicModal={basicModalDelete}
         setBasicModal={setBasicModalDelete}
-        title="Delete chat ?"
-        body="Are you sure !"
-        normal={true}
+        normal={!true}
         ofDelete={true}
-        bodOfDelete={null}
+        bodOfDelete="Delete chat ?"
       />
 
       <ModalEdit
@@ -374,7 +400,46 @@ const ChatRoom = ({
                 onChange={(e) => setSearchText(e.target.value)}
               />
             </Search>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-evenly"
+            >
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                className={`icons ${isPersonIconActive ? "active" : ""}`}
+                style={{ width: "60px", height: "35px", borderRadius: "30px" }}
+                onClick={handlePersonIconClick}
+              >
+                <BsFillPersonLinesFill
+                  style={{
+                    color: isPersonIconActive ? "#57385c" : "grey",
+                    fontSize: 20,
+                  }}
+                />
+              </Stack>
+
+              <Stack
+                direction="row"
+                alignItems="center"
+                className={`icons ${isGroupIconActive ? "active" : ""}`}
+                justifyContent="center"
+                style={{ width: "60px", height: "35px", borderRadius: "30px" }}
+                onClick={handleGroupIconClick}
+              >
+                <MdOutlineGroups
+                  style={{
+                    color: isGroupIconActive ? "#57385c" : "grey",
+                    fontSize: 25,
+                  }}
+                />
+              </Stack>
+            </Stack>
+
             <Divider />
+
             <ChatElement />
           </Stack>
         </Stack>
