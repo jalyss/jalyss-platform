@@ -75,7 +75,7 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               variant="dot"
             >
-              <Avatar src={Icon} />
+              <Avatar src={user.user.avatar?user.user.avatar.path : Icon} />
             </StyledBadge>
             <Stack direction="row"
               alignItems="center"

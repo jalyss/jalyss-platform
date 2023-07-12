@@ -85,11 +85,11 @@ if (!['take', 'skip'].includes(key)) {
         sessionHasPrerequire:{include:{prerequire:true}},
         SessionHasWhatYouWillLearn:{include:{WhatYouWillLearn:true}},
         sessionFeedback:{include:{User:{include:{avatar:true}}}},
-        previousSesion:{include:{sessionFeedback:{include:{User:{include:{avatar:true}}}},MediaSession:{include:{media:true}}}},
-        tarifs:{include:{features:{include:{feature:true}},bookings:{include:{user:true}}}},
+        previousSesion:{include:{sessionFeedback:{include:{User:{include:{avatar:true}}}},tarifs:{include:{bookings:{include:{user:true}}}},MediaSession:{include:{media:true}}}},
+        tarifs:{include:{features:{include:{feature:true}},session:true,bookings:{include:{user:true}}}},
         cover:true,
-        sessionType:{include:{sessiontype:true}}
-        
+        sessionType:{include:{sessiontype:true}},
+        MediaSession:{include:{media:true}}
        
         
       }

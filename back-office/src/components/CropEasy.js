@@ -76,7 +76,7 @@ const CropEasy = ({ preview, setOpenCrop, setPreview, setOpp,setAvatar,avatar })
       <DialogActions sx={{ flexDirection: 'column', mx: 3, my: 2 }}>
         <Box sx={{ width: '100%', mb: 1 }}>
           <Box>
-            <Typography>Zoom: {zoomPercent(zoom)}</Typography>
+            <Typography >Zoom: {zoomPercent(zoom)}</Typography>
             <Slider
               valueLabelDisplay="auto"
               valueLabelFormat={zoomPercent}
@@ -84,7 +84,9 @@ const CropEasy = ({ preview, setOpenCrop, setPreview, setOpp,setAvatar,avatar })
               max={3}
               step={0.1}
               value={zoom}
+              style={{color:"#956EB1"}}
               onChange={(e, zoom) => setZoom(zoom)}
+            
             />
           </Box>
           <Box>
@@ -95,6 +97,7 @@ const CropEasy = ({ preview, setOpenCrop, setPreview, setOpp,setAvatar,avatar })
               max={360}
               value={rotation}
               onChange={(e, rotation) => setRotation(rotation)}
+              style={{color:"#956EB1"}}
             />
           </Box>
         </Box>
@@ -109,12 +112,14 @@ const CropEasy = ({ preview, setOpenCrop, setPreview, setOpp,setAvatar,avatar })
             variant="outlined"
             startIcon={<Cancel />}
             onClick={() => setOpenCrop(false)}
+            style={{backgroundColor:"#956EB1" , color:"#fff"}}
           >
             Cancel
           </Button>
           <Button
             variant="contained"
             startIcon={<CropIcon />}
+            style={{backgroundColor:"#956EB1" , color:"#fff"}}
             onClick={cropImage}
           >
             Crop

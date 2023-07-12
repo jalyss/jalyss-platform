@@ -6,10 +6,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class SessionRequestService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateSessionRequestDto) {
+  async create(dto: CreateSessionRequestDto,userId:string) {
     return await this.prisma.sessionRequest.create({
       data : { 
-        ...dto
+        ...dto,
+        userId
       }
     })
   }
