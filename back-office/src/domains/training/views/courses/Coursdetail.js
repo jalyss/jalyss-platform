@@ -11,13 +11,16 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 
 const Coursdetail = () => {
-const lecture=useSelector((state)=>state.courses.cours
-)
+const lecture=useSelector((state)=>state.courses.cours)
   const  dispatch=useDispatch()
-  const[cours,setCours]=useState({})
+ 
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [enddate, setEnddate] = useState("");
+  const [startdate, setStartdate] = useState("");
   const { t, i18n } = useTranslation();
   const [editMode, setEditMode] = useState(false)
 
@@ -29,16 +32,21 @@ const lecture=useSelector((state)=>state.courses.cours
   dispatch(fetchOnecouse(lectureId)) 
   }, [lectureId])
 
-  useEffect(()=>{
-    setCours(cours)
-  },[cours])
+ 
 
-  const handlecoursChange = (e) => {
-    const { name, value } = e.target;
-    setCours((Cours) => ({ 
-      ...Cours,
-       [name]: value ? parseFloat(value) : null }));
-  };
+  // useEffect(()=>{
+  //   setTitle(lecture?.title)
+  //   setDescription(lecture?.description)
+  //   setEnddate(lecture?.endAt)
+  //   setStartdate(lecture?.startAt)
+  // },[])
+
+  // const handlecoursChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setCours((Cours) => ({ 
+  //     ...Cours,
+  //      [name]: value ? parseFloat(value) : null }));
+  // };
 
 
   
@@ -48,9 +56,23 @@ const lecture=useSelector((state)=>state.courses.cours
       event.preventDefault()
       setEditMode(true)
     }else{
-      event.preventDefault()
-        let courss= Object.assign({},cours)
-        dispatch(editcours(courss) )
+      let body ={
+        title,
+        description,
+        startDate: new Date(startdate),
+        endDate: new Date(enddate),
+
+      }
+    
+        dispatch(editcours({id:lectureId,body}) ).then((res)=>{
+          if (!res.error) {
+            showSuccessToast("session.created");
+          
+          } else {
+            console.log(res);
+            showErrorToast(res.error.message);
+          }
+        })
       setEditMode(false)
     }
   }
@@ -76,14 +98,14 @@ const lecture=useSelector((state)=>state.courses.cours
                       {editMode ? (
                         <input
                           id="titel"
-                           value={cours?.titel}
+                          value={title}
                           name="titel"
                           type="text"
                           className="form-control"
-                          onChange={handlecoursChange}
+                          onChange={(e)=>{setTitle(e.target.value)}}
                         />
                       ) : (
-                        <span>{cours?.titel} </span>
+                        <span>{lecture?.titel} </span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -97,13 +119,13 @@ const lecture=useSelector((state)=>state.courses.cours
                       {editMode ? (
                         <input
                           name="description"
-                          value={cours?.description}
+                          value={description}
                           type="text"
                           className="form-control"
-                          onChange={handlecoursChange}
+                          onChange={(e)=>{setDescription(e.target.value)}}
                         />
                       ) : (
-                        <span>{cours?.description}</span>
+                        <span>{lecture?.description}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -117,13 +139,13 @@ const lecture=useSelector((state)=>state.courses.cours
                       {editMode ? (
                         <input
                           name="start"
-                          value={cours?.startDate}
+                        
                           type="date"
                           className="form-control"
-                          onChange={handlecoursChange}
+                          onChange={(e)=>{setStartdate(e.target.value)}}
                         />
                       ) : (
-                        <span>{cours?.startDate}</span>
+                        <span>{lecture?.startDate}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -138,13 +160,13 @@ const lecture=useSelector((state)=>state.courses.cours
                         <input
             
                           name="End"
-                          value={cours?.endDate}
+                          
                           type="date"
                           className="form-control"
-                          onChange={handlecoursChange}
+                          onChange={(e)=>{setEnddate(e.target.value)}}
                         />
                       ) : (
-                        <span>{cours?.endDate}</span>
+                        <span>{lecture?.endDate}</span>
                       )}
                     </TableCell>
                   </TableRow>

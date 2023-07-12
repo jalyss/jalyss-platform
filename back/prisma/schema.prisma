@@ -404,6 +404,7 @@ model MediaSession {
 }
 
 model Session {
+  
   id                String                  @id @default(uuid())
   title             String
   description       String
@@ -411,7 +412,7 @@ model Session {
   updatedAt         DateTime                @updatedAt
   startDate         DateTime
   endDate           DateTime
-  category          ArticleCategory         @relation(fields: [categoryId], references: [id])
+  category          ArticleCategory         @relation(fields: [categoryId], references:[id])
   categoryId        String
   previousSesion    Session?                @relation(name: "prevSession", fields: [previousSessionId], references: [id])
   previousSessionId String?
@@ -464,7 +465,7 @@ model SessionHasWhatYouWillLearn {
 }
 
 model LectureHasWhatYouWillLearn {
-  lecture            Lecture          @relation(fields: [lectureId], references: [id])
+  lecture            Lecture          @relation(fields: [lectureId], references: [id],onDelete: Cascade)
   lectureId          String
   WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
   WhatYouWillLearnId String
@@ -507,7 +508,7 @@ model SessionType {
 model SessionHasLecture {
   session   Session @relation(fields: [sessionId], references: [id])
   sessionId String
-  lectures  Lecture @relation(fields: [lectureId], references: [id])
+  lectures  Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId String
 
   @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
@@ -529,7 +530,7 @@ model Coaching {
   id        String  @id @default(uuid())
   user      User    @relation(fields: [userId], references: [id])
   userId    String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lecture   Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId String
 }
 
@@ -537,7 +538,7 @@ model Assessments {
   id        String  @id @default(uuid())
   title     String
   content   String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lecture   Lecture @relation(fields: [lectureId], references: [id],onDelete: Cascade)
   lectureId String
 }
 

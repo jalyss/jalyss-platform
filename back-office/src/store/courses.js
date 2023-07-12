@@ -13,7 +13,6 @@ export const fetchcours = createAsyncThunk("cours/couses",async ()=>{
 
 export const fetchOnecouse= createAsyncThunk("cours/courseOne",async (id)=>{
   const response =await axios.get(`${config.API_ENDPOINT}/lecture/${id}`)
-  console.log('response.data',response.data)
   return response.data;
 })
 
@@ -32,7 +31,7 @@ export const deletcours = createAsyncThunk("cours/deletcours", async (id, { disp
 
 
 export const editcours = createAsyncThunk("cours/Updtcours", async (args, { dispatch }) => {
-  const {id,...body} = args
+  const {id,body} = args
 
   let token = JSON.parse(localStorage.getItem('token'))
   const configs = {
@@ -42,10 +41,15 @@ export const editcours = createAsyncThunk("cours/Updtcours", async (args, { disp
   }
 
   const response = await axios.patch(`${config.API_ENDPOINT}/lecture/${id}`,body,configs);
-  dispatch(fetchcours (id))
+  // dispatch(fetchcours (id))
   return response.data;
 });
 
+export const CreateNeswcours = createAsyncThunk("cours/addcours", async (body, {dispatch  }) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/lecture`, body);
+  dispatch( fetchcours())  
+  return response.data;
+});
 
 
 export const coursSlice = createSlice({

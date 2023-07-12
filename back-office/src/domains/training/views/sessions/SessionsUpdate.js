@@ -11,35 +11,64 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useTranslation } from "react-i18next";
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
+import { fetchCategories } from "../../../../store/category";
+import { useNavigate } from "react-router-dom";
 
 const SessionsUpdate = () => {
   const sessions = useSelector((state) => state.sessions.session);
+  const categoriesStore = useSelector((state) => state.category);
+  const { categories } = categoriesStore;
+  const [categoryId, setCategoryId] = useState("");
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const [session, setSession] = useState({});
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [enddate, setEnddate] = useState("");
+  const [startdate, setStartdate] = useState("");
   const [editMode, setEditMode] = useState(false);
   const { sessionsId } = useParams();
 
   useEffect(() => {
-    dispatch(fetchOnesession(sessionsId));
-  }, [dispatch, sessionsId]);
-
+       dispatch(fetchOnesession(sessionsId));
+  }, [ sessionsId]);
   useEffect(() => {
-    setSession(sessions);
-  }, [sessions]);
+   setTitle(sessions?.title)
+   setDescription(sessions?.description)
+   setEnddate(sessions?.endDate)
+   setStartdate(sessions?.startDate)
+   setCategoryId(sessions?.category?.nameEn)
+  //  console.log("session",session);
+  }, []);
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
-  const handlesessionChange = (e) => {
-    const { name, value } = e.target;
-    setSession((Session) => ({...Session, [name]: value  }));
-  };
 
   const submitEditsession = async (event) => {
     event.preventDefault();
     if (!editMode) {
       setEditMode(true);
     } else {
-      let sess = { ...session };
-      dispatch(editsession(sess));
+      // let body = Object.assign({},session)
+      let body = {
+        title,
+        description,
+        startDate: new Date(startdate),
+        endDate: new Date(enddate),
+        categoryId 
+      };
+      console.log("sess", body);
+      dispatch(editsession({ id: sessionsId, body })).then((res)=>{
+        if (res.error) {
+          showErrorToast(res.error.message)
+        } else {
+          showSuccessToast('session has been updted')
+          navigate(-1)
+        }
+      })
       setEditMode(false);
     }
   };
@@ -53,7 +82,9 @@ const SessionsUpdate = () => {
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
-                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell className="fw-bold" align="right">
                       {t("titel")}
                     </TableCell>
@@ -61,18 +92,21 @@ const SessionsUpdate = () => {
                       {editMode ? (
                         <input
                           id="title"
-                          name="title"
-                          value={session?.title || ""}
+                          value={title}
                           type="text"
                           className="form-control"
-                          onChange={handlesessionChange}
+                          onChange={(e) => {
+                            setTitle(e.target.value);
+                          }}
                         />
                       ) : (
-                        <span> {session?.title}</span>
+                        <span> {sessions?.title}</span>
                       )}
                     </TableCell>
                   </TableRow>
-                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell className="fw-bold" align="right">
                       {t(" description")}
                     </TableCell>
@@ -80,18 +114,21 @@ const SessionsUpdate = () => {
                       {editMode ? (
                         <input
                           id="description"
-                          name="description"
                           type="text"
-                          value={session?.description || ""}
-                          onChange={handlesessionChange}
+                          value={description}
+                          onChange={(e) => {
+                            setDescription(e.target.value);
+                          }}
                           className="form-control"
                         />
                       ) : (
-                        <span>{session?.description}</span>
+                        <span>{sessions?.description}</span>
                       )}
                     </TableCell>
                   </TableRow>
-                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
                     <TableCell className="fw-bold" align="right">
                       {t("start-Date")}
                     </TableCell>
@@ -100,35 +137,64 @@ const SessionsUpdate = () => {
                         <input
                           type="date"
                           id="startDate"
-                          name="startDate"
-                          onChange={handlesessionChange}
-                          value={session?.startDate || ""}
+                          onChange={(e) => {
+                            setStartdate(e.target.value);
+                          }}
+                          value={startdate}
                           className="form-control"
                         />
                       ) : (
-                        <span>{session?.startDate}</span>
+                        <span>{sessions?.startDate}</span>
                       )}
                     </TableCell>
                   </TableRow>
                   <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell className="fw-bold" align="right">
-                      {t(" End sessions")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          type="date"
-                          id="endDate"
-                          name="endDate"
-                          value={session?.endDate || ""}
-                          onChange={handlesessionChange}
-                          className="form-control"
-                        />
-                      ) : (
-                        <span>{session?.endDate}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
+  <TableCell className="fw-bold" align="right">
+    {t("End sessions")}
+  </TableCell>
+  <TableCell align="right">
+    <div style={{ display: "flex", alignItems: "center" }}>
+      {editMode ? (
+        <input
+          type="date"
+          id="endDate"
+          value={enddate}
+          onChange={(e) => {
+            setEnddate(e.target.value);
+          }}
+          className="form-control"
+        />
+      ) : (
+        <span>{sessions?.endDate}</span>
+      )}
+      <TableCell className="fw-bold" align="right">
+        {t("Category session:")}
+      </TableCell>
+      {editMode ? (
+        <select
+          value={categoryId}
+          className="form-select mt-3"
+          aria-label="Default select example"
+          onChange={(e)=>{setCategoryId(e.target.value)}}
+          required
+          style={{ marginLeft: "10px" }}
+        >
+          <option value="" disabled selected>
+            Choose your Blog category
+          </option>
+          {categories.items.map((category, index) => (
+            <option key={index} value={category.id}>
+              {category.nameEn}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <span>{sessions?.category?.nameEn}</span>
+      )}
+    </div>
+  </TableCell>
+</TableRow>
+
                 </TableBody>
               </Table>
             </TableContainer>

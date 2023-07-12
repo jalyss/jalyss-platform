@@ -84,41 +84,63 @@ useEffect(()=>{
   
 
   console.log('lzem tji daata',coacheStore)
+const coa =[]
+coacheStore.forEach(element => {
+  coa.push(element.user)
+});
+ console.log("coa",coa);
 
+
+  const uniqueUsers = [];
+  const visitedUsers = new Set();
+
+  for (const user of coa ) {
+    const userKey = `${user.id}`;
+
+    if (!visitedUsers.has(userKey)) {
+      uniqueUsers.push(user);
+      visitedUsers.add(userKey);
+    }
+  }
+  console.log('uniqueUsers',uniqueUsers)
+
+ 
  
   return (
     <div>
   <div className='serchbare' >
-     <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+   
            </div>
-    <div className='crdcoches' style={{marginLeft:'20px', marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'20px'}}>
-      {coacheStore.map((el,key)=>(
+    <div className='crdcoches' style={{marginLeft:'20px', marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'20px',border:10}}>
+      {uniqueUsers.map((el,key)=>(
     <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
       <MDBCol style={{width:300}}>
         <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-            alt='...'
-            position='top'
-          />
+         
+        <img
+  src={el?.avatar?.path}
+  alt="coach"
+  style={{
+    width: '100%',
+    marginBottom: '10px',
+    height: 'auto',
+    maxWidth: '200px',
+    maxHeight: '200px'
+  }}
+/>
+        
           <Button size="small" onClick={() =>navigate(`${el.id}`)}>see More</Button>
           <MDBCardBody>
-            <MDBCardTitle>Name:{el.user.fullNameEn}</MDBCardTitle>
+            <MDBCardTitle>Name:{el.fullNameEn}</MDBCardTitle>
             <MDBCardText>
-           Email: {el.user.email}
+           Email: {el.email}
             </MDBCardText>
             <MDBCardText>
-           Tel: {el.user.tel}
+           Tel: {el.tel}
             </MDBCardText >
-            
+            <MDBCardText>
+           Address: {el.address}
+            </MDBCardText >
           </MDBCardBody>
         </MDBCard>
       </MDBCol>

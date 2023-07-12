@@ -21,7 +21,6 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
   const navigate = useNavigate()
   const open = Boolean(anchorEl);
   
-  console.log('heyyy',coursStore)
 
   useEffect(()=>{
     dispatch(fetchcours()) 
@@ -55,7 +54,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
-          onClick={()=>{navigate('WSessionAdd')}}
+          onClick={()=>{navigate('/training/courses/AddNewCours')}}
         >
         add new course
         </Button>
@@ -76,6 +75,9 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
         
         titel : {el.title}
          
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+         :{el.content}
         </Typography>
         <Typography variant="body2" color="text.secondary">
         Start-At :{el.startAt}

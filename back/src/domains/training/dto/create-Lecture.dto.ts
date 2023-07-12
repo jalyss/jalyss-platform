@@ -6,5 +6,5 @@ export class CreateLectureDto {
  @ApiProperty()
  content: string; 
  @ApiProperty()
- categoryId:string;
+ categoryId: string;
 }

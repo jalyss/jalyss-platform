@@ -158,7 +158,7 @@ function Router() {
                            
               <Route path="courses" element={<Courses />}/>
               <Route path="courses/:lectureId" element={<Coursdetail/>}/>
-              <Route path="SessionAdd" element={<AddNewCours/>}/>
+              <Route path="/training/courses/AddNewCours" element={<AddNewCours/>}/>
             
                 
                 <Route path="coachs" element={<Coachs />}/>

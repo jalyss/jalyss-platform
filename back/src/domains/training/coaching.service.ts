@@ -19,7 +19,7 @@ export class CoachingService {
 
   async findAll() {
     return await this.prisma.coaching.findMany({
-      include : {user:true}
+      include : {user:{include:{avatar:true}}}
     })
   }
 

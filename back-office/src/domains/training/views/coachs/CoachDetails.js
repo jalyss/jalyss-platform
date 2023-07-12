@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 
 function CoachDetails() {
   const coach = useSelector((state) => state.coach.coach);
+  
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
@@ -25,7 +26,7 @@ function CoachDetails() {
 
   useEffect(() => {
     dispatch(fetchCoach(coachId));
-  }, [dispatch,coachId]);
+  }, [coachId]);
 
   useEffect(() => {
     setAuxCoach(coach);
@@ -90,7 +91,7 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           id="fullNameEn"
-                          value={coach?.user?.fullNameEn  || ''}
+                          value={coach?.user?.fullNameEn || ''}
                           name="fullNameEn"
                           type="text"
                           className="form-control"

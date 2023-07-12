@@ -12,10 +12,10 @@ const Addtarif = () => {
     const[price,setPrice]=useState('')
     const dispatch = useDispatch()
 
-    // const handleAddTarifChange = (e) => {
-    //     const { name, value } = e.target.value;
-    //     setAddtarif((addtarif => ({ ...addtarif, [name]: value ? parseFloat(value) : null })
-    //     ))}
+    const handleAddTarifChange = (e) => {
+        const { name, value } = e.target
+        setAddtarif((addtarif => ({ ...addtarif, [name]: value ? parseFloat(value) : null })
+        ))}
 
 
 
@@ -44,7 +44,7 @@ const Addtarif = () => {
             <Form.Control
              type="text" 
              placeholder="Enter name" 
-            //  name='name' 
+             name='name' 
              value={title}
              onChange={(e)=>{setTitle(e.target.value)} } />
           </Form.Group>
@@ -61,6 +61,7 @@ const Addtarif = () => {
             <Form.Label>Price</Form.Label>
             <Form.Control
              type="number"
+             name='number'
              placeholder="Enter price"
              value={price}
             onChange={(e) => { setPrice(parseFloat(+e.target.value)) }}/>
