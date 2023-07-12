@@ -11,8 +11,8 @@ export class CreateProviderDto {
     tel: string
     @ApiProperty({ required: true })
     accountBalance: number
-    @ApiProperty({ required: true })
-    logo: string
+    @ApiProperty({ required: false })
+    logoId: string
     @ApiProperty({ required: true })
     email: string
   

@@ -8,9 +8,11 @@ export class ProvidersService {
   constructor(private readonly prisma: PrismaService) {}
  async create(dto: CreateProviderDto) {
   
-    return await this.prisma.provider.create({data : dto});
+    return await this.prisma.provider.create({data : dto,
+      include:{logo:true},
+    });
   }
-
+ 
   async findAll() {
     return await this.prisma.provider.findMany({});
    }
