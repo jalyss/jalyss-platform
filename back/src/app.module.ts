@@ -22,7 +22,7 @@ import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
 import { LikesModule } from './likes/likes.module';
 import { TrainingModule } from './domains/training/training.module';
 import { QuestionsModule } from './domains/questions/questions.module';
-import { SessionFeedbacksModule } from './domains/session-feedbacks/session-feedbacks.module';
+
 
 @Module({
   imports: [
@@ -44,7 +44,7 @@ import { SessionFeedbacksModule } from './domains/session-feedbacks/session-feed
     LikesModule,
     TrainingModule,
     QuestionsModule,
-    SessionFeedbacksModule
+
     
   ],
   controllers: [AppController],

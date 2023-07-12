@@ -20,7 +20,9 @@ export default function App({
   body,
   normal,
   ofDelete,
-  bodOfDelete
+  bodOfDelete,
+ withoutSave,
+ yesFunc
 }) {
   return (
     <>
@@ -70,11 +72,11 @@ export default function App({
               {normal ? (
                 <>
                   <CloseButton onClick={toggleShow} />
-                  <SaveButton />
+                {!withoutSave &&  <SaveButton  />} 
                 </>
               ) : (
                 <>
-                  <button className="full bg-danger">Yes</button>
+                  <button className="full bg-danger" onClick={yesFunc}>Yes</button>
                   <button
                     type="button"
                     className="btn btn-outline-danger"

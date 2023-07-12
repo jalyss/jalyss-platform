@@ -1,10 +1,24 @@
 import React from "react";
-import { price } from "../../dummydata";
+
 import TrainingHeading from "../Commun/TrainingHeading";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { createTrainingBooking } from "../../store/trainingBooking";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
+import Modal from "../Commun/Modal";
+import { useState } from "react";
+import DisplayLottie from './../../pages/DisplayLottie';
+import warning from "../../constants/warning.json"
+import done from "../../constants/done.json"
 
 const TrainingPricing = ({ session }) => {
- 
+  const [basicModal,setBasicModal]=useState(false)
+  const [isError, setIsError] = useState(false);
+  const toggleShow=()=>{
+ setBasicModal(!basicModal)
+  }
+
+const dispatch=useDispatch()
   function customSort(arr) {
     // const order = ["Basic", "Pro", "Companies"];
     
@@ -94,12 +108,52 @@ console.log("sorted",customSort(wiw))
                   color: "#fff",
                   width: "200px",
                 }}
+                id="basic-primary-trigger"
+                onClick={async () => {
+                  try {
+                    const res = await dispatch(createTrainingBooking({ sessionTarifId: elem.id }));
+                    if (res.error) {
+                      showErrorToast(res.error.message);
+                      setIsError(true)
+                      toggleShow()
+
+                    } else {
+                      showSuccessToast("Reservation done!");
+                     toggleShow()
+                    }
+                  } catch (error) {
+                    showErrorToast(error.message);
+                    setIsError(true)
+                  }
+                }}
+                
+                
               >
                 Subscribe
               </button>
             </div>
           </div>
         ))}
+      <Modal
+  setBasicModal={setBasicModal}
+  basicModal={basicModal}
+  toggleShow={toggleShow}
+  body={isError ?(
+    <div className="d-flex flex-column justify-content-center align-items-center mb-3">
+<DisplayLottie animationData={warning} style={{ width: "120px", height: "120px" }}  />
+<span>You are alredy Subscribed !</span>
+    </div>
+    
+    ):(  <div className="d-flex flex-column justify-content-center align-items-center mb-3">
+    <DisplayLottie animationData={done} style={{ width: "120px", height: "120px" }}  />
+    <div className="text-center">Reservation has been created successfully. We will contact you soon for the confirmation.</div>
+        </div>)}
+  normal={true}
+  title={isError ? "Error":"Success Reservation"}
+  withoutSave={true}
+/>
+                       
+   
       </div>
     </div>
   );
