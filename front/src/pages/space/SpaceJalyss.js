@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchServices } from "../../store/service";
+
 function SpaceJalyss() {
   const { t, i18n } = useTranslation();
   const meta = useMeta(
@@ -24,45 +25,55 @@ function SpaceJalyss() {
   );
   const images = [
     {
-      src: "https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png",
+      src:
+        "https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png",
       alt: "Image 1",
     },
     {
-      src: "https://www.interieurs.com.tn/wp-content/uploads/2022/11/bureau-new-island-scaled.jpg?v=1669101303",
+      src:
+        "https://www.interieurs.com.tn/wp-content/uploads/2022/11/bureau-new-island-scaled.jpg?v=1669101303",
       alt: "Image 2",
     },
     {
-      src: "https://www.meublesmezghani.com/wp-content/uploads/2019/11/04-AMBASSADEUR-4-PIED-Richmond-570x372.jpg",
+      src:
+        "https://www.meublesmezghani.com/wp-content/uploads/2019/11/04-AMBASSADEUR-4-PIED-Richmond-570x372.jpg",
       alt: "Image 3",
     },
     {
-      src: "https://www.megasb.fr/media/0b/e3/a5/1634845517/108752_bild_alter7.jpg",
+      src:
+        "https://www.megasb.fr/media/0b/e3/a5/1634845517/108752_bild_alter7.jpg",
       alt: "Image 4",
     },
   ];
   const [currentImage, setCurrentImage] = useState(0);
   const dispatch = useDispatch();
   const services = useSelector((state) => state.service.services);
-  console.log(services,'iiiiiiiiiii')
+
   useEffect(() => {
     dispatch(fetchServices());
   }, []);
+
   function nextImage() {
     setCurrentImage((currentImage + 1) % images.length);
   }
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       nextImage();
     }, 1500);
     return () => clearInterval(intervalId);
   }, []);
+
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div className="my-2 text-center">
-        {/* <img src="https://assets.devx.work/images/blog/blog-detail/co-working-enterpreneyrs/slider-part/coworking-ahmedaba-slider-5.png" alt="Working zone" className="mb-4" style={{width:2000}} /> */}
         <div className="row">
           <div className="col">
-            <div id="carousel" className="carousel slide" data-ride="carousel">
+            <div
+              id="carousel"
+              className="carousel slide"
+              data-ride="carousel"
+            >
               <ol className="carousel-indicators">
                 {images.map((image, index) => (
                   <li
@@ -93,7 +104,6 @@ function SpaceJalyss() {
             </div>
           </div>
         </div>
-
         <div className="card-body d-flex flex-wrap justify-content-around">
           <div
             className="card p-3 whyUs transition"
@@ -162,252 +172,171 @@ function SpaceJalyss() {
             </p>
           </div>
         </div>
-
         <h6 className="firstLine">Find the workspace that inspires you</h6>
         <h1 className="secondLine">Our Services</h1>
-
-        <div className="d-flex justify-content-center align-items-center ">
-          {services.items.map((elem, i) => (
-            <div className="col-md-2.5 mx-1">
-              <img
-                src={elem.cover?.path}
-                alt={elem.cover?.alt}
-                className="card-img-top"
-                style={{
-                  borderRadius: 35,
-                  marginBottom: -50,
-                  height: 250,
-                  width: 300,
-                }}
-              />
-              <div
-                className="card  headerspaceitem"
-                style={{
-                  borderRadius: 25,
-                  width: 250,
-                  left: 26,
-                  transition: "all 1.6s ease-in-out",
-                }}
-              >
-                <div className="card-body  ">
+        
+          <div className="d-flex flex-wrap justify-content-around align-items-center  ">
+            {services.items.map((elem, i) => (
+              
+              <div className="col-md-2.5 mx-1" >
+                
+                <img
+            src={elem.cover?.path}
+            alt={elem.cover?.alt}
+            className="card-img-top "
+            style={{ borderRadius: 35,
+              marginBottom: -50,
+              height: 250,
+              width: 300,}}
+          />
+           <div
+                  className="card  headerspaceitem"
+                  style={{
+                    borderRadius: 25,
+                    width: 250,
+                    left: 26,
+                    transition: "all 1.6s ease-in-out",
+                  }}
+                >
+                <div className="card-body">
+                
                   <h5 className="card-title">{elem.name}</h5>
                   <button
-                    className="btn btn-primary"
-                    style={{
-                      width: 170,
-                      marginLeft: 25,
-                      backgroundColor: "rgb(230, 229, 232)",
-                      borderRadius: 30,
-                      color: "black",
-                    }}
-                  >
-                    <Link
-                      to={elem?.identifier}
-                      style={{ textDecoration: "none", color: "black" }}
+                      className="btn btn-primary"
+                      style={{
+                        width: 170,
+                        marginLeft: 25,
+                        backgroundColor: "rgb(230, 229, 232)",
+                        borderRadius: 30,
+                        color: "black",
+                      }}
                     >
-                      {" "}
-                      Reserve
-                    </Link>
+                  <Link
+                     to={elem?.identifier}
+                     style={{ textDecoration: "none", color: "black" }}
+                   
+                  >
+                 Reserve
+                  </Link>
                   </button>
                 </div>
               </div>
-            </div>
-          ))}
-         
-        </div>
-
-        <div
-          className="card mb-4"
-          style={{ marginTop: 50, backgroundColor: "rgb(240, 240, 240)" }}
-        >
-          <img
-            decoding="async"
-            width="1498"
-            height="300"
-            src="https://o.remove.bg/downloads/b06c6746-f3fe-4039-97d6-0fc0f05ae263/lightbulb-moment-royalty-free-image-176565702-1563363264-removebg-preview.png"
-            class="attachment-full size-full responsive-img"
-            alt=""
-            loading="lazy"
-            srcset="https://o.remove.bg/downloads/b06c6746-f3fe-4039-97d6-0fc0f05ae263/lightbulb-moment-royalty-free-image-176565702-1563363264-removebg-preview.png 177w, https://o.remove.bg/downloads/b06c6746-f3fe-4039-97d6-0fc0f05ae263/lightbulb-moment-royalty-free-image-176565702-1563363264-removebg-preview.png 113w"
-            sizes="(max-width: 177px) 100vw, 177px"
-            style={{
-              borderRadius: 20,
-            }}
-          />
-          <div className="card-body d-flex justify-content-around">
-            <img
-              decoding="async"
-              width="198"
-              height="471"
-              src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
-              class="attachment-full size-full responsive-img"
-              alt=""
-              loading="lazy"
-              srcset="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
-              sizes="(max-width: 177px) 100vw, 177px"
-              style={{
-                borderRadius: 20,
-              }}
-            />
-
-            <div
-              class="card p-1 whyUs"
-              style={{
-                position: "relative",
-                borderRadius: 23,
-                transition: "all 1.8s ease-in-out",
-              }}
-            >
-              <div class="d-flex justify-content-between align-items-center ">
-                <span>
-                  <h6
-                    className="my-2 text-start"
-                    style={{ fontSize: "1.2rem", color: "red" }}
-                  >
-                    Why....?
-                  </h6>
-                  <h3
-                    className=" mx-5 mb-4"
-                    style={{ fontSize: "3.2rem", color: "darkred" }}
-                  >
-                    JalyssCom
-                  </h3>
-                </span>
               </div>
-
-              <p class="my-2 text-start " style={{ fontSize: "1.5rem" }}>
-                At JalyssCom We value adaptability and initiative in whatever we
-                do as business owners.
-                <br />
-                Our offers can be tailored to your needs and financial
-                situation.
-                <br />
-                Our workspaces encourage collaboration, promote performance, and
-                inspire creativity.
-                <br />
-                They were designed with these goals in mind. Our spaces are
-                secured <br />
-                and available around-the-clock,
-                <br />
-                include natural light that is good for your staff's wellbeing,
-                and are located in a high-rise building in the middle of a
-                renowned business district.
-                <br />
-                JalyssCom is another place for planned events. Whether it's a
-                workshop, seminar, or other type of training, JalyssCom is
-                always active!
-              </p>
-            </div>
-
-            <img
-              decoding="async"
-              width="198"
-              height="471"
-              src="https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock"
-              class="attachment-full size-full responsive-img"
-              alt=""
-              loading="lazy"
-              srcset="https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock 172w, https://freepngimg.com/convert-png/72547-thinking-photography-question-mark-man-stock 108w"
-              sizes="(max-width: 172px) 100vw, 172px"
-              style={{
-                borderRadius: 20,
-              }}
-            />
+            ))}
           </div>
-          <div className="d-flex justify-content-center align-items-center">
-            <div className="col-md-2.5 mx-4">
-              <div
-                className="card whyUs"
-                style={{
-                  width: 120,
-                  height: 135,
-                  borderRadius: 25,
-                  transition: "all 1.7s ease-in-out",
-                }}
-              >
-                <div className="card-body ">
-                  <h3>
-                    <FaMapMarker style={{ color: "darkred " }} />
-                  </h3>
+        
+
+  <div className="card-body d-flex flex-column flex-md-row justify-content-around mb-3"style={{ marginTop: 30}}>
+   
+
+    <div
+      className="card p-1 "
+      style={{
+        position: "relative",
+        borderRadius: 23,
+        transition: "all 1.8s ease-in-out",
+      }}
+    >
+      <div className="d-flex flex-wrap justify-content-between align-items-center">
+  <div className="d-flex align-items-center mb-3 mb-md-0">
+    <img
+      decoding="async"
+      width="198"
+      height="471"
+      src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
+      className="attachment-full size-full responsive-img"
+      alt=""
+      loading="lazy"
+      srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
+      sizes="(max-width: 177px) 100vw, 177px"
+      style={{
+        borderRadius: 20,
+      }}
+    />
+    <div className="d-flex flex-column">
+      <h6 className="my-2 text-start" style={{ fontSize: "1rem", color: "red" }}>
+        Why....?
+      </h6>
+        <h3 className="mb-4 fw-bold text-md-center text-lg-start" style={{ color: "darkred", margin: 0 }}>
+        JalyssCom
+      </h3>
+    </div>
+  </div>
+</div>
+
+
+
+
+      <p className="my-2 text-start" style={{ fontSize: "1.15rem" }}>
+        At JalyssCom We value adaptability and initiative in whatever we do as business owners.
+        <br />
+        Our offers can be tailored to your needs and financial situation.
+        <br />
+        Our workspaces encourage collaboration, promote performance, and inspire creativity.
+        <br />
+        They were designed with these goals in mind. Our spaces are secured <br />
+        and available around-the-clock,
+        <br />
+        include natural light that is good for your staff's wellbeing, and are located in a high-rise building in the middle of a renowned business district.
+        <br />
+        JalyssCom is another place for planned events. Whether it's a workshop, seminar, or other type of training, JalyssCom is always active!
+      </p>
+    </div>
+
+    
+  </div>
+</div>
+
+        <div className="card-body">
+          <div className="d-flex flex-wrap justify-content-around mb-3">
+            <div className="card  " style={{ width: "10.2rem",borderRadius: 25, }}>
+              <div className="card-body">
+                <div className="card-icon">
+                  <FaMapMarker />
                 </div>
-                <p>2 Espaces coworking</p>
+                <h5 className="card-title">2 Espaces coworking</h5>
+             
               </div>
             </div>
-            <div className="col-md-2.5 mx-4">
-              <div
-                className="card whyUs"
-                style={{
-                  width: 120,
-                  height: 135,
-                  borderRadius: 25,
-                  transition: "all 1.7s ease-in-out",
-                }}
-              >
-                <div className="card-body ">
-                  <h3>
-                    <FaCommentDots style={{ color: "darkred " }} />
-                  </h3>
+            <div className="card  " style={{ width: "10.2rem",borderRadius: 25, }}>
+              <div className="card-body">
+                <div className="card-icon">
+                  <FaCommentDots />
                 </div>
-                <p>Active Community</p>
+                <h5 className="card-title">Active Community</h5>
+              
               </div>
             </div>
-            <div className="col-md-2.5 mx-4 ">
-              <div
-                className="card whyUs"
-                style={{
-                  width: 120,
-                  height: 135,
-                  borderRadius: 25,
-                  transition: "all 1.7s ease-in-out",
-                }}
-              >
-                <div className="card-body ">
-                  <h3>
-                    <FaChair style={{ color: "darkred " }} />
-                  </h3>
+            <div className="card  " style={{ width: "10.2rem",borderRadius: 25, }}>
+              <div className="card-body">
+                <div className="card-icon">
+                  <FaChair />
                 </div>
-                <p>Comfortable Seating</p>
+                <h5 className="card-title">Comfortable Seating</h5>
+               
               </div>
             </div>
-            <div className="col-md-2.5 mx-4">
-              <div
-                className="card whyUs"
-                style={{
-                  width: 120,
-                  height: 135,
-                  borderRadius: 25,
-                  transition: "all 1.7s ease-in-out",
-                }}
-              >
-                <div className="card-body ">
-                  <h3>
-                    <FaWifi style={{ color: "darkred " }} />
-                  </h3>
+            <div className="card  " style={{ width: "10.2rem",borderRadius: 25, }}>
+              <div className="card-body">
+                <div className="card-icon">
+                  <FaWifi />
                 </div>
-                <p>Free Wi-Fi</p>
+                <h5 className="card-title">Free Wi-Fi</h5>
+               
               </div>
             </div>
-            <div className="col-md-2.5 mx-4">
-              <div
-                className="card whyUs"
-                style={{
-                  width: 120,
-                  height: 135,
-                  borderRadius: 25,
-                  transition: "all 1.7s ease-in-out",
-                }}
-              >
-                <div className="card-body ">
-                  <h3>
-                    <FaCalendarAlt style={{ color: "darkred " }} />
-                  </h3>
+            <div className="card  " style={{ width: "10.2rem",borderRadius: 25, }}>
+              <div className="card-body">
+                <div className="card-icon">
+                  <FaCalendarAlt />
                 </div>
-                <p>Events </p>
+                <h5 className="card-title">Events</h5>
+            
               </div>
             </div>
           </div>
         </div>
-      </div>
+      
     </DocumentMeta>
   );
 }

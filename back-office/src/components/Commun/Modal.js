@@ -20,15 +20,14 @@ export default function App({
   body,
   normal,
   ofDelete,
-  bodOfDelete
+  bodOfDelete,
+  fn
 }) {
   return (
-    <>
       <MDBModal
         show={basicModal}
         setShow={setBasicModal}
         toggle={toggleShow}
-        tabIndex="-1"
       >
         <MDBModalDialog centered>
           <MDBModalContent>
@@ -70,7 +69,7 @@ export default function App({
               {normal ? (
                 <>
                   <CloseButton onClick={toggleShow} />
-                  <SaveButton />
+                  <SaveButton onClick={fn} />
                 </>
               ) : (
                 <>
@@ -88,6 +87,5 @@ export default function App({
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
-    </>
   );
 }
