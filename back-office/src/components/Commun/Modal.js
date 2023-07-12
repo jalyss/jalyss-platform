@@ -21,7 +21,7 @@ export default function App({
   normal,
   ofDelete,
   bodOfDelete,
-  confirm,,
+  confirm,
   fn
 }) {
   return (
