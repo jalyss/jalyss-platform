@@ -73,7 +73,7 @@ export default function App({
                 </>
               ) : (
                 <>
-                  <button className="full bg-danger">Yes</button>
+                  <button className="full bg-danger" onClick={fn}>Yes</button>
                   <button
                     type="button"
                     className="btn btn-outline-danger"
