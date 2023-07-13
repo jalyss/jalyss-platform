@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { purple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { editcours, fetchOnecouse } from "../../../../store/courses";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,11 +16,11 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 const Coursdetail = () => {
 const lecture=useSelector((state)=>state.courses.cours)
   const  dispatch=useDispatch()
- 
+ const navigate=useNavigate()
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [enddate, setEnddate] = useState("");
-  const [startdate, setStartdate] = useState("");
+  const [content, setContent] = useState("");
+  // const [enddate, setEnddate] = useState("");
+  // const [startdate, setStartdate] = useState("");
   const { t, i18n } = useTranslation();
   const [editMode, setEditMode] = useState(false)
 
@@ -34,12 +34,11 @@ const lecture=useSelector((state)=>state.courses.cours)
 
  
 
-  // useEffect(()=>{
-  //   setTitle(lecture?.title)
-  //   setDescription(lecture?.description)
-  //   setEnddate(lecture?.endAt)
-  //   setStartdate(lecture?.startAt)
-  // },[])
+  useEffect(()=>{
+    setTitle(lecture?.title)
+    setContent(lecture?.description)
+   
+  },[])
 
   // const handlecoursChange = (e) => {
   //   const { name, value } = e.target;
@@ -58,23 +57,19 @@ const lecture=useSelector((state)=>state.courses.cours)
     }else{
       let body ={
         title,
-        description,
-        startDate: new Date(startdate),
-        endDate: new Date(enddate),
-
+        content,
       }
     
         dispatch(editcours({id:lectureId,body}) ).then((res)=>{
-          if (!res.error) {
-            showSuccessToast("session.created");
-          
+          if (res.error) {
+            showErrorToast(res.error.message)
           } else {
-            console.log(res);
-            showErrorToast(res.error.message);
+            showSuccessToast('lecture has been updted')
+            navigate(-1)
           }
         })
-      setEditMode(false)
-    }
+        setEditMode(false);
+      }
   }
 
 
@@ -105,7 +100,7 @@ const lecture=useSelector((state)=>state.courses.cours)
                           onChange={(e)=>{setTitle(e.target.value)}}
                         />
                       ) : (
-                        <span>{lecture?.titel} </span>
+                        <span>{lecture?.title} </span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -113,46 +108,46 @@ const lecture=useSelector((state)=>state.courses.cours)
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t("description")}
+                      {t("content")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
                         <input
-                          name="description"
-                          value={description}
+                          name="content"
+                          value={content}
                           type="text"
                           className="form-control"
-                          onChange={(e)=>{setDescription(e.target.value)}}
+                          onChange={(e)=>{setContent(e.target.value)}}
                         />
                       ) : (
-                        <span>{lecture?.description}</span>
+                        <span>{lecture?.content}</span>
                       )}
                     </TableCell>
                   </TableRow>
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
-                      {t("start")}
+                    {/* <TableCell className="fw-bold" align="right">
+                      {t("startAt")}
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
                         <input
-                          name="start"
+                          name="startAt"
                         
                           type="date"
                           className="form-control"
                           onChange={(e)=>{setStartdate(e.target.value)}}
                         />
                       ) : (
-                        <span>{lecture?.startDate}</span>
+                        <span>{lecture?.startAt}</span>
                       )}
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
+                    {/* <TableCell className="fw-bold" align="right">
                       {t("end")}
                     </TableCell>
                     <TableCell align="right">
@@ -166,9 +161,9 @@ const lecture=useSelector((state)=>state.courses.cours)
                           onChange={(e)=>{setEnddate(e.target.value)}}
                         />
                       ) : (
-                        <span>{lecture?.endDate}</span>
+                        <span>{lecture?.endAt}</span>
                       )}
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

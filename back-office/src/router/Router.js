@@ -194,12 +194,11 @@ function Router() {
             
                 
                 <Route path="coachs" element={<Coachs />}/>
-                <Route path="coachs/:coachId" element={<CoachDetails/>}>
-              </Route>
+                <Route path="coachs/:id" element={<CoachDetails/>}>
+              </Route>      <Route path="tarifs/:tarifId" element={<Updatetarif/>}/>
               <Route path="tarifs" element={<Tarifs />}/>
-              <Route path="tarifs/up/:tarifId" element={<Updatetarif/>}/>
-              <Route path="addtarif" element={<Addtarif/>}/> 
-            
+              <Route path="tarifs/addtarif" element={<Addtarif/>}/> 
+        
             </Route>
 
 

@@ -41,7 +41,7 @@ export const editcours = createAsyncThunk("cours/Updtcours", async (args, { disp
   }
 
   const response = await axios.patch(`${config.API_ENDPOINT}/lecture/${id}`,body,configs);
-  // dispatch(fetchcours (id))
+  dispatch(fetchcours (id))
   return response.data;
 });
 

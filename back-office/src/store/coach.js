@@ -11,7 +11,7 @@ export const fetchCoachs = createAsyncThunk(" coache /coaches",async ()=>{
 })
 
 
-export const fetchCoach= createAsyncThunk("coache/coaachId",async (id)=>{
+export const fetchoneCoach= createAsyncThunk("coache/coaachId",async (id)=>{
   const response =await axios.get(`${config.API_ENDPOINT}/coaching/${id}`)
   return response.data;
 })
@@ -44,13 +44,7 @@ export const deleteCoach = createAsyncThunk("coache/deletcoache", async (id, { d
   return response.data;
 });
 export const CreateNeswcoach = createAsyncThunk("coach/addcoach", async (body, {dispatch  }) => {
-  let token = JSON.parse(localStorage.getItem('token'))
-  const configs = {
-    headers: {
-      Authorization: 'Bearer ' + token  
-    } 
-  }
-  const response = await axios.post(`${config.API_ENDPOINT}/coaching`, body, configs);
+  const response = await axios.post(`${config.API_ENDPOINT}/coaching`, body);
   dispatch(fetchCoachs())  
   return response.data;
 });
@@ -73,7 +67,7 @@ export const coachesSlice = createSlice({
       builder.addCase(fetchCoachs.fulfilled, (state, action) => {
         state.coachs.items = action.payload;
       });
-      builder.addCase(fetchCoach.fulfilled, (state, action) => {
+      builder.addCase(fetchoneCoach.fulfilled, (state, action) => {
         state.coach=action.payload;
       });
     },

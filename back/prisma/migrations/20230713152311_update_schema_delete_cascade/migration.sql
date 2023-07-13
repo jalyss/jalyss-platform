@@ -1007,7 +1007,7 @@ ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_fe
 ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "SessionTarif"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionTarif" ADD CONSTRAINT "SessionTarif_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionTarif" ADD CONSTRAINT "SessionTarif_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

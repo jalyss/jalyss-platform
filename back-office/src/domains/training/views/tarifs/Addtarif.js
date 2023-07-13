@@ -1,28 +1,50 @@
 import React, { useState } from 'react';
 import { Card, Button, Form } from 'react-bootstrap';
 import { showErrorToast,showSuccessToast } from '../../../../utils/toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CreateTarif from '../../../service/views/CreateTarif';
 import { CreateNeswTarif } from '../../../../store/tarif';
 import Title from 'antd/es/skeleton/Title';
+import { useEffect } from 'react';
+import { fetchsessions } from '../../../../store/sessions';
+
+
+
+
+
+
 const Addtarif = () => {
-    // const [addtarif,setAddtarif]=useState({})
+const sessionstore=useSelector((state)=>state.sessions.sessions.items)
+
+console.log(sessionstore)
+
+
+    const [sessionId,setSessionId]=useState('')
     const [title,setTitle]=useState('')
-    const[description,setDescription]=useState('')
-    const[price,setPrice]=useState('')
+    // const [description,setDescription]=useState('')   
+    const [skip, setSkip] = useState(0);
+    const [price,setPrice]=useState('')
+
     const dispatch = useDispatch()
 
-    const handleAddTarifChange = (e) => {
-        const { name, value } = e.target
-        setAddtarif((addtarif => ({ ...addtarif, [name]: value ? parseFloat(value) : null })
-        ))}
+    const take = 6;
+    useEffect(()=>{
+      dispatch(fetchsessions({ take, skip }));
+    }, [dispatch, take, skip])
+
+    // const handleAddTarifChange = (e) => {
+    //     const { name, value } = e.target
+    //     setAddtarif((addtarif => ({ ...addtarif, [name]: value ? parseFloat(value) : null })
+    //     ))}
 
 
 
         const submitTarif = async (event) => {
             event.preventDefault();
-            let tar={price,title}
-            dispatch(CreateNeswTarif(tar))
+           
+            dispatch(CreateNeswTarif({price:parseFloat(price),
+              title,
+              sessionId}))
               .then(res => {
                 if (!res.error) {
                   showSuccessToast('tarif.created')
@@ -48,6 +70,23 @@ const Addtarif = () => {
              value={title}
              onChange={(e)=>{setTitle(e.target.value)} } />
           </Form.Group>
+          <select
+           value={sessionId}
+            className="form-select mt-3"
+              aria-label="Default select example"
+             onChange={(e) => { setSessionId(e.target.value) }}
+               required
+  style={{ marginLeft: "10px" }}
+>
+  <option value="" disabled selected>
+    Choose your sessionid
+  </option>
+  { sessionstore?.items?.map((el, index) => (
+      <option key={index} value={el.id}>
+        {el.description}
+      </option>
+    ))}
+</select>
           {/* <Form.Group controlId="tariffDescription">
             <Form.Label>Description</Form.Label>
             <Form.Control
@@ -66,6 +105,9 @@ const Addtarif = () => {
              value={price}
             onChange={(e) => { setPrice(parseFloat(+e.target.value)) }}/>
           </Form.Group>
+        
+
+
           <Button variant="primary"  onClick={submitTarif}>Confirm</Button>
         </Card.Body>
       </Card>

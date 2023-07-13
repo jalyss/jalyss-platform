@@ -72,7 +72,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
  function Coachs() {
 
-  const coacheStore= useSelector((state)=>state.coach.coachs.items)
+  const coacheStore= useSelector((state)=>state.coach.coachs)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -85,7 +85,8 @@ useEffect(()=>{
 
   console.log('lzem tji daata',coacheStore)
 const coa =[]
-coacheStore.forEach(element => {
+coacheStore.items.forEach(element => {
+  coa.push(element.id)
   coa.push(element.user)
 });
  console.log("coa",coa);
@@ -102,9 +103,9 @@ coacheStore.forEach(element => {
       visitedUsers.add(userKey);
     }
   }
-  console.log('uniqueUsers',uniqueUsers)
 
- 
+
+ console.log(uniqueUsers)
  
   return (
     <div>
@@ -112,13 +113,14 @@ coacheStore.forEach(element => {
    
            </div>
     <div className='crdcoches' style={{marginLeft:'20px', marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'20px',border:10}}>
-      {uniqueUsers.map((el,key)=>(
+      {coacheStore.items.map((el,key)=>(
+
     <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
       <MDBCol style={{width:300}}>
         <MDBCard>
          
         <img
-  src={el?.avatar?.path}
+  src={el?.user?.avatar?.path}
   alt="coach"
   style={{
     width: '100%',
@@ -133,13 +135,13 @@ coacheStore.forEach(element => {
           <MDBCardBody>
             <MDBCardTitle>Name:{el.fullNameEn}</MDBCardTitle>
             <MDBCardText>
-           Email: {el.email}
+           Email: {el.user.email}
             </MDBCardText>
             <MDBCardText>
-           Tel: {el.tel}
+           Tel: {el.user.tel}
             </MDBCardText >
             <MDBCardText>
-           Address: {el.address}
+           Address: {el.user.address}
             </MDBCardText >
           </MDBCardBody>
         </MDBCard>

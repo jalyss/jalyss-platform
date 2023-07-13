@@ -8,38 +8,42 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { editCoach, fetchCoach } from "../../../../store/coach";
+import { editCoach, fetchoneCoach } from "../../../../store/coach";
 import { useParams } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 
 function CoachDetails() {
-  const coach = useSelector((state) => state.coach.coach);
-  
+  const coach = useSelector((state) => state.coach?.coach);
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
   const [auxCoach, setAuxCoach] = useState({});
   const [editMode, setEditMode] = useState(false);
-  const {coachId} = useParams();
+  const [fullname,setFullname]=useState('')
+  const [email,setEmail]=useState('')
+  const[address,setAddress]=useState('')
+  const [tel,setTel]=useState('')
+  const {id} = useParams();
 
   console.log('hello',coach)
   console.log('aya',auxCoach)
 
   useEffect(() => {
-    dispatch(fetchCoach(coachId));
-  }, [coachId]);
+    dispatch(fetchoneCoach(id));
+  }, [id]);
 
   useEffect(() => {
     setAuxCoach(coach);
   },[coach]);
 
 
-  const handlecoacheChange = (e) => {
-    const { name, value } = e.target;
-    setAuxCoach((auxCoach) => ({
-      ...auxCoach ,
-      [name]: value 
-    }));
-  };
+  // const handlecoacheChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setAuxCoach((auxCoach) => ({
+  //     ...auxCoach ,
+  //     [name]: value 
+  //   }));
+  // };
 
 
   const submitEditcoache = async (event) => {
@@ -48,11 +52,25 @@ function CoachDetails() {
       setEditMode(true);
     } 
  else {
-      event.preventDefault();
-      let coch = Object.assign({}, auxCoach);
-      dispatch(editCoach(coch));
+      
+      // let coch = Object.assign({}, auxCoach);
+      let body ={
+        fullname,
+        email,
+        address,
+        address
+      }
+      dispatch(editCoach({id:id,body})).then((res)=>{
+        if (res.error) {
+          showErrorToast(res.error.message)
+        } else {
+          showSuccessToast('coach has been updted')
+          // navigate(-1)
+        }
+      })
       setEditMode(false);
     }
+     
   };
 
   return (
@@ -63,7 +81,7 @@ function CoachDetails() {
           <label id="image">{t("image")}</label>
 
           <div class="image-upload">
-            <input id="image" type="file" accept="image/*" />
+            <input id="image" type="file" accept="image/*" src={coach?.user?.avatar?.path}/>
           </div>
 
           <button
@@ -95,7 +113,9 @@ function CoachDetails() {
                           name="fullNameEn"
                           type="text"
                           className="form-control"
-                          onChange={handlecoacheChange}
+                          onChange={(e) => {
+                            setFullname(e.target.value);
+                          }}
                         />
                       ) : (
                         <span>{coach?.user?.fullNameEn}</span>
@@ -112,10 +132,12 @@ function CoachDetails() {
                       {editMode ? (
                         <input
                           name="email"
-                          value={coach?.user?.email || ''}
+                          value={coach?.user?.email}
                           type="text"
                           className="form-control"
-                          onChange={handlecoacheChange}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                          }}
                         />
                       ) : (
                         <span>{coach?.user?.email}</span>
@@ -133,10 +155,12 @@ function CoachDetails() {
                         <input
                       
                           name="address"
-                           value={coach?.user?.address || ''}
+                           value={coach?.user?.address}
                           type="text"
                           className="form-control"
-                          onChange={handlecoacheChange}
+                          onChange={(e) => {
+                            setAddress(e.target.value);
+                          }}
                         />
                       ) : (
                         <span>{coach?.user?.address}</span>
@@ -154,10 +178,12 @@ function CoachDetails() {
                         <input
             
                           name="tel"
-                          value={coach?.user?.tel || ''}
+                          value={coach?.user?.tel}
                           type="tel"
                           className="form-control"
-                          onChange={handlecoacheChange}
+                          onChange={(e) => {
+                            setTel(e.target.value);
+                          }}
                         />
                       ) : (
                         <span>{coach?.user?.tel}</span>

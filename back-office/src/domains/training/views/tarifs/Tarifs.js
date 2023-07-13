@@ -13,7 +13,7 @@ import { red } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux'
 import { delettarif, fetchtarif } from '../../../../store/tarif';
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,6 +27,7 @@ const Item = styled(Paper)(({ theme }) => ({
   const tarifStore= useSelector((state)=>state.tarif.tarifs.items)
   const dispatch = useDispatch()
   const navigate=useNavigate()
+const {tarifId}=useParams()
 
 
 useEffect(()=>{
@@ -45,6 +46,8 @@ const handleDeletetarifClick=(id) => {
     }
   })
 };
+
+
 const handeladd=()=>{
   navigate("addtarif")
 }
@@ -76,12 +79,10 @@ const handeladd=()=>{
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" >
      
-Price :{el.price}
+        Price :{el.price}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-       {el.title}
-
-
+        {el.title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
       Duration: {el.durtion}
@@ -91,7 +92,7 @@ Price :{el.price}
       </CardContent>
       <CardActions>
         <Button size="small" onClick={()=>{handleDeletetarifClick(el.id)}}>DELETE</Button>
-        <Button size="small" onClick={()=>{navigate('tarifs/up/:tarifId')}}>UPDATE</Button>
+        <Button size="small" onClick={() => navigate(`${el.id}`)} >UPDATE</Button>
       </CardActions>
     </Card>
   </Box>))}

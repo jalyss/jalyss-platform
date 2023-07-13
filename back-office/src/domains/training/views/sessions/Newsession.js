@@ -49,6 +49,8 @@ const Addtarif = () => {
       }
     });
   };
+
+  
   const handleChange = (e) => {
     const selectedOption = e.target.value;
     if (selectedOption === "") {
