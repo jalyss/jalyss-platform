@@ -26,6 +26,18 @@ function DetailProvider() {
                 <hr />
                 <div className="row">
                   <div className="col-2">
+                    <h6>logo</h6>
+                  </div>
+                  <div className="col-4">
+                  <img
+            className="card-img-top"
+            src={provider?.logo?.path}
+            alt="Card image cap"
+          />
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-2">
                     <h6>Email :</h6>
                   </div>
                   <div className="col-4">

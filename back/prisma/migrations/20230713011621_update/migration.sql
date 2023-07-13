@@ -523,6 +523,12 @@ CREATE TABLE "Media" (
 );
 
 -- CreateTable
+CREATE TABLE "MediaProvider" (
+    "mediaId" TEXT NOT NULL,
+    "providerId" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "MediaUser" (
     "mediaId" TEXT NOT NULL,
     "userId" TEXT NOT NULL
@@ -785,6 +791,9 @@ CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_sessionId_key" ON "Sessio
 CREATE UNIQUE INDEX "TrainingBooking_userId_sessionTarifId_key" ON "TrainingBooking"("userId", "sessionTarifId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "MediaProvider_mediaId_providerId_key" ON "MediaProvider"("mediaId", "providerId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "MediaUser_mediaId_userId_key" ON "MediaUser"("mediaId", "userId");
 
 -- CreateIndex
@@ -1020,6 +1029,12 @@ ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_sessionTarifId_fke
 
 -- AddForeignKey
 ALTER TABLE "UserPayment" ADD CONSTRAINT "UserPayment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MediaProvider" ADD CONSTRAINT "MediaProvider_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MediaProvider" ADD CONSTRAINT "MediaProvider_providerId_fkey" FOREIGN KEY ("providerId") REFERENCES "Provider"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaUser" ADD CONSTRAINT "MediaUser_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

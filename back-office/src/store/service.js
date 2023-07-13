@@ -31,7 +31,6 @@ export const createService = createAsyncThunk(
 export const removeService = createAsyncThunk(
   "services/deleteservice",
   async (id) => {
-
     const response = await axios.delete(
       `${config.API_ENDPOINT}/services/${id}`
     );

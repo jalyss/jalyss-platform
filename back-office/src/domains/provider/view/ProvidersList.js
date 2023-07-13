@@ -46,7 +46,7 @@ function ProvidersList() {
       let aux = providerStore.providers.items.map((e) => {
         return {
           id: e.id,
-          logo: e.logo,
+          logo: e.logo.path,
           name: e.name,
           address: e.address,
           tel: e.tel,
@@ -60,7 +60,16 @@ function ProvidersList() {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'logo', headerName: 'Logo', width: 150, editable: false },
+    {
+      field: 'logo',
+      headerName: 'Logo',
+      width: 150,
+      editable: false,
+      renderCell: (params) => (
+        <img src={params.value} alt="Logo" style={{ width: '100%', height: 'auto' }} />
+      ),
+    },
+    
     { field: 'name', headerName: 'Name', width: 150, editable: false },
     { field: 'address', headerName: 'Address', width: 150, editable: false },
     { field: 'tel', headerName: 'Tel', width: 150, editable: false },
