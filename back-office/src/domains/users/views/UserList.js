@@ -167,7 +167,7 @@ function UserList() {
         </Modal>
       </>
       <div className='top-0 start-0' style={{marginLeft:800}} >
-        <Button type='button' href='user/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
+        <Button type='button' onClick={() => navigate('create')} variant="outlined" endIcon={<IoIosPersonAdd />} >
           <span className='btn btn-sm '>
             Add user
           </span>

@@ -321,7 +321,7 @@ CREATE TABLE "Provider" (
     "address" TEXT NOT NULL,
     "tel" TEXT NOT NULL,
     "accountBalance" DOUBLE PRECISION NOT NULL,
-    "logo" TEXT,
+    "logoId" TEXT,
     "email" TEXT NOT NULL,
 
     CONSTRAINT "Provider_pkey" PRIMARY KEY ("id")
@@ -930,6 +930,9 @@ ALTER TABLE "Supply" ADD CONSTRAINT "Supply_providerId_fkey" FOREIGN KEY ("provi
 
 -- AddForeignKey
 ALTER TABLE "Supply" ADD CONSTRAINT "Supply_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Provider" ADD CONSTRAINT "Provider_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -25,7 +25,7 @@ function CreateUser() {
     const { name, value } = e.target
     setUser((User) => ({ ...User, [name]: value }))
   }
-  console.log(avatar);
+  console.log('test',avatar);
   const submitSignup = async (event) => {
     event.preventDefault();
     let aux = Object.assign({}, user)
