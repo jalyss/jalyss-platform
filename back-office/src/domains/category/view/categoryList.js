@@ -41,6 +41,34 @@ function CategoryList() {
     { field: "nameAr", headerName: "nameAr", width: 150, editable: false },
     { field: "nameEn", headerName: "nameEn", width: 150, editable: false },
     {
+      field: "createdAt",
+      headerName: "createdAt",
+      width: 150,
+      editable: false,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const formattedDate =
+          date.toISOString().split("T")[0] +
+          " At " +
+          date.toISOString().split("T")[1].split(".")[0];
+        return formattedDate;
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "updatedAt",
+      width: 150,
+      editable: false,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const formattedDate =
+          date.toISOString().split("T")[0] +
+          " At " +
+          date.toISOString().split("T")[1].split(".")[0];
+        return formattedDate;
+      },
+    },
+    {
       field: "actions",
       type: "actions",
       headerName: "Actions",

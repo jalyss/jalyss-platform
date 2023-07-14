@@ -4,9 +4,9 @@ import isEnglish from "../helpers/isEnglish";
 import { sidebarDataBranch } from "../constants/sidebarDataBranch";
 import Logo from "../assets/logo.jpg";
 import { Box, Typography } from "@mui/material";
-import { AiOutlineDown ,AiOutlineUp} from "react-icons/ai";
-
-function Sidebar() {
+import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { FiAlignJustify } from "react-icons/fi";
+function Sidebar({ onSidebarData }) {
   const isEng = isEnglish();
   const location = useLocation();
 
@@ -23,12 +23,14 @@ function Sidebar() {
 
   const isItemActive = (path) => {
     return activeItems.includes(path);
-    
   };
 
   const isChildActive = (path) => {
     return location.pathname.includes(path);
-    
+  };
+  const handleClick = () => {
+    const data = 'Example data'; // Replace with your actual data
+    onSidebarData(data); // Pass the data to the onSidebarData prop
   };
 
   return (
@@ -37,6 +39,7 @@ function Sidebar() {
       borderRight={isEng ? "1px solid #d9d9d9" : "none"}
       borderLeft={!isEng ? "1px solid #d9d9d9" : "none"}
     >
+      <FiAlignJustify  color="black"  onClick={handleClick}/>
       <div className="sidebarHeader">
         <img style={{ height: 100 }} src={Logo} alt="logo" />
         {/* <AiOutlineDown color="black"/> */}
@@ -52,12 +55,19 @@ function Sidebar() {
                   borderLeft: isActive && !isEng && "2px solid #48184c",
                   borderRight: isActive && isEng && "2px solid #48184c",
                 }}
-                className={`sidebarItem ${isActive && "activeSidebarItem"} justify-content-between`}
+                className={`sidebarItem ${
+                  isActive && "activeSidebarItem"
+                } justify-content-between`}
               >
                 <Typography fontWeight={isActive && "bold"}>
                   {isEng ? elem.nameEn : elem.nameAr}
                 </Typography>
-                {elem.children.length!==0&&(!isActive?<AiOutlineDown color="black"/>:<AiOutlineUp color="black"/>)}
+                {elem.children.length !== 0 &&
+                  (!isActive ? (
+                    <AiOutlineDown color="black" />
+                  ) : (
+                    <AiOutlineUp color="black" />
+                  ))}
               </div>
               {isActive && elem.children.length > 0 && (
                 <div className="sidebarChildren">
@@ -82,7 +92,6 @@ function Sidebar() {
                         <Typography fontWeight={isActiveChildren && "bold"}>
                           • {isEng ? el.nameEn : el.nameAr}
                         </Typography>
-                       
                       </Link>
                     );
                   })}
