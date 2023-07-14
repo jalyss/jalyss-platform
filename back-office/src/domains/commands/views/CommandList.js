@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchServiceById, removeservice } from "../../../store/service";
 import { removeSpace } from "../../../store/space";
-import tarif, { removeTarif } from "../../../store/tarifs";
+import tarif, { removeTarif } from "../../../store/tarif";
 import Dropdown from "react-bootstrap/Dropdown";
 import AddButton from "../../../components/buttons/AddButton";
 import { BsPersonWorkspace } from "react-icons/bs";

@@ -3,7 +3,7 @@ import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { createTarif } from "../../../store/tarifs";
+import { createTarif } from "../../../store/tarif";
 
 export default function CreateTarif() {
   const [name, setName] = useState("");

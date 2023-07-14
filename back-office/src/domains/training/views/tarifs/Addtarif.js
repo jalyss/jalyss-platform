@@ -3,7 +3,7 @@ import { Card, Button, Form } from 'react-bootstrap';
 import { showErrorToast,showSuccessToast } from '../../../../utils/toast';
 import { useDispatch, useSelector } from 'react-redux';
 import CreateTarif from '../../../service/views/CreateTarif';
-import { CreateNeswTarif } from '../../../../store/tarif';
+import { CreateNeswTarif } from '../../../../store/tarifss';
 import Title from 'antd/es/skeleton/Title';
 import { useEffect } from 'react';
 import { fetchsessions } from '../../../../store/sessions';

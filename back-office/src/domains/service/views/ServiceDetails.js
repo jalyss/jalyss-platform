@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchServiceById, removeService } from "../../../store/service";
 import { removeSpace } from "../../../store/space";
-import tarif, { removeTarif } from "../../../store/tarifs";
+import tarif, { removeTarif } from "../../../store/tarif";
 import { DataGrid } from "@mui/x-data-grid";
 import { BsPersonWorkspace } from "react-icons/bs";
 import { BiDetail } from "react-icons/bi";

@@ -2,73 +2,79 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-
-
-export const fetchtarif= createAsyncThunk("tarif/tarifs",async ()=>{
-    const response =await axios.get(`${config.API_ENDPOINT}/sessionTarif`)
+export const createTarif = createAsyncThunk(
+  "tarifs/createTarif",
+  async (body, { dispatch }) => {
+    const response = await axios.post(`${config.API_ENDPOINT}/tarifs`, body);
+    dispatch(fetchtarifs(response.data));
     return response.data;
-})
-export const fetchOneTarif= createAsyncThunk("tarif/tarif",async (id)=>{
-  const response =await axios.get(`${config.API_ENDPOINT}/sessionTarif/${id}`)
-  return response.data;
-})
-
-export const delettarif = createAsyncThunk("tarif/edittarifs", async (id, { dispatch }) => {
-  let token = JSON.parse(localStorage.getItem('tokentarif'));
-  const configs = {
-    headers: {
-    Authorization: 'Bearer ' + token
-    }
-  };
-  const response = await axios.delete(`${config.API_ENDPOINT}/sessionTarif/${id}`, configs);
-  dispatch(fetchtarif());
-  return response.data;
-});
-
-export const editTarif = createAsyncThunk("tarif/Updtarifs", async (args, { dispatch }) => {
-  const {id,...body} = args
-  console.log("argsss",args);
-  let token = JSON.parse(localStorage.getItem('token'))
-  const configs = {
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
   }
+);
 
- 
-  const response = await axios.patch(`${config.API_ENDPOINT}/sessionTarif/${id}`,body,configs);
-  console.log("body",body);
-  dispatch(fetchtarif(id))
-  return response.data;
-});
-export const CreateNeswTarif = createAsyncThunk("tarif/addtarifs", async (body, {dispatch  }) => {
-  const response = await axios.post(`${config.API_ENDPOINT}/sessionTarif`, body);
-  dispatch(fetchtarif())  
-  return response.data;
-});
+export const removeTarif = createAsyncThunk(
+  "tarifs/deleteTarif",
+  async (idi) => {
+    // const { id } = args;
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/tarifs/${idi}`
+    );
+    console.log("hmd",response.data);
+    return response.data;
+  }
+);
 
-export const tarifSlice = createSlice({
-    name: "tarifs",
-    initialState: {
-        tarif: null,
-        tarifs: {
-        items: [],
-        count: 0,
-      },
-      error: null,
-      deleteError: null,
-      saveError: null,
-      createUserError: null,
+export const editTarif = createAsyncThunk(
+  "tarifs/editTarif",
+  async (args) => {
+    const { id, ...body } = args;
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/tarifs/${id}`,
+      body
+    );
+    return response.data;
+  }
+);
+
+export const fetchtarifs = createAsyncThunk(
+  "tarifs/fetchtarifs",
+  async () => {
+    const response = await axios.get(`${config.API_ENDPOINT}/tarifs`);
+    return response.data;
+  }
+);
+
+export const fetchTarifById = createAsyncThunk(
+  "tarifs/fetchTarifById",
+  async (id) => {
+    const response = await axios.get(`${config.API_ENDPOINT}/tarifs/one/${id}`);
+    return response.data;
+  }
+);
+
+export const tarifslice = createSlice({
+  name: "tarif",
+  initialState: {
+    tarif: null,
+    tarifs: {
+      items: [],
+      count: 0,
     },
-    reducers: {},
-    extraReducers(builder) {
-      builder.addCase(fetchtarif.fulfilled, (state, action) => {
-        state.tarifs.items = action.payload;
-      });
-      builder.addCase(fetchOneTarif.fulfilled, (state, action) => {
+    error: null,
+    deleteError: null,
+    saveError: null,
+    createUserError: null,
+  },
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(fetchtarifs.fulfilled, (state, action) => {
+        state.tarifs.items = action.payload.items;
+        state.tarifs.count = action.payload.count;
+
+      })
+      builder.addCase(fetchTarifById.fulfilled, (state, action) => {
         state.tarif = action.payload;
-      });
-  
-    },
-  });
-  export default tarifSlice.reducer;
+      })
+  },
+});
+
+export default tarifslice.reducer;

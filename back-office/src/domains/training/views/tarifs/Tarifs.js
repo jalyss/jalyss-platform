@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { red } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux'
-import { delettarif, fetchtarif } from '../../../../store/tarif';
+import { delettarif, fetchtarif } from '../../../../store/tarifss';
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 import { useNavigate, useParams } from 'react-router-dom';
 

@@ -2,7 +2,7 @@ import React, { useState,useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { purple } from "@mui/material/colors";
 import {useDispatch,useSelector} from 'react-redux';
-import { editTarif, fetchOneTarif } from "../../../../store/tarif";
+import { editTarif, fetchOneTarif } from "../../../../store/tarifss";
 import { useNavigate, useParams } from "react-router-dom";
 import Tarifs from "./Tarifs";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";

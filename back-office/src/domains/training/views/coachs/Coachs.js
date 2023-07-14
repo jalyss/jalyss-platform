@@ -96,7 +96,7 @@ coacheStore.items.forEach(element => {
   const visitedUsers = new Set();
 
   for (const user of coa ) {
-    const userKey = `${user.id}`;
+    const userKey = `${user.fullNameEn}`;
 
     if (!visitedUsers.has(userKey)) {
       uniqueUsers.push(user);
@@ -113,7 +113,7 @@ coacheStore.items.forEach(element => {
    
            </div>
     <div className='crdcoches' style={{marginLeft:'20px', marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'20px',border:10}}>
-      {coacheStore.items.map((el,key)=>(
+      {uniqueUsers.map((el,key)=>(
 
     <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
       <MDBCol style={{width:300}}>
@@ -135,13 +135,13 @@ coacheStore.items.forEach(element => {
           <MDBCardBody>
             <MDBCardTitle>Name:{el.fullNameEn}</MDBCardTitle>
             <MDBCardText>
-           Email: {el.user.email}
+           Email: {el.email}
             </MDBCardText>
             <MDBCardText>
-           Tel: {el.user.tel}
+           Tel: {el.tel}
             </MDBCardText >
             <MDBCardText>
-           Address: {el.user.address}
+           Address: {el.address}
             </MDBCardText >
           </MDBCardBody>
         </MDBCard>

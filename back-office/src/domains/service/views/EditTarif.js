@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTarifById, editTarif } from "../../../store/tarifs";
+import { fetchTarifById, editTarif } from "../../../store/tarif";
 
 export default function EditTarif() {
   const [name, setName] = useState("");

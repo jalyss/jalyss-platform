@@ -16,8 +16,8 @@ import coach from './coach';
 import sessiontyps from './sessiontyps';
 import service from './service'
 import space from './space';
+import tarifss from './tarifss';
 import tarif from './tarif';
-import tarifs from './tarifs';
 
 export const store = configureStore({
   reducer: {
@@ -38,8 +38,8 @@ export const store = configureStore({
     sessiontyps,
     service,
     space,
-    tarif,
-    tarifs
+    tarifss,
+    tarif
     
   },
   middleware: (getDefaultMiddleware) =>

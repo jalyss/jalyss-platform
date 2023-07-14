@@ -22,9 +22,12 @@ function Sessions() {
   };
   const take = 6;
 
+
+  
   useEffect(() => {
     dispatch(fetchsessions({ take, skip }));
   }, [dispatch, take, skip]);
+
 
   const handleDeletesessionsClick = (id) => {
     dispatch(deletsessions(id)).then((res) => {
