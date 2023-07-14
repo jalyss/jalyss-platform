@@ -70,7 +70,20 @@ console.log(sessionstore)
              value={title}
              onChange={(e)=>{setTitle(e.target.value)} } />
           </Form.Group>
-          <select
+         
+        
+          <Form.Group controlId="tariffPrice">
+            <Form.Label>Price</Form.Label>
+            <Form.Control
+             type="number"
+             name='number'
+             placeholder="Enter price"
+             value={price}
+            onChange={(e) => { setPrice(parseFloat(+e.target.value)) }}/>
+          </Form.Group>
+          <Form.Group controlId="tariffPrice">
+
+ <select
            value={sessionId}
             className="form-select mt-3"
               aria-label="Default select example"
@@ -86,28 +99,7 @@ console.log(sessionstore)
         {el.description}
       </option>
     ))}
-</select>
-          {/* <Form.Group controlId="tariffDescription">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-            type="text"
-            placeholder="Enter description"
-            // name='description' 
-            value={description}
-            onChange={(e)=>{setDescription(e.target.value)} } />
-          </Form.Group> */}
-          <Form.Group controlId="tariffPrice">
-            <Form.Label>Price</Form.Label>
-            <Form.Control
-             type="number"
-             name='number'
-             placeholder="Enter price"
-             value={price}
-            onChange={(e) => { setPrice(parseFloat(+e.target.value)) }}/>
-          </Form.Group>
-        
-
-
+</select></Form.Group>
           <Button variant="primary"  onClick={submitTarif}>Confirm</Button>
         </Card.Body>
       </Card>

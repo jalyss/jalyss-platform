@@ -143,17 +143,10 @@ const handleChange = (e) => {
               )}
                     </TableCell>
                   </TableRow>
-               
-              
-                  
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    
-      <TableCell className="fw-bold" align="right">
-        {t(" sessionid:")}
+                  <TableCell className="fw-bold" align="right">
+        {t("  session")}
       </TableCell>
-      {editMode ? (
+                  {editMode ? (
         <select
         value={sessionId}
         className="form-select mt-3"
@@ -175,7 +168,14 @@ const handleChange = (e) => {
       ) : (
         <span>{tarif?.sessionId}</span>
       )}
-                  </TableRow>
+          
+                  
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    
+     
+             </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>

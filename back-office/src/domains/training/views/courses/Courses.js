@@ -77,7 +77,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
          
         </Typography>
         <Typography variant="body2" color="text.secondary">
-         :{el.content}
+         Content :{el.content}
         </Typography>
         <Typography variant="body2" color="text.secondary">
         Start-At :{el.startAt}

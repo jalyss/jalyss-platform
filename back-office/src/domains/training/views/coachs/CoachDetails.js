@@ -81,7 +81,8 @@ function CoachDetails() {
           <label id="image">{t("image")}</label>
 
           <div class="image-upload">
-            <input id="image" type="file" accept="image/*" src={coach?.user?.avatar?.path}/>
+            {/* <input id="image" type="file" accept="image/*" src={coach?.user?.avatar?.path}/> */}
+            <img src={coach?.user?.avatar?.path} alt="image" style={{ width: '100%', marginBottom: '10px' }} /> 
           </div>
 
           <button

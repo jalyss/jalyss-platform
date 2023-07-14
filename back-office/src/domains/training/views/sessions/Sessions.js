@@ -41,7 +41,7 @@ function Sessions() {
   }
 
   return (
-    <div className="container" style={{ border: 20}}>
+    <div className="container" style={{ border: 20,}}>
  <div style={{marginLeft:600, position: 'sticky', top: 70, zIndex: 999, marginTop: 20 }}>
   <CreateButton
     title={'add new session'}
