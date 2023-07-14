@@ -221,7 +221,7 @@ model Author {
 model ArticleByAuthor {
   article   Article @relation(fields: [articleId], references: [id],onDelete: Cascade)
   articleId String
-  author    Author  @relation(fields: [authorId], references: [id],onDelete: Cascade)
+  author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   @@unique([authorId, articleId])
@@ -379,7 +379,8 @@ model Provider {
   address        String
   tel            String
   accountBalance Float
-  logo           String
+  logoId         String?
+  logo           Media?   @relation(fields: [logoId], references: [id])
   email          String   @unique
   Supply         Supply[]
 }
@@ -608,6 +609,7 @@ model Media {
   Employee     Employee[]
   Blog         Blog[]
   WorkSpace    WorkSpace[]
+  Provider     Provider[]
 
   MediaWorkSpace MediaWorkSpace[]
 
@@ -766,11 +768,9 @@ model View {
 // }
 
 model Service {
-  id String @id @default(uuid())
-
+  id           String         @id @default(uuid())
   name         String
   description  String? 
-
   identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
