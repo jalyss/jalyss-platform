@@ -33,14 +33,14 @@ function DetailPublishHouse() {
                 }}
               >
                 <img
-                className="img-fluid rounded-start mt-5"
+                className="img-fluid mt-5"
                 src={
                   publishingHouse?.logo?.path
                     ? publishingHouse?.logo?.path
                     : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
                 }
                 alt="Card image cap"
-                style={{ height: 200, width: 300,padding:"10px" }}
+                style={{ height: 170, width: 250,padding:"5px",borderRadius:"12px" }}
               />
               </div>
             </div>

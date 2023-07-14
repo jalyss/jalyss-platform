@@ -9,7 +9,6 @@ import {styled} from "@mui/material/styles";
       // vertical padding + font size from searchIcon
       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
       width: "100%",
-      border:"none"
     },
   }));
 
