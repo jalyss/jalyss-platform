@@ -1,76 +1,125 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { fetchProvider, editProvider } from '../../../store/provider';
-import { showErrorToast, showSuccessToast } from '../../../utils/toast';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { editProvider, fetchProvider } from "../../../store/provider";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 function EditProvider() {
-  const { providerId } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const provider = useSelector((state) => state.provider.provider);
-  const [updatedProvider, setUpdatedProvider] = useState({});
-
+  const { providerId } = useParams();
+ 
+  const [name, setName] = useState("");
+  const [accountBalance, setAccountBalance] = useState(0);
+  const [email, setEmail] = useState("");
+  const [tel, setTel] = useState("");
+  const [address, setAddress] = useState("");
+  const [filename, setFileName] = useState("");
+  const [filenamesplitted, setFileNamesplitted] = useState("");
+  const [logo, setLogo] = useState("");
+  
+  const providerStore = useSelector((state) => state.provider);
+  console.log(providerId, "providerId");
+  console.log(providerStore, "providerStore");
   useEffect(() => {
     dispatch(fetchProvider(providerId));
   }, [dispatch, providerId]);
+  console.log(providerId, "providerIdMMMM");
 
   useEffect(() => {
-    setUpdatedProvider(provider);
-  }, [provider]);
+    if (providerStore.provider) {
+      const { name, accountBalance, email, tel, address, logo } =
+        providerStore.provider;
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await dispatch(editProvider({ id: providerId, body: updatedProvider }));
-      showSuccessToast('Provider updated successfully');
-    } catch (error) {
-      console.log(error);
-      showErrorToast(error.message);
+      setName(name);
+      setAccountBalance(accountBalance);
+      setEmail(email);
+      setTel(tel);
+      setAddress(address);
+      setFileName(logo?.path);
+      deleteImg(filename);
+      setLogo();
     }
-  };
+  }, [providerStore.provider]);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setUpdatedProvider((prevProvider) => ({ ...prevProvider, [name]: value }));
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+   
+    var body = {
+      name,
+      accountBalance,
+      email,
+      tel,
+      address,
+    };
+console.log(body,"booo")
 
+    const submitEdit = async () => {
+      let aux = { ...body,providerId, accountBalance: Number(body.accountBalance) };
+      try {
+        dispatch(editProvider(aux));
+        showSuccessToast("Provider editd successfully");
+        navigate(-1);
+      } catch (error) {
+        console.log(error);
+        showErrorToast(error.message);
+      }
+      console.log(aux,"aux")
+    };
+    if (logo !== null) {
+      try {
+        const formData = new FormData();
+        formData.append("file", logo);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          formData
+        );
+
+        body.logoId = response.data.id;
+      } catch (error) {
+        console.error("Error uploading logo image:", error);
+      }
+    }
+
+    submitEdit();
+
+  };
+  const deleteImg = async (path) => {
+    const pathElements = path.split("/");
+    const name = pathElements[pathElements.length - 1];
+    console.log(name, "ggg");
+    setFileNamesplitted(name);
+  };
   return (
     <div>
       <div className="container">
         <div className="card">
           <div className="container">
             <form onSubmit={handleSubmit}>
-              <div className="d-flex mb-2" style={{ justifyContent: 'center' }}>
-                <img
-                  className="img-fluid rounded-start mt-5"
-                  src={provider?.logo}
-                  alt="Card image cap"
-                  style={{ height: 100, width: 250 }}
-                />
-              </div>
+             
               <div className="row">
                 <div className="form-group col-6 mt-3">
                   <label>Name</label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Name"
-                    name="name"
-                    id="name"
-                    onChange={handleChange}
-                    value={updatedProvider?.name || ''}
+                    id="exampleFormControlInput1"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                   
                   />
                 </div>
                 <div className="form-group col-6 mt-3">
                   <label>Account</label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
-                    placeholder="0"
-                    name="accountBalance"
-                    id="accountBalance"
-                    onChange={handleChange}
-                    value={updatedProvider?.accountBalance || ''}
+                    id="exampleFormControlInput1"
+                    value={accountBalance}
+                    onChange={(e) => setAccountBalance(e.target.value)}
+                   
                   />
                 </div>
               </div>
@@ -79,13 +128,12 @@ function EditProvider() {
                 <div className="form-group col-6">
                   <label>Email</label>
                   <input
-                    type="email"
+                    type="text"
                     className="form-control"
-                    placeholder="email@gmail.com"
-                    name="email"
-                    id="email"
-                    onChange={handleChange}
-                    value={updatedProvider?.email || ''}
+                    id="exampleFormControlInput1"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  
                   />
                 </div>
               </div>
@@ -94,13 +142,12 @@ function EditProvider() {
                 <div className="form-group col-6">
                   <label>Telephone number</label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
-                    placeholder="+21644251517"
-                    name="tel"
-                    id="tel"
-                    onChange={handleChange}
-                    value={updatedProvider?.tel || ''}
+                    id="exampleFormControlInput1"
+                    value={tel}
+                    onChange={(e) => setTel(e.target.value)}
+                   
                   />
                 </div>
                 <div className="form-group col-6">
@@ -108,15 +155,26 @@ function EditProvider() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="1234 Main St"
-                    name="address"
-                    id="address"
-                    onChange={handleChange}
-                    value={updatedProvider?.address || ''}
+                    id="exampleFormControlInput1"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  
                   />
                 </div>
               </div>
-
+              <div className="form-group">
+                <label htmlFor="exampleFormControlFile1">
+                  Image file input
+                </label>
+                <input
+                  type="file"
+                  className="form-control-file"
+                  id="exampleFormControlFile1"
+                  onChange={(e) => setLogo(e.target.files[0])}
+                  
+                />
+                {/* {filenamesplitted && <p>Selected file: {filenamesplitted}</p>} */}
+              </div>
               <div className="d-flex justify-content-center">
                 <button type="submit" className="btn btn-primary mt-3">
                   Update Provider

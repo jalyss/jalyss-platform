@@ -383,6 +383,7 @@ model Provider {
   logo           Media?   @relation(fields: [logoId], references: [id])
   email          String   @unique
   Supply         Supply[]
+  MediaProvider  MediaProvider[]
 }
 
 //TRAINING
@@ -610,6 +611,7 @@ model Media {
   Blog         Blog[]
   WorkSpace    WorkSpace[]
   Provider     Provider[]
+  MediaProvider MediaProvider[]
 
   MediaWorkSpace MediaWorkSpace[]
 
@@ -623,6 +625,14 @@ model Media {
   MediaPublishingHouse MediaPublishingHouse[]
 }
 
+model MediaProvider {
+  media     Media   @relation(fields: [mediaId], references: [id])
+  mediaId   String
+  provider   Provider @relation(fields: [providerId], references: [id])
+  providerId String
+
+  @@unique(fields: [mediaId, providerId], name: "providerMedia")
+}
 model MediaPublishingHouse {
   media   Media  @relation(fields: [mediaId], references: [id])
   mediaId String
