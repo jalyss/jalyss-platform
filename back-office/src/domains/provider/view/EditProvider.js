@@ -37,7 +37,7 @@ function EditProvider() {
       setEmail(email);
       setTel(tel);
       setAddress(address);
-      setFileName(logo.path);
+      setFileName(logo?.path);
       deleteImg(filename);
       setLogo();
     }
@@ -53,16 +53,19 @@ function EditProvider() {
       tel,
       address,
     };
+console.log(body,"booo")
+
     const submitEdit = async () => {
       let aux = { ...body,providerId, accountBalance: Number(body.accountBalance) };
       try {
-        dispatch(editProvider(providerId, aux));
+        dispatch(editProvider(aux));
         showSuccessToast("Provider editd successfully");
         navigate(-1);
       } catch (error) {
         console.log(error);
         showErrorToast(error.message);
       }
+      console.log(aux,"aux")
     };
     if (logo !== null) {
       try {
@@ -81,6 +84,7 @@ function EditProvider() {
     }
 
     submitEdit();
+
   };
   const deleteImg = async (path) => {
     const pathElements = path.split("/");
@@ -88,7 +92,6 @@ function EditProvider() {
     console.log(name, "ggg");
     setFileNamesplitted(name);
   };
-
   return (
     <div>
       <div className="container">

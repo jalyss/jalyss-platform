@@ -29,15 +29,18 @@ export const createProvider = createAsyncThunk("providers/createProvider", async
   return response.data;
 });
 
+
 export const editProvider = createAsyncThunk(
   "providers/editProvider",
   async (args) => {
-    const { id, body } = args;
-    
+    const { providerId, ...rest } = args;
+    console.log(args,"args")
+    console.log(rest,"rest")
       const response = await axios.patch(
-        `${config.API_ENDPOINT}/providers/${id}`,
-        body
+        `${config.API_ENDPOINT}/providers/${providerId}`,
+        {...rest}
       );
+      console.log(response.data,'response.data')
       return response.data;
    
   }
