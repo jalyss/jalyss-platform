@@ -29,7 +29,7 @@ export class ServiceService {
       },
     });
   }
-
+  
   // Find a service by ID with workspace and tariff included
   async findOne(id: string) {
     const service = await this.prisma.service.findFirstOrThrow({

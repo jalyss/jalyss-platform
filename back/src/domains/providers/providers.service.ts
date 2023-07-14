@@ -6,16 +6,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class ProvidersService {
   constructor(private readonly prisma: PrismaService) {}
- async create(data: CreateProviderDto) {
+  async create(dto: CreateProviderDto) {
   
-    return await this.prisma.provider.create({
-      data ,
-      include:{logo:true},
+    return await this.prisma.provider.create({data : dto
     });
   }
  
   async findAll() {
-    return await this.prisma.provider.findMany({});
+    return await this.prisma.provider.findMany({
+      include: {
+        logo: true,
+      }
+    });
    }
 
    async findOne(id: string) {
@@ -23,6 +25,10 @@ export class ProvidersService {
       where: {
         id,
       },
+      include:{
+        MediaProvider: { include: { media: true } },
+        logo: true,
+      }
     });
   }
 
