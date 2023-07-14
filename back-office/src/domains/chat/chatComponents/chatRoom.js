@@ -32,6 +32,7 @@ import zIndex from "@mui/material/styles/zIndex";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Select from "react-select";
 import { BsFillPersonLinesFill } from "react-icons/bs";
+import { PiSmileySadThin } from "react-icons/pi";
 import { MdOutlineGroups } from "react-icons/md";
 import "../../../assets/styles/chatRoom.css";
 
@@ -61,15 +62,18 @@ const ChatRoom = ({
   const [open, setOpen] = React.useState(false);
   const [isPersonIconActive, setIsPersonIconActive] = useState(false);
   const [isGroupIconActive, setIsGroupIconActive] = useState(false);
+  const [viewGenerator, setViewGenerator] = useState(false);
 
   const handlePersonIconClick = () => {
     setIsPersonIconActive(true);
     setIsGroupIconActive(false);
+    setViewGenerator(!true);
   };
 
   const handleGroupIconClick = () => {
     setIsPersonIconActive(false);
     setIsGroupIconActive(true);
+    setViewGenerator(true);
   };
 
   const handleOpen = () => {
@@ -82,7 +86,7 @@ const ChatRoom = ({
 
   const handleMouseLeave = () => {
     setHoveredChatRoom(null);
-    setOpen(!open)
+    setOpen(false);
   };
 
   // const filteredChatRooms = chatRoomList.filter((chatRoom) => {
@@ -225,15 +229,14 @@ const ChatRoom = ({
 
                   {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
                 </Stack>
-                {hoveredChatRoom === chatRoom.id ? (
+                {true ? (
                   <>
                     <button
                       style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: "20px",
-                        marginTop: "10px",
+                        marginTop: "15px",
                         border: "none",
                         backgroundColor: "white",
                         cursor: "pointer",
@@ -244,41 +247,32 @@ const ChatRoom = ({
                       <div
                         className="btnicon"
                         style={{
-                          height: "25px",
+                          paddingLeft: "5px",
                           borderRadius: "50px",
-                          display:'flex',
-                          justifyContent:"center",
-                          alignItems:"center"
+                          height: "30px",
                         }}
                       >
                         <BiDotsVerticalRounded style={{ fontSize: 25 }} />
                       </div>
                     </button>
                     {open ? (
-                      <ul
-                        class="list-group"
-                        style={{
-                          position: "fixed",
-                          marginLeft: "180px",
-                          marginTop: "120px",
-                          cursor: "pointer",
-                          zIndex:999
-                        }}
-                      >
-                        <li
-                          class="list-group-item"
-                          onClick={() => toggleShowEdit()}
-                        >
-                          Edit chat
-                        </li>
-                        <li
-                          class="list-group-item"
-                          onClick={() => toggleShowDelete()}
-                          style={{ color: "red" }}
-                        >
-                          Delete chat
-                        </li>
-                      </ul>
+                      <div className="divList">
+                        <ul class="list-group">
+                          <li
+                            class="list-group-item"
+                            onClick={() => toggleShowEdit()}
+                          >
+                            Edit chat
+                          </li>
+                          <li
+                            class="list-group-item"
+                            onClick={() => toggleShowDelete()}
+                            style={{ color: "red" }}
+                          >
+                            Delete chat
+                          </li>
+                        </ul>
+                      </div>
                     ) : null}
                   </>
                 ) : null}
@@ -438,9 +432,26 @@ const ChatRoom = ({
               </Stack>
             </Stack>
 
-            <Divider />
-
-            <ChatElement />
+            {viewGenerator ? (
+              <>
+                <Divider />
+                <ChatElement />
+              </>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent:"space-evenly",
+                  marginTop:"10pc"
+            
+                }}
+              >
+                <div style={{color:"grey"}} >
+                No users to show 
+                 <PiSmileySadThin fontSize={23} color="#57385c" />
+                </div>
+              </div>
+            )}
           </Stack>
         </Stack>
       </Box>

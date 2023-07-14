@@ -8,14 +8,18 @@ import { useNavigate } from "react-router-dom";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { IoIosPersonAdd } from "react-icons/io";
 import { fetchCategories, deleteCategory } from "../../../store/category";
+import DeleteModal from "../../../components/Commun/Modal";
 
 function CategoryList() {
   const [show, setShow] = useState(false);
   const [elementId, setElementId] = useState(null);
   const [rows, setRows] = useState(null);
   const dispatch = useDispatch();
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
+  const [basicModalDeleteid, setBasicModalDeleteid] = useState(false);
 
   const categories = useSelector((state) => state.category.categories);
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, []);
@@ -84,7 +88,7 @@ function CategoryList() {
             icon={<AiFillDelete />}
             label="Delete"
             onClick={() => {
-              handleDeleteClick(id);
+              toggleShowDelete(id);
             }}
             // should open popup to ask are u sure delete this user (yes/no)
             color="error"
@@ -96,24 +100,40 @@ function CategoryList() {
   const isEng = isEnglish();
   const Navigate = useNavigate();
 
+
   const handleDeleteClick = (id) => {
-    dispatch(deleteCategory(id)).then((res) => {
+    dispatch(deleteCategory(basicModalDeleteid)).then((res) => {
       if (res.error) {
         showErrorToast(res.error.message);
       } else {
-        showSuccessToast("Category has been deleted");
+        showSuccessToast("Cayegory has been deleted");
         dispatch(fetchCategories());
+        setBasicModalDelete(false)
       }
     });
   };
 
-  
+  const toggleShowDelete = (id) => {
+    setBasicModalDeleteid(id);
+
+    setBasicModalDelete(!basicModalDelete);
+  };
+
   const handleEditClick = (id) => {
-      Navigate(`editCategory/${id}`);
-    };
+    Navigate(`editCategory/${id}`);
+  };
 
   return (
     <div>
+      <DeleteModal
+        toggleShow={toggleShowDelete}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        normal={!true}
+        ofDelete={true}
+        bodOfDelete="You want to Delete this Publishing house ?"
+        fn={()=>{handleDeleteClick()}}
+      />
       <div>
         <div className="container">
           <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List categories</h2>

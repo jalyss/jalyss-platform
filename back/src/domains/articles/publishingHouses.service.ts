@@ -6,21 +6,17 @@ import { UpdatePublishingHouseDto } from './dto/update-publishingHouse.dto';
 
 @Injectable()
 export class PublishingHouseService {
-  constructor(
-    private readonly prisma: PrismaService,
-
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreatePublishingHouseDto) {
     return await this.prisma.publishingHouse.create({
-      data: {
-        ...dto,
-      },
+      data: dto,
+      include: { logo: true },
     });
   }
 
   findAll() {
-    return this.prisma.publishingHouse.findMany();
+    return this.prisma.publishingHouse.findMany({ include: { logo: true } });
   }
 
   async findOne(id: string) {
@@ -28,11 +24,16 @@ export class PublishingHouseService {
       where: {
         id,
       },
+      include: { logo: true },
     });
   }
 
   async update(id: string, dto: UpdatePublishingHouseDto) {
-    return await this.prisma.publishingHouse.update({ where: { id }, data: dto });
+    return await this.prisma.publishingHouse.update({
+      where: { id },
+      data: dto,
+      include: { logo: true },
+    });
   }
 
   async remove(id: string) {
