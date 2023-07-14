@@ -131,7 +131,7 @@ function CategoryList() {
         setBasicModal={setBasicModalDelete}
         normal={!true}
         ofDelete={true}
-        bodOfDelete="You want to Delete this Publishing house ?"
+        bodOfDelete={<div className="d-flex justify-content-center align-items-center">You want to Delete this category ?</div>}
         fn={()=>{handleDeleteClick()}}
       />
       <div>
