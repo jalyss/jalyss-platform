@@ -175,10 +175,11 @@ model PublishingHouse {
   id        String    @id @default(uuid())
   name      String
   address   String
-  logo      String
-  createdAt DateTime  @default(now())
+  logoId    String?
+  logo      Media?   @relation(fields: [logoId], references: [id])
   updatedAt DateTime  @updatedAt
   articles  Article[]
+  MediaPublishingHouse MediaPublishingHouse[]
 }
 
 model Article {
@@ -197,7 +198,7 @@ model Article {
   updatedAt          DateTime           @updatedAt
   category           ArticleCategory    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId         String
-  publishingHouse    PublishingHouse    @relation(fields: [publishingHouseId], references: [id])
+  publishingHouse    PublishingHouse    @relation(fields: [publishingHouseId], references: [id],onDelete: Cascade)
   publishingHouseId  String
   type               Type               @relation(fields: [typeId], references: [id])
   typeId             String
@@ -218,7 +219,7 @@ model Author {
 }
 
 model ArticleByAuthor {
-  article   Article @relation(fields: [articleId], references: [id])
+  article   Article @relation(fields: [articleId], references: [id],onDelete: Cascade)
   articleId String
   author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
@@ -228,10 +229,10 @@ model ArticleByAuthor {
 
 model ArticlesByBranch {
   id          String        @id @default(uuid())
-  branch      Branch        @relation(fields: [branchId], references: [id])
+  branch      Branch        @relation(fields: [branchId], references: [id],onDelete: Cascade)
   branchId    String
   articleId   String
-  article     Article       @relation(fields: [articleId], references: [id])
+  article     Article       @relation(fields: [articleId], references: [id],onDelete: Cascade)
   price       Float
   stock       Int
   rating      Rating[]
@@ -413,7 +414,7 @@ model Session {
   updatedAt         DateTime                @updatedAt
   startDate         DateTime
   endDate           DateTime
-  category          ArticleCategory         @relation(fields: [categoryId], references: [id])
+  category          ArticleCategory         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId        String
   previousSesion    Session?                @relation(name: "prevSession", fields: [previousSessionId], references: [id])
   previousSessionId String?
@@ -438,7 +439,7 @@ model Session {
 model SessionFeedback {
   id        String   @id @default(uuid())
   content   String
-  Session   Session? @relation(fields: [sessionId], references: [id])
+  Session   Session? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId String?
 
   User   User?   @relation(fields: [userId], references: [id])
@@ -459,9 +460,9 @@ model WhatYouWillLearn {
 }
 
 model SessionHasWhatYouWillLearn {
-  session            Session          @relation(fields: [sessionId], references: [id])
+  session            Session          @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId          String
-  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
+  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id], onDelete: Cascade)
   WhatYouWillLearnId String
 
   @@unique(fields: [sessionId, WhatYouWillLearnId], name: "joinerr")
@@ -483,9 +484,9 @@ model Prerequire {
 }
 
 model sessionHasPrerequire {
-  session      Session    @relation(fields: [sessionId], references: [id])
+  session      Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId    String
-  prerequire   Prerequire @relation(fields: [prerequireId], references: [id])
+  prerequire   Prerequire @relation(fields: [prerequireId], references: [id], onDelete: Cascade)
   prerequireId String
 
   @@unique(fields: [sessionId, prerequireId], name: "joiner")
@@ -493,9 +494,9 @@ model sessionHasPrerequire {
 
 //!join table between Session and SessionType
 model SessionHasSessionType {
-  session       Session     @relation(fields: [sessionId], references: [id])
+  session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId     String
-  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id])
+  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id], onDelete: Cascade)
   sessionTypeId String
 
   @@unique(fields: [sessionId, sessionTypeId], name: "joiner")
@@ -509,9 +510,9 @@ model SessionType {
 
 //!join table between Session and Lecture
 model SessionHasLecture {
-  session   Session @relation(fields: [sessionId], references: [id])
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId String
-  lectures  Lecture @relation(fields: [lectureId], references: [id])
+  lectures  Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId String
 
   @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
@@ -554,9 +555,9 @@ model Feature {
 }
 
 model SessionTarifHasFeatures {
-  feature      Feature      @relation(fields: [featureId], references: [id])
+  feature      Feature      @relation(fields: [featureId], references: [id], onDelete: Cascade)
   featureId    String
-  sessionTarif SessionTarif @relation(fields: [sessionId], references: [id])
+  sessionTarif SessionTarif @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId    String
 
   @@unique(fields: [featureId, sessionId], name: "sessionTarifHasFeatures")
@@ -567,7 +568,7 @@ model SessionTarif {
   title     String
   price     Float
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session                   @relation(fields: [sessionId], references: [id])
+  session   Session                   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId String
   features  SessionTarifHasFeatures[]
 }
@@ -575,9 +576,9 @@ model SessionTarif {
 model TrainingBooking {
   id             String       @id @default(uuid())
   createdAt      DateTime     @default(now())
-  user           User         @relation(fields: [userId], references: [id])
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
-  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
+  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id], onDelete: Cascade)
   sessionTarifId String
   paid           Boolean?     @default(false)
 
@@ -617,7 +618,20 @@ model Media {
   MediaSession   MediaSession[]
   Session        Session[]
   SessionRequest SessionRequest[]
+
+  PublishingHouse PublishingHouse[]
+  MediaPublishingHouse MediaPublishingHouse[]
 }
+
+model MediaPublishingHouse {
+  media   Media  @relation(fields: [mediaId], references: [id])
+  mediaId String
+  publishingHouse   PublishingHouse   @relation(fields: [publishingHouseId], references: [id], onDelete: Cascade)
+  publishingHouseId  String
+
+  @@unique(fields: [mediaId, publishingHouseId], name: "PublishingHouseMedia")
+}
+
 
 model MediaUser {
   media   Media  @relation(fields: [mediaId], references: [id])

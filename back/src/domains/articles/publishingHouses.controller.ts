@@ -37,6 +37,8 @@ export class PublishingHouseController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePublishingHouseDto) {
+    console.log(dto)
+
     return this.service.update(id, dto);
   }
 
