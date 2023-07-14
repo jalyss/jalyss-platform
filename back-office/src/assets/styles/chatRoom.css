@@ -12,6 +12,13 @@
     background-color: lightgray;
 }
 .btnicon:hover{
-      background-color:lightgray;
+      background-color:rgb(227, 227, 227);
 
+  }
+  .divList{
+    position: absolute;
+    margin-left: 10pc;
+    margin-top: 7pc;
+    z-index: 999;  
+    cursor: pointer;
   }

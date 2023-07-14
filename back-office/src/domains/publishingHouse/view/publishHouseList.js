@@ -1,35 +1,62 @@
 import { Box } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import React, { useState } from "react";
-import { rows } from "../../../constants/publishingHouseData";
+import React, { useState, useEffect } from "react";
 import { AiFillDelete, AiFillEdit, AiOutlineEye } from "react-icons/ai";
 import isEnglish from "../../../helpers/isEnglish";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { IoIosPersonAdd } from "react-icons/io";
 import { Button } from "react-bootstrap";
+import {fetchPublishingHouses,deletePublishingHouse} from "../../../store/publishingHouse"
+import { useDispatch, useSelector } from "react-redux";
+import DeleteModal from "../../../components/Commun/Modal";
 
 function PublishingHouse() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
+  const [basicModalDeleteid, setBasicModalDeleteid] = useState(false);
+  const [rows, setRows] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchPublishingHouses());
+  }, []);
+
+  const publishingHouses = useSelector((state) => state.publishingHouse.publishingHouses);
+  useEffect(() => {
+    if (publishingHouses?.items?.length) {
+      let publishingHousesData = publishingHouses.items.map((e, index) => {
+        return {
+          ...e,
+          logoId: <img src={e?.logo?.path} alt={'img'} />,
+
+        };
+      });
+      setRows(publishingHousesData);
+    }
+  }, [publishingHouses.items]);
+
+
+
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "logo", headerName: "Logo", width: 150, editable: false },
+    {
+      field: "logoId",
+      headerName: "Logo",
+      width: 150,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <img
+            src={params?.row?.logo?.path}
+            alt={params?.row?.logo?.alt}
+            style={{ padding:"20px",width: "80%", height: "auto" }}
+          />
+        );
+      },
+    },
     { field: "name", headerName: "Name", width: 150, editable: false },
     { field: "address", headerName: "Address", width: 150, editable: false },
-    {
-      field: "createdAt",
-      headerName: "CreatedAt",
-      width: 150,
-      editable: false,
-    },
-    {
-      field: "updatedAt",
-      headerName: "UpdatedAt",
-      width: 150,
-      editable: false,
-    },
-    { field: "article", headerName: "Article", width: 150, editable: false },
     {
       field: "actions",
       type: "actions",
@@ -52,31 +79,57 @@ function PublishingHouse() {
             onClick={() => handleAddClick(id)}
             color="success"
           />,
-
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
             onClick={() => {
-              handleDeleteClick(id);
+              toggleShowDelete(id);
             }}
-            // should open popup to ask are u sure delete this user (yes/no)
             color="error"
           />,
         ];
       },
     },
   ];
+  
   const isEng = isEnglish();
   const Navigate = useNavigate();
-  const handleDeleteClick = (id) => {};
+
+  const handleDeleteClick = ()=> {
+    dispatch(deletePublishingHouse(basicModalDeleteid)).then((res) => {
+      if (res.error) {
+        showErrorToast(res.error.message);
+      } else {
+        showSuccessToast("Publishing house has been deleted");
+        dispatch(fetchPublishingHouses());
+        setBasicModalDelete(false)
+      }
+    });
+  };
+  
   const handleAddClick = (id) => {
     Navigate(`detail/${id}`);
   };
   const handleEditClick = (id) => {
     Navigate(`edit/${id}`);
   };
+
+  const toggleShowDelete = (id) => {
+  setBasicModalDeleteid(id)
+
+    setBasicModalDelete(!basicModalDelete);
+  };
   return (
     <div>
+        <DeleteModal
+        toggleShow={toggleShowDelete}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        normal={!true}
+        ofDelete={true}
+        bodOfDelete="You want to Delete this Publishing house ?"
+        fn={()=>{handleDeleteClick()}}
+      />
       <div>
         <div className="container">
           <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>
@@ -94,19 +147,21 @@ function PublishingHouse() {
             <span className="btn btn-sm ">Add Publishing House</span>
           </Button>
           <Box sx={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
+          {rows?.length > 0 ? (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 5,
+                    },
                   },
-                },
-              }}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-            />
+                }}
+                pageSizeOptions={[5]}
+                disableRowSelectionOnClick
+              />
+            ) : null}
           </Box>
         </div>
       </div>

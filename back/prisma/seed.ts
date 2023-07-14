@@ -461,61 +461,71 @@ async function main() {
       nameEn: 'books',
     },
   });
+  
+  // create logo id 
+  let medialogoforPublishHouse = await prisma.media.create({
+    data: {
+      path: 'https://p5.storage.canalblog.com/50/89/1228697/127715041.jpg',
+      type: 'image',
+      extension: 'jpg',
+    },
+  });
+
   //create dummy publishing House
   let publishingHouse1 = await prisma.publishingHouse.create({
     data: {
       name: 'جرير',
       address: 'Saudi arabic',
-      logo: 'https://cata-joodek.s3.us-east-2.amazonaws.com/static/67531867/store--%2856%29.png',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishingHouse2 = await prisma.publishingHouse.create({
     data: {
       name: 'جبل عمان',
       address: 'Saudi arabic',
-      logo: 'https://jalyss.com/img/m/3.jpg',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishingHouse3 = await prisma.publishingHouse.create({
     data: {
       name: 'ملهمون',
       address: 'Saudi arabic',
-      logo: 'https://jalyss.com/img/m/21.jpg',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishingHouse4 = await prisma.publishingHouse.create({
     data: {
       name: 'دار الشروق',
       address: 'Saudi arabic',
-      logo: 'https://jalyss.com/img/m/4.jpg',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishingHouse5 = await prisma.publishingHouse.create({
     data: {
       name: 'دار الكتاب العربي',
       address: 'Saudi arabic',
-      logo: 'https://jalyss.com/img/m/31.jpg',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishingHouse6 = await prisma.publishingHouse.create({
     data: {
       name: 'دار الفراشة',
       address: 'Saudi arabic',
-      logo: 'https://jalyss.com/img/m/26.jpg',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishingHouse7 = await prisma.publishingHouse.create({
     data: {
       name: 'دار المعارف',
       address: 'Saudi arabic',
-      logo: 'https://jalyss.com/img/m/15.jpg',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishingHouse8 = await prisma.publishingHouse.create({
     data: {
       name: ' دار الآداب',
       address: 'Saudi arabic',
-      logo: 'https://jalyss.com/img/m/5.jpg',
+      logoId: medialogoforPublishHouse.id,
     },
   });
   let publishinghouseIds = [
@@ -1364,6 +1374,7 @@ async function main() {
 
     MediaServiceIds.push(media.id);
   }
+  
   for (let i = 0; i < serviceNames.length; i++) {
     let service = await prisma.service.create({
       data: {
