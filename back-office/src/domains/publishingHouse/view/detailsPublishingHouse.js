@@ -1,10 +1,23 @@
-import React from "react";
-import { rows } from "../../../constants/publishingHouseData";
+import React,{useEffect,useState} from "react";
 import { useParams } from "react-router-dom";
+import {fetchPublishingHouse} from "../../../store/publishingHouse"
+import { useDispatch, useSelector } from "react-redux";
 
 function DetailPublishHouse() {
   const { id } = useParams();
-  const PublishHouse = rows[id];
+  const dispatch = useDispatch();
+  const [path, setPath] = useState("");
+
+  const publishingHouse = useSelector((state) => state.publishingHouse.publishingHouse);
+
+  useEffect(() => {
+
+    dispatch(fetchPublishingHouse(id));
+  }, [path]);
+
+
+
+
   return (
     <div>
       <div class="container">
@@ -20,18 +33,22 @@ function DetailPublishHouse() {
                 }}
               >
                 <img
-                  class="img-fluid rounded-start mt-5"
-                  src={PublishHouse.logo}
-                  alt="Card image cap"
-                  style={{ height: 100, width: 250 }}
-                />
+                className="img-fluid mt-5"
+                src={
+                  publishingHouse?.logo?.path
+                    ? publishingHouse?.logo?.path
+                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
+                }
+                alt="Card image cap"
+                style={{ height: 170, width: 250,padding:"5px",borderRadius:"12px" }}
+              />
               </div>
             </div>
             <div class="col-md-8">
               <div class="card-body">
                 <h3 class="card-title " style={{ textAlign: "center" }}>
                   {" "}
-                  {PublishHouse.name}
+                  {publishingHouse?.name}
                 </h3>
                 <hr></hr>
                 <div className="row">
@@ -40,47 +57,26 @@ function DetailPublishHouse() {
                   </div>
                   <div className="col-4">
                     <p class="card-text">
-                      <small class="text-muted">{PublishHouse.name}</small>
+                      <small class="text-muted">{publishingHouse?.name}</small>
+                    </p>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-2 ">
+                    <h6>Address :</h6>
+                  </div>
+                  <div className="col-4">
+                    <p class="card-text">
+                      <small class="text-muted">{publishingHouse?.address}</small>
                     </p>
                   </div>
                 </div>
 
-                <div className="row mt-3">
-                  <div className="col-4 ">
-                    <h6>Article :</h6>
-                  </div>
-                  <div className="col-4">
-                    <p class="card-text">
-                      <small class="text-muted">{PublishHouse.article}</small>
-                    </p>
-                  </div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-4 ">
-                    <h6>Adresse : </h6>
-                  </div>
-                  <div className="col-4">
-                    <p class="card-text">{PublishHouse.address}</p>
-                  </div>
-                </div>
-
-                <div className="row mt-3">
-                  <div className="col-4 ">
-                    <h6> Created At : </h6>
-                  </div>
-                  <div className="col-4">
-                    <p class="card-text">
-                      <small class="text-muted">
-                        {PublishHouse.createdAt}
-                      </small>
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
   );
 }
