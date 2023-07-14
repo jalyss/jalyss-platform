@@ -23,17 +23,11 @@ export const fetchProvider = createAsyncThunk(
   }
 );
 
-export const createProvider = createAsyncThunk(
-  "providers/createProvider",
-  async (body, { dispatch }) => {
-    const response = await axios.post(
-      `${config.API_ENDPOINT}/providers`,
-      body
-    );
-    dispatch(fetchProviders(response.data))
-    return response.data;
-  }
-);
+export const createProvider = createAsyncThunk("providers/createProvider", async (body, { dispatch }) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/providers/`, body);
+  dispatch(fetchProvider(response.data.id))
+  return response.data;
+});
 
 export const editProvider = createAsyncThunk(
   "providers/editProvider",

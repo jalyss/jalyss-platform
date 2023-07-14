@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createProvider, fetchProviders } from '../../../store/provider';
@@ -10,7 +11,7 @@ function CreateProvider() {
   const dispatch = useDispatch();
 
   const [name, setName] = useState('');
-  const [accountBalance, setAccountBalance] = useState('');
+  const [accountBalance, setAccountBalance] = useState(0);
   const [email, setEmail] = useState('');
   const [tel, setTel] = useState('');
   const [address, setAddress] = useState('');
@@ -24,47 +25,52 @@ function CreateProvider() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Check if all required fields are filled
-    if (!name || !accountBalance || !email || !tel || !address ) {
+    if (!name || !accountBalance || !email || !tel || !address) {
       console.log('Please fill in all required fields');
       return;
     }
-
-    let body = {
+    var body = {
       name,
       accountBalance,
       email,
       tel,
       address,
     };
-
+    const submitCreate = async () => {
+     
+  
+    
+    let aux = { ...body, accountBalance: Number(body.accountBalance) };
+    try {
+      await dispatch(createProvider(aux));
+      showSuccessToast('Provider created successfully');
+      navigate(-1);
+    } catch (error) {
+      console.log(error);
+      showErrorToast(error.message);
+    }
+  };
     if (logo !== null) {
       try {
         const formData = new FormData();
         formData.append('file', logo);
-
+  
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
           formData
         );
-
+  
         body.logoId = response.data.id;
       } catch (error) {
         console.error('Error uploading logo image:', error);
       }
     }
-
-    dispatch(createProvider(body)).then((res) => {
-      if (!res.error) {
-        showSuccessToast('Provider has been created');
-        navigate(-1);
-      } else {
-        showErrorToast(res.error.message);
-      }
-    });
+  
+    submitCreate();
   };
-
+  
   return (
     <div className="container">
     <div className="card">

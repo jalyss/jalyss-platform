@@ -46,7 +46,7 @@ function ProvidersList() {
       let aux = providerStore.providers.items.map((e) => {
         return {
           id: e.id,
-          logo: e.logo.path,
+          logo: e.logo?.path,
           name: e.name,
           address: e.address,
           tel: e.tel,
