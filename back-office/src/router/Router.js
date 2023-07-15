@@ -172,6 +172,13 @@ function Router() {
               <Route path="create" element={<CreateAuthor />} />
             </Route>
 
+            <Route path="type" element={<Types />}>
+              <Route index element={<TypesList />} />
+              <Route path="edit/:typeId" element={<EditType />} />
+              <Route path="detail/:typeId" element={<DetailType />} />
+              <Route path="create" element={<CreateType />} />
+            </Route>
+
             <Route path="articles" element={<Article />}>
               <Route index element={<ArticleList />} />
               <Route

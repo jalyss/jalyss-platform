@@ -44,6 +44,7 @@ export const editType = createAsyncThunk("types/editType", async (args, { dispat
     }
   }
   const { id, ...body } = args
+  console.log("args",args);
   const response = await axios.patch(`${config.API_ENDPOINT}/article-types/${id}`, body, configs);
   return response.data;
 });
