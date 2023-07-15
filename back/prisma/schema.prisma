@@ -221,7 +221,7 @@ model Author {
 model ArticleByAuthor {
   article   Article @relation(fields: [articleId], references: [id],onDelete: Cascade)
   articleId String
-  author    Author  @relation(fields: [authorId], references: [id],onDelete: Cascade)
+  author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   @@unique([authorId, articleId])
@@ -379,9 +379,11 @@ model Provider {
   address        String
   tel            String
   accountBalance Float
-  logo           String
+  logoId         String?
+  logo           Media?   @relation(fields: [logoId], references: [id])
   email          String   @unique
   Supply         Supply[]
+  MediaProvider  MediaProvider[]
 }
 
 //TRAINING
@@ -608,6 +610,8 @@ model Media {
   Employee     Employee[]
   Blog         Blog[]
   WorkSpace    WorkSpace[]
+  Provider     Provider[]
+  MediaProvider MediaProvider[]
 
   MediaWorkSpace MediaWorkSpace[]
 
@@ -621,6 +625,14 @@ model Media {
   MediaPublishingHouse MediaPublishingHouse[]
 }
 
+model MediaProvider {
+  media     Media   @relation(fields: [mediaId], references: [id])
+  mediaId   String
+  provider   Provider @relation(fields: [providerId], references: [id])
+  providerId String
+
+  @@unique(fields: [mediaId, providerId], name: "providerMedia")
+}
 model MediaPublishingHouse {
   media   Media  @relation(fields: [mediaId], references: [id])
   mediaId String
@@ -766,11 +778,9 @@ model View {
 // }
 
 model Service {
-  id String @id @default(uuid())
-
+  id           String         @id @default(uuid())
   name         String
   description  String? 
-
   identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
