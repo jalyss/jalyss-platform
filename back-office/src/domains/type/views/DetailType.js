@@ -5,7 +5,6 @@ import { fetchArticleType } from '../../../store/articleType';
 
 function DetailType() {
 
-  // const type = rows[typeId]
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { typeId } = useParams();

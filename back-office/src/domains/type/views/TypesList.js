@@ -7,15 +7,13 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { AiFillDelete, AiFillEdit, AiOutlineEye } from 'react-icons/ai';
 import AddButton from '../../../components/Commun/buttons/AddButton';
 import { Box } from '@mui/material';
-import { rows } from '../../../constants/typeData';
 import { fetchArticleTypes, removType } from '../../../store/articleType';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import { useEffect } from 'react';
 import Modal from "../../../components/Commun/Modal";
 
 function TypesList() {
-    const [show, setShow] = useState(false);
-    const [type, setType] = useState({})
+   
     const [basicModal,setBasicModal]=useState(false)
     const articleTypeStore = useSelector((state) => state.articleType)
     const dispatch = useDispatch()
@@ -97,8 +95,6 @@ function TypesList() {
                 label="Delete"
                 onClick={() => { toggleShow()
                   setSelectedTypeId(id) } }
-               
-                // should open popup to ask are u sure delete this user (yes/no)
                 color="error" />,
     
             ];
@@ -132,7 +128,7 @@ function TypesList() {
                     />
                 </Box>
               
-                <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={() => handleDeletetypeClick(selectedTypeId)} /> 
+                <Modal  basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={() => handleDeletetypeClick(selectedTypeId)} /> 
             </div>
     </div>
   )
