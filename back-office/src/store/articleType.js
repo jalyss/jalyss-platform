@@ -12,6 +12,46 @@ export const fetchArticleType = createAsyncThunk("types/type", async (id) => {
   return response.data;
 });
 
+export const createType = createAsyncThunk("types/type", async (body, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  }
+  const response = await axios.post(`${config.API_ENDPOINT}/article-types`, body, configs);
+  dispatch(fetchArticleType())
+  return response.data;
+});
+
+export const removType = createAsyncThunk("types/deleteType", async (id, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token.Authorization
+    }
+  }
+  const response = await axios.delete(`${config.API_ENDPOINT}/article-types/${id}`, configs);
+  dispatch(fetchArticleTypes())
+  return response.data;
+});
+
+export const editType = createAsyncThunk("types/editType", async (args, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token.Authorization
+    }
+  }
+  const { id, ...body } = args
+  console.log("args",args);
+  const response = await axios.patch(`${config.API_ENDPOINT}/article-types/${id}`, body, configs);
+  return response.data;
+});
+
+
+
+
 export const articleTypeSlice = createSlice({
   name: "articleType",
   initialState: {

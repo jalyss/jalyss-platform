@@ -45,7 +45,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const myId = useSelector((state) => state.auth.me?.id);
   const userStore = useSelector((state) => state.user)
   const { user } = userStore
-  console.log("hahaa", userr)
+  console.log("userr", userr)
   // const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
@@ -64,7 +64,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const userName = user ? user.fullNameEn : userr?.user?.fullNameEn;
   const messagesEndRef = useRef(null);
   const { userId } = useParams()
-  console.log("uu", userId);
+  console.log("userId", userId);
   const toggleShow=()=>{
     setBasicModal(!basicModal)
   }

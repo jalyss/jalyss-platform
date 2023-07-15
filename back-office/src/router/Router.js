@@ -86,6 +86,12 @@ import Updatetarif from '../domains/training/views/tarifs/Updatetarif'
 import Addtarif from "../domains/training/views/tarifs/Addtarif";
 import Newsession from'../domains/training/views/sessions/Newsession'
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
+// import Types from "../domains/type/Types";
+import TypesList from "../domains/type/views/TypesList";
+import EditType from "../domains/type/views/EditType";
+import DetailType from "../domains/type/views/DetailType";
+import CreateType from "../domains/type/views/CreateType";
+
 import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
 import AddNewCours from "../domains/training/views/courses/Addnewcours";
 
@@ -123,15 +129,15 @@ function Router() {
               <Route path="edit-space/:spaceId" element={<EditWorkSpace />} />
               <Route path="edit-tarif/:tarifId" element={<EditTarif />} />
               </Route>
-
-
             </Route>
+
             <Route path="profile" element={<Profile />} />
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
               <Route path="edit/:userId" element={<EditUser />} />
             </Route>
+
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
@@ -171,6 +177,13 @@ function Router() {
               <Route path="edit/:authorId" element={<EditAuthor />} />
               <Route path="detail/:authorId" element={<DetailAuthor />} />
               <Route path="create" element={<CreateAuthor />} />
+            </Route>
+
+            <Route path="type" element={<Types />}>
+              <Route index element={<TypesList />} />
+              <Route path="edit/:typeId" element={<EditType />} />
+              <Route path="detail/:typeId" element={<DetailType />} />
+              <Route path="create" element={<CreateType />} />
             </Route>
 
             <Route path="articles" element={<Article />}>

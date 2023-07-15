@@ -1,0 +1,147 @@
+/* spacejalyss.css */
+
+/* Default styles for larger screens */
+.carousel-inner .carousel-item {
+  height: 500px; /* Adjust the height as needed */
+}
+.card-body {
+    height: auto;
+    width: auto;
+   }
+   
+.firstLine {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.secondLine {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.card {
+  position: relative;
+  border-radius: 20px;
+  transition: all 1.4s ease-in-out;
+}
+
+.carousell {
+  height: 500px; /* Adjust the height as needed */
+}
+
+.whyUs {
+  position: relative;
+  border-radius: 20px;
+  transition: all 1.4s ease-in-out;
+  width: 100%;
+  max-width: 415px;
+}
+
+.headerspaceitem {
+  border-radius: 25px;
+  width: 250px;
+  left: 26px;
+  transition: all 1.6s ease-in-out;
+}
+
+.card-icon {
+  font-size: 3rem;
+}
+
+.card-body {
+  margin-bottom: 1rem;
+}
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 991px) {
+  .carousel-inner .carousel-item {
+    height: 250px; /* Adjust the height as needed */
+  }
+
+  .carouselside {
+    height: 350px;
+    margin-bottom: 50px;
+  }
+  .whyUs {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .secondLine {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .col-md-2.5 {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .headerspaceitem {
+    width: 100%;
+    left: 0;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 881px) {
+    .carousel-inner .carousel-item {
+      height: 250px; /* Adjust the height as needed */
+    }
+    .carouselside {
+      height: 300px;
+    }
+    .whyUs {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .secondLine {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+  
+    .col-md-2.5 {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .headerspaceitem {
+      width: 100%;
+      left: 0;
+    }
+  
+    .card-icon {
+      font-size: 2rem;
+    }
+  }
+
+/* Add responsive styles for even smaller screens */
+@media (max-width: 767px) {
+  .carousel-inner .carousel-item {
+    height: 200px; /* Adjust the height as needed */
+  }
+
+  .secondLine {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  .carouselside {
+    height: 150px;
+    margin-bottom: 50px;
+  }
+
+  .headerspaceitem {
+    width: 100%;
+    left: 0;
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+  }
+}

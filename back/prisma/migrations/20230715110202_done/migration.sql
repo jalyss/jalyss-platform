@@ -140,8 +140,7 @@ CREATE TABLE "PublishingHouse" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "address" TEXT NOT NULL,
-    "logo" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "logoId" TEXT,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "PublishingHouse_pkey" PRIMARY KEY ("id")
@@ -321,7 +320,7 @@ CREATE TABLE "Provider" (
     "address" TEXT NOT NULL,
     "tel" TEXT NOT NULL,
     "accountBalance" DOUBLE PRECISION NOT NULL,
-    "logo" TEXT NOT NULL,
+    "logoId" TEXT,
     "email" TEXT NOT NULL,
 
     CONSTRAINT "Provider_pkey" PRIMARY KEY ("id")
@@ -520,6 +519,18 @@ CREATE TABLE "Media" (
     "description" TEXT,
 
     CONSTRAINT "Media_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "MediaProvider" (
+    "mediaId" TEXT NOT NULL,
+    "providerId" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "MediaPublishingHouse" (
+    "mediaId" TEXT NOT NULL,
+    "publishingHouseId" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -785,6 +796,12 @@ CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_sessionId_key" ON "Sessio
 CREATE UNIQUE INDEX "TrainingBooking_userId_sessionTarifId_key" ON "TrainingBooking"("userId", "sessionTarifId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "MediaProvider_mediaId_providerId_key" ON "MediaProvider"("mediaId", "providerId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MediaPublishingHouse_mediaId_publishingHouseId_key" ON "MediaPublishingHouse"("mediaId", "publishingHouseId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "MediaUser_mediaId_userId_key" ON "MediaUser"("mediaId", "userId");
 
 -- CreateIndex
@@ -854,28 +871,31 @@ ALTER TABLE "UserChatRoom" ADD CONSTRAINT "UserChatRoom_userId_fkey" FOREIGN KEY
 ALTER TABLE "UserChatRoom" ADD CONSTRAINT "UserChatRoom_chatRoomId_fkey" FOREIGN KEY ("chatRoomId") REFERENCES "ChatRoom"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "PublishingHouse" ADD CONSTRAINT "PublishingHouse_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Article" ADD CONSTRAINT "Article_coverId_fkey" FOREIGN KEY ("coverId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Article" ADD CONSTRAINT "Article_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "ArticleCategory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Article" ADD CONSTRAINT "Article_publishingHouseId_fkey" FOREIGN KEY ("publishingHouseId") REFERENCES "PublishingHouse"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Article" ADD CONSTRAINT "Article_publishingHouseId_fkey" FOREIGN KEY ("publishingHouseId") REFERENCES "PublishingHouse"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Article" ADD CONSTRAINT "Article_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "Type"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Author"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Author"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_branchSenderId_fkey" FOREIGN KEY ("branchSenderId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -932,6 +952,9 @@ ALTER TABLE "Supply" ADD CONSTRAINT "Supply_providerId_fkey" FOREIGN KEY ("provi
 ALTER TABLE "Supply" ADD CONSTRAINT "Supply_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Provider" ADD CONSTRAINT "Provider_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -956,16 +979,16 @@ ALTER TABLE "Session" ADD CONSTRAINT "Session_nextSessionId_fkey" FOREIGN KEY ("
 ALTER TABLE "Session" ADD CONSTRAINT "Session_coverId_fkey" FOREIGN KEY ("coverId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionFeedback" ADD CONSTRAINT "SessionFeedback_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "SessionFeedback" ADD CONSTRAINT "SessionFeedback_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SessionFeedback" ADD CONSTRAINT "SessionFeedback_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionHasWhatYouWillLearn" ADD CONSTRAINT "SessionHasWhatYouWillLearn_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionHasWhatYouWillLearn" ADD CONSTRAINT "SessionHasWhatYouWillLearn_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionHasWhatYouWillLearn" ADD CONSTRAINT "SessionHasWhatYouWillLearn_WhatYouWillLearnId_fkey" FOREIGN KEY ("WhatYouWillLearnId") REFERENCES "WhatYouWillLearn"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionHasWhatYouWillLearn" ADD CONSTRAINT "SessionHasWhatYouWillLearn_WhatYouWillLearnId_fkey" FOREIGN KEY ("WhatYouWillLearnId") REFERENCES "WhatYouWillLearn"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "LectureHasWhatYouWillLearn" ADD CONSTRAINT "LectureHasWhatYouWillLearn_lectureId_fkey" FOREIGN KEY ("lectureId") REFERENCES "Lecture"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -974,19 +997,19 @@ ALTER TABLE "LectureHasWhatYouWillLearn" ADD CONSTRAINT "LectureHasWhatYouWillLe
 ALTER TABLE "LectureHasWhatYouWillLearn" ADD CONSTRAINT "LectureHasWhatYouWillLearn_WhatYouWillLearnId_fkey" FOREIGN KEY ("WhatYouWillLearnId") REFERENCES "WhatYouWillLearn"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "sessionHasPrerequire" ADD CONSTRAINT "sessionHasPrerequire_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "sessionHasPrerequire" ADD CONSTRAINT "sessionHasPrerequire_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "sessionHasPrerequire" ADD CONSTRAINT "sessionHasPrerequire_prerequireId_fkey" FOREIGN KEY ("prerequireId") REFERENCES "Prerequire"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "sessionHasPrerequire" ADD CONSTRAINT "sessionHasPrerequire_prerequireId_fkey" FOREIGN KEY ("prerequireId") REFERENCES "Prerequire"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionHasSessionType" ADD CONSTRAINT "SessionHasSessionType_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionHasSessionType" ADD CONSTRAINT "SessionHasSessionType_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionHasSessionType" ADD CONSTRAINT "SessionHasSessionType_sessionTypeId_fkey" FOREIGN KEY ("sessionTypeId") REFERENCES "SessionType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionHasSessionType" ADD CONSTRAINT "SessionHasSessionType_sessionTypeId_fkey" FOREIGN KEY ("sessionTypeId") REFERENCES "SessionType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionHasLecture" ADD CONSTRAINT "SessionHasLecture_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionHasLecture" ADD CONSTRAINT "SessionHasLecture_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SessionHasLecture" ADD CONSTRAINT "SessionHasLecture_lectureId_fkey" FOREIGN KEY ("lectureId") REFERENCES "Lecture"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1001,22 +1024,34 @@ ALTER TABLE "Coaching" ADD CONSTRAINT "Coaching_lectureId_fkey" FOREIGN KEY ("le
 ALTER TABLE "Assessments" ADD CONSTRAINT "Assessments_lectureId_fkey" FOREIGN KEY ("lectureId") REFERENCES "Lecture"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "SessionTarif"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionTarif" ADD CONSTRAINT "SessionTarif_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SessionTarif" ADD CONSTRAINT "SessionTarif_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_sessionTarifId_fkey" FOREIGN KEY ("sessionTarifId") REFERENCES "SessionTarif"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_sessionTarifId_fkey" FOREIGN KEY ("sessionTarifId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserPayment" ADD CONSTRAINT "UserPayment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MediaProvider" ADD CONSTRAINT "MediaProvider_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MediaProvider" ADD CONSTRAINT "MediaProvider_providerId_fkey" FOREIGN KEY ("providerId") REFERENCES "Provider"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MediaPublishingHouse" ADD CONSTRAINT "MediaPublishingHouse_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MediaPublishingHouse" ADD CONSTRAINT "MediaPublishingHouse_publishingHouseId_fkey" FOREIGN KEY ("publishingHouseId") REFERENCES "PublishingHouse"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaUser" ADD CONSTRAINT "MediaUser_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

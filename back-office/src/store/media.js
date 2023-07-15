@@ -9,7 +9,6 @@ export const fetchMedias = createAsyncThunk("medias/medias", async (id) => {
 
 export const fetchMedia = createAsyncThunk("medias/media", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/medias/${id}`);
-  console.log("data",response.data);
   return response.data;
   
 });

@@ -113,7 +113,7 @@ coacheStore.items.forEach(element => {
    
            </div>
     <div className='crdcoches' style={{marginLeft:'20px', marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'20px',border:10}}>
-      {uniqueUsers.map((el,key)=>(
+      {coacheStore.items.map((el,key)=>(
 
     <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
       <MDBCol style={{width:300}}>
@@ -133,15 +133,15 @@ coacheStore.items.forEach(element => {
         
           <Button size="small" onClick={() =>navigate(`${el.id}`)}>see More</Button>
           <MDBCardBody>
-            <MDBCardTitle>Name:{el.fullNameEn}</MDBCardTitle>
+            <MDBCardTitle>Name:{el.user.fullNameEn}</MDBCardTitle>
             <MDBCardText>
-           Email: {el.email}
+           Email: {el.user.email}
             </MDBCardText>
             <MDBCardText>
-           Tel: {el.tel}
+           Tel: {el.user.tel}
             </MDBCardText >
             <MDBCardText>
-           Address: {el.address}
+           Address: {el.user.address}
             </MDBCardText >
           </MDBCardBody>
         </MDBCard>

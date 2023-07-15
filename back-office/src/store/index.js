@@ -18,6 +18,7 @@ import service from './service'
 import space from './space';
 import tarifss from './tarifss';
 import tarif from './tarif';
+import provider from './provider';
 
 export const store = configureStore({
   reducer: {
@@ -39,7 +40,9 @@ export const store = configureStore({
     service,
     space,
     tarifss,
-    tarif
+
+    tarif,
+    provider,
     
   },
   middleware: (getDefaultMiddleware) =>
