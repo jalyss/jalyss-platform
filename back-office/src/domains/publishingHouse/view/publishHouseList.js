@@ -43,14 +43,14 @@ function PublishingHouse() {
     {
       field: "logoId",
       headerName: "Logo",
-      width: 150,
+      width: 70,
       editable: false,
       renderCell: (params) => {
         return (
           <img
             src={params?.row?.logo?.path}
             alt={params?.row?.logo?.alt}
-            style={{ padding:"20px",width: "80%", height: "auto" }}
+            style={{width: "100%", height: "95%",borderRadius:"5px" }}
           />
         );
       },
@@ -127,7 +127,7 @@ function PublishingHouse() {
         setBasicModal={setBasicModalDelete}
         normal={!true}
         ofDelete={true}
-        bodOfDelete="You want to Delete this Publishing house ?"
+        bodOfDelete={<div className="d-flex justify-content-center align-items-center">You want to Delete this Publishing house ?</div>}
         fn={()=>{handleDeleteClick()}}
       />
       <div>
