@@ -19,6 +19,9 @@ import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 import { useNavigate } from "react-router-dom";
 import { Button } from "antd";
 import "../../assets/styles/conversation.css";
+import { BsFillPersonLinesFill } from "react-icons/bs";
+import { MdOutlineGroups } from "react-icons/md";
+import { PiSmileySadThin } from "react-icons/pi";
 
 
 
@@ -36,7 +39,21 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
   const [users ,setUsers ] = useState(true)
   const [groups ,setGroups ] = useState(false)
   const [isHovering, setIsHovering] = useState(false);
+  const [isPersonIconActive, setIsPersonIconActive] = useState(true);
+  const [isGroupIconActive, setIsGroupIconActive] = useState(false);
 
+
+  const handlePersonIconClick = () => {
+    setIsPersonIconActive(true);
+    setIsGroupIconActive(false);
+   
+  };
+
+  const handleGroupIconClick = () => {
+    setIsPersonIconActive(false);
+    setIsGroupIconActive(true);
+  
+  };
   const handleMouseEnter = () => {
     setIsHovering(true);
   };
@@ -49,9 +66,11 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
     if (stack === 'users') {
       setUsers(true);
       setGroups(false);
+      handlePersonIconClick()
     } else if (stack === 'groups') {
       setUsers(false);
       setGroups(true);
+      handleGroupIconClick()
     }
   };
 
@@ -220,7 +239,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
             </SearchIconWrapper>
             <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
           </Search>
-          <div className="row">
+          {/* <div className="row">
   <button
     variant="h5"
     className={"col purple-buttonn "}
@@ -238,8 +257,83 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
   >
     GROUPS
   </button>
-</div>
+</div> */}
+    <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-evenly"
+            >
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                className={`icons ${isPersonIconActive ? "active" : ""}`}
+                style={{ width: "120px", height: "40px", borderRadius: "30px" }}
+                onClick={() => handleButtonClick('users') }
 
+              >
+                <BsFillPersonLinesFill
+                  style={{
+                    color: isPersonIconActive ? "#57385c" : "grey",
+                    fontSize: 15,
+                  }}
+                />
+                <Typography
+                  style={{
+                    marginLeft: "8px",
+                    fontWeight: "540",
+                    color: isPersonIconActive ? "#57385c" : "grey",
+                  }}
+                >
+                  Users
+                </Typography>
+              </Stack>
+
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                className={`icons ${isGroupIconActive ? "active" : ""}`}
+                style={{ width: "120px", height: "40px", borderRadius: "30px" }}
+                onClick={() => handleButtonClick('groups')}
+              >
+                <MdOutlineGroups
+                  style={{
+                    color: isGroupIconActive ? "#57385c" : "grey",
+                    fontSize: 17,
+                  }}
+                />
+                <Typography
+                  style={{
+                    marginLeft: "8px",
+                    fontWeight: "540",
+
+                    color: isGroupIconActive ? "#57385c" : "grey",
+                  }}
+                >
+                  Groups
+                </Typography>
+              </Stack>
+            </Stack>
+            {/* {viewGenerator ? (
+              <>
+                <Divider />
+                <ChatElement />
+              </>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  marginTop: "10pc",
+                }}
+              >
+                <div style={{ color: "grey" }}>
+                  No users to show
+                  <PiSmileySadThin style={{marginLeft:'5px'}} fontSize={23} color="#57385c" />
+                </div>
+              </div>
+            )} */}
 
 
 
