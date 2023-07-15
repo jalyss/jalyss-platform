@@ -26,6 +26,7 @@ export class LectureService {
   async findOne(id: string) {
     return await this.prisma.lecture.findUnique({
       where: { id },
+      
     });
   }
 

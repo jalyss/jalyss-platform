@@ -29,7 +29,7 @@ export class LectureController {
   }
 
   @Get(':lectureId')
-  findOne(@Param('id') lectureId: string) {
+  findOne(@Param('lectureId') lectureId: string) {
     return this.lectureService.findOne(lectureId);
   }
 
