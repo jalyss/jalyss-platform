@@ -45,12 +45,6 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
     setIsHovering(false);
   };
 
-  // const handleButtonClickGroups = () => {
-  //   setGroups(!groups);
-  // };
-  // const handleButtonClickUsers = () => {
-  //   setUsers(!users);
-  // };
   const handleButtonClick = (stack) => {
     if (stack === 'users') {
       setUsers(true);
