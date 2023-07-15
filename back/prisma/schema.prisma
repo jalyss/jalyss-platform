@@ -408,6 +408,7 @@ model MediaSession {
 }
 
 model Session {
+  
   id                String                  @id @default(uuid())
   title             String
   description       String
@@ -415,7 +416,7 @@ model Session {
   updatedAt         DateTime                @updatedAt
   startDate         DateTime
   endDate           DateTime
-  category          ArticleCategory         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category          ArticleCategory         @relation(fields: [categoryId], references: [id])
   categoryId        String
   previousSesion    Session?                @relation(name: "prevSession", fields: [previousSessionId], references: [id])
   previousSessionId String?
@@ -431,9 +432,7 @@ model Session {
   cover           Media?            @relation(fields: [coverId], references: [id])
   coverId         String?
   sessionFeedback SessionFeedback[]
-
   sessionHasPrerequire sessionHasPrerequire[]
-
   SessionHasWhatYouWillLearn SessionHasWhatYouWillLearn[]
 }
 
@@ -470,7 +469,7 @@ model SessionHasWhatYouWillLearn {
 }
 
 model LectureHasWhatYouWillLearn {
-  lecture            Lecture          @relation(fields: [lectureId], references: [id])
+  lecture            Lecture          @relation(fields: [lectureId], references: [id],onDelete: Cascade)
   lectureId          String
   WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
   WhatYouWillLearnId String
@@ -535,7 +534,7 @@ model Coaching {
   id        String  @id @default(uuid())
   user      User    @relation(fields: [userId], references: [id])
   userId    String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lecture   Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId String
 }
 
@@ -543,7 +542,7 @@ model Assessments {
   id        String  @id @default(uuid())
   title     String
   content   String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lecture   Lecture @relation(fields: [lectureId], references: [id],onDelete: Cascade)
   lectureId String
 }
 
@@ -569,7 +568,7 @@ model SessionTarif {
   title     String
   price     Float
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session                   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session   Session                   @relation(fields: [sessionId], references: [id])
   sessionId String
   features  SessionTarifHasFeatures[]
 }
@@ -784,6 +783,7 @@ model Service {
   identifier   String?         @unique()
   perHour      Boolean        @default(true)
   coverId      String?
+ 
   cover        Media?         @relation(fields: [coverId], references: [id])
   workSpace    WorkSpace[]
   tarif        Tarif[]

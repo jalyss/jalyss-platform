@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,7 +9,9 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';  
 import Button from '@mui/material/Button';
-  import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {useDispatch,useSelector} from 'react-redux';
+
 import {
   MDBCard,
   MDBCardImage,
@@ -19,6 +21,8 @@ import {
   MDBRow,
   MDBCol
 } from 'mdb-react-ui-kit';
+import { fetchCoachs } from '../../../../store/coach';
+
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -67,102 +71,82 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
  function Coachs() {
+
+  const coacheStore= useSelector((state)=>state.coach.coachs)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const handleEditClick = () => {
-    navigate(`/Coachs`)
-  };
+useEffect(()=>{
+  dispatch(fetchCoachs())
+ },[dispatch])
 
+
+  
+
+  console.log('lzem tji daata',coacheStore)
+const coa =[]
+coacheStore.items.forEach(element => {
+  coa.push(element.id)
+  coa.push(element.user)
+});
+ console.log("coa",coa);
+
+
+  const uniqueUsers = [];
+  const visitedUsers = new Set();
+
+  for (const user of coa ) {
+    const userKey = `${user.fullNameEn}`;
+
+    if (!visitedUsers.has(userKey)) {
+      uniqueUsers.push(user);
+      visitedUsers.add(userKey);
+    }
+  }
+
+
+ console.log(uniqueUsers)
+ 
   return (
-  <div className='serchbare'>
-     <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search> 
-    <div className='crdcoches' style={{maxWidth:1005,}}>
+    <div>
+  <div className='serchbare' >
+   
+           </div>
+    <div className='crdcoches' style={{marginLeft:'20px', marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',gap:'20px',border:10}}>
+      {coacheStore.items.map((el,key)=>(
+
     <MDBRow className='row-cols-1 row-cols-md-3 g-4'>
-      <MDBCol>
+      <MDBCol style={{width:300}}>
         <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
-            alt='...'
-            position='top'
-          />
-          <Button size="small" onClick={() => handleEditClick()}>see More</Button>
+         
+        <img
+  src={el?.user?.avatar?.path}
+  alt="coach"
+  style={{
+    width: '100%',
+    marginBottom: '10px',
+    height: 'auto',
+    maxWidth: '200px',
+    maxHeight: '200px'
+  }}
+/>
+        
+          <Button size="small" onClick={() =>navigate(`${el.id}`)}>see More</Button>
           <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
+            <MDBCardTitle>Name:{el.user.fullNameEn}</MDBCardTitle>
             <MDBCardText>
-             Email:
+           Email: {el.user.email}
             </MDBCardText>
             <MDBCardText>
-             Cours:
+           Tel: {el.user.tel}
+            </MDBCardText >
+            <MDBCardText>
+           Address: {el.user.address}
             </MDBCardText >
           </MDBCardBody>
         </MDBCard>
       </MDBCol>
-      <MDBCol>
-        <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
-            alt='...'
-            position='top'
-          />
-            <Button size="small">see More</Button>
-          <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
-            <MDBCardText>
-             Email:
-            </MDBCardText>
-            <MDBCardText>
-             Cours:
-            </MDBCardText >
-          </MDBCardBody>
-        </MDBCard>
-      </MDBCol>
-      <MDBCol>
-        <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
-            alt='...'
-            position='top'
-          />
-           <Button size="small">see More</Button>
-          <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
-            <MDBCardText>
-             Email:
-            </MDBCardText>
-            <MDBCardText>
-             Cours:
-            </MDBCardText >
-          </MDBCardBody>
-        </MDBCard>
-      </MDBCol>
-      <MDBCol>
-        <MDBCard>
-          <MDBCardImage
-            src='https://images.pexels.com/photos/4491461/pexels-photo-4491461.jpeg?auto=compress&cs=tinysrgb&w=600'
-            alt='...'
-            position='top'
-          />
-          <Button size="small">see More</Button>
-          <MDBCardBody>
-            <MDBCardTitle>Name</MDBCardTitle>
-            <MDBCardText>
-             Email:
-            </MDBCardText>
-            <MDBCardText>
-             Cours:
-            </MDBCardText >
-          </MDBCardBody>
-        </MDBCard>
-      </MDBCol>
-    </MDBRow>
+    </MDBRow>))}
     </div>
     </div>
   );

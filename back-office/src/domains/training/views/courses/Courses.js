@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{  useEffect}from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -9,103 +9,92 @@ import { dividerClasses } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+import { deletcours, fetchcours } from '../../../../store/courses';
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
+
 
  const Courses = () => {
-
+  const coursStore= useSelector((state)=>state.courses.courses.items)
+  const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate()
   const open = Boolean(anchorEl);
-  //event for button drop down 
+  
+
+  useEffect(()=>{
+    dispatch(fetchcours()) 
+    }, [dispatch])
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handle = () => {
-    navigate(`/Coursdetail`)
+ 
+  const handleDeletecoursClick=(id) => {
+    dispatch(deletcours(id))
+    .then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('COURS has been deleted')
+      }
+    })
   };
+
   return (
     <div>
           <div className='button category'>
-          <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-      Category
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={handleClose}> Category1</MenuItem>
-        <MenuItem onClick={handleClose}> Category2</MenuItem>
-        <MenuItem onClick={handleClose}> Category3</MenuItem>
-      </Menu> 
       <div  className='button add'>
-        <Button sx={{marginTop:'-70px',marginLeft:'900px'}}
+        <Button sx={{marginLeft:'900px'}}
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
-          
+          onClick={()=>{navigate('/training/courses/AddNewCours')}}
         >
         add new course
         </Button>
         </div>
 
           </div>
-         <div className='cart'>
-    
-        <Card sx={{ maxWidth: 250 ,marginTop:'100px',boxShadow:20 }}>
+         <div className='cart'  style={{ marginLeft:30, marginTop:'100px',boxShadow:20 ,display: 'grid', gridTemplateColumns: 'repeat(3 ,1fr)',gap:'20px'}}>
+        {coursStore.map((el,i)=>(
+        <Card style={{width:300}}>
         <CardMedia
         component="img"
         alt="green iguana"
         height="140"
-        image="https://images.pexels.com/photos/4443160/pexels-photo-4443160.jpeg?auto=compress&cs=tinysrgb&w=600"
+        image="https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=600"
       />
          <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Titel 
+        
+        titel : {el.title}
+         
         </Typography>
         <Typography variant="body2" color="text.secondary">
-        Description
+         Content :{el.content}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+        Start-At :{el.startAt}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+        End-At :{el.endAt}
         </Typography>
        
        </CardContent>
        <CardActions>
       
-        <Button size="small" onClick={() => handle()}>see More</Button>
+        <Button size="small" onClick={()=>handleDeletecoursClick(el.id)} >Delete</Button>
+        <Button size="small" onClick={() =>navigate(`${el.id}`)}>Update</Button>
        </CardActions>
        </Card>
-       <Card sx={{ maxWidth: 250 ,marginTop:'-280px',marginLeft:'300px',boxShadow:20}}>
-        <CardMedia
-        component="img"
-        alt="green iguana"
-        height="140"
-        image="https://images.pexels.com/photos/4218864/pexels-photo-4218864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      />
-         <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Titel 
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-        Description
-        </Typography>
-       </CardContent>
-       <CardActions>
+       ))}   
       
-        <Button size="small" onClick={() => handle()}>see More</Button>
-       </CardActions>
-       </Card>
        </div>
        </div> 
   )
