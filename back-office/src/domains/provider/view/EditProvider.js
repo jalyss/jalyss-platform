@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { editProvider, fetchProvider } from "../../../store/provider";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
@@ -9,66 +10,47 @@ function EditProvider() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { providerId } = useParams();
- 
-  const [name, setName] = useState("");
-  const [accountBalance, setAccountBalance] = useState(0);
-  const [email, setEmail] = useState("");
-  const [tel, setTel] = useState("");
-  const [address, setAddress] = useState("");
-  const [filename, setFileName] = useState("");
-  const [filenamesplitted, setFileNamesplitted] = useState("");
-  const [logo, setLogo] = useState("");
-  
-  const providerStore = useSelector((state) => state.provider);
-  console.log(providerId, "providerId");
-  console.log(providerStore, "providerStore");
+  const providerStore = useSelector((state) => state.provider.provider);
+
+  const [name, setName] = useState(providerStore?.name);
+  const [accountBalance, setAccountBalance] = useState(
+    providerStore?.accountBalance
+  );
+  const [email, setEmail] = useState(providerStore?.email);
+  const [tel, setTel] = useState(providerStore?.tel);
+  const [address, setAddress] = useState(providerStore?.address);
+  const [logo, setLogo] = useState(null);
+
   useEffect(() => {
     dispatch(fetchProvider(providerId));
   }, [dispatch, providerId]);
-  console.log(providerId, "providerIdMMMM");
 
   useEffect(() => {
-    if (providerStore.provider) {
-      const { name, accountBalance, email, tel, address, logo } =
+    if (providerStore && providerStore.provider) {
+      const { name, accountBalance, email, tel, address } =
         providerStore.provider;
 
       setName(name);
-      setAccountBalance(accountBalance);
+      setAccountBalance(accountBalance.toString());
       setEmail(email);
       setTel(tel);
       setAddress(address);
-      setFileName(logo?.path);
-      deleteImg(filename);
-      setLogo();
     }
-  }, [providerStore.provider]);
+  }, [providerStore]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    var body = {
+
+    const body = {
       name,
-      accountBalance,
+      accountBalance: Number(accountBalance),
       email,
       tel,
       address,
     };
-console.log(body,"booo")
 
-    const submitEdit = async () => {
-      let aux = { ...body,providerId, accountBalance: Number(body.accountBalance) };
-      try {
-        dispatch(editProvider(aux));
-        showSuccessToast("Provider editd successfully");
-        navigate(-1);
-      } catch (error) {
-        console.log(error);
-        showErrorToast(error.message);
-      }
-      console.log(aux,"aux")
-    };
-    if (logo !== null) {
-      try {
+    try {
+      if (logo) {
         const formData = new FormData();
         formData.append("file", logo);
 
@@ -78,113 +60,88 @@ console.log(body,"booo")
         );
 
         body.logoId = response.data.id;
-      } catch (error) {
-        console.error("Error uploading logo image:", error);
       }
+
+      const editedProvider = { ...body, providerId };
+      dispatch(editProvider(editedProvider));
+      showSuccessToast("Provider edited successfully");
+      navigate(-1);
+    } catch (error) {
+      console.error("Error editing provider:", error);
+      showErrorToast(error.message);
     }
-
-    submitEdit();
-
   };
-  const deleteImg = async (path) => {
-    const pathElements = path.split("/");
-    const name = pathElements[pathElements.length - 1];
-    console.log(name, "ggg");
-    setFileNamesplitted(name);
-  };
+
   return (
-    <div>
-      <div className="container">
-        <div className="card">
-          <div className="container">
-            <form onSubmit={handleSubmit}>
-             
-              <div className="row">
-                <div className="form-group col-6 mt-3">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                   
-                  />
-                </div>
-                <div className="form-group col-6 mt-3">
-                  <label>Account</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    value={accountBalance}
-                    onChange={(e) => setAccountBalance(e.target.value)}
-                   
-                  />
-                </div>
-              </div>
-
-              <div className="row mt-3">
-                <div className="form-group col-6">
-                  <label>Email</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  
-                  />
-                </div>
-              </div>
-
-              <div className="row mt-3">
-                <div className="form-group col-6">
-                  <label>Telephone number</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    value={tel}
-                    onChange={(e) => setTel(e.target.value)}
-                   
-                  />
-                </div>
-                <div className="form-group col-6">
-                  <label>Address</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="exampleFormControlInput1"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                  
-                  />
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="exampleFormControlFile1">
-                  Image file input
-                </label>
-                <input
-                  type="file"
-                  className="form-control-file"
-                  id="exampleFormControlFile1"
-                  onChange={(e) => setLogo(e.target.files[0])}
-                  
-                />
-                {/* {filenamesplitted && <p>Selected file: {filenamesplitted}</p>} */}
-              </div>
-              <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary mt-3">
-                  Update Provider
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container maxWidth="sm">
+      <Box component="form" onSubmit={handleSubmit} mt={3}>
+        <Typography variant="h6" align="center" gutterBottom>
+          Edit Provider
+        </Typography>
+        <TextField
+          label="Name"
+      
+          variant="outlined"
+          fullWidth
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          margin="normal"
+        />
+        <TextField
+          label="Account Balance"
+        
+          variant="outlined"
+          fullWidth
+          type="number"
+          value={accountBalance}
+          onChange={(e) => setAccountBalance(e.target.value)}
+          margin="normal"
+        />
+        <TextField
+          label="Email"
+          variant="outlined"
+          fullWidth
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          margin="normal"
+        />
+        <TextField
+          label="Telephone Number"
+          variant="outlined"
+          fullWidth
+          value={tel}
+          onChange={(e) => setTel(e.target.value)}
+          margin="normal"
+        />
+        <TextField
+          label="Address"
+          variant="outlined"
+          fullWidth
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          margin="normal"
+        />
+        <Box my={2}>
+          <input
+            type="file"
+            accept="image/*"
+            id="logo-file"
+            style={{ display: "none" }}
+            onChange={(e) => setLogo(e.target.files[0])}
+          />
+          <label htmlFor="logo-file">
+            <Button variant="outlined" component="span">
+              Upload Logo
+            </Button>
+          </label>
+        </Box>
+        <Box display="flex" justifyContent="center">
+          <Button type="submit" variant="contained" color="primary">
+            Update Provider
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
