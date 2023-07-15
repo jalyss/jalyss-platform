@@ -5,7 +5,8 @@ import { sidebarDataBranch } from "../constants/sidebarDataBranch";
 import Logo from "../assets/logo.jpg";
 import { Box, Typography } from "@mui/material";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
-import { FiAlignJustify } from "react-icons/fi";
+import { FiMenu, FiHome, FiSettings, FiUsers } from "react-icons/fi";
+
 function Sidebar({ onSidebarData }) {
   const isEng = isEnglish();
   const location = useLocation();
@@ -28,8 +29,9 @@ function Sidebar({ onSidebarData }) {
   const isChildActive = (path) => {
     return location.pathname.includes(path);
   };
+
   const handleClick = () => {
-    const data = 'Example data'; // Replace with your actual data
+    const data = "Example data"; // Replace with your actual data
     onSidebarData(data); // Pass the data to the onSidebarData prop
   };
 
@@ -39,7 +41,7 @@ function Sidebar({ onSidebarData }) {
       borderRight={isEng ? "1px solid #d9d9d9" : "none"}
       borderLeft={!isEng ? "1px solid #d9d9d9" : "none"}
     >
-      <FiAlignJustify  color="black"  onClick={handleClick}/>
+      <FiMenu color="black" onClick={handleClick} />
       <div className="sidebarHeader">
         <img style={{ height: 100 }} src={Logo} alt="logo" />
         {/* <AiOutlineDown color="black"/> */}
@@ -57,17 +59,30 @@ function Sidebar({ onSidebarData }) {
                 }}
                 className={`sidebarItem ${
                   isActive && "activeSidebarItem"
-                } justify-content-between`}
+                } text-align-left`}
               >
-                <Typography fontWeight={isActive && "bold"}>
+                {elem.icon}
+                <Typography
+                  style={{ marginLeft: "20px" }}
+                  fontWeight={isActive && "bold"}
+                >
                   {isEng ? elem.nameEn : elem.nameAr}
                 </Typography>
-                {elem.children.length !== 0 &&
-                  (!isActive ? (
-                    <AiOutlineDown color="black" />
-                  ) : (
-                    <AiOutlineUp color="black" />
-                  ))}
+                {elem.children.length !== 0 && (
+                  <span
+                    style={{
+                      marginLeft: "auto",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {!isActive ? (
+                      <AiOutlineDown color="black" />
+                    ) : (
+                      <AiOutlineUp color="black" />
+                    )}
+                  </span>
+                )}
               </div>
               {isActive && elem.children.length > 0 && (
                 <div className="sidebarChildren">

@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 function Branch() {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -17,15 +17,14 @@ function Branch() {
 
   return (
     <div>
+      <Header isSidebarClosed={isSidebarOpen} handleSidebarToggle={handleSidebarToggle} />
       <div className="d-flex">
-        {!isSidebarOpen && <Sidebar />}
-        <div className="w-100">
-          <Header isSidebarClosed={isSidebarOpen} handleSidebarToggle={handleSidebarToggle} />
-          <Box
-            width={`calc(100% - ${isSidebarOpen ? '260px' : '0px'})`}
-            mr={isRtl && '260px'}
-            ml={!isRtl && '260px'}
-            mt={isSidebarOpen && '80px'}
+        {isSidebarOpen && <Sidebar />}
+        <div className="w-100" style={{ marginTop: '100px' }}>
+          <Box 
+            width={`calc(100% - ${isSidebarOpen ? '150px' : '0px'})`}
+            mr={isRtl && isSidebarOpen ? '320px' : 0}
+            ml={!isRtl && isSidebarOpen ? '320px' : 0}
             className="pages"
           >
             <Outlet />

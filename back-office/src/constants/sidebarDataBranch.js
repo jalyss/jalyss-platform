@@ -1,20 +1,31 @@
+import { TfiStatsUp } from 'react-icons/tfi';
+import { RiProductHuntLine } from 'react-icons/ri';
+import { TbPackageImport } from 'react-icons/tb';
+import { BiMoneyWithdraw } from 'react-icons/bi';
+import { AiOutlineComment } from 'react-icons/ai';
+import { FiSettings } from 'react-icons/fi';
+
+
 export const sidebarDataBranch = [
   {
     nameEn: "Dashboard",
     nameAr: "لوحة التحكم",
     path: "charts",
+    icon: <TfiStatsUp/>,
     children: [],
   },
   {
     nameEn: "Branches",
     nameAr: "المنتج ",
     path: "branches",
+    icon: <RiProductHuntLine/>,
     children: [],
   },
   {
     nameEn: "Supplying",
     nameAr: "توريد",
     path: "suppluing",
+    icon: <TbPackageImport/>,
     children: [
       {
         nameEn: "Articles",
@@ -57,6 +68,7 @@ export const sidebarDataBranch = [
     nameEn: "Sellings",
     nameAr: "المبيعات",
     path: "Sellings",
+    icon: <BiMoneyWithdraw/>,
     children: [
       {
         nameEn: "Orders list",
@@ -89,6 +101,7 @@ export const sidebarDataBranch = [
     nameEn: "Interactions",
     nameAr: "المنتج ",
     path: "Interactions",
+    icon: <AiOutlineComment/>,
     children: [
       {
         nameEn: "Blogs",
@@ -106,6 +119,7 @@ export const sidebarDataBranch = [
     nameEn: "Admin settings",
     nameAr: " اعدادات المشرف",
     path: "settings",
+    icon: <FiSettings/>,
     children: [
       {
         nameEn: "Employee",
