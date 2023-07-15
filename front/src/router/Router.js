@@ -89,16 +89,10 @@ function Router() {
             />
            
 
-          
+
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />}/>
-    
-
            
-
-
-        
-       
             <Route path="RegisterForm" element={<RegisterForm />} />
             <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
           </Route>
