@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { fetchProvider } from '../../../store/provider';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { fetchProvider } from "../../../store/provider";
 
 function DetailProvider() {
   const { providerId } = useParams();
@@ -13,74 +14,63 @@ function DetailProvider() {
   }, [dispatch, providerId]);
 
   return (
-    <div>
-      <div className="container">
-        <div className="card mb-3" style={{ width: 1000 }}>
-          <div className="row g-0">
-            <div className="col-md-4"></div>
-            <div className="col-md-8">
-              <div className="card-body">
-                <h3 className="card-title" style={{ textAlign: 'center' }}>
-                  {provider?.name}
-                </h3>
-                <hr />
-                <div className="row">
-                  <div className="col-2">
-                    <h6>logo</h6>
-                  </div>
-                  <div className="col-4">
-                  <img
-            className="card-img-top"
-            src={provider?.logo?.path}
-            alt="Card image cap"
-          />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-2">
-                    <h6>Email :</h6>
-                  </div>
-                  <div className="col-4">
-                    <p className="card-text">
-                      <small className="text-muted">{provider?.email}</small>
-                    </p>
-                  </div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-4">
-                    <h6>Telephone Number:</h6>
-                  </div>
-                  <div className="col-4">
-                    <p className="card-text">
-                      <small className="text-muted">{provider?.tel}</small>
-                    </p>
-                  </div>
-                </div>
-               
-                <div className="row mt-3">
-                  <div className="col-4">
-                    <h6>Adresse :</h6>
-                  </div>
-                  <div className="col-4">
-                    <p className="card-text">{provider?.address}</p>
-                  </div>
-                </div>
-                <div className="row mt-3">
-                  <div className="col-4">
-                    <h6>Account Balance :</h6>
-                  </div>
-                  <div className="col-4">
-                    <p className="card-text">
-                      <small className="text-muted">{provider?.accountBalance}</small>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ maxWidth: 1000, margin: "auto" }}>
+      <Card>
+        <CardContent>
+          <Typography variant="h4" align="center" gutterBottom>
+            {provider?.name}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CardMedia
+              component="img"
+              alt="Logo"
+              image={provider?.logo?.path}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <Box sx={{ flexBasis: "45%", my: 2 }}>
+              <Typography variant="h5" gutterBottom>
+                Email :
+              </Typography>
+              <Typography variant="body1">{provider?.email}</Typography>
+            </Box>
+            <Box sx={{ flexBasis: "45%", my: 2 }}>
+              <Typography variant="h5" gutterBottom>
+                Telephone Number :
+              </Typography>
+              <Typography variant="body1">{provider?.tel}</Typography>
+            </Box>
+            <Box sx={{ flexBasis: "45%", my: 2 }}>
+              <Typography variant="h5" gutterBottom>
+                Adresse :
+              </Typography>
+              <Typography variant="body1">{provider?.address}</Typography>
+            </Box>
+            <Box sx={{ flexBasis: "45%", my: 2 }}>
+              <Typography variant="h5" gutterBottom>
+                Account Balance :
+              </Typography>
+              <Typography variant="body1">
+                {provider?.accountBalance}
+              </Typography>
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
 
