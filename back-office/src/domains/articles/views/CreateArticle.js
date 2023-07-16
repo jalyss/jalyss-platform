@@ -125,6 +125,7 @@ function CreateArticle() {
                 <TextField
                   fullWidth
                   required
+                  multiline
                   name="title"
                   label="Title"
                   value={article?.title || ""}
@@ -135,6 +136,7 @@ function CreateArticle() {
                 <TextField
                   fullWidth
                   required
+                  multiline
                   type="number"
                   name="weight"
                   label="Weight"
@@ -146,6 +148,7 @@ function CreateArticle() {
                 <TextField
                   fullWidth
                   required
+                  multiline
                   type="number"
                   name="pageNumber"
                   label="Page Number"
@@ -157,6 +160,7 @@ function CreateArticle() {
                 <TextField
                   fullWidth
                   required
+                  multiline
                   name="code"
                   label="Code"
                   value={article?.code || ""}
@@ -188,9 +192,12 @@ function CreateArticle() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth required >
                   <InputLabel id="category">Category</InputLabel>
                   <Select
+                 
+                
+                   
                     labelId="category"
                     name="categoryId"
                     value={article?.categoryId || ""}
@@ -206,9 +213,11 @@ function CreateArticle() {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth required>
                   <InputLabel id="publishingHouse">Publishing House</InputLabel>
                   <Select
+                  
+                 
                     labelId="publishingHouse"
                     name="publishingHouseId"
                     value={article?.publishingHouseId || ""}
@@ -224,9 +233,11 @@ function CreateArticle() {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth required>
                   <InputLabel id="type">Type</InputLabel>
                   <Select
+                  
+                 
                     labelId="type"
                     name="typeId"
                     value={article?.typeId || ""}
@@ -242,9 +253,11 @@ function CreateArticle() {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth required>
                   <InputLabel id="branch">Branch</InputLabel>
                   <Select
+                  
+                  
                     labelId="branch"
                     name="branchId"
                     value={article?.ArticleByBranch?.branchId || ""}
@@ -260,9 +273,11 @@ function CreateArticle() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl fullWidth>
+                <FormControl fullWidth required>
                   <InputLabel id="author">Author</InputLabel>
                   <Select
+                  
+                  
                     labelId="author"
                     name="authorIds"
                     value={article?.ArticleByAuthor?.authorId || ""}
