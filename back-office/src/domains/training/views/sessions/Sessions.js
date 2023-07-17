@@ -14,6 +14,7 @@ import DeleteButton from "../../../../components/Commun/buttons/DeleteButton"
 import CreateButton from "../../../../components/Commun/buttons/CreateButton"
 function Sessions() {
   const sessionStore = useSelector((state) => state.sessions?.sessions?.items || []);
+  console.log(sessionStore,'rfr')
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [skip, setSkip] = useState(0);

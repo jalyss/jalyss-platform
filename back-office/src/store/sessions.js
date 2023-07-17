@@ -21,6 +21,11 @@ export const fetchOnesession= createAsyncThunk("session/session",async (id)=>{
   return response.data;
 })
 
+export const findAllSessionTitles= createAsyncThunk("session/session",async (id)=>{
+  const response =await axios.get(`${config.API_ENDPOINT}/session`)
+  return response.data;
+})
+
 export const deletsessions = createAsyncThunk("session/deletsessions", async (id, { dispatch }) => {
   let token = JSON.parse(localStorage.getItem('tokensession'));
   const configs = {
@@ -75,6 +80,8 @@ export const sessionSlice = createSlice({
       builder.addCase(fetchOnesession.fulfilled, (state, action) => {
         state.session=action.payload;
       });
+      
     },
+    
   });
   export default sessionSlice.reducer;

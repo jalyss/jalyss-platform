@@ -5,7 +5,7 @@ function Command() {
   return (
     <div className='page'>
       
-        <Outlet/>
+       <Outlet></Outlet>
     </div>
   )
 }
