@@ -1,18 +1,15 @@
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import { AiFillDelete, AiOutlineEye } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import isEnglish from '../../../helpers/isEnglish';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
-import { rows } from "../../../constants/blogData";
 import { fetchBlogs } from '../../../store/blogs';
-import Modal from "../../../components/Commun/Modal";
-import DropDown from '../../../components/Commun/DropDown';
-
+import Modal from '../../../components/Commun/Modal';
+import AutoCompleteFilter from '../../../components/Commun/AutoCompleteFilter';
 
 function BlogsList() {
   const [show, setShow] = useState(false);
@@ -21,15 +18,19 @@ function BlogsList() {
   const take = 50;
   const trend = 0;
   const [basicModal, setBasicModal] = useState(false);
-
-
+  const [selectedSituation, setSelectedSituation] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch();
   const colorReference = '#48184c';
+  const situations = [
+    { value: 'Confirmed', label: 'Confirmed' },
+    { value: 'Refused', label: 'Refused' },
+    { value: 'Pending', label: 'Pending' },
+  ];
 
   const blogs = useSelector((state) => state.blogs.blogs.items);
-  console.log(blogs, 'omar');
+
 
   const rows = blogs?.map((elem) => ({
     id: elem.id,
@@ -39,7 +40,9 @@ function BlogsList() {
     date: elem.createdAt,
     content: elem.content,
     situation: elem.confirm,
-  }));
+    reason: elem.reason,
+  }))
+  .filter((elem) => !selectedSituation || elem.situation.toLowerCase() === selectedSituation.toLowerCase());
 
   useEffect(() => {
     dispatch(fetchBlogs({ take, skip }));
@@ -97,10 +100,18 @@ function BlogsList() {
 
   return (
     <div>
-      <div className='container'>
+      <div className="container">
         <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List of people who create blogs</h2>
         <hr></hr>
-        <DropDown content1={'Accept'} content2={'Refuse'} content3={'Waiting'} />
+
+        <AutoCompleteFilter
+          data={situations}
+          valueOptionName="value"
+          labelOptionName="label"
+          label="Filter by situation"
+          onChange={(selectedValue) => setSelectedSituation(selectedValue?.value)}
+        />
+
         <Box sx={{ height: 400, width: '100%' }}>
           <DataGrid
             rows={rows}
@@ -116,7 +127,7 @@ function BlogsList() {
             disableRowSelectionOnClick
           />
         </Box>
-        <Modal bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} />
+        <Modal bodOfDelete={'are'} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { rows } from "../../../constants/blogData";
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import blogs, { fetchBlog, editBlog } from "../../../store/blogs";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
@@ -9,8 +10,8 @@ function DetailBlog() {
   const [action, setAction] = useState("");
   const dispatch = useDispatch();
   const { blogId } = useParams();
-  const [confirm , setConfirm] = useState(false);
-
+  const [confirm , setConfirm] = useState();
+  const navigate = useNavigate(); 
   
   const blog = useSelector((state) => state?.blogs?.blog);
   console.log(blogId, "bloggg");
@@ -31,17 +32,16 @@ function DetailBlog() {
     
     const acceptBlogFun = async (e) => {
       e.preventDefault();
-      setConfirm(true)
+
       let id = blogId;
 
     let body = {
-      confirm,
+      confirm:"confirmed",
     };
    
     dispatch(editBlog({id,body})).then((res) => {
       if (!res.error) {
-        showSuccessToast("Blog has been updated");
-        navigate(-1);
+        showSuccessToast("Blog has been confirmed ");
       } else {
         showErrorToast(res.error.message);
       }
@@ -50,15 +50,14 @@ function DetailBlog() {
 
   const refuseBlogFun = async (e) => {
     e.preventDefault();
-    setConfirm(!true)
+
     let id = blogId;
     let body = {
-      confirm,
+      confirm:"refused",
     };
     dispatch(editBlog({id,body})).then((res) => {
       if (!res.error) {
-        showSuccessToast("Blog has been updated");
-        navigate(-1);
+        showSuccessToast("Blog has been refused");
       } else {
         showErrorToast(res.error.message);
       }

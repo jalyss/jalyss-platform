@@ -20,9 +20,9 @@ function Branch() {
       <Header isSidebarClosed={isSidebarOpen} handleSidebarToggle={handleSidebarToggle} />
       <div className="d-flex">
         {isSidebarOpen && <Sidebar />}
-        <div className="w-100" style={{ marginTop: '100px' }}>
+        <div className="w-100" style={{ marginTop: '100px' ,display:"flex", justifyContent:"center", alignItems:"center"}}>
           <Box 
-            width={`calc(100% - ${isSidebarOpen ? '150px' : '0px'})`}
+            width={`calc(70% - ${isSidebarOpen ? '70px' : '0px'})`}
             mr={isRtl && isSidebarOpen ? '320px' : 0}
             ml={!isRtl && isSidebarOpen ? '320px' : 0}
             className="pages"

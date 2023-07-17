@@ -43,7 +43,7 @@ function Sidebar({ onSidebarData }) {
     >
       <FiMenu color="black" onClick={handleClick} />
       <div className="sidebarHeader">
-        <img style={{ height: 100 }} src={Logo} alt="logo" />
+        {/* <img style={{ height: 100 }} src={Logo} alt="logo" /> */}
         {/* <AiOutlineDown color="black"/> */}
       </div>
       <div className="sidebarContent">

@@ -76,6 +76,7 @@ export const editBlog = createAsyncThunk(
   "blogs/editBlog",
   async (args)=>{
     const {id,body}=args
+    console.log(args,"args")
     let token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
       headers: {
