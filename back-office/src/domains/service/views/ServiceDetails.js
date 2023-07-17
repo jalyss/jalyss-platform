@@ -44,7 +44,7 @@ export default function ServiceDetails() {
     
   };
 
-  const id = serviceId;
+
   const service = useSelector((state) => state.service.service);
 
   useEffect(() => {
@@ -164,7 +164,7 @@ export default function ServiceDetails() {
     } else if (deleteType === "tarif") {
       handleRemoveTarif(deleteId);
     } else if (deleteType === "service") {
-      handleRemoveService(deleteId);
+      handleRemoveService(serviceId);
     }
     setBasicModal(false);
   };
