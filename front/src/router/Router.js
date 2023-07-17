@@ -73,6 +73,7 @@ function Router() {
             <Route path="*" element={<NoPage />} />
             <Route path="/chat" element={<Chat />}>
             <Route path="/chat/:userId" element={<Conversation />} />
+           
 
             </Route>
             <Route path="training" element={<TrainingPage />} />
@@ -89,16 +90,10 @@ function Router() {
             />
            
 
-          
+
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />}/>
-    
-
            
-
-
-        
-       
             <Route path="RegisterForm" element={<RegisterForm />} />
             <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
           </Route>

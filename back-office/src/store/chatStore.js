@@ -24,6 +24,27 @@ export const fetchChatRoom = createAsyncThunk("chatRoom/user", async (userId) =>
 
 })
 
+export const updatechatroomname = createAsyncThunk("chatRoom/user",  async (args, { dispatch }) =>{
+    const { ...rest } = args
+    const response = await axios.patch(`${config.API_ENDPOINT}/chatRoom/${rest.id}`,rest)
+    console.log("chatRooms",response.data,userId)
+    return response.data
+
+})
+
+
+export const deleteUser = createAsyncThunk("user-chatroom", async (args, { dispatch })  => {
+    const { userId,chatRoomId } = args
+    console.log({userId,chatRoomId},"res")
+    const response = await axios.delete(`${config.API_ENDPOINT}/user-chatroom`,{
+        userId,chatRoomId
+    })
+    console.log("userOut",response.data)
+    dispatch(fetchOneRoom(chatRoomId))
+    return response.data
+})
+
+
 export const fetchOneRoom = createAsyncThunk("one/chatromm", async (id) => {
     
     const response = await axios.get(`${config.API_ENDPOINT}/chatRoom/one/${id}`)
@@ -31,6 +52,33 @@ export const fetchOneRoom = createAsyncThunk("one/chatromm", async (id) => {
 
     return response.data
 })
+
+export const deleteChatRoom = createAsyncThunk(
+    "one/chatromm",
+    async (id) => {
+      const response = await axios.delete(
+        `${config.API_ENDPOINT}/chatroom/${id}`
+      );
+      return response.data;
+    }
+  );
+
+
+export const findAllRooms = createAsyncThunk("chatRoom/all/all-chatsRooms", async () => {
+  const response = await axios.get(`${config.API_ENDPOINT}/chatRoom/all/all-chatsRooms`)   
+   console.log("Room",response.data)
+
+    return response.data
+})
+
+export const addUser = createAsyncThunk("user-chatroom", async (args , {dispatch}) => {
+   const {userId,chatRoomId}=args
+    const response = await axios.post(`${config.API_ENDPOINT}/user-chatroom`,{userId,chatRoomId})   
+     console.log("userAdded",response.data)
+  dispatch(fetchOneRoom(chatRoomId))
+      return response.data
+  })
+  
 
 
 export const notSeenMessages = createAsyncThunk("notSeen",async(id)=> {
@@ -44,7 +92,13 @@ export const chatSlice = createSlice({
     name: "chat",
     initialState: {
         chat: null,
+        
         chatRooms: {
+            items: [],
+            count: 0,
+        },
+          
+        AllchatRooms: {
             items: [],
             count: 0,
         },
@@ -65,6 +119,9 @@ export const chatSlice = createSlice({
         });
         builder.addCase(fetchOneRoom.fulfilled, (state, action) => {
             state.chat = action.payload
+        });
+        builder.addCase(findAllRooms.fulfilled, (state, action) => {
+            state.AllchatRooms.items = action.payload
         });
         builder.addCase(fetchMessages.fulfilled, (state, action) => {
             state.messagess.items = action.payload

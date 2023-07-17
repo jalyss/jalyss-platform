@@ -50,27 +50,40 @@ function BlogsList() {
 
   const buttonStyle = {
     backgroundColor: colorReference,
-    color: 'white',
-    borderRadius: '5px',
+    color: "white",
+    borderRadius: "5px",
   };
-
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
-
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 150, editable: false },
-    { field: 'blogTitle', headerName: 'Blog Title', width: 150, editable: false },
-    { field: 'articleCategory', headerName: 'Category', width: 150, editable: false },
-    { field: 'date', headerName: 'Date', width: 150, editable: false },
-    { field: 'situation', headerName: 'Situation', width: 150, editable: false },
+    { field: "id", headerName: "ID", width: 90 },
+    { field: "name", headerName: "Name", width: 150, editable: false },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "blogTitle",
+      headerName: "Blog Title",
       width: 150,
-      cellClassName: 'actions',
+      editable: false,
+    },
+    {
+      field: "articleCategory",
+      headerName: "Category",
+      width: 150,
+      editable: false,
+    },
+    { field: "date", headerName: "Date", width: 150, editable: false },
+    {
+      field: "situation",
+      headerName: "Situation",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 150,
+      cellClassName: "actions",
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
@@ -80,10 +93,12 @@ function BlogsList() {
             onClick={() => handleAddClick(id)}
             color="success"
           />,
+
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
             onClick={toggleShow}
+            // should open popup to ask are u sure delete this user (yes/no)
             color="error"
           />,
         ];
@@ -93,7 +108,9 @@ function BlogsList() {
 
   const isEng = isEnglish();
   const Navigate = useNavigate();
+  // const handleDeleteClick = (id) => {
 
+  // };
   const handleAddClick = (blogId) => {
     Navigate(`detail/${blogId}`);
   };
@@ -132,5 +149,4 @@ function BlogsList() {
     </div>
   );
 }
-
 export default BlogsList;

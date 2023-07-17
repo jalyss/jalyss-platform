@@ -45,6 +45,9 @@ export class UsersService {
       include: { Media: true, avatar: true },
     });
   }
+
+
+  
   authorList() {
     return this.prisma.user.findMany({
       where: {

@@ -4,6 +4,7 @@ import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 
+
 @Injectable()
 export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
@@ -80,6 +81,19 @@ export class ChatRoomService {
       }},
     });
   }
+
+  findAllRoooooooooooooms() {
+    return this.prisma.chatRoom.findMany({
+      include: { messages: true , participants: {
+        include: { user : {
+          include : {
+            avatar : true
+          }
+        } }  
+      }}
+    });
+  }
+
   async findUsersChatroom(userId1: string, userId2: string) {
     const chatRoom = await this.prisma.chatRoom.findFirst({
       where: {
@@ -111,6 +125,11 @@ export class ChatRoomService {
       data: dto,
     });
   }
+
+
+
+
+  
 
   async remove(id: string) {
     return await this.prisma.chatRoom.delete({ where: { id } });

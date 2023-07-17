@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 import '../../../assets/styles/signup.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { showErrorToast, showSuccessToast } from '../../../utils/toast'
@@ -42,7 +41,7 @@ function EditUser() {
   }, [userStore.user])
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const {name,value} = e.target
     setUser((User) => ({ ...User, [name]: value }))
   }
 

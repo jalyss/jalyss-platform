@@ -1,105 +1,79 @@
-import React, { useMemo, useState } from 'react';
-import { Navbar, Container } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { sidebarDataBranch } from '../constants/sidebarDataBranch';
-import isEnglish from '../helpers/isEnglish';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Avatar from '@mui/material/Avatar';
-import { FiSettings } from 'react-icons/fi';
-import { FiX } from "react-icons/fi";
-import { useSelector } from 'react-redux';
-import MenuItem from '@mui/material/MenuItem';
-import WhiteSelect from '../components/WhiteSelect';
-import { useTranslation } from 'react-i18next';
-import { useLanguage } from '../hooks/useLanguage';
-import { Box, Stack } from '@mui/material';
-import { FiMenu } from "react-icons/fi";
-import Logo from "../assets/logo.jpg";
+import React, { useMemo } from 'react'
+import { Navbar, Container} from 'react-bootstrap'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { sidebarDataBranch } from '../constants/sidebarDataBranch'
+import isEnglish from '../helpers/isEnglish'
+import Typography from '@mui/material/Typography'
+import Menu from '@mui/material/Menu'
+import Avatar from '@mui/material/Avatar'
+import { FiSettings } from 'react-icons/fi'
+import { useSelector } from 'react-redux'
+import MenuItem from '@mui/material/MenuItem'
+import WhiteSelect from '../components/WhiteSelect'
+import { useTranslation } from 'react-i18next'
+import { useLanguage } from '../hooks/useLanguage'
+import { Box, Stack } from '@mui/material'
 
-function Header({ isSidebarClosed, handleSidebarToggle }) {
-  const { t, i18n } = useTranslation();
-  const currentLanguage = useLanguage();
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const navigate = useNavigate();
+function Header() {
+  const { t, i18n } = useTranslation()
+  const currentLanguage = useLanguage()
+  const [anchorElUser, setAnchorElUser] = React.useState(null)
+  const navigate = useNavigate()
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-  const userStore = useSelector((state) => state.auth);
-  const [openSideBar, setOpenSideBar] = useState(true)
-  const onChangeLanguage = (event) => {
-    console.log('hello');
-    console.log(event.target.value);
-    i18n.changeLanguage(event.target.value);
-    localStorage.setItem('lg', event.target.value);
-  };
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-  const toggleOpen = () => {
-    setOpenSideBar(!openSideBar)
-    handleSidebarToggle()
+    setAnchorElUser(event.currentTarget)
   }
-  const location = useLocation();
-  const isEng = isEnglish();
-  const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages]);
+  const userStore = useSelector((state) => state.auth)
+
+  const onChangeLanguage = (event) => {
+    console.log('hello')
+    console.log(event.target.value)
+    i18n.changeLanguage(event.target.value)
+    localStorage.setItem('lg', event.target.value)
+  }
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null)
+  }
+
+  const location = useLocation()
+  const isEng = isEnglish()
+  const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages])
 
   const getBrandText = () => {
     const currentPath = location.pathname;
-
+  
     for (let i = 0; i < sidebarDataBranch.length; i++) {
       const item = sidebarDataBranch[i];
-
+  
       if (currentPath === `/${item.path}`) {
         return isEng ? item.nameEn : item.nameAr;
       }
-
+  
       for (let j = 0; j < item.children.length; j++) {
         const child = item.children[j];
-
+  
         if (currentPath.endsWith(`/${child.path}`)) {
           return isEng ? child.nameEn : child.nameAr;
         }
       }
     }
-    return 'MasterKnowledgeAcademy';
-  };
+    return 'MasterKnowledgeAcademy'
+  }
 
   return (
     <Box
       bgcolor="white"
       zIndex="99"
       position="fixed"
-      width="100%"
+      width="calc(100% - 260px)"
       borderBottom="1px solid #d9d9d9"
-
+      mr={isRtl && '260px'}
+      ml={!isRtl && '260px'}
     >
       <Navbar>
-        <div className="sidebarHeader">
-          <img style={{ height: 60 }} src={Logo} alt="logo" />
-        </div>
-        <div
-          style={{
-            cursor: 'pointer',
-            marginLeft: '6.5rem',
-          }}
-          onClick={toggleOpen}
-        >
-          {openSideBar ? <FiMenu color="black" /> : <FiX color="black" />}
-        </div>
-
         <Container>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="h6" fontWeight="bold">
-              {getBrandText()}
-            </Typography>
-          </div>
+          <Typography variant="h6" fontWeight="bold">
+            {getBrandText()}
+          </Typography>
           <Box>
             <Stack direction="row" spacing={3}>
               <WhiteSelect
@@ -109,16 +83,16 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
                 value={currentLanguage}
                 onChange={onChangeLanguage}
                 data={[
-                  { label: 'AR', value: 'ar' },
-                  { label: 'EN', value: 'en' },
+                  { label: "AR", value: "ar" },
+                  { label: "EN", value: "en" },
                 ]}
-                helper={t('Language')}
+                helper={t("Language")}
               />
 
               <Box
                 sx={{ cursor: 'pointer' }}
-                display="flex"
-                justifyContent="center"
+                display='flex'
+                justifyContent='center'
                 alignItems="center"
                 onClick={handleOpenUserMenu}
                 px={1.5}
@@ -129,7 +103,7 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
               >
                 <FiSettings size={22} color="#48184c" />
                 <Typography fontWeight="bold" mx={2}>
-                  {userStore.meAdmin[isEng ? 'fullNameEn' : 'fullNameAr']}
+                  {userStore.meAdmin[isEng ? "fullNameEn" : "fullNameAr"]}
                 </Typography>
                 <Avatar
                   alt="Remy Sharp"
@@ -140,25 +114,25 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
             </Stack>
 
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
                 <MenuItem>
-                  <Typography textAlign="center" onClick={() => {
-                    navigate("/profile");
+                  <Typography textAlign="center" onClick={()=>{
+                    navigate("/profile")
                   }}>
                     <span className="no-icon">Profile</span>
                   </Typography>
@@ -167,9 +141,9 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
                   <Typography>
                     <span
                       onClick={(e) => {
-                        e.preventDefault();
-                        localStorage.removeItem('tokenAdmin');
-                        window.location.pathname = '/';
+                        e.preventDefault()
+                        localStorage.removeItem('tokenAdmin')
+                        window.location.pathname = '/'
                       }}
                       className="no-icon"
                     >
@@ -183,7 +157,7 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
         </Container>
       </Navbar>
     </Box>
-  );
+  )
 }
 
-export default Header;
+export default Header

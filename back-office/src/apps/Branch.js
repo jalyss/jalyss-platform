@@ -1,30 +1,25 @@
-import React, { useMemo, useState } from 'react';
-import Sidebar from '../layouts/Sidebar';
-import Header from '../layouts/Header';
-import { Outlet } from 'react-router-dom';
-import { Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import React, { useMemo } from 'react'
+import Sidebar from '../layouts/Sidebar'
+import Header from '../layouts/Header'
+import { Outlet } from 'react-router-dom'
+import { Box } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 function Branch() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
-
-  const { i18n } = useTranslation();
-  const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages]);
+  const { i18n } = useTranslation()
+  const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages])
 
   return (
     <div>
-      <Header isSidebarClosed={isSidebarOpen} handleSidebarToggle={handleSidebarToggle} />
-      <div className="d-flex">
-        {isSidebarOpen && <Sidebar />}
-        <div className="w-100" style={{ marginTop: '100px' ,display:"flex", justifyContent:"center", alignItems:"center"}}>
-          <Box 
-            width={`calc(70% - ${isSidebarOpen ? '70px' : '0px'})`}
-            mr={isRtl && isSidebarOpen ? '320px' : 0}
-            ml={!isRtl && isSidebarOpen ? '320px' : 0}
+      <div className={`d-flex `}>
+        <Sidebar />
+        <div className="w-100">
+          <Header />
+          <Box
+            width="calc(100% - 260px)"
+            mr={isRtl && '260px'}
+            ml={!isRtl && '260px'}
+            mt='80px'
             className="pages"
           >
             <Outlet />
@@ -32,7 +27,7 @@ function Branch() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Branch;
+export default Branch

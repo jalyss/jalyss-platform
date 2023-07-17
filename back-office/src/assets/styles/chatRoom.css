@@ -1,17 +1,7 @@
-.icons{
-    background-color: rgb(239, 244, 244);
-}
 
-.icons:hover {
-    background-color: lightgray;
-  }
-  .IconButton:hover {
-    background-color: lightgray;
-  }
-  .icons.active {
-    background-color: lightgray;
-}
-.btnicon:hover{
-      background-color:lightgray;
-
+  .divList{
+    position: fixed;
+width: 20%;
+    z-index: 999;  
+    cursor: pointer;
   }
