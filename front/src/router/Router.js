@@ -73,6 +73,7 @@ function Router() {
             <Route path="*" element={<NoPage />} />
             <Route path="/chat" element={<Chat />}>
             <Route path="/chat/:userId" element={<Conversation />} />
+           
 
             </Route>
             <Route path="training" element={<TrainingPage />} />

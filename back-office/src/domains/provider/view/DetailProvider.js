@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, TextField } from "@mui/material";
 import { fetchProvider } from "../../../store/provider";
 
 function DetailProvider() {
@@ -14,62 +14,161 @@ function DetailProvider() {
   }, [dispatch, providerId]);
 
   return (
-    <Box sx={{ maxWidth: 1000, margin: "auto" }}>
-      <Card>
+    <Box sx={{ maxWidth: "100%",height: "100%", margin: "auto" }}>
+      
         <CardContent>
-          <Typography variant="h4" align="center" gutterBottom>
-            {provider?.name}
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt="Logo"
-              image={provider?.logo?.path}
-            />
-          </Box>
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               flexWrap: "wrap",
+              height: "100%",
             }}
           >
-            <Box sx={{ flexBasis: "45%", my: 2 }}>
-              <Typography variant="h5" gutterBottom>
-                Email :
-              </Typography>
-              <Typography variant="body1">{provider?.email}</Typography>
+            <Box sx={{ flexBasis: "45%", my: 3,ml:5 }}>
+              <TextField
+                label="Name"
+                value={provider?.name}
+                disabled
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: "#4b0082", 
+                  },
+                }}
+                sx={{
+                  color: "#8a2be2", 
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2",
+                  }, 
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",  
+                  },
+                
+                }}
+              />
+              <TextField
+                label="Email"
+                value={provider?.email}
+                disabled
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: "#4b0082", 
+                  },
+                }}
+                sx={{
+                  color: "#8a2be2", 
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2", 
+                  },
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "#8a2be2",  
+                    },
+                }}
+              />
+              <TextField
+                label="Telephone Number"
+                value={provider?.tel}
+                disabled
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: "#4b0082", 
+                  },
+                }}
+                sx={{
+                  color: "#8a2be2", 
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2", 
+                  },
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "#8a2be2",  
+                    },
+                }}
+              />
+              <TextField
+                label="Adresse"
+                value={provider?.address}
+                disabled
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: "#4b0082", 
+                  },
+                }}
+                sx={{
+                  color: "#8a2be2", 
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2", 
+                  },
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "#8a2be2",  
+                    },
+                }}
+              />
+              <TextField
+                label="Account Balance"
+                value={provider?.accountBalance}
+                disabled
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: "#4b0082", 
+                  },
+                }}
+                sx={{
+                  color: "#8a2be2", 
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2", 
+                  },
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "#8a2be2",  
+                    },
+                }}
+              />
             </Box>
-            <Box sx={{ flexBasis: "45%", my: 2 }}>
-              <Typography variant="h5" gutterBottom>
-                Telephone Number :
-              </Typography>
-              <Typography variant="body1">{provider?.tel}</Typography>
-            </Box>
-            <Box sx={{ flexBasis: "45%", my: 2 }}>
-              <Typography variant="h5" gutterBottom>
-                Adresse :
-              </Typography>
-              <Typography variant="body1">{provider?.address}</Typography>
-            </Box>
-            <Box sx={{ flexBasis: "45%", my: 2 }}>
-              <Typography variant="h5" gutterBottom>
-                Account Balance :
-              </Typography>
-              <Typography variant="body1">
-                {provider?.accountBalance}
-              </Typography>
+
+            <Box
+              sx={{
+                flexBasis: "45%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end"
+                , mr:5
+              }} 
+            >
+              <CardMedia
+                component="img"
+                alt="Logo"
+                image={provider?.logo?.path}
+                sx={{
+                  width: "90%", 
+                  height: "60%", 
+                  objectFit: "contain", 
+                  borderRadius: "8px", 
+                }}
+              />
             </Box>
           </Box>
         </CardContent>
-      </Card>
+      
     </Box>
   );
 }

@@ -58,19 +58,22 @@ function ProvidersList() {
     }
   }, [providerStore.providers.items]);
   const [open, setOpen] = useState(false);
+  const [selectedLogo, setSelectedLogo] = useState(null);
 
-  const handleClick = () => {
+  const handleClick = (logo) => {
+    setSelectedLogo(logo);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
   const columns = [
     {
       field: "logo",
       headerName: "Logo",
-      width: 155,
+      width: 120,
       editable: false,
       renderCell: (params) => (
         <>
@@ -83,13 +86,12 @@ function ProvidersList() {
               height: "110%",
               cursor: "pointer",
             }}
-            onClick={handleClick}
+            onClick={() => handleClick(params.value)}
           />
-          <Dialog open={open} onClose={handleClose} style={{borderRadius:"50px"}}>
-            
-            <DialogContent  >
+          <Dialog open={open} onClose={handleClose} style={{ borderRadius: "50px" }}>
+            <DialogContent>
               <img
-                src={params.value}
+                src={selectedLogo}
                 alt="Logo"
                 style={{ width: "100%", borderRadius: "40px" }}
               />
@@ -98,7 +100,6 @@ function ProvidersList() {
         </>
       ),
     },
-
     { field: "name", headerName: "Name", width: 155, editable: false },
     { field: "address", headerName: "Address", width: 155, editable: false },
     { field: "tel", headerName: "Tel", width: 155, editable: false },
