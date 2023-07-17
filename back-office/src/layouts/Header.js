@@ -13,7 +13,7 @@ import WhiteSelect from '../components/WhiteSelect';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../hooks/useLanguage';
 import { Box, Stack } from '@mui/material';
-import { FiMenu } from "react-icons/fi";
+import { FiAlignJustify } from "react-icons/fi";
 import Logo from "../assets/logo.jpg";
 
 
@@ -74,17 +74,17 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
       <Navbar>
       <div className="sidebarHeader">
         <img style={{ height: 100 }} src={Logo} alt="logo" />
+        <div
+              style={{
+                cursor: 'pointer',
+                marginRight: '10px',
+              }}
+              onClick={handleSidebarToggle}
+            >
+              <FiAlignJustify size={22} color="#000" />
+            </div>
+        {/* <AiOutlineDown color="black"/> */}
       </div>
- <div
-  style={{
-    cursor: 'pointer',
-    marginLeft: '6.5rem',
-  }}
-  onClick={handleSidebarToggle}
->
-  <FiMenu color="black" />
-</div>
-
         <Container>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             
