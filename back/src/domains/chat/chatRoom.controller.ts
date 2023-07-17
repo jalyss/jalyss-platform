@@ -19,7 +19,8 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @Controller('chatRoom')
 
 export class ChatRoomController {
-  constructor(private readonly chatRoomService: ChatRoomService) {}
+  constructor(private readonly chatRoomService: ChatRoomService
+    ) {}
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -54,4 +55,6 @@ export class ChatRoomController {
   remove(@Param('id') id: string) {
     return this.chatRoomService.remove(id);
   }
+
+  
 }
