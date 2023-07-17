@@ -10,6 +10,8 @@ import { IoIosPersonAdd } from "react-icons/io";
 import { fetchCategories, deleteCategory } from "../../../store/category";
 import DeleteModal from "../../../components/Commun/Modal";
 import Select from "react-select";
+import { BiDotsVerticalRounded } from "react-icons/bi";
+import "../../../assets/styles/chatRoom.css";
 
 function ChatList() {
   const [show, setShow] = useState(false);
@@ -18,18 +20,13 @@ function ChatList() {
   const dispatch = useDispatch();
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [basicModalDeleteid, setBasicModalDeleteid] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const categories = useSelector((state) => state.category.categories);
 
-   const options = [
-    {
-      value: "Groups",
-      label: "Groups",
-    },
-    {
-      value: "Users",
-      label: "Users",
-    }]
+  const handleOpen = () => {
+    setOpen(!open);
+  };
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -102,7 +99,6 @@ function ChatList() {
             onClick={() => {
               toggleShowDelete(id);
             }}
-            // should open popup to ask are u sure delete this user (yes/no)
             color="error"
           />,
         ];
@@ -112,7 +108,6 @@ function ChatList() {
   const isEng = isEnglish();
   const Navigate = useNavigate();
 
-
   const handleDeleteClick = (id) => {
     dispatch(deleteCategory(basicModalDeleteid)).then((res) => {
       if (res.error) {
@@ -120,7 +115,7 @@ function ChatList() {
       } else {
         showSuccessToast("Cayegory has been deleted");
         dispatch(fetchCategories());
-        setBasicModalDelete(false)
+        setBasicModalDelete(false);
       }
     });
   };
@@ -143,8 +138,14 @@ function ChatList() {
         setBasicModal={setBasicModalDelete}
         normal={!true}
         ofDelete={true}
-        bodOfDelete={<div className="d-flex justify-content-center align-items-center">You want to Delete this category ?</div>}
-        fn={()=>{handleDeleteClick()}}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            You want to Delete this category ?
+          </div>
+        }
+        fn={() => {
+          handleDeleteClick();
+        }}
       />
       <div>
         <div className="container">
@@ -152,6 +153,11 @@ function ChatList() {
           <hr></hr>
           <Button
             type="button"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             onClick={() => {
               Navigate("createCategory");
             }}
@@ -159,12 +165,41 @@ function ChatList() {
           >
             <span className="btn btn-sm ">Add Category</span>
           </Button>
-          <Select
-            placeholder="Search by sessions"
-            options={options}
-            isMulti
-          />
-          <Box >
+          {true ? (
+            <>
+              <button
+                style={{
+                  textAlign: "start",
+                  marginTop: "15px",
+                  border: "none",
+                  backgroundColor: "white",
+                  cursor: "pointer",
+                  color: "black",
+                  marginBottom: "5px",
+                }}
+                onClick={handleOpen}
+              >
+                <span>
+                  Select chat type 
+                </span>
+                <BiDotsVerticalRounded style={{ fontSize: 25 }} />
+              </button>
+              {open ? (
+                <div className="divList">
+                  <ul class="list-group">
+                    <li
+                      class="list-group-item"
+                      onClick={() => toggleShowEdit()}
+                    >
+                      Groups
+                    </li>
+                    <li class="list-group-item">2 Users chat</li>
+                  </ul>
+                </div>
+              ) : null}
+            </>
+          ) : null}
+          <Box>
             {rows?.length > 0 ? (
               <DataGrid
                 rows={rows}
