@@ -63,17 +63,17 @@ model User {
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   accountBalance       Float?
-  category             UserCategory?         @relation(fields: [categoryId], references: [id])
+  category             UserCategory?         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId           String?
-  educationLevel       EducationLevel?       @relation(fields: [educationLevelId], references: [id])
+  educationLevel       EducationLevel?       @relation(fields: [educationLevelId], references: [id], onDelete: Cascade)
   educationLevelId     String?
-  functionalArea       FunctionalArea?       @relation(fields: [functionalAreaId], references: [id])
+  functionalArea       FunctionalArea?       @relation(fields: [functionalAreaId], references: [id], onDelete: Cascade)
   functionalAreaId     String?
-  jobTitle             JobTitle?             @relation(fields: [jobTitleId], references: [id])
+  jobTitle             JobTitle?             @relation(fields: [jobTitleId], references: [id], onDelete: Cascade)
   jobTitleId           String?
-  country              Country?              @relation(fields: [countryId], references: [id])
+  country              Country?              @relation(fields: [countryId], references: [id], onDelete: Cascade)
   countryId            String?
-  city                 City?                 @relation(fields: [cityId], references: [id])
+  city                 City?                 @relation(fields: [cityId], references: [id], onDelete: Cascade)
   cityId               String?
   confirmkey           String?
   isActive             Boolean               @default(true)

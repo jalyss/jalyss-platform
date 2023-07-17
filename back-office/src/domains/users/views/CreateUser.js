@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 function CreateUser() {
   const { t, i18n } = useTranslation()
-  const dispatch = useDispatch()
+  const  dispatch=useDispatch()
   const navigate = useNavigate()
 
 
@@ -62,7 +62,7 @@ function CreateUser() {
                   required
                   name='fullNameAr'
                   id="fullNameAr"
-                  value={user?.fullNameAr}
+                  value={user?.fullNameEn}
                   onChange={(e)=>{handleChange}}
                 />
               </div>
@@ -80,8 +80,9 @@ function CreateUser() {
                   id="fullNameEn"
                   name="fullNameEn"
                  // pattern="^(\w\w+)\s(\w+)$"
-                  value={user?.fullNameEn}
+                 
                   onChange={handleChange}
+                  value={user?.fullNameEn}
                 />
               </div>
             </div>
@@ -96,8 +97,8 @@ function CreateUser() {
                   class="form-control mt-2"
                   type="email"
                   id="email"
-                  name="email"
                   value={user?.email}
+                  name="email"
                   onChange={handleChange}
                 />
               </div>
