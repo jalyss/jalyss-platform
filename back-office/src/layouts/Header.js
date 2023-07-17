@@ -83,10 +83,10 @@ function Header() {
                 value={currentLanguage}
                 onChange={onChangeLanguage}
                 data={[
-                  { label: 'AR', value: 'ar' },
-                  { label: 'EN', value: 'en' },
+                  { label: "AR", value: "ar" },
+                  { label: "EN", value: "en" },
                 ]}
-                helper={t('Language')}
+                helper={t("Language")}
               />
 
               <Box
@@ -103,7 +103,7 @@ function Header() {
               >
                 <FiSettings size={22} color="#48184c" />
                 <Typography fontWeight="bold" mx={2}>
-                  {userStore.meAdmin[isEng ? 'fullNameEn' : 'fullNameAr']}
+                  {userStore.meAdmin[isEng ? "fullNameEn" : "fullNameAr"]}
                 </Typography>
                 <Avatar
                   alt="Remy Sharp"
@@ -114,17 +114,17 @@ function Header() {
             </Stack>
 
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
