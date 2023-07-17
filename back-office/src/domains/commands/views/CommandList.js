@@ -14,8 +14,6 @@ import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import Modal from 'react-bootstrap/Modal';
 import { fetchCommands } from '../../../store/command';
 
-
-
 function CommandList() {
   const [show, setShow] = useState(false);
   const [elementId, setElementId] = useState(null);
@@ -23,17 +21,14 @@ function CommandList() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const columns = [
-    {
-      field: 'id', headerName: 'ID', width: 90
-    },
-    {
-      field: '',
-      headerName: 'TOTAL',
-      width: 100,
-      sortable: true,
+    
+    // {
+    //   field: '',
+    //   headerName: 'TOTAL',
+    //   width: 100,
+    //   sortable: true,
 
-
-    },
+    // },
     {
       field: 'clientName',
       headerName: 'NAME CLIENT',
@@ -218,7 +213,7 @@ function CommandList() {
 
 
       <div>
-        <Button type='button' href='command/create' variant="outlined" endIcon={<GrAdd />} >
+        <Button type='button' onClick={() => navigate(`create`)} variant="outlined" endIcon={<GrAdd />} >
           <span className='btn btn-sm '>
             Add Order
           </span>
@@ -249,5 +244,4 @@ function CommandList() {
     </div>
   )
 }
-
 export default CommandList
