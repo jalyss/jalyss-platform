@@ -1,239 +1,173 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
-import { useTheme } from "@emotion/react";
-// import Icon from "../assets/styles/profile.png";
-import {
-  ChatCircleDots,
-  Broadcast,
-} from "phosphor-react";
+import { Box, Button } from "@mui/material";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AiFillDelete, AiFillEdit, AiOutlineEye } from "react-icons/ai";
+import isEnglish from "../../../helpers/isEnglish";
+import { useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import { IoIosPersonAdd } from "react-icons/io";
+import { fetchCategories, deleteCategory } from "../../../store/category";
+import DeleteModal from "../../../components/Commun/Modal";
 
-import Conversation from "../chatComponents/conversation";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-
-import ConnectedUsers from "../chatComponents/connectedUser";
-
-import ChatRoom from "../chatComponents/chatRoom";
-import { styled } from "@mui/material/styles";
-import { fetchMessages, fetchChatRoom } from "../../../store/chatStore";
-
-const Chat = () => {
+function ChatList() {
+  const [show, setShow] = useState(false);
+  const [elementId, setElementId] = useState(null);
+  const [rows, setRows] = useState(null);
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
+  const [basicModalDeleteid, setBasicModalDeleteid] = useState(false);
 
-  const myId = useSelector((state) => state.auth.me?.id);
-
-  const [chatRoomList, setChatRoomList] = useState([]);
-  const [room, setRoom] = useState({});
-  const [activeComponentMd, setActiveComponentMd] = useState("chatRoom");
-  const [activeComponentLg, setActiveComponentLg] = useState("chatRoom");
-  const [selectedUser, setSelectedUser] = useState(null);
+  const categories = useSelector((state) => state.category.categories);
 
   useEffect(() => {
-    if (myId)
-      axios
-        .get(`http://localhost:3001/api/v1/chatRoom/${myId}`)
-        .then((response) => {
-          let data = response.data;
-          console.log(data);
-          setChatRoomList(data);
-          setSelectedUser(
-            data[0].participants.filter(
-              (particip) => particip.user.id !== myId
-            )[0]
-          );
-        })
-        .catch((err) => console.log(err));
-  }, [myId]);
+    dispatch(fetchCategories());
+  }, []);
+  useEffect(() => {
+    if (categories?.items?.length) {
+      let categoryData = categories.items.map((e, index) => {
+        return {
+          ...e,
+          index: index,
+        };
+      });
+      setRows(categoryData);
+    }
+  }, [categories.items]);
+
+  const columns = [
+    { field: "index", headerName: "Index", width: 90 },
+    { field: "id", headerName: "ID", width: 90 },
+    { field: "nameAr", headerName: "nameAr", width: 150, editable: false },
+    { field: "nameEn", headerName: "nameEn", width: 150, editable: false },
+    {
+      field: "createdAt",
+      headerName: "createdAt",
+      width: 150,
+      editable: false,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const formattedDate =
+          date.toISOString().split("T")[0] +
+          " At " +
+          date.toISOString().split("T")[1].split(".")[0];
+        return formattedDate;
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "updatedAt",
+      width: 150,
+      editable: false,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        const formattedDate =
+          date.toISOString().split("T")[0] +
+          " At " +
+          date.toISOString().split("T")[1].split(".")[0];
+        return formattedDate;
+      },
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 150,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<AiFillEdit />}
+            label="Edit"
+            className="textPrimary"
+            onClick={() => handleEditClick(id)}
+            color="inherit"
+          />,
+
+          <GridActionsCellItem
+            icon={<AiFillDelete />}
+            label="Delete"
+            onClick={() => {
+              toggleShowDelete(id);
+            }}
+            // should open popup to ask are u sure delete this user (yes/no)
+            color="error"
+          />,
+        ];
+      },
+    },
+  ];
+  const isEng = isEnglish();
+  const Navigate = useNavigate();
 
 
-  const handleChangeComponent = (string) => {
-    setActiveComponentLg(string);
-    setActiveComponentMd(string);
+  const handleDeleteClick = (id) => {
+    dispatch(deleteCategory(basicModalDeleteid)).then((res) => {
+      if (res.error) {
+        showErrorToast(res.error.message);
+      } else {
+        showSuccessToast("Cayegory has been deleted");
+        dispatch(fetchCategories());
+        setBasicModalDelete(false)
+      }
+    });
   };
 
-  const Stack0 = styled("div")(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: "100%",
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "row",
-    },
-  }));
-  const Stack1 = styled("div")(({ theme }) => ({
-    flexDirection: "column",
-    width: "max-content",
-    alignItems: "center",
-    display: "flex",
-    gap: 10,
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "row",
-    },
-  }));
+  const toggleShowDelete = (id) => {
+    setBasicModalDeleteid(id);
 
-  const Stack2 = styled("div")(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    height: "100%",
-    gap: 10,
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "row",
-    },
-  }));
-  const Box1 = styled("div")(({ theme }) => ({
-    padding: 10,
-    backgroundColor: "white",
-    height: "100vh",
-    boxShadow: "0px 0px 2px",
-    width: 100,
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-      height: 60,
-    },
-  }));
-  const BoxDiscussion = styled("div")(({ theme }) => ({
-    backgroundColor: "#57385c",
-    borderRadius: 6,
-    padding: 8,
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  }));
-  const BoxLg = styled("div")(({ theme }) => ({
-    width: 500,
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
-  }));
-  const BoxMd = styled("div")(({ theme }) => ({
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  }));
-  const BoxLgConversation = styled("div")(({ theme }) => ({
-    width: "100%",
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
-  }));
+    setBasicModalDelete(!basicModalDelete);
+  };
+
+  const handleEditClick = (id) => {
+    Navigate(`editCategory/${id}`);
+  };
 
   return (
-    <div className="d-flex chatContainer">
-      <Box1>
-        <Stack0>
-          <Stack1 spacing={3}>
-            <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton
-                sx={{ width: "max-content", color: "#fcfefe" }}
-                onClick={() => {
-                  handleChangeComponent("chatRoom");
+    <div>
+      <DeleteModal
+        toggleShow={toggleShowDelete}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        normal={!true}
+        ofDelete={true}
+        bodOfDelete={<div className="d-flex justify-content-center align-items-center">You want to Delete this category ?</div>}
+        fn={()=>{handleDeleteClick()}}
+      />
+      <div>
+        <div className="container">
+          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List categories</h2>
+          <hr></hr>
+          <Button
+            type="button"
+            onClick={() => {
+              Navigate("createCategory");
+            }}
+            variant="outlined"
+          >
+            <span className="btn btn-sm ">Add Category</span>
+          </Button>
+          <Box >
+            {rows?.length > 0 ? (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 5,
+                    },
+                  },
                 }}
-              >
-                <ChatCircleDots  />
-              </IconButton>
-            </Box>
-            <Box p={1} sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}>
-              <IconButton
-                sx={{ width: "max-content", color: "#fcfefe" }}
-                onClick={() => {
-                  handleChangeComponent("connectedUsers");
-                }}
-              >
-                <Broadcast className="users"  />
-              </IconButton>
-            </Box>
-            {/* <Box p={1}
-              sx={{ backgroundColor: "#57385c", borderRadius: 1.5 }}
-
-            >
-              <IconButton sx={{ width: "max-content", color: "#fcfefe" }}
-                onClick={() => {
-                  handleChangeComponent("chatRoom")
-
-                }}>
-                <Users />
-              </IconButton>
-            </Box> */}
-            {/* <Divider sx={{ width: "48px" }} />
-            <IconButton>
-              <Gear />
-            </IconButton> */}
-          </Stack1>
-          <div className="w-100 d-flex optionChat">
-            <Stack2>
-              <Switch defaultChecked color="warning" />
-              <Avatar />
-            </Stack2>
-          </div>
-        </Stack0>
-      </Box1>
-      {activeComponentLg === "connectedUsers" && (
-        <BoxLg>
-          <ConnectedUsers
-            setActiveComponent={handleChangeComponent}
-            setSelectedUser={setSelectedUser}
-            screen={"lg"}
-          />
-        </BoxLg>
-      )}
-      {activeComponentLg === "chatRoom" && (
-        <BoxLg>
-          <ChatRoom
-            chatRoomList={chatRoomList}
-            setRoom={setRoom}
-            room={room}
-            setActiveComponent={handleChangeComponent}
-            setSelectedUser={setSelectedUser}
-            screen={"lg"}
-          />
-        </BoxLg>
-      )}
-
-      <BoxLgConversation>
-        <Conversation
-          setChatRoomList={setChatRoomList}
-          room={room}
-          userr={selectedUser}
-        />
-      </BoxLgConversation>
-
-      {activeComponentMd === "connectedUsers" && (
-        <BoxMd>
-          <ConnectedUsers
-            setActiveComponent={handleChangeComponent}
-            setSelectedUser={setSelectedUser}
-            screen={"md"}
-          />
-        </BoxMd>
-      )}
-      {activeComponentMd === "chatRoom" && (
-        <BoxMd>
-          <ChatRoom
-            chatRoomList={chatRoomList}
-            setRoom={setRoom}
-            room={room}
-            setActiveComponent={handleChangeComponent}
-            setSelectedUser={setSelectedUser}
-            screen={"md"}
-          />
-        </BoxMd>
-      )}
-      {
-      activeComponentMd === "conversation" && (
-        <BoxMd>
-          <Conversation
-            setChatRoomList={setChatRoomList}
-            room={room}
-            userr={selectedUser}
-          />
-        </BoxMd>
-      )}
+                pageSizeOptions={[5]}
+                disableRowSelectionOnClick
+              />
+            ) : null}
+          </Box>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
-export default Chat;
+export default ChatList;
