@@ -35,9 +35,14 @@ export class BlogsController {
     return this.blogsService.findAll(filters);
   }
 
+
   @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.blogsService.findOne(id);
+  }
+ @Get(':confirm')
+  searchBlogs(@Param('confirm') confirm: string) {
+    return this.blogsService.findOne(confirm);
   }
 
   @ApiSecurity('apiKey')
