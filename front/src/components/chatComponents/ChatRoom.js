@@ -17,8 +17,6 @@ import StyledBadge from "../Commun/StyledBadge";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
-import "../../assets/styles/conversation.css";
 
 
 
@@ -33,27 +31,8 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
 
   const [searchText, setSearchText] = useState("");
   const [identifier, setIdentifier] = useState("")
-  const [users ,setUsers ] = useState(true)
-  const [groups ,setGroups ] = useState(false)
-  const [isHovering, setIsHovering] = useState(false);
 
-  const handleMouseEnter = () => {
-    setIsHovering(true);
-  };
 
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-  };
-
-  const handleButtonClick = (stack) => {
-    if (stack === 'users') {
-      setUsers(true);
-      setGroups(false);
-    } else if (stack === 'groups') {
-      setUsers(false);
-      setGroups(true);
-    }
-  };
 
 
 
@@ -74,16 +53,16 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
           backgroundColor: "#fff",
         }}
       >
-        {filteredChatRooms.filter(e=>e.participants.length === 2).map((chatRoom, i) => {
+        {filteredChatRooms.map((chatRoom, i) => {
           setIdentifier(chatRoom.id);
-  
-          let name = "";
-          let user = chatRoom.participants.filter(
-            (p) => p.userId !== authStore?.id
-          )[0];
-          if (chatRoom.name === null) name = user.user.fullNameEn;
+
+
+          let name = ''
+          let user = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0]
+          if (chatRoom.name === null)
+            name = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0].user.fullNameEn
           else {
-            name = chatRoom.name;
+            name = chatRoom.name
           }
           return (
             <Stack
@@ -92,106 +71,49 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
               justifyContent="space-between"
               key={i}
               onClick={() => {
-                setSelectedUser(user);
-  
-                if (screen === "md") setActiveComponent("conversation");
-                navigate(`/chat/${user?.userId}`);
+                setSelectedUser(user)
+                
+                if (screen === 'md')
+                setActiveComponent("conversation")
+                navigate(`/chat/${user?.userId}`)
+
               }}
             >
-              {users && (
-                <>
-                  <Stack direction="row" spacing={2}>
-                    <StyledBadge
-                      overlap="circular"
-                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                      variant="dot"
-                    >
-                      <Avatar src={user.user.avatar ? user.user.avatar.path : Icon} />
-                    </StyledBadge>
-                    <Stack>
-                      <Typography variant="subtitle1">{name}</Typography>
-                      <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack spacing={2} alignItems="center">
-                    <Typography sx={{ fontWeight: 600 }} variant="caption">
-                      {chatRoom.messages[0].createdAt.slice(11, 16)}
-                    </Typography>
-                    {chatRoom?._count?.messages ? (
-                      <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge>
-                    ) : chatRoom.messages[0].userId !== authStore.id ? (
-                      <Checks size={25} weight="thin" color="green" />
-                    ) : (
-                      <Checks size={25} weight="light" color="blue" />
-                    )}
-                  </Stack>
-                </>
-              )}
+              <Stack direction="row" spacing={2}>
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  variant="dot"
+                >
+                  <Avatar src={Icon} />
+                </StyledBadge>
+                <Stack>
+                  <Typography variant="subtitle1">{name}</Typography>
+                  <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
+                </Stack>
+
+              </Stack>
+              <Stack spacing={2} alignItems="center">
+                <Typography sx={{ fontWeight: 600 }} variant="caption">
+                  {chatRoom.messages[0].createdAt.slice(11, 16)}
+                </Typography>
+                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0].userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
+
+                  (
+                    <Checks size={25} weight="light" color="blue" />
+
+                  )}
+                 
+                {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
+              </Stack>
             </Stack>
-          );
-        })}
-        {filteredChatRooms.filter(e=>e.participants.length > 2).map((chatRoom, i) => {
-          setIdentifier(chatRoom.id);
-  
-          let name = "";
-          let user = chatRoom.participants.filter(
-            (p) => p.userId !== authStore?.id
-          )[0];
-          if (chatRoom.name === null) name = user.user.fullNameEn;
-          else {
-            name = chatRoom.name;
-          }
-          return (
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              key={i}
-              onClick={() => {
-                setSelectedUser(user);
-  
-                if (screen === "md") setActiveComponent("conversation");
-                navigate(`/chat/${identifier}`);
-              }}
-            >
-              { groups && (
-                <>
-                  <Stack direction="row" spacing={2}>
-                    <StyledBadge
-                      overlap="circular"
-                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                      variant="dot"
-                    >
-                      <Avatar src={user.user.avatar ? user.user.avatar.path : Icon} />
-                    </StyledBadge>
-                    <Stack>
-                      <Typography variant="subtitle1">{name}</Typography>
-                      <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
-                    </Stack>
-                  </Stack>
-                  <Stack spacing={2} alignItems="center">
-                    <Typography sx={{ fontWeight: 600 }} variant="caption">
-                      {chatRoom.messages[0].createdAt.slice(11, 16)}
-                    </Typography>
-                    {chatRoom?._count?.messages ? (
-                      <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge>
-                    ) : chatRoom.messages[0].userId !== authStore.id ? (
-                      <Checks size={25} weight="thin" color="green" />
-                    ) : (
-                      <Checks size={25} weight="light" color="blue" />
-                    )}
-                  </Stack>
-                </>
-              )}
-            </Stack>
-          );
-        })}
-  
-       
+          )
+        }
+
+        )}
       </Box>
     );
   };
-  
   return (
     <Box
       sx={{
@@ -220,29 +142,6 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
             </SearchIconWrapper>
             <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
           </Search>
-          <div className="row">
-  <button
-    variant="h5"
-    className={"col purple-buttonn "}
-    
-    onClick={() => handleButtonClick('users')}
-    
-  >
-    USERS
-  </button>
-  <button
-    variant="h5"
-    className={"col purple-buttonn "}
-    onClick={() => handleButtonClick('groups')}
-    
-  >
-    GROUPS
-  </button>
-</div>
-
-
-
-
           <Divider />
           <ChatElement />
         </Stack>
