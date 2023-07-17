@@ -47,6 +47,7 @@ import CreatePublishingHouse from "../domains/publishingHouse/view/createPublish
 
 import Chat from "../domains/chat/chat";
 import ChatList from "../domains/chat/view/ChatList";
+import ChatEdit from "../domains/chat/view/ChatEdit";
 
 
 import Courses from "../domains/training/views/courses/Courses";
@@ -170,6 +171,7 @@ function Router() {
 
             <Route path="Chat" element={<Chat />}>
               <Route index element={<ChatList />} />
+              <Route path="edit/:id" element={<ChatEdit/>} />
             </Route>
 
             <Route path="author" element={<Author />}>
