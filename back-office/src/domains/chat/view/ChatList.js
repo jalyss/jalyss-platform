@@ -9,6 +9,7 @@ import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { IoIosPersonAdd } from "react-icons/io";
 import { fetchCategories, deleteCategory } from "../../../store/category";
 import DeleteModal from "../../../components/Commun/Modal";
+import Select from "react-select";
 
 function ChatList() {
   const [show, setShow] = useState(false);
@@ -20,9 +21,20 @@ function ChatList() {
 
   const categories = useSelector((state) => state.category.categories);
 
+   const options = [
+    {
+      value: "Groups",
+      label: "Groups",
+    },
+    {
+      value: "Users",
+      label: "Users",
+    }]
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, []);
+
   useEffect(() => {
     if (categories?.items?.length) {
       let categoryData = categories.items.map((e, index) => {
@@ -38,8 +50,8 @@ function ChatList() {
   const columns = [
     { field: "index", headerName: "Index", width: 90 },
     { field: "id", headerName: "ID", width: 90 },
-    { field: "nameAr", headerName: "nameAr", width: 150, editable: false },
-    { field: "nameEn", headerName: "nameEn", width: 150, editable: false },
+    { field: "nameAr", headerName: "Admin", width: 150, editable: false },
+    { field: "nameEn", headerName: "Members", width: 150, editable: false },
     {
       field: "createdAt",
       headerName: "createdAt",
@@ -147,6 +159,11 @@ function ChatList() {
           >
             <span className="btn btn-sm ">Add Category</span>
           </Button>
+          <Select
+            placeholder="Search by sessions"
+            options={options}
+            isMulti
+          />
           <Box >
             {rows?.length > 0 ? (
               <DataGrid
