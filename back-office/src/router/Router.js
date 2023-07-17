@@ -25,7 +25,6 @@ import Dashboard from "../domains/dashboard/Dashboard";
 import ChartTabs from "../domains/charts/ChartTabs";
 import Command from "../domains/commands/Command";
 import CommandList from "../domains/commands/views/CommandList";
-import CreateCommand from "../domains/commands/views/CreateCommand";
 import EditCommand from "../domains/commands/views/EditCommand";
 //training
 import Training from "../domains/training/Training";
@@ -94,6 +93,7 @@ import CreateType from "../domains/type/views/CreateType";
 
 import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
 import AddNewCours from "../domains/training/views/courses/Addnewcours";
+import CreateCommand from "../domains/commands/views/CreateCommand";
 
 
 
@@ -219,7 +219,7 @@ function Router() {
 
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
-              <Route path="create" element={<CreateCommand />} />
+              <Route path="create" element={<CreateCommand/>} />
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
             {/* <Route path="charts" element={<ChartTabs />} /> */}
