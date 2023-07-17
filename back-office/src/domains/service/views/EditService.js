@@ -70,6 +70,7 @@ export default function EditService() {
         showSuccessToast("Service has been updated");
         navigate(-1);
       } else {
+        showErrorToast("res.error.message");
         console.log(res.error.message);
       }
     });

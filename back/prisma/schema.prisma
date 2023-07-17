@@ -865,6 +865,12 @@ enum Status {
   refused
 }
 
+enum StatusBlog {
+  confirmed
+  pending
+  refused
+}
+
 enum StatusMvt {
   pending
   in_progress

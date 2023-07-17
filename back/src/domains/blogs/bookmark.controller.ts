@@ -28,6 +28,8 @@ export class BookmarksController {
   findOne(@Param('id') id: string) {
     return this.bookmarkService.findOne(id);
   }
+
+ 
   
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
