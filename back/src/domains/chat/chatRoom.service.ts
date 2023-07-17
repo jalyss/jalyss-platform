@@ -111,6 +111,7 @@ export class ChatRoomService {
       data: dto,
     });
   }
+  
 
   async remove(id: string) {
     return await this.prisma.chatRoom.delete({ where: { id } });

@@ -17,7 +17,6 @@ import { users } from "../../../constants/users";
 import React, { useEffect, useState } from "react";
 import Search from "../../../components/Commun/Search";
 import SearchIconWrapper from "../../../components/Commun/SearchIconWrapper";
-import StyledInputBase from "../../../components/Commun/inputs/SearchInputBase";
 import Icon from "../../../assets/logo.jpg";
 import StyledBadge from "../../../components/Commun/StyledBadge";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,8 +31,11 @@ import zIndex from "@mui/material/styles/zIndex";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Select from "react-select";
 import { BsFillPersonLinesFill } from "react-icons/bs";
+import { PiSmileySadThin } from "react-icons/pi";
 import { MdOutlineGroups } from "react-icons/md";
 import "../../../assets/styles/chatRoom.css";
+import { styled } from "@mui/material/styles";
+import { InputBase } from "@mui/material";
 
 const ChatRoom = ({
   chatRoomList,
@@ -59,18 +61,32 @@ const ChatRoom = ({
   const [hoveredChatRoom, setHoveredChatRoom] = useState(null);
   const [isButtonVisible, setisButtonVisible] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const [isPersonIconActive, setIsPersonIconActive] = useState(false);
+  const [isPersonIconActive, setIsPersonIconActive] = useState(true);
   const [isGroupIconActive, setIsGroupIconActive] = useState(false);
+  const [viewGenerator, setViewGenerator] = useState(false);
 
   const handlePersonIconClick = () => {
     setIsPersonIconActive(true);
     setIsGroupIconActive(false);
+    setViewGenerator(!true);
   };
 
   const handleGroupIconClick = () => {
     setIsPersonIconActive(false);
     setIsGroupIconActive(true);
+    setViewGenerator(true);
   };
+
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: "inherit",
+    "& .MuiInputBase-input": {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      width: "100%",
+      border: "none",
+    },
+  }));
 
   const handleOpen = () => {
     setOpen(!open);
@@ -82,7 +98,7 @@ const ChatRoom = ({
 
   const handleMouseLeave = () => {
     setHoveredChatRoom(null);
-    setOpen(!open)
+    setOpen(false);
   };
 
   // const filteredChatRooms = chatRoomList.filter((chatRoom) => {
@@ -225,15 +241,14 @@ const ChatRoom = ({
 
                   {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
                 </Stack>
-                {hoveredChatRoom === chatRoom.id ? (
+                {true ? (
                   <>
                     <button
                       style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: "20px",
-                        marginTop: "10px",
+                        marginTop: "15px",
                         border: "none",
                         backgroundColor: "white",
                         cursor: "pointer",
@@ -244,41 +259,32 @@ const ChatRoom = ({
                       <div
                         className="btnicon"
                         style={{
-                          height: "25px",
+                          paddingLeft: "5px",
                           borderRadius: "50px",
-                          display:'flex',
-                          justifyContent:"center",
-                          alignItems:"center"
+                          height: "30px",
                         }}
                       >
                         <BiDotsVerticalRounded style={{ fontSize: 25 }} />
                       </div>
                     </button>
                     {open ? (
-                      <ul
-                        class="list-group"
-                        style={{
-                          position: "fixed",
-                          marginLeft: "180px",
-                          marginTop: "120px",
-                          cursor: "pointer",
-                          zIndex:999
-                        }}
-                      >
-                        <li
-                          class="list-group-item"
-                          onClick={() => toggleShowEdit()}
-                        >
-                          Edit chat
-                        </li>
-                        <li
-                          class="list-group-item"
-                          onClick={() => toggleShowDelete()}
-                          style={{ color: "red" }}
-                        >
-                          Delete chat
-                        </li>
-                      </ul>
+                      <div className="divList">
+                        <ul class="list-group">
+                          <li
+                            class="list-group-item"
+                            onClick={() => toggleShowEdit()}
+                          >
+                            Edit chat
+                          </li>
+                          <li
+                            class="list-group-item"
+                            onClick={() => toggleShowDelete()}
+                            style={{ color: "red" }}
+                          >
+                            Delete chat
+                          </li>
+                        </ul>
+                      </div>
                     ) : null}
                   </>
                 ) : null}
@@ -410,37 +416,72 @@ const ChatRoom = ({
                 justifyContent="center"
                 alignItems="center"
                 className={`icons ${isPersonIconActive ? "active" : ""}`}
-                style={{ width: "60px", height: "35px", borderRadius: "30px" }}
+                style={{ width: "120px", height: "40px", borderRadius: "30px" }}
                 onClick={handlePersonIconClick}
               >
                 <BsFillPersonLinesFill
                   style={{
                     color: isPersonIconActive ? "#57385c" : "grey",
-                    fontSize: 20,
+                    fontSize: 15,
                   }}
                 />
+                <Typography
+                  style={{
+                    marginLeft: "8px",
+                    fontWeight: "540",
+                    color: isPersonIconActive ? "#57385c" : "grey",
+                  }}
+                >
+                  Users
+                </Typography>
               </Stack>
 
               <Stack
                 direction="row"
+                justifyContent="center"
                 alignItems="center"
                 className={`icons ${isGroupIconActive ? "active" : ""}`}
-                justifyContent="center"
-                style={{ width: "60px", height: "35px", borderRadius: "30px" }}
+                style={{ width: "120px", height: "40px", borderRadius: "30px" }}
                 onClick={handleGroupIconClick}
               >
                 <MdOutlineGroups
                   style={{
                     color: isGroupIconActive ? "#57385c" : "grey",
-                    fontSize: 25,
+                    fontSize: 17,
                   }}
                 />
+                <Typography
+                  style={{
+                    marginLeft: "8px",
+                    fontWeight: "540",
+
+                    color: isGroupIconActive ? "#57385c" : "grey",
+                  }}
+                >
+                  Groups
+                </Typography>
               </Stack>
             </Stack>
 
-            <Divider />
-
-            <ChatElement />
+            {viewGenerator ? (
+              <>
+                <Divider />
+                <ChatElement />
+              </>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  marginTop: "10pc",
+                }}
+              >
+                <div style={{ color: "grey" }}>
+                  No users to show
+                  <PiSmileySadThin style={{marginLeft:'5px'}} fontSize={23} color="#57385c" />
+                </div>
+              </div>
+            )}
           </Stack>
         </Stack>
       </Box>

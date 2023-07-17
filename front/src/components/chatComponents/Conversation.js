@@ -38,14 +38,15 @@ import { SocketContext } from "../../apps/Client";
 import { useParams } from "react-router-dom";
 import { fetchUser } from "../../store/user";
 import Modal from "../Commun/Modal"
-
+import DisplayLottie from "../../pages/DisplayLottie";
+import noMes from "../../constants/noMes.json"
 const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const [basicModal,setBasicModal]=useState(false)
   const [basicModal2,setBasicModal2]=useState(false)
   const myId = useSelector((state) => state.auth.me?.id);
   const userStore = useSelector((state) => state.user)
   const { user } = userStore
-  console.log("hahaa", userr)
+  console.log("userr", userr)
   // const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
@@ -64,7 +65,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const userName = user ? user.fullNameEn : userr?.user?.fullNameEn;
   const messagesEndRef = useRef(null);
   const { userId } = useParams()
-  console.log("uu", userId);
+  console.log("userId", userId);
   const toggleShow=()=>{
     setBasicModal(!basicModal)
   }
@@ -228,7 +229,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
 
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
-      <Box
+    {userr &&  <Box
         p={2}
         sx={{
           height: "15vh",
@@ -268,32 +269,33 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
               <Typography variant="caption">Online</Typography>
             </Stack>
           </Stack>
+          {groupeChatName &&
           <Stack direction="row" alignItems="center" spacing={3}>
-            <span
-             className="tt"
-             title="See all members">
-            <IconButton>
-              <UserList onClick={toggleShow}/>
-            </IconButton>
-            </span>
-            <span
-             className="tt"
-             title="Leave the groupe">
-            <IconButton>
-              <Plugs  onClick={toggleShow2} />
-            </IconButton>
-            </span>
-            {/* <IconButton>
-              <MagnifyingGlass />
-            </IconButton>
-            <Divider orientation="vertical" flexItem />
-            <IconButton>
-              <CaretDown />
-            </IconButton> */}
-          </Stack>
+          <span
+           className="tt"
+           title="See all members">
+          <IconButton>
+            <UserList onClick={toggleShow}/>
+          </IconButton>
+          </span>
+          <span
+           className="tt"
+           title="Leave the groupe">
+          <IconButton>
+            <Plugs  onClick={toggleShow2} />
+          </IconButton>
+          </span>
+          {/* <IconButton>
+            <MagnifyingGlass />
+          </IconButton>
+          <Divider orientation="vertical" flexItem />
+          <IconButton>
+            <CaretDown />
+          </IconButton> */}
+        </Stack> }       
         </Stack>
-      </Box>
-      <Box
+      </Box> } 
+    <Box
         sx={{
           height: "70vh",
           width: "100%",
@@ -356,8 +358,19 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
             />
           </div>
         ) : null}
-      </Box>
-      <Box
+        {inbox.length === 0 && <div className="d-flex flex-column  align-items-center mt-5" style={{color:"grey"}}>
+              <DisplayLottie
+                animationData={noMes}
+                style={{
+                  width: "200px",
+                  height: "200px",
+                 
+                }}
+              />
+              No Messages to show
+            </div>}
+      </Box>  
+   {userr && <Box
         p={4}
         sx={{
           width: "100%",
@@ -473,7 +486,8 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
        
           title = "leave the groupe"/>
         </Stack>
-      </Box>
+      </Box>}  
+    
     </Stack>
   );
 };
