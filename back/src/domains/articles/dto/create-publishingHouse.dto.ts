@@ -5,8 +5,6 @@ export class CreatePublishingHouseDto {
   name: string;
   @ApiProperty({ required: true })
   address: string;
-  @ApiProperty({ required: true })
-  logo: string;
-
-
+  @ApiProperty({ required: false })
+  logoId?: string;
 }

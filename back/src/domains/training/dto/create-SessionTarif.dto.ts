@@ -5,7 +5,7 @@ export class CreateSessionTarifDto {
     @ApiProperty()
     title : string ; 
     @ApiProperty()
-    sessionId : string ;
+    sessionId : string;
     @ApiProperty() 
-    price : number ; 
+    price : number; 
 }

@@ -50,36 +50,36 @@ model JobTitle {
 }
 
 model User {
-  id                   String                @id @default(uuid())
+  id                   String             @id @default(uuid())
   fullNameEn           String
   fullNameAr           String
-  email                String                @unique
+  email                String             @unique
   address              String
   tel                  String
   password             String
-  avatar               Media?                @relation(fields: [avatarId], references: [id])
+  avatar               Media?             @relation(fields: [avatarId], references: [id])
   avatarId             String?
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
   accountBalance       Float?
-  category             UserCategory?         @relation(fields: [categoryId], references: [id])
+  category             UserCategory?      @relation(fields: [categoryId], references: [id])
   categoryId           String?
-  educationLevel       EducationLevel?       @relation(fields: [educationLevelId], references: [id])
+  educationLevel       EducationLevel?    @relation(fields: [educationLevelId], references: [id])
   educationLevelId     String?
-  functionalArea       FunctionalArea?       @relation(fields: [functionalAreaId], references: [id])
+  functionalArea       FunctionalArea?    @relation(fields: [functionalAreaId], references: [id])
   functionalAreaId     String?
-  jobTitle             JobTitle?             @relation(fields: [jobTitleId], references: [id])
+  jobTitle             JobTitle?          @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
-  country              Country?              @relation(fields: [countryId], references: [id])
+  country              Country?           @relation(fields: [countryId], references: [id])
   countryId            String?
-  city                 City?                 @relation(fields: [cityId], references: [id])
+  city                 City?              @relation(fields: [cityId], references: [id])
   cityId               String?
   confirmkey           String?
-  isActive             Boolean               @default(true)
+  isActive             Boolean            @default(true)
   Media                MediaUser[]
   Rating               Rating[]
-  IntermediateCommands Command[]             @relation("intermediate")
-  clientCommands       Command[]             @relation("clientCommand")
+  IntermediateCommands Command[]          @relation("intermediate")
+  clientCommands       Command[]          @relation("clientCommand")
   Blog                 Blog[]
   BlogLike             BlogLike[]
   chatRooms            UserChatRoom[] // *many to many relationships user&chatRoom
@@ -118,18 +118,16 @@ model ChatRoom {
   participants UserChatRoom[]
 }
 
-
-
 model ChatMessage {
-  id               String          @id @default(uuid())
-  text             String
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  user             User            @relation(fields: [userId], references: [id])
-  userId           String
-  chatRoom         ChatRoom        @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
-  chatRoomId       String
-  seen             Boolean         @default(false)
+  id         String   @id @default(uuid())
+  text       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId String
+  seen       Boolean  @default(false)
 }
 
 model ConnectedUser {
@@ -150,8 +148,6 @@ model UserChatRoom {
   @@unique(fields: [userId, chatRoomId], name: "joinerRoom")
 }
 
-
-
 model UserCategory {
   id        String   @id @default(uuid())
   nameAr    String
@@ -171,13 +167,14 @@ model Type {
 }
 
 model PublishingHouse {
-  id        String    @id @default(uuid())
-  name      String
-  address   String
-  logo      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  articles  Article[]
+  id                   String                 @id @default(uuid())
+  name                 String
+  address              String
+  logoId               String?
+  logo                 Media?                 @relation(fields: [logoId], references: [id])
+  updatedAt            DateTime               @updatedAt
+  articles             Article[]
+  MediaPublishingHouse MediaPublishingHouse[]
 }
 
 model Article {
@@ -194,9 +191,9 @@ model Article {
   longDescriptionAr  String?            @map("long_desc_ar")
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  category           ArticleCategory    @relation(fields: [categoryId], references: [id])
+  category           ArticleCategory    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId         String
-  publishingHouse    PublishingHouse    @relation(fields: [publishingHouseId], references: [id])
+  publishingHouse    PublishingHouse    @relation(fields: [publishingHouseId], references: [id], onDelete: Cascade)
   publishingHouseId  String
   type               Type               @relation(fields: [typeId], references: [id])
   typeId             String
@@ -217,9 +214,9 @@ model Author {
 }
 
 model ArticleByAuthor {
-  article   Article @relation(fields: [articleId], references: [id])
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId String
-  author    Author  @relation(fields: [authorId], references: [id])
+  author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  String
 
   @@unique([authorId, articleId])
@@ -227,10 +224,10 @@ model ArticleByAuthor {
 
 model ArticlesByBranch {
   id          String        @id @default(uuid())
-  branch      Branch        @relation(fields: [branchId], references: [id])
+  branch      Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
   branchId    String
   articleId   String
-  article     Article       @relation(fields: [articleId], references: [id])
+  article     Article       @relation(fields: [articleId], references: [id], onDelete: Cascade)
   price       Float
   stock       Int
   rating      Rating[]
@@ -372,14 +369,16 @@ model Supply {
 }
 
 model Provider {
-  id             String   @id @default(uuid())
+  id             String          @id @default(uuid())
   name           String
   address        String
   tel            String
   accountBalance Float
-  logo           String
-  email          String   @unique
+  logoId         String?
+  logo           Media?          @relation(fields: [logoId], references: [id])
+  email          String          @unique
   Supply         Supply[]
+  MediaProvider  MediaProvider[]
 }
 
 //TRAINING
@@ -423,20 +422,18 @@ model Session {
   lectures          SessionHasLecture[] // *many to many relation lecture 
   tarifs            SessionTarif[] // * one to many relation to Session Tarif
 
-  MediaSession    MediaSession[]
-  cover           Media?            @relation(fields: [coverId], references: [id])
-  coverId         String?
-  sessionFeedback SessionFeedback[]
-
-  sessionHasPrerequire sessionHasPrerequire[]
-
+  MediaSession               MediaSession[]
+  cover                      Media?                       @relation(fields: [coverId], references: [id])
+  coverId                    String?
+  sessionFeedback            SessionFeedback[]
+  sessionHasPrerequire       sessionHasPrerequire[]
   SessionHasWhatYouWillLearn SessionHasWhatYouWillLearn[]
 }
 
 model SessionFeedback {
   id        String   @id @default(uuid())
   content   String
-  Session   Session? @relation(fields: [sessionId], references: [id])
+  Session   Session? @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId String?
 
   User   User?   @relation(fields: [userId], references: [id])
@@ -457,16 +454,16 @@ model WhatYouWillLearn {
 }
 
 model SessionHasWhatYouWillLearn {
-  session            Session          @relation(fields: [sessionId], references: [id])
+  session            Session          @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId          String
-  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
+  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id], onDelete: Cascade)
   WhatYouWillLearnId String
 
   @@unique(fields: [sessionId, WhatYouWillLearnId], name: "joinerr")
 }
 
 model LectureHasWhatYouWillLearn {
-  lecture            Lecture          @relation(fields: [lectureId], references: [id])
+  lecture            Lecture          @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId          String
   WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
   WhatYouWillLearnId String
@@ -481,9 +478,9 @@ model Prerequire {
 }
 
 model sessionHasPrerequire {
-  session      Session    @relation(fields: [sessionId], references: [id])
+  session      Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId    String
-  prerequire   Prerequire @relation(fields: [prerequireId], references: [id])
+  prerequire   Prerequire @relation(fields: [prerequireId], references: [id], onDelete: Cascade)
   prerequireId String
 
   @@unique(fields: [sessionId, prerequireId], name: "joiner")
@@ -491,9 +488,9 @@ model sessionHasPrerequire {
 
 //!join table between Session and SessionType
 model SessionHasSessionType {
-  session       Session     @relation(fields: [sessionId], references: [id])
+  session       Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId     String
-  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id])
+  sessiontype   SessionType @relation(fields: [sessionTypeId], references: [id], onDelete: Cascade)
   sessionTypeId String
 
   @@unique(fields: [sessionId, sessionTypeId], name: "joiner")
@@ -507,9 +504,9 @@ model SessionType {
 
 //!join table between Session and Lecture
 model SessionHasLecture {
-  session   Session @relation(fields: [sessionId], references: [id])
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId String
-  lectures  Lecture @relation(fields: [lectureId], references: [id])
+  lectures  Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId String
 
   @@unique(fields: [sessionId, lectureId], name: "joiner_Session_Lecture")
@@ -531,7 +528,7 @@ model Coaching {
   id        String  @id @default(uuid())
   user      User    @relation(fields: [userId], references: [id])
   userId    String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lecture   Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId String
 }
 
@@ -539,7 +536,7 @@ model Assessments {
   id        String  @id @default(uuid())
   title     String
   content   String
-  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lecture   Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId String
 }
 
@@ -552,9 +549,9 @@ model Feature {
 }
 
 model SessionTarifHasFeatures {
-  feature      Feature      @relation(fields: [featureId], references: [id])
+  feature      Feature      @relation(fields: [featureId], references: [id], onDelete: Cascade)
   featureId    String
-  sessionTarif SessionTarif @relation(fields: [sessionId], references: [id])
+  sessionTarif SessionTarif @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId    String
 
   @@unique(fields: [featureId, sessionId], name: "sessionTarifHasFeatures")
@@ -573,9 +570,9 @@ model SessionTarif {
 model TrainingBooking {
   id             String       @id @default(uuid())
   createdAt      DateTime     @default(now())
-  user           User         @relation(fields: [userId], references: [id])
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
-  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id])
+  sessiontarif   SessionTarif @relation(fields: [sessionTarifId], references: [id], onDelete: Cascade)
   sessionTarifId String
   paid           Boolean?     @default(false)
 
@@ -592,20 +589,22 @@ model UserPayment {
 
 //media
 model Media {
-  id           String         @id @default(uuid())
-  path         String
-  type         String
-  alt          String?
-  extension    String?
-  description  String?
-  MediaUser    MediaUser[]
-  MediaArticle MediaArticle[]
-  User         User[]
-  Article      Article[]
-  MediaBlog    MediaBlog[]
-  Employee     Employee[]
-  Blog         Blog[]
-  WorkSpace    WorkSpace[]
+  id            String          @id @default(uuid())
+  path          String
+  type          String
+  alt           String?
+  extension     String?
+  description   String?
+  MediaUser     MediaUser[]
+  MediaArticle  MediaArticle[]
+  User          User[]
+  Article       Article[]
+  MediaBlog     MediaBlog[]
+  Employee      Employee[]
+  Blog          Blog[]
+  WorkSpace     WorkSpace[]
+  Provider      Provider[]
+  MediaProvider MediaProvider[]
 
   MediaWorkSpace MediaWorkSpace[]
 
@@ -614,6 +613,27 @@ model Media {
   MediaSession   MediaSession[]
   Session        Session[]
   SessionRequest SessionRequest[]
+
+  PublishingHouse      PublishingHouse[]
+  MediaPublishingHouse MediaPublishingHouse[]
+}
+
+model MediaProvider {
+  media      Media    @relation(fields: [mediaId], references: [id])
+  mediaId    String
+  provider   Provider @relation(fields: [providerId], references: [id])
+  providerId String
+
+  @@unique(fields: [mediaId, providerId], name: "providerMedia")
+}
+
+model MediaPublishingHouse {
+  media             Media           @relation(fields: [mediaId], references: [id])
+  mediaId           String
+  publishingHouse   PublishingHouse @relation(fields: [publishingHouseId], references: [id], onDelete: Cascade)
+  publishingHouseId String
+
+  @@unique(fields: [mediaId, publishingHouseId], name: "PublishingHouseMedia")
 }
 
 model MediaUser {
@@ -673,7 +693,7 @@ model Blog {
   updatedAt   DateTime         @updatedAt
   author      User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
-  confirm     Boolean          @default(false)
+  confirm     StatusBlog   @default(pending)
   category    ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String
   MediaBlog   MediaBlog[]
@@ -751,14 +771,13 @@ model View {
 // }
 
 model Service {
-  id String @id @default(uuid())
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  identifier  String? @unique()
+  perHour     Boolean @default(true)
+  coverId     String?
 
-  name         String
-  description  String? 
-
-  identifier   String?         @unique()
-  perHour      Boolean        @default(true)
-  coverId      String?
   cover        Media?         @relation(fields: [coverId], references: [id])
   workSpace    WorkSpace[]
   tarif        Tarif[]
@@ -841,6 +860,12 @@ model ContentSubComponent {
 }
 
 enum Status {
+  confirmed
+  pending
+  refused
+}
+
+enum StatusBlog {
   confirmed
   pending
   refused

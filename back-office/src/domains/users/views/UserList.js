@@ -16,7 +16,7 @@ import { size } from 'draft-js/lib/DefaultDraftBlockRenderMap';
 
 function UserList() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
+  const [elementId, setElementId]= useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const columns = [
@@ -107,6 +107,7 @@ function UserList() {
   const isEng = isEnglish()
   const navigate = useNavigate()
   const [rows, setRows] = useState([])
+  
   useEffect(() => {
     dispatch(fetchUsers())
   }, [])
@@ -167,7 +168,7 @@ function UserList() {
         </Modal>
       </>
       <div className='top-0 start-0' style={{marginLeft:800}} >
-        <Button type='button' href='user/create' variant="outlined" endIcon={<IoIosPersonAdd />} >
+        <Button type='button' onClick={() => navigate('create')} variant="outlined" endIcon={<IoIosPersonAdd />} >
           <span className='btn btn-sm '>
             Add user
           </span>

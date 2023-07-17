@@ -28,6 +28,7 @@ export class ArticleTypeService {
       where: {
         id,
       },
+      include: {articles:{select:{title:true}}}
     });
   }
 
@@ -39,3 +40,4 @@ export class ArticleTypeService {
     return await this.prisma.type.delete({ where: { id } });
   }
 }
+

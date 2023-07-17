@@ -19,13 +19,14 @@ export class CoachingService {
 
   async findAll() {
     return await this.prisma.coaching.findMany({
+      include : {user:{include:{avatar:true}}}
     })
   }
 
 async  findOne(id: string) {
     return await this.prisma.coaching.findUnique({
       where : { id },
-      include : { lecture : true }
+      include : { lecture : true , user: true }
     })
   }
 
