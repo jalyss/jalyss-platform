@@ -30,6 +30,4 @@ function Branch() {
   )
 }
 
-
-export default Branch;
-
+export default Branch
