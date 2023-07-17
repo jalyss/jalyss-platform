@@ -1,22 +1,20 @@
-import React, { useMemo } from 'react';
-import { Navbar, Container } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { sidebarDataBranch } from '../constants/sidebarDataBranch';
-import isEnglish from '../helpers/isEnglish';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Avatar from '@mui/material/Avatar';
-import { FiSettings } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
-import MenuItem from '@mui/material/MenuItem';
-import WhiteSelect from '../components/WhiteSelect';
-import { useTranslation } from 'react-i18next';
-import { useLanguage } from '../hooks/useLanguage';
-import { Box, Stack } from '@mui/material';
+import React, { useMemo } from "react";
+import { Navbar, Container } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import { sidebarDataBranch } from "../constants/sidebarDataBranch";
+import isEnglish from "../helpers/isEnglish";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Avatar from "@mui/material/Avatar";
+import { FiSettings } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import MenuItem from "@mui/material/MenuItem";
+import WhiteSelect from "../components/WhiteSelect";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../hooks/useLanguage";
+import { Box, Stack } from "@mui/material";
 import { FiMenu } from "react-icons/fi";
 import Logo from "../assets/logo.jpg";
-
-
 
 function Header({ isSidebarClosed, handleSidebarToggle }) {
   const { t, i18n } = useTranslation();
@@ -29,10 +27,10 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
   const userStore = useSelector((state) => state.auth);
 
   const onChangeLanguage = (event) => {
-    console.log('hello');
+    console.log("hello");
     console.log(event.target.value);
     i18n.changeLanguage(event.target.value);
-    localStorage.setItem('lg', event.target.value);
+    localStorage.setItem("lg", event.target.value);
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
@@ -40,7 +38,7 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
 
   const location = useLocation();
   const isEng = isEnglish();
-  const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages]);
+  const isRtl = useMemo(() => i18n?.languages[0] === "ar", [i18n?.languages]);
 
   const getBrandText = () => {
     const currentPath = location.pathname;
@@ -60,7 +58,7 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
         }
       }
     }
-    return 'MasterKnowledgeAcademy';
+    return "MasterKnowledgeAcademy";
   };
 
   return (
@@ -72,22 +70,21 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
       borderBottom="1px solid #d9d9d9"
     >
       <Navbar>
-      <div className="sidebarHeader">
-        <img style={{ height: 100 }} src={Logo} alt="logo" />
-      </div>
- <div
-  style={{
-    cursor: 'pointer',
-    marginLeft: '6.5rem',
-  }}
-  onClick={handleSidebarToggle}
->
-  <FiMenu color="black" />
-</div>
+        <div className="sidebarHeader">
+          <img style={{ height: 100 }} src={Logo} alt="logo" />
+        </div>
+        <div
+          style={{
+            cursor: "pointer",
+            marginLeft: "6.5rem",
+          }}
+          onClick={handleSidebarToggle}
+        >
+          <FiMenu color="black" />
+        </div>
 
         <Container>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            
+          <div style={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h6" fontWeight="bold">
               {getBrandText()}
             </Typography>
@@ -101,14 +98,14 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
                 value={currentLanguage}
                 onChange={onChangeLanguage}
                 data={[
-                  { label: 'AR', value: 'ar' },
-                  { label: 'EN', value: 'en' },
+                  { label: "AR", value: "ar" },
+                  { label: "EN", value: "en" },
                 ]}
-                helper={t('Language')}
+                helper={t("Language")}
               />
 
               <Box
-                sx={{ cursor: 'pointer' }}
+                sx={{ cursor: "pointer" }}
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -121,7 +118,7 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
               >
                 <FiSettings size={22} color="#48184c" />
                 <Typography fontWeight="bold" mx={2}>
-                  {userStore.meAdmin[isEng ? 'fullNameEn' : 'fullNameAr']}
+                  {userStore.meAdmin[isEng ? "fullNameEn" : "fullNameAr"]}
                 </Typography>
                 <Avatar
                   alt="Remy Sharp"
@@ -132,26 +129,29 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
             </Stack>
 
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleCloseUserMenu}>
                 <MenuItem>
-                  <Typography textAlign="center" onClick={() => {
-                    navigate("/profile");
-                  }}>
+                  <Typography
+                    textAlign="center"
+                    onClick={() => {
+                      navigate("/profile");
+                    }}
+                  >
                     <span className="no-icon">Profile</span>
                   </Typography>
                 </MenuItem>
@@ -160,8 +160,8 @@ function Header({ isSidebarClosed, handleSidebarToggle }) {
                     <span
                       onClick={(e) => {
                         e.preventDefault();
-                        localStorage.removeItem('tokenAdmin');
-                        window.location.pathname = '/';
+                        localStorage.removeItem("tokenAdmin");
+                        window.location.pathname = "/";
                       }}
                       className="no-icon"
                     >

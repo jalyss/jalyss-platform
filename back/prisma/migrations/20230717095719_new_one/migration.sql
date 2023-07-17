@@ -572,7 +572,7 @@ CREATE TABLE "Blog" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "authorId" TEXT NOT NULL,
-    "confirm" BOOLEAN NOT NULL DEFAULT false,
+    "confirm" BOOLEAN NOT NULL DEFAULT true,
     "categoryId" TEXT NOT NULL,
 
     CONSTRAINT "Blog_pkey" PRIMARY KEY ("id")
