@@ -140,7 +140,7 @@ function ChatList() {
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-            You want to Delete this category ?
+            You want to Delete this chat ?
           </div>
         }
         fn={() => {
@@ -149,7 +149,7 @@ function ChatList() {
       />
       <div>
         <div className="container">
-          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List categories</h2>
+          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List Disscussion</h2>
           <hr></hr>
           <Button
             type="button"
@@ -159,11 +159,11 @@ function ChatList() {
               justifyContent: "center",
             }}
             onClick={() => {
-              Navigate("createCategory");
+              Navigate("create");
             }}
             variant="outlined"
           >
-            <span className="btn btn-sm ">Add Category</span>
+            <span className="btn btn-sm ">Add Chat</span>
           </Button>
           {true ? (
             <>
@@ -176,6 +176,7 @@ function ChatList() {
                   cursor: "pointer",
                   color: "black",
                   marginBottom: "5px",
+                  marginLeft: "0px"
                 }}
                 onClick={handleOpen}
               >

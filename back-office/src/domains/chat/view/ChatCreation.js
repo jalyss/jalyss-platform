@@ -2,33 +2,27 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { useTranslation } from "react-i18next";
-import { fetchCategory, updateCategory } from "../../../store/category";
-import { useNavigate, useParams } from "react-router-dom";
+import { createCategory,fetchCategories } from "../../../store/category";
+import { useNavigate } from "react-router-dom";
 
-function EditChat() {
+function CreateChat() {
   const [nameAr, setNameAr] = useState();
   const [nameEn, setNameEn] = useState();
 
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-  const { id } = useParams();
-
-  const category = useSelector((state) => state.category.category);
-
-  useEffect(() => {
-    dispatch(fetchCategory(id));
-  }, []);
+  const { t, i18n } = useTranslation()
 
   const handleSubmit = () => {
     const names = {
-      id: id,
-      nameAr: nameAr,
-      nameEn: nameEn,
-    };
+      nameAr:nameAr,
+      nameEn:nameEn
+    }
     let aux = Object.assign({}, names);
-    dispatch(updateCategory(aux)).then((res) => {
+    dispatch(createCategory(aux)).then((res) => {
       if (!res.error) {
-        showSuccessToast("Category Edited successful");
+        showSuccessToast(("category created"));
+        dispatch(fetchCategories());
         Navigate(-1);
       } else {
         showErrorToast(res.error.message);
@@ -46,17 +40,17 @@ function EditChat() {
               <input
                 type="text"
                 class="form-control"
-                placeholder={category?.nameAr}
-                onChange={(e) => setNameAr(e.target.value)}
+                onChange={(e)=>setNameAr(e.target.value)}
+                placeholder="NameAr"
               />
             </div>
             <div class="form-group col-6 mt-3">
               <label>NameEn</label>
               <input
-                placeholder={category?.nameEn}
                 type="text"
                 class="form-control"
-                onChange={(e) => setNameEn(e.target.value)}
+                onChange={(e)=>setNameEn(e.target.value)}
+                placeholder="NameEn"
               />
             </div>
           </div>
@@ -66,7 +60,7 @@ function EditChat() {
               onClick={() => handleSubmit()}
               className="confirm-button mt-5   mb-3"
             >
-              <span className="label-btn"> Edit Category </span>
+              <span className="label-btn"> Add Category </span>
             </button>
           </div>
         </div>
@@ -75,4 +69,4 @@ function EditChat() {
   );
 }
 
-export default EditChat;
+export default CreateChat;
