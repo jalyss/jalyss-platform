@@ -1620,7 +1620,7 @@ async function main() {
         },
       });
     }
-  }pull 
+  }
 
   //create session
   let lectures = [];
