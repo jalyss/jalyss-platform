@@ -18,9 +18,7 @@ import {
   Phone,
   Smiley,
   VideoCamera,
-  Checks,
-  UserList,
-  Plugs
+  Checks
 } from "phosphor-react";
 import StyledInput from "../Commun/inputs/StyledInput";
 import data from "@emoji-mart/data";
@@ -37,16 +35,12 @@ import { useRef } from "react";
 import { SocketContext } from "../../apps/Client";
 import { useParams } from "react-router-dom";
 import { fetchUser } from "../../store/user";
-import Modal from "../Commun/Modal"
-import DisplayLottie from "../../pages/DisplayLottie";
-import noMes from "../../constants/noMes.json"
+
 const Conversation = ({ setChatRoomList, room, userr, socket }) => {
-  const [basicModal,setBasicModal]=useState(false)
-  const [basicModal2,setBasicModal2]=useState(false)
   const myId = useSelector((state) => state.auth.me?.id);
   const userStore = useSelector((state) => state.user)
   const { user } = userStore
-  console.log("userr", userr)
+  console.log("hahaa", userr)
   // const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
@@ -59,19 +53,11 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const [inbox, setInbox] = useState([]);
   const [isTyping, setIsTyping] = useState([]);
   const [exist, setExist] = useState(null);
-  const [groupeChatName,setGroupeChatName] = useState(null)
-  const [participants, setParticipants] = useState([])
 
   const userName = user ? user.fullNameEn : userr?.user?.fullNameEn;
   const messagesEndRef = useRef(null);
   const { userId } = useParams()
-  console.log("userId", userId);
-  const toggleShow=()=>{
-    setBasicModal(!basicModal)
-  }
-  const toggleShow2=()=>{
-    setBasicModal2(!basicModal2)
-  }
+  console.log("uu", userId);
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
@@ -81,31 +67,20 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
 
 
   useEffect(() => {
+    if(userId)
     dispatch(fetchUser(userId))
   }, [userId, userr?.userId])
 
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/api/v1/chatRoom/by-participants/${userId?userId:userr?.userId}/${myId}`)
+        `http://localhost:3001/api/v1/chatRoom/by-participants/${userId ? userId : userr?.userId}/${myId}`)
       .then((res) => {
-    
+        console.log(res.data)
         setExist(res.data.id);
-      })
-      .catch((err) => console.log("je error", err));
-  }, [myId, userId]);
-
-  useEffect(() => {
-    axios
-      .get(
-        `http://localhost:3001/api/v1/chatRoom/one/${userId?userId:userr?.userId}`)
-      .then((res) => {
-        setExist(res.data.id);
-        setGroupeChatName(res.data.name)
-        setParticipants(res.data.participants)
       })
       .catch((err) => console.log(err));
-  }, [userId]);
+  }, [myId, userId]);
 
   useEffect(() => {
     if (exist) {
@@ -117,10 +92,11 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
         })
         .then((response) => {
           let aux = [];
-          for (let i = response.data.length - 1; i >= 0; i--){
+          for (let i = response.data.length - 1; i >= 0; i--) {
             aux.push(response.data[i]);
           }
           console.log(aux[aux.length - 1]);
+
           setInbox(aux);
         })
         .catch((err) => console.log(err));
@@ -205,7 +181,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
         let payload = {
           receiverId:
             //  user.userId
-           [ userId ? userId : userr?.userId ]
+            userId ? userId : userr?.userId
           ,
           senderId: myId,
           text: message,
@@ -229,7 +205,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
 
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
-    {userr &&  <Box
+      <Box
         p={2}
         sx={{
           height: "15vh",
@@ -256,46 +232,36 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
               >
                 <Avatar
                   alt="profile picture"
-                  src={user ? user.avatar.path : userr?.user?.avatar? userr?.user?.avatar.path : Icon }
-
+                  src={Icon}
                 />
               </StyledBadge>
             </Box>
             <Stack spacing={0.2}>
               <Typography variant="subtitle2">
-             
-                {groupeChatName?groupeChatName:userName}
+                {/* RANIA */}
+                {userName}
               </Typography>
               <Typography variant="caption">Online</Typography>
             </Stack>
           </Stack>
-          {groupeChatName &&
           <Stack direction="row" alignItems="center" spacing={3}>
-          <span
-           className="tt"
-           title="See all members">
-          <IconButton>
-            <UserList onClick={toggleShow}/>
-          </IconButton>
-          </span>
-          <span
-           className="tt"
-           title="Leave the groupe">
-          <IconButton>
-            <Plugs  onClick={toggleShow2} />
-          </IconButton>
-          </span>
-          {/* <IconButton>
-            <MagnifyingGlass />
-          </IconButton>
-          <Divider orientation="vertical" flexItem />
-          <IconButton>
-            <CaretDown />
-          </IconButton> */}
-        </Stack> }       
+            {/* <IconButton>
+              <VideoCamera />
+            </IconButton>
+            <IconButton>
+              <Phone />
+            </IconButton>
+            <IconButton>
+              <MagnifyingGlass />
+            </IconButton>
+            <Divider orientation="vertical" flexItem />
+            <IconButton>
+              <CaretDown />
+            </IconButton> */}
+          </Stack>
         </Stack>
-      </Box> } 
-    <Box
+      </Box>
+      <Box
         sx={{
           height: "70vh",
           width: "100%",
@@ -314,14 +280,8 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
                   : "justify-content-end"
                 }`}
             >
-              <span 
-               className="tt"
-               data-bs-placement="bottom"
-               title={e.user?.fullNameEn}
-              >
-              <img src={ e.user?.avatar ? e.user.avatar.path : Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-           </span>  
-           <div>
+              <img src={e.user.avatar ? e.user.avatar.path : Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+             <div>
               <p
                 key={i}
                 className={
@@ -358,19 +318,8 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
             />
           </div>
         ) : null}
-        {inbox.length === 0 && <div className="d-flex flex-column  align-items-center mt-5" style={{color:"grey"}}>
-              <DisplayLottie
-                animationData={noMes}
-                style={{
-                  width: "200px",
-                  height: "200px",
-                 
-                }}
-              />
-              No Messages to show
-            </div>}
-      </Box>  
-   {userr && <Box
+      </Box>
+      <Box
         p={4}
         sx={{
           width: "100%",
@@ -452,42 +401,13 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
               alignItems="center"
               justifyContent="center"
             >
-              <IconButton onClick={handleSubmit}>
+              <IconButton onSubmit={handleSubmit}>
                 <PaperPlaneTilt color="#fff" />
               </IconButton>
             </Stack>
           </Box>
-          <Modal basicModal={basicModal} setBasicModal={setBasicModal} normal={true} toggleShow={toggleShow} withoutSave={true} body={
-            <Stack sx={{display:"grid" , gridTemplateColumns:"repeat(3,1fr)"}}>
-            {participants?.map((elem)=>{
-              return(<Stack
-                sx={{ height: "100%", width: "100%",marginBottom:"12px" }}
-                alignItems="center"
-                justifyContent="center"
-                spacing={10}
-              >
-              <Avatar  src = {elem.user.avatar?elem.user.avatar.path:Icon}/>
-              {elem.user.fullNameEn}
-              
-              
-              </Stack>)
-            })}
-         
-            </Stack>
-          } 
-          title = "See all Members"/>
-                <Modal basicModal={basicModal2} setBasicModal={setBasicModal2} ofDelete={true} toggleShow={toggleShow2}  bodOfDelete={
-                  <>
-                  Are you sure to leave the groupe ? 
-                  </>
-                }
-           
-         
-       
-          title = "leave the groupe"/>
         </Stack>
-      </Box>}  
-    
+      </Box>
     </Stack>
   );
 };

@@ -4,6 +4,7 @@ import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 
+
 @Injectable()
 export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
@@ -111,6 +112,10 @@ export class ChatRoomService {
       data: dto,
     });
   }
+
+
+
+
   
 
   async remove(id: string) {
