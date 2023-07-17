@@ -4,7 +4,7 @@ import config from "../configs";
 
 
 
-export const fetchCoachs = createAsyncThunk(" coache /coaches",async ()=>{
+export const fetchCoachs = createAsyncThunk("coache/coaches",async ()=>{
     const response =await axios.get(`${config.API_ENDPOINT}/coaching`) 
      return response.data;
 
