@@ -88,6 +88,7 @@ CREATE TABLE "ChatRoom" (
     "name" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "isGroup" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "ChatRoom_pkey" PRIMARY KEY ("id")
 );

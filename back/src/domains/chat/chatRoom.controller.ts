@@ -19,7 +19,8 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @Controller('chatRoom')
 
 export class ChatRoomController {
-  constructor(private readonly chatRoomService: ChatRoomService) {}
+  constructor(private readonly chatRoomService: ChatRoomService
+    ) {}
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -46,6 +47,11 @@ export class ChatRoomController {
     return this.chatRoomService.findUsersChatroom(user1, user2);
   }
 
+  @Get('all/all-chatsRooms') 
+  getAll(){
+    return this.chatRoomService.findAllRoooooooooooooms()
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateChatDto: UpdateChatDto) {
     return this.chatRoomService.update(id, updateChatDto);
@@ -55,4 +61,6 @@ export class ChatRoomController {
   remove(@Param('id') id: string) {
     return this.chatRoomService.remove(id);
   }
+
+  
 }

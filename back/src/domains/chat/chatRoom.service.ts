@@ -83,6 +83,19 @@ export class ChatRoomService {
       },
     });
   }
+
+  findAllRoooooooooooooms() {
+    return this.prisma.chatRoom.findMany({
+      include: { messages: true , participants: {
+        include: { user : {
+          include : {
+            avatar : true
+          }
+        } }  
+      }}
+    });
+  }
+
   async findUsersChatroom(userId1: string, userId2: string) {
     const chatRoom = await this.prisma.chatRoom.findFirstOrThrow({
       where: {
@@ -117,6 +130,7 @@ export class ChatRoomService {
       data: dto,
     });
   }
+  
 
   async remove(id: string) {
     return await this.prisma.chatRoom.delete({ where: { id } });

@@ -24,6 +24,7 @@ import { TrainingModule } from './domains/training/training.module';
 import { QuestionsModule } from './domains/questions/questions.module';
 
 import { ProvidersModule } from './domains/providers/providers.module';
+import { UserChatroomModule } from './domains/user-chatroom/user-chatroom.module';
 
 @Module({
   imports: [
@@ -46,7 +47,8 @@ import { ProvidersModule } from './domains/providers/providers.module';
     TrainingModule,
     QuestionsModule,
    
-    ProvidersModule
+    ProvidersModule,
+    UserChatroomModule,
     
   ],
   controllers: [AppController],
