@@ -46,6 +46,11 @@ export class ChatRoomController {
     return this.chatRoomService.findUsersChatroom(user1, user2);
   }
 
+  @Get('all/all-chatsRooms') 
+  getAll(){
+    return this.chatRoomService.findAllRoooooooooooooms()
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateChatDto: UpdateChatDto) {
     return this.chatRoomService.update(id, updateChatDto);

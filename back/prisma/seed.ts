@@ -1958,6 +1958,28 @@ let pathMedia2 = [
   });
   featuresIds.push(features.id);
 }
+
+
+const chatSeed = async (prisma: PrismaClient, userIds: string[]) => {
+  await prisma.chatRoom.create({
+    data: {
+      name: 'javaScript',
+      isGroup:true,
+      participants: {
+        create: userIds.map((userId) => ({ userId })),
+      },
+      messages:{
+        create:{
+            userId:userIds[0],
+            text:'hello',
+        }
+      }
+    },
+  });
+};
+
+chatSeed(prisma,usersIds)
+
 }
 // execute the main function
 main()
