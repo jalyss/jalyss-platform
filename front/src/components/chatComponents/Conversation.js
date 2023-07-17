@@ -67,6 +67,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
 
 
   useEffect(() => {
+    if(userId)
     dispatch(fetchUser(userId))
   }, [userId, userr?.userId])
 

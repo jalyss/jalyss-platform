@@ -208,7 +208,7 @@ const Chat = () => {
       {activeComponentLg === "GroupChat" && (
         <BoxLg>
           <GroupChat
-            groupChatList={chatRoomList}
+            chatRoomList={chatRoomList}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -254,7 +254,7 @@ const Chat = () => {
       {activeComponentMd === "GroupChat" && (
         <BoxMd>
           <GroupChat
-            groupChatList={chatRoomList}
+            chatRoomList={chatRoomList}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}

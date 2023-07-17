@@ -14,7 +14,12 @@ import {
   DialogActions,
   DialogContentText,
 } from "@mui/material";
-import { CircleDashed, MagnifyingGlass, BookOpen, Checks } from "phosphor-react";
+import {
+  CircleDashed,
+  MagnifyingGlass,
+  BookOpen,
+  Checks,
+} from "phosphor-react";
 import Search from "../Commun/Search";
 import SearchIconWrapper from "../Commun/SearchIconWrapper";
 import StyledInputBase from "../Commun/inputs/SearchInputBase";
@@ -29,7 +34,14 @@ import {
 } from "../../store/chat";
 import "../../assets/styles/conversation.css";
 
-const GroupChat = () => {
+const GroupChat = ({
+  chatRoomList,
+  setRoom,
+  room,
+  setActiveComponent,
+  setSelectedUser,
+  screen,
+}) => {
   const navigate = useNavigate();
   const authStore = useSelector((state) => state.auth?.me);
   const chatStore = useSelector((state) => state.chat);
@@ -39,24 +51,6 @@ const GroupChat = () => {
   const [searchText, setSearchText] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
-
-  const groupChatList = [
-    // Add your group chat list data here
-    // Each group chat object should have the necessary properties like id, name, participants, messages, etc.
-    // Example:
-    // {
-    //   id: 1,
-    //   name: "Group Chat 1",
-    //   participants: [
-    //     { id: 1, name: "User 1" },
-    //     { id: 2, name: "User 2" },
-    //   ],
-    //   messages: [
-    //     { id: 1, text: "Message 1" },
-    //     { id: 2, text: "Message 2" },
-    //   ],
-    // },
-  ];
 
   const handleGroupChatClick = (group) => {
     setSelectedGroup(group);
@@ -78,11 +72,11 @@ const GroupChat = () => {
     // handleDeleteDialogClose();
     console.log("Delete group chat", selectedGroup);
   };
+  console.log(chatRoomList);
 
-  const filteredGroupChats = groupChatList.filter((groupChat) => {
+  const filteredGroupChats = chatRoomList?.filter((groupChat) => {
     return groupChat.name.toLowerCase().includes(searchText.toLowerCase());
   });
-  
   return (
     <Box
       sx={{
@@ -131,9 +125,7 @@ const GroupChat = () => {
                   <Avatar src={Icon} />
                 </StyledBadge>
                 <Stack>
-                  <Typography variant="subtitle1">
-                    {groupChat.name}
-                  </Typography>
+                  <Typography variant="subtitle1">{groupChat.name}</Typography>
                   <Typography variant="caption">
                     {groupChat.messages.length > 0
                       ? groupChat.messages[0].text
@@ -197,8 +189,6 @@ const GroupChat = () => {
       </Dialog>
     </Box>
   );
-
-  
 };
 
 export default GroupChat;
