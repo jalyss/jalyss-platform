@@ -575,7 +575,7 @@ CREATE TABLE "Blog" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "authorId" TEXT NOT NULL,
-    "confirm" "StatusBlog" NOT NULL DEFAULT 'pending',
+    "confirm" BOOLEAN NOT NULL DEFAULT false,
     "categoryId" TEXT NOT NULL,
 
     CONSTRAINT "Blog_pkey" PRIMARY KEY ("id")
