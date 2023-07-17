@@ -5,7 +5,7 @@ export class CreateChatRoomDto {
     name:string
 
     @ApiProperty()
-    receiverId:string[]
+    receiverId:string
     @ApiProperty()
     text:string
 }

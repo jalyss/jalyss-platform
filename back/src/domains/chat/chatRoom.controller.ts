@@ -26,6 +26,7 @@ export class ChatRoomController {
   create(@Body() createChatDto: CreateChatRoomDto, @CurrentUser() user: any) {
     return this.chatRoomService.create(createChatDto, user.id);
   }
+  
 
   @Get(':userId')
   findAll(@Param('userId') userId: string) {

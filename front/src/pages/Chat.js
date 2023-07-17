@@ -35,9 +35,9 @@ const Chat = () => {
         .then((response) => {
           const data = response.data;
           setChatRoomList(data);
-          setSelectedUser(
-            data[0].participants.find((participant) => participant.user.id !== myId)
-          );
+          // setSelectedUser(
+          //   data[0].participants.find((participant) => participant.user.id !== myId)
+          // );
         })
         .catch((err) => console.log(err));
     }
@@ -195,7 +195,7 @@ const Chat = () => {
       {activeComponentLg === "chatRoom" && (
         <BoxLg>
           <ChatRoom
-            chatRoomList={chatRoomList}
+            chatRoomList={chatRoomList.filter(room=>!room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -208,7 +208,7 @@ const Chat = () => {
       {activeComponentLg === "GroupChat" && (
         <BoxLg>
           <GroupChat
-            chatRoomList={chatRoomList}
+            chatRoomList={chatRoomList.filter(room=>room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -222,8 +222,9 @@ const Chat = () => {
         <Conversation
           setChatRoomList={setChatRoomList}
           room={room}
-          userr={selectedUser}
+          selectedUser={selectedUser}
           socket={socket}
+          setSelectedUser={setSelectedUser}
         />
       </BoxLgConversation>
 
@@ -241,7 +242,7 @@ const Chat = () => {
       {activeComponentMd === "chatRoom" && (
         <BoxMd>
           <ChatRoom
-            chatRoomList={chatRoomList}
+            chatRoomList={chatRoomList.filter(room=>!room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -254,7 +255,7 @@ const Chat = () => {
       {activeComponentMd === "GroupChat" && (
         <BoxMd>
           <GroupChat
-            chatRoomList={chatRoomList}
+            chatRoomList={chatRoomList.filter(room=>room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -269,8 +270,9 @@ const Chat = () => {
           <Conversation
             setChatRoomList={setChatRoomList}
             room={room}
-            userr={selectedUser}
+            selectedUser={selectedUser}
             socket={socket}
+            setSelectedUser={setSelectedUser}
           />
         </BoxMd>
       )}
