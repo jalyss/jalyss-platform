@@ -18,7 +18,8 @@ export class SessionTarifService {
  async findAll() {
     return await this.prisma.sessionTarif.findMany({
       include : { 
-        bookings : true 
+        bookings : true ,
+        session:true
       }
     });
   }

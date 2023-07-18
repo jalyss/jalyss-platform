@@ -21,7 +21,7 @@ export const delettarif = createAsyncThunk("tarif/edittarifs", async (id, { disp
     }
   };
   const response = await axios.delete(`${config.API_ENDPOINT}/sessionTarif/${id}`, configs);
-  dispatch(fetchtarif());
+  dispatch(fetchtarif())
   return response.data;
 });
 

@@ -563,7 +563,7 @@ model SessionTarif {
   title     String
   price     Float
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session                   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  session   Session                   @relation(fields: [sessionId], references: [id])
   sessionId String
   features  SessionTarifHasFeatures[]
 }
