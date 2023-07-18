@@ -58,9 +58,9 @@ const handleCreateClick = () => {
   let aux = Object.assign({}, names);
   dispatch(createChatRoom(aux)).then((res) => {
     if (!res.error) {
-      showSuccessToast("category created");
+      showSuccessToast("Chat room created");
       dispatch(findAllRooms());
-      // Navigate(-1);
+      Navigate(-1);
     } else {
       showErrorToast(res.error.message);
     }

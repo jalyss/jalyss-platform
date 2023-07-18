@@ -25,14 +25,14 @@ export class ChatRoomController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createChatDto: CreateChatRoomDto, @CurrentUser() user: any) {
-    return this.chatRoomService.create(createChatDto, user.id);
+    return this.chatRoomService.create2(createChatDto, user.id);
   }
-
+  
   @Post('backoffice/:senderId')
   create2(@Body() createChatDto: CreateChatRoomDto,
   @Param('senderId') senderId:string
   ) {
-    return this.chatRoomService.create(createChatDto,senderId);
+    return this.chatRoomService.create2(createChatDto,senderId);
   }
 
   @Get(':userId')
