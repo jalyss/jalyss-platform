@@ -444,6 +444,7 @@ CREATE TABLE "Lecture" (
     "content" TEXT NOT NULL,
     "startAt" TIMESTAMP(3),
     "endAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Lecture_pkey" PRIMARY KEY ("id")
 );

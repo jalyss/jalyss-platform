@@ -26,7 +26,7 @@ const toggleShow=()=>{
   setBasicModal(!basicModal)
 }
 
-  const take = 5;
+  const take = 10;
 
   useEffect(() => {
     dispatch(fetchsessions({ take, skip }));
