@@ -44,22 +44,22 @@ function ChatList() {
    }, [AllchatRooms]);
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    {
-      field: "participants",
-      headerName: "Participants",
-      width: 150,
-      editable: false,
-      valueGetter: (params) => {
-        const { participants } = params.row;
-        // Assuming each participant has a property named "fullNameEn"
-        const participantNames = participants.map(
-          (participant) => participant.user.fullNameEn
-        );
-        return participantNames.join(", ");
-      },
-    },
-    { field: "isGroup", headerName: "isGroup", width: 150, editable: false },
+    { field: "name", headerName: "Name", width: 150, editable: false },
+    // {
+    //   field: "participants",
+    //   headerName: "Participants",
+    //   width: 150,
+    //   editable: false,
+    //   valueGetter: (params) => {
+    //     const { participants } = params.row;
+    //     // Assuming each participant has a property named "fullNameEn"
+    //     const participantNames = participants.map(
+    //       (participant) => participant.user.fullNameEn
+    //     );
+    //     return participantNames.join(", ");
+    //   },
+    // },
+   
 
     {
       field: "createdAt",

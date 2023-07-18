@@ -6,18 +6,19 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UserChatroomService {
   constructor(private readonly prisma: PrismaService) {}
- 
 
- async create(dto: CreateUserChatroomDto) {
+  async create(dto: CreateUserChatroomDto) {
     return await this.prisma.userChatRoom.create({
-      data : dto
+      data: dto,
     });
   }
 
-
   async remove(dto: UpdateUserChatroomDto) {
-    return await this.prisma.userChatRoom.deleteMany({ where: { 
-      userId:dto.userId, chatRoomId:dto.chatRoomId
-     } });
+    return await this.prisma.userChatRoom.deleteMany({
+      where: {
+        userId: dto.userId,
+        chatRoomId: dto.chatRoomId,
+      },
+    });
   }
 }
