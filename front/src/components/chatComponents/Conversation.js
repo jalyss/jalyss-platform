@@ -19,8 +19,6 @@ import {
   Smiley,
   VideoCamera,
   Checks,
-  UserList,
-  Plugs
 } from "phosphor-react";
 import StyledInput from "../Commun/inputs/StyledInput";
 import data from "@emoji-mart/data";
@@ -37,16 +35,20 @@ import { useRef } from "react";
 import { SocketContext } from "../../apps/Client";
 import { useParams } from "react-router-dom";
 import { fetchUser } from "../../store/user";
-import Modal from "../Commun/Modal"
-import DisplayLottie from "../../pages/DisplayLottie";
-import noMes from "../../constants/noMes.json"
-const Conversation = ({ setChatRoomList, room, userr, socket }) => {
-  const [basicModal,setBasicModal]=useState(false)
-  const [basicModal2,setBasicModal2]=useState(false)
+import config from "../../configs";
+import { set } from "lodash";
+
+const Conversation = ({
+  setChatRoomList,
+  room,
+  selectedUser,
+  socket,
+  setSelectedUser,
+}) => {
   const myId = useSelector((state) => state.auth.me?.id);
-  const userStore = useSelector((state) => state.user)
-  const { user } = userStore
-  console.log("userr", userr)
+  const userStore = useSelector((state) => state.user);
+  const { user } = userStore;
+
   // const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
@@ -59,68 +61,71 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   const [inbox, setInbox] = useState([]);
   const [isTyping, setIsTyping] = useState([]);
   const [exist, setExist] = useState(null);
-  const [groupeChatName,setGroupeChatName] = useState(null)
-  const [participants, setParticipants] = useState([])
 
-  const userName = user ? user.fullNameEn : userr?.user?.fullNameEn;
   const messagesEndRef = useRef(null);
-  const { userId } = useParams()
-  console.log("userId", userId);
-  const toggleShow=()=>{
-    setBasicModal(!basicModal)
-  }
-  const toggleShow2=()=>{
-    setBasicModal2(!basicModal2)
-  }
+  const { userId } = useParams();
+
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
   useEffect(() => {
-    scrollToBottom();
-  }, [inbox]);
+    if (selectedUser) scrollToBottom();
+  }, [inbox, selectedUser]);
 
-
-  useEffect(() => {
-    dispatch(fetchUser(userId))
-  }, [userId, userr?.userId])
+  // useEffect(() => {
+  //   if (userId)
+  //     dispatch(fetchUser(userId))
+  //       .then((res) => setUserName(user?.fullNameEn))
+  //       .catch((err) => {});
+  // }, [userId]);
 
   useEffect(() => {
     axios
       .get(
-        `http://localhost:3001/api/v1/chatRoom/by-participants/${userId?userId:userr?.userId}/${myId}`)
+        `${config.API_ENDPOINT}/chatRoom/by-participants/${
+          userId ? userId : selectedUser?.userId
+        }/${myId}`
+      )
       .then((res) => {
-    
+        
         setExist(res.data.id);
+        if(!selectedUser)
+        setSelectedUser(
+          res.data.participants.filter(
+            (participant) => participant.userId !== myId
+          )[0]
+        );
+        
       })
-      .catch((err) => console.log("je error", err));
+      .catch((err) =>
+        axios
+          .get(
+            `${config.API_ENDPOINT}/chatRoom/one/${
+              userId ? userId : selectedUser?.userId
+            }`
+          )
+          .then((res) => {
+            if(!selectedUser)
+            setSelectedUser(res.data)
+            setExist(res.data.id);
+          }).catch(err=>console.log(err))
+      );
   }, [myId, userId]);
-
-  useEffect(() => {
-    axios
-      .get(
-        `http://localhost:3001/api/v1/chatRoom/one/${userId?userId:userr?.userId}`)
-      .then((res) => {
-        setExist(res.data.id);
-        setGroupeChatName(res.data.name)
-        setParticipants(res.data.participants)
-      })
-      .catch((err) => console.log(err));
-  }, [userId]);
 
   useEffect(() => {
     if (exist) {
       axios
-        .get(`http://localhost:3001/api/v1/messages/${exist}`, {
+        .get(`${config.API_ENDPOINT}/messages/${exist}`, {
           params: {
             numberMessages: number,
           },
         })
         .then((response) => {
           let aux = [];
-          for (let i = response.data.length - 1; i >= 0; i--){
+          for (let i = response.data.length - 1; i >= 0; i--) {
             aux.push(response.data[i]);
           }
-          console.log(aux[aux.length - 1]);
+
           setInbox(aux);
         })
         .catch((err) => console.log(err));
@@ -146,8 +151,6 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
   useEffect(() => {
     function getMsg(value) {
       setInbox((Inbox) => [...Inbox, value]);
-
-
     }
 
     function getIsTyping(data) {
@@ -203,10 +206,7 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
         socket.emit("msg-to-server", payload);
       } else {
         let payload = {
-          receiverId:
-            //  user.userId
-           [ userId ? userId : userr?.userId ]
-          ,
+          receiverId: userId ? userId : selectedUser?.userId,
           senderId: myId,
           text: message,
         };
@@ -229,265 +229,228 @@ const Conversation = ({ setChatRoomList, room, userr, socket }) => {
 
   return (
     <Stack height="100%" maxHeight="100vh" width="100%">
-    {userr &&  <Box
-        p={2}
-        sx={{
-          height: "15vh",
-          width: "100%",
-          backgroundColor: "#F8FAFF",
-          boxShadow: "0px 0px 2px",
-        }}
-      >
-        <Stack
-          alignItems="center"
-          direction="row"
-          justifyContent="space-between"
-          sx={{ width: "100%", height: "100%" }}
-        >
-          <Stack direction="row" spacing={2}>
-            <Box>
-              <StyledBadge
-                overlap="circular"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                variant="dot"
-              >
-                <Avatar
-                  alt="profile picture"
-                  src={user ? user.avatar.path : userr?.user?.avatar? userr?.user?.avatar.path : Icon }
-
-                />
-              </StyledBadge>
-            </Box>
-            <Stack spacing={0.2}>
-              <Typography variant="subtitle2">
-             
-                {groupeChatName?groupeChatName:userName}
-              </Typography>
-              <Typography variant="caption">Online</Typography>
-            </Stack>
-          </Stack>
-          {groupeChatName &&
-          <Stack direction="row" alignItems="center" spacing={3}>
-          <span
-           className="tt"
-           title="See all members">
-          <IconButton>
-            <UserList onClick={toggleShow}/>
-          </IconButton>
-          </span>
-          <span
-           className="tt"
-           title="Leave the groupe">
-          <IconButton>
-            <Plugs  onClick={toggleShow2} />
-          </IconButton>
-          </span>
-          {/* <IconButton>
-            <MagnifyingGlass />
-          </IconButton>
-          <Divider orientation="vertical" flexItem />
-          <IconButton>
-            <CaretDown />
-          </IconButton> */}
-        </Stack> }       
-        </Stack>
-      </Box> } 
-    <Box
-        sx={{
-          height: "70vh",
-          width: "100%",
-          backgroundColor: "#fff",
-          boxShadow: "0px 0px 2px",
-          overflowY: "scroll",
-          scrollBehavior: "unset",
-        }}
-        ref={messagesEndRef}
-      >
-        {inbox.map((e, i) => (
-          <div className="containerr" key={i}>
-            <div
-              className={`d-flex  ${e.userId !== myId
-                  ? "justify-content-start"
-                  : "justify-content-end"
-                }`}
-            >
-              <span 
-               className="tt"
-               data-bs-placement="bottom"
-               title={e.user?.fullNameEn}
-              >
-              <img src={ e.user?.avatar ? e.user.avatar.path : Icon} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
-           </span>  
-           <div>
-              <p
-                key={i}
-                className={
-                  e.userId === myId ? "sent-message" : "received-message"
-                }
-              >
-                {e.text}
-              </p>
-              <div>
-              {i === inbox.length - 1 && e.seen && e.userId === myId && (
-                <p><Checks size={25} weight="thin" color="green" /> at {e.updatedAt.slice(11, 16)}</p>
-              )}
-            </div>
-            </div>
-            </div>
-           
-          </div>
-        ))}
-        {isTyping.length ? (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <p style={{ marginLeft: "5px", marginTop: "7px" }}>
-              {isTyping.map((elem) => elem.fullNameEn + " ")} is typing
-            </p>{" "}
-            <Lottie
-              animationData={typing}
-              loop={true}
-              style={{ width: "100px", marginLeft: "-34px" }}
-            />
-          </div>
-        ) : null}
-        {inbox.length === 0 && <div className="d-flex flex-column  align-items-center mt-5" style={{color:"grey"}}>
-              <DisplayLottie
-                animationData={noMes}
-                style={{
-                  width: "200px",
-                  height: "200px",
-                 
-                }}
-              />
-              No Messages to show
-            </div>}
-      </Box>  
-   {userr && <Box
-        p={4}
-        sx={{
-          width: "100%",
-          backgroundColor: "#fff",
-          boxShadow: "0px 0px 2px",
-        }}
-      >
-        <Stack
-          direction="row"
-          alignItems="center"
-          spacing={3}
-          component="form"
-          onKeyDown={handleTyping}
-          // onFocus={handleTyping}
-          // onBlur={handleStopTyping}
-          onSubmit={handleSubmit}
-        >
-          <Stack sx={{ width: "100%" }}>
-            <StyledInput
-              fullWidth
-              placeholder="write a message . . ."
-              variant="filled"
-              InputProps={{
-                disableUnderline: true,
-                startAdornment: (
-                  <InputAdornment>
-                    <IconButton>
-                      <LinkSimple />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment>
-                    <IconButton
-                      onClick={() => {
-                        setPickerOpen(!pickerOpen);
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: pickerOpen ? "inline" : "none",
-                          zIndex: 10,
-                          position: "absolute",
-                          bottom: 50,
-                          right: 10,
-                        }}
-                      >
-                        <Picker
-                          data={data}
-                          onEmojiSelect={(emoji) => {
-                            setSelectedEmoji(emoji.native);
-                            setMessage(`${message}${emoji.native}`);
-                            setPickerOpen(false);
-                          }}
-                        />
-                      </Box>
-                      <Smiley />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              setPickerOpen={setPickerOpen}
-              onChange={(e) => {
-                setMessage(`${e.target.value}`);
-              }}
-              value={message}
-            />
-          </Stack>
+      {!selectedUser ? (
+        <h1>No conversation</h1>
+      ) : (
+        <>
           <Box
+            p={2}
             sx={{
-              height: 48,
-              width: 48,
-              background: "#57385c",
-              borderRadius: 1.5,
+              height: "15vh",
+              width: "100%",
+              backgroundColor: "#F8FAFF",
+              boxShadow: "0px 0px 2px",
             }}
           >
             <Stack
-              sx={{ height: "100%", width: "100%" }}
               alignItems="center"
-              justifyContent="center"
+              direction="row"
+              justifyContent="space-between"
+              sx={{ width: "100%", height: "100%" }}
             >
-              <IconButton onClick={handleSubmit}>
-                <PaperPlaneTilt color="#fff" />
-              </IconButton>
+              <Stack direction="row" spacing={2}>
+                <Box>
+                  <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    variant="dot"
+                  >
+                    <Avatar alt="profile picture" src={Icon} />
+                  </StyledBadge>
+                </Box>
+                <Stack spacing={0.2}>
+                  <Typography variant="subtitle2">
+                    {/* RANIA */}
+                    {selectedUser?.name
+                      ? selectedUser.name
+                      : selectedUser?.user
+                      ? selectedUser.user.fullNameEn
+                      : ""}
+                  </Typography>
+                  <Typography variant="caption">Online</Typography>
+                </Stack>
+              </Stack>
+              <Stack direction="row" alignItems="center" spacing={3}>
+                {/* <IconButton>
+              <VideoCamera />
+            </IconButton>
+            <IconButton>
+              <Phone />
+            </IconButton>
+            <IconButton>
+              <MagnifyingGlass />
+            </IconButton>
+            <Divider orientation="vertical" flexItem />
+            <IconButton>
+              <CaretDown />
+            </IconButton> */}
+              </Stack>
             </Stack>
           </Box>
-          <Modal basicModal={basicModal} setBasicModal={setBasicModal} normal={true} toggleShow={toggleShow} withoutSave={true} body={
-            <Stack sx={{display:"grid" , gridTemplateColumns:"repeat(3,1fr)"}}>
-            {participants?.map((elem)=>{
-              return(<Stack
-                sx={{ height: "100%", width: "100%",marginBottom:"12px" }}
-                alignItems="center"
-                justifyContent="center"
-                spacing={10}
+          <Box
+            sx={{
+              height: "70vh",
+              width: "100%",
+              backgroundColor: "#fff",
+              boxShadow: "0px 0px 2px",
+              overflowY: "scroll",
+              scrollBehavior: "unset",
+            }}
+            ref={messagesEndRef}
+          >
+            {inbox.map((e, i) => (
+              <div className="containerr" key={i}>
+                <div
+                  className={`d-flex  ${
+                    e.userId !== myId
+                      ? "justify-content-start"
+                      : "justify-content-end"
+                  }`}
+                >
+                  <img
+                    src={e?.user?.avatar ? e?.user?.avatar?.path : Icon}
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <div>
+                    <p
+                      key={i}
+                      className={
+                        e.userId === myId ? "sent-message" : "received-message"
+                      }
+                    >
+                      {e.text}
+                    </p>
+                    <div>
+                      {i === inbox.length - 1 &&
+                        e.seen &&
+                        e.userId === myId && (
+                          <p>
+                            <Checks size={25} weight="thin" color="green" /> at{" "}
+                            {e.updatedAt.slice(11, 16)}
+                          </p>
+                        )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {isTyping.length ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
               >
-              <Avatar  src = {elem.user.avatar?elem.user.avatar.path:Icon}/>
-              {elem.user.fullNameEn}
-              
-              
-              </Stack>)
-            })}
-         
+                <p style={{ marginLeft: "5px", marginTop: "7px" }}>
+                  {isTyping.map((elem) => elem.fullNameEn + " ")} is typing
+                </p>{" "}
+                <Lottie
+                  animationData={typing}
+                  loop={true}
+                  style={{ width: "100px", marginLeft: "-34px" }}
+                />
+              </div>
+            ) : null}
+          </Box>
+          <Box
+            p={4}
+            sx={{
+              width: "100%",
+              backgroundColor: "#fff",
+              boxShadow: "0px 0px 2px",
+            }}
+          >
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={3}
+              component="form"
+              onKeyDown={handleTyping}
+              // onFocus={handleTyping}
+              // onBlur={handleStopTyping}
+              onSubmit={handleSubmit}
+            >
+              <Stack sx={{ width: "100%" }}>
+                <StyledInput
+                  fullWidth
+                  placeholder="write a message . . ."
+                  variant="filled"
+                  InputProps={{
+                    disableUnderline: true,
+                    startAdornment: (
+                      <InputAdornment>
+                        <IconButton>
+                          <LinkSimple />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment>
+                        <IconButton
+                          onClick={() => {
+                            setPickerOpen(!pickerOpen);
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: pickerOpen ? "inline" : "none",
+                              zIndex: 10,
+                              position: "absolute",
+                              bottom: 50,
+                              right: 10,
+                            }}
+                          >
+                            <Picker
+                              data={data}
+                              onEmojiSelect={(emoji) => {
+                                setSelectedEmoji(emoji.native);
+                                setMessage(`${message}${emoji.native}`);
+                                setPickerOpen(false);
+                              }}
+                            />
+                          </Box>
+                          <Smiley />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  setPickerOpen={setPickerOpen}
+                  onChange={(e) => {
+                    setMessage(`${e.target.value}`);
+                  }}
+                  value={message}
+                />
+              </Stack>
+              <Box
+                sx={{
+                  height: 48,
+                  width: 48,
+                  background: "#57385c",
+                  borderRadius: 1.5,
+                }}
+              >
+                <Stack
+                  sx={{ height: "100%", width: "100%" }}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <IconButton onSubmit={handleSubmit}>
+                    <PaperPlaneTilt color="#fff" />
+                  </IconButton>
+                </Stack>
+              </Box>
             </Stack>
-          } 
-          title = "See all Members"/>
-                <Modal basicModal={basicModal2} setBasicModal={setBasicModal2} ofDelete={true} toggleShow={toggleShow2}  bodOfDelete={
-                  <>
-                  Are you sure to leave the groupe ? 
-                  </>
-                }
-           
-         
-       
-          title = "leave the groupe"/>
-        </Stack>
-      </Box>}  
-    
+          </Box>
+        </>
+      )}
     </Stack>
   );
 };

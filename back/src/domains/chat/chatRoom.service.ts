@@ -3,85 +3,106 @@ import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
-
 @Injectable()
 export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(dto: CreateChatRoomDto,senderId:string) {
-   return await this.prisma.chatRoom.create({
+  async create(dto: CreateChatRoomDto, senderId: string) {
+    return await this.prisma.chatRoom.create({
       data: {
         name: dto.name,
         participants: {
           create: [
             {
               userId: senderId,
-            }
-          ].concat(dto.receiverId.map(id=>({
-            userId:id
-          }))),
+            },
+            { userId: dto.receiverId },
+          ],
         },
-        messages:{create:{
-          text:dto.text,
-          userId:senderId
-        }}
-      },
-      include:{
-        participants:true,
-        messages:true
-      }
-    });
-    
-    
-  }
-
-  async findAll(id:string) {
-    const rooms = await this.prisma.chatRoom.findMany({
-      where : {
-        participants :{
-          some : {
-            userId : id
-          }
-        }
+        messages: {
+          create: {
+            text: dto.text,
+            userId: senderId,
+          },
+        },
       },
       include: {
-        participants: { include: { user: {
-          include : {
-            avatar : true
-          }
-        }} },
+        participants: true,
+        messages: true,
+      },
+    });
+  }
+
+  async findAll(id: string) {
+    const rooms = await this.prisma.chatRoom.findMany({
+      where: {
+        participants: {
+          some: {
+            userId: id,
+          },
+        },
+      },
+      include: {
+        participants: {
+          include: {
+            user: {
+              include: {
+                avatar: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
-            messages: { where: { seen: false, userId: { not: id} } },
+            messages: { where: { seen: false, userId: { not: id } } },
           },
         },
         messages: { orderBy: { createdAt: 'desc' }, take: 1 },
       },
-    }
-     
-    );
+    });
     const sortedRooms = rooms.sort(
       (a, b) =>
         b.messages[0].createdAt.getTime() - a.messages[0].createdAt.getTime(),
     );
-    return sortedRooms
+    return sortedRooms;
   }
-
-
 
   async findOne(id: string) {
     return await this.prisma.chatRoom.findUnique({
       where: { id },
-      include: { messages: true , participants: {
-        include: { user : {
-          include : {
-            avatar : true
-          }
-        } }  
-      }},
+      include: {
+        messages: true,
+        participants: {
+          include: {
+            user: {
+              include: {
+                avatar: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
+
+  findAllRoooooooooooooms() {
+    return this.prisma.chatRoom.findMany({
+      include: {
+        messages: true,
+        participants: {
+          include: {
+            user: {
+              include: {
+                avatar: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async findUsersChatroom(userId1: string, userId2: string) {
-    const chatRoom = await this.prisma.chatRoom.findFirst({
+    const chatRoom = await this.prisma.chatRoom.findFirstOrThrow({
       where: {
         participants: {
           every: {
@@ -92,26 +113,62 @@ export class ChatRoomService {
         },
       },
       include: {
-        participants: { include: { user: {
-          include : {
-            avatar : true
-          }
-        }} },
-        messages:true,
+        participants: {
+          include: {
+            user: {
+              include: {
+                avatar: true,
+              },
+            },
+          },
+        },
+        messages: true,
       },
     });
-  
+
     return chatRoom;
   }
- 
 
   async update(id: string, dto: UpdateChatDto) {
-    return await this.prisma.chatRoom.update({
-      where: { id },
-      data: dto,
+    let chatRoom = await this.findOne(id);
+    return await this.prisma.$transaction(async (prisma) => {
+      for (let i = 0; i < chatRoom.participants.length; i++) {
+        let response = false;
+        for (let j = 0; j < dto.participants.length; j++) {
+          if (dto.participants[j].value === chatRoom.participants[i].userId)
+            response = true;
+        }
+        if (!response ) {
+          await prisma.userChatRoom.delete({
+            where: {
+              joinerRoom: {
+                chatRoomId: id,
+                userId: chatRoom.participants[i].userId,
+              },
+            },
+          });
+        }
+      }
+
+      return await prisma.chatRoom.update({
+        where: { id },
+        include:{participants:true},
+        data: {
+          name: dto.name,
+          participants: {
+            connectOrCreate: dto.participants.map((participant) => ({
+              where: {
+                joinerRoom: { chatRoomId: id, userId: participant.value },
+              },
+              create: {
+                userId: participant.value,
+              },
+            })),
+          },
+        },
+      });
     });
   }
-  
 
   async remove(id: string) {
     return await this.prisma.chatRoom.delete({ where: { id } });

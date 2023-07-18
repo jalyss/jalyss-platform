@@ -25,6 +25,7 @@ import { QuestionsModule } from './domains/questions/questions.module';
 
 import { ProvidersModule } from './domains/providers/providers.module';
 
+
 @Module({
   imports: [
     MailModule,
@@ -46,7 +47,8 @@ import { ProvidersModule } from './domains/providers/providers.module';
     TrainingModule,
     QuestionsModule,
    
-    ProvidersModule
+    ProvidersModule,
+   
     
   ],
   controllers: [AppController],

@@ -2,39 +2,84 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { useTranslation } from "react-i18next";
-import { fetchCategory, updateCategory } from "../../../store/category";
+import {
+  fetchOneRoom,
+  updateChatRoom,
+  deleteUser,
+  addUser,
+} from "../../../store/chatStore";
+import { fetchUsers } from "../../../store/user";
 import { useNavigate, useParams } from "react-router-dom";
+import Select from "react-select";
+import DeleteModal from "../../../components/Commun/Modal";
 
-function EditCategory() {
-  const [nameAr, setNameAr] = useState();
-  const [nameEn, setNameEn] = useState();
-
+function EditChat() {
   const dispatch = useDispatch();
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
+  const oneRoom = useSelector((state) => state.chat.chat);
+  const users = useSelector((state) => state.user.users.items);
+  const [userList, setUserList] = useState([]);
+  const [value, setValue] = useState([]);
+  const [name, setName] = useState("");
 
-  const category = useSelector((state) => state.category.category);
+ 
 
   useEffect(() => {
-    dispatch(fetchCategory(id));
+    dispatch(fetchOneRoom(id));
+    dispatch(fetchUsers());
   }, []);
+  useEffect(() => {
+    if (oneRoom) {
+      setName(oneRoom.name);
+      setValue(
+        oneRoom.participants.map((participant) => ({
+          value: participant.userId,
+          label: participant.user.fullNameEn,
+        }))
+      );
+    }
+  }, [oneRoom]);
+  useEffect(() => {
+    if (oneRoom && users.length) {
+      let auxUser = [];
+      for (let i = 0; i < users.length; i++) {
+        let response = false;
+        for (let j = 0; j < value.length; j++) {
+          if (value[j].value === users[i].id) {
+            response = true;
+          }
+        }
+        if (!response) {
+          auxUser = [...auxUser, users[i]];
+        }
+        console.log(response);
+      }
+      console.log(auxUser);
+      setUserList(
+        auxUser.map((user) => ({ value: user.id, label: user.fullNameEn }))
+      );
+    }
+  }, [users, value]);
 
   const handleSubmit = () => {
-    const names = {
+    const aux = {
       id: id,
-      nameAr: nameAr,
-      nameEn: nameEn,
+      name: name,
+      participants:value
     };
-    let aux = Object.assign({}, names);
-    dispatch(updateCategory(aux)).then((res) => {
+    
+    dispatch(updateChatRoom(aux)).then((res) => {
       if (!res.error) {
-        showSuccessToast("Category Edited successful");
-        Navigate(-1);
+        showSuccessToast("chat Edited successful");
+        navigate(-1);
       } else {
         showErrorToast(res.error.message);
       }
     });
   };
+
+ 
 
   return (
     <div className="container">
@@ -42,37 +87,87 @@ function EditCategory() {
         <div className="container">
           <div class="row">
             <div class="form-group col-6 mt-3">
-              <label>NameAr</label>
+              <label>Chat Group Name</label>
               <input
                 type="text"
                 class="form-control"
-                placeholder={category?.nameAr}
-                onChange={(e) => setNameAr(e.target.value)}
+                value={name}
+                placeholder='chat group name'
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div class="form-group col-6 mt-3">
-              <label>NameEn</label>
-              <input
-                placeholder={category?.nameEn}
-                type="text"
-                class="form-control"
-                onChange={(e) => setNameEn(e.target.value)}
+              <label>Participants</label>
+              <Select
+                onChange={(e) => {
+                  console.log(e);
+                  setValue(e);
+                }}
+                placeholder="Search by users"
+                options={userList}
+                value={value}
+                isMulti
               />
             </div>
           </div>
+          <div class="row">
+            {}
+            <div></div>
+            {/* 
+            <div class="form-group col-6 mt-3">
+              <label>Participants</label>
+              <Select
+                onChange={(e)=>console.log(e)}
+                placeholder="Search by users"
+                options={users}
+                isMulti
+              />
+            </div>*/}
+          </div>
+
           <div className="w-100 d-flex justify-content-center">
             <button
               type="submit"
               onClick={() => handleSubmit()}
               className="confirm-button mt-5   mb-3"
             >
-              <span className="label-btn"> Edit Category </span>
+              <span className="label-btn"> Edit chat </span>
             </button>
           </div>
         </div>
       </div>
+      {/* <addModal
+        toggleShow={toggleShowDelete1}
+        basicModal={basicModalDelete1}
+        setBasicModal={setBasicModalDelete1}
+        normal={!true}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            You want to add this user ?
+          </div>
+        }
+        confirm={() => {
+          handleDeleteClick();
+        }}
+      /> */}
+      {/* <DeleteModal
+        toggleShow={toggleShowDelete}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        normal={!true}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            You want to Delete this Publishing house ?
+          </div>
+        }
+        confirm={() => {
+          handleDeleteClick();
+        }}
+      /> */}
     </div>
   );
 }
 
-export default EditCategory;
+export default EditChat;

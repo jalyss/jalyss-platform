@@ -7,7 +7,7 @@ import isEnglish from "../../../helpers/isEnglish";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { IoIosPersonAdd } from "react-icons/io";
-import { fetchCategories, deleteCategory } from "../../../store/category";
+import { findAllRooms,deleteChatRoom } from "../../../store/chatStore";
 import DeleteModal from "../../../components/Commun/Modal";
 import Select from "react-select";
 import { BiDotsVerticalRounded } from "react-icons/bi";
@@ -22,33 +22,45 @@ function ChatList() {
   const [basicModalDeleteid, setBasicModalDeleteid] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const categories = useSelector((state) => state.category.categories);
-
+  const  AllchatRooms = useSelector((state) => state.chat.AllchatRooms.items);
   const handleOpen = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    dispatch(fetchCategories());
+    dispatch(findAllRooms());
   }, []);
 
-  useEffect(() => {
-    if (categories?.items?.length) {
-      let categoryData = categories.items.map((e, index) => {
-        return {
-          ...e,
-          index: index,
-        };
-      });
-      setRows(categoryData);
-    }
-  }, [categories.items]);
+   useEffect(() => {
+     if ( AllchatRooms) {
+       let chatRoomData =  AllchatRooms.map((e, index) => {
+         return {
+           ...e,
+           index: index,
+         };
+       });
+       setRows(chatRoomData);
+     }
+   }, [AllchatRooms]);
 
   const columns = [
-    { field: "index", headerName: "Index", width: 90 },
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "nameAr", headerName: "Admin", width: 150, editable: false },
-    { field: "nameEn", headerName: "Members", width: 150, editable: false },
+    { field: "name", headerName: "Name", width: 150, editable: false },
+    // {
+    //   field: "participants",
+    //   headerName: "Participants",
+    //   width: 150,
+    //   editable: false,
+    //   valueGetter: (params) => {
+    //     const { participants } = params.row;
+    //     // Assuming each participant has a property named "fullNameEn"
+    //     const participantNames = participants.map(
+    //       (participant) => participant.user.fullNameEn
+    //     );
+    //     return participantNames.join(", ");
+    //   },
+    // },
+   
+
     {
       field: "createdAt",
       headerName: "createdAt",
@@ -109,15 +121,15 @@ function ChatList() {
   const Navigate = useNavigate();
 
   const handleDeleteClick = (id) => {
-    dispatch(deleteCategory(basicModalDeleteid)).then((res) => {
-      if (res.error) {
-        showErrorToast(res.error.message);
-      } else {
-        showSuccessToast("Cayegory has been deleted");
-        dispatch(fetchCategories());
-        setBasicModalDelete(false);
-      }
-    });
+     dispatch(deleteChatRoom(basicModalDeleteid)).then((res) => {
+       if (res.error) {
+         showErrorToast(res.error.message);
+       } else {
+         showSuccessToast("Chat Room has been deleted");
+         dispatch(findAllRooms());
+         setBasicModalDelete(false);
+       }
+     });
   };
 
   const toggleShowDelete = (id) => {
@@ -127,7 +139,7 @@ function ChatList() {
   };
 
   const handleEditClick = (id) => {
-    Navigate(`editCategory/${id}`);
+    Navigate(`edit/${id}`);
   };
 
   return (
@@ -140,16 +152,16 @@ function ChatList() {
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-            You want to Delete this category ?
+            You want to Delete this chat ?
           </div>
         }
-        fn={() => {
+        confirm={() => {
           handleDeleteClick();
         }}
       />
       <div>
         <div className="container">
-          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List categories</h2>
+          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List Disscussion</h2>
           <hr></hr>
           <Button
             type="button"
@@ -159,46 +171,13 @@ function ChatList() {
               justifyContent: "center",
             }}
             onClick={() => {
-              Navigate("createCategory");
+              Navigate("create");
             }}
             variant="outlined"
           >
-            <span className="btn btn-sm ">Add Category</span>
+            <span className="btn btn-sm ">Add Chat</span>
           </Button>
-          {true ? (
-            <>
-              <button
-                style={{
-                  textAlign: "start",
-                  marginTop: "15px",
-                  border: "none",
-                  backgroundColor: "white",
-                  cursor: "pointer",
-                  color: "black",
-                  marginBottom: "5px",
-                }}
-                onClick={handleOpen}
-              >
-                <span>
-                  Select chat type 
-                </span>
-                <BiDotsVerticalRounded style={{ fontSize: 25 }} />
-              </button>
-              {open ? (
-                <div className="divList">
-                  <ul class="list-group">
-                    <li
-                      class="list-group-item"
-                      onClick={() => toggleShowEdit()}
-                    >
-                      Groups
-                    </li>
-                    <li class="list-group-item">2 Users chat</li>
-                  </ul>
-                </div>
-              ) : null}
-            </>
-          ) : null}
+         
           <Box>
             {rows?.length > 0 ? (
               <DataGrid

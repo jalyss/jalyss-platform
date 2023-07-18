@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-
+import { chatSeed } from './seeds/chatSeed';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 async function main() {
   let users = [];
   let articles = [];
-  let usersIds=[]
+  let usersIds = [];
 
   // create dummy branch
   let branch = await prisma.branch.create({
@@ -108,23 +108,20 @@ async function main() {
 
   const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
-    
-    let newUser =  await prisma.user.create({
-        data: {
-          email: 'jalyss' + i + '@gmail.com',
-          fullNameAr: `جليس ${i}`,
-          fullNameEn: `jalyss${i}`,
-          address: 'sfax',
-          tel: '123456789',
-          password: await bcrypt.hash('1234', salt),
-          avatarId: userMedia[i],
-        },
-      })
+    let newUser = await prisma.user.create({
+      data: {
+        email: 'jalyss' + i + '@gmail.com',
+        fullNameAr: `جليس ${i}`,
+        fullNameEn: `jalyss${i}`,
+        address: 'sfax',
+        tel: '123456789',
+        password: await bcrypt.hash('1234', salt),
+        avatarId: userMedia[i],
+      },
+    });
 
-     usersIds.push(newUser.id);
-     users.push(newUser)
-
-  
+    usersIds.push(newUser.id);
+    users.push(newUser);
   }
 
   //create roles
@@ -461,8 +458,8 @@ async function main() {
       nameEn: 'books',
     },
   });
-  
-  // create logo id 
+
+  // create logo id
   let medialogoforPublishHouse = await prisma.media.create({
     data: {
       path: 'https://p5.storage.canalblog.com/50/89/1228697/127715041.jpg',
@@ -1374,7 +1371,7 @@ async function main() {
 
     MediaServiceIds.push(media.id);
   }
-  
+
   for (let i = 0; i < serviceNames.length; i++) {
     let service = await prisma.service.create({
       data: {
@@ -1392,9 +1389,6 @@ async function main() {
         perHour: i !== 2 ? true : false,
         name: serviceNames[i],
         identifier: serviceNames[i].replace(' ', '-').toLowerCase(),
-
-     
-
       },
     });
 
@@ -1432,13 +1426,13 @@ async function main() {
       serviceId: serviceIds[2],
     },
   });
-  let tarifPrivateSpace33= await prisma.tarif.create({
+  let tarifPrivateSpace33 = await prisma.tarif.create({
     data: {
       duration: 'trimestre(299DT)',
-      price:299,
+      price: 299,
       description: 'aaaaaaaaaa',
       serviceId: serviceIds[0],
-      pricePerDay:5
+      pricePerDay: 5,
     },
   });
   let tarifPrivateSpace1 = await prisma.tarif.create({
@@ -1454,8 +1448,7 @@ async function main() {
     data: {
       duration: 'YEAR',
       price: 2777,
-      description:
-        'salle de reunion  sfax ',
+      description: 'salle de reunion  sfax ',
       serviceId: serviceIds[0],
     },
   });
@@ -1479,16 +1472,16 @@ async function main() {
       serviceId: serviceIds[1],
     },
   });
- let tarifMeetingSpace3 = await prisma.tarif.create({
-  data: {
-    name: 'Training Room',
-    capacity: '15 people',
-    price: 40,
-    pricePerDay: 5.5,
-    description: 'Optical fiber, Video Projector, White board',
-    serviceId: serviceIds[1],
-  },
-});
+  let tarifMeetingSpace3 = await prisma.tarif.create({
+    data: {
+      name: 'Training Room',
+      capacity: '15 people',
+      price: 40,
+      pricePerDay: 5.5,
+      description: 'Optical fiber, Video Projector, White board',
+      serviceId: serviceIds[1],
+    },
+  });
 
   let tarifCoWorkingZone1 = await prisma.tarif.create({
     data: {
@@ -1631,8 +1624,8 @@ async function main() {
   let shW = [];
   let lhw = [];
   let sHp = []; // session has prerequire elements
-  let sessionTarifIds=[]
-  let featuresIds=[]
+  let sessionTarifIds = [];
+  let featuresIds = [];
 
   const search = (s, l) => {
     return (
@@ -1693,46 +1686,42 @@ async function main() {
   }
   let mediaSessionCoverIds = [];
 
-//  let trainingBookingIds=[]
+  //  let trainingBookingIds=[]
 
-//   for (let i = 0; i < 3; i++) {
-//     let trainingBooking = await prisma.trainingBooking.create({
-//       data: {
-//      userId: users[Math.floor(Math.random() * users.length)].id,
-//      sessiontarif:{create}
-//       },
-//     });
+  //   for (let i = 0; i < 3; i++) {
+  //     let trainingBooking = await prisma.trainingBooking.create({
+  //       data: {
+  //      userId: users[Math.floor(Math.random() * users.length)].id,
+  //      sessiontarif:{create}
+  //       },
+  //     });
 
-
-let pathMedia2 = [
- "https://cdn.explara.com/tempuploads/interactive-business-mentoring-session-820210706121141.jpg",
- "https://www.district32.com.au/wp-content/uploads/2023/03/Business-Mentoring.png",
- "https://static.wixstatic.com/media/316e68_3f56dee9bdb54f23ba7dcd3bbd885105~mv2.png/v1/fill/w_438,h_620,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Mentorship_Mentor.png",
- "https://www.process.st/wp-content/uploads/2022/05/Benefits-of-mentoring-new-employees6-1024x1024.png",
- "https://media.licdn.com/dms/image/C5622AQEl4Ai6P5OOsg/feedshare-shrink_800/0/1673415000723?e=1690416000&v=beta&t=PEKjsJZY4OGfc0EtGXRCEbi0fGiJisMStYkedS3KmW4",
- "https://s4769.pcdn.co/wp-content/uploads/2020/03/Roundtable_mt_v3_MentoringWorkplace-scaled.jpg",
- "https://lh5.googleusercontent.com/LECgNkEUM257nb9KLx6GEFCupRZCnvl424v6ZUnO8REGaXp350Y0pEHUJFMSorbhzSYw4cWwcpQSka4PfkAMkNvcgEHPs9LtbUM2dtDmSs1Oijx107ItummU5E8QVmBLI7bWd0zm",
- "https://miro.medium.com/v2/resize:fit:1200/1*gaq5hWubLxmyylgTC8WqRw.jpeg",
- "https://odgers-prod-neu-cdn-tm-endpoint.azureedge.net/media/10904/odgers-berndtson-eye-on-the-c-suite-series-hero.png?anchor=center&mode=crop&width=335&height=289&rnd=132767937190000000",
-"https://fs.hubspotusercontent00.net/hubfs/41809/social-suggested-images/engagedly.comwp-contentuploads20180910-Things-To-Look-For-In-A-Goal-Setting-Software-Nov-18-2021-02-52-40-07-PM.jpg",
-"https://leadershipmanagement.com.au/wp-content/uploads/2016/11/Following-the-Leaders_LEAD-Whitepaper-Nov-16-Thumbnail.png",
-"https://ospe.on.ca/wp-content/uploads/2019/04/Mentorship-2.jpg",
-"https://sidecarglobal.com/wp-content/uploads/2021/11/Everything-You-Need-to-Know-About-Being-a-Mentor-e1637009976672.png",
-"https://www.bulcode.com/assets/img/blog/mentorship_program/blog_mentorship_program.jpg",
-"https://www.sreb.org/sites/main/files/imagecache/thumbnail/main-images/2022_publication_cover.png?1666788264",
-"https://media.licdn.com/dms/image/C5612AQGsYnJAD56WxA/article-cover_image-shrink_600_2000/0/1580266364378?e=2147483647&v=beta&t=uwk6-vDPqvl7LUHtuZo6AvjQnbPnkOvQAML08zrmQUA",
-"https://minutes.co/wp-content/uploads/2022/03/shutterstock_1851240808-1000x600.jpg"
-
-]
-
-
+  let pathMedia2 = [
+    'https://cdn.explara.com/tempuploads/interactive-business-mentoring-session-820210706121141.jpg',
+    'https://www.district32.com.au/wp-content/uploads/2023/03/Business-Mentoring.png',
+    'https://static.wixstatic.com/media/316e68_3f56dee9bdb54f23ba7dcd3bbd885105~mv2.png/v1/fill/w_438,h_620,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Mentorship_Mentor.png',
+    'https://www.process.st/wp-content/uploads/2022/05/Benefits-of-mentoring-new-employees6-1024x1024.png',
+    'https://media.licdn.com/dms/image/C5622AQEl4Ai6P5OOsg/feedshare-shrink_800/0/1673415000723?e=1690416000&v=beta&t=PEKjsJZY4OGfc0EtGXRCEbi0fGiJisMStYkedS3KmW4',
+    'https://s4769.pcdn.co/wp-content/uploads/2020/03/Roundtable_mt_v3_MentoringWorkplace-scaled.jpg',
+    'https://lh5.googleusercontent.com/LECgNkEUM257nb9KLx6GEFCupRZCnvl424v6ZUnO8REGaXp350Y0pEHUJFMSorbhzSYw4cWwcpQSka4PfkAMkNvcgEHPs9LtbUM2dtDmSs1Oijx107ItummU5E8QVmBLI7bWd0zm',
+    'https://miro.medium.com/v2/resize:fit:1200/1*gaq5hWubLxmyylgTC8WqRw.jpeg',
+    'https://odgers-prod-neu-cdn-tm-endpoint.azureedge.net/media/10904/odgers-berndtson-eye-on-the-c-suite-series-hero.png?anchor=center&mode=crop&width=335&height=289&rnd=132767937190000000',
+    'https://fs.hubspotusercontent00.net/hubfs/41809/social-suggested-images/engagedly.comwp-contentuploads20180910-Things-To-Look-For-In-A-Goal-Setting-Software-Nov-18-2021-02-52-40-07-PM.jpg',
+    'https://leadershipmanagement.com.au/wp-content/uploads/2016/11/Following-the-Leaders_LEAD-Whitepaper-Nov-16-Thumbnail.png',
+    'https://ospe.on.ca/wp-content/uploads/2019/04/Mentorship-2.jpg',
+    'https://sidecarglobal.com/wp-content/uploads/2021/11/Everything-You-Need-to-Know-About-Being-a-Mentor-e1637009976672.png',
+    'https://www.bulcode.com/assets/img/blog/mentorship_program/blog_mentorship_program.jpg',
+    'https://www.sreb.org/sites/main/files/imagecache/thumbnail/main-images/2022_publication_cover.png?1666788264',
+    'https://media.licdn.com/dms/image/C5612AQGsYnJAD56WxA/article-cover_image-shrink_600_2000/0/1580266364378?e=2147483647&v=beta&t=uwk6-vDPqvl7LUHtuZo6AvjQnbPnkOvQAML08zrmQUA',
+    'https://minutes.co/wp-content/uploads/2022/03/shutterstock_1851240808-1000x600.jpg',
+  ];
 
   for (let i = 0; i < 10; i++) {
     let media = await prisma.media.create({
       data: {
         alt: 'image',
         description: 'image',
-        path:  pathMedia2[Math.floor(Math.random()* pathMedia2.length)],
+        path: pathMedia2[Math.floor(Math.random() * pathMedia2.length)],
         extension: 'jpg',
         type: 'image',
       },
@@ -1768,7 +1757,6 @@ let pathMedia2 = [
       );
     }
 
- 
     const session = await prisma.session.create({
       data: {
         MediaSession: {
@@ -1790,9 +1778,6 @@ let pathMedia2 = [
     });
     sessions.push(session);
     sessionIds.push(session.id);
-  
-
-
 
     if (sessionIds.length && sessionTypeIds.length) {
       let l = sessionIds[Math.floor(Math.random() * sessionIds.length)];
@@ -1825,21 +1810,17 @@ let pathMedia2 = [
       }
     }
 
- 
-   
-    const titleST =["Basic","Pro","Companies"]
-    const priceST =[20,50,90]
+    const titleST = ['Basic', 'Pro', 'Companies'];
+    const priceST = [20, 50, 90];
     const sessionTarif = await prisma.sessionTarif.create({
       data: {
-        title: titleST[Math.floor(Math.random()*titleST.length)],
-        price:priceST[Math.floor(Math.random()*priceST.length)] ,
+        title: titleST[Math.floor(Math.random() * titleST.length)],
+        price: priceST[Math.floor(Math.random() * priceST.length)],
         sessionId: sessionIds[Math.floor(Math.random() * sessionIds.length)],
-        bookings:{create :usersIds.map((userId)=>({userId})) }
+        bookings: { create: usersIds.map((userId) => ({ userId })) },
       },
     });
     sessionTarifIds.push(sessionTarif.id);
-
-
 
     let feedBack = [
       'The session provided a matter. The content was well-organized and easy to follow. I particularly enjoyed the hands-on exercises that helped solidify my understanding!',
@@ -1911,17 +1892,19 @@ let pathMedia2 = [
     }
   }
 
- for ( let i=0;i<sessionIds.length;i++) {
-  const sessionUpdate = await prisma.session.update({
-    where : {
-      id : sessionIds[i]
-    },
-    data : {
-      previousSessionId : sessionIds[Math.floor(Math.random()*sessionIds.length)],
-      nextSessionId : sessionIds[Math.floor(Math.random()*sessionIds.length)],
-    }
-  })
- } 
+  for (let i = 0; i < sessionIds.length; i++) {
+    const sessionUpdate = await prisma.session.update({
+      where: {
+        id: sessionIds[i],
+      },
+      data: {
+        previousSessionId:
+          sessionIds[Math.floor(Math.random() * sessionIds.length)],
+        nextSessionId:
+          sessionIds[Math.floor(Math.random() * sessionIds.length)],
+      },
+    });
+  }
 
   // create dummy FrequenclyAsked
   let questions = [
@@ -1932,7 +1915,14 @@ let pathMedia2 = [
     'Wherefault, until the collapse?',
     'How It is hidden by default, until the collapse?',
   ];
-  let answer = ['Choose a course: Start by identifying the online course you want to enroll in. Consider factors such as the subject, duration, cost, and the reputation of the course provider.', 'Research the course provider: Look for reviews or information about the institution or platform offering the course. Ensure that it is a legitimate and reputable source of online education', 'Visit the course website: Go to the website of the course provider to gather more details about the course. Look for information regarding enrollment, prerequisites, course content, and any specific requirements', 'Review the course requirements: Check if there are any prerequisites or specific requirements for enrolling in the course. Ensure that you meet these requirements or are willing to fulfill them before proceeding', 'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a "Sign Up" or "Create an Account" option on the website and provide the necessary information to register', 'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a Sign Up or "Create an Account" option on the website and provide the necessary information to register'];
+  let answer = [
+    'Choose a course: Start by identifying the online course you want to enroll in. Consider factors such as the subject, duration, cost, and the reputation of the course provider.',
+    'Research the course provider: Look for reviews or information about the institution or platform offering the course. Ensure that it is a legitimate and reputable source of online education',
+    'Visit the course website: Go to the website of the course provider to gather more details about the course. Look for information regarding enrollment, prerequisites, course content, and any specific requirements',
+    'Review the course requirements: Check if there are any prerequisites or specific requirements for enrolling in the course. Ensure that you meet these requirements or are willing to fulfill them before proceeding',
+    'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a "Sign Up" or "Create an Account" option on the website and provide the necessary information to register',
+    'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a Sign Up or "Create an Account" option on the website and provide the necessary information to register',
+  ];
   for (let i = 0; i < 6; i++) {
     let Freq = await prisma.frequentilyQuestion.create({
       data: {
@@ -1943,21 +1933,21 @@ let pathMedia2 = [
   }
 
   // create feedbacks
-  const bol =[true,false]
-     
-  for (let i = 0; i < 6; i++) {
+  const bol = [true, false];
 
-  const features = await prisma.feature.create({
-    data: {
-      label: '5 online courses gratuit ' + i,
-      isAvailable : bol[Math.floor(Math.random()*bol.length)],
-      SessionTarifHasFeatures:{
-        create :sessionTarifIds.map((sessionId) => ({ sessionId })),
+  for (let i = 0; i < 6; i++) {
+    const features = await prisma.feature.create({
+      data: {
+        label: '5 online courses gratuit ' + i,
+        isAvailable: bol[Math.floor(Math.random() * bol.length)],
+        SessionTarifHasFeatures: {
+          create: sessionTarifIds.map((sessionId) => ({ sessionId })),
+        },
       },
-    },
-  });
-  featuresIds.push(features.id);
-}
+    });
+    featuresIds.push(features.id);
+  }
+  chatSeed(prisma,usersIds)
 }
 // execute the main function
 main()

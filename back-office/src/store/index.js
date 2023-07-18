@@ -18,7 +18,7 @@ import service from './service'
 import space from './space';
 import tarifss from './tarifss';
 import tarif from './tarif';
-
+import chat from "./chatStore"
 import blogs from './blogs';
 
 import provider from './provider';
@@ -51,7 +51,7 @@ export const store = configureStore({
 
     provider,
 
-    
+    chat
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
