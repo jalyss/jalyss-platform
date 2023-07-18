@@ -576,7 +576,7 @@ CREATE TABLE "Blog" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "authorId" TEXT NOT NULL,
-    "confirm" "StatusBlog" NOT NULL DEFAULT 'confirmed',
+    "confirm" "StatusBlog" NOT NULL DEFAULT 'pending',
     "reason" TEXT,
     "categoryId" TEXT NOT NULL,
 

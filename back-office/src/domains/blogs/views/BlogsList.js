@@ -52,10 +52,9 @@ function BlogsList() {
     }))
     .filter((elem) => {
       if (!selectedSituation) {
-        // If no situation is selected, show all data
+
         return true;
       } else {
-        // Filter the data based on the selected situation
         console.log(selectedSituation,"tiihaya");
         return elem.situation.toLowerCase() === selectedSituation.toLowerCase();
       }
@@ -150,6 +149,7 @@ function BlogsList() {
           labelOptionName="label"
           label="Filter by situation"
           onChange={(e) => setSelectedSituation(e[0])}
+          multiple 
         />
 
         <Box sx={{ height: 400, width: '100%' }}>

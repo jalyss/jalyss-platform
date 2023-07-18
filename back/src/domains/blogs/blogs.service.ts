@@ -41,9 +41,9 @@ export class BlogsService {
         } else {
           where = {
             ...where,
-            [key]: key === 'confirm' ? { equals: 'confirmed' } : value,
-          };
+            [key]: key === 'confirm' ? (value == 1 ? "confirmed" : "pending") : value,
         }
+      }
       }
     });
     if (errors.length) {
