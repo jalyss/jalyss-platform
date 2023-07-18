@@ -32,7 +32,30 @@ export const updatechatroomname = createAsyncThunk("chatRoom/user",  async (args
 
 })
 
-
+export const createChatRoom = createAsyncThunk("chatRoom", async (args, { dispatch })  => {
+    // try{
+    //     let token = await localStorage.getItem('tokenAdmin')
+    //     const configs = {
+    //         headers: {
+    //             Authorization: 'Bearer ' + token.Authorization
+    //         }
+    //     }
+    //     console.log(token,"as")
+        const { text,receiverId,name,} = args
+        console.log({text,receiverId,name},"res")
+        receiverId.slice(1)
+        const response = await axios.post(`${config.API_ENDPOINT}/chatRoom/backoffice/e5a50c5d-c173-4fc5-a93a-5b8ad2deccfa`,{
+            text,
+            receiverId,
+            name
+        })
+        console.log("userOut",response.data)
+        return response.data
+    // }catch(err){
+    //     console.log(err)
+    // }
+    })
+    
 export const deleteUser = createAsyncThunk("user-chatroom", async (args, { dispatch })  => {
     const { userId,chatRoomId } = args
     console.log({userId,chatRoomId},"res")
@@ -46,10 +69,8 @@ export const deleteUser = createAsyncThunk("user-chatroom", async (args, { dispa
 
 
 export const fetchOneRoom = createAsyncThunk("one/chatromm", async (id) => {
-    
     const response = await axios.get(`${config.API_ENDPOINT}/chatRoom/one/${id}`)
     console.log("oooooooooooneRoom",response.data)
-
     return response.data
 })
 

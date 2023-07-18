@@ -28,6 +28,13 @@ export class ChatRoomController {
     return this.chatRoomService.create(createChatDto, user.id);
   }
 
+  @Post('backoffice/:senderId')
+  create2(@Body() createChatDto: CreateChatRoomDto,
+  @Param('senderId') senderId:string
+  ) {
+    return this.chatRoomService.create(createChatDto,senderId);
+  }
+
   @Get(':userId')
   findAll(@Param('userId') userId: string) {
     return this.chatRoomService.findAll(userId);
