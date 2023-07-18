@@ -576,12 +576,8 @@ CREATE TABLE "Blog" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "authorId" TEXT NOT NULL,
-<<<<<<< HEAD:back/prisma/migrations/20230717151914_new_m/migration.sql
     "confirm" "StatusBlog" NOT NULL DEFAULT 'confirmed',
     "reason" TEXT,
-=======
-    "confirm" BOOLEAN NOT NULL DEFAULT false,
->>>>>>> 5fdf044b90a08eb032f79035ac75c2163daed392:back/prisma/migrations/20230717182911_y/migration.sql
     "categoryId" TEXT NOT NULL,
 
     CONSTRAINT "Blog_pkey" PRIMARY KEY ("id")

@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import isEnglish from '../../../helpers/isEnglish';
-import { fetchBlogs } from '../../../store/blogs';
+import { fetchBlogs,removeBlog } from '../../../store/blogs';
 import Modal from '../../../components/Commun/Modal';
 import AutoCompleteFilter from '../../../components/Commun/AutoCompleteFilter';
 
@@ -17,32 +17,49 @@ function BlogsList() {
   const [skip, setSkip] = useState(0);
   const take = 50;
   const trend = 0;
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
-  const [selectedSituation, setSelectedSituation] = useState(null);
+  const [selectedSituation, setSelectedSituation] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch();
   const colorReference = '#48184c';
   const situations = [
-    { value: 'Confirmed', label: 'Confirmed' },
-    { value: 'Refused', label: 'Refused' },
-    { value: 'Pending', label: 'Pending' },
+    { value: 'confirmed', label: 'confirmed' },
+    { value: 'refused', label: 'refused' },
+    { value: 'pending', label: 'pending' },
   ];
 
   const blogs = useSelector((state) => state.blogs.blogs.items);
 
-
-  const rows = blogs?.map((elem) => ({
-    id: elem.id,
-    name: elem.author.fullNameEn,
-    blogTitle: elem.title,
-    articleCategory: elem.category.nameEn,
-    date: elem.createdAt,
-    content: elem.content,
-    situation: elem.confirm,
-    reason: elem.reason,
-  }))
-  .filter((elem) => !selectedSituation || elem.situation.toLowerCase() === selectedSituation.toLowerCase());
+  function getDataByConfirmStatus(dataArray, confirmStatus) {
+   return confirmStatus?
+     dataArray.filter((item) => item.confirm === confirmStatus)
+    :blogs
+  }
+  console.log(selectedSituation,'frf')
+  const confirmedPosts = getDataByConfirmStatus(blogs, selectedSituation); 
+    const rows = confirmedPosts
+    ?.map((elem) => ({
+      id: elem.id,
+      name: elem.author.fullNameEn,
+      blogTitle: elem.title,
+      articleCategory: elem.category.nameEn,
+      date: elem.createdAt,
+      content: elem.content,
+      situation: elem.confirm,
+      reason: elem.reason,
+    }))
+    .filter((elem) => {
+      if (!selectedSituation) {
+        // If no situation is selected, show all data
+        return true;
+      } else {
+        // Filter the data based on the selected situation
+        console.log(selectedSituation,"tiihaya");
+        return elem.situation.toLowerCase() === selectedSituation.toLowerCase();
+      }
+    });
 
   useEffect(() => {
     dispatch(fetchBlogs({ take, skip }));
@@ -50,40 +67,40 @@ function BlogsList() {
 
   const buttonStyle = {
     backgroundColor: colorReference,
-    color: "white",
-    borderRadius: "5px",
+    color: 'white',
+    borderRadius: '5px',
   };
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "name", headerName: "Name", width: 150, editable: false },
+    { field: 'id', headerName: 'ID', width: 90 },
+    { field: 'name', headerName: 'Name', width: 150, editable: false },
     {
-      field: "blogTitle",
-      headerName: "Blog Title",
+      field: 'blogTitle',
+      headerName: 'Blog Title',
       width: 150,
       editable: false,
     },
     {
-      field: "articleCategory",
-      headerName: "Category",
+      field: 'articleCategory',
+      headerName: 'Category',
       width: 150,
       editable: false,
     },
-    { field: "date", headerName: "Date", width: 150, editable: false },
+    { field: 'date', headerName: 'Date', width: 150, editable: false },
     {
-      field: "situation",
-      headerName: "Situation",
+      field: 'situation',
+      headerName: 'Situation',
       width: 150,
       editable: false,
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
       width: 150,
-      cellClassName: "actions",
+      cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
@@ -93,12 +110,10 @@ function BlogsList() {
             onClick={() => handleAddClick(id)}
             color="success"
           />,
-
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
             onClick={toggleShow}
-            // should open popup to ask are u sure delete this user (yes/no)
             color="error"
           />,
         ];
@@ -108,9 +123,17 @@ function BlogsList() {
 
   const isEng = isEnglish();
   const Navigate = useNavigate();
-  // const handleDeleteClick = (id) => {
+  const handleDeleteBlog = (id) => {
+    dispatch(removeBlog(id)).then((res) => {
+      if (!res.error) {
+        setBasicModalDelete(!basicModalDelete);
+        showSuccessToast("WorkSpace has been deleted");
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
 
-  // };
   const handleAddClick = (blogId) => {
     Navigate(`detail/${blogId}`);
   };
@@ -126,7 +149,7 @@ function BlogsList() {
           valueOptionName="value"
           labelOptionName="label"
           label="Filter by situation"
-          onChange={(selectedValue) => setSelectedSituation(selectedValue?.value)}
+          onChange={(e) => setSelectedSituation(e[0])}
         />
 
         <Box sx={{ height: 400, width: '100%' }}>
@@ -144,9 +167,10 @@ function BlogsList() {
             disableRowSelectionOnClick
           />
         </Box>
-        <Modal bodOfDelete={'are'} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} />
+        <Modal bodOfDelete={'are you sure you want to delete this blog?'} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={()=>{handleDeleteBlog()}}/>
       </div>
     </div>
   );
 }
+
 export default BlogsList;

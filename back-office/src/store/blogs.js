@@ -55,8 +55,7 @@ export const createView = createAsyncThunk("views/createView", async (body) => {
 });
 export const removeBlog = createAsyncThunk(
   "blogs/deleteBlog",
-  async (args, { dispatch }) => {
-    const { id, ...queries } = args;
+  async (id,{ dispatch }) => {
     const token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
       headers: {
