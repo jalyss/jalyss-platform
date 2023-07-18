@@ -30,6 +30,18 @@ export const fetchChatRoom = createAsyncThunk(
   }
 );
 
+export const createChatRoomGroup = createAsyncThunk(
+  "chatRoom/update",
+  async (args, { dispatch }) => {
+    
+    const response = await axios.post(
+      `${config.API_ENDPOINT}/chatRoom/group`,
+      args
+    );
+    dispatch(findAllRooms())
+    return response.data;
+  }
+);
 export const updateChatRoom = createAsyncThunk(
   "chatRoom/update",
   async (args, { dispatch }) => {
