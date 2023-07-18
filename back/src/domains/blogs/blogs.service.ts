@@ -106,7 +106,7 @@ export class BlogsService {
     await this.prisma.$transaction(async (prisma) => {
       let blog = await prisma.blog.findFirstOrThrow({ where: { id } });
       let tokenAdmin = localStorage.getItem('tokenAdmin')
-      if (blog.authorId !== userId || !tokenAdmin )
+      if (blog.authorId !== userId || ! tokenAdmin )
         throw new HttpException(
           'this user can not update the blog',
           HttpStatus.BAD_REQUEST,

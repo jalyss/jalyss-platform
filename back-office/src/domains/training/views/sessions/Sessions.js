@@ -1,41 +1,60 @@
-import { red } from '@mui/material/colors';
-import { useEffect } from 'react';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
-import { useDispatch, useSelector } from 'react-redux';
-import { deletsessions, fetchsessions } from '../../../../store/sessions';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { showErrorToast, showSuccessToast } from '../../../../utils/toast';
-import Pagination from '@mui/material/Pagination';
-import AddButton from '../../../../components/buttons/AddButton';
-import UpdateButton from "../../../../components/Commun/buttons/UpdateButton"
-import DeleteButton from "../../../../components/Commun/buttons/DeleteButton"
-import CreateButton from "../../../../components/Commun/buttons/CreateButton"
+import { useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { deletsessions, fetchsessions } from "../../../../store/sessions";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
+
+import CreateButton from "../../../../components/Commun/buttons/CreateButton";
+import { Box, Button } from "@mui/material";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { AiFillEdit } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
+import Modal from "../../../../components/Commun/Modal"
 function Sessions() {
-  const sessionStore = useSelector((state) => state.sessions?.sessions?.items || []);
-  console.log(sessionStore,'rfr')
+  const sessionStore = useSelector(
+    (state) => state.sessions?.sessions?.items || []
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [skip, setSkip] = useState(0);
-  const handleChange = (event, value) => {
-    setSkip((value - 1) * take);
-  };
-  const take = 6;
+  const [rows, setRows] = useState([]);
+  const [basicModal, setBasicModal] = useState(false);
+  const [idOfDelete,setIdOfDelete]=useState("")
+const toggleShow=()=>{
+  setBasicModal(!basicModal)
+}
 
+  const take = 5;
 
-  
   useEffect(() => {
     dispatch(fetchsessions({ take, skip }));
-  }, [dispatch, take, skip]);
+  }, [take, skip]);
+  console.log(sessionStore, "rfr");
 
+  useEffect(() => {
+    if (sessionStore.items?.length) {
+      let aux = sessionStore.items.map((e) => {
+        return {
+          ...e,
+          avatar: e?.cover?.path,
+          startDate: e.startDate.slice(0, 10),
+          endDate: e?.endDate.slice(0, 10),
+          category: e.category.nameEn,
+        };
+      });
+      console.log(aux);
+      setRows(aux);
+    }
+  }, [sessionStore.items]);
 
   const handleDeletesessionsClick = (id) => {
-    dispatch(deletsessions(id)).then((res) => {
+    dispatch(deletsessions({ id, take, skip })).then((res) => {
       if (res.error) {
         showErrorToast(res.error.message);
       } else {
-        showSuccessToast('Session has been deleted');
+        showSuccessToast("Session has been deleted");
       }
     });
   };
@@ -43,49 +62,118 @@ function Sessions() {
   if (sessionStore.length === 0) {
     return <div>Loading...</div>;
   }
+  const columns = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 90,
+    },
+    {
+      field: "avatar",
+      headerName: "Cover",
+      width: 150,
+      renderCell: (params) => (
+        <img
+          src={params.row?.cover?.path}
+          style={{ width: "40px", height: "40px", borderRadius: "50%" }}
+        />
+      ),
+    },
+    {
+      field: "title",
+      headerName: "Title",
+      width: 230,
+      editable: true,
+    },
+    {
+      field: "startDate",
+      headerName: "StartDate ",
+
+      width: 120,
+      sortable: true,
+    },
+
+    {
+      field: "endDate",
+      headerName: "EndDate",
+      width: 120,
+      editable: true,
+      sortable: false,
+    },
+    {
+      field: "category",
+      headerName: "Category ",
+
+      width: 180,
+      sortable: false,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<AiFillEdit />}
+            label="Edit"
+            className="textPrimary"
+            color="inherit"
+            onClick={() => navigate(`${id}`)}
+          />,
+          <GridActionsCellItem
+            icon={<AiFillDelete />}
+            label="Delete"
+            // should open popup to ask are u sure delete this user (yes/no)
+            color="inherit"
+            // onClick={() => handleDeletesessionsClick(id)}
+            onClick={() => {
+              toggleShow();
+              setIdOfDelete(id);
+            }}
+          />,
+        ];
+      },
+    },
+  ];
 
   return (
-    <div className="container" style={{ border: 20,}}>
- <div style={{marginLeft:600, position: 'sticky', top: 70, zIndex: 999, marginTop: 20 }}>
-  <CreateButton
-    title={'add new session'}
-    onClick={() => navigate('newsession')}
-    style={{ display: 'flex', alignItems: 'center' }}
-  />
-</div>
-      {Array.isArray(sessionStore.items) &&
-        sessionStore.items.map((el, i) => (
-      
-
-
-          <Card key={i} style={{ marginBottom: 20, border: '1px solid purple', borderRadius: '10px', boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)' }}>
-            <Card.Body>
-            
-            
-              <Card.Title style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Title:{el?.title}</Card.Title>
-              <Card.Text style={{ fontSize: '16px' }}>Description:{el.description}</Card.Text>
-              <img src={el?.cover?.path} alt="Session" style={{ width: '100%', marginBottom: '10px' }} /> 
-            </Card.Body>
-            <ListGroup className="list-group-flush" style={{ backgroundColor: '#AA00FF' }}>
-              <ListGroup.Item>Start sessions: {el.startDate}</ListGroup.Item>
-              <ListGroup.Item>End sessions: {el.endDate}</ListGroup.Item>
-              <ListGroup.Item>Category: {el.category.nameEn}</ListGroup.Item>
-              <ListGroup.Item>Category: {el.category.nameAr}</ListGroup.Item>
-            </ListGroup>
-            <div style={{ display: 'flex', justifyContent: 'space-between', padding: 10 }}>
-              <DeleteButton size="small" content={'Delete'} onClick={() => handleDeletesessionsClick(el.id)} />
-              <UpdateButton size="small" content={'Update'} onClick={() => navigate(`${el.id}`)} />
-            </div>
-          </Card>
-        ))}
-      <div className="d-flex justify-content-center my-5">
-        <Pagination
-          count={Math.ceil(sessionStore.count / take)}
-          color="secondary"
-          variant="outlined"
-          onChange={handleChange}
+    <div>
+      <div>
+        <CreateButton
+          title={"add new session"}
+          onClick={() => navigate("newsession")}
+          mt={20}
+          mb={20}
         />
       </div>
+      <div className="position-relative">
+        Session List
+        <Box sx={{ height: 600, width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 10,
+                },
+              },
+            }}
+            pageSizeOptions={[5]}
+            checkboxSelection
+            disableRowSelectionOnClick
+          />
+        </Box>
+      </div>
+      <Modal  basicModal={basicModal} setBasicModal={setBasicModal} toggleShow={toggleShow} ofDelete={true} bodOfDelete={
+        <div className="d-flex justify-content-center align-items-center">
+        are you sure to delete this session
+        </div>
+      }
+      confirm={() => {handleDeletesessionsClick(idOfDelete)
+      setBasicModal(false)}}/>
     </div>
   );
 }

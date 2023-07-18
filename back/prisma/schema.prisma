@@ -518,6 +518,7 @@ model Lecture {
   content                    String
   startAt                    DateTime?
   endAt                      DateTime?
+  createdAt                  DateTime                     @default(now())
   sessions                   SessionHasLecture[]
   assesments                 Assessments[]
   coaching                   Coaching[]
@@ -562,7 +563,7 @@ model SessionTarif {
   title     String
   price     Float
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
-  session   Session                   @relation(fields: [sessionId], references: [id])
+  session   Session                   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId String
   features  SessionTarifHasFeatures[]
 }
