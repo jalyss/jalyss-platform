@@ -6,7 +6,7 @@ export class UpdateChatDto {
   @ApiProperty()
   participants: participant[];
 }
-type participant = {
+export type participant = {
   value: string;
   label: string;
 };
