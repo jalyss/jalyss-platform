@@ -15,14 +15,23 @@ export class SessionTarifService {
     })
   }
 
- async findAll() {
-    return await this.prisma.sessionTarif.findMany({
-      include : { 
-        bookings : true ,
-        session:true
-      }
-    });
+  async findAll() {
+    try {
+      return await this.prisma.sessionTarif.findMany({
+        include: {
+          bookings: true,
+          session: true
+        },
+        orderBy: {
+          createdAt: 'desc',
+        }
+      });
+    } catch (error) {
+      console.error('Error in findAll:', error);
+      throw error; // or handle the error appropriately
+    }
   }
+  
 
    async findOne(id: string) {
     return await this.prisma.sessionTarif.findUnique({

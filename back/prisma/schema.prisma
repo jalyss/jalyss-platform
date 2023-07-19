@@ -429,6 +429,7 @@ model Session {
   sessionFeedback            SessionFeedback[]
   sessionHasPrerequire       sessionHasPrerequire[]
   SessionHasWhatYouWillLearn SessionHasWhatYouWillLearn[]
+  SessionHasFeatures         SessionHasFeatures[]
 }
 
 model SessionFeedback {
@@ -543,11 +544,12 @@ model Assessments {
 }
 
 model Feature {
-  id          String  @id @default(uuid())
-  label       String
-  isAvailable Boolean
+  id        String   @id @default(uuid())
+  label     String
+  createdAt DateTime @default(now())
 
   SessionTarifHasFeatures SessionTarifHasFeatures[]
+  SessionHasFeatures      SessionHasFeatures[]
 }
 
 model SessionTarifHasFeatures {
@@ -555,14 +557,25 @@ model SessionTarifHasFeatures {
   featureId    String
   sessionTarif SessionTarif @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   sessionId    String
+  isAvailable  Boolean
 
   @@unique(fields: [featureId, sessionId], name: "sessionTarifHasFeatures")
+}
+
+model SessionHasFeatures {
+  feature      Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  featureId    String
+  sessionTarif Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId    String
+
+  @@unique(fields: [featureId, sessionId], name: "sessionHasFeatures")
 }
 
 model SessionTarif {
   id        String                    @id @default(uuid())
   title     String
   price     Float
+  createdAt DateTime                  @default(now())
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking
   session   Session                   @relation(fields: [sessionId], references: [id])
   sessionId String
@@ -695,7 +708,7 @@ model Blog {
   updatedAt   DateTime         @updatedAt
   author      User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
-  confirm     Boolean   @default(false)
+  confirm     Boolean          @default(false)
   category    ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String
   MediaBlog   MediaBlog[]

@@ -1933,16 +1933,22 @@ async function main() {
   }
 
   // create feedbacks
-  const bol = [true, false];
-
-  for (let i = 0; i < 6; i++) {
+  
+  const label = [
+    "5 online courses gratuit",
+    "free Book",
+    "Certificates of Participation",
+    "Access to Premium or VIP Content",
+    "Gift Cards or Vouchers",
+    "Exclusive Content or Resources",
+    "Discounts or Coupons"
+  ];
+  
+  for (let i = 0; i < 7; i++) {
     const features = await prisma.feature.create({
       data: {
-        label: '5 online courses gratuit ' + i,
-        isAvailable: bol[Math.floor(Math.random() * bol.length)],
-        SessionTarifHasFeatures: {
-          create: sessionTarifIds.map((sessionId) => ({ sessionId })),
-        },
+        label: label[i],
+     
       },
     });
     featuresIds.push(features.id);
