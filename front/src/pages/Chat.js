@@ -54,7 +54,7 @@ const Chat = () => {
       socket.off(`chat-rooms/${myId}`, handleChatRooms);
     };
   }, [socket, myId]);
-
+console.log(chatRoomList);
   const handleChangeComponent = (string) => {
     setActiveComponentLg(string);
     setActiveComponentMd(string);

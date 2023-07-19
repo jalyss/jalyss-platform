@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
+import { CreateChatRoomDto, CreateChatRoomGroupDto } from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -32,6 +32,7 @@ export class ChatRoomService {
     });
   }
 
+  
   async findAll(id: string) {
     const rooms = await this.prisma.chatRoom.findMany({
       where: {
@@ -84,8 +85,11 @@ export class ChatRoomService {
     });
   }
 
-  findAllRoooooooooooooms() {
+  findAllRoomsGroup() {
     return this.prisma.chatRoom.findMany({
+      where:{
+        isGroup:true
+      },
       include: {
         messages: true,
         participants: {
@@ -167,6 +171,25 @@ export class ChatRoomService {
           },
         },
       });
+    });
+  }
+  async createChatRoomGroup(dto:CreateChatRoomGroupDto){
+    return await this.prisma.chatRoom.create({
+      data: {
+        name: dto.name,
+        isGroup:true,
+        participants: {
+          create: dto.participants.map(participant=>({userId:participant.value}))
+        },
+        messages:{
+          create:dto.participants.map(participant=>({userId:participant.value,text:'hi'}))
+        }
+        
+      },
+      include: {
+        participants: true,
+        messages: true,
+      },
     });
   }
 

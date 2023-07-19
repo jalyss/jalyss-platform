@@ -342,7 +342,7 @@ const ChatRoom = ({
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">Discussion</Typography>
+          <Typography variant="h5">Groups</Typography>
           <IconButton>
             <BookOpen />
           </IconButton>
