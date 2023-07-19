@@ -53,7 +53,7 @@ export class UsersService {
       where: {
         Blog: {
           some: {
-            confirm: true,
+            confirm: 'confirmed',
           }
           ,
         },

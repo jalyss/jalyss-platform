@@ -41,9 +41,9 @@ export class BlogsService {
         } else {
           where = {
             ...where,
-            [key]: key === 'confirm' ? (value == 1 ? true : false) : value,
-          };
+            [key]: key === 'confirm' ? (value == 1 ? "confirmed" : "pending") : value,
         }
+      }
       }
     });
     if (errors.length) {
@@ -105,12 +105,12 @@ export class BlogsService {
   async update(id: string, dto: UpdateBlogDto, userId: string) {
     await this.prisma.$transaction(async (prisma) => {
       let blog = await prisma.blog.findFirstOrThrow({ where: { id } });
-      let tokenAdmin = localStorage.getItem('tokenAdmin')
-      if (blog.authorId !== userId || !tokenAdmin )
-        throw new HttpException(
-          'this user can not update the blog',
-          HttpStatus.BAD_REQUEST,
-        );
+      // let tokenAdmin = localStorage.getItem('tokenAdmin')
+      // if (blog.authorId !== userId || !tokenAdmin )
+      //   throw new HttpException(
+      //     'this user can not update the blog',
+      //     HttpStatus.BAD_REQUEST,
+      //   );
       // await prisma.mediaBlog.deleteMany({ where: { blogId: id } });
       // let mediaIds = [];
       // if (dto.mediaIds) {

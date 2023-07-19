@@ -38,7 +38,7 @@ function Sidebar() {
       borderLeft={!isEng ? "1px solid #d9d9d9" : "none"}
     >
       <div className="sidebarHeader">
-        <img style={{ height: 100 }} src={Logo} alt="logo" />
+        {/* <img style={{ height: 100 }} src={Logo} alt="logo" /> */}
         {/* <AiOutlineDown color="black"/> */}
       </div>
       <div className="sidebarContent">
