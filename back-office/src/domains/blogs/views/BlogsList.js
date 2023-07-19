@@ -1,105 +1,76 @@
-import { GridActionsCellItem } from '@mui/x-data-grid';
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AiFillDelete, AiOutlineEye } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
-import { showErrorToast, showSuccessToast } from '../../../utils/toast';
-import isEnglish from '../../../helpers/isEnglish';
-import { fetchBlogs,removeBlog } from '../../../store/blogs';
-import Modal from '../../../components/Commun/Modal';
-import AutoCompleteFilter from '../../../components/Commun/AutoCompleteFilter';
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
+import { DataGrid } from "@mui/x-data-grid";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import isEnglish from "../../../helpers/isEnglish";
+import { fetchBlogs, removeBlog } from "../../../store/blogs";
+import Modal from "../../../components/Commun/Modal";
+import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 
 function BlogsList() {
+  const dispatch = useDispatch();
+  const blogs = useSelector((state) => state.blogs.blogs.items);
+  const isEng = isEnglish();
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [elementId, setElementId] = useState(null);
   const [skip, setSkip] = useState(0);
-  const take = 50;
-  const trend = 0;
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
-  const [selectedSituation, setSelectedSituation] = useState("");
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const dispatch = useDispatch();
-  const colorReference = '#48184c';
+  const [selectedSituation, setSelectedSituation] = useState([]);
+  const [rows, setRows] = useState([]);
+  const take = 50;
+  const trend = 0;
+
+  const colorReference = "#48184c";
   const situations = [
-    { value: 'confirmed', label: 'confirmed' },
-    { value: 'refused', label: 'refused' },
-    { value: 'pending', label: 'pending' },
+    { value: "confirmed", label: "confirmed" },
+    { value: "refused", label: "refused" },
+    { value: "pending", label: "pending" },
   ];
-
-  const blogs = useSelector((state) => state.blogs.blogs.items);
-
-  function getDataByConfirmStatus(dataArray, confirmStatus) {
-   return confirmStatus?
-     dataArray.filter((item) => item.confirm === confirmStatus)
-    :blogs
-  }
-  console.log(selectedSituation,'frf')
-  const confirmedPosts = getDataByConfirmStatus(blogs, selectedSituation); 
-    const rows = confirmedPosts
-    ?.map((elem) => ({
-      id: elem.id,
-      name: elem.author.fullNameEn,
-      blogTitle: elem.title,
-      articleCategory: elem.category.nameEn,
-      date: elem.createdAt,
-      content: elem.content,
-      situation: elem.confirm,
-      reason: elem.reason,
-    }))
-    .filter((elem) => {
-      if (!selectedSituation) {
-
-        return true;
-      } else {
-        console.log(selectedSituation,"tiihaya");
-        return elem.situation.toLowerCase() === selectedSituation.toLowerCase();
-      }
-    });
-
-  useEffect(() => {
-    dispatch(fetchBlogs({ take, skip }));
-  }, [dispatch, skip]);
-
   const buttonStyle = {
     backgroundColor: colorReference,
-    color: 'white',
-    borderRadius: '5px',
-  };
-  const toggleShow = () => {
-    setBasicModal(!basicModal);
+    color: "white",
+    borderRadius: "5px",
   };
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    { field: 'name', headerName: 'Name', width: 150, editable: false },
     {
-      field: 'blogTitle',
-      headerName: 'Blog Title',
+      field: "title",
+      headerName: "Blog Title",
       width: 150,
       editable: false,
     },
     {
-      field: 'articleCategory',
-      headerName: 'Category',
+      field:'authorName',
+      headerName: "Author Name",
+      width: 150,
+      editable: false,
+      valueGetter: (params) => `${params.row.author.fullNameEn}`,
+    },
+    { field: "createdAt", headerName: "Date", width: 150, editable: false },
+    {
+      field:'blogCategory',
+      headerName: "Category",
+      width: 150,
+      editable: false,
+      valueGetter: (params) => `${params.row.category.nameEn}`,
+    },
+    {
+      field: "confirm",
+      headerName: "Situation",
       width: 150,
       editable: false,
     },
-    { field: 'date', headerName: 'Date', width: 150, editable: false },
     {
-      field: 'situation',
-      headerName: 'Situation',
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
       width: 150,
-      editable: false,
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 150,
-      cellClassName: 'actions',
+      cellClassName: "actions",
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
@@ -120,8 +91,22 @@ function BlogsList() {
     },
   ];
 
-  const isEng = isEnglish();
-  const Navigate = useNavigate();
+  useEffect(() => {
+    dispatch(fetchBlogs({ take, skip }));
+  }, [dispatch, skip]);
+  useEffect(() => {
+    let auxRows;
+    if (selectedSituation.length)
+      auxRows = blogs.filter((item) =>
+        selectedSituation.includes(item.confirm)
+      );
+    else auxRows = blogs;
+    setRows(auxRows);
+  }, [selectedSituation, blogs]);
+
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
   const handleDeleteBlog = (id) => {
     dispatch(removeBlog(id)).then((res) => {
       if (!res.error) {
@@ -134,13 +119,15 @@ function BlogsList() {
   };
 
   const handleAddClick = (blogId) => {
-    Navigate(`detail/${blogId}`);
+    navigate(`detail/${blogId}`);
   };
 
   return (
     <div>
       <div className="container">
-        <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List of people who create blogs</h2>
+        <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>
+          List of people who create blogs
+        </h2>
         <hr></hr>
 
         <AutoCompleteFilter
@@ -148,11 +135,11 @@ function BlogsList() {
           valueOptionName="value"
           labelOptionName="label"
           label="Filter by situation"
-          onChange={(e) => setSelectedSituation(e[0])}
-          multiple 
+          onChange={(e) => setSelectedSituation(e)}
+          multiple
         />
 
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 400, width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -163,11 +150,19 @@ function BlogsList() {
                 },
               },
             }}
-            pageSizeOptions={[10]}
+            pageSizeOptions={[10, 20, 50]}
             disableRowSelectionOnClick
           />
         </Box>
-        <Modal bodOfDelete={'are you sure you want to delete this blog?'} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={()=>{handleDeleteBlog()}}/>
+        <Modal
+          bodOfDelete={"are you sure you want to delete this blog?"}
+          basicModal={basicModal}
+          toggleShow={toggleShow}
+          ofDelete={true}
+          confirm={() => {
+            handleDeleteBlog();
+          }}
+        />
       </div>
     </div>
   );

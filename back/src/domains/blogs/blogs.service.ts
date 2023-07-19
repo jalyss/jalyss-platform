@@ -117,7 +117,7 @@ export class BlogsService {
       //   mediaIds = dto.mediaIds;
         delete dto?.mediaIds;
       // }
-      let data = { ...dto };
+      let data = { ...dto, };
       // if (mediaIds.length > 0) {
       //   data['MediaBlog'] = {
       //     create: mediaIds.map((id) => ({
@@ -125,7 +125,7 @@ export class BlogsService {
       //     })),
       //   };
       // }
-      return await prisma.blog.update({ where: { id }, data });
+      return await prisma.blog.update({ where: { id }, data:{...data,confirm:'pending',reason: 'updating'} });
     });
   }
   async blogDecision(id: string, dto: UpdateBlogDecisionDto){
