@@ -7,6 +7,7 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchBlogs", async (args) => {
   const response = await axios.get(`${config.API_ENDPOINT}/blogs`, {
     params: {
       ...args,
+      confirm:1,
     },
   });
 
