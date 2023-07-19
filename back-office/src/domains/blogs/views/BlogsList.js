@@ -19,7 +19,7 @@ function BlogsList() {
   const trend = 0;
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
-  const [selectedSituation, setSelectedSituation] = useState("");
+  const [selectedSituation, setSelectedSituation] = useState();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch();
@@ -148,8 +148,7 @@ function BlogsList() {
           valueOptionName="value"
           labelOptionName="label"
           label="Filter by situation"
-          onChange={(e) => setSelectedSituation(e[0])}
-          multiple 
+          onChange={(e)=>{setSelectedSituation(e[0])}}
         />
 
         <Box sx={{ height: 400, width: '100%' }}>
