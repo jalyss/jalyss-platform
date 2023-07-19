@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+import { UpdateBlogDecisionDto, UpdateBlogDto } from './dto/update-blog.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
 import { Prisma, PrismaClient } from '@prisma/client';
@@ -41,9 +41,9 @@ export class BlogsService {
         } else {
           where = {
             ...where,
-            [key]: key === 'confirm' ? (value == 1 ? true : false) : value,
-          };
+            [key]:  value,
         }
+      }
       }
     });
     if (errors.length) {
@@ -67,11 +67,10 @@ export class BlogsService {
         },
       };
       let blogs = await this.searchBlogs(this.prisma, {}, 6, 0, orderBy);
-      console.log('trend', blogs);
+     
 
       return blogs;
     } else {
-      console.log('NoTrend');
       orderBy = { createdAt: 'desc' };
       return await this.prisma.$transaction(async (prisma) => {
         let items = await this.searchBlogs(
@@ -81,6 +80,8 @@ export class BlogsService {
           +filters.skip,
           orderBy,
         );
+        console.log(where);
+        
         let count = await prisma.blog.count({ where });
 
         return { items, count };
@@ -105,11 +106,11 @@ export class BlogsService {
   async update(id: string, dto: UpdateBlogDto, userId: string) {
     await this.prisma.$transaction(async (prisma) => {
       let blog = await prisma.blog.findFirstOrThrow({ where: { id } });
-      let tokenAdmin = localStorage.getItem('tokenAdmin')
-      if (blog.authorId !== userId || !tokenAdmin )
+      
+       if (blog.authorId !== userId)
         throw new HttpException(
           'this user can not update the blog',
-          HttpStatus.BAD_REQUEST,
+         HttpStatus.BAD_REQUEST,
         );
       // await prisma.mediaBlog.deleteMany({ where: { blogId: id } });
       // let mediaIds = [];
@@ -117,7 +118,7 @@ export class BlogsService {
       //   mediaIds = dto.mediaIds;
         delete dto?.mediaIds;
       // }
-      let data = { ...dto };
+      let data = { ...dto, };
       // if (mediaIds.length > 0) {
       //   data['MediaBlog'] = {
       //     create: mediaIds.map((id) => ({
@@ -125,8 +126,13 @@ export class BlogsService {
       //     })),
       //   };
       // }
-      return await prisma.blog.update({ where: { id }, data });
+      return await prisma.blog.update({ where: { id }, data:{...data,confirm:'pending',reason: 'updating'} });
     });
+  }
+  async blogDecision(id: string, dto: UpdateBlogDecisionDto){
+    return await this.prisma.blog.update({ where: { id }, data:{
+      ...dto
+    } });
   }
 
   async remove(id: string) {
