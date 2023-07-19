@@ -1,20 +1,22 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateSessionDto {
-    @ApiProperty()
-    title : string ;
-    @ApiProperty()
-    description:string ;
-    @ApiProperty()
-    startDate:Date ;
-    @ApiProperty()
-    endDate:Date ;
-    @ApiProperty()
-    categoryId:string ;
-    @ApiProperty()
+  @ApiProperty()
+  title: string;
+  @ApiProperty()
+  description: string;
+  @ApiProperty()
+  startDate: Date;
+  @ApiProperty()
+  endDate: Date;
+  @ApiProperty()
+  categoryId: string;
+  @ApiProperty()
+  previousSessionId: string;
 
-    previousSessionId:string;
-    
-    @ApiProperty()
-    nextSessionId:string
+  @ApiProperty()
+  nextSessionId: string;
+  @ApiProperty()
+
+  SessionHasFeaturesIds:string[]
 }

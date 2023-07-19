@@ -12,8 +12,8 @@ export const navbarTrainigData = [
     path: "/training/coachs",
   },
   {
-    name: "Tarifs",
-    path: "/training/tarifs",
+    name: "Features",
+    path: "/training/features",
   },
   
 

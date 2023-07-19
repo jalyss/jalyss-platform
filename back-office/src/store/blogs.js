@@ -71,18 +71,18 @@ export const removeBlog = createAsyncThunk(
   }
 );
 
-export const editBlog = createAsyncThunk(
+export const editBlogDecision = createAsyncThunk(
   "blogs/editBlog",
   async (args)=>{
     const {id,body}=args
-    console.log(args,"args")
+   
     let token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
       headers: {
         Authorization: "Bearer " + token.Authorization,
       },
     };
-    const response = await axios.patch(
+    const response = await axios.put(
       `${config.API_ENDPOINT}/blogs/${id}`,
       body,
       configs 

@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+import { UpdateBlogDecisionDto, UpdateBlogDto } from './dto/update-blog.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
 import { Prisma, PrismaClient } from '@prisma/client';
@@ -105,12 +105,12 @@ export class BlogsService {
   async update(id: string, dto: UpdateBlogDto, userId: string) {
     await this.prisma.$transaction(async (prisma) => {
       let blog = await prisma.blog.findFirstOrThrow({ where: { id } });
-      // let tokenAdmin = localStorage.getItem('tokenAdmin')
-      // if (blog.authorId !== userId || !tokenAdmin )
-      //   throw new HttpException(
-      //     'this user can not update the blog',
-      //     HttpStatus.BAD_REQUEST,
-      //   );
+      
+       if (blog.authorId !== userId)
+        throw new HttpException(
+          'this user can not update the blog',
+         HttpStatus.BAD_REQUEST,
+        );
       // await prisma.mediaBlog.deleteMany({ where: { blogId: id } });
       // let mediaIds = [];
       // if (dto.mediaIds) {
@@ -127,6 +127,11 @@ export class BlogsService {
       // }
       return await prisma.blog.update({ where: { id }, data });
     });
+  }
+  async blogDecision(id: string, dto: UpdateBlogDecisionDto){
+    return await this.prisma.blog.update({ where: { id }, data:{
+      ...dto
+    } });
   }
 
   async remove(id: string) {

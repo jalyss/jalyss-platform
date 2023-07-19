@@ -6,15 +6,27 @@ import {
   FilterSession,
   FilterSessionExample,
 } from './entities/training.entity';
-import { features } from 'process';
+
 
 @Injectable()
 export class SessionService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateSessionDto) {
+    const {SessionHasFeaturesIds, ...rest}=dto
+
     return await this.prisma.session.create({
-      data: { ...dto },
+      data:{
+        ...rest,
+        SessionHasFeatures:{
+         create:SessionHasFeaturesIds.map((id)=>{
+          return {
+            featureId: id,
+          }
+         })
+  
+        }
+      },
     });
   }
 
@@ -113,6 +125,7 @@ export class SessionService {
         cover: true,
         sessionType: { include: { sessiontype: true } },
         MediaSession: { include: { media: true } },
+        SessionHasFeatures:{include:{feature:true}}
       },
     });
   }
