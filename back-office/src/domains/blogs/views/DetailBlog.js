@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import blogs, { fetchBlog, editBlog } from "../../../store/blogs";
+import blogs, { fetchBlog, editBlogDecision } from "../../../store/blogs";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import DeleteModal from "../../../components/Commun/Modal";
 
 function DetailBlog() {
   const [reason, setReason] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { blogId } = useParams();
   const blog = useSelector((state) => state?.blogs?.blog);
 
@@ -33,9 +34,10 @@ function DetailBlog() {
       confirm: "confirmed",
     };
 
-    dispatch(editBlog({ id, body })).then((res) => {
+    dispatch(editBlogDecision({ id, body })).then((res) => {
       if (!res.error) {
-        showSuccessToast("Blog has been confirmed");
+        showSuccessToast("Blog decision has been accepted");
+        navigate(-1);
       } else {
         showErrorToast(res.error.message);
       }
@@ -43,17 +45,15 @@ function DetailBlog() {
   };
 
   const refuseBlogFun = async (e) => {
-
-
     let id = blogId;
     let body = {
       confirm: "refused",
       reason: reason,
     };
-    dispatch(editBlog({ id,body })).then((res) => {
+    dispatch(editBlogDecision({ id, body })).then((res) => {
       if (!res.error) {
-        setBasicModalDelete(!basicModalDelete);
         showSuccessToast("Blog has been refused");
+        navigate(-1);
       } else {
         showErrorToast(res.error.message);
       }
@@ -68,30 +68,7 @@ function DetailBlog() {
 
   return (
     <div className="container">
-      <DeleteModal
-        toggleShow={toggleShowDelete}
-        basicModal={basicModalDelete}
-        setBasicModal={setBasicModalDelete}
-        normal={!true}
-        ofDelete={true}
-        bodOfDelete={
-          <div className="d-flex justify-content-center align-items-center">
-            <div className="form-group">
-              <label htmlFor="reason">Reason for Refusal</label>
-              <input
-                type="text"
-                className="form-control"
-                id="reason"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-        }
-        confirm={()=>{refuseBlogFun()}} 
-      />
-      <h5> {blog?.category.nameEn}</h5>
+      <h5> {blog?.category?.nameEn}</h5>
       <div className="card mb-3" style={{ width: 1000 }}>
         <div className="row g-0">
           <div className="col-md-4">
@@ -127,34 +104,82 @@ function DetailBlog() {
                 <small className="text-muted">{blog?.articleCategory}</small>
               </p>
             </div>
-            <div
-              className="form-group"
-              style={{
-                position: "absolute",
-                bottom: "10px",
-                right: "10px",
-              }}
-            >
-              <button
-                type="button"
-                className="btn btn-success mb-2"
-                style={{ marginLeft: "10px" }}
-                onClick={acceptBlogFun}
+            {blog?.confirm === "pending" ? (
+              <div
+                className="form-group"
+                style={{
+                  position: "absolute",
+                  bottom: "10px",
+                  right: "10px",
+                }}
               >
-                Accept
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger mb-2"
-                style={{ marginLeft: "20px" }}
-                onClick={toggleShowDelete} 
+                <button
+                  type="button"
+                  className="btn btn-success mb-2"
+                  style={{ marginLeft: "10px" }}
+                  onClick={acceptBlogFun}
+                >
+                  Accept
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger mb-2"
+                  style={{ marginLeft: "20px" }}
+                  onClick={toggleShowDelete}
+                >
+                  Refuse
+                </button>
+              </div>
+            ) : (
+              <div
+                className="form-group"
+                style={{
+                  position: "absolute",
+                  bottom: "10px",
+                  right: "10px",
+                }}
               >
-                Refuse
-              </button>
-            </div>
+                <button
+                  type="button"
+                  className={`btn ${
+                    blog?.confirm === "confirmed" ? "btn-success" : "btn-danger"
+                  } mb-2`}
+                  style={{ marginLeft: "20px" }}
+                  onClick={toggleShowDelete}
+                  disabled
+                >
+                  {blog?.confirm}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
+      <DeleteModal
+        toggleShow={toggleShowDelete}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        normal={!true}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            <div className="form-group">
+              <label htmlFor="reason">Reason for Refusal</label>
+              <input
+                type="text"
+                className="form-control"
+                id="reason"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+        }
+        confirm={() => {
+          refuseBlogFun();
+        }}
+      />
     </div>
   );
 }

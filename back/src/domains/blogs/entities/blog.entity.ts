@@ -1,8 +1,10 @@
+import { StatusBlog } from "@prisma/client";
+
 export class Blog {}
 export type FilterBlog = {
   authorId: string[];
   categoryId: string[];
-  confirm: number;
+  confirm: StatusBlog[];
   take: number;
   skip: number;
   trend: number;
@@ -11,7 +13,7 @@ export type FilterBlog = {
 export const FilterBlogExample = {
   authorId: ['id1', 'id2'],
   categoryId: ['id1', 'id2'],
-  confirm: 1,
+  confirm: ['confirmed'],
   take: 10,
   skip: 10,
   trend: 0,

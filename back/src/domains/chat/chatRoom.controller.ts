@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ChatRoomService } from './chatRoom.service';
-import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
+import { CreateChatRoomDto, CreateChatRoomGroupDto } from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { CurrentUser } from '../auth/decorators/currentUser';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -27,6 +27,12 @@ export class ChatRoomController {
   create(@Body() createChatDto: CreateChatRoomDto, @CurrentUser() user: any) {
     return this.chatRoomService.create(createChatDto, user.id);
   }
+
+  @Post('group')
+  createChatRoomGroup(@Body() dto: CreateChatRoomGroupDto) {
+    return this.chatRoomService.createChatRoomGroup(dto);
+  }
+  
 
   @Get(':userId')
   findAll(@Param('userId') userId: string) {
@@ -48,7 +54,7 @@ export class ChatRoomController {
 
   @Get('all/all-chatsRooms') 
   getAll(){
-    return this.chatRoomService.findAllRoooooooooooooms()
+    return this.chatRoomService.findAllRoomsGroup()
   }
 
   @Patch(':id')

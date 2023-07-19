@@ -14,7 +14,8 @@ import { useTranslation } from "react-i18next";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 import { fetchCategories } from "../../../../store/category";
 import { useNavigate } from "react-router-dom";
-
+import CropEasy from '../../../../components/CropEasy'
+import axios from "axios";
 const SessionsUpdate = () => {
   const sessions = useSelector((state) => state.sessions.session);
   const categoriesStore = useSelector((state) => state.category);
@@ -22,185 +23,245 @@ const SessionsUpdate = () => {
   const [categoryId, setCategoryId] = useState("");
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [session, setSession] = useState({});
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [enddate, setEnddate] = useState("");
   const [startdate, setStartdate] = useState("");
   const [editMode, setEditMode] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [openCrop, setOpenCrop] = useState(false);
+  const [opp, setOpp] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+
   const { sessionsId } = useParams();
 
   useEffect(() => {
-       dispatch(fetchOnesession(sessionsId));
-  }, [ sessionsId]);
+    dispatch(fetchOnesession(sessionsId));
+    
+  }, [sessionsId]);
+  // console.log("one session",sessions);
   useEffect(() => {
-   setTitle(sessions?.title)
-   setDescription(sessions?.description)
-   setEnddate(sessions?.endDate)
-   setStartdate(sessions?.startDate)
-   setCategoryId(sessions?.category?.nameEn)
-  //  console.log("session",session);
-  }, []);
+    setTitle(sessions?.title);
+    setDescription(sessions?.description);
+    setEnddate(sessions?.endDate);
+    setStartdate(sessions?.startDate);
+    setCategoryId(sessions?.category?.nameEn);
+    //  console.log("session",session);
+  }, [sessions]);
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
-
 
   const submitEditsession = async (event) => {
     event.preventDefault();
     if (!editMode) {
       setEditMode(true);
     } else {
-      // let body = Object.assign({},session)
+    
       let body = {
         title,
         description,
         startDate: new Date(startdate),
         endDate: new Date(enddate),
-        categoryId 
+        categoryId,
       };
-      console.log("sess", body);
-      dispatch(editsession({ id: sessionsId, body })).then((res)=>{
+      event.preventDefault();
+      if (avatar !== null) {
+        console.log('in if');
+        const image = new FormData();
+        image.append('file', avatar);
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          image
+        );
+        body.coverId = response.data.id;
+      }
+  
+      console.log("bodyyyyy", body);
+      dispatch(editsession({ id: sessionsId, body })).then((res) => {
         if (res.error) {
-          showErrorToast(res.error.message)
+          showErrorToast(res.error.message);
         } else {
-          showSuccessToast('session has been updted')
-          navigate(-1)
+          showSuccessToast("session has been updated");
+          navigate(-1);
         }
-      })
+      });
       setEditMode(false);
     }
+  }
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setOpp(file);
+    setPreview(URL.createObjectURL(file));
+
+    setOpenCrop(true);
+    setAvatar(opp);
   };
 
-  return (
+  return (!openCrop?(
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>Profile coches</h2>
-      <form className="checkout-form">
-        <div className="d-flex flex-wrap">
-          <div className="d-flex justify-content-center w-100 m-3">
-            <TableContainer className="w-100" component={Paper}>
-              <Table aria-label="simple table">
-                <TableBody>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("titel")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          id="title"
-                          value={title}
-                          type="text"
-                          className="form-control"
-                          onChange={(e) => {
-                            setTitle(e.target.value);
-                          }}
-                        />
-                      ) : (
-                        <span> {sessions?.title}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t(" description")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          id="description"
-                          type="text"
-                          value={description}
-                          onChange={(e) => {
-                            setDescription(e.target.value);
-                          }}
-                          className="form-control"
-                        />
-                      ) : (
-                        <span>{sessions?.description}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("start-Date")}
-                    </TableCell>
-                    <TableCell align="right">
+      <h2>Update Session</h2>
+      <form className="checkout-form" onSubmit={submitEditsession}>
+        <div className="d-flex flex-wrap justify-content-center" >
+        <div class="image-upload">
+          <img src={preview ? preview : sessions?.cover?.path} alt="cover" className="rounded" />
+
+          {editMode && (
+            <input
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{height:"200px",width:"200px"}}
+            />
+          )}
+     </div>
+        {preview && editMode && (
+          <button
+            type="button"
+            class="delete-button"
+            onClick={() => {
+              setPreview(null);
+              setAvatar(null);
+            }}
+          >
+            X
+          </button>
+        )}
+
+        <div className="d-flex justify-content-center w-100 m-3">
+          <TableContainer className="w-100" component={Paper}>
+            <Table aria-label="simple table">
+              <TableBody>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold" align="right">
+                    {t("title")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {editMode ? (
+                      <input
+                        id="title"
+                        value={title}
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => {
+                          setTitle(e.target.value);
+                        }}
+                      />
+                    ) : (
+                      <span> {sessions?.title}</span>
+                    )}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold" align="right">
+                    {t(" description")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {editMode ? (
+                      <input
+                        id="description"
+                        type="text"
+                        value={description}
+                        onChange={(e) => {
+                          setDescription(e.target.value);
+                        }}
+                        className="form-control"
+                      />
+                    ) : (
+                      <span>{sessions?.description}</span>
+                    )}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold" align="right">
+                    {t("start-Date")}
+                  </TableCell>
+                  <TableCell align="right">
+                    {editMode ? (
+                      <input
+                        type="date"
+                        id="startDate"
+                        onChange={(e) => {
+                          setStartdate(e.target.value);
+                        }}
+                        value={startdate}
+                        className="form-control"
+                      />
+                    ) : (
+                      <span>{sessions?.startDate?.slice(0,10)}</span>
+                    )}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold" align="right">
+                    {t("End sessions")}
+                  </TableCell>
+                  <TableCell align="right">
+                   
                       {editMode ? (
                         <input
                           type="date"
-                          id="startDate"
+                          id="endDate"
+                          value={enddate}
                           onChange={(e) => {
-                            setStartdate(e.target.value);
+                            setEnddate(e.target.value);
                           }}
-                          value={startdate}
                           className="form-control"
                         />
                       ) : (
-                        <span>{sessions?.startDate}</span>
+                        <span>{sessions?.endDate?.slice(0,10)}</span>
                       )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-  <TableCell className="fw-bold" align="right">
-    {t("End sessions")}
-  </TableCell>
-  <TableCell align="right">
-    <div style={{ display: "flex", alignItems: "center" }}>
-      {editMode ? (
-        <input
-          type="date"
-          id="endDate"
-          value={enddate}
-          onChange={(e) => {
-            setEnddate(e.target.value);
-          }}
-          className="form-control"
-        />
-      ) : (
-        <span>{sessions?.endDate}</span>
-      )}
-      <TableCell className="fw-bold" align="right">
-        {t("Category session:")}
-      </TableCell>
-      {editMode ? (
-        <select
-          value={categoryId}
-          className="form-select mt-3"
-          aria-label="Default select example"
-          onChange={(e)=>{setCategoryId(e.target.value)}}
-          required
-          style={{ marginLeft: "10px" }}
-        >
-          <option value="" disabled selected>
-            Choose your Blog category
-          </option>
-          {categories.items.map((category, index) => (
-            <option key={index} value={category.id}>
-              {category.nameEn}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <span>{sessions?.category?.nameEn}</span>
-      )}
-    </div>
-  </TableCell>
-</TableRow>
+                  </TableCell>
+                      </TableRow>
+                      <TableRow>
+                      <TableCell className="fw-bold" align="right">
+                        {t("Category session:")}
+                      </TableCell>
+                  <TableCell align="right">
 
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
+                      {editMode ? (
+                        <select
+                          value={categoryId}
+                          className="form-select mt-3"
+                          aria-label="Default select example"
+                          onChange={(e) => {
+                            setCategoryId(e.target.value);
+                          }}
+                          required
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <option value="" disabled selected>
+                            Choose your Blog category
+                          </option>
+                          {categories.items.map((category, index) => (
+                            <option key={index} value={category.id}>
+                              {category.nameEn}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className="mt-5">{sessions?.category?.nameEn}</span>
+                      )}
+                  </TableCell>
+                 
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
-
+        </div>
         <div className="w-100 d-flex justify-content-center">
           <button
             type="submit"
@@ -211,7 +272,8 @@ const SessionsUpdate = () => {
           </button>
         </div>
       </form>
-    </div>
+      
+      </div>):<CropEasy {...{ preview, setOpenCrop, setPreview,setOpp, setAvatar,avatar }}/>
   );
 };
 
