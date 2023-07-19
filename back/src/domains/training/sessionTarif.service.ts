@@ -19,7 +19,8 @@ export class SessionTarifService {
 
    
     if (features && features.length > 0) {
-      for (const feature of features) {
+      for (let i = 0; i < features.length; i++) {
+        const feature = features[i];
         await this.prisma.sessionTarifHasFeatures.create({
           data: {
             feature: { connect: { id: feature.featureId } },

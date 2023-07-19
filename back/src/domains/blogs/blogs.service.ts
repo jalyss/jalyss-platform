@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+import { UpdateBlogDecisionDto, UpdateBlogDto } from './dto/update-blog.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FilterBlog, FilterBlogExample } from './entities/blog.entity';
 import { Prisma, PrismaClient } from '@prisma/client';
@@ -127,6 +127,11 @@ export class BlogsService {
       // }
       return await prisma.blog.update({ where: { id }, data });
     });
+  }
+  async blogDecision(id: string, dto: UpdateBlogDecisionDto){
+    return await this.prisma.blog.update({ where: { id }, data:{
+      ...dto
+    } });
   }
 
   async remove(id: string) {

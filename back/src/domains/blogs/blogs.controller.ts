@@ -9,10 +9,11 @@ import {
   Query,
   UseGuards,
   Request,
+  Put,
 } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+import { UpdateBlogDecisionDto, UpdateBlogDto } from './dto/update-blog.dto';
 import { FilterBlog } from './entities/blog.entity';
 import { ApiTags, ApiSecurity } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -54,6 +55,14 @@ export class BlogsController {
     @CurrentUser() user: FormatLogin,
   ) {
     return this.blogsService.update(id, updateBlogDto, user.id);
+  }
+  @Put(':id')
+  blogDecision(
+    @Param('id') id: string,
+    @Body() updateBlogDto: UpdateBlogDecisionDto,
+    @CurrentUser() user: FormatLogin,
+  ) {
+    return this.blogsService.blogDecision(id, updateBlogDto);
   }
   
   @ApiSecurity('apiKey')

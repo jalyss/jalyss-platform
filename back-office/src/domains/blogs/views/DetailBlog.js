@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import blogs, { fetchBlog, editBlog } from "../../../store/blogs";
+import blogs, { fetchBlog, editBlogDecision } from "../../../store/blogs";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import DeleteModal from "../../../components/Commun/Modal";
 
 function DetailBlog() {
   const [reason, setReason] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { blogId } = useParams();
   const blog = useSelector((state) => state?.blogs?.blog);
 
@@ -33,9 +34,10 @@ function DetailBlog() {
       confirm: "confirmed",
     };
 
-    dispatch(editBlog({ id, body })).then((res) => {
+    dispatch(editBlogDecision({ id, body })).then((res) => {
       if (!res.error) {
-        showSuccessToast("Blog has been confirmed");
+        showSuccessToast("Blog decision has been accepted");
+        navigate(-1);
       } else {
         showErrorToast(res.error.message);
       }
@@ -43,17 +45,15 @@ function DetailBlog() {
   };
 
   const refuseBlogFun = async (e) => {
-
-
     let id = blogId;
     let body = {
       confirm: "refused",
       reason: reason,
     };
-    dispatch(editBlog({ id,body })).then((res) => {
+    dispatch(editBlogDecision({ id, body })).then((res) => {
       if (!res.error) {
-        setBasicModalDelete(!basicModalDelete);
         showSuccessToast("Blog has been refused");
+        navigate(-1)
       } else {
         showErrorToast(res.error.message);
       }
@@ -89,7 +89,9 @@ function DetailBlog() {
             </div>
           </div>
         }
-        confirm={()=>{refuseBlogFun()}} 
+        confirm={() => {
+          refuseBlogFun();
+        }}
       />
       <h5> {blog?.category.nameEn}</h5>
       <div className="card mb-3" style={{ width: 1000 }}>
@@ -147,7 +149,7 @@ function DetailBlog() {
                 type="button"
                 className="btn btn-danger mb-2"
                 style={{ marginLeft: "20px" }}
-                onClick={toggleShowDelete} 
+                onClick={toggleShowDelete}
               >
                 Refuse
               </button>
