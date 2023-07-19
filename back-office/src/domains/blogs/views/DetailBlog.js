@@ -10,8 +10,10 @@ function DetailBlog() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { blogId } = useParams();
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
   const blog = useSelector((state) => state?.blogs?.blog);
-
+  
+  
   function extractTextFromHTML(html) {
     const temporaryElement = document.createElement("div");
     temporaryElement.innerHTML = html;
@@ -19,15 +21,19 @@ function DetailBlog() {
       temporaryElement.textContent.substring(0, 100) ||
       temporaryElement.innerText.substring(0, 100) ||
       ""
-    );
-  }
+      );
+    }
+    
+    useEffect(() => {
+      dispatch(fetchBlog(blogId));
+    }, [dispatch, blogId]);
+    
+    const toggleShowDelete = () => {
+      setBasicModalDelete(!basicModalDelete);
+    };
 
-  useEffect(() => {
-    dispatch(fetchBlog(blogId));
-  }, [dispatch, blogId]);
-
-  const acceptBlogFun = async (e) => {
-    e.preventDefault();
+    const acceptBlogFun = async (e) => {
+      e.preventDefault();
 
     let id = blogId;
     let body = {
@@ -45,6 +51,12 @@ function DetailBlog() {
   };
 
   const refuseBlogFun = async (e) => {
+
+    if (!reason) {
+      showErrorToast("Please provide a reason for refusal.");
+      return;
+    }
+
     let id = blogId;
     let body = {
       confirm: "refused",
@@ -60,51 +72,91 @@ function DetailBlog() {
     });
   };
 
-  const [basicModalDelete, setBasicModalDelete] = useState(false);
-
-  const toggleShowDelete = () => {
-    setBasicModalDelete(!basicModalDelete);
-  };
-
   return (
     <div className="container">
-      <h5> {blog?.category?.nameEn}</h5>
-      <div className="card mb-3" style={{ width: 1000 }}>
+      <div className="card mb-3" style={{ maxWidth: "700px", margin: "0 auto" }}>
         <div className="row g-0">
           <div className="col-md-4">
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {blog?.cover ? (
+            <div className="d-flex flex-column align-items-center">
+              {blog.author.avatar ? (
                 <img
-                  className="img-fluid rounded-start"
-                  src={blog?.cover.path}
-                  alt={blog?.cover.alt}
-                  style={{ height: 300, width: 500 }}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "50%",
+                    marginBottom: "10px",
+                  }}
+                  className="blogItemAuthorAvatar"
+                  src={blog.author.avatar?.path}
+                  alt="avatar"
                 />
               ) : (
                 <img
-                  className="img-fluid rounded-start"
-                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
-                  alt="cover"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    borderRadius: "50%",
+                    marginBottom: "10px",
+                  }}
+                  className="blogItemAuthorAvatar"
+                  src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                  alt="avatar"
                 />
               )}
+              <p
+                style={{
+                  fontSize: "1.2rem",
+                  fontWeight: "bold",
+                  marginBottom: "50px",
+                }}
+              >
+                {blog.author.fullNameEn}
+              </p>
             </div>
           </div>
           <div className="col-md-8">
             <div className="card-body">
-              <h5 className="card-title"> {blog?.title}</h5>
-              <p className="card-text">{extractTextFromHTML(blog?.content)}.</p>
-              <p className="card-text">
-                <small className="text-muted">{blog?.articleCategory}</small>
+              <p
+                style={{
+                  fontSize: "0.8rem",
+                  color: "#a9a9a9",
+                  fontWeight: "500",
+                  marginBottom: "1rem",
+                }}
+              >
+                Published {blog.createdAt}
+              </p>
+              <h1
+                style={{
+                  whiteSpace: "pre-line",
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {blog.title}
+              </h1>
+              <div className="categoryInfo" style={{ marginBottom: "1rem" }}>
+                <span className="categoryLabel">Category:</span>
+                <span className="chip">{blog.category.nameEn}</span>
+              </div>
+              {blog.cover ? (
+                <img
+                  style={{ width: "100%", borderRadius: "15px" }}
+                  src={blog.cover?.path}
+                  alt="cover"
+                />
+              ) : (
+                <img
+                  style={{ width: "100%", borderRadius: "15px" }}
+                  src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                  alt="cover"
+                />
+              )}
+              <p style={{ padding: "1rem", marginTop: "1.5rem" }}>
+                <span dangerouslySetInnerHTML={{ __html: blog.content }}></span>
               </p>
             </div>
-            {blog?.confirm === "pending" ? (
+            {blog?.confirm === "pending" && (
               <div
                 className="form-group"
                 style={{
@@ -130,31 +182,16 @@ function DetailBlog() {
                   Refuse
                 </button>
               </div>
-            ) : (
-              <div
-                className="form-group"
-                style={{
-                  position: "absolute",
-                  bottom: "10px",
-                  right: "10px",
-                }}
-              >
-                <button
-                  type="button"
-                  className={`btn ${
-                    blog?.confirm === "confirmed" ? "btn-success" : "btn-danger"
-                  } mb-2`}
-                  style={{ marginLeft: "20px" }}
-                  onClick={toggleShowDelete}
-                  disabled
-                >
-                  {blog?.confirm}
-                </button>
-              </div>
             )}
+                  {blog?.confirm === "refused" && (
+        <p style={{ alignSelf: "flex-end", margin: "20px 0", color: "red" }}>
+          Reason for Refusal: {blog?.reason}
+        </p>
+      )}
           </div>
         </div>
       </div>
+
       <DeleteModal
         toggleShow={toggleShowDelete}
         basicModal={basicModalDelete}
@@ -177,7 +214,7 @@ function DetailBlog() {
           </div>
         }
         confirm={() => {
-          refuseBlogFun();
+          refuseBlogFun()
         }}
       />
     </div>
