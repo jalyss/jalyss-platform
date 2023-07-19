@@ -1610,8 +1610,8 @@ async function main() {
           articleCategoryIds[
             Math.floor(Math.random() * articleCategoryIds.length)
           ],
-       
-      }, confirm: i % 2 === 0 ? true : false,
+        confirm: i % 2 === 0 ? true : false,
+      },
     });
     for (let i = 0; i < Math.floor(Math.random() * 10); i++) {
       await prisma.view.create({
@@ -1621,7 +1621,6 @@ async function main() {
       });
     }
   }
-
   //create session
   let lectures = [];
   let sessions = [];
