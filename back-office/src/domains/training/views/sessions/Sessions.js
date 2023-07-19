@@ -9,7 +9,7 @@ import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 import CreateButton from "../../../../components/Commun/buttons/CreateButton";
 import { Box, Button } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillEdit, AiOutlineEye } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
 import Modal from "../../../../components/Commun/Modal"
 function Sessions() {
@@ -116,17 +116,24 @@ const toggleShow=()=>{
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
+          icon={<AiOutlineEye />}
+          label="Add"
+          className="textPrimary"
+          onClick={() => navigate(`detail-training/${id}`)}
+          color="success"
+        />,
+          <GridActionsCellItem
+          icon={<AiFillEdit style={{ color: 'blue' }} />} 
             label="Edit"
             className="textPrimary"
-            color="inherit"
-            onClick={() => navigate(`${id}`)}
+            
+            onClick={() => navigate(`update-training/${id}`)}
           />,
           <GridActionsCellItem
-            icon={<AiFillDelete />}
+          icon={<AiFillDelete />}
             label="Delete"
             // should open popup to ask are u sure delete this user (yes/no)
-            color="inherit"
+            color="error"
             // onClick={() => handleDeletesessionsClick(id)}
             onClick={() => {
               toggleShow();

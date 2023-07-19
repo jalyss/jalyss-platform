@@ -97,6 +97,7 @@ import CreateCommand from "../domains/commands/views/CreateCommand";
 import AddFeatures from "../domains/training/views/features/AddFeatures";
 import Features from "../domains/training/views/features/Features";
 import UpdateFeatures from "../domains/training/views/features/UpdateFeature";
+import SessionDetail from "../domains/training/views/sessions/SessionDetail";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -206,9 +207,15 @@ function Router() {
             <Route path="training" element={<Training />}>
               <Route index element={<Sessions />} />
               <Route
-                path="/training/:sessionsId"
+                path="update-training/:sessionsId"
                 element={<SessionsUpdate />}
               />
+               <Route
+                path="detail-training/:sessionsId"
+                element={<SessionDetail />}
+              >
+                
+              </Route>
               <Route path="newsession" element={<Newsession />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses/:lectureId" element={<Coursdetail />} />

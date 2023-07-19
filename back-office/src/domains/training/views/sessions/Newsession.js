@@ -10,10 +10,15 @@ import AddButton from "../../../../components/buttons/AddButton";
 import { useNavigate } from "react-router-dom";
 import SaveButton from "../../../../components/Commun/buttons/SaveButton";
 import { useRef } from "react";
+import Select from "react-select";
+
 import axios from "axios";
+import { fetchFeatures } from "./../../../../store/tarifss";
 const Addtarif = () => {
   const [addsession, setAddsession] = useState({});
   const categoriesStore = useSelector((state) => state.category);
+  const featuresStore = useSelector((state) => state.tarifss.features);
+  const [selectedFeaturesIds, setSelectedFeaturesIds] = useState([]);
   const [cover, setCover] = useState("");
 
   const { categories } = categoriesStore;
@@ -24,8 +29,9 @@ const Addtarif = () => {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(fetchCategories());
+    dispatch(fetchFeatures());
   }, [dispatch]);
-
+  console.log("featuressss", featuresStore);
   const handleAddsessionChange = (e) => {
     const { name, value } = e.target;
     console.log(name);
@@ -53,6 +59,7 @@ const Addtarif = () => {
       sess.coverId = response.data.id;
     }
     console.log("sessssss", sess);
+    sess.SessionHasFeaturesIds = selectedFeaturesIds;
     dispatch(CreateNeswSession(sess)).then((res) => {
       if (!res.error) {
         showSuccessToast("session.created");
@@ -67,7 +74,7 @@ const Addtarif = () => {
     const file = e.target.files[0];
     setCover(file);
   };
-
+  console.log("sel", selectedFeaturesIds);
   const handleChange = (e) => {
     const selectedOption = e.target.value;
     if (selectedOption === "") {
@@ -173,6 +180,16 @@ const Addtarif = () => {
             ))}
           </select>
         </Form.Group>
+        <div className="mt-4">
+          <AutoCompleteFilter
+            data={featuresStore?.items}
+            valueOptionName="id"
+            labelOptionName="label"
+            label="Add features"
+            onChange={setSelectedFeaturesIds}
+            placeholder="Add features"
+          />
+        </div>
 
         <SaveButton variant="primary" mt={20} onClick={submitsession} />
       </div>
