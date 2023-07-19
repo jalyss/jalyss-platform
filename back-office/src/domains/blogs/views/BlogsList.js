@@ -14,17 +14,17 @@ import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 function BlogsList() {
   const dispatch = useDispatch();
   const blogs = useSelector((state) => state.blogs.blogs.items);
+  const count = useSelector((state) => state.blogs.blogs.count);
   const isEng = isEnglish();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [elementId, setElementId] = useState(null);
-  const [skip, setSkip] = useState(0);
+  const [params, setParams] = useState({skip:0,take:10});
+ 
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
   const [selectedSituation, setSelectedSituation] = useState([]);
   const [rows, setRows] = useState([]);
-  const take = 50;
-  const trend = 0;
 
   const colorReference = "#48184c";
   const situations = [
@@ -45,7 +45,7 @@ function BlogsList() {
       editable: false,
     },
     {
-      field:'authorName',
+      field: "authorName",
       headerName: "Author Name",
       width: 150,
       editable: false,
@@ -53,7 +53,7 @@ function BlogsList() {
     },
     { field: "createdAt", headerName: "Date", width: 150, editable: false },
     {
-      field:'blogCategory',
+      field: "blogCategory",
       headerName: "Category",
       width: 150,
       editable: false,
@@ -92,17 +92,17 @@ function BlogsList() {
   ];
 
   useEffect(() => {
-    dispatch(fetchBlogs({ take, skip }));
-  }, [dispatch, skip]);
+    dispatch(fetchBlogs({ ...params,confirm:selectedSituation }));
+  }, [dispatch, params,selectedSituation]);
   useEffect(() => {
-    let auxRows;
-    if (selectedSituation.length)
-      auxRows = blogs.filter((item) =>
-        selectedSituation.includes(item.confirm)
-      );
-    else auxRows = blogs;
-    setRows(auxRows);
-  }, [selectedSituation, blogs]);
+    // let auxRows;
+    // if (selectedSituation.length)
+    //   auxRows = blogs.filter((item) =>
+    //     selectedSituation.includes(item.confirm)
+    //   );
+    // else auxRows = blogs;
+    setRows(blogs);
+  }, [ blogs]);
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
@@ -121,6 +121,7 @@ function BlogsList() {
   const handleAddClick = (blogId) => {
     navigate(`detail/${blogId}`);
   };
+  console.log(blogs,params.skip,params.take);
 
   return (
     <div>
@@ -146,12 +147,16 @@ function BlogsList() {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 10,
+                  pageSize: params.take,
                 },
               },
             }}
+            onPaginationModelChange={(e) => {
+             setParams({...params,take:+e.pageSize*(+e.page+1)})
+            }}
             pageSizeOptions={[10, 20, 50]}
             disableRowSelectionOnClick
+            rowCount={count}
           />
         </Box>
         <Modal
