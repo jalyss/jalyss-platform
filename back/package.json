@@ -28,12 +28,14 @@
     "prisma:build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
+    "@angular-devkit/schematics": "^15.2.1",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.3.10",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^10.0.2",
     "@nestjs/mapped-types": "*",
+    
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/platform-socket.io": "^9.4.0",
