@@ -1,27 +1,45 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifss";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, GridPagination } from "@mui/x-data-grid";
+
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Modal from "../components/Commun/Modal";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
+import StyledInput from "./Commun/inputs/StyledInput";
 
 function Featuress() {
   const dispatch = useDispatch();
+  const featuresStore = useSelector((state) => state.tarifss);
+  const { features } = featuresStore;
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
   const [editLabel, setEditLabel] = useState("");
   const [editRowId, setEditRowId] = useState("");
-  const [editInputVisible, setEditInputVisible] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [paginationModel, setPaginationModel] = React.useState({
+    pageSize: 5,
+    page: 0,
+  });
+  const [rowCount, setRowCount] = React.useState(0);
+React.useEffect(() => {
+  
+  setRowCount(features.items?.length)
+  
+}, [rowCount]);
 
-  const navigate = useNavigate();
-  const featuresStore = useSelector((state) => state.tarifss);
-  const { features } = featuresStore;
+
+
+  useEffect(() => {
+    if (editModal && editRowId) {
+      const row = rows.find((row) => row.id === editRowId);
+      if (row) {
+        setEditLabel(row.label);
+      }
+    }
+  }, [editModal, editRowId, rows]);
 
   useEffect(() => {
     dispatch(fetchFeatures());
@@ -43,6 +61,9 @@ function Featuress() {
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
+  const toggleShow2 = () => {
+    setEditModal(!editModal);
+  };
 
   const handleDeleteFeatureClick = (id) => {
     dispatch(deleteFeatures(id))
@@ -58,63 +79,34 @@ function Featuress() {
       });
   };
 
-  const handleEditLabelClick = (rowId, currentLabel) => {
-    setEditRowId(rowId);
-    setEditLabel(currentLabel);
-    setEditInputVisible(true);
-  };
-
-  const handleEditLabelChange = (e) => {
-    setEditLabel(e.target.value);
-  };
-console.log("editlab",editLabel);
-  const handleEditLabelSave = () => {
- const label=editLabel
-    dispatch(editFeature({id:editRowId,label:label})).then((res) => {
-      if (res.error) {
-        showErrorToast(res.error.message);
-      } else {
-        showSuccessToast("Features has been Updated");
-      }
-    })
-    .catch((error) => {
-      showErrorToast(error.message);
-    });
-    // Clear the edit state
+  const handleEdit = () => {
+    const label = editLabel;
+    dispatch(editFeature({ id: editRowId, label: label }))
+      .then((res) => {
+        if (res.error) {
+          showErrorToast(res.error.message);
+        } else {
+          showSuccessToast("Features has been Updated");
+        }
+      })
+      .catch((error) => {
+        showErrorToast(error.message);
+      });
+    
     setEditRowId("");
     setEditLabel("");
-    setEditInputVisible(false);
+    toggleShow2();
   };
 
-  const handleEditLabelKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleEditLabelSave();
-    }
-  };
+  
 
   const columns = [
-   {
-    field: "label",
-    headerName: "Label",
-    width: 330,
-    editable: false,
-    renderCell: (params) => {
-      console.log(params,"params");
-      if (params.row.id === editRowId && editInputVisible) {
-        return (
-          <input
-            type="text"
-            value={editLabel}
-            onChange={handleEditLabelChange}
-            onKeyPress={handleEditLabelKeyPress}
-            autoFocus
-          />
-        );
-      } else {
-        return params.value;
-      }
+    {
+      field: "label",
+      headerName: "Label",
+      width: 330,
+      editable: false,
     },
-  },,
     {
       field: "createdAt",
       headerName: "CreatedAt",
@@ -127,14 +119,17 @@ console.log("editlab",editLabel);
       headerName: "Actions",
       width: 330,
       cellClassName: "actions",
-      getActions: ({ id, label }) => {
+      getActions: ({ id }) => {
         return [
           <GridActionsCellItem
             icon={<AiFillEdit />}
             label="Edit"
             className="textPrimary"
             color="inherit"
-            onClick={() => handleEditLabelClick(id, label)}
+            onClick={() => {
+              toggleShow2();
+              setEditRowId(id);
+            }}
           />,
           <GridActionsCellItem
             icon={<AiFillDelete />}
@@ -155,7 +150,7 @@ console.log("editlab",editLabel);
       <div className="position-relative">
         <div className="mb-3">Feature's List</div>
         <Box sx={{ height: 600, width: "100%" }}>
-          <DataGrid
+        <DataGrid
             rows={rows}
             columns={columns}
             initialState={{
@@ -168,6 +163,12 @@ console.log("editlab",editLabel);
             pageSizeOptions={[5]}
             checkboxSelection
             disableRowSelectionOnClick
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            rowCount={rowCount}
+        
+            paginationMode="server"
+        
           />
         </Box>
       </div>
@@ -185,6 +186,29 @@ console.log("editlab",editLabel);
           handleDeleteFeatureClick(idOfDelete);
           setBasicModal(false);
         }}
+      />
+
+      <Modal
+        basicModal={editModal}
+        setBasicModal={setEditModal}
+        toggleShow={toggleShow2}
+        normal={true}
+        title="Edit feature"
+        body={
+          <div
+            className="d-flex justify-content-center align-items-center "
+            style={{ marginRight: "50px" }}
+          >
+            <StyledInput
+              value={editLabel}
+              label="Label"
+              onChange={(e) => {
+                setEditLabel(e.target.value);
+              }}
+            />
+          </div>
+        }
+        fn={handleEdit}
       />
     </div>
   );
