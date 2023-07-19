@@ -1346,6 +1346,8 @@ async function main() {
           clientAddress: 'Lac 2 Tunis',
           clientTel: '22222222',
           clientEmail: 'client' + i + '@gmail.com',
+          payment: 'check',
+          montant: 1234,
           branchId: branch.id,
           countryId: countryIds[Math.floor(Math.random() * countryIds.length)],
           cityId: cityIds[Math.floor(Math.random() * cityIds.length)],

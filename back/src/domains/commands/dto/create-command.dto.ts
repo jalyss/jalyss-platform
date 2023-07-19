@@ -5,8 +5,6 @@ export class CreateCommandDto {
 
     @ApiProperty({ required: false })
     clientId: string
-    @ApiProperty({ required: false })
-    intermediateId?: string
     @ApiProperty({ required: true })
     clientName: string
     @ApiProperty({ required: true })
@@ -16,23 +14,16 @@ export class CreateCommandDto {
     @ApiProperty({ required: true })
     clientEmail: string
     @ApiProperty({ required: true })
-    delivered: boolean
+    payment: string
     @ApiProperty({ required: true })
-    paid: boolean
+    montant: number
     @ApiProperty({ required: true })
-    hasDelivery: boolean
+    commandeDirect: boolean
     @ApiProperty({ required: false })
     countryId?: string
     @ApiProperty({ required: false })
-    cityId?: string // ? mean optional
-
-    @IsNotEmpty()
-    @ApiProperty({ required: true })
-    commandLine!: CreateCommandLineDto[] // ! mean required
+    cityId?: string 
+    // @ApiProperty({ required: true })
+    // commandLine: string[]
 }
-class CreateCommandLineDto {
-    // commandId: string;
-    articleByBranchId: string;
-    quantity: number
 
-}

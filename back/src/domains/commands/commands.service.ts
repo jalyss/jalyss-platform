@@ -28,7 +28,7 @@ export class CommandsService {
       data: {
         ...dto,
         branchId: branch.id,
-        commandLine: { create: dto.commandLine },
+        // commandLine: { articlesByBranchId: articlesByBranchId },
       },
     });
   }
@@ -130,9 +130,9 @@ async findAllCommandLIne(){
               in: command.commandLine.map((l) => l.articleByBranchId),
             },
           },
-          create: dto.commandLine.map((elem) => ({
-            ...elem,
-          })),
+          // create: dto.commandLine.map((elem) => ({
+          //   ...elem,
+          // })),
         },
       },
     });
