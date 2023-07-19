@@ -14,6 +14,7 @@ import Select from "react-select";
 
 import axios from "axios";
 import { fetchFeatures } from "./../../../../store/tarifss";
+import TrainingStepper from "../../../../components/TrainingStepper";
 const Addtarif = () => {
   const [addsession, setAddsession] = useState({});
   const categoriesStore = useSelector((state) => state.category);
@@ -190,7 +191,7 @@ const Addtarif = () => {
             placeholder="Add features"
           />
         </div>
-
+         <TrainingStepper/>
         <SaveButton variant="primary" mt={20} onClick={submitsession} />
       </div>
     </div>

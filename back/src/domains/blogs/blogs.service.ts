@@ -41,7 +41,7 @@ export class BlogsService {
         } else {
           where = {
             ...where,
-            [key]: key === 'confirm' ? (value == 1 ? "confirmed" : "pending") : value,
+            [key]:  value,
         }
       }
       }
@@ -67,11 +67,10 @@ export class BlogsService {
         },
       };
       let blogs = await this.searchBlogs(this.prisma, {}, 6, 0, orderBy);
-      console.log('trend', blogs);
+     
 
       return blogs;
     } else {
-      console.log('NoTrend');
       orderBy = { createdAt: 'desc' };
       return await this.prisma.$transaction(async (prisma) => {
         let items = await this.searchBlogs(
@@ -81,6 +80,8 @@ export class BlogsService {
           +filters.skip,
           orderBy,
         );
+        console.log(where);
+        
         let count = await prisma.blog.count({ where });
 
         return { items, count };
@@ -117,7 +118,7 @@ export class BlogsService {
       //   mediaIds = dto.mediaIds;
         delete dto?.mediaIds;
       // }
-      let data = { ...dto };
+      let data = { ...dto, };
       // if (mediaIds.length > 0) {
       //   data['MediaBlog'] = {
       //     create: mediaIds.map((id) => ({
@@ -125,7 +126,7 @@ export class BlogsService {
       //     })),
       //   };
       // }
-      return await prisma.blog.update({ where: { id }, data });
+      return await prisma.blog.update({ where: { id }, data:{...data,confirm:'pending',reason: 'updating'} });
     });
   }
   async blogDecision(id: string, dto: UpdateBlogDecisionDto){

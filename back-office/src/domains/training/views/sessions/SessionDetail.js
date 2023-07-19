@@ -163,7 +163,7 @@ function SessionDetail() {
           </TableContainer>
         </div>
       </div>
-      <TrainingStepper sessions={sessions} sessionsId={sessionsId} />
+
     </>
   );
 }

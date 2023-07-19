@@ -81,6 +81,7 @@ function UpdateBlog() {
       content: newContent,
       categoryId,
       title,
+      
     };
 
     if (cover !== null) {
