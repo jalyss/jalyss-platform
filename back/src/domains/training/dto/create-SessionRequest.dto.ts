@@ -4,8 +4,6 @@ export class CreateSessionRequestDto {
     @ApiProperty()
     content : string ; 
      @ApiProperty()
-     userId : string ; 
-     @ApiProperty()
      resumeId : string
 
 }

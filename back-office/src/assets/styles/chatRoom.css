@@ -1,0 +1,7 @@
+
+  .divList{
+    position: fixed;
+width: 20%;
+    z-index: 999;  
+    cursor: pointer;
+  }

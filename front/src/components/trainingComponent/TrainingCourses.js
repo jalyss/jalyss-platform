@@ -20,7 +20,7 @@ const TrainingCourses = () => {
   const { categories } = categoriesStore;
   const [skip, setSkip] = useState(0);
   
- let take=5;
+ let take=6;
 
   useEffect (() => {
     dispatch(fetchSessions({categoryId,take,skip}));
@@ -54,11 +54,11 @@ console.log("count",sessions.count);
           {sessions?.items.map((course) => (
             <div key={course.id}>
               <Card
-                cover={course.cover.path}
-                category={course.category.nameEn}
-                title={course.title}
-                startTime={course.startDate.slice(0,10)}
-                endTime={course.endDate.slice(0,10)}
+                cover={course?.cover?.path}
+                category={course?.category.nameEn}
+                title={course?.title}
+                startTime={course?.startDate.slice(0,10)}
+                endTime={course?.endDate.slice(0,10)}
                 onClick={() => navigate(`/sessions/${course.id}`)} 
               />
             </div>

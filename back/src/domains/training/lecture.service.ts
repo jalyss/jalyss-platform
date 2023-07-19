@@ -16,16 +16,26 @@ export class LectureService {
   async findAll() {
     return await this.prisma.lecture.findMany({
       include: {
-        sessions: true,
         coaching: true,
         assesments: true,
+        sessions: {
+          include: {
+            session: {
+              select: {
+                title: true,
+              },
+            },
+          },
+        },
       },
     });
   }
+  
 
   async findOne(id: string) {
     return await this.prisma.lecture.findUnique({
       where: { id },
+      
     });
   }
 

@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
-// import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import "../../../assets/styles/signup.css";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { useTranslation } from "react-i18next";
@@ -15,17 +12,28 @@ import { fetchCategories } from "../../../store/category";
 import { fetchBranches } from "../../../store/branche";
 import { uploadFileAxios } from "../../../helpers/uploadFileAxios";
 
+import {
+  Button,
+  FormControl,
+  Grid,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+
+import "../../../assets/styles/signup.css";
+
 function CreateArticle() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isShowPassword, setIsShowPassword] = useState(false);
   const [preview, setPreview] = useState(null);
   const [article, setArticle] = useState({});
   const [cover, setCover] = useState(null);
   const [progress, setProgress] = useState(null);
-  const [error, setError] = useState(null);
-
+  
   const authorStore = useSelector((state) => state.author);
   const articleTypeStore = useSelector((state) => state.articleType);
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
@@ -39,21 +47,18 @@ function CreateArticle() {
     dispatch(fetchCategories());
     dispatch(fetchBranches());
   }, [dispatch]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setArticle((Article) => ({
       ...Article,
-      [name]: ["weight", "pageNumber"].includes(name)
-        ? +value
-        : name === "authorIds"
-        ? [value]
-        : value,
+      [name]: ["weight", "pageNumber"].includes(name) ? +value : value,
     }));
   };
 
   const submitCreate = async (event) => {
     event.preventDefault();
-    let aux = Object.assign({}, article);
+    let aux = { ...article };
     if (cover !== null) {
       const image = new FormData();
       image.append("file", cover);
@@ -74,25 +79,18 @@ function CreateArticle() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    // const reader = new FileReader()
-    // if (file) {
-    //   reader.readAsDataURL(file)
-    // }
-    // reader.onloadend = () => {
-    //   setPreview(reader.result)
-    // }
     setPreview(URL.createObjectURL(file));
     setCover(file);
   };
 
-  return (
+    return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Add Article</h2>
       <form className="checkout-form" onSubmit={submitCreate}>
         <div className="d-flex flex-wrap">
           <div className="position-relative m-3">
-            <label id="image">Image</label>
-            <div class="image-upload">
+            <InputLabel htmlFor="image">Image</InputLabel>
+            <div className="image-upload">
               <img
                 src={
                   preview
@@ -101,7 +99,7 @@ function CreateArticle() {
                 }
                 alt=""
               />
-              <input
+              <Input
                 id="image"
                 type="file"
                 accept="image/*"
@@ -109,218 +107,206 @@ function CreateArticle() {
               />
             </div>
             {preview && (
-              <button
-                type="button"
-                class="delete-button"
+              <Button
+                variant="outlined"
+                className="delete-button"
                 onClick={() => {
                   setPreview(null);
                   setCover(null);
                 }}
               >
                 X
-              </button>
+              </Button>
             )}
           </div>
           <div className=" m-3">
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="title">
-                  Title<span style={{ color: "red" }}>*</span>
-                </label>
-
-                <input
-                  class="form-control mt-2"
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
                   required
+                  multiline
                   name="title"
-                  id="title"
-                  value={article?.title}
+                  label="Title"
+                  value={article?.title || ""}
                   onChange={handleChange}
                 />
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="weight">
-                  Weight<span style={{ color: "red" }}>*</span>
-                </label>
-
-                <input
-                  class="form-control mt-2"
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
                   required
-                  id="weight"
+                  multiline
+                  type="number"
                   name="weight"
-                  type="number"
-                  value={article?.weight}
+                  label="Weight"
+                  value={article?.weight || ""}
                   onChange={handleChange}
                 />
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="pageNumber">
-                  Page Number<span style={{ color: "red" }}>*</span>
-                </label>
-                <input
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
                   required
-                  class="form-control mt-2"
+                  multiline
                   type="number"
-                  id="pageNumber"
                   name="pageNumber"
-                  value={article?.pageNumber}
+                  label="Page Number"
+                  value={article?.pageNumber || ""}
                   onChange={handleChange}
                 />
-              </div>
-              <div class="col mb-3 ">
-                <label for="code">
-                  Code<span style={{ color: "red" }}>*</span>
-                </label>
-                <input
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
                   required
-                  class="form-control mt-2"
-                  id="code"
+                  multiline
                   name="code"
-                  value={article?.code}
+                  label="Code"
+                  value={article?.code || ""}
                   onChange={handleChange}
                 />
-              </div>
-            </div>
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="shortDescriptionEn">Short Description</label>
-                <div className=" d-flex  ">
-                  <textarea
-                    rows={4}
-                    cols={60}
-                    value={article?.shortDescriptionEn}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  multiline
+                  required
+                  name="shortDescriptionEn"
+                  label="Short Description"
+                  rows={4}
+                  value={article?.shortDescriptionEn || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  multiline
+                  required
+                  name="longDescriptionEn"
+                  label="Long Description"
+                  rows={4}
+                  value={article?.longDescriptionEn || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required >
+                  <InputLabel id="category">Category</InputLabel>
+                  <Select
+                 
+                
+                   
+                    labelId="category"
+                    name="categoryId"
+                    value={article?.categoryId || ""}
                     onChange={handleChange}
-                    style={{ width: "100%" }}
-                    required
-                    className="form-control"
-                    id="shortDescriptionEn"
-                    name="shortDescriptionEn"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="longDescriptionEn">Long Description</label>
-                <div className=" d-flex  ">
-                  <textarea
-                    rows={4}
-                    cols={60}
-                    required
-                    class="form-control mt-2"
-                    id="longDescriptionEn"
-                    name="longDescriptionEn"
-                    value={article?.longDescriptionEn}
+                  >
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {categoryStore.categories.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
+                  <InputLabel id="publishingHouse">Publishing House</InputLabel>
+                  <Select
+                  
+                 
+                    labelId="publishingHouse"
+                    name="publishingHouseId"
+                    value={article?.publishingHouseId || ""}
                     onChange={handleChange}
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="category">Category</label>
-                <select
-                  name="categoryId"
-                  class="form-control mt-2"
-                  id="category"
-                  value={article?.categoryId}
-                  onChange={handleChange}
-                >
-                  <option value={null}>--select option--</option>
-                  {categoryStore.categories.items.map((item) => (
-                    <option value={item.id}>{item.nameAr}</option>
-                  ))}
-                </select>
-              </div>
-              <div class="col mb-3 ">
-                <label for="publishingHouse">publishing House</label>
-                <select
-                  name="publishingHouseId"
-                  class="form-control mt-2"
-                  id="publishingHouse"
-                  value={article?.publishingHouseId}
-                  onChange={handleChange}
-                >
-                  <option value={null}>--select option--</option>
-                  {publishingHouseStore.publishingHouses.items.map((item) => (
-                    <option value={item.id}>{item.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="type"> Type</label>
-                <select
-                  name="typeId"
-                  class="form-control mt-2"
-                  id="type"
-                  value={article?.typeId}
-                  onChange={handleChange}
-                >
-                  <option value={null}>--select option--</option>
-                  {articleTypeStore.articleTypes.items.map((item) => (
-                    <option value={item.id}>{item.nameAr}</option>
-                  ))}
-                </select>
-              </div>
-              <div class="col mb-3 ">
-                <label for="branch">Branch</label>
-                <select
-                  name="branchId"
-                  class="form-control mt-2"
-                  id="branch"
-                  value={article?.ArticleByBranch?.branchId}
-                  onChange={handleChange}
-                >
-                  <option value={null}>--select option--</option>
-                  {branchStore.branches.items.map((item) => (
-                    <option value={item.id}>{item.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col mb-3 ">
-                <label for="author">
-                  Author<span style={{ color: "red" }}>*</span>
-                </label>
-                <select
-                  name="authorIds"
-                  class="form-control mt-2"
-                  id="author"
-                  value={article?.ArticleByAuthor?.authorId}
-                  onChange={handleChange}
-                >
-                  <option value={null}>--select option--</option>
-                  {authorStore.authors.items.map((item) => (
-                    <option value={item.id}>{item.nameAr}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col mb-3 "></div>
-            </div>
+                  >
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {publishingHouseStore.publishingHouses.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
+                  <InputLabel id="type">Type</InputLabel>
+                  <Select
+                  
+                 
+                    labelId="type"
+                    name="typeId"
+                    value={article?.typeId || ""}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {articleTypeStore.articleTypes.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
+                  <InputLabel id="branch">Branch</InputLabel>
+                  <Select
+                  
+                  
+                    labelId="branch"
+                    name="branchId"
+                    value={article?.ArticleByBranch?.branchId || ""}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {branchStore.branches.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth required>
+                  <InputLabel id="author">Author</InputLabel>
+                  <Select
+                  
+                  
+                    labelId="author"
+                    name="authorIds"
+                    value={article?.ArticleByAuthor?.authorId || ""}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {authorStore.authors.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
           </div>
         </div>
-        {progress && <ProgressBar now={progress} label={`${progress}%`} />}
+        {progress && (
+          <ProgressBar now={progress} label={`${progress}%`} />
+        )}
         <div className="w-100 d-flex justify-content-center">
-          <button
+          <Button
             type="submit"
             className="confirm-button mt-3"
             onSubmit={submitCreate}
+            variant="contained"
           >
-            <span className="label-btn">Create Article</span>
-          </button>
+            Create Article
+          </Button>
         </div>
       </form>
     </div>

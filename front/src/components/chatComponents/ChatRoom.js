@@ -5,9 +5,14 @@ import {
   IconButton,
   Stack,
   Typography,
-  Badge
+  Badge,
 } from "@mui/material";
-import { CircleDashed, MagnifyingGlass, BookOpen, Checks } from "phosphor-react";
+import {
+  CircleDashed,
+  MagnifyingGlass,
+  BookOpen,
+  Checks,
+} from "phosphor-react";
 import React, { useEffect, useState } from "react";
 import Search from "../Commun/Search";
 import SearchIconWrapper from "../Commun/SearchIconWrapper";
@@ -18,15 +23,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 import { useNavigate } from "react-router-dom";
 
-
-
-const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelectedUser ,screen}) => {
-
-  const navigate=useNavigate()
-  const authStore = useSelector(state => state.auth?.me)
-  const chatStore = useSelector((state) => state.chat)
-  const { notSeen } = chatStore
-  let number = notSeen
+const ChatRoom = ({
+  chatRoomList,
+  setRoom,
+  room,
+  setActiveComponent,
+  setSelectedUser,
+  screen,
+}) => {
+  const navigate = useNavigate();
+  const authStore = useSelector((state) => state.auth?.me);
+  const chatStore = useSelector((state) => state.chat);
+  const { notSeen } = chatStore;
+  let number = notSeen;
   const dispatch = useDispatch();
 
   const [searchText, setSearchText] = useState("");
@@ -34,23 +43,31 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
 
 
 
-
-
   const filteredChatRooms = chatRoomList.filter((chatRoom) => {
-    let name = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0].user.fullNameEn
-    return (name.toLowerCase().includes(searchText.toLowerCase()))
-  }
-
-  );
+    let name = chatRoom.participants.filter(
+      (p) => p.userId !== authStore?.id
+    )[0].user.fullNameEn;
+    return name.toLowerCase().includes(searchText.toLowerCase());
+  });
+  const containerStyle = {
+    width: "200px",
+    height: "200px",
+  };
 
   const ChatElement = () => {
+    const filteredUsers = filteredChatRooms.filter(
+      (e) => e.participants.length === 2
+    );
+    const filteredGroups = filteredChatRooms.filter(
+      (e) => e.participants.length > 2
+    );
     return (
       <Box
         sx={{
           width: "100%",
           height: 65,
           borderRadius: 1,
-          backgroundColor: "#fff",
+          // backgroundColor: "#fff",
         }}
       >
         {filteredChatRooms.map((chatRoom, i) => {
@@ -89,20 +106,21 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
                 </StyledBadge>
                 <Stack>
                   <Typography variant="subtitle1">{name}</Typography>
-                  <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
+                  <Typography variant="caption">{chatRoom.messages[0]?.text}</Typography>
                 </Stack>
 
               </Stack>
               <Stack spacing={2} alignItems="center">
                 <Typography sx={{ fontWeight: 600 }} variant="caption">
-                  {chatRoom.messages[0].createdAt.slice(11, 16)}
+                  {chatRoom.messages[0]?.createdAt.slice(11, 16)}
                 </Typography>
-                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0].userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
+                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0]?.userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
 
                   (
                     <Checks size={25} weight="light" color="blue" />
 
                   )}
+                 
                  
                 {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
               </Stack>
@@ -119,7 +137,7 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
       sx={{
         position: "relative",
         height: "100vh",
-        width: '100%',
+        width: "100%",
         backgroundColor: "#F8FAFF",
         boxShadow: "0px 0px 2px",
       }}
@@ -140,7 +158,10 @@ const ChatRoom = ({ chatRoomList, setRoom, room, setActiveComponent, setSelected
             <SearchIconWrapper>
               <MagnifyingGlass color="#57385c" />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
+            <StyledInputBase
+              placeholder="Search"
+              onChange={(e) => setSearchText(e.target.value)}
+            />
           </Search>
           <Divider />
           <ChatElement />

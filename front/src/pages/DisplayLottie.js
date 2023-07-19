@@ -13,8 +13,10 @@ export default class DisplayLottie extends Component {
 
     return (
       <Suspense>
+      <div style={this.props.style}>
         <Lottie options={defaultOptions} isClickToPauseDisabled={true} />
-      </Suspense>
+      </div>
+    </Suspense>
     );
   }
 }

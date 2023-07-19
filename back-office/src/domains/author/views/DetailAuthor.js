@@ -1,6 +1,5 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { rows } from '../../../constants/authorData'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchauthor } from '../../../store/author';
 import { useEffect } from 'react';
@@ -14,10 +13,8 @@ function DetailAuthor() {
 
     useEffect(() => {
         dispatch(fetchauthor(authorId));
-        
-      }, [dispatch]);
-      console.log('test', author )
-      
+      }, [authorId,dispatch]);
+    
 
     return (
         <div className='container'>

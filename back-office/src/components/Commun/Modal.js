@@ -20,15 +20,15 @@ export default function App({
   body,
   normal,
   ofDelete,
-  bodOfDelete
+  bodOfDelete,
+  confirm,
+  fn
 }) {
   return (
-    <>
       <MDBModal
         show={basicModal}
         setShow={setBasicModal}
         toggle={toggleShow}
-        tabIndex="-1"
       >
         <MDBModalDialog centered>
           <MDBModalContent>
@@ -70,11 +70,11 @@ export default function App({
               {normal ? (
                 <>
                   <CloseButton onClick={toggleShow} />
-                  <SaveButton />
+                  <SaveButton onClick={fn} />
                 </>
               ) : (
                 <>
-                  <button className="full bg-danger">Yes</button>
+                  <button className="full bg-danger" onClick={confirm}>Yes</button>
                   <button
                     type="button"
                     className="btn btn-outline-danger"
@@ -88,6 +88,5 @@ export default function App({
           </MDBModalContent>
         </MDBModalDialog>
       </MDBModal>
-    </>
   );
 }

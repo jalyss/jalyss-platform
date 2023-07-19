@@ -27,10 +27,12 @@ import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
 import { LikesModule } from './likes/likes.module';
 import { TrainingModule } from './domains/training/training.module';
 import { QuestionsModule } from './domains/questions/questions.module';
-import { SessionFeedbacksModule } from './domains/session-feedbacks/session-feedbacks.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 // import { FrontendMiddleware } from './middlewere/front.middlewere';
+
+import { ProvidersModule } from './domains/providers/providers.module';
+
 
 @Module({
   imports: [
@@ -52,7 +54,6 @@ import { join } from 'path';
     LikesModule,
     TrainingModule,
     QuestionsModule,
-    SessionFeedbacksModule,
     ServeStaticModule.forRoot({
       serveStaticOptions: {
         maxAge: 604800, // one week
@@ -64,6 +65,9 @@ import { join } from 'path';
       // renderPath: '/back-office',
     }),
     
+   
+    ProvidersModule,
+   
     
   ],
   controllers: [AppController],
@@ -73,4 +77,5 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
   //   consumer.apply(FrontendMiddleware).forRoutes('*');
   }
+
 }
