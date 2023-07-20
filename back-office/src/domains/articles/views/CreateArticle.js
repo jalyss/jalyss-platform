@@ -33,7 +33,7 @@ function CreateArticle() {
   const [article, setArticle] = useState({});
   const [cover, setCover] = useState(null);
   const [progress, setProgress] = useState(null);
-  
+
   const authorStore = useSelector((state) => state.author);
   const articleTypeStore = useSelector((state) => state.articleType);
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
@@ -83,7 +83,7 @@ function CreateArticle() {
     setCover(file);
   };
 
-    return (
+  return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Add Article</h2>
       <form className="checkout-form" onSubmit={submitCreate}>
@@ -192,12 +192,9 @@ function CreateArticle() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required >
+                <FormControl fullWidth required>
                   <InputLabel id="category">Category</InputLabel>
                   <Select
-                 
-                
-                   
                     labelId="category"
                     name="categoryId"
                     value={article?.categoryId || ""}
@@ -216,8 +213,6 @@ function CreateArticle() {
                 <FormControl fullWidth required>
                   <InputLabel id="publishingHouse">Publishing House</InputLabel>
                   <Select
-                  
-                 
                     labelId="publishingHouse"
                     name="publishingHouseId"
                     value={article?.publishingHouseId || ""}
@@ -236,8 +231,6 @@ function CreateArticle() {
                 <FormControl fullWidth required>
                   <InputLabel id="type">Type</InputLabel>
                   <Select
-                  
-                 
                     labelId="type"
                     name="typeId"
                     value={article?.typeId || ""}
@@ -256,14 +249,12 @@ function CreateArticle() {
                 <FormControl fullWidth required>
                   <InputLabel id="branch">Branch</InputLabel>
                   <Select
-                  
-                  
                     labelId="branch"
                     name="branchId"
-                    value={article?.ArticleByBranch?.branchId || ""}
+                    value={article?.branchId || ""}
                     onChange={handleChange}
                   >
-                    <MenuItem value={null}>--select option--</MenuItem>
+                    <MenuItem value="">--select option--</MenuItem>
                     {branchStore.branches.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
                         {item.name}
@@ -276,14 +267,13 @@ function CreateArticle() {
                 <FormControl fullWidth required>
                   <InputLabel id="author">Author</InputLabel>
                   <Select
-                  
-                  
                     labelId="author"
                     name="authorIds"
-                    value={article?.ArticleByAuthor?.authorId || ""}
+                    multiple
+                    value={article?.authorIds || []}
                     onChange={handleChange}
                   >
-                    <MenuItem value={null}>--select option--</MenuItem>
+                    <MenuItem value="">--select option--</MenuItem>
                     {authorStore.authors.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
                         {item.nameAr}
@@ -295,9 +285,7 @@ function CreateArticle() {
             </Grid>
           </div>
         </div>
-        {progress && (
-          <ProgressBar now={progress} label={`${progress}%`} />
-        )}
+        {progress && <ProgressBar now={progress} label={`${progress}%`} />}
         <div className="w-100 d-flex justify-content-center">
           <Button
             type="submit"
