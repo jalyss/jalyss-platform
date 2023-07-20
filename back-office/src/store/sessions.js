@@ -54,6 +54,25 @@ export const editReq = createAsyncThunk(
   }
 );
 
+export const deletsessionsReq = createAsyncThunk(
+  "session/deletsessionsReq",
+  async (id, { dispatch }) => {
+   
+    let token = JSON.parse(localStorage.getItem("tokensession"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/SessionRequest/${id}`,
+      configs
+    );
+    dispatch(fetchsessionsRequest());
+
+    return response.data;
+  }
+);
 
 export const fetchOnesession = createAsyncThunk(
   "session/session",

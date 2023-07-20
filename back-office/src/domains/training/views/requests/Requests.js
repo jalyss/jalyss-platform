@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { fetchsessionsRequest } from "../../../../store/sessions";
+import {
+  deletsessionsReq,
+  fetchsessionsRequest,
+} from "../../../../store/sessions";
 import { Box } from "@mui/material";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import CloseButton from "../../../../components/Commun/buttons/CloseButton";
+import Modall from "../../../../components/Commun/Modal";
+import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 
 const style = {
   position: "absolute",
@@ -32,18 +37,22 @@ function Requests() {
   const { sessionRequest } = requestStore;
   const [rows, setRows] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [userName, setUserName] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const [basicModal, setBasicModal] = useState(false);
+  const [idOfDelete, setIdOfDelete] = useState("");
   const handleRowClick = (params) => {
     setSelectedRow(params.row);
     handleOpen();
   };
 
-
-  console.log(sessionRequest,"req");
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
+  console.log(sessionRequest, "req");
   useEffect(() => {
     dispatch(fetchsessionsRequest());
   }, []);
@@ -69,7 +78,29 @@ function Requests() {
       setRows(updatedRows);
     }
   }, [sessionRequest]);
+  useEffect(() => {
+    if (basicModal && idOfDelete) {
+      const row = rows.find((row) => row.id === idOfDelete);
+      if (row) {
+        setUserName(row.fullName);
+        console.log("row", row);
+      }
+    }
+  }, [basicModal, idOfDelete, rows]);
 
+  const handleDeleteReq = (id) => {
+    dispatch(deletsessionsReq(id))
+      .then((res) => {
+        if (res.error) {
+          showErrorToast(res.error.message);
+        } else {
+          showSuccessToast("Request has been deleted");
+        }
+      })
+      .catch((error) => {
+        showErrorToast(error.message);
+      });
+  };
   const columns = [
     {
       field: "user",
@@ -132,14 +163,33 @@ function Requests() {
       width: 150,
       renderCell: (params) => (
         <a onClick={() => handleRowClick(params)}>View Resume</a>
-      )
+      ),
     },
     {
       field: "status",
-      headerName: "status",
+      headerName: "Status",
       width: 100,
-      editable: true,
       sortable: false,
+      renderCell: (params) => {
+        const status = params.value;
+        let statusStyle = {};
+        
+        if (status === "confirmed") {
+          statusStyle = { color: "green", backgroundColor: "lightgreen" , borderRadius: "4px",  padding: "4px 8px",
+          padding: "4px 8px"};
+        } else if (status === "refused") {
+          statusStyle = { color: "red", backgroundColor: "salmon", borderRadius: "4px" ,  padding: "4px 8px",
+          padding: "4px 8px"};
+        } else if (status === "pending") {
+          statusStyle = { color: "orange", backgroundColor: "lightyellow", borderRadius: "4px", padding: "4px 8px" };
+        }
+        
+        return (
+          <div style={statusStyle}>
+            {status}
+          </div>
+        );
+      },
     },
     {
       field: "createdAt",
@@ -167,7 +217,8 @@ function Requests() {
             label="Delete"
             color="error"
             onClick={() => {
-              // Handle delete action
+              toggleShow();
+              setIdOfDelete(id);
             }}
           />,
         ];
@@ -199,21 +250,38 @@ function Requests() {
           disableRowSelectionOnClick
         />
       </Box>
+
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-        {selectedRow && selectedRow.resume &&
+          {selectedRow && selectedRow.resume && (
             <embed
               src={selectedRow.resume}
               title="Resume"
-             
               style={iframeStyle}
             ></embed>
-        }
+          )}
           <div className="d-flex justify-content-end align-items-center">
             <CloseButton onClick={handleClose} />
           </div>
         </Box>
       </Modal>
+      <Modall
+        basicModal={basicModal}
+        setBasicModal={setBasicModal}
+        toggleShow={toggleShow}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            {`Are you sure you want to delete `}
+            <span style={{ color: "red" ,margin:"10px"}}>{userName}</span>
+            {` Request?`}
+          </div>
+        }
+        confirm={() => {
+          handleDeleteReq(idOfDelete);
+          setBasicModal(false);
+        }}
+      />
     </div>
   );
 }

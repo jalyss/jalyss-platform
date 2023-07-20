@@ -44,7 +44,7 @@ export class SessionRequestController {
     return this.sessionRequestService.update(id, dto);
   }
 
-  @Delete(':sessionId')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.sessionRequestService.remove(id);
   }

@@ -399,7 +399,7 @@ model SessionRequest {
 }
 
 model RequestCategories {
-  sessionRequest   SessionRequest  @relation(fields: [sessionRequestId], references: [id])
+  sessionRequest   SessionRequest  @relation(fields: [sessionRequestId], references: [id],onDelete: Cascade)
   sessionRequestId String
   category         ArticleCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId       String

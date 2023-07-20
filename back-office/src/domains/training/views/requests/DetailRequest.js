@@ -75,14 +75,14 @@ function DetailRequest() {
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>Request</h2>
+      <h2 className="mt-5">Request</h2>
       <form className="checkout-form">
         <div className="d-flex flex-wrap justify-content-center">
-          <div className="image-upload">
+          <div className="image-upload mt-4">
             <img src={request?.user?.avatar?.path} alt="avatar" />
           </div>
 
-          <div className="d-flex justify-content-center w-100 m-3">
+          <div className="d-flex justify-content-center align-items-center m-3">
             <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
@@ -113,10 +113,17 @@ function DetailRequest() {
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="center">
+                    <TableCell className="fw-bold">Fields:</TableCell>
+                    <TableCell>
+                      <span>{request?.RequestCategories?.map((elem)=>(
+                        elem.category.nameEn
+
+                      )).join(" , ")}</span>
+                    </TableCell>
+                    <TableCell className="fw-bold">
                       Resume:
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell >
                       <CloseButton
                         modifTitle="View Resume"
                         onClick={handleOpen}
@@ -126,7 +133,7 @@ function DetailRequest() {
                   </TableRow>
                   {request?.status === "pending" ? (
                     <TableRow>
-                      <TableCell>
+                      <TableCell >
                         <button
                           type="button"
                           class="btn btn-success"
@@ -136,7 +143,7 @@ function DetailRequest() {
                         </button>
                       </TableCell>
 
-                      <TableCell>
+                      <TableCell >
                         <button
                           type="button"
                           class="btn btn-danger"
@@ -147,15 +154,10 @@ function DetailRequest() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    <div
-                      className="form-group"
-                      style={{
-                        position: "absolute",
-                        bottom: "10px",
-                        right: "10px",
-                      }}
-                    >
-                      <button
+                    <TableRow>
+                  <TableCell >
+                    
+                    <button
                         type="button"
                         className={`btn ${
                           request?.status === "confirmed"
@@ -167,7 +169,10 @@ function DetailRequest() {
                       >
                         {request?.status}
                       </button>
-                    </div>
+                    
+                      
+                      </TableCell>
+                    </TableRow>
                   )}
                 </TableBody>
               </Table>

@@ -191,7 +191,10 @@ function Featuress() {
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-            {`Are you sure you want to delete "${labelOfDelete}"?`}
+           
+            {`Are you sure you want to delete `}
+            <span style={{ color: "red" ,margin:"10px"}}>{labelOfDelete}</span>
+            {` Feature?`}
           </div>
         }
         confirm={() => {
