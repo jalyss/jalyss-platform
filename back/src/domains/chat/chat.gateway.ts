@@ -144,7 +144,7 @@ export class ChatGateway {
   private async chatRoomList(participants: any) {
    await participants.forEach(async (e: any,i:number) => {
       const rooms = await this.ChatRoomService.findAll(e.userId);
-      console.log(`room of ${i}`,e.userId);
+      
       
       this.server.emit(`chat-rooms/${e.userId}`, rooms);
     });

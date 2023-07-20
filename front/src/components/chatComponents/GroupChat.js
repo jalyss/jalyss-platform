@@ -250,12 +250,12 @@ const ChatRoom = ({
   };
 
   const ChatElement = () => {
-    const filteredUsers = filteredChatRooms.filter(
-      (e) => e.participants.length === 2
-    );
-    const filteredGroups = filteredChatRooms.filter(
-      (e) => e.participants.length > 2
-    );
+    // const filteredUsers = filteredChatRooms.filter(
+    //   (e) => e.participants.length === 2
+    // );
+    // const filteredGroups = filteredChatRooms.filter(
+    //   (e) => e.participants.length > 2
+    // );
     return (
       <Box
         sx={{
