@@ -103,6 +103,7 @@ const Conversation = ({
             if(!selectedUser)
             setSelectedUser(res.data)
             setExist(res.data.id);
+            setInbox([])
           }).catch(err=>console.log(err))
       );
   }, [myId, userId]);
