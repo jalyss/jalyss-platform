@@ -100,6 +100,8 @@ import Features from "../domains/training/views/features/Features";
 import SessionDetail from "../domains/training/views/sessions/SessionDetail";
 import Requests from "../domains/training/views/requests/Requests";
 import DetailRequest from "../domains/training/views/requests/DetailRequest";
+import Gains from "../domains/training/views/gain/Gains";
+import Prerequires from "../domains/training/views/prerequire/Prerequires";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -231,6 +233,8 @@ function Router() {
               <Route path="features" element={<Features />} />
               <Route path="requests" element={<Requests />} />
               <Route path="requests/:id" element={<DetailRequest />} />
+              <Route path="gains" element={<Gains />} />
+              <Route path="prerequires" element={<Prerequires />} />
 
 
              

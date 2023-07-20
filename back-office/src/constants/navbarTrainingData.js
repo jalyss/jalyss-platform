@@ -18,6 +18,14 @@ export const navbarTrainigData = [
   {
     name: "Requests",
     path: "/training/requests",
+  },
+  {
+    name: "Gain",
+    path: "/training/gains",
+  },
+  {
+    name: "Prerequire",
+    path: "/training/prerequires",
   }
   
 

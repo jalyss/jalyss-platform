@@ -464,6 +464,8 @@ model frequentilyQuestion {
 model WhatYouWillLearn {
   id                         String                       @id @default(uuid())
   content                    String
+  createdAt                  DateTime @default(now())
+
   SessionHasWhatYouWillLearn SessionHasWhatYouWillLearn[]
   LectureHasWhatYouWillLearn LectureHasWhatYouWillLearn[]
 }
@@ -480,7 +482,7 @@ model SessionHasWhatYouWillLearn {
 model LectureHasWhatYouWillLearn {
   lecture            Lecture          @relation(fields: [lectureId], references: [id], onDelete: Cascade)
   lectureId          String
-  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id])
+  WhatYouWillLearn   WhatYouWillLearn @relation(fields: [WhatYouWillLearnId], references: [id],onDelete: Cascade)
   WhatYouWillLearnId String
 
   @@unique(fields: [lectureId, WhatYouWillLearnId], name: "joinerrr")
@@ -489,6 +491,8 @@ model LectureHasWhatYouWillLearn {
 model Prerequire {
   id                   String                 @id @default(uuid())
   content              String
+  createdAt DateTime @default(now())
+
   sessionHasPrerequire sessionHasPrerequire[]
 }
 
