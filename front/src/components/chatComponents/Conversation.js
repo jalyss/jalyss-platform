@@ -72,12 +72,7 @@ const Conversation = ({
     if (selectedUser) scrollToBottom();
   }, [inbox, selectedUser]);
 
-  // useEffect(() => {
-  //   if (userId)
-  //     dispatch(fetchUser(userId))
-  //       .then((res) => setUserName(user?.fullNameEn))
-  //       .catch((err) => {});
-  // }, [userId]);
+
 
   useEffect(() => {
     axios
@@ -143,6 +138,7 @@ const Conversation = ({
           userId: myId,
           num: number,
         };
+        console.log('seen');
         socket.emit("msg-seen", payload);
       }
     }
@@ -150,6 +146,7 @@ const Conversation = ({
 
   useEffect(() => {
     function getMsg(value) {
+      console.log(value);
       setInbox((Inbox) => [...Inbox, value]);
     }
 

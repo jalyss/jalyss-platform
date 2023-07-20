@@ -14,6 +14,7 @@ export class MessagesService {
         userId,
         chatRoomId,
       },
+      include:{user:{select:{avatar:true,fullNameAr:true,fullNameEn:true}}}
     });
   }
   async getChatRoomMessages(chatRoomId: string, numberMessages: number) {
