@@ -171,7 +171,13 @@ const Conversation = ({
       }
     }
     function getInbox(data) {
-      setInbox(data);
+      let aux = [];
+          for (let i = data.length - 1; i >= 0; i--) {
+            aux.push(data[i]);
+          }
+
+          setInbox(aux);
+     
     }
     function getChatRoomCreated(data) {
       setExist(data.id);
