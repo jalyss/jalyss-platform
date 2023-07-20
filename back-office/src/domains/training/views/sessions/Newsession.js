@@ -15,11 +15,13 @@ import Select from "react-select";
 import axios from "axios";
 import { fetchFeatures } from "./../../../../store/tarifss";
 import TrainingStepper from "../../../../components/TrainingStepper";
+import TarifSection from "../../../../components/TarifSection";
 const Addtarif = () => {
   const [addsession, setAddsession] = useState({});
   const categoriesStore = useSelector((state) => state.category);
   const featuresStore = useSelector((state) => state.tarifss.features);
   const [selectedFeaturesIds, setSelectedFeaturesIds] = useState([]);
+  const [selectedLabels, setSelectedLabels] = useState([]);
   const [cover, setCover] = useState("");
 
   const { categories } = categoriesStore;
@@ -42,6 +44,13 @@ const Addtarif = () => {
       [name]: value,
     }));
   };
+  useEffect(() => {
+    const selectedLabels = selectedFeaturesIds.map((id) => {
+      const feature = featuresStore?.items.find((item) => item.id === id);
+      return feature ? feature.label : '';
+    });
+    setSelectedLabels(selectedLabels);
+  }, [selectedFeaturesIds]);
 
   const submitsession = async (event) => {
     event.preventDefault();
@@ -88,7 +97,7 @@ const Addtarif = () => {
     fileInputRef.current.click(); // Programmatically trigger the file input click event
   };
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100 card-container">
+    <div className="d-flex align-items-center justify-content-center "style={{marginTop:50,marginBottom:200}}>
       <div style={{ width: "50rem" }} className="text-center custom-card">
         <label class="form-label mt-5" for="customFile">
           Image{" "}
@@ -191,7 +200,8 @@ const Addtarif = () => {
             placeholder="Add features"
           />
         </div>
-         <TrainingStepper/>
+         {/* <TrainingStepper/> */}
+         <TarifSection selectedLabels={selectedLabels}/>
         <SaveButton variant="primary" mt={20} onClick={submitsession} />
       </div>
     </div>

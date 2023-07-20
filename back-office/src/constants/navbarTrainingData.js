@@ -15,6 +15,10 @@ export const navbarTrainigData = [
     name: "Features",
     path: "/training/features",
   },
+  {
+    name: "Requests",
+    path: "/training/requests",
+  }
   
 
 ];

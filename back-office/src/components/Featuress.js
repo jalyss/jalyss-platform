@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifss";
-import { DataGrid, GridActionsCellItem, GridPagination } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  
+} from "@mui/x-data-grid";
 
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
@@ -19,21 +23,25 @@ function Featuress() {
   const [editLabel, setEditLabel] = useState("");
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
+  const [labelOfDelete, setLabelOfDelete] = useState("");
+
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 5,
     page: 0,
   });
   const [rowCount, setRowCount] = React.useState(0);
-React.useEffect(() => {
-  
-  setRowCount(features.items?.length)
-  
-}, [rowCount]);
-
-
+  React.useEffect(() => {
+    setRowCount(features.items?.length);
+  }, [rowCount]);
 
   useEffect(() => {
     if (editModal && editRowId) {
+      const row = rows.find((row) => row.id === editRowId);
+      if (row) {
+        setEditLabel(row.label);
+      }
+    }
+    if (basicModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
         setEditLabel(row.label);
@@ -64,6 +72,14 @@ React.useEffect(() => {
   const toggleShow2 = () => {
     setEditModal(!editModal);
   };
+  useEffect(() => {
+    if (basicModal && idOfDelete) {
+      const row = rows.find((row) => row.id === idOfDelete);
+      if (row) {
+        setLabelOfDelete(row.label);
+      }
+    }
+  }, [basicModal, idOfDelete, rows]);
 
   const handleDeleteFeatureClick = (id) => {
     dispatch(deleteFeatures(id))
@@ -92,13 +108,11 @@ React.useEffect(() => {
       .catch((error) => {
         showErrorToast(error.message);
       });
-    
+
     setEditRowId("");
     setEditLabel("");
     toggleShow2();
   };
-
-  
 
   const columns = [
     {
@@ -122,7 +136,7 @@ React.useEffect(() => {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
+            icon={<AiFillEdit style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
             color="inherit"
@@ -134,7 +148,7 @@ React.useEffect(() => {
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
-            color="inherit"
+            color="error"
             onClick={() => {
               toggleShow();
               setIdOfDelete(id);
@@ -150,7 +164,7 @@ React.useEffect(() => {
       <div className="position-relative">
         <div className="mb-3">Feature's List</div>
         <Box sx={{ height: 600, width: "100%" }}>
-        <DataGrid
+          <DataGrid
             rows={rows}
             columns={columns}
             initialState={{
@@ -166,9 +180,7 @@ React.useEffect(() => {
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             rowCount={rowCount}
-        
             paginationMode="server"
-        
           />
         </Box>
       </div>
@@ -179,7 +191,7 @@ React.useEffect(() => {
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-            Are you sure you want to delete this feature?
+            {`Are you sure you want to delete "${labelOfDelete}"?`}
           </div>
         }
         confirm={() => {

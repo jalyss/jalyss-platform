@@ -97,13 +97,11 @@ function SessionDetail() {
                   </Table>
                 </TableContainer>
               </div>
-            </div>
+            </div>  
           </form>
         </div>
         <div className="w-100 d-flex justify-content-center align-items-center flex-column m-3 ">
-          <div className="d-flex justify-content-end mb-4">
-            <CreateButton title="add Tarif " />
-          </div>
+       
           <TableContainer className="w-100" component={Paper}>
             <Table aria-label="simple table">
               <TableBody>
@@ -113,7 +111,7 @@ function SessionDetail() {
                   <TableCell className="fw-bold">Features</TableCell>
                   <TableCell>
                     <span>
-                      {" "}
+                      
                       {sessions?.SessionHasFeatures?.map((elem) => (
                         <div>{elem?.feature?.label}</div>
                       ))}

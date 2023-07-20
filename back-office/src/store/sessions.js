@@ -19,7 +19,40 @@ export const fetchsessions = createAsyncThunk(
   }
 );
 
+export const fetchsessionsRequest = createAsyncThunk(
+  "session/fetchsessionsRequest",
+  async () => {
+    const response = await axios.get(`${config.API_ENDPOINT}/SessionRequest`);
 
+    return response.data;
+  }
+);
+export const fetchOnesessionReq = createAsyncThunk(
+  "session/sessionReq",
+  async (id) => {
+    const response = await axios.get(`${config.API_ENDPOINT}/SessionRequest/${id}`);
+    return response.data;
+  }
+);
+export const editReq = createAsyncThunk(
+  "sessions/editReq",
+  async (args) => {
+    const { id, status } = args;
+    let token = JSON.parse(localStorage.getItem("token"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/SessionRequest/${id}`,
+      status,
+      configs
+    );
+   
+    return response.data;
+  }
+);
 
 
 export const fetchOnesession = createAsyncThunk(
@@ -93,7 +126,6 @@ export const FetchSessionsHasLectures = createAsyncThunk(
       `${config.API_ENDPOINT}/SessionHasLecture`
     );
 
-    
     return response.data;
   }
 );
@@ -101,12 +133,11 @@ export const FetchSessionsHasLectures = createAsyncThunk(
 export const CreateSessionHasLecture = createAsyncThunk(
   "sessionHasLect/addSessionHasLect",
   async (body, { dispatch }) => {
-    
     const response = await axios.post(
       `${config.API_ENDPOINT}/SessionHasLecture`,
       body
     );
-    dispatch(fetchcours())
+    dispatch(fetchcours());
     return response.data;
   }
 );
@@ -115,11 +146,15 @@ export const sessionSlice = createSlice({
   name: "sessions",
   initialState: {
     session: null,
+    request:null,
     sessions: {
       items: [],
       count: 0,
     },
     sessionHasLect: {
+      items: [],
+    },
+    sessionRequest: {
       items: [],
     },
     error: null,
@@ -135,8 +170,14 @@ export const sessionSlice = createSlice({
     builder.addCase(fetchOnesession.fulfilled, (state, action) => {
       state.session = action.payload;
     });
+    builder.addCase(fetchOnesessionReq.fulfilled, (state, action) => {
+      state.request = action.payload;
+    });
     builder.addCase(FetchSessionsHasLectures.fulfilled, (state, action) => {
       state.sessionHasLect = action.payload;
+    });
+    builder.addCase(fetchsessionsRequest.fulfilled, (state, action) => {
+      state.sessionRequest = action.payload;
     });
   },
 });

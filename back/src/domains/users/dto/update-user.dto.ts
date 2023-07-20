@@ -29,3 +29,7 @@ export class UpdateUserStatusDto {
     @ApiProperty({required:true})
     isActive!: boolean
 }
+export class UpdateUserIsCoach {
+    @ApiProperty({required:true})
+    isCoach!: boolean
+}
