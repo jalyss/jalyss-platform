@@ -19,6 +19,7 @@ import EditEmployee from "../domains/employees/views/EditEmployee";
 import Article from "../domains/articles/Article";
 import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
+import EditArticle from "../domains/articles/views/EditArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
@@ -197,7 +198,9 @@ function Router() {
                 element={<ArticleByBranchList />}
               />
               <Route path="create" element={<CreateArticle />} />
+              <Route path="editArticle" element={<EditArticle />} />
             </Route>
+            
 
             <Route path="training" element={<Training />}>
               
