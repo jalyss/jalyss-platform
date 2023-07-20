@@ -39,7 +39,7 @@ function UpdateBlog() {
 
   useEffect(() => {
     if (blog) {
-      
+   
       blog.content.split("width");
       setNewContent(blog.content);
       setCover(blog.cover);
