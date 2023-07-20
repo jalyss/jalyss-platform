@@ -22,14 +22,6 @@ import StyledBadge from "../Commun/StyledBadge";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOneRoom, notSeenMessages } from "../../store/chat";
 import { useNavigate } from "react-router-dom";
-import { Button } from "antd";
-import "../../assets/styles/conversation.css";
-import { BsFillPersonLinesFill } from "react-icons/bs";
-import { MdOutlineGroups } from "react-icons/md";
-import { PiSmileySadThin } from "react-icons/pi";
-import DisplayLottie from "./../../pages/DisplayLottie";
-import empty from "../../constants/empty.json";
-import noGroups from "../../constants/noGroups.json";
 
 const ChatRoom = ({
   chatRoomList,
@@ -47,41 +39,9 @@ const ChatRoom = ({
   const dispatch = useDispatch();
 
   const [searchText, setSearchText] = useState("");
-  const [identifier, setIdentifier] = useState("");
-  const [users, setUsers] = useState(true);
-  const [groups, setGroups] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isPersonIconActive, setIsPersonIconActive] = useState(true);
-  const [isGroupIconActive, setIsGroupIconActive] = useState(false);
+  const [identifier, setIdentifier] = useState("")
 
-  const handlePersonIconClick = () => {
-    setIsPersonIconActive(true);
-    setIsGroupIconActive(false);
-  };
 
-  const handleGroupIconClick = () => {
-    setIsPersonIconActive(false);
-    setIsGroupIconActive(true);
-  };
-  const handleMouseEnter = () => {
-    setIsHovering(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-  };
-
-  const handleButtonClick = (stack) => {
-    if (stack === "users") {
-      setUsers(true);
-      setGroups(false);
-      handlePersonIconClick();
-    } else if (stack === "groups") {
-      setUsers(false);
-      setGroups(true);
-      handleGroupIconClick();
-    }
-  };
 
   const filteredChatRooms = chatRoomList.filter((chatRoom) => {
     let name = chatRoom.participants.filter(
@@ -110,193 +70,68 @@ const ChatRoom = ({
           // backgroundColor: "#fff",
         }}
       >
-        {filteredChatRooms
-          .filter((e) => e.participants.length === 2)
-          .map((chatRoom, i) => {
-            setIdentifier(chatRoom.id);
+        {filteredChatRooms.map((chatRoom, i) => {
+          setIdentifier(chatRoom.id);
 
-            let name = "";
-            let user = chatRoom.participants.filter(
-              (p) => p.userId !== authStore?.id
-            )[0];
-            if (chatRoom.name === null) name = user.user.fullNameEn;
-            else {
-              name = chatRoom.name;
-            }
 
-            return (
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                key={i}
-                onClick={() => {
-                  setSelectedUser(user);
+          let name = ''
+          let user = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0]
+          if (chatRoom.name === null)
+            name = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0].user.fullNameEn
+          else {
+            name = chatRoom.name
+          }
+          return (
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              key={i}
+              onClick={() => {
+                setSelectedUser(user)
+                
+                if (screen === 'md')
+                setActiveComponent("conversation")
+                navigate(`/chat/${user?.userId}`)
 
-                  if (screen === "md") setActiveComponent("conversation");
-                  navigate(`/chat/${user?.userId}`);
-                }}
-              >
-                {users && (
-                  <>
-                    <Stack direction="row" spacing={2}>
-                      <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        variant="dot"
-                      >
-                        <Avatar
-                          src={user.user.avatar ? user.user.avatar.path : Icon}
-                        />
-                      </StyledBadge>
-                      <Stack>
-                        <Typography variant="subtitle1">{name}</Typography>
-                        <Typography variant="caption">
-                          {chatRoom.messages[0].text}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                    <Stack spacing={2} alignItems="center">
-                      <Typography sx={{ fontWeight: 600 }} variant="caption">
-                        {chatRoom.messages[0].createdAt.slice(11, 16)}
-                      </Typography>
-                      {chatRoom?._count?.messages ? (
-                        <Badge
-                          color="primary"
-                          badgeContent={chatRoom?._count?.messages}
-                        ></Badge>
-                      ) : chatRoom.messages[0].userId !== authStore.id ? (
-                        <Checks size={25} weight="thin" color="green" />
-                      ) : (
-                        <Checks size={25} weight="light" color="blue" />
-                      )}
-                    </Stack>
-                  </>
-                )}
+              }}
+            >
+              <Stack direction="row" spacing={2}>
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  variant="dot"
+                >
+                  <Avatar src={Icon} />
+                </StyledBadge>
+                <Stack>
+                  <Typography variant="subtitle1">{name}</Typography>
+                  <Typography variant="caption">{chatRoom.messages[0]?.text}</Typography>
+                </Stack>
+
               </Stack>
-            );
-          })}
-        {filteredChatRooms
-          .filter((e) => e.participants.length > 2)
-          .map((chatRoom, i) => {
-            setIdentifier(chatRoom.id);
+              <Stack spacing={2} alignItems="center">
+                <Typography sx={{ fontWeight: 600 }} variant="caption">
+                  {chatRoom.messages[0]?.createdAt.slice(11, 16)}
+                </Typography>
+                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0]?.userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
 
-            let name = "";
-            let user = chatRoom.participants.filter(
-              (p) => p.userId !== authStore?.id
-            )[0];
-            if (chatRoom.name === null) name = user.user.fullNameEn;
-            else {
-              name = chatRoom.name;
-            }
-            return (
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                key={i}
-                onClick={() => {
-                  setSelectedUser(user);
+                  (
+                    <Checks size={25} weight="light" color="blue" />
 
-                  if (screen === "md") setActiveComponent("conversation");
-                  navigate(`/chat/${identifier}`);
-                }}
-              >
-                {groups && (
-                  <div>
-                    <Stack direction="row" spacing={2}>
-                      <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        variant="dot"
-                      >
-                        <Avatar
-                          src={user.user.avatar ? user.user.avatar.path : Icon}
-                        />
-                      </StyledBadge>
-                      <Stack>
-                        <Typography variant="subtitle1">{name}</Typography>
-                        <Typography variant="caption">
-                          {chatRoom.messages[0].text}
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                    <Stack spacing={2} alignItems="center">
-                      <Typography sx={{ fontWeight: 600 }} variant="caption">
-                        {chatRoom.messages[0].createdAt.slice(11, 16)}
-                      </Typography>
-                      {chatRoom?._count?.messages ? (
-                        <Badge
-                          color="primary"
-                          badgeContent={chatRoom?._count?.messages}
-                        ></Badge>
-                      ) : chatRoom.messages[0].userId !== authStore.id ? (
-                        <Checks size={25} weight="thin" color="green" />
-                      ) : (
-                        <Checks size={25} weight="light" color="blue" />
-                      )}
-                    </Stack>
-                  </div>
-                )}
+                  )}
+                 
+                 
+                {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
               </Stack>
-            );
-          })}
+            </Stack>
+          )
+        }
 
-        {users && filteredUsers.length === 0 && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              // marginTop: "10pc",
-            }}
-          >
-            <div style={{ color: "grey" }}>
-              <DisplayLottie
-                animationData={empty}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  margin: "0 auto",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              />
-              No users to show
-            </div>
-          </div>
-        )}
-        {groups && filteredGroups.length === 0 && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-            }}
-          >
-            <div style={{ color: "grey" }}>
-              <DisplayLottie
-                animationData={noGroups}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  margin: "0 auto",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              />
-              No groups to show
-            </div>
-          </div>
         )}
       </Box>
     );
   };
-
   return (
     <Box
       sx={{
@@ -328,82 +163,6 @@ const ChatRoom = ({
               onChange={(e) => setSearchText(e.target.value)}
             />
           </Search>
-          {/* <div className="row">
-  <button
-    variant="h5"
-    className={"col purple-buttonn "}
-    
-    onClick={() => handleButtonClick('users')}
-    
-  >
-    USERS
-  </button>
-  <button
-    variant="h5"
-    className={"col purple-buttonn "}
-    onClick={() => handleButtonClick('groups')}
-    
-  >
-    GROUPS
-  </button>
-</div> */}
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-evenly"
-          >
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              className={`icons ${isPersonIconActive ? "active" : ""}`}
-              style={{ width: "120px", height: "40px", borderRadius: "30px" }}
-              onClick={() => handleButtonClick("users")}
-            >
-              <BsFillPersonLinesFill
-                style={{
-                  color: isPersonIconActive ? "#57385c" : "grey",
-                  fontSize: 15,
-                }}
-              />
-              <Typography
-                style={{
-                  marginLeft: "8px",
-                  fontWeight: "540",
-                  color: isPersonIconActive ? "#57385c" : "grey",
-                }}
-              >
-                Users
-              </Typography>
-            </Stack>
-
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              className={`icons ${isGroupIconActive ? "active" : ""}`}
-              style={{ width: "120px", height: "40px", borderRadius: "30px" }}
-              onClick={() => handleButtonClick("groups")}
-            >
-              <MdOutlineGroups
-                style={{
-                  color: isGroupIconActive ? "#57385c" : "grey",
-                  fontSize: 17,
-                }}
-              />
-              <Typography
-                style={{
-                  marginLeft: "8px",
-                  fontWeight: "540",
-
-                  color: isGroupIconActive ? "#57385c" : "grey",
-                }}
-              >
-                Groups
-              </Typography>
-            </Stack>
-          </Stack>
-
           <Divider />
           <ChatElement />
         </Stack>

@@ -106,3 +106,54 @@
     color: #333;
     border-radius: 4px;
   }
+  .delete-button {
+    margin-right: 50px;
+top: 230px;
+  color: #ffffff;
+  padding: 5px 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.delete-icon {
+  margin-right: 8px; /* Adjust the margin as needed */
+}
+.add-image-button {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-image-icon {
+  margin-right: 8px; /* Adjust the margin as needed */
+}
+.button-container {
+  margin-left: 150px;
+  display: flex;
+  gap: 10px; /* Adjust the gap between buttons */
+  justify-content: center; /* Center the buttons horizontally */
+}
+
+.cancel-button, .save-button {
+  padding: 10px 20px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #f44336; /* Red color for Cancel button */
+}
+
+.save-button {
+  background-color: #4CAF50; /* Green color for Save button */
+}

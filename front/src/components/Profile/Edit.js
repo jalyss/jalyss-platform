@@ -13,7 +13,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-
+import "../../../src/assets/styles/edit.css"
 const Edit = () => {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -32,7 +32,6 @@ const Edit = () => {
   useEffect(() => {
     if (authStore.me) {
       setUser(authStore.me);
-
       console.log(user, "lenna");
     }
   }, [authStore.me]);
@@ -77,23 +76,19 @@ const Edit = () => {
 
   return (
     <form className="checkout-form" onSubmit={submitEditProfile}>
-      <div className="d-flex flex-wrap">
-        <div className="d-flex justify-content-center w-100 m-3">
-          <TableContainer className="w-100" component={Paper}>
+      <div className="two-column-form">
+        <div className="form-column">
+          <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableBody>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("nameAr")}
                   </TableCell>
                   <TableCell align="left">
                     {editMode ? (
                       <input
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         required
                         name="fullNameAr"
                         id="fullNameAr"
@@ -105,21 +100,17 @@ const Edit = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("nameEn")}
                   </TableCell>
                   <TableCell align="left">
                     {editMode ? (
                       <input
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         required
-                        name="fullNameAr"
-                        id="fullNameAr"
+                        name="fullNameEn"
+                        id="fullNameEn"
                         value={user?.fullNameEn}
                         onChange={handleChange}
                       />
@@ -128,11 +119,7 @@ const Edit = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("email")}
                   </TableCell>
@@ -140,7 +127,7 @@ const Edit = () => {
                     {editMode ? (
                       <input
                         required
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         type="email"
                         id="email"
                         name="email"
@@ -152,11 +139,7 @@ const Edit = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("phone")}
                   </TableCell>
@@ -165,7 +148,7 @@ const Edit = () => {
                       <input
                         required
                         type="tel"
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         id="tel"
                         name="tel"
                         value={user?.tel}
@@ -176,34 +159,7 @@ const Edit = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
-                  <TableCell className="fw-bold" align="left">
-                    {t("address")}
-                  </TableCell>
-                  <TableCell align="left">
-                    {editMode ? (
-                      <input
-                        required
-                        class="form-control mt-2"
-                        id="address"
-                        name="address"
-                        value={user?.address}
-                        onChange={handleChange}
-                      />
-                    ) : (
-                      <span>{user?.address}</span>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("country")}
                   </TableCell>
@@ -211,7 +167,7 @@ const Edit = () => {
                     {editMode ? (
                       <input
                         type="tel"
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         id="country"
                         name="countryId"
                         value={user?.country?.nameAr}
@@ -222,18 +178,42 @@ const Edit = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+
+        <div className="form-column">
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableBody>
+                <TableRow>
+                  <TableCell className="fw-bold" align="left">
+                    {t("address")}
+                  </TableCell>
+                  <TableCell align="left">
+                    {editMode ? (
+                      <input
+                        required
+                        className="form-control mt-2"
+                        id="address"
+                        name="address"
+                        value={user?.address}
+                        onChange={handleChange}
+                      />
+                    ) : (
+                      <span>{user?.address}</span>
+                    )}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("city")}
                   </TableCell>
                   <TableCell align="left">
                     {editMode ? (
                       <input
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         id="city"
                         name="cityId"
                         value={user?.city?.nameAr}
@@ -244,18 +224,14 @@ const Edit = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("functionalArea")}
                   </TableCell>
                   <TableCell align="left">
                     {editMode ? (
                       <input
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         id="functionalArea"
                         name="functionalAreaId"
                         value={user?.functionalArea?.nameAr}
@@ -266,40 +242,32 @@ const Edit = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("educationLevel")}
                   </TableCell>
                   <TableCell align="left">
                     {editMode ? (
                       <input
-                        class="form-control"
+                        className="form-control"
                         id="educationLevel"
                         name="educationLevelId"
                         value={user?.educationLevel?.nameAr}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.educationLevel?.nameAr}</span>
+                      <span>{user?.educationLevel?.nameAr} </span>
                     )}
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                  }}
-                >
+                <TableRow>
                   <TableCell className="fw-bold" align="left">
                     {t("jobTitle")}
                   </TableCell>
                   <TableCell align="left">
                     {editMode ? (
                       <input
-                        class="form-control mt-2"
+                        className="form-control mt-2"
                         id="jobTitle"
                         name="jobTitleId"
                         value={user?.jobTitle?.nameAr}
@@ -317,11 +285,7 @@ const Edit = () => {
       </div>
 
       <div className="w-100 d-flex justify-content-center">
-        <button
-          type="submit"
-          className="confirm-button mt-3"
-          onSubmit={submitEditProfile}
-        >
+        <button type="submit" className="confirm-button mt-3">
           <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
         </button>
       </div>

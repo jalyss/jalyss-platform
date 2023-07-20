@@ -158,7 +158,7 @@ const handleRemove = (id) => {
                           setBasicModal(true);
                         }}
                       >
-                        Delete 
+                      
                       </Dropdown.Item>
                       <Dropdown.Item
                         onClick={() => navigate(`/update-blog/${blog.id}`)}

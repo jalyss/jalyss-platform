@@ -61,7 +61,7 @@ function Router() {
               <Route index element={<MyBlogs />} />
               <Route path="my-bookmarks" element={<MyBookmarks />} />
               <Route path="edit" element={<Edit />} />
-              {/* <Route path="bio" element={<Bio />} /> */}
+              <Route path="bio" element={<Bio />} />
               <Route path="orders-history" element={<OrderHistory />} />
             </Route>
 
@@ -73,6 +73,7 @@ function Router() {
             <Route path="*" element={<NoPage />} />
             <Route path="/chat" element={<Chat />}>
             <Route path="/chat/:userId" element={<Conversation />} />
+           
 
             </Route>
             <Route path="training" element={<TrainingPage />} />

@@ -98,9 +98,8 @@ function EditUser() {
       <form className="checkout-form" onSubmit={submitEditProfile}>
         <div className="d-flex flex-wrap justify-content-center">
         {/* <label id="image">{t('image')}</label> */}
-            <div class="image-upload">
+            <div className="image-upload">
             <img src={preview?preview:user?.avatar?.path} alt="taswira" />
-
               { editMode && (
                 <input
                   id="image"
@@ -352,7 +351,8 @@ function EditUser() {
           </button>
         </div>
       </form>
-    </div>):<CropEasy {...{ preview, setOpenCrop, setPreview,setOpp, setAvatar,avatar }}/>
+    </div>
+    ):<CropEasy {...{ preview, setOpenCrop, setPreview,setOpp, setAvatar,avatar }}/>
   )
 
 }
