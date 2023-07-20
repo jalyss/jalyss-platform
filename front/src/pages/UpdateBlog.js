@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 import { useNavigate, useParams } from "react-router-dom";
-import ReactHtmlParser from "react-html-parser";
+
 const { Title } = Typography;
 
 function UpdateBlog() {
@@ -39,7 +39,7 @@ function UpdateBlog() {
 
   useEffect(() => {
     if (blog) {
-      console.log("updateblog", ReactHtmlParser(blog.content));
+   
       blog.content.split("width");
       setNewContent(blog.content);
       setCover(blog.cover);
