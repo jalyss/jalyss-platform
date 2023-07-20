@@ -38,8 +38,8 @@ function Sidebar() {
       borderLeft={!isEng ? "1px solid #d9d9d9" : "none"}
     >
       <div className="sidebarHeader">
-        {/* <img style={{ height: 100 }} src={Logo} alt="logo" /> */}
-        {/* <AiOutlineDown color="black"/> */}
+        <img style={{ height: 100 }} src={Logo} alt="logo" />
+        
       </div>
       <div className="sidebarContent">
         {sidebarDataBranch.map((elem, index) => {
