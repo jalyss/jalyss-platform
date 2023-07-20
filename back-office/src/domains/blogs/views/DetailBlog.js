@@ -78,16 +78,17 @@ function DetailBlog() {
         <div className="row g-0">
           <div className="col-md-4">
             <div className="d-flex flex-column align-items-center">
-              {blog.author.avatar ? (
+              {blog?.author.avatar ? (
                 <img
                   style={{
                     width: "100px",
                     height: "100px",
                     borderRadius: "50%",
                     marginBottom: "10px",
+                    marginTop:"30px",
                   }}
                   className="blogItemAuthorAvatar"
-                  src={blog.author.avatar?.path}
+                  src={blog?.author.avatar?.path}
                   alt="avatar"
                 />
               ) : (
@@ -97,6 +98,7 @@ function DetailBlog() {
                     height: "100px",
                     borderRadius: "50%",
                     marginBottom: "10px",
+                    marginTop:"30px",
                   }}
                   className="blogItemAuthorAvatar"
                   src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
@@ -110,7 +112,7 @@ function DetailBlog() {
                   marginBottom: "50px",
                 }}
               >
-                {blog.author.fullNameEn}
+                {blog?.author.fullNameEn}
               </p>
             </div>
           </div>
@@ -121,10 +123,11 @@ function DetailBlog() {
                   fontSize: "0.8rem",
                   color: "#a9a9a9",
                   fontWeight: "500",
+                  textAlign: "center",
                   marginBottom: "1rem",
                 }}
               >
-                Published {blog.createdAt}
+                Published {blog?.createdAt}
               </p>
               <h1
                 style={{
@@ -133,16 +136,16 @@ function DetailBlog() {
                   marginBottom: "1rem",
                 }}
               >
-                {blog.title}
+                {blog?.title}
               </h1>
-              <div className="categoryInfo" style={{ marginBottom: "1rem" }}>
+              <div className="categoryInfo" style={{ marginBottom: "1rem" ,textAlign: "center",}}>
                 <span className="categoryLabel">Category:</span>
-                <span className="chip">{blog.category.nameEn}</span>
+                <span className="chip">{blog?.category.nameEn}</span>
               </div>
-              {blog.cover ? (
+              {blog?.cover ? (
                 <img
                   style={{ width: "100%", borderRadius: "15px" }}
-                  src={blog.cover?.path}
+                  src={blog?.cover?.path}
                   alt="cover"
                 />
               ) : (
@@ -153,10 +156,10 @@ function DetailBlog() {
                 />
               )}
               <p style={{ padding: "1rem", marginTop: "1.5rem" }}>
-                <span dangerouslySetInnerHTML={{ __html: blog.content }}></span>
+                <span dangerouslySetInnerHTML={{ __html: blog?.content }}></span>
               </p>
             </div>
-            {blog?.confirm === "pending" && (
+            {blog?.confirm === "pending" ? (
               <div
                 className="form-group"
                 style={{
@@ -180,6 +183,27 @@ function DetailBlog() {
                   onClick={toggleShowDelete}
                 >
                   Refuse
+                </button>
+              </div>
+            ) : (
+              <div
+                className="form-group"
+                style={{
+                  position: "absolute",
+                  bottom: "10px",
+                  right: "10px",
+                }}
+              >
+                <button
+                  type="button"
+                  className={`btn ${
+                    blog?.confirm === "confirmed" ? "btn-success" : "btn-danger"
+                  } mb-2`}
+                  style={{ marginLeft: "20px" }}
+                  onClick={toggleShowDelete}
+                  disabled
+                >
+                  {blog?.confirm}
                 </button>
               </div>
             )}
