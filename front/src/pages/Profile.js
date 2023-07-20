@@ -214,7 +214,7 @@ export default function ProfilePage() {
               <MDBCardBody>
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Full Name</MDBCardText>
+                    <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Full Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
@@ -224,20 +224,18 @@ export default function ProfilePage() {
                 </MDBRow>
                 <hr />
                 <MDBRow>
-                  <MDBCol sm="3">
-                    <MDBCardText>Email</MDBCardText>
+                 <MDBCol sm="3">
+                 <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Email</MDBCardText>
+                 </MDBCol>
+                 <MDBCol sm="9">
+                  <MDBCardText className="text-muted">{user.email}</MDBCardText>
                   </MDBCol>
-                  <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      {user.email}
-                    </MDBCardText>
-                  </MDBCol>
-                </MDBRow>
+                    </MDBRow>
                 <hr />
 
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Mobile</MDBCardText>
+                    <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Mobile</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">{user.tel}</MDBCardText>
@@ -246,7 +244,7 @@ export default function ProfilePage() {
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Address</MDBCardText>
+                    <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Address</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
@@ -267,6 +265,10 @@ export default function ProfilePage() {
                 style={{
                   backgroundColor:
                     elem.path === path ? "rgb(156 39 176 / 34%)" : "",
+                    borderRadius: '10px',
+                    padding: '5px 10px',
+                    margin: '0 5px',
+                    
                 }}
               >
                 <MDBNavbarLink
@@ -274,6 +276,12 @@ export default function ProfilePage() {
                     navigate(elem.path);
                   }}
                   className="label-btn"
+                  style={{
+                    color: elem.path === path ? "#fff" : "rgb(156 39 176 )", 
+                    textDecoration: 'none',
+                    fontWeight: 'bold', 
+                  
+                  }}
                 >
                   {elem.name}
                 </MDBNavbarLink>
