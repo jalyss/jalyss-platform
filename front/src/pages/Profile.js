@@ -158,11 +158,9 @@ export default function ProfilePage() {
     
     />
   )}
-                <div className="d-flex justify-content-between align-items-center p-3">
+                <div className="d-flex justify-content-between align-items-center p-3 ">
                   <label htmlFor="upload-image">
-                    <span className="material-symbols-outlined upbtn">
-                      &#128247;
-                    </span>
+                  <span className="material-symbols-outlined upbtn">+</span>
                   </label>
                   <input
                     id="upload-image"
@@ -187,22 +185,22 @@ export default function ProfilePage() {
 
                 {editMode && (user.avatar || preview) && (
  <>
- <div className="button-container">
-   <button
-     type="button"
-     className="cancel-button"
-     onClick={() => setEditMode(false)}
-   >
-     Cancel
-   </button>
-   <button 
-     type="button"
-     className="save-button"
-     onClick={submitEditProfile}
-   >
-     Save
-   </button>
- </div>
+  <div className="button-container">
+    <button
+      type="button"
+      className="cancel-button"
+      onClick={() => setEditMode(false)}
+    >
+      Cancel
+    </button>
+    <button 
+      type="button"
+      className="save-button"
+      onClick={submitEditProfile}
+    >
+      Save
+    </button>
+  </div>
 </>
 )}
 
