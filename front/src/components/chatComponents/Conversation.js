@@ -445,7 +445,7 @@ const Conversation = ({
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <IconButton onSubmit={handleSubmit}>
+                  <IconButton onSubmit={handleSubmit} type="submit">
                     <PaperPlaneTilt color="#fff" />
                   </IconButton>
                 </Stack>
