@@ -35,5 +35,8 @@
     "os": false,
     "stream": false,
     "tls": false
+  },
+  "engines": {
+    "node": ">=18 <19"
   }
 }
