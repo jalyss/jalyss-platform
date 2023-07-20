@@ -1,8 +1,5 @@
 {
-  "dependencies": {
-    
-   
-  },
+  "dependencies": {},
   "name": "@jalyss-platform/root",
   "private": true,
   "workspaces": [
