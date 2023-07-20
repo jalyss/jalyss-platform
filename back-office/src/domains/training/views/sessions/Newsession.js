@@ -11,33 +11,45 @@ import { useNavigate } from "react-router-dom";
 import SaveButton from "../../../../components/Commun/buttons/SaveButton";
 import { useRef } from "react";
 import Select from "react-select";
+import Modal from "../../../../components/Commun/Modal";
 
 import axios from "axios";
 import { fetchFeatures } from "./../../../../store/tarifss";
 import TrainingStepper from "../../../../components/TrainingStepper";
 import TarifSection from "../../../../components/TarifSection";
+import { DataGrid } from "@mui/x-data-grid";
+import StyledInput from "../../../../components/Commun/inputs/StyledInput";
+import { Box } from "@mui/material";
+import CloseButton from "../../../../components/Commun/buttons/CloseButton";
+const columns = [
+  { field: "title", headerName: "Title" },
+  { field: "price", headerName: "Price" },
+];
 const Addtarif = () => {
-  const [addsession, setAddsession] = useState({});
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const categoriesStore = useSelector((state) => state.category);
   const featuresStore = useSelector((state) => state.tarifss.features);
   const [selectedFeaturesIds, setSelectedFeaturesIds] = useState([]);
   const [selectedLabels, setSelectedLabels] = useState([]);
   const [cover, setCover] = useState("");
+  const [addsession, setAddsession] = useState({ tarifs: [] });
+  const [tarif, setTarif] = useState(null);
 
   const { categories } = categoriesStore;
   const [categoryId, setCategoryId] = useState("");
+  const [showAddTarifModal, setShowAddTarifModal] = useState(false);
   const fileInputRef = useRef(null); // Reference to the file input element
-  const dispatch = useDispatch();
-  console.log(categoriesStore);
-  const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchFeatures());
   }, [dispatch]);
-  console.log("featuressss", featuresStore);
+
   const handleAddsessionChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
 
     setAddsession((Addsession) => ({
       ...Addsession,
@@ -47,7 +59,7 @@ const Addtarif = () => {
   useEffect(() => {
     const selectedLabels = selectedFeaturesIds.map((id) => {
       const feature = featuresStore?.items.find((item) => item.id === id);
-      return feature ? feature.label : '';
+      return feature ? feature.label : "";
     });
     setSelectedLabels(selectedLabels);
   }, [selectedFeaturesIds]);
@@ -59,7 +71,6 @@ const Addtarif = () => {
     sess.startDate = new Date(sess.startDate);
     sess.endDate = new Date(sess.endDate);
     if (cover !== null) {
-      console.log("in if");
       const image = new FormData();
       image.append("file", cover);
       const response = await axios.post(
@@ -68,14 +79,13 @@ const Addtarif = () => {
       );
       sess.coverId = response.data.id;
     }
-    console.log("sessssss", sess);
+
     sess.SessionHasFeaturesIds = selectedFeaturesIds;
     dispatch(CreateNeswSession(sess)).then((res) => {
       if (!res.error) {
         showSuccessToast("session.created");
         navigate(-1);
       } else {
-        console.log(res);
         showErrorToast(res.error.message);
       }
     });
@@ -84,7 +94,7 @@ const Addtarif = () => {
     const file = e.target.files[0];
     setCover(file);
   };
-  console.log("sel", selectedFeaturesIds);
+
   const handleChange = (e) => {
     const selectedOption = e.target.value;
     if (selectedOption === "") {
@@ -96,8 +106,12 @@ const Addtarif = () => {
   const handleImageClick = () => {
     fileInputRef.current.click(); // Programmatically trigger the file input click event
   };
+  console.log(tarif);
   return (
-    <div className="d-flex align-items-center justify-content-center "style={{marginTop:50,marginBottom:200}}>
+    <div
+      className="d-flex align-items-center justify-content-center "
+      style={{ marginTop: 50, marginBottom: 200 }}
+    >
       <div style={{ width: "50rem" }} className="text-center custom-card">
         <label class="form-label mt-5" for="customFile">
           Image{" "}
@@ -200,10 +214,76 @@ const Addtarif = () => {
             placeholder="Add features"
           />
         </div>
-         {/* <TrainingStepper/> */}
-         <TarifSection selectedLabels={selectedLabels}/>
+        <div>
+          <AddButton onClick={() => setShowAddTarifModal(true)} />
+          <Box
+            sx={{ height: 100 * (addsession.tarifs.length + 1), width: "100%" }}
+          >
+            <DataGrid rows={addsession.tarifs} columns={columns} />
+          </Box>
+        </div>
+
+        {/* <TrainingStepper/> */}
+        <TarifSection selectedLabels={selectedLabels} />
         <SaveButton variant="primary" mt={20} onClick={submitsession} />
       </div>
+      <Modal
+        toggleShow={() => setShowAddTarifModal(false)}
+        basicModal={showAddTarifModal}
+        setBasicModal={setShowAddTarifModal}
+        normal={true}
+        title="Add new gain"
+        noButtons={true}
+        body={
+          <form
+            onSubmit={() => {
+              let auxTarif = { ...tarif, id: addsession.tarifs.length };
+              setAddsession((Addsession) => ({
+                ...Addsession,
+                tarifs: [...addsession.tarifs, auxTarif],
+              }));
+              setTarif(null);
+              setShowAddTarifModal(false);
+            }}
+            className="d-flex justify-content-center align-items-center "
+            style={{ marginRight: "50px" }}
+          >
+            <StyledInput
+              value={tarif?.title || ""}
+              label="Title"
+              required
+              onChange={(e) => {
+                setTarif((Tarif) => ({ ...Tarif, title: e.target.value }));
+              }}
+            />
+            <StyledInput
+              value={tarif?.price || 0}
+              label="Price"
+              type="number"
+              required
+              onChange={(e) => {
+                setTarif((Tarif) => ({ ...Tarif, price: e.target.value }));
+              }}
+            />
+            <>
+              <CloseButton onClick={()=>setShowAddTarifModal(false)} type={"button"} />
+              <SaveButton
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  let auxTarif = { ...tarif, id: addsession.tarifs.length };
+                  setAddsession((Addsession) => ({
+                    ...Addsession,
+                    tarifs: [...addsession.tarifs, auxTarif],
+                  }));
+                  setTarif(null);
+                  setShowAddTarifModal(false);
+                }}
+                type={ "submit" }
+              />
+            </>
+          </form>
+        }
+      />
     </div>
   );
 };
