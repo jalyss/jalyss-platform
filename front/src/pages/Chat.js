@@ -14,6 +14,81 @@ import GroupChat from "../components/chatComponents/GroupChat";
 import { styled } from "@mui/system";
 import { fetchMessages, fetchChatRoom } from "../store/chat";
 
+const Stack0 = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "space-between",
+  height: "100%",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "row",
+  },
+}));
+
+const Stack1 = styled("div")(({ theme }) => ({
+  flexDirection: "column",
+  width: "max-content",
+  alignItems: "center",
+  display: "flex",
+  gap: 10,
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "row",
+  },
+}));
+
+const Stack2 = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  height: "100%",
+  gap: 10,
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "row",
+  },
+}));
+
+const Box1 = styled("div")(({ theme }) => ({
+  padding: 10,
+  backgroundColor: "white",
+  height: "100vh",
+  boxShadow: "0px 0px 2px",
+  width: 100,
+  [theme.breakpoints.down("md")]: {
+    width: "100%",
+    height: 60,
+  },
+}));
+
+const BoxDiscussion = styled("div")(({ theme }) => ({
+  backgroundColor: "#57385c",
+  borderRadius: 6,
+  padding: 8,
+  [theme.breakpoints.up("md")]: {
+    display: "none",
+  },
+}));
+
+const BoxLg = styled("div")(({ theme }) => ({
+  width: 500,
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
+}));
+
+const BoxMd = styled("div")(({ theme }) => ({
+  width: "100%",
+  [theme.breakpoints.up("md")]: {
+    display: "none",
+  },
+}));
+
+const BoxLgConversation = styled("div")(({ theme }) => ({
+  width: "100%",
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
+}));
+
 const Chat = () => {
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
@@ -25,7 +100,7 @@ const Chat = () => {
   const [room, setRoom] = useState({});
   const [activeComponentMd, setActiveComponentMd] = useState("chatRoom");
   const [activeComponentLg, setActiveComponentLg] = useState("chatRoom");
-  
+
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
@@ -46,95 +121,20 @@ const Chat = () => {
   useEffect(() => {
     function handleChatRooms(value) {
       setChatRoomList(value);
+      console.log('seens');
     }
-
     socket.on(`chat-rooms/${myId}`, handleChatRooms);
 
     return () => {
       socket.off(`chat-rooms/${myId}`, handleChatRooms);
     };
   }, [socket, myId]);
-
   const handleChangeComponent = (string) => {
     setActiveComponentLg(string);
     setActiveComponentMd(string);
-    
   };
 
-  const Stack0 = styled("div")(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between",
-    height: "100%",
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "row",
-    },
-  }));
-
-  const Stack1 = styled("div")(({ theme }) => ({
-    flexDirection: "column",
-    width: "max-content",
-    alignItems: "center",
-    display: "flex",
-    gap: 10,
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "row",
-    },
-  }));
-
-  const Stack2 = styled("div")(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    height: "100%",
-    gap: 10,
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "row",
-    },
-  }));
-
-  const Box1 = styled("div")(({ theme }) => ({
-    padding: 10,
-    backgroundColor: "white",
-    height: "100vh",
-    boxShadow: "0px 0px 2px",
-    width: 100,
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-      height: 60,
-    },
-  }));
-
-  const BoxDiscussion = styled("div")(({ theme }) => ({
-    backgroundColor: "#57385c",
-    borderRadius: 6,
-    padding: 8,
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  }));
-
-  const BoxLg = styled("div")(({ theme }) => ({
-    width: 500,
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
-  }));
-
-  const BoxMd = styled("div")(({ theme }) => ({
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  }));
-
-  const BoxLgConversation = styled("div")(({ theme }) => ({
-    width: "100%",
-    [theme.breakpoints.down("md")]: {
-      display: "none",
-    },
-  }));
+  
 
   return (
     <div className="d-flex chatContainer">
@@ -195,7 +195,7 @@ const Chat = () => {
       {activeComponentLg === "chatRoom" && (
         <BoxLg>
           <ChatRoom
-            chatRoomList={chatRoomList.filter(room=>!room.isGroup)}
+            chatRoomList={chatRoomList.filter((room) => !room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -208,7 +208,7 @@ const Chat = () => {
       {activeComponentLg === "GroupChat" && (
         <BoxLg>
           <GroupChat
-            chatRoomList={chatRoomList.filter(room=>room.isGroup)}
+            chatRoomList={chatRoomList.filter((room) => room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -220,8 +220,8 @@ const Chat = () => {
 
       <BoxLgConversation>
         <Conversation
-          setChatRoomList={setChatRoomList}
-          room={room}
+          // setChatRoomList={setChatRoomList}
+          // room={room}
           selectedUser={selectedUser}
           socket={socket}
           setSelectedUser={setSelectedUser}
@@ -242,7 +242,7 @@ const Chat = () => {
       {activeComponentMd === "chatRoom" && (
         <BoxMd>
           <ChatRoom
-            chatRoomList={chatRoomList.filter(room=>!room.isGroup)}
+            chatRoomList={chatRoomList.filter((room) => !room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -255,7 +255,7 @@ const Chat = () => {
       {activeComponentMd === "GroupChat" && (
         <BoxMd>
           <GroupChat
-            chatRoomList={chatRoomList.filter(room=>room.isGroup)}
+            chatRoomList={chatRoomList.filter((room) => room.isGroup)}
             setRoom={setRoom}
             room={room}
             setActiveComponent={handleChangeComponent}
@@ -268,8 +268,6 @@ const Chat = () => {
       {activeComponentMd === "conversation" && (
         <BoxMd>
           <Conversation
-            setChatRoomList={setChatRoomList}
-            room={room}
             selectedUser={selectedUser}
             socket={socket}
             setSelectedUser={setSelectedUser}

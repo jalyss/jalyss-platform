@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { participant } from './update-chatRoom.dto';
 
 export class CreateChatRoomDto {
   @ApiProperty()
@@ -7,4 +8,10 @@ export class CreateChatRoomDto {
   receiverId: string;
   @ApiProperty()
   text: string;
+}
+export class CreateChatRoomGroupDto {
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  participants: participant[];
 }

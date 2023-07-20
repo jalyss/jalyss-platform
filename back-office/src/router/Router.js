@@ -30,7 +30,7 @@ import EditCommand from "../domains/commands/views/EditCommand";
 //training
 import Training from "../domains/training/Training";
 import SessionsUpdate from "../domains/training/views/sessions/SessionsUpdate";
-import Coursdetail from "../domains/training/views/courses/Coursdetail"
+import Coursdetail from "../domains/training/views/courses/Coursdetail";
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
 import Service from "../domains/service/Service";
 
@@ -45,15 +45,13 @@ import EditPublishHouseList from "../domains/publishingHouse/view/editPublishing
 import DetailPublishHouse from "../domains/publishingHouse/view/detailsPublishingHouse";
 import CreatePublishingHouse from "../domains/publishingHouse/view/createPublishingHouse";
 
-
 import Chat from "../domains/chat/chat";
 import ChatList from "../domains/chat/view/ChatList";
 import ChatEdit from "../domains/chat/view/ChatEdit";
 import ChatCreation from "../domains/chat/view/ChatCreation";
 
-
 import Courses from "../domains/training/views/courses/Courses";
-import Tarifs from "../domains/training/views/tarifs/Tarifs";
+import Tarifs from "../domains/training/views/features/Features";
 import Assesment from "../domains/training/views/assements/Assesment";
 import Coachs from "../domains/training/views/coachs/Coachs";
 import CoachDetails from "../domains/training/views/coachs/CoachDetails";
@@ -83,10 +81,10 @@ import AuthorList from "../domains/author/views/AuthorList";
 import EditAuthor from "../domains/author/views/EditAuthor";
 import DetailAuthor from "../domains/author/views/DetailAuthor";
 import CreateAuthor from "../domains/author/views/CreateAuthor";
-import Types from '../domains/training/views/sessions/Types'
-import Updatetarif from '../domains/training/views/tarifs/Updatetarif'
-import Addtarif from "../domains/training/views/tarifs/Addtarif";
-import Newsession from'../domains/training/views/sessions/Newsession'
+import Types from "../domains/training/views/sessions/Types";
+import Updatetarif from "../domains/training/views/features/UpdateFeature";
+import Addtarif from "../domains/training/views/features/AddFeatures";
+import Newsession from "../domains/training/views/sessions/Newsession";
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
 // import Types from "../domains/type/Types";
 import TypesList from "../domains/type/views/TypesList";
@@ -97,9 +95,10 @@ import CreateType from "../domains/type/views/CreateType";
 import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
 import AddNewCours from "../domains/training/views/courses/Addnewcours";
 import CreateCommand from "../domains/commands/views/CreateCommand";
-
-
-
+import AddFeatures from "../domains/training/views/features/AddFeatures";
+import Features from "../domains/training/views/features/Features";
+import UpdateFeatures from "../domains/training/views/features/UpdateFeature";
+import SessionDetail from "../domains/training/views/sessions/SessionDetail";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -119,18 +118,24 @@ function Router() {
           <Route path="/" element={<Branch />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="space" element={<Service />}>
-            <Route path="edit-service/:serviceId" element={<EditService />} />
+              <Route path="edit-service/:serviceId" element={<EditService />} />
 
               <Route index element={<ServiceList />} />
               <Route path="create-service" element={<CreateService />} />
-              <Route path="service/:serviceId" element={<OneService />} >
-              <Route index element={<ServiceDetails />} />
-              <Route path="create-workspace" element={<CreateWorkSpace />} />
-              <Route path="create-Tarif" element={<CreateTarif />} />
-              <Route path="tarif-details/:tarifId" element={<TarifDetails />} />
-              <Route path="space-details/:spaceId" element={<SpaceDetails />} />
-              <Route path="edit-space/:spaceId" element={<EditWorkSpace />} />
-              <Route path="edit-tarif/:tarifId" element={<EditTarif />} />
+              <Route path="service/:serviceId" element={<OneService />}>
+                <Route index element={<ServiceDetails />} />
+                <Route path="create-workspace" element={<CreateWorkSpace />} />
+                <Route path="create-Tarif" element={<CreateTarif />} />
+                <Route
+                  path="tarif-details/:tarifId"
+                  element={<TarifDetails />}
+                />
+                <Route
+                  path="space-details/:spaceId"
+                  element={<SpaceDetails />}
+                />
+                <Route path="edit-space/:spaceId" element={<EditWorkSpace />} />
+                <Route path="edit-tarif/:tarifId" element={<EditTarif />} />
               </Route>
             </Route>
 
@@ -173,7 +178,7 @@ function Router() {
 
             <Route path="Chat" element={<Chat />}>
               <Route index element={<ChatList />} />
-              <Route path="edit/:id" element={<ChatEdit/>} />
+              <Route path="edit/:id" element={<ChatEdit />} />
               <Route path="create" element={<ChatCreation />} />
             </Route>
 
@@ -203,30 +208,37 @@ function Router() {
             
 
             <Route path="training" element={<Training />}>
-              
-              <Route index element={<Sessions/>}/>
-              <Route  path="/training/:sessionsId"  element={<SessionsUpdate/>}/> 
-              <Route path='newsession' element={<Newsession/>}/>
-                           
-              <Route path="courses" element={<Courses />}/>
-              <Route path="courses/:lectureId" element={<Coursdetail/>}/>
-              <Route path="/training/courses/AddNewCours" element={<AddNewCours/>}/>
-            
+              <Route index element={<Sessions />} />
+              <Route
+                path="update-training/:sessionsId"
+                element={<SessionsUpdate />}
+              />
+               <Route
+                path="detail-training/:sessionsId"
+                element={<SessionDetail />}
+              >
                 
-                <Route path="coachs" element={<Coachs />}/>
-                <Route path="coachs/:id" element={<CoachDetails/>}>
-              </Route>      <Route path="tarifs/:tarifId" element={<Updatetarif/>}/>
-              <Route path="tarifs" element={<Tarifs />}/>
-              <Route path="tarifs/addtarif" element={<Addtarif/>}/> 
-        
+              </Route>
+              <Route path="newsession" element={<Newsession />} />
+              <Route path="courses" element={<Courses />} />
+              <Route path="courses/:lectureId" element={<Coursdetail />} />
+              <Route
+                path="/training/courses/AddNewCours"
+                element={<AddNewCours />}
+              />
+              <Route path="coachs" element={<Coachs />} />
+              <Route path="coachs/:id" element={<CoachDetails />}></Route>{" "}
+              <Route path="features/:feature" element={<UpdateFeatures />} />
+              <Route path="features" element={<Features />} />
+              <Route path="features/addFeatures" element={<AddFeatures />} />
+              
             </Route>
-
 
             {/* <Route path="charts" element={<Charts />} /> */}
 
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
-              <Route path="create" element={<CreateCommand/>} />
+              <Route path="create" element={<CreateCommand />} />
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
             {/* <Route path="charts" element={<ChartTabs />} /> */}
