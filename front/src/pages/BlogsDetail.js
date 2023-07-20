@@ -208,11 +208,11 @@ const BlogDetail = () => {
                 fontWeight: " 500",
               }}
             >
-              Published {blog.createdAt}
+              Published {blog?.createdAt}
             </p>
 
             <h1 style={{ whiteSpace: "pre-line", textAlign: "center" }}>
-              {blog.title}
+              {blog?.title}
             </h1>
 
             <div className="categoryInfo">
@@ -223,10 +223,10 @@ const BlogDetail = () => {
               className="d-flex align-items-center"
               style={{ margin: "0.5rem" }}
             >
-              {blog.author.avatar ? (
+              {blog?.author.avatar ? (
                 <img
                   className="blogItemAuthorAvatar"
-                  src={blog.author.avatar?.path}
+                  src={blog?.author.avatar?.path}
                   alt="avatar"
                 />
               ) : (
@@ -237,14 +237,14 @@ const BlogDetail = () => {
                 />
               )}
               <h3 style={{ fontSize: "1.2rem", color: "#333" }}>
-                {blog.author.fullNameEn}
+                {blog?.author?.fullNameEn}
               </h3>
             </div>
           </div>
           {blog.cover ? (
             <img
               style={{ width: "100%", borderRadius: "15px" }}
-              src={blog.cover?.path}
+              src={blog?.cover?.path}
               alt="cover"
             />
           ) : (
@@ -263,7 +263,7 @@ const BlogDetail = () => {
       </div>
 
       <div style={{ width: "300px", marginTop: "15px" }}>
-        {blog.author.avatar ? (
+        {blog?.author.avatar ? (
           <img
             style={{
               width: "100px",
@@ -295,11 +295,11 @@ const BlogDetail = () => {
             marginBottom: "50px",
           }}
         >
-          {blog.authorName}
+          {blog?.authorName}
         </p>
         <h2 className="moreFromAuthor">More from {blog.author.fullNameEn}</h2>
         <div style={{ marginTop: "10px" }}>
-          {blogs.items.map((blog) => (
+          {blogs?.items.map((blog) => (
             <div
               className="d-flex align-items-center"
               style={{ cursor: "pointer", marginTop: "20px" }}
@@ -307,12 +307,12 @@ const BlogDetail = () => {
               // onClick={() => handleBlogSelection(blog)}
             >
               <h6 className="sideBlogTitle">
-                {blog.title}
+                {blog?.title}
                 <br />
                 <span className="spanBlog">Category: </span>{" "}
                 <small>{blog.category.nameEn}</small>
               </h6>
-              {blog.cover ? (
+              {blog?.cover ? (
                 <img
                   className="sideBlogImage"
                   src={blog.cover?.path}
