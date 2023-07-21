@@ -49,7 +49,7 @@ function MentorPage() {
     console.log("pdfFile", pdfFile);
     if (isFormValid) {
       let body = {
-        content: categoryId.join(),
+        requestCategoriesIds: categoryId,
       };
 
       try {

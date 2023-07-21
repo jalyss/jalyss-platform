@@ -1,9 +1,10 @@
 import React from "react";
 
-function CloseButton({ onClick, mt, mb ,modifTitle }) {
+function CloseButton({ onClick, mt, mb ,modifTitle ,type}) {
   return (
     <button
       class="full "
+      type={type}
       style={{
         marginTop: mt,
         marginBottom: mb,

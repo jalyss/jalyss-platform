@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { UpdateUserDto, UpdateUserStatusDto } from './dto/update-user.dto';
+import { UpdateUserDto, UpdateUserIsCoach, UpdateUserStatusDto } from './dto/update-user.dto';
 import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
@@ -78,6 +78,14 @@ export class UsersService {
   }
 
   updateUserStatus(id: string, data: UpdateUserStatusDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  
+  updateUserCoach(id: string, data: UpdateUserIsCoach) {
     return this.prisma.user.update({
       where: { id },
       data,
