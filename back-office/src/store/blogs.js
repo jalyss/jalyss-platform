@@ -55,8 +55,7 @@ export const createView = createAsyncThunk("views/createView", async (body) => {
 });
 export const removeBlog = createAsyncThunk(
   "blogs/deleteBlog",
-  async (args, { dispatch }) => {
-    const { id, ...queries } = args;
+  async (id,{ dispatch }) => {
     const token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
       headers: {
@@ -72,17 +71,18 @@ export const removeBlog = createAsyncThunk(
   }
 );
 
-export const editBlog = createAsyncThunk(
+export const editBlogDecision = createAsyncThunk(
   "blogs/editBlog",
   async (args)=>{
     const {id,body}=args
+   
     let token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
       headers: {
         Authorization: "Bearer " + token.Authorization,
       },
     };
-    const response = await axios.patch(
+    const response = await axios.put(
       `${config.API_ENDPOINT}/blogs/${id}`,
       body,
       configs 

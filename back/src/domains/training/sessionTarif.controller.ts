@@ -26,10 +26,10 @@ export class SessionTarifController {
     return this.sessionTarifService.findOne(id);
   }
 
-  @Patch(':sessionTarifId')
-  update(@Param('sessionTarifId') id: string, @Body() dto:UpdateSessionTarifDto) {
-    return this.sessionTarifService.update(id, dto);
-  }
+  // @Patch(':sessionTarifId')
+  // update(@Param('sessionTarifId') id: string, @Body() dto:UpdateSessionTarifDto) {
+  //   return this.sessionTarifService.update(id, dto);
+  // }
 
   @Delete(':sessionTarifId')
   remove(@Param('sessionTarifId') id: string) {

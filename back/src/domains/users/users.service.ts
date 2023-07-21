@@ -35,9 +35,12 @@ export class UsersService {
     const salt = await bcrypt.genSalt();
     data.password = await bcrypt.hash(data.password, salt);
 
-    return this.prisma.user.create({
+    const user= await this.prisma.user.create({
       data,
     });
+    console.log(user);
+    return user
+    
   }
 
   findAll() {
@@ -53,7 +56,7 @@ export class UsersService {
       where: {
         Blog: {
           some: {
-            confirm: true,
+            confirm: 'confirmed',
           }
           ,
         },
