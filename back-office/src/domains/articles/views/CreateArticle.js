@@ -258,7 +258,7 @@ function CreateArticle() {
                     value={article?.authorIds || []}
                     onChange={handleChange}
                   >
-                    <MenuItem value="">--select option--</MenuItem>
+                    <MenuItem value={null}>--select option--</MenuItem>
                     {authorStore.authors.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
                         {item.nameAr}
