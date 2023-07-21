@@ -7,27 +7,29 @@ import { updateArticleByBranch, fetchArticle } from "../../../store/article";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 function EditArticle() {
- 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { articleId } = useParams();
   const articleStore = useSelector((state) => state.article.article);
 
   const [title, setTitle] = useState(articleStore?.title);
-  const [weight, setWeight] = useState(
-    articleStore?.weight
+  const [weight, setWeight] = useState(articleStore?.weight);
+  const [pageNumber, setPageNumber] = useState(articleStore?.pageNumber);
+  const [code, setCode] = useState(articleStore?.code);
+  const [shortDescriptionAr, setShortDescriptionAr] = useState(
+    articleStore?.shortDescriptionAr
   );
-  const [pageNumber, setPageNumber] = useState(
-    articleStore?.pageNumber
+  const [longDescriptionAr, setLongDescriptionAr] = useState(
+    articleStore?.longDescriptionAr
   );
-  const [shortDescriptionAr, setShortDescriptionAr] = useState(articleStore?.shortDescriptionAr);
-  const [longDescriptionAr, setLongDescriptionAr] = useState(articleStore?.longDescriptionAr);
-  const [categoryId, setCategoryId] = useState(articleStore?.categoryId);
-  const [publishingHouseId, setPublishingHouseId] = useState(articleStore?.publishingHouseId);
-  const [typeId, setTypeId] = useState(articleStore?.typeId);
-  const [authorIds, setauthorIds] = useState(articleStore?.authorIds);
+  const [category, setCategory] = useState(articleStore?.category);
+  const [publishingHouse, setPublishingHouse] = useState(
+    articleStore?.publishingHouse
+  );
+  const [type, setType] = useState(articleStore?.type);
+  const [author, setAuthor] = useState(articleStore?.authors);
 
-  const [coverId, setCoverId] = useState(null);
+  const [cover, setCover] = useState(null);
 
   useEffect(() => {
     dispatch(fetchArticle(articleId));
@@ -35,14 +37,30 @@ function EditArticle() {
 
   useEffect(() => {
     if (articleStore && articleStore.article) {
-      const { name, accountBalance, email, tel, address } =
-        articleStore.article;
+      const {
+        title,
+        weight,
+        pageNumber,
+        code,
+        shortDescriptionAr,
+        longDescriptionAr,
+        category,
+        publishingHouse,
+        type,
+        author,
+      } = articleStore.article;
 
-      setName(name);
-      setAccountBalance(accountBalance.toString());
-      setEmail(email);
-      setTel(tel);
-      setAddress(address);
+      setTitle(title);
+      setWeight(weight.toString());
+      setPageNumber(pageNumber.toString());
+      setCode(code);
+      setShortDescriptionAr(shortDescriptionAr);
+      setLongDescriptionAr(longDescriptionAr);
+      setCategory(category);
+      setPublishingHouse(publishingHouse);
+      setType(type);
+      setAuthor(author);
+
     }
   }, [articleStore]);
 
@@ -50,24 +68,30 @@ function EditArticle() {
     e.preventDefault();
 
     const body = {
-      name,
-      accountBalance: Number(accountBalance),
-      email,
-      tel,
-      address,
+      title,
+      weight: Number(weight),
+      pageNumber: Number(pageNumber),
+      code,
+      shortDescriptionAr,
+      longDescriptionAr,
+      category,
+      publishingHouse,
+      type,
+      author,
+
     };
 
     try {
-      if (logo) {
+      if (cover) {
         const formData = new FormData();
-        formData.append("file", logo);
+        formData.append("file", cover);
 
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
           formData
         );
 
-        body.logoId = response.data.id;
+        body.coverId = response.data.id;
       }
 
       const editedArticle = { ...body, articleId };
@@ -87,59 +111,81 @@ function EditArticle() {
           Edit article
         </Typography>
         <TextField
-          label="Name"
-      
+          label="title"
           variant="outlined"
           fullWidth
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           margin="normal"
         />
         <TextField
           label="Account Balance"
-        
           variant="outlined"
           fullWidth
           type="number"
-          value={accountBalance}
-          onChange={(e) => setAccountBalance(e.target.value)}
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
           margin="normal"
         />
         <TextField
-          label="Email"
+          label="shortDescriptionAr"
           variant="outlined"
           fullWidth
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={shortDescriptionAr}
+          onChange={(e) => setShortDescriptionAr(e.target.value)}
           margin="normal"
         />
         <TextField
-          label="Telephone Number"
+          label="longDescriptionArephone Number"
           variant="outlined"
           fullWidth
-          value={tel}
-          onChange={(e) => setTel(e.target.value)}
+          value={longDescriptionAr}
+          onChange={(e) => setLongDescriptionAr(e.target.value)}
           margin="normal"
         />
         <TextField
-          label="Address"
+          label="category"
           variant="outlined"
-          fullWidth
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          fullWh
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          margin="normal"
+        />
+        <TextField
+          label="publishingHouse"
+          variant="outlined"
+          fullWh
+          value={publishingHouse}
+          onChange={(e) => setPublishingHouse(e.target.value)}
+          margin="normal"
+        />
+        <TextField
+          label="type"
+          variant="outlined"
+          fullWh
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          margin="normal"
+        />
+        <TextField
+          label="author"
+          variant="outlined"
+          fullWh
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
           margin="normal"
         />
         <Box my={2}>
           <input
             type="file"
             accept="image/*"
-            id="logo-file"
+            id="cover-file"
             style={{ display: "none" }}
-            onChange={(e) => setLogo(e.target.files[0])}
+            onChange={(e) => setCover(e.target.files[0])}
           />
-          <label htmlFor="logo-file">
+          <label htmlFor="cover-file">
             <Button variant="outlined" component="span">
-              Upload Logo
+              Upload cover
             </Button>
           </label>
         </Box>
@@ -152,6 +198,5 @@ function EditArticle() {
     </Container>
   );
 }
-
 
 export default EditArticle;
