@@ -35,7 +35,7 @@ export const addTransactionStock = createAsyncThunk("mvt/createMvt", async (args
 })
 
 export const createArticle = createAsyncThunk("articles/createArticle", async (body, { dispatch }) => {
-  const response = await axios.post(`${config.API_ENDPOINT}/articles/TUN/`, body);
+  const response = await axios.post(`${config.API_ENDPOINT}/articles/`, body);
   dispatch(fetchArticle(response.data.id))
   return response.data;
 });

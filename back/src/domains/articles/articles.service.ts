@@ -16,7 +16,7 @@ export class ArticleService {
     private readonly branchService: BranchesService,
   ) {}
 
-  async create(dto: CreateArticleDto, branchId: string) {
+  async create(dto: CreateArticleDto) {
     const { authorIds, ...rest } = dto;
     return await this.prisma.article.create({
       data: {

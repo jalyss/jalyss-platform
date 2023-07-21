@@ -203,7 +203,7 @@ function Router() {
                 element={<ArticleByBranchList />}
               />
               <Route path="create" element={<CreateArticle />} />
-              <Route path="editArticle" element={<EditArticle />} />
+              <Route path="editArticle/:articleId" element={<EditArticle />} />
             </Route>
             
 

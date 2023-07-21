@@ -22,7 +22,5 @@ export class CreateArticleDto {
   @ApiProperty({ required: true })
   typeId: string;
   @ApiProperty({ required: true })
-  branchId: string[];
-  @ApiProperty({ required: true })
   authorIds: string[];
 }

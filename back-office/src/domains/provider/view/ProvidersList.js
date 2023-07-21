@@ -120,7 +120,7 @@ function ProvidersList() {
             icon={<AiFillEdit />}
             label="Edit"
             className="textPrimary"
-            onClick={() => navigate(`editArticle/${id}`)}
+            onClick={() => navigate(`editProvider/${id}`)}
             color="inherit"
           />,
           <GridActionsCellItem

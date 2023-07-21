@@ -236,6 +236,7 @@ function CreateArticle() {
                     value={article?.typeId || ""}
                     onChange={handleChange}
                   >
+                    
                     <MenuItem value={null}>--select option--</MenuItem>
                     {articleTypeStore.articleTypes.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
@@ -245,24 +246,8 @@ function CreateArticle() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="branch">Branch</InputLabel>
-                  <Select
-                    labelId="branch"
-                    name="branchId"
-                    value={article?.branchId || ""}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="">--select option--</MenuItem>
-                    {branchStore.branches.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+             
+            
               <Grid item xs={12}>
                 <FormControl fullWidth required>
                   <InputLabel id="author">Author</InputLabel>
