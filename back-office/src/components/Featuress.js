@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifss";
+import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifSession";
 import {
   DataGrid,
   GridActionsCellItem,

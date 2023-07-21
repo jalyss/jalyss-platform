@@ -14,33 +14,35 @@ import Select from "react-select";
 import Modal from "../../../../components/Commun/Modal";
 
 import axios from "axios";
-import { fetchFeatures } from "./../../../../store/tarifss";
+import { fetchFeatures } from "../../../../store/tarifSession";
 import TrainingStepper from "../../../../components/TrainingStepper";
 import TarifSection from "../../../../components/TarifSection";
 import { DataGrid } from "@mui/x-data-grid";
 import StyledInput from "../../../../components/Commun/inputs/StyledInput";
 import { Box } from "@mui/material";
 import CloseButton from "../../../../components/Commun/buttons/CloseButton";
+import TrainingPricing from "../../components/TrainingPricing";
 const columns = [
   { field: "title", headerName: "Title" },
   { field: "price", headerName: "Price" },
 ];
 const Addtarif = () => {
   const dispatch = useDispatch();
-
+  const categoriesStore = useSelector((state) => state.category);
+  const featuresStore = useSelector((state) => state.tarifSession.features);
+  const { categories } = categoriesStore;
   const navigate = useNavigate();
 
-  const categoriesStore = useSelector((state) => state.category);
-  const featuresStore = useSelector((state) => state.tarifss.features);
-  const [selectedFeaturesIds, setSelectedFeaturesIds] = useState([]);
-  const [selectedLabels, setSelectedLabels] = useState([]);
-  const [cover, setCover] = useState("");
-  const [addsession, setAddsession] = useState({ tarifs: [] });
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [cover, setCover] = useState(null);
+  const [addSession, setAddSession] = useState({ tarifs: [] });
   const [tarif, setTarif] = useState(null);
+  const [index, setIndex] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
 
-  const { categories } = categoriesStore;
-  const [categoryId, setCategoryId] = useState("");
+  const [categoryId, setCategoryId] = useState(null);
   const [showAddTarifModal, setShowAddTarifModal] = useState(false);
+
   const fileInputRef = useRef(null); // Reference to the file input element
 
   useEffect(() => {
@@ -48,28 +50,56 @@ const Addtarif = () => {
     dispatch(fetchFeatures());
   }, [dispatch]);
 
-  const handleAddsessionChange = (e) => {
+  useEffect(() => {
+    setAddSession({ ...addSession, tarifs: [] });
+  }, [selectedFeatures]);
+
+  const handleAddSessionChange = (e) => {
     const { name, value } = e.target;
 
-    setAddsession((Addsession) => ({
-      ...Addsession,
+    setAddSession((AddSession) => ({
+      ...AddSession,
       [name]: value,
     }));
   };
-  useEffect(() => {
-    const selectedLabels = selectedFeaturesIds.map((id) => {
-      const feature = featuresStore?.items.find((item) => item.id === id);
-      return feature ? feature.label : "";
-    });
-    setSelectedLabels(selectedLabels);
-  }, [selectedFeaturesIds]);
+  const submitTarif = (e) => {
+    e.preventDefault();
 
+    let auxTarifs = [...addSession.tarifs];
+    if (isEdit) {
+      auxTarifs[index] = tarif;
+      setIsEdit(false);
+    } else {
+      auxTarifs = [...auxTarifs, tarif];
+    }
+    auxTarifs = auxTarifs.sort((a, b) => {
+      return a.price - b.price;
+    });
+    setAddSession((AddSession) => ({
+      ...AddSession,
+      tarifs: auxTarifs,
+    }));
+
+    setTarif(null);
+    setIndex(null);
+    setShowAddTarifModal(false);
+  };
   const submitsession = async (event) => {
     event.preventDefault();
-    let sess = Object.assign({}, addsession);
-    sess.categoryId = categoryId;
-    sess.startDate = new Date(sess.startDate);
-    sess.endDate = new Date(sess.endDate);
+    
+    if (selectedFeatures.length === 0) {
+      showErrorToast("Pick freatures");
+      
+      return;
+    }
+    if (addSession.tarifs.length === 0) {
+      showErrorToast("create one tarif as minimun");
+      return;
+    }
+    let aux = Object.assign({}, addSession);
+    aux.categoryId = categoryId;
+    aux.startDate = new Date(aux.startDate);
+    aux.endDate = new Date(aux.endDate);
     if (cover !== null) {
       const image = new FormData();
       image.append("file", cover);
@@ -77,11 +107,12 @@ const Addtarif = () => {
         `${process.env.REACT_APP_API_ENDPOINT}/upload`,
         image
       );
-      sess.coverId = response.data.id;
+      aux.coverId = response.data.id;
     }
 
-    sess.SessionHasFeaturesIds = selectedFeaturesIds;
-    dispatch(CreateNeswSession(sess)).then((res) => {
+    aux.SessionHasFeaturesIds = selectedFeatures.map((e) => e.id);
+    console.log(aux);
+    dispatch(CreateNeswSession(aux)).then((res) => {
       if (!res.error) {
         showSuccessToast("session.created");
         navigate(-1);
@@ -106,181 +137,201 @@ const Addtarif = () => {
   const handleImageClick = () => {
     fileInputRef.current.click(); // Programmatically trigger the file input click event
   };
-  console.log(tarif);
+
   return (
-    <div
-      className="d-flex align-items-center justify-content-center "
-      style={{ marginTop: 50, marginBottom: 200 }}
-    >
-      <div style={{ width: "50rem" }} className="text-center custom-card">
-        <label class="form-label mt-5" for="customFile">
-          Image{" "}
-        </label>
+    <div>
+      <form onSubmit={submitsession}>
+        <div className="d-flex align-items-center justify-content-center page ">
+          <div style={{ width: "50rem" }} className="text-center custom-card">
+            <label class="form-label mt-5" for="customFile">
+              Image{" "}
+            </label>
 
-        <input
-          type="file"
-          className="form-control visually-hidden"
-          id="customFile"
-          onChange={handleImageChange}
-          ref={fileInputRef}
-        />
+            <input
+              type="file"
+              className="form-control visually-hidden"
+              id="customFile"
+              onChange={handleImageChange}
+              ref={fileInputRef}
+            />
 
-        {cover && (
-          <img
-            src={URL.createObjectURL(cover)}
-            alt="Cover Image"
-            style={{
-              width: "200px",
-              height: "200px",
-              marginTop: "10px",
-              cursor: "pointer",
+            {cover && (
+              <img
+                src={URL.createObjectURL(cover)}
+                alt="Cover Image"
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  marginTop: "10px",
+                  cursor: "pointer",
+                }}
+                onClick={handleImageClick}
+                className="rounded"
+              />
+            )}
+            {!cover && (
+              <input
+                type="file"
+                className="form-control "
+                onChange={handleImageChange}
+              />
+            )}
+
+            <Form.Label>title</Form.Label>
+            <input
+              required
+              type="text"
+              placeholder="Enter title"
+              name="title"
+              value={addSession?.Title}
+              onChange={handleAddSessionChange}
+            />
+
+            <Form.Group controlId="tariffDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                value={addSession?.description}
+                placeholder="Enter description"
+                name="description"
+                onChange={handleAddSessionChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="tariffPrice">
+              <Form.Label>start-Date</Form.Label>
+              <Form.Control
+                required
+                type="date"
+                value={addSession?.startDate}
+                name="startDate"
+                placeholder="startDate"
+                onChange={handleAddSessionChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="tariffPrice">
+              <Form.Label>end-Date</Form.Label>
+              <Form.Control
+                required
+                type="date"
+                name="endDate"
+                value={addSession?.endDate}
+                placeholder="endDate"
+                onChange={handleAddSessionChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="tariffPrice">
+              <select
+                value={categoryId}
+                class="form-select mt-3"
+                aria-label="Default select example"
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled selected>
+                  Choose your Blog category
+                </option>
+                {categories.items.map((category, index) => (
+                  <option key={index} value={category.id}>
+                    {category.nameEn}
+                  </option>
+                ))}
+              </select>
+            </Form.Group>
+            <div className="mt-4 d-flex">
+              <AutoCompleteFilter
+                required
+                data={featuresStore?.items}
+                labelOptionName="label"
+                label="Add features"
+                onChange={setSelectedFeatures}
+                placeholder="Add features"
+              />
+              <span style={{color:'red'}}>*</span>
+            </div>
+            <div>{!selectedFeatures.length&&<p style={{color:'red',textAlign:'start'}}>You must select features for the session !  </p>}</div>
+            
+          </div>
+        </div>
+        <div className="p-5">
+          <div className="d-flex justify-content-end">
+            <AddButton
+              disabled={selectedFeatures.length ? false : true}
+              onClick={() => {
+                setShowAddTarifModal(true);
+                setTarif({
+                  ...tarif,
+                  features: selectedFeatures.map((elem) => ({
+                    ...elem,
+                    isAvailable: false,
+                  })),
+                });
+              }}
+              content="Add Tarif"
+            />
+          </div>
+          <TrainingPricing
+            session={addSession}
+            setSession={setAddSession}
+            fn={(t, i) => {
+              setTarif(t);
+              setIndex(i);
+              setIsEdit(true);
+              setShowAddTarifModal(true);
             }}
-            onClick={handleImageClick}
-            className="rounded"
           />
-        )}
-        {!cover && (
-          <input
-            type="file"
-            className="form-control "
-            onChange={handleImageChange}
-          />
-        )}
-
-        <Form.Label>title</Form.Label>
-        <input
-          type="text"
-          placeholder="Enter title"
-          name="title"
-          value={addsession?.Title}
-          onChange={handleAddsessionChange}
-        />
-
-        <Form.Group controlId="tariffDescription">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            type="text"
-            value={addsession?.description}
-            placeholder="Enter description"
-            name="description"
-            onChange={handleAddsessionChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="tariffPrice">
-          <Form.Label>start-Date</Form.Label>
-          <Form.Control
-            type="date"
-            value={addsession?.startDate}
-            name="startDate"
-            placeholder="startDate"
-            onChange={handleAddsessionChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="tariffPrice">
-          <Form.Label>end-Date</Form.Label>
-          <Form.Control
-            type="date"
-            name="endDate"
-            value={addsession?.endDate}
-            placeholder="endDate"
-            onChange={handleAddsessionChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="tariffPrice">
-          <select
-            value={categoryId}
-            class="form-select mt-3"
-            aria-label="Default select example"
-            onChange={handleChange}
-            required
-          >
-            <option value="" disabled selected>
-              Choose your Blog category
-            </option>
-            {categories.items.map((category, index) => (
-              <option key={index} value={category.id}>
-                {category.nameEn}
-              </option>
-            ))}
-          </select>
-        </Form.Group>
-        <div className="mt-4">
-          <AutoCompleteFilter
-            data={featuresStore?.items}
-            valueOptionName="id"
-            labelOptionName="label"
-            label="Add features"
-            onChange={setSelectedFeaturesIds}
-            placeholder="Add features"
-          />
+          <div className="text-center">
+            <SaveButton
+              variant="primary"
+              mt={20}
+              onSubmit={submitsession}
+              type="submit"
+            />
+          </div>
         </div>
-        <div>
-          <AddButton onClick={() => setShowAddTarifModal(true)} />
-          <Box
-            sx={{ height: 100 * (addsession.tarifs.length + 1), width: "100%" }}
-          >
-            <DataGrid rows={addsession.tarifs} columns={columns} />
-          </Box>
-        </div>
-
-        {/* <TrainingStepper/> */}
-        <TarifSection selectedLabels={selectedLabels} />
-        <SaveButton variant="primary" mt={20} onClick={submitsession} />
-      </div>
+      </form>
       <Modal
         toggleShow={() => setShowAddTarifModal(false)}
         basicModal={showAddTarifModal}
         setBasicModal={setShowAddTarifModal}
         normal={true}
-        title="Add new gain"
+        title="Add new Tarif"
         noButtons={true}
         body={
           <form
-            onSubmit={() => {
-              let auxTarif = { ...tarif, id: addsession.tarifs.length };
-              setAddsession((Addsession) => ({
-                ...Addsession,
-                tarifs: [...addsession.tarifs, auxTarif],
-              }));
-              setTarif(null);
-              setShowAddTarifModal(false);
-            }}
-            className="d-flex justify-content-center align-items-center "
+            onSubmit={submitTarif}
+            // className="d-flex justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
-            <StyledInput
-              value={tarif?.title || ""}
-              label="Title"
-              required
-              onChange={(e) => {
-                setTarif((Tarif) => ({ ...Tarif, title: e.target.value }));
-              }}
-            />
-            <StyledInput
-              value={tarif?.price || 0}
-              label="Price"
-              type="number"
-              required
-              onChange={(e) => {
-                setTarif((Tarif) => ({ ...Tarif, price: e.target.value }));
-              }}
-            />
-            <>
-              <CloseButton onClick={()=>setShowAddTarifModal(false)} type={"button"} />
-              <SaveButton
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  let auxTarif = { ...tarif, id: addsession.tarifs.length };
-                  setAddsession((Addsession) => ({
-                    ...Addsession,
-                    tarifs: [...addsession.tarifs, auxTarif],
-                  }));
-                  setTarif(null);
-                  setShowAddTarifModal(false);
+            <div className="gap-3 d-flex">
+              <StyledInput
+                value={tarif?.title || ""}
+                label="Title"
+                required
+                onChange={(e) => {
+                  setTarif((Tarif) => ({ ...Tarif, title: e.target.value }));
                 }}
-                type={ "submit" }
               />
-            </>
+              <StyledInput
+                value={tarif?.price || ""}
+                label="Price"
+                type="number"
+                required
+                onChange={(e) => {
+                  setTarif((Tarif) => ({ ...Tarif, price: +e.target.value }));
+                }}
+              />
+            </div>
+            <div>
+              <TarifSection setTarif={setTarif} tarif={tarif} />
+            </div>
+            <div>
+              <CloseButton
+                onClick={() => setShowAddTarifModal(false)}
+                type={"button"}
+              />
+              <SaveButton onSubmit={submitTarif} type={"submit"} />
+            </div>
           </form>
         }
       />

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Feature, SessionTarif, SessionTarifHasFeatures } from '@prisma/client';
 
 export class CreateSessionDto {
   @ApiProperty()
@@ -13,10 +14,19 @@ export class CreateSessionDto {
   categoryId: string;
   @ApiProperty()
   previousSessionId: string;
-
   @ApiProperty()
   nextSessionId: string;
   @ApiProperty()
-
-  SessionHasFeaturesIds:string[]
+  SessionHasFeaturesIds: string[];
+  @ApiProperty()
+  tarifs: TarifsSesssionDto[];
+}
+export class TarifsSesssionDto {
+  title: string;
+  price: number;
+  features: FeatureTarifSessionDto[];
+}
+export class FeatureTarifSessionDto {
+  isAvailable: boolean;
+  id: string;
 }

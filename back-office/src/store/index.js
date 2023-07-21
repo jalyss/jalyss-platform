@@ -16,7 +16,7 @@ import coach from "./coach";
 import sessiontyps from "./sessiontyps";
 import service from "./service";
 import space from "./space";
-import tarifss from "./tarifss";
+import tarifSession from "./tarifSession";
 import tarif from "./tarif";
 import chat from "./chatStore";
 import blogs from "./blogs";
@@ -42,16 +42,12 @@ export const store = configureStore({
     sessiontyps,
     service,
     space,
-    tarifss,
-
+    tarifSession,
     tarif,
-
     blogs,
-
     provider,
-
     chat,
-    gain
+    gain,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

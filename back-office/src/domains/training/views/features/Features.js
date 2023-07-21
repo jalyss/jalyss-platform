@@ -6,7 +6,7 @@ import Featuress from "../../../../components/Featuress";
 import StyledInput from "./../../../../components/Commun/inputs/StyledInput";
 import { useDispatch } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
-import { CreateFeature } from "../../../../store/tarifss";
+import { CreateFeature } from "../../../../store/tarifSession";
 import Modal from "../../../../components/Commun/Modal";
 function Features() {
 

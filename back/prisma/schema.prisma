@@ -572,11 +572,11 @@ model Feature {
 model SessionTarifHasFeatures {
   feature      Feature      @relation(fields: [featureId], references: [id], onDelete: Cascade)
   featureId    String
-  sessionTarif SessionTarif @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  sessionId    String
+  sessionTarif SessionTarif @relation(fields: [tarifId], references: [id], onDelete: Cascade)
+  tarifId    String
   isAvailable  Boolean
 
-  @@unique(fields: [featureId, sessionId], name: "sessionTarifHasFeatures")
+  @@unique(fields: [featureId, tarifId], name: "sessionTarifHasFeatures")
 }
 
 model SessionHasFeatures {

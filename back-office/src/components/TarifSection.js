@@ -1,70 +1,73 @@
-import React from 'react';
-import { useState } from 'react';
-import StyledInput from './Commun/inputs/StyledInput';
+import React from "react";
+import { useState } from "react";
+import StyledInput from "./Commun/inputs/StyledInput";
 
-function TarifSection({ selectedLabels }) {
-  const [availabilityStates, setAvailabilityStates] = useState(
-    new Array(selectedLabels.length).fill(true)
-  );
-
-  console.log("selected", selectedLabels);
-
-  const handleCheckboxChange = (index) => {
-    setAvailabilityStates((prevStates) => {
-      const newStates = prevStates.map((state, i) => (i === index ? !state : state));
-      return newStates;
-    });
-  };
-
+function TarifSection({  setTarif ,tarif}) {
   return (
     <div>
-      <div className="d-flex">
-        <StyledInput
-          label="title"
-          className="w-50 m-3"
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-        />
-        <StyledInput
-          type="number"
-          label="Price"
-          className="w-50 m-3"
-          onChange={(e) => {
-            setPrice(e.target.value);
-          }}
-        />
+      <div className="d-flex gap-3 justify-content-between fw-bold py-3">
+        <div style={{ width: 200 }} className="text-center">
+          Features
+        </div>
+        <div style={{ width: 100 }} className="text-center">
+          Available
+        </div>
+        <div style={{ width: 150 }} className="text-center">
+          Not Available
+        </div>
       </div>
 
-      <div className="d-flex flex-wrap gap-5 justify-content-between align-items-start">
-        {selectedLabels.length > 0 ? (
+      <div className="">
+        {tarif?.features.length > 0 ? (
           <>
-            {selectedLabels.map((elem, index) => (
-              <div key={index}>
-                <div>{elem}</div>
-                <label className="d-flex align-items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={availabilityStates[index]}
-                    onChange={() => handleCheckboxChange(index)}
-                  />
-                  <span>Available</span>
-                </label>
-                <label className="d-flex align-items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={!availabilityStates[index]}
-                    onChange={() => handleCheckboxChange(index)}
-                  />
-                  <span>Not available</span>
-                </label>
+            {tarif?.features.map((elem, index) => (
+              <div>
+                <hr style={{ height: 2, background: "black", margin: 0 }} />
+                <div
+                  key={index}
+                  className="d-flex gap-3 justify-content-between align-items-center"
+                >
+                  <div style={{ width: 200 }}>{elem.label}</div>
+                  <div style={{ width: 100 }} className="text-center">
+                    <input
+                      type="checkbox"
+                      checked={tarif.features[index].isAvailable}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          let array = [...tarif.features];
+                          array[index].isAvailable = true;
+
+                          setTarif((Tarif) => ({
+                            ...Tarif,
+                            features: array
+                          }));
+                        }
+                      }}
+                    />
+                  </div>
+                  <div style={{ width: 150 }} className="text-center">
+                    <input
+                      type="checkbox"
+                      checked={!tarif.features[index].isAvailable}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          let array = [...tarif.features];
+                          array[index].isAvailable = false;
+
+                          setTarif((Tarif) => ({
+                            ...Tarif,
+                            features: array
+                          }));
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             ))}
           </>
         ) : (
-          <div style={{ color: "red" }} className='d-flex justify-content-center align-items-center '>
-            You must select features for the sessions First !
-          </div>
+          null
         )}
       </div>
     </div>
@@ -72,3 +75,5 @@ function TarifSection({ selectedLabels }) {
 }
 
 export default TarifSection;
+
+
