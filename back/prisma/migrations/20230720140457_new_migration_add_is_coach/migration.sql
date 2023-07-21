@@ -67,6 +67,7 @@ CREATE TABLE "User" (
     "cityId" TEXT,
     "confirmkey" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "isCoach" BOOLEAN DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -334,11 +335,17 @@ CREATE TABLE "Provider" (
 CREATE TABLE "SessionRequest" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "resumeId" TEXT NOT NULL,
+    "status" "StatusBlog" NOT NULL DEFAULT 'pending',
 
     CONSTRAINT "SessionRequest_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "RequestCategories" (
+    "sessionRequestId" TEXT NOT NULL,
+    "categoryId" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -387,6 +394,7 @@ CREATE TABLE "frequentilyQuestion" (
 CREATE TABLE "WhatYouWillLearn" (
     "id" TEXT NOT NULL,
     "content" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "WhatYouWillLearn_pkey" PRIMARY KEY ("id")
 );
@@ -407,6 +415,7 @@ CREATE TABLE "LectureHasWhatYouWillLearn" (
 CREATE TABLE "Prerequire" (
     "id" TEXT NOT NULL,
     "content" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Prerequire_pkey" PRIMARY KEY ("id")
 );
@@ -786,6 +795,9 @@ CREATE UNIQUE INDEX "Supply_articleId_providerId_dateTime_key" ON "Supply"("arti
 CREATE UNIQUE INDEX "Provider_email_key" ON "Provider"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "RequestCategories_categoryId_sessionRequestId_key" ON "RequestCategories"("categoryId", "sessionRequestId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "MediaSession_mediaId_sessionId_key" ON "MediaSession"("mediaId", "sessionId");
 
 -- CreateIndex
@@ -978,6 +990,12 @@ ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_userId_fkey" FOREIGN
 ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_resumeId_fkey" FOREIGN KEY ("resumeId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "RequestCategories" ADD CONSTRAINT "RequestCategories_sessionRequestId_fkey" FOREIGN KEY ("sessionRequestId") REFERENCES "SessionRequest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "RequestCategories" ADD CONSTRAINT "RequestCategories_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "ArticleCategory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "MediaSession" ADD CONSTRAINT "MediaSession_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -1011,7 +1029,7 @@ ALTER TABLE "SessionHasWhatYouWillLearn" ADD CONSTRAINT "SessionHasWhatYouWillLe
 ALTER TABLE "LectureHasWhatYouWillLearn" ADD CONSTRAINT "LectureHasWhatYouWillLearn_lectureId_fkey" FOREIGN KEY ("lectureId") REFERENCES "Lecture"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "LectureHasWhatYouWillLearn" ADD CONSTRAINT "LectureHasWhatYouWillLearn_WhatYouWillLearnId_fkey" FOREIGN KEY ("WhatYouWillLearnId") REFERENCES "WhatYouWillLearn"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "LectureHasWhatYouWillLearn" ADD CONSTRAINT "LectureHasWhatYouWillLearn_WhatYouWillLearnId_fkey" FOREIGN KEY ("WhatYouWillLearnId") REFERENCES "WhatYouWillLearn"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "sessionHasPrerequire" ADD CONSTRAINT "sessionHasPrerequire_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "Session"("id") ON DELETE CASCADE ON UPDATE CASCADE;

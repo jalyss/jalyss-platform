@@ -1,93 +1,86 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifss";
-import {
-  DataGrid,
-  GridActionsCellItem,
-  
-} from "@mui/x-data-grid";
-
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
 import Modal from "../components/Commun/Modal";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import StyledInput from "./Commun/inputs/StyledInput";
+import {
+  deletePrerequire,
+  editPrerequire,
+  fetchPrerequires,
+} from "../store/gain";
 
-function Featuress() {
+function Prereq() {
   const dispatch = useDispatch();
-  const featuresStore = useSelector((state) => state.tarifss);
-  const { features } = featuresStore;
+  const prereqStore = useSelector((state) => state.gain);
+  const { prerequires } = prereqStore;
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
-  const [editLabel, setEditLabel] = useState("");
+  const [editContent, setEditContent] = useState("");
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
-  const [labelOfDelete, setLabelOfDelete] = useState("");
+  const [contentOfDelete, setContentOfDelete] = useState("");
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 5,
     page: 0,
   });
-  const [rowCount, setRowCount] = React.useState(0);
-  React.useEffect(() => {
-    setRowCount(features.items?.length);
-  }, [rowCount]);
+
+  useEffect(() => {
+    dispatch(fetchPrerequires());
+  }, [dispatch]);
 
   useEffect(() => {
     if (editModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
-        setEditLabel(row.label);
-      }
-    }
-    if (basicModal && editRowId) {
-      const row = rows.find((row) => row.id === editRowId);
-      if (row) {
-        setEditLabel(row.label);
+        setEditContent(row.content);
       }
     }
   }, [editModal, editRowId, rows]);
 
   useEffect(() => {
-    dispatch(fetchFeatures());
-  }, []);
-
-  useEffect(() => {
-    if (features?.items.length) {
-      let aux = features?.items.map((e) => {
+    if (prerequires?.items?.length) {
+      let aux = prerequires?.items.map((e) => {
         return {
           ...e,
-          label: e.label,
+          content: e.content,
           createdAt: e.createdAt.slice(0, 10),
         };
       });
       setRows(aux);
     }
-  }, [features.items]);
+  }, [prerequires.items]);
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
+
   const toggleShow2 = () => {
     setEditModal(!editModal);
   };
+
   useEffect(() => {
     if (basicModal && idOfDelete) {
-      const row = rows.find((row) => row.id === idOfDelete);
-      if (row) {
-        setLabelOfDelete(row.label);
+      const prereqToDelete = prerequires.items.find(
+        (prereq) => prereq.id === idOfDelete
+      );
+      if (prereqToDelete) {
+        setContentOfDelete(prereqToDelete.content);
       }
     }
-  }, [basicModal, idOfDelete, rows]);
+  }, [basicModal, idOfDelete, prerequires.items]);
 
-  const handleDeleteFeatureClick = (id) => {
-    dispatch(deleteFeatures(id))
+  const handleDeletePrerequireClick = (id) => {
+    dispatch(deletePrerequire(id))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
         } else {
-          showSuccessToast("Feature has been deleted");
+          showSuccessToast("Prerequire has been deleted");
         }
       })
       .catch((error) => {
@@ -96,13 +89,18 @@ function Featuress() {
   };
 
   const handleEdit = () => {
-    const label = editLabel;
-    dispatch(editFeature({ id: editRowId, label: label }))
+    const content = editContent;
+    dispatch(
+      editPrerequire({
+        id: editRowId,
+        content: content,
+      })
+    )
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
         } else {
-          showSuccessToast("Features has been Updated");
+          showSuccessToast("Prerequire has been updated");
         }
       })
       .catch((error) => {
@@ -110,14 +108,14 @@ function Featuress() {
       });
 
     setEditRowId("");
-    setEditLabel("");
+    setEditContent("");
     toggleShow2();
   };
 
   const columns = [
     {
-      field: "label",
-      headerName: "Label",
+      field: "content",
+      headerName: "Content",
       width: 330,
       editable: false,
     },
@@ -162,7 +160,7 @@ function Featuress() {
   return (
     <div>
       <div className="position-relative">
-        <div className="mb-3">Feature's List</div>
+        <div className="mb-3">Prerequire's List</div>
         <Box sx={{ height: 600, width: "100%" }}>
           <DataGrid
             rows={rows}
@@ -179,7 +177,7 @@ function Featuress() {
             disableRowSelectionOnClick
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
-            rowCount={rowCount}
+            rowCount={rows.length}
             paginationMode="server"
           />
         </Box>
@@ -191,14 +189,15 @@ function Featuress() {
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-           
             {`Are you sure you want to delete `}
-            <span style={{ color: "red" ,margin:"10px"}}>{labelOfDelete}</span>
-            {` Feature?`}
+            <span style={{ color: "red", margin: "10px" }}>
+              {contentOfDelete}
+            </span>
+            {` Prerequire?`}
           </div>
         }
         confirm={() => {
-          handleDeleteFeatureClick(idOfDelete);
+          handleDeletePrerequireClick(idOfDelete);
           setBasicModal(false);
         }}
       />
@@ -208,17 +207,17 @@ function Featuress() {
         setBasicModal={setEditModal}
         toggleShow={toggleShow2}
         normal={true}
-        title="Edit feature"
+        title="Edit Prerequire"
         body={
           <div
             className="d-flex justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={editLabel}
-              label="Label"
+              value={editContent}
+              label="Content"
               onChange={(e) => {
-                setEditLabel(e.target.value);
+                setEditContent(e.target.value);
               }}
             />
           </div>
@@ -229,4 +228,4 @@ function Featuress() {
   );
 }
 
-export default Featuress;
+export default Prereq;

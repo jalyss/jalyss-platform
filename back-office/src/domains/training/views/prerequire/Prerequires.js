@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import CreateButton from "../../../../components/Commun/buttons/CreateButton";
 
-import Featuress from "../../../../components/Featuress";
 import StyledInput from "./../../../../components/Commun/inputs/StyledInput";
 import { useDispatch } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
-import { CreateFeature } from "../../../../store/tarifss";
-import Modal from "../../../../components/Commun/Modal";
-function Features() {
 
-  const [label, setLabel] = useState("");
+import Modal from "../../../../components/Commun/Modal";
+import { CreatePrereq } from "../../../../store/gain";
+import Prereq from "../../../../components/Prereq";
+
+function Prerequire() {
+  const [content, setContent] = useState("");
   const [basicModal, setBasicModal] = useState(false);
 
   const toggleShow = () => {
@@ -18,13 +19,13 @@ function Features() {
   };
 
   const dispatch = useDispatch();
-  const addFea = () => {
-    dispatch(CreateFeature({ label }))
+  const addPrereq = () => {
+    dispatch(CreatePrereq({ content }))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
         } else {
-          showSuccessToast("Features has been created successfuly");
+          showSuccessToast("Prerequire has been created successfuly");
         }
       })
       .catch((error) => {
@@ -33,39 +34,38 @@ function Features() {
   };
 
   const handleSave = () => {
-    addFea();
-    setLabel("");
+    addPrereq();
+    setContent("");
     toggleShow();
   };
-
   return (
     <div className="mx-5">
       <div className="d-flex">
         <CreateButton
-          title={"add new feature"}
+          title={"add new Prerequire"}
           mt={20}
           mb={20}
           onClick={toggleShow}
         />
         <div style={{ marginTop: 20 }}> </div>
       </div>
-      <Featuress />
+      <Prereq />
       <Modal
         toggleShow={toggleShow}
         basicModal={basicModal}
         setBasicModal={setBasicModal}
         normal={true}
-        title="Add new feature"
+        title="Add new prerequire"
         body={
           <div
             className="d-flex justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-            value={label}
-              label="Label"
+              value={content}
+              label="content"
               onChange={(e) => {
-                setLabel(e.target.value);
+                setContent(e.target.value);
               }}
             />
           </div>
@@ -75,4 +75,5 @@ function Features() {
     </div>
   );
 }
-export default Features;
+
+export default Prerequire;

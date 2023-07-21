@@ -21,7 +21,11 @@ function AutoCompleteFilter({ data, labelOptionName,onChange,valueOptionName,lab
         )}
         
         onChange={(event, newValue) => {
-         onChange(newValue.map(v=>v[valueOptionName]));
+          if(valueOptionName)
+         onChange(newValue.map(v=>v[valueOptionName]))
+         else{
+          onChange(newValue)
+         }
         }}
       />
     </Stack>

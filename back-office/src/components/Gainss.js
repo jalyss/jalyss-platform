@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifss";
-import {
-  DataGrid,
-  GridActionsCellItem,
-  
-} from "@mui/x-data-grid";
-
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
 import Modal from "../components/Commun/Modal";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import StyledInput from "./Commun/inputs/StyledInput";
+import { deleteGain, editGain, fetchGains } from "../store/gain";
 
-function Featuress() {
+function Gainss() {
   const dispatch = useDispatch();
-  const featuresStore = useSelector((state) => state.tarifss);
-  const { features } = featuresStore;
+  const gainsStore = useSelector((state) => state.gain);
+  const { gains } = gainsStore;
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
-  const [editLabel, setEditLabel] = useState("");
+  const [editContent, setEditContent] = useState("");
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
-  const [labelOfDelete, setLabelOfDelete] = useState("");
+  const [contentOfDelete, setContentOfDelete] = useState("");
 
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 5,
@@ -31,40 +26,34 @@ function Featuress() {
   });
   const [rowCount, setRowCount] = React.useState(0);
   React.useEffect(() => {
-    setRowCount(features.items?.length);
+    setRowCount(gains.items?.length);
   }, [rowCount]);
+
+  useEffect(() => {
+    dispatch(fetchGains());
+  }, [dispatch]);
 
   useEffect(() => {
     if (editModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
-        setEditLabel(row.label);
-      }
-    }
-    if (basicModal && editRowId) {
-      const row = rows.find((row) => row.id === editRowId);
-      if (row) {
-        setEditLabel(row.label);
+        setEditContent(row.content);
       }
     }
   }, [editModal, editRowId, rows]);
 
   useEffect(() => {
-    dispatch(fetchFeatures());
-  }, []);
-
-  useEffect(() => {
-    if (features?.items.length) {
-      let aux = features?.items.map((e) => {
+    if (gains?.items?.length) {
+      let aux = gains?.items.map((e) => {
         return {
           ...e,
-          label: e.label,
+          content: e.content,
           createdAt: e.createdAt.slice(0, 10),
         };
       });
       setRows(aux);
     }
-  }, [features.items]);
+  }, [gains.items]);
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
@@ -74,15 +63,15 @@ function Featuress() {
   };
   useEffect(() => {
     if (basicModal && idOfDelete) {
-      const row = rows.find((row) => row.id === idOfDelete);
-      if (row) {
-        setLabelOfDelete(row.label);
+      const gainToDelete = gains.items.find((gain) => gain.id === idOfDelete);
+      if (gainToDelete) {
+        setContentOfDelete(gainToDelete.content);
       }
     }
-  }, [basicModal, idOfDelete, rows]);
+  }, [basicModal, idOfDelete, gains.items]);
 
-  const handleDeleteFeatureClick = (id) => {
-    dispatch(deleteFeatures(id))
+  const handleDeleteGainClick = (id) => {
+    dispatch(deleteGain(id))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -96,8 +85,8 @@ function Featuress() {
   };
 
   const handleEdit = () => {
-    const label = editLabel;
-    dispatch(editFeature({ id: editRowId, label: label }))
+    const content = editContent;
+    dispatch(editGain({ id: editRowId, content: content }))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -110,14 +99,14 @@ function Featuress() {
       });
 
     setEditRowId("");
-    setEditLabel("");
+    setEditContent("");
     toggleShow2();
   };
 
   const columns = [
     {
-      field: "label",
-      headerName: "Label",
+      field: "content",
+      headerName: "Content",
       width: 330,
       editable: false,
     },
@@ -162,7 +151,7 @@ function Featuress() {
   return (
     <div>
       <div className="position-relative">
-        <div className="mb-3">Feature's List</div>
+        <div className="mb-3">Gain's List</div>
         <Box sx={{ height: 600, width: "100%" }}>
           <DataGrid
             rows={rows}
@@ -191,14 +180,15 @@ function Featuress() {
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-           
             {`Are you sure you want to delete `}
-            <span style={{ color: "red" ,margin:"10px"}}>{labelOfDelete}</span>
+            <span style={{ color: "red", margin: "10px" }}>
+              {contentOfDelete}
+            </span>
             {` Feature?`}
           </div>
         }
         confirm={() => {
-          handleDeleteFeatureClick(idOfDelete);
+          handleDeleteGainClick(idOfDelete);
           setBasicModal(false);
         }}
       />
@@ -208,17 +198,17 @@ function Featuress() {
         setBasicModal={setEditModal}
         toggleShow={toggleShow2}
         normal={true}
-        title="Edit feature"
+        title="Edit Gain"
         body={
           <div
             className="d-flex justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={editLabel}
-              label="Label"
+              value={editContent}
+              label="Content"
               onChange={(e) => {
-                setEditLabel(e.target.value);
+                setEditContent(e.target.value);
               }}
             />
           </div>
@@ -229,4 +219,4 @@ function Featuress() {
   );
 }
 
-export default Featuress;
+export default Gainss;
