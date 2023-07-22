@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react';
 import Table from 'react-bootstrap/Table';
 import {useDispatch,useSelector} from 'react-redux';
-import { fetchsessionstypes } from '../../../../store/sessiontyps';
+import { fetchsessionstypes } from '../../../../store/sessiontypes';
 
 
 
