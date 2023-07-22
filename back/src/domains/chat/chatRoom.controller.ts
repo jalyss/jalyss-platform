@@ -28,9 +28,11 @@ export class ChatRoomController {
     return this.chatRoomService.create(createChatDto, user.id);
   }
 
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Post('group')
-  createChatRoomGroup(@Body() dto: CreateChatRoomGroupDto) {
-    return this.chatRoomService.createChatRoomGroup(dto);
+  createChatRoomGroup(@Body() dto: CreateChatRoomGroupDto, @CurrentUser() user: any) {
+    return this.chatRoomService.createChatRoomGroup(dto,user);
   }
   
 

@@ -173,7 +173,7 @@ export class ChatRoomService {
       });
     });
   }
-  async createChatRoomGroup(dto:CreateChatRoomGroupDto){
+  async createChatRoomGroup(dto:CreateChatRoomGroupDto,user:any){
     return await this.prisma.chatRoom.create({
       data: {
         name: dto.name,
@@ -182,7 +182,7 @@ export class ChatRoomService {
           create: dto.participants.map(participant=>({userId:participant.value}))
         },
         messages:{
-          create:dto.participants.map(participant=>({userId:participant.value,text:'hi'}))
+          create:{userId:user.id,text:'hi'}
         }
         
       },
