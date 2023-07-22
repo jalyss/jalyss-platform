@@ -7,35 +7,35 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserPaymentService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateUserPaymentDto,userId:string) {
-    return await this.prisma.userPayment.create({
+  async create(dto: CreateUserPaymentDto,clientId:string) {
+    return await this.prisma.clientPayment.create({
       data: {...dto,
-      userId}
+      clientId}
     });
   }
 
   async findAll() {
-    return await this.prisma.userPayment.findMany({});
+    return await this.prisma.clientPayment.findMany({});
   }
 
   async findOne(id: string) {
-    return await this.prisma.userPayment.findUnique({
+    return await this.prisma.clientPayment.findUnique({
       where: { id },
       include: {
-        user: true,
+        client: true,
       },
     });
   }
 
   async update(id: string, dto: UpdateUserPaymentgDto) {
-    return await this.prisma.userPayment.update({
+    return await this.prisma.clientPayment.update({
       where: { id },
       data: dto,
     });
   }
 
   async remove(id: string) {
-    return await this.prisma.userPayment.delete({
+    return await this.prisma.clientPayment.delete({
       where: { id },
     });
   }

@@ -38,40 +38,40 @@ export class EmployeeService {
 
   }
 
-  async findByLogin({ email, password }: EmployeeLogin) {
-    const emlpoyee = await this.prisma.employee.findFirst({
-      where: { email },
-      include:{avatar:true}
-    });
-    if (!emlpoyee) {
-      throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
-    }
-    const areEqual = await bcrypt.compare(password, emlpoyee.password);
+  // async findByLogin({ email, password }: EmployeeLogin) {
+  //   const emlpoyee = await this.prisma.employee.findFirst({
+  //     where: { email },
+  //     include:{avatar:true}
+  //   });
+  //   if (!emlpoyee) {
+  //     throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
+  //   }
+  //   const areEqual = await bcrypt.compare(password, emlpoyee.password);
 
-    if (!areEqual) {
-      throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
-    }
+  //   if (!areEqual) {
+  //     throw new HttpException('invalid_credentials', HttpStatus.BAD_REQUEST);
+  //   }
 
-    const { password: p, ...rest } = emlpoyee;
-    return rest;
-  }
+  //   const { password: p, ...rest } = emlpoyee;
+  //   return rest;
+  // }
 
-  async signInAdmin(data: EmployeeLogin) {
-    const response = await this.prisma.employee.findUniqueOrThrow({ where: { email: data.email } });
-    if (!response) {
-      throw new HttpException("invalid_credentials",
-        HttpStatus.UNAUTHORIZED);
-    }
-    const isMatch = await bcrypt.compare(data.password, response.password);
-    if (!isMatch) {
-      throw new HttpException("invalid_credentials",
-        HttpStatus.UNAUTHORIZED);
-    }
-    delete response.password
-    if (isMatch && response.isAdmin === true)
-      return response;
+  // async signInAdmin(data: EmployeeLogin) {
+  //   const response = await this.prisma.employee.findUniqueOrThrow({ where: { email: data.email } });
+  //   if (!response) {
+  //     throw new HttpException("invalid_credentials",
+  //       HttpStatus.UNAUTHORIZED);
+  //   }
+  //   const isMatch = await bcrypt.compare(data.password, response.password);
+  //   if (!isMatch) {
+  //     throw new HttpException("invalid_credentials",
+  //       HttpStatus.UNAUTHORIZED);
+  //   }
+  //   delete response.password
+  //   if (isMatch && response.isAdmin === true)
+  //     return response;
 
-  }
+  // }
 
   findAll() {
     return this.prisma.employee.findMany({include:{role:true,branch:true,avatar:true} ,orderBy:{createdAt:"asc"}});
