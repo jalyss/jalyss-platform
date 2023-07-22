@@ -23,7 +23,14 @@ export class CreateCommandDto {
     countryId?: string
     @ApiProperty({ required: false })
     cityId?: string 
-     @ApiProperty({ required: true })
-     commandLine: string[]
+   
+    @IsNotEmpty()
+    @ApiProperty({ required: true })
+    commandLine!: CreateCommandLineDto[] // ! mean required
+}
+class CreateCommandLineDto {
+    // commandId: string;
+    articleByBranchId: string;
+    quantity: number
 }
 

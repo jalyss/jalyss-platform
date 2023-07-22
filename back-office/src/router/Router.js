@@ -98,6 +98,7 @@ import AddFeatures from "../domains/training/views/features/AddFeatures";
 import Features from "../domains/training/views/features/Features";
 import UpdateFeatures from "../domains/training/views/features/UpdateFeature";
 import SessionDetail from "../domains/training/views/sessions/SessionDetail";
+import CommandDetail from "../domains/commands/views/CommandDetail";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -236,6 +237,7 @@ function Router() {
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
               <Route path="create" element={<CreateCommand />} />
+              <Route path="detail/:commandId" element={<CommandDetail/>} />
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
             {/* <Route path="charts" element={<ChartTabs />} /> */}

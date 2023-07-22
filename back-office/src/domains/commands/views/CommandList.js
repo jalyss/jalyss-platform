@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
 import { GiConfirmed ,GiCancel} from 'react-icons/gi';
-import { AiOutlineEye } from 'react-icons/ai';
+import { AiFillEdit, AiOutlineEye } from 'react-icons/ai';
 import { FcCancel } from 'react-icons/fc';
 import { GrAdd } from 'react-icons/gr';
 import { TbTruckDelivery } from 'react-icons/tb';
@@ -167,6 +167,13 @@ function CommandList() {
             onClick={() => handleEditClick(id)}
             color="inherit"
           />,
+          <GridActionsCellItem
+            icon={<AiFillEdit size={15} />}
+            label="Edit"
+            className="textPrimary"
+            onClick={() => handleClick(id)}
+            color="inherit"
+          />,
 
 
         ];
@@ -202,6 +209,11 @@ function CommandList() {
 
 
   const handleEditClick = (id) => {
+    console.log(id);
+    navigate(`detail/${id}`)
+
+  };
+  const handleClick = (id) => {
     console.log(id);
     navigate(`edit/${id}`)
 
