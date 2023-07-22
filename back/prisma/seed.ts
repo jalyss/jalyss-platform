@@ -1702,7 +1702,6 @@ async function main() {
       });
     }
   }
-
   //create session
   let lectures = [];
   let sessions = [];
