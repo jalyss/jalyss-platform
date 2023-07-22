@@ -33,10 +33,15 @@ export const fetchChatRoom = createAsyncThunk(
 export const createChatRoomGroup = createAsyncThunk(
   "chatRoom/update",
   async (args, { dispatch }) => {
-    
+    let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+    const configs = {
+      headers: {
+        Authorization: 'Bearer ' + token.Authorization
+      }
+    }
     const response = await axios.post(
       `${config.API_ENDPOINT}/chatRoom/group`,
-      args
+      args,configs
     );
     dispatch(findAllRooms())
     return response.data;
@@ -46,9 +51,15 @@ export const updateChatRoom = createAsyncThunk(
   "chatRoom/update",
   async (args, { dispatch }) => {
     const { id,...rest } = args;
+    let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+    const configs = {
+      headers: {
+        Authorization: 'Bearer ' + token.Authorization
+      }
+    }
     const response = await axios.patch(
       `${config.API_ENDPOINT}/chatRoom/${id}`,
-      rest
+      rest,configs
     );
     dispatch(findAllRooms())
     return response.data;

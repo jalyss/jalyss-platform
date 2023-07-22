@@ -22,7 +22,9 @@ export default function App({
   ofDelete,
   bodOfDelete,
   confirm,
-  fn
+  fn,
+  onSubmit,
+  noButtons
 }) {
   return (
       <MDBModal
@@ -67,10 +69,11 @@ export default function App({
               )}
             </MDBModalBody>
             <MDBModalFooter className="d-flex justify-content-center align-items-center">
-              {normal ? (
+              {!noButtons?<>
+                {normal ? (
                 <>
-                  <CloseButton onClick={toggleShow} />
-                  <SaveButton onClick={fn} />
+                  <CloseButton onClick={toggleShow} type={'button'}/>
+                  <SaveButton onClick={fn} onSubmit={onSubmit} type={onSubmit?'submit':'button'} />
                 </>
               ) : (
                 <>
@@ -84,6 +87,8 @@ export default function App({
                   </button>
                 </>
               )}
+              </>:null}
+              
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

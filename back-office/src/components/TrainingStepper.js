@@ -18,9 +18,7 @@ function TrainingStepper({ sessions }) {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(null);
   const [isChecked, setIsChecked] = useState(false);
-  const [checkedStates, setCheckedStates] = useState(
-    sessions?.SessionHasFeatures?.map(() => false)
-  );
+
 
   useEffect(() => {
     if (sessions && sessions.SessionHasFeatures) {
@@ -70,11 +68,7 @@ function TrainingStepper({ sessions }) {
     setActiveStep(0);
   };
 
-  const handleCheckboxChange = (index) => {
-    setCheckedStates((prevStates) =>
-      prevStates.map((prevState, i) => (i === index ? !prevState : prevState))
-    );
-  };
+ 
 
   const getStepContent = (step) => {
     switch (step) {

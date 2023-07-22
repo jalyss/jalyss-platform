@@ -13,7 +13,7 @@ import Bio from "../components/Profile/bio";
 import { navBarDataProfile } from "../constants/NavBarDataProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import CropEasy from '../../src/components/Commun/inputs/CropEasy'
+import CropEasy from "../../src/components/Commun/inputs/CropEasy";
 
 import {
   MDBCol,
@@ -68,7 +68,7 @@ export default function ProfilePage() {
     const file = e.target.files[0];
     setOpp(file);
     setPreview(URL.createObjectURL(file));
-    setOpenCrop(true)
+    setOpenCrop(true);
     setAvatar(opp);
     setEditMode(true);
   };
@@ -129,82 +129,119 @@ export default function ProfilePage() {
     });
   };
 
-  return (
-    !openCrop?(
+  return !openCrop ? (
     <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
         <MDBRow>
           <MDBCol lg="4">
             <MDBCard className="mb-4">
-            <MDBCardBody className="text-center" style={{ width: "125px", height: "auto" }}>
-  {user.avatar || preview ? (
-  <div className="image-upload">
-  <MDBCardImage
-    src={preview ? preview : authStore?.me?.avatar?.path || "https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"}
-    alt=" "
+              <MDBCardBody
+                className="text-center"
+                // style={{ width: "125px", height: "auto" }}
+              >
+                {user.avatar || preview ? (
+                  <div className="image-upload">
+                    <MDBCardImage
+                      src={
+                        preview
+                          ? preview
+                          : authStore?.me?.avatar?.path ||
+                            "https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                      }
+                      alt=" "
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                      fluid
+                    />
+                    <div className="d-flex justify-content-between align-items-center p-3 absolute ">
+                      <label htmlFor="upload-image">
+                        <span className="material-symbols-outlined upbtn">
+                          +
+                        </span>
+                      </label>
+                      <input
+                        id="upload-image"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleImageChange}
+                      />
 
-    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-    fluid
-  />
-</div>
-
-  ) : (
-    <MDBCardImage
-      className="rounded-circle"
-      style={{ width: "100%", height: "100%" }}
-      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
-      alt="avatar"
-      fluid
-    
-    />
-  )}
-                <div className="d-flex justify-content-between align-items-center p-3 ">
-                  <label htmlFor="upload-image">
-                  <span className="material-symbols-outlined upbtn">+</span>
-                  </label>
-                  <input
-                    id="upload-image"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageChange}
-                  />
-
-                 {user.avatar && (
-  <button
-    type="button"
-    className="delete-button"
-    onClick={handleRemoveImage}
-  >
-    <FontAwesomeIcon icon={faTrash} className="delete-icon" />
-
-  </button>
-)}
-
-                </div>
+                      {user.avatar && (
+                        <button
+                          type="button"
+                          className=""
+                          onClick={handleRemoveImage}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="delete-icon"
+                          />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <MDBCardImage
+                      className="rounded-circle "
+                      style={{ width: "100%", height: "100%" }}
+                      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                      alt="avatar"
+                      fluid
+                    />
+                    <div className="d-flex justify-content-between align-items-center p-3 absolute ">
+                      <label htmlFor="upload-image">
+                        <span className="material-symbols-outlined upbtn">
+                          +
+                        </span>
+                      </label>
+                      <input
+                        id="upload-image"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleImageChange}
+                      />
+                      {user.avatar && (
+                        <button
+                          type="button"
+                          className=""
+                          onClick={handleRemoveImage}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="delete-icon"
+                          />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {editMode && (user.avatar || preview) && (
- <>
-  <div className="button-container">
-    <button
-      type="button"
-      className="cancel-button"
-      onClick={() => setEditMode(false)}
-    >
-      Cancel
-    </button>
-    <button 
-      type="button"
-      className="save-button"
-      onClick={submitEditProfile}
-    >
-      Save
-    </button>
-  </div>
-</>
-)}
-
-
+                  <>
+                    <div className="button-container">
+                      <button
+                        type="button"
+                        className="cancel-button"
+                        onClick={() => setEditMode(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className="save-button"
+                        onClick={submitEditProfile}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </>
+                )}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
@@ -214,7 +251,14 @@ export default function ProfilePage() {
               <MDBCardBody>
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Full Name</MDBCardText>
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Full Name
+                    </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
@@ -224,18 +268,34 @@ export default function ProfilePage() {
                 </MDBRow>
                 <hr />
                 <MDBRow>
-                 <MDBCol sm="3">
-                 <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Email</MDBCardText>
-                 </MDBCol>
-                 <MDBCol sm="9">
-                  <MDBCardText className="text-muted">{user.email}</MDBCardText>
+                  <MDBCol sm="3">
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Email
+                    </MDBCardText>
                   </MDBCol>
-                    </MDBRow>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      {user.email}
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
                 <hr />
 
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Mobile</MDBCardText>
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Mobile
+                    </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">{user.tel}</MDBCardText>
@@ -244,7 +304,14 @@ export default function ProfilePage() {
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText style={{ color: "rgb(156 39 176 / 70%)" , fontWeight: 'bold' }}>Address</MDBCardText>
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Address
+                    </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
@@ -265,10 +332,9 @@ export default function ProfilePage() {
                 style={{
                   backgroundColor:
                     elem.path === path ? "rgb(156 39 176 / 34%)" : "",
-                    borderRadius: '10px',
-                    padding: '5px 10px',
-                    margin: '0 5px',
-                    
+                  borderRadius: "10px",
+                  padding: "5px 10px",
+                  margin: "0 5px",
                 }}
               >
                 <MDBNavbarLink
@@ -277,10 +343,9 @@ export default function ProfilePage() {
                   }}
                   className="label-btn"
                   style={{
-                    color: elem.path === path ? "#fff" : "rgb(156 39 176 )", 
-                    textDecoration: 'none',
-                    fontWeight: 'bold', 
-                  
+                    color: elem.path === path ? "#fff" : "rgb(156 39 176 )",
+                    textDecoration: "none",
+                    fontWeight: "bold",
                   }}
                 >
                   {elem.name}
@@ -292,8 +357,10 @@ export default function ProfilePage() {
 
         <Outlet />
       </MDBContainer>
-      
     </section>
-    ):<CropEasy {...{ preview, setOpenCrop, setPreview,setOpp, setAvatar,avatar }}/>
-  )
+  ) : (
+    <CropEasy
+      {...{ preview, setOpenCrop, setPreview, setOpp, setAvatar, avatar }}
+    />
+  );
 }
