@@ -1,20 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UserPaymentService } from './userPayment.service';
 import { CreateUserPaymentDto } from './dto/create-UserPayment.dto';
 import { UpdateUserPaymentgDto } from './dto/update-UserPayment.dto';
 import { ApiTags } from '@nestjs/swagger';
-
+import { CurrentUser } from '../auth/decorators/currentUser';
 
 @ApiTags('UserPayment')
 @Controller('userPayment')
 export class UserPaymentController {
   constructor(private readonly userPaymentService: UserPaymentService) {}
-
-  @Post(':userId')
-  create(@Body() dto: CreateUserPaymentDto,
-  @Param('userId') userId : string
-  ) {
-    return this.userPaymentService.create(dto,userId);
+  @UseGuards()
+  @Post()
+  create(@Body() dto: CreateUserPaymentDto, @CurrentUser() user:any) {
+    return this.userPaymentService.create(dto, user.clientId);
   }
 
   @Get()
@@ -28,7 +35,10 @@ export class UserPaymentController {
   }
 
   @Patch(':userPaymentId')
-  update(@Param('userPaymentId') userPaymentId: string, @Body() updateUserPaymentDto:UpdateUserPaymentgDto) {
+  update(
+    @Param('userPaymentId') userPaymentId: string,
+    @Body() updateUserPaymentDto: UpdateUserPaymentgDto,
+  ) {
     return this.userPaymentService.update(userPaymentId, updateUserPaymentDto);
   }
 

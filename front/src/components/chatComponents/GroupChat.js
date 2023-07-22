@@ -279,6 +279,7 @@ const ChatRoom = ({
           return (
             <Stack
               direction="row"
+              className="pointer"
               alignItems="center"
               justifyContent="space-between"
               key={i}
