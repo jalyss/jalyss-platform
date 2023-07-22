@@ -14,7 +14,7 @@ import SaveButton from "../../../../components/Commun/buttons/SaveButton";
 import { useRef } from "react";
 import Modal from "../../../../components/Commun/Modal";
 import Select from "react-select";
-
+import { MDBModalFooter} from "mdb-react-ui-kit"
 import axios from "axios";
 import { fetchFeatures } from "../../../../store/tarifSession";
 import TrainingStepper from "../../../../components/TrainingStepper";
@@ -35,6 +35,8 @@ import { fetchGains, fetchPrerequires } from "../../../../store/gain";
 import { fetchsessionstypes } from "../../../../store/sessiontypes";
 
 import { DatePicker} from 'antd';
+import DisplayLottie from './../../../../components/DisplayLottie';
+import pricing1 from "../../../../constants/pricing1.json"
 const { RangePicker } = DatePicker;
 
 const Addtarif = () => {
@@ -224,6 +226,7 @@ const Addtarif = () => {
                       type="file"
                       className="form-control "
                       onChange={handleImageChange}
+                      style={{ border: '1px solid #bfbab7',width:290 }} 
                     />
                   )}
                 </TableCell>
@@ -236,6 +239,8 @@ const Addtarif = () => {
                     name="title"
                     value={addSession?.Title}
                     onChange={handleAddSessionChange}
+                    style={{ border: '1px solid #bfbab7',width:290 }} 
+
                   />
                 </TableCell>
               </TableRow>
@@ -251,18 +256,20 @@ const Addtarif = () => {
                     placeholder="Enter description"
                     name="description"
                     onChange={handleAddSessionChange}
+                    style={{ border: '1px solid #bfbab7',width:290 }} 
                   />
                 </TableCell>
                 <TableCell className="fw-bold">Category:</TableCell>
                 <TableCell>
                   <select
                     value={categoryId}
-                    class="form-select mt-3"
+                    class="form-select "
                     aria-label="Default select example"
                     onChange={handleChange}
                     required
+                    style={{ border: '1px solid #bfbab7',width:290 ,height:42 }} 
                   >
-                    <option value="" disabled selected>
+                    <option value="" disabled selected >
                       Choose your Session category
                     </option>
                     {categories.items.map((category, index) => (
@@ -276,8 +283,8 @@ const Addtarif = () => {
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                {/* <TableCell className="fw-bold">Start-Date:</TableCell>
-                <TableCell>
+                 <TableCell className="fw-bold">Start-End-Date:</TableCell>
+              {/* <TableCell>
                   <input
                     required
                     type="date"
@@ -300,9 +307,31 @@ const Addtarif = () => {
                 </TableCell> */}
                 <TableCell>
           
-                {/* <RangePicker onChange={onChange}/> */}
+                <RangePicker onChange={onChange} style={{height:"40px"}} className=""/>
 
 
+                </TableCell>
+                <TableCell className="fw-bold">Types:</TableCell>
+                <TableCell>
+                  <div className="d-flex">
+                    <AutoCompleteFilter
+                      required
+                      data={types?.items}
+                      labelOptionName="title"
+                      label="Add types"
+                      onChange={setSelectedTypes}
+                      placeholder="Select your session types !"
+                      fullWidth={true}
+                    />
+                    <span style={{ color: "red" }}>*</span>
+                  </div>
+                  <div>
+                    {!selectedTypes.length && (
+                      <p style={{ color: "red", textAlign: "start" }}>
+                        You must select types for the session !{" "}
+                      </p>
+                    )}
+                  </div>
                 </TableCell>
               </TableRow>
               <TableRow
@@ -323,7 +352,7 @@ const Addtarif = () => {
                     <span style={{ color: "red" }}>*</span>
                   </div>
                   <div>
-                    {!selectedFeatures.length && (
+                    {!selectedGains.length && (
                       <p style={{ color: "red", textAlign: "start" }}>
                         You must select gains for the session !{" "}
                       </p>
@@ -345,7 +374,7 @@ const Addtarif = () => {
                     <span style={{ color: "red" }}>*</span>
                   </div>
                   <div>
-                    {!selectedFeatures.length && (
+                    {!selectedPrerequire.length && (
                       <p style={{ color: "red", textAlign: "start" }}>
                         You must select prerequire for the session !{" "}
                       </p>
@@ -379,36 +408,15 @@ const Addtarif = () => {
                     )}
                   </div>
                 </TableCell>
-                <TableCell className="fw-bold">Types:</TableCell>
-                <TableCell>
-                  <div className="d-flex">
-                    <AutoCompleteFilter
-                      required
-                      data={types?.items}
-                      labelOptionName="title"
-                      label="Add types"
-                      onChange={setSelectedTypes}
-                      placeholder="Select your session types !"
-                      fullWidth={true}
-                    />
-                    <span style={{ color: "red" }}>*</span>
-                  </div>
-                  <div>
-                    {!selectedFeatures.length && (
-                      <p style={{ color: "red", textAlign: "start" }}>
-                        You must select types for the session !{" "}
-                      </p>
-                    )}
-                  </div>
-                </TableCell>
+               
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
 
         <div className="p-5">
-          <div className="d-flex justify-content-end">
-            <AddButton
+          <div className="d-flex justify-content-center">
+           <AddButton
               disabled={selectedFeatures.length ? false : true}
               onClick={() => {
                 setShowAddTarifModal(true);
@@ -421,7 +429,22 @@ const Addtarif = () => {
                 });
               }}
               content="Add Tarif"
-            />
+            /> 
+            {/* <CloseButton  modifTitle={"Add tarif"}
+             disabled={selectedFeatures.length ? false : true}
+             onClick={() => {
+               setShowAddTarifModal(true);
+               setTarif({
+                 ...tarif,
+                 features: selectedFeatures.map((elem) => ({
+                   ...elem,
+                   isAvailable: false,
+                 })),
+               });
+             }}/> */}
+           <DisplayLottie animationData={pricing1} style={{ width: "120px", height: "80px" }}  />
+
+
           </div>
           <TrainingPricing
             session={addSession}
@@ -432,6 +455,7 @@ const Addtarif = () => {
               setIsEdit(true);
               setShowAddTarifModal(true);
             }}
+            header={true}
           />
           <div className="text-center">
             <SaveButton
@@ -450,13 +474,15 @@ const Addtarif = () => {
         normal={true}
         title="Add new Tarif"
         noButtons={true}
+        noFooter={true}
         body={
           <form
             onSubmit={submitTarif}
             // className="d-flex justify-content-center align-items-center "
-            style={{ marginRight: "50px" }}
+            // style={{ marginRight: "50px" }}
+            className="d-flex flex-column justify-content-center align-items-center"
           >
-            <div className="gap-3 d-flex">
+            <div className="gap-3 d-flex ">
               <StyledInput
                 value={tarif?.title || ""}
                 label="Title"
@@ -478,7 +504,7 @@ const Addtarif = () => {
             <div>
               <TarifSection setTarif={setTarif} tarif={tarif} />
             </div>
-            <div>
+            <div className="d-flex justify-content-center align-items-center mt-5">
               <CloseButton
                 onClick={() => setShowAddTarifModal(false)}
                 type={"button"}
