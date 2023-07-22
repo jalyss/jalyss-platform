@@ -20,6 +20,17 @@ function CreateUser() {
   const [preview, setPreview] = useState(null)
   const [user, setUser] = useState({})
   const [avatar, setAvatar] = useState(null)
+  const [passwordError, setPasswordError] = useState(false);
+
+  useEffect(() => {
+    if (user.password && user.confirmPassword) {
+      if (user?.password !== user?.confirmPassword) {
+        setPasswordError(true);
+      } else {
+        setPasswordError(false);
+      }
+    }
+  }, [user.password,user.confirmPassword]);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -28,6 +39,10 @@ function CreateUser() {
   console.log('test',user);
   const submitSignup = async (event) => {
     event.preventDefault();
+    if(passwordError){
+      showErrorToast(t('errorPassword'));
+      return;
+    }
     let aux = Object.assign({}, user)
     dispatch(createUser(aux))
       .then(res => {
@@ -62,7 +77,7 @@ function CreateUser() {
                   required
                   name='fullNameAr'
                   id="fullNameAr"
-                  value={user?.fullNameEn}
+                  value={user?.fullNameAr}
                   onChange={(e)=>{handleChange}}
                 />
               </div>
@@ -126,7 +141,7 @@ function CreateUser() {
                   <input
                     style={{ width: '100%' }}
                     required
-                    className='form-control'
+                    className={`form-control ${passwordError ? "is-invalid" :user.password&&user.confirmPassword?"is-valid":""}`}
                     id="password"
                     name='password'
                     type={isShowPassword ? 'text' : 'password'}
@@ -136,7 +151,7 @@ function CreateUser() {
                   <div className='position-relative w-0'>
                     <div
                       style={{
-                        left: i18n.languages[0] === 'ar' ? 15 : -25,
+                        left: i18n.languages[0] === 'ar' ? 15 : -45,
                         top: 5,
 
                       }}
@@ -163,17 +178,17 @@ function CreateUser() {
                   <input
                     style={{ width: '100%' }}
                     required
-                    className='form-control'
+                    className={`form-control ${passwordError ? "is-invalid" :user.password&&user.confirmPassword?"is-valid":""}`}
                     id="confirmPassword"
                     name='confirmPassword'
                     type={isShowPassword ? 'text' : 'password'}
-                    value={user?.password}
+                    value={user?.confirmPassword}
                     onChange={handleChange}
                   />
                   <div className='position-relative w-0'>
                     <div
                       style={{
-                        left: i18n.languages[0] === 'ar' ? 15 : -25,
+                        left: i18n.languages[0] === 'ar' ? 15 : -45,
                         top: 5,
 
                       }}
@@ -190,6 +205,11 @@ function CreateUser() {
                 </div>
               </div>
             </div>
+            {passwordError && (
+              <div style={{color:'red'}} >
+                Password and confirm password are not muched
+              </div>
+            )}
             <div class="row">
               <div class="col mb-3 ">
                 <label for="address">

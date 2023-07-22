@@ -18,7 +18,6 @@ import { IconButton } from "@mui/material";
 
 import Container from "react-bootstrap/Container";
 
-
 function Header() {
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
@@ -155,7 +154,7 @@ function Header() {
                           <Dropdown.Item
                             onClick={() => {
                               localStorage.removeItem("token");
-                              navigate("/login");
+                              window.location.pathname="/login";
                             }}
                           >
                             LogOut
@@ -163,13 +162,22 @@ function Header() {
                         </Dropdown.Menu>
                       </Dropdown>
                     ) : (
-                      <button
-                        className="nav-link btn btn-link"
-                        style={{ color: "white" }}
-                        onClick={() => navigate("/login")}
-                      >
-                        {t("login")}
-                      </button>
+                      <div className="d-flex gap-3">
+                        <button
+                          className="nav-link btn btn-link"
+                          style={{ color: "white" }}
+                          onClick={() => navigate("/login")}
+                        >
+                          {t("login")}
+                        </button>
+                        <button
+                          className="nav-link btn btn-link"
+                          style={{ color: "white" }}
+                          onClick={() => navigate("/signup")}
+                        >
+                          {t("signup")}
+                        </button>
+                      </div>
                     )}
                   </div>
                   <div className="d-flex align-items-center mx-3 ">

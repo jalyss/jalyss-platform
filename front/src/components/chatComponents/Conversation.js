@@ -72,12 +72,7 @@ const Conversation = ({
     if (selectedUser) scrollToBottom();
   }, [inbox, selectedUser]);
 
-  // useEffect(() => {
-  //   if (userId)
-  //     dispatch(fetchUser(userId))
-  //       .then((res) => setUserName(user?.fullNameEn))
-  //       .catch((err) => {});
-  // }, [userId]);
+
 
   useEffect(() => {
     axios
@@ -108,6 +103,7 @@ const Conversation = ({
             if(!selectedUser)
             setSelectedUser(res.data)
             setExist(res.data.id);
+            setInbox([])
           }).catch(err=>console.log(err))
       );
   }, [myId, userId]);
@@ -143,6 +139,7 @@ const Conversation = ({
           userId: myId,
           num: number,
         };
+        console.log('seen');
         socket.emit("msg-seen", payload);
       }
     }
@@ -150,6 +147,7 @@ const Conversation = ({
 
   useEffect(() => {
     function getMsg(value) {
+      console.log(value);
       setInbox((Inbox) => [...Inbox, value]);
     }
 
@@ -174,7 +172,13 @@ const Conversation = ({
       }
     }
     function getInbox(data) {
-      setInbox(data);
+      let aux = [];
+          for (let i = data.length - 1; i >= 0; i--) {
+            aux.push(data[i]);
+          }
+
+          setInbox(aux);
+     
     }
     function getChatRoomCreated(data) {
       setExist(data.id);
@@ -442,7 +446,7 @@ const Conversation = ({
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <IconButton onSubmit={handleSubmit}>
+                  <IconButton onSubmit={handleSubmit} type="submit">
                     <PaperPlaneTilt color="#fff" />
                   </IconButton>
                 </Stack>

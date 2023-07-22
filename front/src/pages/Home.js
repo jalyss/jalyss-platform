@@ -30,9 +30,9 @@ function Home() {
         ]}
       />
       <HorizontalMenu>
-        {publishingHouseStore.publishingHouses.items.map(({ id, logo }) => (
+        {publishingHouseStore.publishingHouses.items.map(({ id, logo,name }) => (
           <div key={id} className="horizontal-item horizontal-item-publishingHouse ">
-            <img key={id} draggable="false" src={logo} alt={id} />
+            <img key={id} draggable="false" src={logo?.path} alt={name} />
           </div>
         ))}
       </HorizontalMenu>
