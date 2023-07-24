@@ -15,6 +15,9 @@ export class LectureService {
 
   async findAll() {
     return await this.prisma.lecture.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
       include: {
         coaching: true,
         assesments: true,
@@ -30,6 +33,8 @@ export class LectureService {
       },
     });
   }
+  
+  
   
 
   async findOne(id: string) {

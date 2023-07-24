@@ -250,12 +250,12 @@ const ChatRoom = ({
   };
 
   const ChatElement = () => {
-    const filteredUsers = filteredChatRooms.filter(
-      (e) => e.participants.length === 2
-    );
-    const filteredGroups = filteredChatRooms.filter(
-      (e) => e.participants.length > 2
-    );
+    // const filteredUsers = filteredChatRooms.filter(
+    //   (e) => e.participants.length === 2
+    // );
+    // const filteredGroups = filteredChatRooms.filter(
+    //   (e) => e.participants.length > 2
+    // );
     return (
       <Box
         sx={{
@@ -279,6 +279,7 @@ const ChatRoom = ({
           return (
             <Stack
               direction="row"
+              className="pointer"
               alignItems="center"
               justifyContent="space-between"
               key={i}
@@ -342,7 +343,7 @@ const ChatRoom = ({
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">Discussion</Typography>
+          <Typography variant="h5">Groups</Typography>
           <IconButton>
             <BookOpen />
           </IconButton>

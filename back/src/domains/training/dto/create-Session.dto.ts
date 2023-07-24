@@ -1,20 +1,32 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
+import { Feature, SessionTarif, SessionTarifHasFeatures } from '@prisma/client';
 
 export class CreateSessionDto {
-    @ApiProperty()
-    title : string ;
-    @ApiProperty()
-    description:string ;
-    @ApiProperty()
-    startDate:Date ;
-    @ApiProperty()
-    endDate:Date ;
-    @ApiProperty()
-    categoryId:string ;
-    @ApiProperty()
-
-    previousSessionId:string;
-    
-    @ApiProperty()
-    nextSessionId:string
+  @ApiProperty()
+  title: string;
+  @ApiProperty()
+  description: string;
+  @ApiProperty()
+  startDate: Date;
+  @ApiProperty()
+  endDate: Date;
+  @ApiProperty()
+  categoryId: string;
+  @ApiProperty()
+  previousSessionId: string;
+  @ApiProperty()
+  nextSessionId: string;
+  @ApiProperty()
+  SessionHasFeaturesIds: string[];
+  @ApiProperty()
+  tarifs: TarifsSesssionDto[];
+}
+export class TarifsSesssionDto {
+  title: string;
+  price: number;
+  features: FeatureTarifSessionDto[];
+}
+export class FeatureTarifSessionDto {
+  isAvailable: boolean;
+  id: string;
 }

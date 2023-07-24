@@ -18,6 +18,14 @@ import { LectureService } from './lecture.service';
 import { CoachingService } from './coaching.service';
 import { SessionFeedbacksController } from './session-feedbacks.controller';
 import { SessionFeedbacksService } from './session-feedbacks.service';
+import { SessionHasLectureController } from './sessionHasLecture.controller';
+import { SessionHasLectureService } from './sessionHasLecture.service';
+import { FeaturesService } from './features.service';
+import { FeaturesController } from './features.controller';
+import { PrerequireController } from './prerequire.controller';
+import { GainController } from './gain.controller';
+import { PrerequireService } from './prerequire.service';
+import { GainService } from './gain.service';
 
 @Module({
   controllers: [
@@ -29,7 +37,11 @@ import { SessionFeedbacksService } from './session-feedbacks.service';
     SessionController,
     LectureController,
     CoachingController,
-    SessionFeedbacksController
+    SessionFeedbacksController,
+    SessionHasLectureController,
+    FeaturesController,
+    PrerequireController,
+    GainController
   ],
   providers: [
     UserPaymentService,
@@ -41,7 +53,11 @@ import { SessionFeedbacksService } from './session-feedbacks.service';
     LectureService,
     CoachingService,
     PrismaService,
-    SessionFeedbacksService
+    SessionFeedbacksService,
+    SessionHasLectureService,
+    FeaturesService,
+    PrerequireService,
+    GainService
   ],
 })
 export class TrainingModule {}

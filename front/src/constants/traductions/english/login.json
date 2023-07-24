@@ -1,6 +1,6 @@
 {
     "login":"Login",
-    "address":"Email",
+    "email":"Email",
     "mdp":"Password",
     "btnlogin":"Login",
     "forgetpass":"did you forget your password ?"

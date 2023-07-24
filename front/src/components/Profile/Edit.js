@@ -32,8 +32,6 @@ const Edit = () => {
   useEffect(() => {
     if (authStore.me) {
       setUser(authStore.me);
-
-      console.log(user, "lenna");
     }
   }, [authStore.me]);
 
@@ -41,6 +39,10 @@ const Edit = () => {
     const { name, value } = e.target;
     setUser((User) => ({ ...User, [name]: value }));
   };
+  // fama hajet m3ach mawjoudin fil user direct walou mawjoudin fil client ma3neha user.client
+// l back khadmou khayri 
+// ena badel wala 3ana user w el user ynajem ykoun client w ynajem ykoun employee eyy fhmtek 
+// hatta fil bach office fama hajet user.employee eyy kima lcoach bravo
 
   const submitEditProfile = async (event) => {
     if (!editMode) {
@@ -90,7 +92,7 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("nameAr")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         class="form-control mt-2"
@@ -113,7 +115,7 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("nameEn")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         class="form-control mt-2"
@@ -136,7 +138,7 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("email")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         required
@@ -160,7 +162,7 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("phone")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         required
@@ -168,11 +170,11 @@ const Edit = () => {
                         class="form-control mt-2"
                         id="tel"
                         name="tel"
-                        value={user?.tel}
+                        value={user?.client?.tel}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.tel}</span>
+                      <span>{user?.client?.tel}</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -184,18 +186,18 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("address")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         required
                         class="form-control mt-2"
                         id="address"
                         name="address"
-                        value={user?.address}
+                        value={user?.client?.address}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.address}</span>
+                      <span>{user?.client?.address}</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -207,18 +209,18 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("country")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         type="tel"
                         class="form-control mt-2"
                         id="country"
                         name="countryId"
-                        value={user?.country?.nameAr}
+                        value={user?.client?.country?.nameAr}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.country?.nameAr}</span>
+                      <span>{user?.client?.country?.nameAr}</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -230,17 +232,17 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("city")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         class="form-control mt-2"
                         id="city"
                         name="cityId"
-                        value={user?.city?.nameAr}
+                        value={user?.client?.city?.nameAr}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.city?.nameAr}</span>
+                      <span>{user?.client?.city?.nameAr}</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -252,17 +254,17 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("functionalArea")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         class="form-control mt-2"
                         id="functionalArea"
                         name="functionalAreaId"
-                        value={user?.functionalArea?.nameAr}
+                        value={user?.client?.functionalArea?.nameAr}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.functionalArea?.nameAr}</span>
+                      <span>{user?.client?.functionalArea?.nameAr}</span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -274,17 +276,17 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("educationLevel")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         class="form-control"
                         id="educationLevel"
                         name="educationLevelId"
-                        value={user?.educationLevel?.nameAr}
+                        value={user?.client?.educationLevel?.nameAr}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.educationLevel?.nameAr}</span>
+                      <span>{user?.client?.educationLevel?.nameAr} </span>
                     )}
                   </TableCell>
                 </TableRow>
@@ -296,26 +298,26 @@ const Edit = () => {
                   <TableCell className="fw-bold" align="left">
                     {t("jobTitle")}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="right">
                     {editMode ? (
                       <input
                         class="form-control mt-2"
                         id="jobTitle"
                         name="jobTitleId"
-                        value={user?.jobTitle?.nameAr}
+                        value={user?.client?.jobTitle?.nameAr}
                         onChange={handleChange}
                       />
                     ) : (
-                      <span>{user?.jobTitle?.nameAr}</span>
-                    )}
-                  </TableCell>
+                      <span>{user?.client?.jobTitle?.nameAr}</span>
+                    )}  </TableCell>
+                   
+                 
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
         </div>
       </div>
-
       <div className="w-100 d-flex justify-content-center">
         <button
           type="submit"
@@ -325,6 +327,7 @@ const Edit = () => {
           <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
         </button>
       </div>
+     
     </form>
   );
 };

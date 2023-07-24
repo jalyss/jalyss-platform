@@ -55,12 +55,7 @@ const ChatRoom = ({
   };
 
   const ChatElement = () => {
-    const filteredUsers = filteredChatRooms.filter(
-      (e) => e.participants.length === 2
-    );
-    const filteredGroups = filteredChatRooms.filter(
-      (e) => e.participants.length > 2
-    );
+  
     return (
       <Box
         sx={{
@@ -83,6 +78,7 @@ const ChatRoom = ({
           }
           return (
             <Stack
+            className="pointer"
               direction="row"
               alignItems="center"
               justifyContent="space-between"
@@ -106,20 +102,21 @@ const ChatRoom = ({
                 </StyledBadge>
                 <Stack>
                   <Typography variant="subtitle1">{name}</Typography>
-                  <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
+                  <Typography variant="caption">{chatRoom.messages[0]?.text}</Typography>
                 </Stack>
 
               </Stack>
               <Stack spacing={2} alignItems="center">
                 <Typography sx={{ fontWeight: 600 }} variant="caption">
-                  {chatRoom.messages[0].createdAt.slice(11, 16)}
+                  {chatRoom.messages[0]?.createdAt.slice(11, 16)}
                 </Typography>
-                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0].userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
+                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0]?.userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
 
                   (
                     <Checks size={25} weight="light" color="blue" />
 
                   )}
+                 
                  
                 {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
               </Stack>

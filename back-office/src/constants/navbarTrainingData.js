@@ -12,9 +12,21 @@ export const navbarTrainigData = [
     path: "/training/coachs",
   },
   {
-    name: "Tarifs",
-    path: "/training/tarifs",
+    name: "Features",
+    path: "/training/features",
   },
+  {
+    name: "Requests",
+    path: "/training/requests",
+  },
+  {
+    name: "Gain",
+    path: "/training/gains",
+  },
+  {
+    name: "Prerequire",
+    path: "/training/prerequires",
+  }
   
 
 ];

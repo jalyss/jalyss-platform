@@ -1,9 +1,10 @@
 import React from "react";
 
-function CloseButton({ onClick, mt, mb }) {
+function CloseButton({ onClick, mt, mb ,modifTitle ,type}) {
   return (
     <button
       class="full "
+      type={type}
       style={{
         marginTop: mt,
         marginBottom: mb,
@@ -13,7 +14,7 @@ function CloseButton({ onClick, mt, mb }) {
       }}
       onClick={onClick}
     >
-      Close
+    {modifTitle?modifTitle:"Close"} 
     </button>
   );
 }

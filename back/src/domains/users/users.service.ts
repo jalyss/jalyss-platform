@@ -2,29 +2,31 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { UpdateUserDto, UpdateUserStatusDto } from './dto/update-user.dto';
+import {
+  UpdateUserDto,
+  UpdateUserIsCoach,
+  UpdateUserStatusDto,
+} from './dto/update-user.dto';
 import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
-import { Media, User } from '@prisma/client';
+import { Client, Employee, Media, User } from '@prisma/client';
 
 export interface FormatLogin extends Partial<User> {
   id: string;
   fullNameEn: string;
   fullNameAr: string;
+  isClient: boolean;
+  clientId: string;
+  employeeId: string;
   email: string;
-  address: string;
-  tel: string;
   avatarId: string;
   createdAt: Date;
   updatedAt: Date;
-  accountBalance: number;
-  categoryId: string;
-  educationLevelId: string;
-  functionalAreaId: string;
-  jobTitleId: string;
   avatar: Media;
+  client: Client;
+  employee: Employee;
 }
 
 @Injectable()
@@ -35,9 +37,11 @@ export class UsersService {
     const salt = await bcrypt.genSalt();
     data.password = await bcrypt.hash(data.password, salt);
 
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data,
     });
+    
+    return user;
   }
 
   findAll() {
@@ -46,25 +50,25 @@ export class UsersService {
     });
   }
 
-
-  
   authorList() {
     return this.prisma.user.findMany({
       where: {
         Blog: {
           some: {
-            confirm: true,
-          }
-          ,
+            confirm: 'confirmed',
+          },
         },
       },
-      
-      select:{fullNameEn:true,fullNameAr:true,id:true,avatar:true}
+
+      select: { fullNameEn: true, fullNameAr: true, id: true, avatar: true },
     });
   }
 
   findOne(id: string) {
-    return this.prisma.user.findUniqueOrThrow({ where: { id: id },include:{avatar:true } } );
+    return this.prisma.user.findUniqueOrThrow({
+      where: { id: id },
+      include: { avatar: true },
+    });
   }
 
   update(id: string, data: UpdateUserDto) {
@@ -80,6 +84,13 @@ export class UsersService {
       data,
     });
   }
+
+  updateUserCoach(id: string, data: UpdateUserIsCoach) {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
   remove(id: string) {
     return this.prisma.user.delete({ where: { id } });
   }
@@ -89,6 +100,8 @@ export class UsersService {
       include: {
         Media: true,
         avatar: true,
+        client: true,
+        employee: true,
       },
     });
 
