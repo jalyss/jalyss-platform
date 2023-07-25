@@ -1972,7 +1972,7 @@ async function main() {
       if (search(sesId, lectId)) {
         sHL.push(
           await prisma.sessionHasLecture.create({
-            data: { sessionId: sesId, lectureId: lectId },
+            data: { sessionId: sesId, lectureId: lectId,startAt: new Date().toISOString(),endAt:new Date().toISOString() },
           }),
         );
       }
