@@ -337,7 +337,7 @@ const Addtarif = () => {
                     <option value="" disabled selected>
                       Choose your previous Session
                     </option>
-                    {sessions?.items.items.map((session, index) => (
+                    {sessions?.items.map((session, index) => (
                       <option key={index} value={session.id}>
                         {session.title}
                       </option>
