@@ -19,6 +19,12 @@ export class CreateSessionDto {
   @ApiProperty()
   SessionHasFeaturesIds: string[];
   @ApiProperty()
+  sessionHasGainsIds: string[];
+  @ApiProperty()
+  sessionHasPrerequiresIds: string[];
+  @ApiProperty()
+  sessionTypesIds: string[];
+  @ApiProperty()
   tarifs: TarifsSesssionDto[];
 }
 export class TarifsSesssionDto {

@@ -22,7 +22,7 @@ function TarifSection({  setTarif ,tarif}) {
           <>
             {tarif?.features.map((elem, index) => (
               <div>
-                <hr style={{ height: 2, background: "black", margin: 0 }} />
+                <hr className="mb-2" style={{ height: 1, background: "black", margin: 0 }} />
                 <div
                   key={index}
                   className="d-flex gap-3 justify-content-between align-items-center"

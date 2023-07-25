@@ -38,7 +38,6 @@ const toggleShow=()=>{
       let aux = sessionStore.items.map((e) => {
         return {
           ...e,
-          avatar: e?.cover?.path,
           startDate: e.startDate.slice(0, 10),
           endDate: e?.endDate.slice(0, 10),
           category: e.category.nameEn,
@@ -63,22 +62,8 @@ const toggleShow=()=>{
     return <div>Loading...</div>;
   }
   const columns = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-    },
-    {
-      field: "avatar",
-      headerName: "Cover",
-      width: 150,
-      renderCell: (params) => (
-        <img
-          src={params.row?.cover?.path}
-          style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-        />
-      ),
-    },
+    
+  
     {
       field: "title",
       headerName: "Title",

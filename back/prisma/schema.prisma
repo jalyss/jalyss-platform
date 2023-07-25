@@ -459,7 +459,6 @@ model Session {
   sessionType       SessionHasSessionType[] // *many to many relation sessionType
   lectures          SessionHasLecture[] // *many to many relation lecture 
   tarifs            SessionTarif[] // * one to many relation to Session Tarif
-
   MediaSession               MediaSession[]
   cover                      Media?                       @relation(fields: [coverId], references: [id])
   coverId                    String?

@@ -1,10 +1,11 @@
 import React from "react";
 
-function CloseButton({ onClick, mt, mb ,modifTitle ,type}) {
+function CloseButton({ onClick, mt, mb ,modifTitle ,type,disabled}) {
   return (
     <button
       class="full "
       type={type}
+      disabled={disabled}
       style={{
         marginTop: mt,
         marginBottom: mb,

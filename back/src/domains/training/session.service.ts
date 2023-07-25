@@ -12,7 +12,7 @@ export class SessionService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateSessionDto) {
-    const { SessionHasFeaturesIds, tarifs, ...rest } = dto;
+    const { SessionHasFeaturesIds, sessionHasGainsIds,sessionHasPrerequiresIds,sessionTypesIds,tarifs, ...rest } = dto;
 
     return await this.prisma.session.create({
       data: {
@@ -38,6 +38,27 @@ export class SessionService {
             };
           }),
         },
+        SessionHasWhatYouWillLearn: {
+          create: sessionHasGainsIds.map((id) => {
+            return {
+              WhatYouWillLearnId: id,
+            };
+          }),
+        },
+        sessionHasPrerequire: {
+          create: sessionHasPrerequiresIds.map((id) => {
+            return {
+              prerequireId: id,
+            };
+          }),
+        },
+        sessionType: {
+          create:sessionTypesIds.map((id) => {
+            return {
+              sessionTypeId: id,
+            };
+          }),
+        }
       },
     });
   }
@@ -86,6 +107,7 @@ export class SessionService {
           lectures: true,
           category: true,
           cover: true,
+          
         },
         orderBy,
         take,
