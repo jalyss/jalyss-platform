@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Form, Table } from "react-bootstrap";
+import { Card, Button, Table } from "react-bootstrap";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -36,12 +36,18 @@ import TrainingPricing from "../../components/TrainingPricing";
 import { fetchGains, fetchPrerequires } from "../../../../store/gain";
 import { fetchsessionstypes } from "../../../../store/sessiontypes";
 
-import { DatePicker } from "antd";
+import { DatePicker, Form } from "antd";
 import DisplayLottie from "./../../../../components/DisplayLottie";
 import pricing1 from "../../../../constants/pricing1.json";
 import moment from "moment";
+import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
+import weekday from "dayjs/plugin/weekday";
+import localeData from "dayjs/plugin/localeData";
+
+dayjs.extend(weekday);
+dayjs.extend(localeData);
 
 const Addtarif = () => {
   const navigate = useNavigate();
@@ -68,6 +74,7 @@ const Addtarif = () => {
   const [tarif, setTarif] = useState(null);
   const [index, setIndex] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+  const [editFeatures, setEditFeatures] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const [previousSessionId, setPreviousSessionId] = useState(null);
 
@@ -78,8 +85,11 @@ const Addtarif = () => {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [readOnly, setReadOnly] = useState(true);
+
   const take = sessions?.items?.count || 10;
   const skip = 0;
+
   useEffect(() => {
     dispatch(fetchOnesession(sessionsId));
     dispatch(fetchCategories());
@@ -94,7 +104,6 @@ const Addtarif = () => {
     setAddSession({ ...addSession, ...session });
     setPreviousSessionId(session?.previousSessionId);
     setCategoryId(session?.categoryId);
-
     setSelectedFeatures(
       session?.SessionHasFeatures?.map((elem) => elem.feature)
     );
@@ -108,9 +117,33 @@ const Addtarif = () => {
     setStartDate(session?.startDate);
     setEndDate(session?.endDate);
   }, [session]);
+
   useEffect(() => {
     setAddSession({ ...addSession, tarifs: [] });
-  }, [selectedFeatures]);
+  }, [editFeatures]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setCover(file);
+  };
+
+  const handleChange = (e) => {
+    const selectedOption = e.target.value;
+    if (selectedOption === "") {
+      alert("Please choose a category!");
+    } else {
+      setCategoryId(selectedOption);
+    }
+  };
+  const handleImageClick = () => {
+    fileInputRef.current.click(); // Programmatically trigger the file input click event
+  };
+
+  function onChange(val) {
+    const [start, end] = val;
+    setStartDate(start);
+    setEndDate(end);
+  }
 
   const handleAddSessionChange = (e) => {
     const { name, value } = e.target;
@@ -183,33 +216,12 @@ const Addtarif = () => {
       }
     });
   };
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setCover(file);
-  };
 
-  const handleChange = (e) => {
-    const selectedOption = e.target.value;
-    if (selectedOption === "") {
-      alert("Please choose a category!");
-    } else {
-      setCategoryId(selectedOption);
-    }
-  };
-  const handleImageClick = () => {
-    fileInputRef.current.click(); // Programmatically trigger the file input click event
-  };
-
-  function onChange(val) {
-    const [start, end] = val;
-    setStartDate(start);
-    setEndDate(end);
-  }
   console.log(selectedFeatures);
 
   return (
     <div>
-      <form onSubmit={submitsession} className="mx-5" >
+      <form onSubmit={submitsession} className="mx-5">
         <h3 className="muted d-flex justify-content-center align-items-center my-3">
           {" "}
           Create Session{" "}
@@ -259,15 +271,19 @@ const Addtarif = () => {
                   </TableCell>
                   <TableCell className="fw-bold">Title:</TableCell>
                   <TableCell>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Enter title"
-                      name="title"
-                      value={addSession?.title}
-                      onChange={handleAddSessionChange}
-                      style={{ border: "1px solid #bfbab7", width: 290 }}
-                    />
+                    {readOnly ? (
+                      <span>{session?.title}</span>
+                    ) : (
+                      <input
+                        required
+                        type="text"
+                        placeholder="Enter title"
+                        name="title"
+                        value={addSession?.title}
+                        onChange={handleAddSessionChange}
+                        style={{ border: "1px solid #bfbab7", width: 290 }}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
                 <TableRow
@@ -275,104 +291,110 @@ const Addtarif = () => {
                 >
                   <TableCell className="fw-bold">Description:</TableCell>
                   <TableCell>
-                    <input
-                      required
-                      type="text"
-                      value={addSession?.description}
-                      placeholder="Enter description"
-                      name="description"
-                      onChange={handleAddSessionChange}
-                      style={{ border: "1px solid #bfbab7", width: 290 }}
-                    />
+                    {readOnly ? (
+                      <span>{session?.description}</span>
+                    ) : (
+                      <input
+                        required
+                        type="text"
+                        value={addSession?.description}
+                        placeholder="Enter description"
+                        name="description"
+                        onChange={handleAddSessionChange}
+                        style={{ border: "1px solid #bfbab7", width: 290 }}
+                      />
+                    )}
                   </TableCell>
                   <TableCell className="fw-bold">Category:</TableCell>
                   <TableCell>
-                    <select
-                      value={categoryId}
-                      class="form-select "
-                      aria-label="Default select example"
-                      onChange={handleChange}
-                      required
-                      style={{
-                        border: "1px solid #bfbab7",
-                        width: 290,
-                        height: 42,
-                      }}
-                    >
-                      <option value="" disabled selected>
-                        Choose your Session category
-                      </option>
-                      {categories.items.map((category, index) => (
-                        <option key={index} value={category.id}>
-                          {category.nameEn}
+                    {readOnly ? (
+                      <span>{session?.category.nameEn}</span>
+                    ) : (
+                      <select
+                        value={categoryId}
+                        class="form-select "
+                        aria-label="Default select example"
+                        onChange={handleChange}
+                        required
+                        style={{
+                          border: "1px solid #bfbab7",
+                          width: 290,
+                          height: 42,
+                        }}
+                      >
+                        <option value="" disabled selected>
+                          Choose your Session category
                         </option>
-                      ))}
-                    </select>
+                        {categories.items.map((category, index) => (
+                          <option key={index} value={category.id}>
+                            {category.nameEn}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </TableCell>
                 </TableRow>
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell className="fw-bold">Start-End-Date:</TableCell>
-                  {/* <TableCell>
-                  <input
-                    required
-                    type="date"
-                    value={addSession?.startDate}
-                    name="startDate"
-                    placeholder="startDate"
-                    onChange={handleAddSessionChange}
-                  />
-                </TableCell>
-                <TableCell className="fw-bold">End-Date:</TableCell>
-                <TableCell>
-                  <input
-                    required
-                    type="date"
-                    name="endDate"
-                    value={addSession?.endDate}
-                    placeholder="endDate"
-                    onChange={handleAddSessionChange}
-                  />
-                </TableCell> */}
+
                   <TableCell>
-                    <RangePicker
-                      format={"DD/MM/YYYY"}
-                      
-                      // defaultValue={
-                      //   [ moment('2018-01-11T12:32:26.551Z'), 
-                      //     moment('2018-02-19T12:32:26.551Z') ]
-                      // }
-                      onChange={onChange}
-                      style={{ height: "40px" }}
-                      className=""
-                    />
+                    {readOnly ? (
+                      <span>
+                        {startDate?.slice(0, 10)} ► {endDate?.slice(0, 10)}
+                      </span>
+                    ) : (
+                      <Form.Item
+                        name="range_picker"
+                        rules={[
+                          { required: true, message: "Please select date" },
+                        ]}
+                      >
+                        <RangePicker
+                          format="DD/MM/YYYY"
+                          defaultValue={[dayjs(startDate), dayjs(endDate)]}
+                          value={
+                            startDate && endDate
+                              ? [dayjs(startDate), dayjs(endDate)]
+                              : null
+                          }
+                          onChange={onChange}
+                          style={{ height: "40px" }}
+                          className=""
+                        />
+                      </Form.Item>
+                    )}
                   </TableCell>
                   <TableCell className="fw-bold">Previous Session:</TableCell>
                   <TableCell>
-                    <select
-                      value={previousSessionId}
-                      class="form-select "
-                      aria-label="Default select example"
-                      onChange={(e) => {
-                        setPreviousSessionId(e.target.value);
-                      }}
-                      required
-                      style={{
-                        border: "1px solid #bfbab7",
-                        width: 290,
-                        height: 42,
-                      }}
-                    >
-                      <option value="" disabled selected>
-                        Choose your previous Session
-                      </option>
-                      {sessions?.items.map((session, index) => (
-                        <option key={index} value={session.id}>
-                          {session.title}
+                    {readOnly ? (
+                      <span>{session?.previousSesion.title}</span>
+                    ) : (
+                      <select
+                        value={previousSessionId}
+                        class="form-select "
+                        aria-label="Default select example"
+                        onChange={(e) => {
+                          setPreviousSessionId(e.target.value);
+                        }}
+                        required
+                        style={{
+                          border: "1px solid #bfbab7",
+                          width: 290,
+                          height: 42,
+                        }}
+                      >
+                        <option value="" disabled selected>
+                          Choose your previous Session
                         </option>
-                      ))}
-                    </select>
+                        {sessions?.items.map((session, index) => (
+                          <option key={index} value={session.id}>
+                            {session.title}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   </TableCell>
                 </TableRow>
                 <TableRow
@@ -380,26 +402,34 @@ const Addtarif = () => {
                 >
                   <TableCell className="fw-bold">Gains:</TableCell>
                   <TableCell>
-                    <div className="d-flex">
-                      <AutoCompleteFilter
-                        required
-                        value={selectedGains}
-                        data={gains?.items}
-                        labelOptionName="content"
-                        label="Add gains"
-                        onChange={setSelectedGains}
-                        placeholder="Add Your session's gain"
-                        width={280}
-                      />
-                      <span style={{ color: "red" }}>*</span>
-                    </div>
-                    <div>
-                      {!selectedGains?.length && (
-                        <p style={{ color: "red", textAlign: "start" }}>
-                          You must select gains for the session !{" "}
-                        </p>
-                      )}
-                    </div>
+                    {readOnly ? (
+                      <>
+                      {selectedGains.map((elem,i)=><span key={i}>{elem.content}</span>)}
+                      </>
+                    ) : (
+                      <>
+                        <div className="d-flex">
+                          <AutoCompleteFilter
+                            required
+                            value={selectedGains}
+                            data={gains?.items}
+                            labelOptionName="content"
+                            label="Add gains"
+                            onChange={setSelectedGains}
+                            placeholder="Add Your session's gain"
+                            width={280}
+                          />
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+                        <div>
+                          {!selectedGains?.length && (
+                            <p style={{ color: "red", textAlign: "start" }}>
+                              You must select gains for the session !{" "}
+                            </p>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </TableCell>
                   <TableCell className="fw-bold">Prerequires:</TableCell>
                   <TableCell>
@@ -438,7 +468,10 @@ const Addtarif = () => {
                         value={selectedFeatures}
                         labelOptionName="label"
                         label="Add features"
-                        onChange={setSelectedFeatures}
+                        onChange={(value) => {
+                          setSelectedFeatures(value);
+                          setEditFeatures(true);
+                        }}
                         placeholder="Add features"
                         width={280}
                       />
