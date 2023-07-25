@@ -13,7 +13,7 @@ function AddLecture() {
     const [sessionId,setSessionId]=useState(null)
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const take = sessions?.items.count || 10;
+    const take = sessions?.items?.count || 10;
     const skip = 0;
     useEffect(() => {
       dispatch(fetchsessions({ take, skip }));
@@ -42,7 +42,7 @@ function AddLecture() {
         <option value="" disabled selected>
           Choose your Lecture Session
         </option>
-        {sessions?.items.items.map((session, index) => (
+        {sessions?.items?.items?.map((session, index) => (
           <option key={index} value={session.id}>
             {session.title}
           </option>
