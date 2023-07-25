@@ -1,10 +1,8 @@
-
-
 import React, { useEffect, useState } from "react";
 import { Card, Button, Form, Table } from "react-bootstrap";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateNeswSession } from "../../../../store/sessions";
+import { CreateNeswSession, fetchsessions } from "../../../../store/sessions";
 import { Title } from "@mui/icons-material";
 import AutoCompleteFilter from "../../../../components/Commun/AutoCompleteFilter";
 import { fetchCategories } from "../../../../store/category";
@@ -14,7 +12,7 @@ import SaveButton from "../../../../components/Commun/buttons/SaveButton";
 import { useRef } from "react";
 import Modal from "../../../../components/Commun/Modal";
 import Select from "react-select";
-import { MDBModalFooter} from "mdb-react-ui-kit"
+import { MDBModalFooter } from "mdb-react-ui-kit";
 import axios from "axios";
 import { fetchFeatures } from "../../../../store/tarifSession";
 import TrainingStepper from "../../../../components/TrainingStepper";
@@ -34,13 +32,15 @@ import TrainingPricing from "../../components/TrainingPricing";
 import { fetchGains, fetchPrerequires } from "../../../../store/gain";
 import { fetchsessionstypes } from "../../../../store/sessiontypes";
 
-import { DatePicker} from 'antd';
-import DisplayLottie from './../../../../components/DisplayLottie';
-import pricing1 from "../../../../constants/pricing1.json"
+import { DatePicker } from "antd";
+import DisplayLottie from "./../../../../components/DisplayLottie";
+import pricing1 from "../../../../constants/pricing1.json";
 const { RangePicker } = DatePicker;
 
 const Addtarif = () => {
   const dispatch = useDispatch();
+  const sessionStore = useSelector((state) => state.sessions);
+  const { sessions } = sessionStore;
   const categoriesStore = useSelector((state) => state.category);
   const featuresStore = useSelector((state) => state.tarifSession.features);
   const gainsStore = useSelector((state) => state.gain);
@@ -62,23 +62,27 @@ const Addtarif = () => {
   const [index, setIndex] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
+  const [previousSessionId, setPreviousSessionId] = useState(null);
+
   const [showAddTarifModal, setShowAddTarifModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
+
   const fileInputRef = useRef(null); // Reference to the file input element
 
-  
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
-  
+  const take = sessions?.items?.count || 10;
+  const skip = 0;
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchFeatures());
     dispatch(fetchGains());
     dispatch(fetchPrerequires());
     dispatch(fetchsessionstypes());
+    dispatch(fetchsessions({ take, skip }));
   }, [dispatch]);
-  console.log("typ", types);
-  
+  console.log("sess", sessions);
+
   useEffect(() => {
     setAddSession({ ...addSession, tarifs: [] });
   }, [selectedFeatures]);
@@ -127,8 +131,8 @@ const Addtarif = () => {
     }
     let aux = Object.assign({}, addSession);
     aux.categoryId = categoryId;
-    aux.startDate = startDate
-    aux.endDate = endDate
+    aux.startDate = startDate;
+    aux.endDate = endDate;
     if (cover !== null) {
       const image = new FormData();
       image.append("file", cover);
@@ -143,7 +147,7 @@ const Addtarif = () => {
     aux.sessionHasPrerequiresIds = selectedPrerequire.map((e) => e.id);
     aux.sessionHasGainsIds = selectedGains.map((e) => e.id);
     aux.sessionTypesIds = selectedTypes.map((e) => e.id);
-
+    aux.previousSessionId = previousSessionId;
     console.log(aux);
     dispatch(CreateNeswSession(aux)).then((res) => {
       if (!res.error) {
@@ -171,12 +175,10 @@ const Addtarif = () => {
     fileInputRef.current.click(); // Programmatically trigger the file input click event
   };
 
-  
-  
   function onChange(val) {
     const [start, end] = val;
-    setStartDate(start)
-    setEndDate(end)
+    setStartDate(start);
+    setEndDate(end);
   }
 
 
@@ -204,6 +206,7 @@ const Addtarif = () => {
             />
           )}
         </div>
+        <div className="d-flex justify-content-center w-100 m-3">
 
         <TableContainer className="" component={Paper}>
           <Table aria-label="simple table">
@@ -226,7 +229,7 @@ const Addtarif = () => {
                       type="file"
                       className="form-control "
                       onChange={handleImageChange}
-                      style={{ border: '1px solid #bfbab7',width:290 }} 
+                      style={{ border: "1px solid #bfbab7", width: 290 }}
                     />
                   )}
                 </TableCell>
@@ -239,8 +242,7 @@ const Addtarif = () => {
                     name="title"
                     value={addSession?.Title}
                     onChange={handleAddSessionChange}
-                    style={{ border: '1px solid #bfbab7',width:290 }} 
-
+                    style={{ border: "1px solid #bfbab7", width: 290 }}
                   />
                 </TableCell>
               </TableRow>
@@ -256,7 +258,7 @@ const Addtarif = () => {
                     placeholder="Enter description"
                     name="description"
                     onChange={handleAddSessionChange}
-                    style={{ border: '1px solid #bfbab7',width:290 }} 
+                    style={{ border: "1px solid #bfbab7", width: 290 }}
                   />
                 </TableCell>
                 <TableCell className="fw-bold">Category:</TableCell>
@@ -267,9 +269,13 @@ const Addtarif = () => {
                     aria-label="Default select example"
                     onChange={handleChange}
                     required
-                    style={{ border: '1px solid #bfbab7',width:290 ,height:42 }} 
+                    style={{
+                      border: "1px solid #bfbab7",
+                      width: 290,
+                      height: 42,
+                    }}
                   >
-                    <option value="" disabled selected >
+                    <option value="" disabled selected>
                       Choose your Session category
                     </option>
                     {categories.items.map((category, index) => (
@@ -283,8 +289,8 @@ const Addtarif = () => {
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                 <TableCell className="fw-bold">Start-End-Date:</TableCell>
-              {/* <TableCell>
+                <TableCell className="fw-bold">Start-End-Date:</TableCell>
+                {/* <TableCell>
                   <input
                     required
                     type="date"
@@ -306,32 +312,37 @@ const Addtarif = () => {
                   />
                 </TableCell> */}
                 <TableCell>
-          
-                <RangePicker onChange={onChange} style={{height:"40px"}} className=""/>
-
-
+                  <RangePicker
+                    onChange={onChange}
+                    style={{ height: "40px" }}
+                    className=""
+                  />
                 </TableCell>
-                <TableCell className="fw-bold">Types:</TableCell>
+                <TableCell className="fw-bold">Previous Session:</TableCell>
                 <TableCell>
-                  <div className="d-flex">
-                    <AutoCompleteFilter
-                      required
-                      data={types?.items}
-                      labelOptionName="title"
-                      label="Add types"
-                      onChange={setSelectedTypes}
-                      placeholder="Select your session types !"
-                      fullWidth={true}
-                    />
-                    <span style={{ color: "red" }}>*</span>
-                  </div>
-                  <div>
-                    {!selectedTypes.length && (
-                      <p style={{ color: "red", textAlign: "start" }}>
-                        You must select types for the session !{" "}
-                      </p>
-                    )}
-                  </div>
+                  <select
+                    value={previousSessionId}
+                    class="form-select "
+                    aria-label="Default select example"
+                    onChange={(e) => {
+                      setPreviousSessionId(e.target.value);
+                    }}
+                    required
+                    style={{
+                      border: "1px solid #bfbab7",
+                      width: 290,
+                      height: 42,
+                    }}
+                  >
+                    <option value="" disabled selected>
+                      Choose your previous Session
+                    </option>
+                    {sessions?.items.items.map((session, index) => (
+                      <option key={index} value={session.id}>
+                        {session.title}
+                      </option>
+                    ))}
+                  </select>
                 </TableCell>
               </TableRow>
               <TableRow
@@ -347,7 +358,7 @@ const Addtarif = () => {
                       label="Add gains"
                       onChange={setSelectedGains}
                       placeholder="Add Your session's gain"
-                      fullWidth={true}
+                      width={280}
                     />
                     <span style={{ color: "red" }}>*</span>
                   </div>
@@ -369,7 +380,7 @@ const Addtarif = () => {
                       label="Add prerequires"
                       onChange={setSelectedPrerequire}
                       placeholder="Add Your session's prerequire"
-                      fullWidth={true}
+                      width={280}
                     />
                     <span style={{ color: "red" }}>*</span>
                   </div>
@@ -396,7 +407,7 @@ const Addtarif = () => {
                       label="Add features"
                       onChange={setSelectedFeatures}
                       placeholder="Add features"
-                      fullWidth={true}
+                      width={280}
                     />
                     <span style={{ color: "red" }}>*</span>
                   </div>
@@ -408,28 +419,55 @@ const Addtarif = () => {
                     )}
                   </div>
                 </TableCell>
-               
+                <TableCell className="fw-bold">Types:</TableCell>
+                <TableCell>
+                  {" "}
+                  <div className="d-flex">
+                    <AutoCompleteFilter
+                      required
+                      data={types?.items}
+                      labelOptionName="title"
+                      label="Add types"
+                      onChange={setSelectedTypes}
+                      placeholder="Select your session types !"
+                      width={280}
+                    />
+                    <span style={{ color: "red" }}>*</span>
+                  </div>
+                  <div>
+                    {!selectedTypes.length && (
+                      <p style={{ color: "red", textAlign: "start" }}>
+                        You must select types for the session !{" "}
+                      </p>
+                    )}
+                  </div>
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
-
+</div>
         <div className="p-5">
           <div className="d-flex justify-content-center">
-           <AddButton
+            <AddButton
               disabled={selectedFeatures.length ? false : true}
               onClick={() => {
-                setShowAddTarifModal(true);
-                setTarif({
-                  ...tarif,
-                  features: selectedFeatures.map((elem) => ({
-                    ...elem,
-                    isAvailable: false,
-                  })),
-                });
+                if (selectedFeatures.length === 0) {
+                  // Show a message to the user when features are not selected
+                  setErrorMessage(true);
+                } else {
+                  setShowAddTarifModal(true);
+                  setTarif({
+                    ...tarif,
+                    features: selectedFeatures.map((elem) => ({
+                      ...elem,
+                      isAvailable: false,
+                    })),
+                  });
+                }
               }}
               content="Add Tarif"
-            /> 
+            />
             {/* <CloseButton  modifTitle={"Add tarif"}
              disabled={selectedFeatures.length ? false : true}
              onClick={() => {
@@ -442,21 +480,28 @@ const Addtarif = () => {
                  })),
                });
              }}/> */}
-           <DisplayLottie animationData={pricing1} style={{ width: "120px", height: "80px" }}  />
-
-
+            <DisplayLottie
+              animationData={pricing1}
+              style={{ width: "120px", height: "80px" }}
+            />
+            {errorMessage && (
+              <div style={{ color: "black" }}> Nooooooooooooooooooo</div>
+            )}
           </div>
-          <TrainingPricing
-            session={addSession}
-            setSession={setAddSession}
-            fn={(t, i) => {
-              setTarif(t);
-              setIndex(i);
-              setIsEdit(true);
-              setShowAddTarifModal(true);
-            }}
-            header={true}
-          />
+          <div className="mt-4">
+            <TrainingPricing
+              session={addSession}
+              setSession={setAddSession}
+              fn={(t, i) => {
+                setTarif(t);
+                setIndex(i);
+                setIsEdit(true);
+                setShowAddTarifModal(true);
+              }}
+              header={true}
+            />
+          </div>
+
           <div className="text-center">
             <SaveButton
               variant="primary"

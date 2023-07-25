@@ -38,27 +38,27 @@ export class SessionService {
             };
           }),
         },
-        // SessionHasWhatYouWillLearn: {
-        //   create: sessionHasGainsIds.map((id) => {
-        //     return {
-        //       WhatYouWillLearnId: id,
-        //     };
-        //   }),
-        // },
-        // sessionHasPrerequire: {
-        //   create: sessionHasPrerequiresIds.map((id) => {
-        //     return {
-        //       prerequireId: id,
-        //     };
-        //   }),
-        // },
-        // sessionType: {
-        //   create:sessionTypesIds.map((id) => {
-        //     return {
-        //       sessionTypeId: id,
-        //     };
-        //   }),
-        // }
+        SessionHasWhatYouWillLearn: {
+          create: sessionHasGainsIds.map((id) => {
+            return {
+              WhatYouWillLearnId: id,
+            };
+          }),
+        },
+        sessionHasPrerequire: {
+          create: sessionHasPrerequiresIds.map((id) => {
+            return {
+              prerequireId: id,
+            };
+          }),
+        },
+        sessionType: {
+          create:sessionTypesIds.map((id) => {
+            return {
+              sessionTypeId: id,
+            };
+          }),
+        }
       },
     });
   }
