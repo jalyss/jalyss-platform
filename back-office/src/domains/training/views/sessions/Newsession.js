@@ -35,6 +35,8 @@ import { fetchsessionstypes } from "../../../../store/sessiontypes";
 import { DatePicker } from "antd";
 import DisplayLottie from "./../../../../components/DisplayLottie";
 import pricing1 from "../../../../constants/pricing1.json";
+import AddLecture from "../../components/AddLecture";
+
 const { RangePicker } = DatePicker;
 
 const Addtarif = () => {
@@ -59,12 +61,16 @@ const Addtarif = () => {
   const [cover, setCover] = useState(null);
   const [addSession, setAddSession] = useState({ tarifs: [] });
   const [tarif, setTarif] = useState(null);
+  const [lectures, setLectures] = useState(null);
+
   const [index, setIndex] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const [previousSessionId, setPreviousSessionId] = useState(null);
 
   const [showAddTarifModal, setShowAddTarifModal] = useState(false);
+  const [showAddLectureModal, setShowAddLectureModal] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState(false);
 
   const fileInputRef = useRef(null); // Reference to the file input element
@@ -181,7 +187,6 @@ const Addtarif = () => {
     setEndDate(end);
   }
 
-
   return (
     <div>
       <form onSubmit={submitsession} className="mx-5">
@@ -207,90 +212,89 @@ const Addtarif = () => {
           )}
         </div>
         <div className="d-flex justify-content-center w-100 m-3">
-
-        <TableContainer className="" component={Paper}>
-          <Table aria-label="simple table">
-            <TableBody>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell className="fw-bold">Cover:</TableCell>
-                <TableCell>
-                  <StyledInput
-                    type="file"
-                    className="form-control visually-hidden"
-                    id="customFile"
-                    onChange={handleImageChange}
-                    ref={fileInputRef}
-                  />
-
-                  {!cover && (
-                    <input
+          <TableContainer className="" component={Paper}>
+            <Table aria-label="simple table">
+              <TableBody>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold">Cover:</TableCell>
+                  <TableCell>
+                    <StyledInput
                       type="file"
-                      className="form-control "
+                      className="form-control visually-hidden"
+                      id="customFile"
                       onChange={handleImageChange}
+                      ref={fileInputRef}
+                    />
+
+                    {!cover && (
+                      <input
+                        type="file"
+                        className="form-control "
+                        onChange={handleImageChange}
+                        style={{ border: "1px solid #bfbab7", width: 290 }}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell className="fw-bold">Title:</TableCell>
+                  <TableCell>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Enter title"
+                      name="title"
+                      value={addSession?.Title}
+                      onChange={handleAddSessionChange}
                       style={{ border: "1px solid #bfbab7", width: 290 }}
                     />
-                  )}
-                </TableCell>
-                <TableCell className="fw-bold">Title:</TableCell>
-                <TableCell>
-                  <input
-                    required
-                    type="text"
-                    placeholder="Enter title"
-                    name="title"
-                    value={addSession?.Title}
-                    onChange={handleAddSessionChange}
-                    style={{ border: "1px solid #bfbab7", width: 290 }}
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell className="fw-bold">Description:</TableCell>
-                <TableCell>
-                  <input
-                    required
-                    type="text"
-                    value={addSession?.description}
-                    placeholder="Enter description"
-                    name="description"
-                    onChange={handleAddSessionChange}
-                    style={{ border: "1px solid #bfbab7", width: 290 }}
-                  />
-                </TableCell>
-                <TableCell className="fw-bold">Category:</TableCell>
-                <TableCell>
-                  <select
-                    value={categoryId}
-                    class="form-select "
-                    aria-label="Default select example"
-                    onChange={handleChange}
-                    required
-                    style={{
-                      border: "1px solid #bfbab7",
-                      width: 290,
-                      height: 42,
-                    }}
-                  >
-                    <option value="" disabled selected>
-                      Choose your Session category
-                    </option>
-                    {categories.items.map((category, index) => (
-                      <option key={index} value={category.id}>
-                        {category.nameEn}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold">Description:</TableCell>
+                  <TableCell>
+                    <input
+                      required
+                      type="text"
+                      value={addSession?.description}
+                      placeholder="Enter description"
+                      name="description"
+                      onChange={handleAddSessionChange}
+                      style={{ border: "1px solid #bfbab7", width: 290 }}
+                    />
+                  </TableCell>
+                  <TableCell className="fw-bold">Category:</TableCell>
+                  <TableCell>
+                    <select
+                      value={categoryId}
+                      class="form-select "
+                      aria-label="Default select example"
+                      onChange={handleChange}
+                      required
+                      style={{
+                        border: "1px solid #bfbab7",
+                        width: 290,
+                        height: 42,
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Choose your Session category
                       </option>
-                    ))}
-                  </select>
-                </TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell className="fw-bold">Start-End-Date:</TableCell>
-                {/* <TableCell>
+                      {categories.items.map((category, index) => (
+                        <option key={index} value={category.id}>
+                          {category.nameEn}
+                        </option>
+                      ))}
+                    </select>
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold">Start-End-Date:</TableCell>
+                  {/* <TableCell>
                   <input
                     required
                     type="date"
@@ -311,160 +315,155 @@ const Addtarif = () => {
                     onChange={handleAddSessionChange}
                   />
                 </TableCell> */}
-                <TableCell>
-                  <RangePicker
-                    onChange={onChange}
-                    style={{ height: "40px" }}
-                    className=""
-                  />
-                </TableCell>
-                <TableCell className="fw-bold">Previous Session:</TableCell>
-                <TableCell>
-                  <select
-                    value={previousSessionId}
-                    class="form-select "
-                    aria-label="Default select example"
-                    onChange={(e) => {
-                      setPreviousSessionId(e.target.value);
-                    }}
-                    required
-                    style={{
-                      border: "1px solid #bfbab7",
-                      width: 290,
-                      height: 42,
-                    }}
-                  >
-                    <option value="" disabled selected>
-                      Choose your previous Session
-                    </option>
-                    {sessions?.items.items.map((session, index) => (
-                      <option key={index} value={session.id}>
-                        {session.title}
+                  <TableCell>
+                    <RangePicker
+                      onChange={onChange}
+                      style={{ height: "40px" }}
+                      className=""
+                    />
+                  </TableCell>
+                  <TableCell className="fw-bold">Previous Session:</TableCell>
+                  <TableCell>
+                    <select
+                      value={previousSessionId}
+                      class="form-select "
+                      aria-label="Default select example"
+                      onChange={(e) => {
+                        setPreviousSessionId(e.target.value);
+                      }}
+                      required
+                      style={{
+                        border: "1px solid #bfbab7",
+                        width: 290,
+                        height: 42,
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Choose your previous Session
                       </option>
-                    ))}
-                  </select>
-                </TableCell>
-              </TableRow>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell className="fw-bold">Gains:</TableCell>
-                <TableCell>
-                  <div className="d-flex">
-                    <AutoCompleteFilter
-                      required
-                      data={gains?.items}
-                      labelOptionName="content"
-                      label="Add gains"
-                      onChange={setSelectedGains}
-                      placeholder="Add Your session's gain"
-                      width={280}
-                    />
-                    <span style={{ color: "red" }}>*</span>
-                  </div>
-                  <div>
-                    {!selectedGains.length && (
-                      <p style={{ color: "red", textAlign: "start" }}>
-                        You must select gains for the session !{" "}
-                      </p>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell className="fw-bold">Prerequires:</TableCell>
-                <TableCell>
-                  <div className="d-flex">
-                    <AutoCompleteFilter
-                      required
-                      data={prerequires?.items}
-                      labelOptionName="content"
-                      label="Add prerequires"
-                      onChange={setSelectedPrerequire}
-                      placeholder="Add Your session's prerequire"
-                      width={280}
-                    />
-                    <span style={{ color: "red" }}>*</span>
-                  </div>
-                  <div>
-                    {!selectedPrerequire.length && (
-                      <p style={{ color: "red", textAlign: "start" }}>
-                        You must select prerequire for the session !{" "}
-                      </p>
-                    )}
-                  </div>
-                </TableCell>
-              </TableRow>
+                      {sessions?.items?.items?.map((session, index) => (
+                        <option key={index} value={session.id}>
+                          {session.title}
+                        </option>
+                      ))}
+                    </select>
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold">Gains:</TableCell>
+                  <TableCell>
+                    <div className="d-flex">
+                      <AutoCompleteFilter
+                        required
+                        data={gains?.items}
+                        labelOptionName="content"
+                        label="Add gains"
+                        onChange={setSelectedGains}
+                        placeholder="Add Your session's gain"
+                        width={280}
+                      />
+                      <span style={{ color: "red" }}>*</span>
+                    </div>
+                    <div>
+                      {!selectedGains.length && (
+                        <p style={{ color: "red", textAlign: "start" }}>
+                          You must select gains for the session !{" "}
+                        </p>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="fw-bold">Prerequires:</TableCell>
+                  <TableCell>
+                    <div className="d-flex">
+                      <AutoCompleteFilter
+                        required
+                        data={prerequires?.items}
+                        labelOptionName="content"
+                        label="Add prerequires"
+                        onChange={setSelectedPrerequire}
+                        placeholder="Add Your session's prerequire"
+                        width={280}
+                      />
+                      <span style={{ color: "red" }}>*</span>
+                    </div>
+                    <div>
+                      {!selectedPrerequire.length && (
+                        <p style={{ color: "red", textAlign: "start" }}>
+                          You must select prerequire for the session !{" "}
+                        </p>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
 
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell className="fw-bold">Features:</TableCell>
-                <TableCell>
-                  <div className="d-flex">
-                    <AutoCompleteFilter
-                      required
-                      data={featuresStore?.items}
-                      labelOptionName="label"
-                      label="Add features"
-                      onChange={setSelectedFeatures}
-                      placeholder="Add features"
-                      width={280}
-                    />
-                    <span style={{ color: "red" }}>*</span>
-                  </div>
-                  <div>
-                    {!selectedFeatures.length && (
-                      <p style={{ color: "red", textAlign: "start" }}>
-                        You must select features for the session !{" "}
-                      </p>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell className="fw-bold">Types:</TableCell>
-                <TableCell>
-                  {" "}
-                  <div className="d-flex">
-                    <AutoCompleteFilter
-                      required
-                      data={types?.items}
-                      labelOptionName="title"
-                      label="Add types"
-                      onChange={setSelectedTypes}
-                      placeholder="Select your session types !"
-                      width={280}
-                    />
-                    <span style={{ color: "red" }}>*</span>
-                  </div>
-                  <div>
-                    {!selectedTypes.length && (
-                      <p style={{ color: "red", textAlign: "start" }}>
-                        You must select types for the session !{" "}
-                      </p>
-                    )}
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-</div>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell className="fw-bold">Features:</TableCell>
+                  <TableCell>
+                    <div className="d-flex">
+                      <AutoCompleteFilter
+                        required
+                        data={featuresStore?.items}
+                        labelOptionName="label"
+                        label="Add features"
+                        onChange={setSelectedFeatures}
+                        placeholder="Add features"
+                        width={280}
+                      />
+                      <span style={{ color: "red" }}>*</span>
+                    </div>
+                    <div>
+                      {!selectedFeatures.length && (
+                        <p style={{ color: "red", textAlign: "start" }}>
+                          You must select features for the session !{" "}
+                        </p>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="fw-bold">Types:</TableCell>
+                  <TableCell>
+                    {" "}
+                    <div className="d-flex">
+                      <AutoCompleteFilter
+                        required
+                        data={types?.items}
+                        labelOptionName="title"
+                        label="Add types"
+                        onChange={setSelectedTypes}
+                        placeholder="Select your session types !"
+                        width={280}
+                      />
+                      <span style={{ color: "red" }}>*</span>
+                    </div>
+                    <div>
+                      {!selectedTypes.length && (
+                        <p style={{ color: "red", textAlign: "start" }}>
+                          You must select types for the session !{" "}
+                        </p>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
         <div className="p-5">
           <div className="d-flex justify-content-center">
             <AddButton
               disabled={selectedFeatures.length ? false : true}
               onClick={() => {
-                if (selectedFeatures.length === 0) {
-                  // Show a message to the user when features are not selected
-                  setErrorMessage(true);
-                } else {
-                  setShowAddTarifModal(true);
-                  setTarif({
-                    ...tarif,
-                    features: selectedFeatures.map((elem) => ({
-                      ...elem,
-                      isAvailable: false,
-                    })),
-                  });
-                }
+                setShowAddTarifModal(true);
+                setTarif({
+                  ...tarif,
+                  features: selectedFeatures.map((elem) => ({
+                    ...elem,
+                    isAvailable: false,
+                  })),
+                });
               }}
               content="Add Tarif"
             />
@@ -484,9 +483,23 @@ const Addtarif = () => {
               animationData={pricing1}
               style={{ width: "120px", height: "80px" }}
             />
-            {errorMessage && (
-              <div style={{ color: "black" }}> Nooooooooooooooooooo</div>
-            )}
+          
+
+            <AddButton
+              onClick={() => {
+               
+                  setShowAddLectureModal(true);
+                  // setTarif({
+                  //   ...tarif,
+                  //   features: selectedFeatures.map((elem) => ({
+                  //     ...elem,
+                  //     isAvailable: false,
+                  //   })),
+                  // });
+                
+              }}
+              content="Add Lecture"
+            />
           </div>
           <div className="mt-4">
             <TrainingPricing
@@ -557,6 +570,17 @@ const Addtarif = () => {
               <SaveButton onSubmit={submitTarif} type={"submit"} />
             </div>
           </form>
+        }
+      />
+      <Modal
+        toggleShow={() => setShowAddLectureModal(false)}
+        basicModal={showAddLectureModal}
+        setBasicModal={setShowAddLectureModal}
+        normal={true}
+        title="Add new Lecture"
+       
+        body={
+       <AddLecture/>
         }
       />
     </div>
