@@ -12,7 +12,15 @@ export class SessionService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateSessionDto) {
-    const { SessionHasFeaturesIds, sessionHasGainsIds,sessionHasPrerequiresIds,sessionTypesIds,tarifs, ...rest } = dto;
+    const {
+      SessionHasFeaturesIds,
+      sessionHasGainsIds,
+      sessionHasPrerequiresIds,
+      sessionTypesIds,
+      tarifs,
+      lectures,
+      ...rest
+    } = dto;
 
     return await this.prisma.session.create({
       data: {
@@ -53,12 +61,21 @@ export class SessionService {
           }),
         },
         sessionType: {
-          create:sessionTypesIds.map((id) => {
+          create: sessionTypesIds.map((id) => {
             return {
               sessionTypeId: id,
             };
           }),
-        }
+        },
+        lectures: {
+          create: lectures.map((lecture) => {
+            return {
+              lectureId: lecture.lectureId,
+              startAt: lecture.startAt,
+              endAt: lecture.endAt,
+            };
+          }),
+        },
       },
     });
   }
@@ -107,7 +124,6 @@ export class SessionService {
           lectures: true,
           category: true,
           cover: true,
-          
         },
         orderBy,
         take,
@@ -165,7 +181,16 @@ export class SessionService {
   }
 
   async update(id: string, dto: UpdateSessionDto) {
-    const { SessionHasFeaturesIds, tarifs, ...rest } = dto;
+    const {
+      SessionHasFeaturesIds,
+      sessionHasGainsIds,
+      sessionHasPrerequiresIds,
+      sessionTypesIds,
+      tarifs,
+      lectures,
+      ...rest
+    } = dto;
+    
     return await this.prisma.session.update({
       where: { id },
       data: { ...rest },
