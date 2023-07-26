@@ -108,15 +108,23 @@ async function main() {
 
   const salt = await bcrypt.genSalt();
   for (let i = 0; i < 10; i++) {
-    let newUser = await prisma.user.create({
+    let newClient = await prisma.client.create({
       data: {
-        email: 'jalyss' + i + '@gmail.com',
         fullNameAr: `جليس ${i}`,
         fullNameEn: `jalyss${i}`,
         address: 'sfax',
         tel: '123456789',
+        email: 'jalyss' + i + '@gmail.com',
+      },
+    });
+    let newUser = await prisma.user.create({
+      data: {
+        email: newClient.email,
+        fullNameAr: `جليس ${i}`,
+        fullNameEn: `jalyss${i}`,
         password: await bcrypt.hash('1234', salt),
         avatarId: userMedia[i],
+        clientId: newClient.id,
       },
     });
 
@@ -262,10 +270,22 @@ async function main() {
       email: 'besma@jalyss.com',
       address: 'tunis-kairouan',
       tel: '65555550',
-      password: await bcrypt.hash('1234', saltEm),
+
       isAdmin: true,
       roleId: managerRole.id,
       branchId: branch.id,
+      avatarId: mediasAvatarEmployee1.id,
+    },
+  });
+  let managerUser = await prisma.user.create({
+    data: {
+      fullNameAr: 'بسمة',
+      fullNameEn: 'besma',
+      email: 'besma@jalyss.com',
+      isClient: false,
+      employeeId: manager.id,
+      password: await bcrypt.hash('1234', saltEm),
+
       avatarId: mediasAvatarEmployee1.id,
     },
   });
@@ -276,9 +296,21 @@ async function main() {
       email: 'wassim@jalyss.com',
       address: 'tunis-carthage',
       tel: '45454545',
-      password: await bcrypt.hash('1234', saltEm),
+
       roleId: developerRole.id,
       branchId: branch.id,
+      avatarId: mediasAvatarEmployee2.id,
+    },
+  });
+  let developer1User = await prisma.user.create({
+    data: {
+      fullNameAr: 'وسيم',
+      fullNameEn: 'wassim',
+      email: 'wassim@jalyss.com',
+      isClient: false,
+      employeeId: developer1.id,
+      password: await bcrypt.hash('1234', saltEm),
+
       avatarId: mediasAvatarEmployee2.id,
     },
   });
@@ -289,9 +321,21 @@ async function main() {
       email: 'ghada@jalyss.com',
       address: 'Tunis',
       tel: '20202020',
-      password: await bcrypt.hash('1234', saltEm),
+
       roleId: developerRole.id,
       branchId: branch.id,
+      avatarId: mediasAvatarEmployee3.id,
+    },
+  });
+  let developer2User = await prisma.user.create({
+    data: {
+      fullNameAr: 'غادة',
+      fullNameEn: 'ghada',
+      email: 'ghada@jalyss.com',
+      isClient: false,
+      employeeId: developer2.id,
+      password: await bcrypt.hash('1234', saltEm),
+
       avatarId: mediasAvatarEmployee3.id,
     },
   });
@@ -302,9 +346,20 @@ async function main() {
       email: 'khalil@jalyss.com',
       address: 'tunis-soussa',
       tel: '60606060',
-      password: await bcrypt.hash('1234', saltEm),
       roleId: itManagerRole.id,
       branchId: branch.id,
+      avatarId: mediasAvatarEmployee4.id,
+    },
+  });
+  let itManagerUser = await prisma.user.create({
+    data: {
+      fullNameAr: 'خليل',
+      fullNameEn: 'khalil',
+      email: 'khalil@jalyss.com',
+      isClient: false,
+      employeeId: itManager.id,
+      password: await bcrypt.hash('1234', saltEm),
+
       avatarId: mediasAvatarEmployee4.id,
     },
   });
@@ -316,9 +371,21 @@ async function main() {
       email: 'nedia@jalyss.com',
       address: 'Tunis-Monastir',
       tel: '78787878',
-      password: await bcrypt.hash('1234', saltEm),
+
       roleId: groutAgentRole.id,
       branchId: branch.id,
+      avatarId: mediasAvatarEmployee5.id,
+    },
+  });
+  let groutAgentUser = await prisma.user.create({
+    data: {
+      fullNameAr: 'ناديه',
+      fullNameEn: 'nedia',
+      email: 'nedia@jalyss.com',
+      isClient: false,
+      employeeId: groutAgent.id,
+      password: await bcrypt.hash('1234', saltEm),
+
       avatarId: mediasAvatarEmployee5.id,
     },
   });
@@ -329,9 +396,21 @@ async function main() {
       email: 'ameni@jalyss.com',
       address: 'Tunis-Monastir',
       tel: '96969696',
-      password: await bcrypt.hash('1234', saltEm),
+
       roleId: selesAgentRole.id,
       branchId: branch.id,
+      avatarId: mediasAvatarEmployee6.id,
+    },
+  });
+  let sellesAgentUser = await prisma.user.create({
+    data: {
+      fullNameAr: 'اماني',
+      fullNameEn: 'ameni',
+      email: 'ameni@jalyss.com',
+      isClient: false,
+      employeeId: sellesAgent.id,
+      password: await bcrypt.hash('1234', saltEm),
+
       avatarId: mediasAvatarEmployee6.id,
     },
   });
@@ -342,9 +421,19 @@ async function main() {
       email: 'ibtisem@jalyss.com',
       address: 'tunis-elkef',
       tel: '6777760',
-      password: await bcrypt.hash('1234', saltEm),
       roleId: hrManagerRole.id,
       branchId: branch.id,
+      avatarId: mediasAvatarEmployee7.id,
+    },
+  });
+  let hrManagerUser = await prisma.user.create({
+    data: {
+      fullNameAr: 'ابتسام',
+      fullNameEn: 'ibtisem',
+      email: 'ibtisem@jalyss.com',
+      isClient: false,
+      employeeId: hrManager.id,
+      password: await bcrypt.hash('1234', saltEm),
       avatarId: mediasAvatarEmployee7.id,
     },
   });
@@ -1603,7 +1692,6 @@ async function main() {
           articleCategoryIds[
             Math.floor(Math.random() * articleCategoryIds.length)
           ],
-
       },
     });
     for (let i = 0; i < Math.floor(Math.random() * 10); i++) {
@@ -1614,7 +1702,6 @@ async function main() {
       });
     }
   }
-
   //create session
   let lectures = [];
   let sessions = [];
@@ -1885,7 +1972,7 @@ async function main() {
       if (search(sesId, lectId)) {
         sHL.push(
           await prisma.sessionHasLecture.create({
-            data: { sessionId: sesId, lectureId: lectId },
+            data: { sessionId: sesId, lectureId: lectId,startAt: new Date().toISOString(),endAt:new Date().toISOString() },
           }),
         );
       }
@@ -1933,27 +2020,26 @@ async function main() {
   }
 
   // create feedbacks
-  
+
   const label = [
-    "5 online courses gratuit",
-    "free Book",
-    "Certificates of Participation",
-    "Access to Premium or VIP Content",
-    "Gift Cards or Vouchers",
-    "Exclusive Content or Resources",
-    "Discounts or Coupons"
+    '5 online courses gratuit',
+    'free Book',
+    'Certificates of Participation',
+    'Access to Premium or VIP Content',
+    'Gift Cards or Vouchers',
+    'Exclusive Content or Resources',
+    'Discounts or Coupons',
   ];
-  
+
   for (let i = 0; i < 7; i++) {
     const features = await prisma.feature.create({
       data: {
         label: label[i],
-     
       },
     });
     featuresIds.push(features.id);
   }
-  chatSeed(prisma,usersIds)
+  chatSeed(prisma, usersIds);
 }
 // execute the main function
 main()

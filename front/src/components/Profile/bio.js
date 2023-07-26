@@ -71,7 +71,7 @@ const Bio = () => {
                 {t("phone")}
               </TableCell>
               <TableCell align="left">
-                <span>{user?.tel}</span>
+                <span>{user?.client?.tel}</span>
               </TableCell>
             </TableRow>
             <TableRow
@@ -83,7 +83,7 @@ const Bio = () => {
                 {t("address")}
               </TableCell>
               <TableCell align="left">
-                <span>{user?.address}</span>
+                <span>{user?.client?.address}</span>
               </TableCell>
             </TableRow>
             <TableRow

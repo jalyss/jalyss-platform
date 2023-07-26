@@ -41,6 +41,6 @@
     "tls": false
   },
   "engines": {
-    "node": ">=18 <19"
+    "node": ">=18 "
   }
 }

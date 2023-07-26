@@ -83,8 +83,8 @@ import EditAuthor from "../domains/author/views/EditAuthor";
 import DetailAuthor from "../domains/author/views/DetailAuthor";
 import CreateAuthor from "../domains/author/views/CreateAuthor";
 import Types from "../domains/training/views/sessions/Types";
-import Updatetarif from "../domains/training/views/features/UpdateFeature";
-import Addtarif from "../domains/training/views/features/AddFeatures";
+
+
 import Newsession from "../domains/training/views/sessions/Newsession";
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
 // import Types from "../domains/type/Types";
@@ -96,10 +96,14 @@ import CreateType from "../domains/type/views/CreateType";
 import CreateWorkSpace from "../domains/service/views/CreateWorkSpace";
 import AddNewCours from "../domains/training/views/courses/Addnewcours";
 import CreateCommand from "../domains/commands/views/CreateCommand";
-import AddFeatures from "../domains/training/views/features/AddFeatures";
+
 import Features from "../domains/training/views/features/Features";
-import UpdateFeatures from "../domains/training/views/features/UpdateFeature";
+
 import SessionDetail from "../domains/training/views/sessions/SessionDetail";
+import Requests from "../domains/training/views/requests/Requests";
+import DetailRequest from "../domains/training/views/requests/DetailRequest";
+import Gains from "../domains/training/views/gain/Gains";
+import Prerequires from "../domains/training/views/prerequire/Prerequires";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -231,9 +235,15 @@ function Router() {
               />
               <Route path="coachs" element={<Coachs />} />
               <Route path="coachs/:id" element={<CoachDetails />}></Route>{" "}
-              <Route path="features/:feature" element={<UpdateFeatures />} />
+   
               <Route path="features" element={<Features />} />
-              <Route path="features/addFeatures" element={<AddFeatures />} />
+              <Route path="requests" element={<Requests />} />
+              <Route path="requests/:id" element={<DetailRequest />} />
+              <Route path="gains" element={<Gains />} />
+              <Route path="prerequires" element={<Prerequires />} />
+
+
+             
               
             </Route>
 

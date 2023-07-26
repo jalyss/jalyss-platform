@@ -11,20 +11,18 @@ import { Box, Button } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { AiFillEdit, AiOutlineEye } from "react-icons/ai";
 import { AiFillDelete } from "react-icons/ai";
-import Modal from "../../../../components/Commun/Modal"
+import Modal from "../../../../components/Commun/Modal";
 function Sessions() {
-  const sessionStore = useSelector(
-    (state) => state.sessions?.sessions?.items || []
-  );
+  const sessionStore = useSelector((state) => state.sessions?.sessions?.items);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [skip, setSkip] = useState(0);
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
-  const [idOfDelete,setIdOfDelete]=useState("")
-const toggleShow=()=>{
-  setBasicModal(!basicModal)
-}
+  const [idOfDelete, setIdOfDelete] = useState("");
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
 
   const take = 10;
 
@@ -32,22 +30,6 @@ const toggleShow=()=>{
     dispatch(fetchsessions({ take, skip }));
   }, [take, skip]);
   console.log(sessionStore, "rfr");
-
-  useEffect(() => {
-    if (sessionStore.items?.length) {
-      let aux = sessionStore.items.map((e) => {
-        return {
-          ...e,
-          avatar: e?.cover?.path,
-          startDate: e.startDate.slice(0, 10),
-          endDate: e?.endDate.slice(0, 10),
-          category: e.category.nameEn,
-        };
-      });
-      console.log(aux);
-      setRows(aux);
-    }
-  }, [sessionStore.items]);
 
   const handleDeletesessionsClick = (id) => {
     dispatch(deletsessions({ id, take, skip })).then((res) => {
@@ -64,22 +46,6 @@ const toggleShow=()=>{
   }
   const columns = [
     {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-    },
-    {
-      field: "avatar",
-      headerName: "Cover",
-      width: 150,
-      renderCell: (params) => (
-        <img
-          src={params.row?.cover?.path}
-          style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-        />
-      ),
-    },
-    {
       field: "title",
       headerName: "Title",
       width: 230,
@@ -88,7 +54,7 @@ const toggleShow=()=>{
     {
       field: "startDate",
       headerName: "StartDate ",
-
+      valueGetter: (params) => params.row.startDate.slice(0, 10),
       width: 120,
       sortable: true,
     },
@@ -96,6 +62,8 @@ const toggleShow=()=>{
     {
       field: "endDate",
       headerName: "EndDate",
+      valueGetter: (params) => params.row.endDate.slice(0, 10),
+
       width: 120,
       editable: true,
       sortable: false,
@@ -103,7 +71,7 @@ const toggleShow=()=>{
     {
       field: "category",
       headerName: "Category ",
-
+      valueGetter: (params) => params.row.category.nameEn,
       width: 180,
       sortable: false,
     },
@@ -116,21 +84,20 @@ const toggleShow=()=>{
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-          icon={<AiOutlineEye />}
-          label="Add"
-          className="textPrimary"
-          onClick={() => navigate(`detail-training/${id}`)}
-          color="success"
-        />,
+            icon={<AiOutlineEye />}
+            label="Add"
+            className="textPrimary"
+            onClick={() => navigate(`detail-training/${id}`)}
+            color="success"
+          />,
           <GridActionsCellItem
-          icon={<AiFillEdit style={{ color: 'blue' }} />} 
+            icon={<AiFillEdit style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
-            
             onClick={() => navigate(`update-training/${id}`)}
           />,
           <GridActionsCellItem
-          icon={<AiFillDelete />}
+            icon={<AiFillDelete />}
             label="Delete"
             // should open popup to ask are u sure delete this user (yes/no)
             color="error"
@@ -159,7 +126,7 @@ const toggleShow=()=>{
         Session List
         <Box sx={{ height: 600, width: "100%" }}>
           <DataGrid
-            rows={rows}
+            rows={sessionStore}
             columns={columns}
             initialState={{
               pagination: {
@@ -174,13 +141,21 @@ const toggleShow=()=>{
           />
         </Box>
       </div>
-      <Modal  basicModal={basicModal} setBasicModal={setBasicModal} toggleShow={toggleShow} ofDelete={true} bodOfDelete={
-        <div className="d-flex justify-content-center align-items-center">
-        are you sure to delete this session
-        </div>
-      }
-      confirm={() => {handleDeletesessionsClick(idOfDelete)
-      setBasicModal(false)}}/>
+      <Modal
+        basicModal={basicModal}
+        setBasicModal={setBasicModal}
+        toggleShow={toggleShow}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            are you sure to delete this session
+          </div>
+        }
+        confirm={() => {
+          handleDeletesessionsClick(idOfDelete);
+          setBasicModal(false);
+        }}
+      />
     </div>
   );
 }
