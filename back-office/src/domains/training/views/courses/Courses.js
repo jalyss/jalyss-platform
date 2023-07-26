@@ -2,35 +2,42 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deletcours, fetchcours } from "../../../../store/courses";
-import { fetchsessions,} from "../../../../store/sessions";
+import {
+  CreateNeswcours,
+  deletcours,
+  editcours,
+  fetchcours,
+} from "../../../../store/courses";
+
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
 import CreateButton from "../../../../components/Commun/buttons/CreateButton";
 import Modal from "../../../../components/Commun/Modal";
+import StyledInput from "../../../../components/Commun/inputs/StyledInput";
+import { Form } from "react-bootstrap";
 
 const Courses = () => {
   const coursStore = useSelector((state) => state.courses.courses.items);
-  const sessionStore = useSelector((state) => state.sessions);
-  const { sessions } = sessionStore;
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
   const [contentOfDelete, setContentOfDelete] = useState("");
+  const [addcours,setAddcours] = useState({});
+  const [editModal, setEditModal] = useState(false);
+  const [editRowId, setEditRowId] = useState("");
+  const [editedTitle, setEditedTitle] = useState(false);
+  const [editedContent, setEditedContent] = useState(false);
+
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const take = sessions?.count||10;
-  const skip = 0;
   useEffect(() => {
-    dispatch(fetchsessions({ take, skip }));
     dispatch(fetchcours());
-  }, [dispatch,take]);
+  }, [dispatch]);
 
-  console.log("sss", sessions);
   useEffect(() => {
     if (basicModal && idOfDelete) {
       const courseToDelete = coursStore.find(
@@ -42,19 +49,54 @@ const Courses = () => {
     }
   }, [basicModal, idOfDelete, coursStore]);
 
-  
   useEffect(() => {
     if (coursStore.length) {
       let aux = coursStore.map((e) => {
         return {
           ...e,
           title: e.title,
+          content: e.content,
           createdAt: e.createdAt.slice(0, 10),
         };
       });
       setRows(aux);
     }
   }, [coursStore]);
+
+  useEffect(() => {
+  
+    if (editModal && editRowId) {
+      const row = rows.find((row) => row.id === editRowId);
+      if (row) {
+        setEditedTitle(row.title);
+        setEditedContent(row.content);
+
+      }
+    }
+  }, [editModal, editRowId, rows]);
+  const handleAddcoursChange = (e) => {
+    const { name, value } = e.target;
+    console.log(addcours);
+
+    setAddcours((addcours) => ({
+      ...addcours,
+      [name]: value,
+    }));
+  };
+  const Addcours = async (event) => {
+    event.preventDefault();
+
+    dispatch(CreateNeswcours(addcours)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("cours.created");
+        setAddcours({});
+        toggleShowOfCreate();
+      } else {
+        console.log(res);
+        showErrorToast(res.error.message);
+      }
+    });
+  };
 
   const handleDeletecoursClick = (id) => {
     dispatch(deletcours(id)).then((res) => {
@@ -68,18 +110,50 @@ const Courses = () => {
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
+  const toggleShowOfCreate = () => {
+    setCreateModal(!createModal);
+  };
+  const handleEdit = () => {
+   let body={
+    title:editedTitle,
+    content:editedContent
+   }
+    dispatch(editcours({ id: editRowId, body}))
+      .then((res) => {
+        if (res.error) {
+          showErrorToast(res.error.message);
+        } else {
+          showSuccessToast("Lecture has been Updated");
+          setEditedContent("")
+          setEditedTitle("")
+        }
+      })
+      .catch((error) => {
+        showErrorToast(error.message);
+      });
+
+    setEditRowId("");
+ 
+    setEditModal(!editModal)
+  };
 
   const columns = [
     {
       field: "title",
       headerName: "Title",
-      width: 330,
+      width: 230,
+      editable: false,
+    },
+    {
+      field: "content",
+      headerName: "Content",
+      width: 230,
       editable: false,
     },
     {
       field: "createdAt",
       headerName: "CreatedAt",
-      width: 330,
+      width: 230,
       sortable: false,
     },
     {
@@ -95,6 +169,10 @@ const Courses = () => {
             label="Edit"
             className="textPrimary"
             color="inherit"
+            onClick={() => {
+              setEditRowId(id);
+              setEditModal(true)
+            }}
           />,
           <GridActionsCellItem
             icon={<AiFillDelete />}
@@ -112,7 +190,12 @@ const Courses = () => {
 
   return (
     <div className="mx-5">
-      <CreateButton title={"add new Lecture"} mt={20} mb={20} />
+      <CreateButton
+        title={"add new Lecture"}
+        mt={20}
+        mb={20}
+        onClick={toggleShowOfCreate}
+      />
       <div className="mb-3">Lectures's List</div>
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGrid
@@ -148,6 +231,56 @@ const Courses = () => {
           handleDeletecoursClick(idOfDelete);
           setBasicModal(false);
         }}
+      />
+      <Modal
+        toggleShow={toggleShowOfCreate}
+        basicModal={createModal}
+        setBasicModal={setCreateModal}
+        normal={true}
+        title="Add new lecture"
+        body={
+          <div className="d-flex flex-column justify-content-center align-items-center gap-3">
+            <StyledInput
+              value={addcours.title || ""}
+              onChange={handleAddcoursChange}
+              label="Title"
+              name="title"
+            />
+
+            <StyledInput
+              value={addcours.content || ""}
+              onChange={handleAddcoursChange}
+              label="Content"
+              name="content"
+            />
+          </div>
+        }
+        fn={Addcours}
+      />
+        <Modal
+        basicModal={editModal}
+        setBasicModal={setEditModal}
+        toggleShow={()=>{setEditModal(!editModal)}}
+        normal={true}
+        title="Edit Lecture"
+        body={
+          <div className="d-flex flex-column justify-content-center align-items-center gap-3">
+            <StyledInput
+              value={editedTitle}
+              onChange={(e)=>{setEditedTitle(e.target.value)}}
+              label="Title"
+             
+            />
+
+            <StyledInput
+                value={editedContent}
+              onChange={(e)=>{setEditedContent(e.target.value)}}
+              label="Content"
+             
+            />
+          </div>
+        }
+        fn={handleEdit}
       />
     </div>
   );
