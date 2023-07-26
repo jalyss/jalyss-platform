@@ -1,37 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchsessions } from "../../../store/sessions";
-import { DatePicker } from "antd";
-
+import { DatePicker, Form } from "antd";
+import DisplayLottie from "../../../components/DisplayLottie";
+import course from "../../../constants/course.json";
+import { fetchcours } from "../../../store/courses";
+import dayjs from "dayjs";
 const { RangePicker } = DatePicker;
 
-function AddLecture() {
+function AddLecture({ setLecture, lecture, session, startDate, endDate }) {
+  const coursStore = useSelector((state) => state.courses.courses.items);
 
-    const sessionStore = useSelector((state) => state.sessions);
-    const { sessions } = sessionStore;
-    const dispatch=useDispatch()
-    const [sessionId,setSessionId]=useState(null)
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    const take = sessions?.items?.count || 10;
-    const skip = 0;
-    useEffect(() => {
-      dispatch(fetchsessions({ take, skip }));
-    }, [take]);
+  const dispatch = useDispatch();
 
-    function onChange(val) {
-        const [start, end] = val;
-        setStartDate(start);
-        setEndDate(end);
-      }
-    console.log("sessId",sessionId);
+  useEffect(() => {
+    dispatch(fetchcours());
+  }, [dispatch]);
+
+  function onChange(val) {
+    const [start, end] = val;
+    setLecture((Lecture) => ({ ...Lecture, startAt: start, endAt: end }));
+  }
+  const disabledDate = (current) => {
+    const { startDate, endDate } = session;
+    const { startAt, endAt } = lecture;
+    if (!startDate && !endDate) {
+      return false;
+    }
+    const tooLate = startAt && current.diff(startAt, "days") >= endDate;
+    const tooEarly = endAt && endAt.diff(current, "days") >= startDate;
+    return !!tooEarly || !!tooLate;
+  };
+
+  console.log(session);
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center gap-3">
+    <div className="d-flex flex-column justify-content-center align-items-center  mb-4 ">
+      <DisplayLottie
+        animationData={course}
+        style={{ width: "120px", height: "120px" }}
+      />
       <select
-        value={sessionId}
+        value={lecture?.lectureId}
         class="form-select "
         aria-label="Default select example"
-        onChange={(e)=>{setSessionId(e.target.value)}}
+        onChange={(e) => {
+          console.log(e.target.name);
+          setLecture((Lecture) => ({
+            ...Lecture,
+            lectureId: e.target.value,
+            title: coursStore.filter((elem) => elem.id === e.target.value)[0]
+              .title,
+          }));
+        }}
         required
         style={{
           border: "1px solid #bfbab7",
@@ -40,20 +60,30 @@ function AddLecture() {
         }}
       >
         <option value="" disabled selected>
-          Choose your Lecture Session
+          Choose your lecture Session
         </option>
-        {sessions?.items?.items?.map((session, index) => (
-          <option key={index} value={session.id}>
-            {session.title}
+        {coursStore.map((course, index) => (
+          <option key={index} value={course.id} name={course.title}>
+            {course.title}
           </option>
         ))}
       </select>
-
-      <RangePicker
-                      onChange={onChange}
-                      style={{ height: "40px" }}
-                      className=""
-                    />
+      <Form.Item
+        name="range_picker"
+        rules={[{ required: true, message: "Please select date" }]}
+      >
+        <RangePicker
+          disabledDate={(current) => {
+            return (
+              current &&
+              current <= dayjs(startDate) &&
+              current >= dayjs(endDate)
+            );
+          }}
+          onChange={onChange}
+          style={{ height: "40px" }}
+        />
+      </Form.Item>
     </div>
   );
 }

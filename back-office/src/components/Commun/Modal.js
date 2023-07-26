@@ -28,7 +28,7 @@ export default function App({
   noFooter,
 }) {
   return (
-    <MDBModal show={basicModal} setShow={setBasicModal} toggle={toggleShow}>
+    <MDBModal show={basicModal} setShow={setBasicModal} toggle={toggleShow} >
       <MDBModalDialog centered>
         <MDBModalContent>
           <MDBModalHeader

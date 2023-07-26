@@ -25,14 +25,7 @@ function Featuress() {
   const [editModal, setEditModal] = useState(false);
   const [labelOfDelete, setLabelOfDelete] = useState("");
 
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: 5,
-    page: 0,
-  });
-  const [rowCount, setRowCount] = React.useState(0);
-  React.useEffect(() => {
-    setRowCount(features.items?.length);
-  }, [rowCount]);
+ 
 
   useEffect(() => {
     if (editModal && editRowId) {
@@ -177,10 +170,7 @@ function Featuress() {
             pageSizeOptions={[5]}
             checkboxSelection
             disableRowSelectionOnClick
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rowCount={rowCount}
-            paginationMode="server"
+           
           />
         </Box>
       </div>

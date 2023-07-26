@@ -122,7 +122,7 @@ function Sessions() {
           mb={20}
         />
       </div>
-      <div className="position-relative">
+      <div className="position-relative mx-3">
         Session List
         <Box sx={{ height: 600, width: "100%" }}>
           <DataGrid

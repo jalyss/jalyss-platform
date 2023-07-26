@@ -15,7 +15,6 @@ import Select from "react-select";
 import { MDBModalFooter } from "mdb-react-ui-kit";
 import axios from "axios";
 import { fetchFeatures } from "../../../../store/tarifSession";
-import TrainingStepper from "../../../../components/TrainingStepper";
 import TarifSection from "../../../../components/TarifSection";
 import { DataGrid } from "@mui/x-data-grid";
 import StyledInput from "../../../../components/Commun/inputs/StyledInput";
@@ -36,6 +35,8 @@ import { DatePicker } from "antd";
 import DisplayLottie from "./../../../../components/DisplayLottie";
 import pricing1 from "../../../../constants/pricing1.json";
 import AddLecture from "../../components/AddLecture";
+import { fetchcours } from "../../../../store/courses";
+
 
 const { RangePicker } = DatePicker;
 
@@ -44,6 +45,7 @@ const Addtarif = () => {
   const sessionStore = useSelector((state) => state.sessions);
   const { sessions } = sessionStore;
   const categoriesStore = useSelector((state) => state.category);
+  const { categories } = categoriesStore;
   const featuresStore = useSelector((state) => state.tarifSession.features);
   const gainsStore = useSelector((state) => state.gain);
   const { gains } = gainsStore;
@@ -51,17 +53,19 @@ const Addtarif = () => {
   const { prerequires } = prereqStore;
   const typesStore = useSelector((state) => state.sessiontypes);
   const { types } = typesStore;
-  const { categories } = categoriesStore;
+  const lecturesStore = useSelector((state) => state.courses);
+  const { cours } = lecturesStore;
   const navigate = useNavigate();
 
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [selectedGains, setSelectedGains] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedPrerequire, setSelectedPrerequire] = useState([]);
+  const [lectures, setLectures] = useState([]);
   const [cover, setCover] = useState(null);
-  const [addSession, setAddSession] = useState({ tarifs: [] });
+  const [addSession, setAddSession] = useState({ tarifs: [],lectures:[] });
   const [tarif, setTarif] = useState(null);
-  const [lectures, setLectures] = useState(null);
+  const [lecture, setLecture] = useState(null);
 
   const [index, setIndex] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
@@ -71,23 +75,25 @@ const Addtarif = () => {
   const [showAddTarifModal, setShowAddTarifModal] = useState(false);
   const [showAddLectureModal, setShowAddLectureModal] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState(false);
-
   const fileInputRef = useRef(null); // Reference to the file input element
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const take = sessions?.items?.count || 10;
+  const take = sessions?.count || 10;
   const skip = 0;
+
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchFeatures());
     dispatch(fetchGains());
     dispatch(fetchPrerequires());
     dispatch(fetchsessionstypes());
-    dispatch(fetchsessions({ take, skip }));
+    dispatch(fetchcours())
   }, [dispatch]);
-  console.log("sess", sessions);
+
+  useEffect(() => {
+    dispatch(fetchsessions({ take, skip }))
+  }, [dispatch, take]);
 
   useEffect(() => {
     setAddSession({ ...addSession, tarifs: [] });
@@ -100,6 +106,28 @@ const Addtarif = () => {
       ...AddSession,
       [name]: value,
     }));
+  };
+  const submitLecture = (e) => {
+    e.preventDefault();
+
+    let auxLectures = [...addSession.lectures,lecture];
+    // if (isEdit) {
+    //   auxLectures[index] = tarif;
+    //   setIsEdit(false);
+    // } else {
+      // auxTarifs = [...auxTarifs, tarif];
+    // }
+    // auxTarifs = auxTarifs.sort((a, b) => {
+    //   return a.price - b.price;
+    // });
+    setAddSession((AddSession) => ({
+      ...AddSession,
+      lectures: auxLectures,
+    }));
+
+    setLecture(null);
+    // setIndex(null);
+    setShowAddLectureModal(false);
   };
   const submitTarif = (e) => {
     e.preventDefault();
@@ -123,6 +151,7 @@ const Addtarif = () => {
     setIndex(null);
     setShowAddTarifModal(false);
   };
+
   const submitsession = async (event) => {
     event.preventDefault();
 
@@ -184,8 +213,9 @@ const Addtarif = () => {
   function onChange(val) {
     const [start, end] = val;
     setStartDate(start);
-    setEndDate(end);
+    setEndDate(end)
   }
+  console.log("addSession", addSession);
 
   return (
     <div>
@@ -341,7 +371,7 @@ const Addtarif = () => {
                       <option value="" disabled selected>
                         Choose your previous Session
                       </option>
-                      {sessions?.items?.items?.map((session, index) => (
+                      {sessions?.items?.map((session, index) => (
                         <option key={index} value={session.id}>
                           {session.title}
                         </option>
@@ -467,40 +497,29 @@ const Addtarif = () => {
               }}
               content="Add Tarif"
             />
-            {/* <CloseButton  modifTitle={"Add tarif"}
-             disabled={selectedFeatures.length ? false : true}
-             onClick={() => {
-               setShowAddTarifModal(true);
-               setTarif({
-                 ...tarif,
-                 features: selectedFeatures.map((elem) => ({
-                   ...elem,
-                   isAvailable: false,
-                 })),
-               });
-             }}/> */}
+
             <DisplayLottie
               animationData={pricing1}
               style={{ width: "120px", height: "80px" }}
             />
-          
 
             <AddButton
               onClick={() => {
-               
-                  setShowAddLectureModal(true);
-                  // setTarif({
-                  //   ...tarif,
-                  //   features: selectedFeatures.map((elem) => ({
-                  //     ...elem,
-                  //     isAvailable: false,
-                  //   })),
-                  // });
-                
+                setShowAddLectureModal(true);
+                setLectures({
+                  ...lectures,
+                  features: selectedFeatures.map((elem) => ({
+                    ...elem,
+                    isAvailable: false,
+                  })),
+                });
               }}
               content="Add Lecture"
             />
           </div>
+          {addSession?.lectures.map((elem,i)=>(
+            <div>{elem.title}</div>
+          ))}
           <div className="mt-4">
             <TrainingPricing
               session={addSession}
@@ -577,12 +596,32 @@ const Addtarif = () => {
         basicModal={showAddLectureModal}
         setBasicModal={setShowAddLectureModal}
         normal={true}
-        title="Add new Lecture"
-       
+        title="Add new Tarif"
+        noButtons={true}
+        noFooter={true}
         body={
-       <AddLecture/>
+          <form
+            onSubmit={submitLecture}
+            // className="d-flex justify-content-center align-items-center "
+            // style={{ marginRight: "50px" }}
+            className="d-flex flex-column justify-content-center align-items-center"
+          >
+            
+            <div>
+              <AddLecture setLecture={setLecture} session={addSession} startDate={startDate} endDate={endDate} />
+            </div>
+            <div className="d-flex justify-content-center align-items-center mt-5">
+              <CloseButton
+                onClick={() => setShowAddLectureModal(false)}
+                type={"button"}
+              />
+              <SaveButton onSubmit={submitLecture} type={"submit"} />
+            </div>
+            
+          </form>
         }
       />
+     
     </div>
   );
 };
