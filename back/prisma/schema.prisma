@@ -350,9 +350,10 @@ model Command {
   clientAddress  String        @map("client_address")
   clientTel      String        @map("client_tel")
   clientEmail    String        @map("client_email")
-  payment        String        @map("payment")
-  montant        Float         
-  commandeDirect Boolean       @default(false)
+  confirm        Boolean       @default(false)
+  delivered      Boolean       @default(false)
+  paid           Boolean       @default(false)
+  hasDelivery    Boolean       @default(false) @map("has_delivery")
   branch         Branch        @relation(fields: [branchId], references: [id])
   branchId       String        @map("branch_id")
   intermediate   Client?       @relation(name: "intermediate", fields: [intermediateId], references: [id], onDelete: Cascade)

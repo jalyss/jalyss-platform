@@ -1,22 +1,56 @@
 import { Box, Checkbox, Container, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate, useParams } from "react-router-dom";
+import {createCommand} from "../../../store/command"
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import { useDispatch, useSelector } from "react-redux";
 
 function CreateCommand() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [clientName,setclientName]=useState()
+  const [clientAddress,setclientAddress]=useState()
+  const [clientTel,setclientTel]=useState()
+  const [clientEmail,setclientEmail]=useState()
+  const [delivered,setdelivered]=useState(false)
+  const [paid,setpaid]=useState(false)
+  const [hasDelivery,sethasDelivery]=useState(false)
+  const [countryId,setcountryId]=useState()
+  const [cityId,setcityId]=useState()
+
+  const handleSubmit = () => {
+ const aux ={
+  "clientName": clientName,
+  "clientAddress": clientAddress,
+  "clientTel": clientTel,
+  "clientEmail": clientEmail,
+  "delivered": delivered,
+  "paid": paid,
+  "hasDelivery": hasDelivery,
+  "countryId": countryId,
+  "cityId": cityId,
+}
+    
+    dispatch(createCommand(aux)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("command created successfully");
+        navigate(-1);
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+
   return (
 
     <Container maxWidth="md">
-      <Box component="form" mt={3}>
+      <Box  mt={3}>
         <Typography variant="h4" align="center" gutterBottom>
           Create Command
         </Typography>
         <Box mt={3} >
-          <RadioGroup
-            row
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-          >
-            <FormControlLabel value="Comanddirect" control={<Checkbox />} label=" Comand direct" />
-          </RadioGroup>
+       
 
         </Box>
         <div className='row'>
@@ -27,6 +61,7 @@ function CreateCommand() {
               fullWidth
               required
               margin="normal"
+              onChange={(e)=>{setclientName(e.target.value)}}
             />
           </Box>
           <Box mt={2} className="col-6">
@@ -37,6 +72,8 @@ function CreateCommand() {
               fullWidth
               required
               margin="normal"
+            onChange={(e)=>{setclientTel(e.target.value)}}
+
             />
           </Box>
         </div>
@@ -44,6 +81,7 @@ function CreateCommand() {
           <TextField
             label="Adress"
             variant="outlined"
+            onChange={(e)=>{setclientAddress(e.target.value)}}
             fullWidth
             required
             margin="normal"
@@ -52,6 +90,8 @@ function CreateCommand() {
         <Box mt={3}>
           <TextField
             label="Email"
+            onChange={(e)=>{setclientEmail(e.target.value)}}
+
             variant="outlined"
             fullWidth
             required
@@ -66,7 +106,6 @@ function CreateCommand() {
               label="Branch"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-
             >
               <MenuItem value={10}>TUN</MenuItem>
               <MenuItem value={20}>MAROC</MenuItem>
@@ -79,28 +118,32 @@ function CreateCommand() {
               label="Branch"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
+              placeholder='country'
+              onChange={(e)=>{setcountryId(e.target.value)}}
 
             >
-              <MenuItem value={10}> Tunisia</MenuItem>
-              <MenuItem value={20}> Marroc</MenuItem>
+              <MenuItem value="5114eaa7-4d1a-4bef-a03d-2025bd6ea405"> Tunisia</MenuItem>
+              <MenuItem value="20b82e14-aa6e-4d60-bb31-7a50c83d54d6"> Marroc</MenuItem>
             </Select>
           </Box>
           <Box mt={3} className="col-4">
             <InputLabel id="demo-simple-select-label">City</InputLabel>
             <Select
               label="Branch"
+              placeholder='city'
+
               labelId="demo-simple-select-label"
               id="demo-simple-select"
 
             >
-              <MenuItem value={10}> Tunis</MenuItem>
-              <MenuItem value={20}> Sfax</MenuItem>
+              <MenuItem value="c8b885bf-2d79-41ad-b581-0c7889a67cce"> Tunis</MenuItem>
+              <MenuItem value="2c2f2e10-d8cb-42da-8b9a-76f4f89c816f"> Sfax</MenuItem>
             </Select>
           </Box>
         </div>
         <Box mt={3} mb={3} >
           <TextField
-            label="Article"
+            label="Command line"
             variant="outlined"
             fullWidth
             required
@@ -109,32 +152,26 @@ function CreateCommand() {
         </Box>
         <div className='row'>
 
-        <Box mt={3} className="col-7  ">
-          <TextField
-            label="Montant"
-            variant="outlined"
-            fullWidth
-            required
-            margin="normal"
-          />
-        </Box>
-        <Box  className="col-4">
-          <InputLabel id="demo-simple-select-label">Payment : </InputLabel>
-          <Select
-            label="Branch"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-          >
-            <MenuItem value={10}> Check</MenuItem>
-            <MenuItem value={20}> Cash</MenuItem>
-          </Select>
-        </Box>
+          <Box mt={3} className="col-7  ">
+            <TextField
+              label="Price"
+              variant="outlined"
+              fullWidth
+              required
+              margin="normal"
+            />
+          </Box>
+          <Box className="col-4">
+            <InputLabel id="demo-simple-select-label">Quantity : </InputLabel>
+            <input type='number' placeholder='Quantity' />
+          </Box>
         </div>
 
         <div className="w-100 d-flex justify-content-center">
           <button
             type="submit"
             className="confirm-button mt-3"
+            onClick={handleSubmit}
           >
             <span className="label-btn"> Add Command </span>
           </button>

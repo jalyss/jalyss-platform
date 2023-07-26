@@ -1,12 +1,21 @@
-import { Box, Checkbox, FormControlLabel, InputLabel,Container, MenuItem, RadioGroup, Select, TextField, Typography } from '@mui/material'
+import { Box, Checkbox, FormControlLabel, InputLabel,Container, MenuItem, RadioGroup, TextField, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useDispatch , useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import {fetchCommand} from '../../../store/command'
-
+import {users} from "../../../constants/users"
+import Select from "react-select";
 function EditCommand() {
+
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
+
   const command = useSelector((state) => state.command.command);
+  console.log(command,'loll')
   const { commandId } = useParams()
   const dispatch = useDispatch();
   const [com, setCom] = useState({})
@@ -20,7 +29,10 @@ function EditCommand() {
     const { name, value } = e.target;
     setAuth((com) => ({ ...com, [name]: value }));
   };
-
+  const handleChangee = (event) => {
+    // Handle the change of the Select value here if needed
+    console.log(event.target.value)
+  };
 
   return (
     <div>
@@ -86,22 +98,27 @@ function EditCommand() {
         </Box>
 
         <div className='row'>
-          <Box mt={3} className="col-4" >
-            <InputLabel id="demo-simple-select-label">Branch</InputLabel>
-            <Select sx={{
-    width: 150,
-    color: 'success.main',
-  }}
-              label="Branch"
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={command?.branchId}
-            >
-              <MenuItem value={10}>TUN</MenuItem>
-              <MenuItem value={20}>MAROC</MenuItem>
-              <MenuItem value={30}>FRANCE</MenuItem>
-            </Select>
-          </Box>
+        <Box mt={3} className="col-4">
+<Typography>lol</Typography>
+<Select options={options}  isMulti/>
+
+
+    {/*  <Select
+        sx={{
+          width: 150,
+        }}
+        label="Branch"
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={command?.branchId}
+        onChange={handleChangee}
+      >
+        <MenuItem value={10}>TUN</MenuItem>
+        <MenuItem value={20}>MAROC</MenuItem>
+        <MenuItem value={30}>FRANCE</MenuItem>
+      </Select>
+      <Typography variant="body1">Selected Value: {command?.branchId}</Typography>
+    </Box>
           <Box mt={3} className="col-4">
             <InputLabel id="demo-simple-select-label">Country</InputLabel>
             <Select sx={{
@@ -117,6 +134,7 @@ function EditCommand() {
               <MenuItem value={10}> Tunisia</MenuItem>
               <MenuItem value={20}> Marroc</MenuItem>
             </Select>
+            */}
           </Box>
           <Box mt={3} className="col-4">
             <InputLabel id="demo-simple-select-label">City</InputLabel>
@@ -127,7 +145,7 @@ function EditCommand() {
               label="Branch"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={command?.city.nameEn}
+              value={command?.city?.nameEn}
             >
               <MenuItem value={10}> Tunis</MenuItem>
               <MenuItem value={20}> Sfax</MenuItem>
@@ -136,7 +154,7 @@ function EditCommand() {
         </div>
         <Box mt={3} mb={3} >
           <TextField
-            label="Article"
+            label="Command line"
             variant="outlined"
             fullWidth
             required
@@ -147,7 +165,7 @@ function EditCommand() {
 
         <Box mt={3} className="col-7  ">
           <TextField
-            label="Montant"
+            label="Price"
             variant="outlined"
             fullWidth
             required
@@ -156,19 +174,9 @@ function EditCommand() {
           />
         </Box>
         <Box  className="col-4">
-          <InputLabel id="demo-simple-select-label">Payment : </InputLabel>
-          <Select  sx={{
-    width: 150,
-    color: 'success.main',
-  }}
-            label="Branch"
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={command?.payment}
-          >
-            <MenuItem value={10}> Check</MenuItem>
-            <MenuItem value={20}> Cash</MenuItem>
-          </Select>
+          <InputLabel id="demo-simple-select-label">Quantity : </InputLabel>
+          <input type='number' placeholder='Quantity' />
+
         </Box>
         </div>
 

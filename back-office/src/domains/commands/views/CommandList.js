@@ -43,77 +43,74 @@ function CommandList() {
       sortable: false,
 
     },
-
     {
       field: 'paid',
       type: 'actions',
       headerName: 'PAYMENT STATUS',
-      width: 130,
+      width: 110,
       cellClassName: 'actions',
-      getActions: ({ id }) => {
-
+      getActions: ({ id, row }) => {
         return [
-          <GridActionsCellItem
-            icon={<FcCancel size={15} />}
-
-            label="confirmPaid"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<GiConfirmed size={20} color='#3cb371' />}
-
-            label="confirmPaid"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-
-
+          row.paid ? (
+            <GridActionsCellItem
+              icon={<GiConfirmed size={20} color='#3cb371' />}
+              label="confirmPaid"
+              className="textPrimary"
+              onClick={() => handleEditClick(id)}
+              color="inherit"
+            />
+          ) : (
+            <GridActionsCellItem
+              icon={<FcCancel size={15} />}
+              label="confirmPaid"
+              className="textPrimary"
+              onClick={() => handleEditClick(id)}
+              color="inherit"
+            />
+          ),
         ];
-
       },
     },
-
+    
+  
     {
       field: 'hasDelivery',
-      headerName: '	HAS DELIVERY',
-      width: 150,
+      headerName: 'HAS DELIVERY',
+      width: 130,
       sortable: true,
-
+      renderCell: ({ value }) => (value ? 'Yes' : 'No'), // Render 'Yes' or 'No' instead of boolean
 
     },
+ 
     {
       field: 'confirm',
       type: 'actions',
       headerName: 'CONFIRM',
       width: 100,
       cellClassName: 'actions',
-      getActions: ({ id }) => {
-
+      getActions: ({ id, row }) => {
         return [
-          <GridActionsCellItem
-            icon={<FcCancel  size={15} />}
-
-            label="confirm"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<GiConfirmed size={20} color='#3cb371' />}
-
-            label="confirm"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-
+          row.confirm ? (
+            <GridActionsCellItem
+              icon={<GiConfirmed size={20} color='#3cb371' />}
+              label="confirm"
+              className="textPrimary"
+              onClick={() => handleEditClick(id)}
+              color="inherit"
+            />
+          ) : (
+            <GridActionsCellItem
+              icon={<FcCancel size={15} />}
+              label="confirm"
+              className="textPrimary"
+              onClick={() => handleEditClick(id)}
+              color="inherit"
+            />
+          ),
         ];
-
       },
     },
+
     {
       field: 'delivered',
       type: 'actions',
@@ -122,14 +119,14 @@ function CommandList() {
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
-          <GridActionsCellItem
-            icon={<GiCancel color='red' size={15} />}
+          // <GridActionsCellItem
+          //   icon={<GiCancel color='red' size={15} />}
 
-            label="confirm"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
+          //   label="confirm"
+          //   className="textPrimary"
+          //   onClick={() => handleEditClick(id)}
+          //   color="inherit"
+          // />,
           <GridActionsCellItem
             icon={<TbTruckDelivery size={20} />}
             label="Edit"
@@ -183,6 +180,7 @@ function CommandList() {
   ];
 
   const commandStore = useSelector((state) => state.command)
+  console.log(commandStore,"lol")
   const dispatch = useDispatch()
   const isEng = isEnglish()
   const navigate = useNavigate()
