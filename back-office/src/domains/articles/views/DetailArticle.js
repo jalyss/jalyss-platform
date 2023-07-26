@@ -168,7 +168,7 @@ function DetailAritcle() {
               />
               <TextField
                 label="Category"
-                value={article?.category}
+                value={article?.category?.nameEn}
                 disabled
                 fullWidth
                 variant="outlined"
@@ -191,7 +191,7 @@ function DetailAritcle() {
               />
               <TextField
                 label="PublishingHouse"
-                value={article?.publishingHouse}
+                value={article?.publishingHouse?.name}
                 disabled
                 fullWidth
                 variant="outlined"
@@ -214,7 +214,7 @@ function DetailAritcle() {
               />
               <TextField
                 label="Type"
-                value={article?.type}
+                value={article?.type?.nameEn}
                 disabled
                 fullWidth
                 variant="outlined"

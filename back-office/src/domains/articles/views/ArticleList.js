@@ -39,10 +39,11 @@ function ArticleList() {
       let aux = articleStore.articles.items.map((e) => {
         return {
           ...e,
-          category: e?.category?.nameAr,
+          category: e?.category?.nameEn,
           publishingHouse: e?.publishingHouse?.name,
-          price: e?.ArticlesByBranch?.price,
-          stock: e?.ArticlesByBranch?.stock,
+          type: e?.type?.nameEn,
+        
+         
         };
       });
       console.log(aux);
@@ -52,11 +53,7 @@ function ArticleList() {
   console.log(articleStore.articles.items);
 
   const columns = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-    },
+    
     {
       field: "title",
       headerName: "Title",
@@ -64,27 +61,58 @@ function ArticleList() {
       editable: true,
     },
     {
-      field: "code",
-      headerName: "Code ",
+      field: "weight",
+      headerName: "weight ",
 
       width: 100,
       sortable: true,
     },
 
     {
-      field: "category",
-      headerName: "Category",
+      field: "pageNumber",
+      headerName: "page Number",
       width: 110,
       editable: true,
       sortable: false,
     },
     {
-      field: "publishingHouse",
-      headerName: "Publishing House ",
-
+      field: "code",
+      headerName: "code",
       width: 120,
       sortable: false,
     },
+    {
+      field: "shortDescriptionEn",
+      headerName: "shortDescriptionEn ",
+      width: 120,
+      sortable: false,
+    },
+    {
+      field: "longDescriptionEn",
+      headerName: "longDescriptionEn",
+      width: 120,
+      sortable: false,
+    },
+    {
+      field: "type",
+      headerName: "type",
+      width: 120,
+      sortable: false,
+    },
+    
+    {
+      field: "category",
+      headerName: "category ",
+      width: 120,
+      sortable: false,
+    },
+    {
+      field: "publishingHouse",
+      headerName: "Publishing House ",
+      width: 120,
+      sortable: false,
+    },
+    
     {
       field: "actions",
       type: "actions",
