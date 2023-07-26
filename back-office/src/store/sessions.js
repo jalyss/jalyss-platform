@@ -184,7 +184,8 @@ export const sessionSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchsessions.fulfilled, (state, action) => {
-      state.sessions.items = action.payload;
+      state.sessions.items = action.payload.items;
+      state.sessions.count = action.payload.count;
     });
     builder.addCase(fetchOnesession.fulfilled, (state, action) => {
       state.session = action.payload;
