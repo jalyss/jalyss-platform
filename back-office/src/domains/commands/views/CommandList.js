@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
 import { GiConfirmed ,GiCancel} from 'react-icons/gi';
-import { AiFillEdit, AiOutlineEye } from 'react-icons/ai';
+import { AiFillDelete, AiFillEdit, AiOutlineEye } from "react-icons/ai";
 import { FcCancel } from 'react-icons/fc';
 import { GrAdd } from 'react-icons/gr';
 import { TbTruckDelivery } from 'react-icons/tb';
@@ -165,11 +165,12 @@ function CommandList() {
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<AiFillEdit size={15} />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => handleClick(id)}
-            color="inherit"
+            icon={<AiFillDelete />}
+            label="Delete"
+            onClick={() => {
+              toggleShowDelete(id);
+            }}
+            color="error"
           />,
 
 

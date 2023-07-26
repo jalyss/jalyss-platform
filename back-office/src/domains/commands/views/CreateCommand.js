@@ -18,6 +18,7 @@ function CreateCommand() {
   const [hasDelivery,sethasDelivery]=useState(false)
   const [countryId,setcountryId]=useState()
   const [cityId,setcityId]=useState()
+  const [branshId,setBranshId]=useState()
 
   const handleSubmit = () => {
  const aux ={
@@ -30,6 +31,7 @@ function CreateCommand() {
   "hasDelivery": hasDelivery,
   "countryId": countryId,
   "cityId": cityId,
+  "branshId": branshId,
 }
     
     dispatch(createCommand(aux)).then((res) => {
@@ -106,10 +108,11 @@ function CreateCommand() {
               label="Branch"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
+              onChange={(e)=>{setBranshId(e.target.value)}}
             >
-              <MenuItem value={10}>TUN</MenuItem>
-              <MenuItem value={20}>MAROC</MenuItem>
-              <MenuItem value={30}>FRANCE</MenuItem>
+              <MenuItem value="46e79004-7549-476b-b556-29db7318a28d">TUN</MenuItem>
+              <MenuItem value="5cc8abaa-72e8-4227-b65f-32cc92774284">MAROC</MenuItem>
+              <MenuItem value="21ecb3d9-56d8-4142-9431-79166d3d86a1">FRANCE</MenuItem>
             </Select>
           </Box>
           <Box mt={3} className="col-4">
@@ -122,8 +125,8 @@ function CreateCommand() {
               onChange={(e)=>{setcountryId(e.target.value)}}
 
             >
-              <MenuItem value="5114eaa7-4d1a-4bef-a03d-2025bd6ea405"> Tunisia</MenuItem>
-              <MenuItem value="20b82e14-aa6e-4d60-bb31-7a50c83d54d6"> Marroc</MenuItem>
+              <MenuItem value="6966a5ed-21e2-4290-82b8-961ed6c8521b"> Tunisia</MenuItem>
+              <MenuItem value="3569b721-83ca-43a4-b73d-34960a2483ed"> Marroc</MenuItem>
             </Select>
           </Box>
           <Box mt={3} className="col-4">
@@ -136,8 +139,8 @@ function CreateCommand() {
               id="demo-simple-select"
 
             >
-              <MenuItem value="c8b885bf-2d79-41ad-b581-0c7889a67cce"> Tunis</MenuItem>
-              <MenuItem value="2c2f2e10-d8cb-42da-8b9a-76f4f89c816f"> Sfax</MenuItem>
+              <MenuItem value="fe3dfdca-7618-4a80-9172-45d161d7ded9"> Tunis</MenuItem>
+              <MenuItem value="a8ac7684-6868-48d6-a043-4811aaa8bdfe"> Sfax</MenuItem>
             </Select>
           </Box>
         </div>
