@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Box, Card, CardContent, CardMedia, TextField } from "@mui/material";
+import { Box, CardContent, CardMedia, TextField } from "@mui/material";
 import { fetchProvider } from "../../../store/provider";
 
 function DetailProvider() {

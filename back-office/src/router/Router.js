@@ -20,6 +20,7 @@ import Article from "../domains/articles/Article";
 import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
 import EditArticle from "../domains/articles/views/EditArticle";
+import DetailAritcle from "../domains/articles/views/DetailArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
@@ -159,7 +160,7 @@ function Router() {
 
             <Route path="provider" element={<Providers />}>
               <Route index element={<ProvidersList />} />
-              <Route path="edit/:providerId" element={<EditProvider />} />
+              <Route path="editProvider/:providerId" element={<EditProvider />} />
               <Route path="detail/:providerId" element={<DetailProvider />} />
               <Route path="create" element={<CreateProvider />} />
             </Route>
@@ -204,6 +205,8 @@ function Router() {
               />
               <Route path="create" element={<CreateArticle />} />
               <Route path="editArticle/:articleId" element={<EditArticle />} />
+              <Route path="detail/:articleId" element={<DetailAritcle />} />
+
             </Route>
             
 

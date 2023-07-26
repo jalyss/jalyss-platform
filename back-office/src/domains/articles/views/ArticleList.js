@@ -86,19 +86,6 @@ function ArticleList() {
       sortable: false,
     },
     {
-      field: "price",
-      headerName: "Price ",
-      width: 100,
-    },
-
-    {
-      field: "stock",
-      headerName: "Stock",
-      width: 100,
-      editable: true,
-      sortable: false,
-    },
-    {
       field: "actions",
       type: "actions",
       headerName: "Actions",
@@ -117,7 +104,7 @@ function ArticleList() {
             icon={<AiOutlineEye />}
             label="Add"
             className="textPrimary"
-            onClick={() => navigate(`detailArticle/${id}`)}
+            onClick={() => navigate(`detail/${id}`)}
             color="success"
           />,
           <GridActionsCellItem

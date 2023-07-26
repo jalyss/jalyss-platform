@@ -193,8 +193,28 @@ function CreateArticle() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
+                  <InputLabel id="type">Type</InputLabel>
+                  <Select
+                    labelId="type"
+                    name="typeId"
+                    value={article?.typeId || ""}
+                    onChange={handleChange}
+                  >
+                    
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {articleTypeStore.articleTypes.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
                   <InputLabel id="category">Category</InputLabel>
                   <Select
+                  variant="outlined"
                     labelId="category"
                     name="categoryId"
                     value={article?.categoryId || ""}
@@ -227,28 +247,10 @@ function CreateArticle() {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="type">Type</InputLabel>
-                  <Select
-                    labelId="type"
-                    name="typeId"
-                    value={article?.typeId || ""}
-                    onChange={handleChange}
-                  >
-                    
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {articleTypeStore.articleTypes.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+             
              
             
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
                   <InputLabel id="author">Author</InputLabel>
                   <Select
