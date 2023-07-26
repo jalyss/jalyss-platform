@@ -172,7 +172,7 @@ function Signup() {
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
-                  required
+                  // required
                   type="tel"
                   class="form-control mt-2"
                   id="tel"
@@ -266,7 +266,7 @@ function Signup() {
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
-                  required
+                  // required
                   class="form-control mt-2"
                   id="address"
                   name="address"
