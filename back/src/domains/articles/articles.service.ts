@@ -222,7 +222,7 @@ export class ArticleService {
         id,
       },
 
-      include: { category: true, publishingHouse: true, type: true },
+      include: { category: true, publishingHouse: true, type: true,ArticlesByBranch:true },
     });
   }
 

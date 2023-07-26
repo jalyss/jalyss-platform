@@ -11,7 +11,7 @@ import {
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { SessionRequestService } from './sessionRequest.service';
 import { UpdateSessionRequestDto } from './dto/update-SessionRequest.dto';
-import { CreateSessionRequestDto } from './dto/create-SessionRequest.dto';
+import { CreateSessionRequestDto, UpdateReqDto } from './dto/create-SessionRequest.dto';
 import { CurrentUser } from '../auth/decorators/currentUser';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -31,20 +31,20 @@ export class SessionRequestController {
     return this.sessionRequestService.findAll();
   }
 
-  @Get(':sessionId')
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.sessionRequestService.findOne(id);
   }
 
-  @Patch(':sessionId')
+  @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() dto: UpdateSessionRequestDto,
+    @Body() dto: UpdateReqDto,
   ) {
     return this.sessionRequestService.update(id, dto);
   }
 
-  @Delete(':sessionId')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.sessionRequestService.remove(id);
   }

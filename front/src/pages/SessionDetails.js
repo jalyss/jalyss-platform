@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
 import ButtonWithTransformAndHover from "../components/Commun/buttons/ButtonWithTransformAndHover";
- // const duration = (seletedSession?.endDate.getTime() - seletedSession?.startDate.getTime())/(1000*3600) get duration in hours 
+// const duration = (seletedSession?.endDate.getTime() - seletedSession?.startDate.getTime())/(1000*3600) get duration in hours
 function SessionDetails() {
   const [showMore, setShowMore] = useState(false);
 
@@ -29,7 +29,7 @@ function SessionDetails() {
   const sessionStore = useSelector((state) => state.session);
   const { session } = sessionStore;
   const seletedSession = session;
-  console.log("sel",seletedSession);
+  console.log("sel", seletedSession);
   const lec = seletedSession?.lectures;
   const dispatch = useDispatch();
   const ref = useRef(null);
@@ -45,11 +45,9 @@ function SessionDetails() {
     elem.scrollIntoView();
   };
 
-
   const columnCount = Math.ceil(
     session?.SessionHasWhatYouWillLearn?.length / 2
   );
-
 
   const column1 = session?.SessionHasWhatYouWillLearn?.slice(0, columnCount);
   const column2 = session?.SessionHasWhatYouWillLearn?.slice(columnCount);
@@ -72,7 +70,7 @@ function SessionDetails() {
               width={600}
               // style={{
               //   objectFit: "contain",
-              
+
               // }}
             />
           ) : (
@@ -112,13 +110,15 @@ function SessionDetails() {
             value={seletedSession?.lectures?.length}
           />
 
-<KeyValueStyled
-  label="Number of students"
-  value={seletedSession?.tarifs.reduce((totalBookings, tarif) => {
-    const paidBookings = tarif.bookings.filter(booking => booking.paid === true);
-    return totalBookings + paidBookings.length;
-  }, 0)}
-/>
+          <KeyValueStyled
+            label="Number of students"
+            value={seletedSession?.tarifs.reduce((totalBookings, tarif) => {
+              const paidBookings = tarif.bookings.filter(
+                (booking) => booking.paid === true
+              );
+              return totalBookings + paidBookings.length;
+            }, 0)}
+          />
 
           <div className="coaches gap-3 ">
             <div className="d-flex align-items-center fw-bold">Coaches:</div>
@@ -246,20 +246,31 @@ function SessionDetails() {
       <TrainingPricing session={session} ref={ref} />
       {session?.previousSesion &&
         currentDate < new Date(session?.startDate) && (
-          <PreviousSessionGallery previousSesion={session.previousSesion}  subtitle="Previous Session Gallery" />
+          <PreviousSessionGallery
+            previousSesion={session.previousSesion}
+            subtitle="Previous Session Gallery"
+          />
         )}
 
       {session?.previousSesion &&
         currentDate > new Date(session?.startDate) && (
-          <PreviousSessionGallery previousSesion={session}  subtitle="Session Gallery"/>
+          <PreviousSessionGallery
+            previousSesion={session}
+            subtitle="Session Gallery"
+          />
         )}
 
-      {session?.previousSesion && currentDate < new Date(session?.startDate) && (
-          <FeedBack previousSesion={session.previousSesion} subtitle="Previous Session Feedback"/>
+      {session?.previousSesion &&
+        currentDate < new Date(session?.startDate) && (
+          <FeedBack
+            previousSesion={session.previousSesion}
+            subtitle="Previous Session Feedback"
+          />
         )}
 
-{session?.previousSesion && currentDate > new Date(session?.startDate) && (
-          <FeedBack previousSesion={session} subtitle="Session Feedback"/>
+      {session?.previousSesion &&
+        currentDate > new Date(session?.startDate) && (
+          <FeedBack previousSesion={session} subtitle="Session Feedback" />
         )}
     </div>
   );

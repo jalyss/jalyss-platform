@@ -25,7 +25,7 @@ import { AuthGuard } from "@nestjs/passport";
 import { UpdatePasswordDto } from './entities/user.entity';
 import { AuthService } from 'src/domains/auth/auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto, UpdateUserStatusDto } from './dto/update-user.dto';
+import { UpdateUserDto, UpdateUserIsCoach, UpdateUserStatusDto } from './dto/update-user.dto';
 
 
 @ApiTags('users')
@@ -98,6 +98,13 @@ export class UsersController {
     return {
       message: "password_update_success"
     };
+  }
+  @Put('isCoach/:id') 
+  public async updateUserCoach(
+    @Param('id') id: string,
+    @Body() updateUserIsCoachDto: UpdateUserIsCoach,
+  ) {
+    return await this.usersService.updateUserCoach(id, updateUserIsCoachDto);
   }
 
 }
