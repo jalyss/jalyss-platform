@@ -83,7 +83,8 @@ import CreateAuthor from "../domains/author/views/CreateAuthor";
 import Types from "../domains/training/views/sessions/Types";
 
 
-import Newsession from "../domains/training/views/sessions/NewSession";
+// import Newsession from "../domains/training/views/sessions/NewSession";
+import Newsession from "../domains/training/views/sessions/Newsession";
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
 // import Types from "../domains/type/Types";
 import TypesList from "../domains/type/views/TypesList";
