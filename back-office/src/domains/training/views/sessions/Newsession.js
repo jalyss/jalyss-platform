@@ -39,9 +39,12 @@ import pricing1 from "../../../../constants/pricing1.json";
 import AddLecture from "../../components/AddLecture";
 import { fetchcours } from "../../../../store/courses";
 import moment from "moment";
+import uploadImage from "../../../../assets/images/uploadImage.png";
+import UpdateButton from "../../../../components/Commun/buttons/UpdateButton";
+
 const { RangePicker } = DatePicker;
 
-const Addtarif = () => {
+const AddSession = () => {
   const dispatch = useDispatch();
   const sessionStore = useSelector((state) => state.sessions);
   const { sessions } = sessionStore;
@@ -167,6 +170,10 @@ const Addtarif = () => {
       showErrorToast("create one tarif as minimun");
       return;
     }
+    if (addSession.lectures.length === 0) {
+      showErrorToast("create one lecture as minimun");
+      return;
+    }
     let aux = Object.assign({}, addSession);
     aux.categoryId = categoryId;
     aux.startDate = startDate;
@@ -210,7 +217,7 @@ const Addtarif = () => {
     }
   };
   const handleImageClick = () => {
-    fileInputRef.current.click(); // Programmatically trigger the file input click event
+    document.getElementById("coverUpload").click(); // Programmatically trigger the file input click event
   };
 
   function onChange(val) {
@@ -286,6 +293,13 @@ const Addtarif = () => {
   };
   return (
     <div>
+      <input
+        type="file"
+        className="form-control visually-hidden"
+        id="coverUpload"
+        onChange={handleImageChange}
+        ref={fileInputRef}
+      />
       <form onSubmit={submitsession} className="mx-5">
         <h3 className="muted d-flex justify-content-center align-items-center my-3">
           {" "}
@@ -293,19 +307,64 @@ const Addtarif = () => {
         </h3>
 
         <div className="d-flex justify-content-center align-items-center my-3">
-          {cover && (
-            <img
-              src={URL.createObjectURL(cover)}
-              alt="Cover Image"
+          {cover ? (
+            <div
               style={{
-                width: "200px",
-                height: "200px",
+                width: "600px",
+                height: "300px",
                 marginTop: "10px",
+                position: "relative",
+                border: "1px solid black",
+              }}
+            >
+              <img
+                src={cover ? URL.createObjectURL(cover) : null}
+                style={{
+                  width: "600px",
+                  height: 300,
+                  objectFit: "contain",
+                }}
+                alt="Cover Image"
+                className="rounded "
+              />
+              <div
+                style={{
+                  cursor: "pointer",
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                }}
+              >
+                <UpdateButton
+                  type="button"
+                  onClick={handleImageClick}
+                  content="Upload New Cover"
+                ></UpdateButton>
+              </div>
+            </div>
+          ) : (
+            <div
+              style={{
+                width: "600px",
+                height: "300px",
+                marginTop: "10px",
+                position: "relative",
+                border: "1px solid black",
                 cursor: "pointer",
               }}
               onClick={handleImageClick}
-              className="rounded "
-            />
+            >
+              <img
+                alt="add cover"
+                style={{
+                  width: "600px",
+                  height: 300,
+                  objectFit: "contain",
+                }}
+                src={uploadImage}
+                className="rounded "
+              />
+            </div>
           )}
         </div>
         <div className="d-flex justify-content-center w-100 m-3">
@@ -317,14 +376,6 @@ const Addtarif = () => {
                 >
                   <TableCell className="fw-bold">Cover:</TableCell>
                   <TableCell>
-                    <StyledInput
-                      type="file"
-                      className="form-control visually-hidden"
-                      id="customFile"
-                      onChange={handleImageChange}
-                      ref={fileInputRef}
-                    />
-
                     {!cover && (
                       <input
                         type="file"
@@ -408,7 +459,6 @@ const Addtarif = () => {
                       onChange={(e) => {
                         setPreviousSessionId(e.target.value);
                       }}
-                      required
                       style={{
                         border: "1px solid #bfbab7",
                         width: 290,
@@ -433,6 +483,7 @@ const Addtarif = () => {
                   <TableCell>
                     <div className="d-flex">
                       <AutoCompleteFilter
+                        value={selectedGains}
                         required
                         data={gains?.items}
                         labelOptionName="content"
@@ -456,6 +507,7 @@ const Addtarif = () => {
                     <div className="d-flex">
                       <AutoCompleteFilter
                         required
+                        value={selectedPrerequire}
                         data={prerequires?.items}
                         labelOptionName="content"
                         label="Add prerequires"
@@ -482,6 +534,7 @@ const Addtarif = () => {
                   <TableCell>
                     <div className="d-flex">
                       <AutoCompleteFilter
+                        value={selectedFeatures}
                         required
                         data={featuresStore?.items}
                         labelOptionName="label"
@@ -506,6 +559,7 @@ const Addtarif = () => {
                     <div className="d-flex">
                       <AutoCompleteFilter
                         required
+                        value={selectedTypes}
                         data={types?.items}
                         labelOptionName="title"
                         label="Add types"
@@ -690,4 +744,4 @@ const Addtarif = () => {
   );
 };
 
-export default Addtarif;
+export default AddSession;

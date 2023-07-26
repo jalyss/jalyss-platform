@@ -190,7 +190,9 @@ export class SessionService {
       lectures,
       ...rest
     } = dto;
-    await this.prisma.$transaction(async (prisma) => {
+    
+    
+    return await this.prisma.$transaction(async (prisma) => {
       if (SessionHasFeaturesIds?.length)
         await prisma.sessionHasFeatures.deleteMany({
           where: {
@@ -227,6 +229,13 @@ export class SessionService {
             sessionId: id,
           },
         });
+      if (lectures?.length)
+        await prisma.sessionHasLecture.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+        
       return await prisma.session.update({
         where: { id },
         data: {
