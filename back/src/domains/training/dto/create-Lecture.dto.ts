@@ -5,9 +5,6 @@ export class CreateLectureDto {
  title:string;
  @ApiProperty()
  content: string; 
- @ApiProperty()
- startAt:Date;
- @ApiProperty()
- endAt:Date; 
+
 
 }

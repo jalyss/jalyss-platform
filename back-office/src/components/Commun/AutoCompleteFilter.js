@@ -8,7 +8,7 @@ function AutoCompleteFilter({ value,data, labelOptionName,onChange,valueOptionNa
     <Stack spacing={1}  sx={ fullWidth ? {width: 200} : width ? {width:width} : { width: 500 } }>
       <Autocomplete
         multiple
-        value={value?value:[]}
+        // value={value?value:[]}
         aria-required={required}
         id="tags-standard"
         options={data}

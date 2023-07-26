@@ -67,15 +67,15 @@ export class SessionService {
             };
           }),
         },
-        // lectures: {
-        //   create: lectures.map((lecture) => {
-        //     return {
-        //       lectureId: lecture.lectureId,
-        //       startAt: lecture.startAt,
-        //       endAt: lecture.endAt,
-        //     };
-        //   }),
-        // },
+        lectures: {
+          create: lectures.map((lecture) => {
+            return {
+              lectureId: lecture.lectureId,
+              startAt: lecture.startAt,
+              endAt: lecture.endAt,
+            };
+          }),
+        },
       },
     });
   }

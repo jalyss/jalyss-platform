@@ -1822,8 +1822,7 @@ async function main() {
       data: {
         title: 'My Lecture ' + i,
         content: 'Hello, this is a new lecture',
-        startAt: new Date(Date.now()),
-        endAt: new Date(Date.now()),
+       
       },
     });
     lectures.push(lecture);
