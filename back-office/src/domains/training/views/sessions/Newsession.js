@@ -16,7 +16,9 @@ import { MDBModalFooter } from "mdb-react-ui-kit";
 import axios from "axios";
 import { fetchFeatures } from "../../../../store/tarifSession";
 import TarifSection from "../../../../components/TarifSection";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+
 import StyledInput from "../../../../components/Commun/inputs/StyledInput";
 import {
   Box,
@@ -36,8 +38,7 @@ import DisplayLottie from "./../../../../components/DisplayLottie";
 import pricing1 from "../../../../constants/pricing1.json";
 import AddLecture from "../../components/AddLecture";
 import { fetchcours } from "../../../../store/courses";
-
-
+import moment from "moment";
 const { RangePicker } = DatePicker;
 
 const Addtarif = () => {
@@ -63,9 +64,10 @@ const Addtarif = () => {
   const [selectedPrerequire, setSelectedPrerequire] = useState([]);
   const [lectures, setLectures] = useState([]);
   const [cover, setCover] = useState(null);
-  const [addSession, setAddSession] = useState({ tarifs: [],lectures:[] });
+  const [addSession, setAddSession] = useState({ tarifs: [], lectures: [] });
   const [tarif, setTarif] = useState(null);
   const [lecture, setLecture] = useState(null);
+  const [rows, setRows] = useState([]);
 
   const [index, setIndex] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
@@ -76,6 +78,7 @@ const Addtarif = () => {
   const [showAddLectureModal, setShowAddLectureModal] = useState(false);
 
   const fileInputRef = useRef(null); // Reference to the file input element
+  const [idOfDelete, setIdOfDelete] = useState("");
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -88,11 +91,11 @@ const Addtarif = () => {
     dispatch(fetchGains());
     dispatch(fetchPrerequires());
     dispatch(fetchsessionstypes());
-    dispatch(fetchcours())
+    dispatch(fetchcours());
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchsessions({ take, skip }))
+    dispatch(fetchsessions({ take, skip }));
   }, [dispatch, take]);
 
   useEffect(() => {
@@ -110,12 +113,12 @@ const Addtarif = () => {
   const submitLecture = (e) => {
     e.preventDefault();
 
-    let auxLectures = [...addSession.lectures,lecture];
+    let auxLectures = [...addSession.lectures, lecture];
     // if (isEdit) {
     //   auxLectures[index] = tarif;
     //   setIsEdit(false);
     // } else {
-      // auxTarifs = [...auxTarifs, tarif];
+    // auxTarifs = [...auxTarifs, tarif];
     // }
     // auxTarifs = auxTarifs.sort((a, b) => {
     //   return a.price - b.price;
@@ -213,10 +216,74 @@ const Addtarif = () => {
   function onChange(val) {
     const [start, end] = val;
     setStartDate(start);
-    setEndDate(end)
+    setEndDate(end);
   }
   console.log("addSession", addSession);
 
+  useEffect(() => {
+    if (addSession?.lectures.length) {
+      let aux = addSession?.lectures?.map((e) => {
+        const formattedStartAt = moment(e.startAt).format("YYYY-MM-DD");
+        const formattedEndAt = moment(e.endAt).format("YYYY-MM-DD");
+        return {
+          ...e,
+          title: e.title,
+          startAt: formattedStartAt,
+          endAt: formattedEndAt,
+        };
+      });
+      setRows(aux);
+    }
+  }, [addSession?.lectures]);
+  const columns = [
+    {
+      field: "title",
+      headerName: "Title",
+      width: 250,
+      editable: false,
+    },
+    {
+      field: "startAt",
+      headerName: "StartAt",
+      width: 120,
+      sortable: false,
+    },
+    {
+      field: "endAt",
+      headerName: "EndAt",
+      width: 120,
+      sortable: false,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 330,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<AiFillEdit style={{ color: "blue" }} />}
+            label="Edit"
+            className="textPrimary"
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={<AiFillDelete />}
+            label="Delete"
+            color="error"
+            // onClick={() => {
+            //   toggleShow();
+            //   setIdOfDelete(id);
+            // }}
+          />,
+        ];
+      },
+    },
+  ];
+  const generateRowId = (row) => {
+    return row.lectureId;
+  };
   return (
     <div>
       <form onSubmit={submitsession} className="mx-5">
@@ -324,27 +391,7 @@ const Addtarif = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell className="fw-bold">Start-End-Date:</TableCell>
-                  {/* <TableCell>
-                  <input
-                    required
-                    type="date"
-                    value={addSession?.startDate}
-                    name="startDate"
-                    placeholder="startDate"
-                    onChange={handleAddSessionChange}
-                  />
-                </TableCell>
-                <TableCell className="fw-bold">End-Date:</TableCell>
-                <TableCell>
-                  <input
-                    required
-                    type="date"
-                    name="endDate"
-                    value={addSession?.endDate}
-                    placeholder="endDate"
-                    onChange={handleAddSessionChange}
-                  />
-                </TableCell> */}
+                 
                   <TableCell>
                     <RangePicker
                       onChange={onChange}
@@ -481,57 +528,72 @@ const Addtarif = () => {
             </Table>
           </TableContainer>
         </div>
-        <div className="p-5">
-          <div className="d-flex justify-content-center">
-            <AddButton
-              disabled={selectedFeatures.length ? false : true}
-              onClick={() => {
-                setShowAddTarifModal(true);
-                setTarif({
-                  ...tarif,
-                  features: selectedFeatures.map((elem) => ({
-                    ...elem,
-                    isAvailable: false,
-                  })),
-                });
-              }}
-              content="Add Tarif"
-            />
-
-            <DisplayLottie
+        <div className="">
+          <div className="d-flex flex-column justify-content-center">
+            <div className="d-flex flex-column justify-content-center align-items-center ">
+              <AddButton
+                onClick={() => {
+                  setShowAddLectureModal(true);
+                }}
+                content="Add Lecture"
+              />
+              {addSession?.lectures?.length > 0 && 
+                  <Box sx={{ height: 300, width: "99%" }}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  getRowId={generateRowId}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                      },
+                    },
+                  }}
+                  pageSizeOptions={[5]}
+                  checkboxSelection
+                  disableRowSelectionOnClick
+                />
+              </Box>}
+          
+            </div>
+            <div className="d-flex flex-column justify-content-center align-items-center mt-2">
+              <div className="d-flex">
+              <AddButton
+                disabled={selectedFeatures.length ? false : true}
+                onClick={() => {
+                  setShowAddTarifModal(true);
+                  setTarif({
+                    ...tarif,
+                    features: selectedFeatures.map((elem) => ({
+                      ...elem,
+                      isAvailable: false,
+                    })),
+                  });
+                }}
+                content="Add Tarif"
+              />
+                  <DisplayLottie
               animationData={pricing1}
-              style={{ width: "120px", height: "80px" }}
+              style={{ width: "30px", height: "30px" }}
             />
+            </div>
+              <div className="mt-4">
+                <TrainingPricing
+                  session={addSession}
+                  setSession={setAddSession}
+                  fn={(t, i) => {
+                    setTarif(t);
+                    setIndex(i);
+                    setIsEdit(true);
+                    setShowAddTarifModal(true);
+                  }}
+                  header={true}
+                />
+              </div>
 
-            <AddButton
-              onClick={() => {
-                setShowAddLectureModal(true);
-                setLectures({
-                  ...lectures,
-                  features: selectedFeatures.map((elem) => ({
-                    ...elem,
-                    isAvailable: false,
-                  })),
-                });
-              }}
-              content="Add Lecture"
-            />
-          </div>
-          {addSession?.lectures.map((elem,i)=>(
-            <div>{elem.title}</div>
-          ))}
-          <div className="mt-4">
-            <TrainingPricing
-              session={addSession}
-              setSession={setAddSession}
-              fn={(t, i) => {
-                setTarif(t);
-                setIndex(i);
-                setIsEdit(true);
-                setShowAddTarifModal(true);
-              }}
-              header={true}
-            />
+          
+            </div>
           </div>
 
           <div className="text-center">
@@ -606,9 +668,13 @@ const Addtarif = () => {
             // style={{ marginRight: "50px" }}
             className="d-flex flex-column justify-content-center align-items-center"
           >
-            
             <div>
-              <AddLecture setLecture={setLecture} session={addSession} startDate={startDate} endDate={endDate} />
+              <AddLecture
+                setLecture={setLecture}
+                session={addSession}
+                startDate={startDate}
+                endDate={endDate}
+              />
             </div>
             <div className="d-flex justify-content-center align-items-center mt-5">
               <CloseButton
@@ -617,11 +683,9 @@ const Addtarif = () => {
               />
               <SaveButton onSubmit={submitLecture} type={"submit"} />
             </div>
-            
           </form>
         }
       />
-     
     </div>
   );
 };

@@ -34,7 +34,7 @@ function AddLecture({ setLecture, lecture, session, startDate, endDate }) {
 
   console.log(session);
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center  mb-4 ">
+    <div className="d-flex flex-column justify-content-center align-items-center gap-3">
       <DisplayLottie
         animationData={course}
         style={{ width: "120px", height: "120px" }}
