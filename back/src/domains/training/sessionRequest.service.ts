@@ -27,7 +27,7 @@ export class SessionRequestService {
  async findAll() {
     return await this.prisma.sessionRequest.findMany({
       include : {
-        user :{include:{avatar:true}} ,
+        user :{include:{avatar:true,client:true}} ,
         resume:true,
         RequestCategories:{include:{ category:true}}
 

@@ -10,6 +10,48 @@ export const fetchsessionstypes = createAsyncThunk("type/types",async ()=>{
     return response.data;
 
 })
+export const CreateSessionType = createAsyncThunk(
+  "type/CreateType",
+  async (body, { dispatch }) => {
+    const response = await axios.post(`${config.API_ENDPOINT}/sessionType`, body);
+    dispatch(fetchsessionstypes());
+
+    return response.data;
+  }
+);
+export const deleteSessionType = createAsyncThunk(
+  "types/deletetype",
+  async (id, { dispatch }) => {
+    const response = await axios.delete(`${config.API_ENDPOINT}/sessionType/${id}`);
+    dispatch(fetchsessionstypes());
+    return response.data;
+  }
+);
+
+
+export const editSessionType = createAsyncThunk(
+  "types/editType",
+  async (args, { dispatch }) => {
+    const { id, title } = args;
+    console.log("argsss", args);
+    let token = JSON.parse(localStorage.getItem("token"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/sessionType/${id}`,
+      { title: title },
+      configs
+    );
+
+    dispatch(fetchsessionstypes());
+
+    return response.data;
+  }
+);
 
 
 

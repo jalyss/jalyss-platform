@@ -28,7 +28,7 @@ import CommandList from "../domains/commands/views/CommandList";
 import EditCommand from "../domains/commands/views/EditCommand";
 //training
 import Training from "../domains/training/Training";
-import SessionsUpdate from "../domains/training/views/sessions/SessionsUpdate";
+
 import Coursdetail from "../domains/training/views/courses/Coursdetail";
 import Checkpoint from "../domains/training/views/assements/Checkpoint";
 import Service from "../domains/service/Service";
@@ -82,7 +82,6 @@ import DetailAuthor from "../domains/author/views/DetailAuthor";
 import CreateAuthor from "../domains/author/views/CreateAuthor";
 import Types from "../domains/training/views/sessions/Types";
 
-
 import Newsession from "../domains/training/views/sessions/Newsession";
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
 // import Types from "../domains/type/Types";
@@ -102,6 +101,7 @@ import Requests from "../domains/training/views/requests/Requests";
 import DetailRequest from "../domains/training/views/requests/DetailRequest";
 import Gains from "../domains/training/views/gain/Gains";
 import Prerequires from "../domains/training/views/prerequire/Prerequires";
+import SessionType from "../domains/training/views/sessionType/SessionType";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -211,15 +211,9 @@ function Router() {
             <Route path="training" element={<Training />}>
               <Route index element={<Sessions />} />
               <Route
-                path="update-training/:sessionsId"
-                element={<SessionsUpdate />}
-              />
-               <Route
                 path="detail-training/:sessionsId"
                 element={<SessionDetail />}
-              >
-                
-              </Route>
+              ></Route>
               <Route path="newsession" element={<Newsession />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses/:lectureId" element={<Coursdetail />} />
@@ -229,16 +223,13 @@ function Router() {
               />
               <Route path="coachs" element={<Coachs />} />
               <Route path="coachs/:id" element={<CoachDetails />}></Route>{" "}
-   
               <Route path="features" element={<Features />} />
               <Route path="requests" element={<Requests />} />
               <Route path="requests/:id" element={<DetailRequest />} />
               <Route path="gains" element={<Gains />} />
               <Route path="prerequires" element={<Prerequires />} />
+              <Route path="types" element={<SessionType />} />
 
-
-             
-              
             </Route>
 
             {/* <Route path="charts" element={<Charts />} /> */}

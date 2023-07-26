@@ -11,67 +11,32 @@ import Paper from "@mui/material/Paper";
 import { editCoach, fetchoneCoach } from "../../../../store/coach";
 import { useParams } from "react-router-dom";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
+import { fetchUser } from "../../../../store/user";
 
 function CoachDetails() {
-  const coach = useSelector((state) => state.coach?.coach);
+  const userStore = useSelector((state) => state.user);
+  const {user}=userStore
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
   const [auxCoach, setAuxCoach] = useState({});
-  const [editMode, setEditMode] = useState(false);
+  
   const [fullname,setFullname]=useState('')
   const [email,setEmail]=useState('')
   const[address,setAddress]=useState('')
   const [tel,setTel]=useState('')
   const {id} = useParams();
 
-  console.log('hello',coach)
-  console.log('aya',auxCoach)
-
   useEffect(() => {
-    dispatch(fetchoneCoach(id));
+    dispatch(fetchUser(id));
   }, [id]);
 
-  useEffect(() => {
-    setAuxCoach(coach);
-  },[coach]);
+ console.log("user",user);
 
 
-  // const handlecoacheChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setAuxCoach((auxCoach) => ({
-  //     ...auxCoach ,
-  //     [name]: value 
-  //   }));
-  // };
+ 
 
-
-  const submitEditcoache = async (event) => {
-    if (!editMode) {
-      event.preventDefault();
-      setEditMode(true);
-    } 
- else {
-      
-      // let coch = Object.assign({}, auxCoach);
-      let body ={
-        fullname,
-        email,
-        address,
-        address
-      }
-      dispatch(editCoach({id:id,body})).then((res)=>{
-        if (res.error) {
-          showErrorToast(res.error.message)
-        } else {
-          showSuccessToast('coach has been updted')
-          // navigate(-1)
-        }
-      })
-      setEditMode(false);
-    }
-     
-  };
+ 
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
@@ -81,23 +46,14 @@ function CoachDetails() {
           <label id="image">{t("image")}</label>
 
           <div class="image-upload">
-            {/* <input id="image" type="file" accept="image/*" src={coach?.user?.avatar?.path}/> */}
-            <img src={coach?.user?.avatar?.path} alt="image" style={{ width: '100%', marginBottom: '10px' }} /> 
+
+            <img src={user?.avatar?.path} alt="image" style={{ width: '100%', marginBottom: '10px' }} /> 
           </div>
 
-          <button
-            type="button"
-            class="delete-button"
-            onClick={() => {
-              setPreview(null);
-              setAvatar(null);
-            }}
-          >
-            X
-          </button>
+       
 
           <div className="d-flex justify-content-center w-100 m-3">
-            <TableContainer className="w-100" component={Paper}>
+            {/* <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
                   <TableRow
@@ -107,20 +63,9 @@ function CoachDetails() {
                       {t("nameAr")}
                     </TableCell>
                     <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          id="fullNameEn"
-                          value={coach?.user?.fullNameEn || ''}
-                          name="fullNameEn"
-                          type="text"
-                          className="form-control"
-                          onChange={(e) => {
-                            setFullname(e.target.value);
-                          }}
-                        />
-                      ) : (
+                    
                         <span>{coach?.user?.fullNameEn}</span>
-                      )}
+                      
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -130,19 +75,9 @@ function CoachDetails() {
                       {t("nameEn")}
                     </TableCell>
                     <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          name="email"
-                          value={coach?.user?.email}
-                          type="text"
-                          className="form-control"
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                        />
-                      ) : (
+                      
                         <span>{coach?.user?.email}</span>
-                      )}
+                      
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -152,20 +87,9 @@ function CoachDetails() {
                       {t("email")}
                     </TableCell>
                     <TableCell align="right">
-                      {editMode ? (
-                        <input
-                      
-                          name="address"
-                           value={coach?.user?.address}
-                          type="text"
-                          className="form-control"
-                          onChange={(e) => {
-                            setAddress(e.target.value);
-                          }}
-                        />
-                      ) : (
+                     
                         <span>{coach?.user?.address}</span>
-                      )}
+                      
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -175,20 +99,9 @@ function CoachDetails() {
                       {t("phone")}
                     </TableCell>
                     <TableCell align="right">
-                      {editMode ? (
-                        <input
-            
-                          name="tel"
-                          value={coach?.user?.tel}
-                          type="tel"
-                          className="form-control"
-                          onChange={(e) => {
-                            setTel(e.target.value);
-                          }}
-                        />
-                      ) : (
+                     
                         <span>{coach?.user?.tel}</span>
-                      )}
+                      
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -199,21 +112,14 @@ function CoachDetails() {
                   ></TableRow>
                 </TableBody>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
           </div>
         </div>
 
-        <div className="w-100 d-flex justify-content-center">
-          <button
-            type="submit"
-            className="confirm-button mt-3"
-            onClick={submitEditcoache}
-          >
-            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
-          </button>
-        </div>
+       
       </form>
     </div>
+    
   );
 }
 

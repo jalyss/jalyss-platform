@@ -128,16 +128,7 @@ const SessionDetails = () => {
             label="Edit"
             className="textPrimary"
             color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<AiFillDelete />}
-            label="Delete"
-            color="error"
-            // onClick={() => {
-            //   toggleShow();
-            //   setIdOfDelete(id);
-            // }}
-          />,
+          />
         ];
       },
     },
