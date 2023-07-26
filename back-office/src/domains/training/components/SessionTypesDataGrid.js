@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifSession";
+
 import {
   DataGrid,
   GridActionsCellItem,
@@ -9,55 +9,55 @@ import {
 
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
-import Modal from "../components/Commun/Modal";
-import { showErrorToast, showSuccessToast } from "../utils/toast";
-import StyledInput from "./Commun/inputs/StyledInput";
-
-function Featuress() {
+import Modal from "../../../components/Commun/Modal";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import StyledInput from "../../../components/Commun//inputs/StyledInput";
+import { deleteSessionType, editSessionType, fetchsessionstypes } from "../../../store/sessiontypes";
+import moment from "moment";
+function SessionTypesDataGrid() {
   const dispatch = useDispatch();
-  const featuresStore = useSelector((state) => state.tarifSession);
-  const { features } = featuresStore;
+  const typesStore = useSelector((state) => state.sessiontypes);
+  const { types } = typesStore;
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
-  const [editLabel, setEditLabel] = useState("");
+  const [editTitle, setEditTitle] = useState("");
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
-  const [labelOfDelete, setLabelOfDelete] = useState("");
-console.log("storfeat",featuresStore);
+  const [titleOfDelete, setTitleOfDelete] = useState("");
+console.log("types",types);
  
 
   useEffect(() => {
     if (editModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
-        setEditLabel(row.label);
+        setEditTitle(row.title);
       }
     }
-    if (basicModal && editRowId) {
-      const row = rows.find((row) => row.id === editRowId);
-      if (row) {
-        setEditLabel(row.label);
-      }
-    }
+   
   }, [editModal, editRowId, rows]);
 
   useEffect(() => {
-    dispatch(fetchFeatures());
+    dispatch(fetchsessionstypes());
   }, [dispatch]);
 
   useEffect(() => {
-    if (features?.items?.length) {
-      let aux = features?.items.map((e) => {
+    if (types?.items?.length) {
+        
+
+      let aux = types?.items.map((e) => {
+        const formattedCreatAt = moment(e.createdAt).format("YYYY-MM-DD");
+
         return {
           ...e,
-          label: e.label,
-          createdAt: e.createdAt.slice(0, 10),
+          title: e.title,
+          createdAt:formattedCreatAt,
         };
       });
       setRows(aux);
     }
-  }, [features?.items]);
+  }, [types?.items]);
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
@@ -69,18 +69,18 @@ console.log("storfeat",featuresStore);
     if (basicModal && idOfDelete) {
       const row = rows.find((row) => row.id === idOfDelete);
       if (row) {
-        setLabelOfDelete(row.label);
+        setTitleOfDelete(row.title);
       }
     }
   }, [basicModal, idOfDelete, rows]);
 
   const handleDeleteFeatureClick = (id) => {
-    dispatch(deleteFeatures(id))
+    dispatch(deleteSessionType(id))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
         } else {
-          showSuccessToast("Feature has been deleted");
+          showSuccessToast("Type has been deleted");
         }
       })
       .catch((error) => {
@@ -89,13 +89,13 @@ console.log("storfeat",featuresStore);
   };
 
   const handleEdit = () => {
-    const label = editLabel;
-    dispatch(editFeature({ id: editRowId, label: label }))
+    const title = editTitle;
+    dispatch(editSessionType({ id: editRowId, title: title }))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
         } else {
-          showSuccessToast("Features has been Updated");
+          showSuccessToast("Type has been Updated");
         }
       })
       .catch((error) => {
@@ -103,14 +103,14 @@ console.log("storfeat",featuresStore);
       });
 
     setEditRowId("");
-    setEditLabel("");
+    setEditTitle("");
     toggleShow2();
   };
 
   const columns = [
     {
-      field: "label",
-      headerName: "Label",
+      field: "title",
+      headerName: "Title",
       width: 330,
       editable: false,
     },
@@ -155,7 +155,7 @@ console.log("storfeat",featuresStore);
   return (
     <div>
       <div className="position-relative">
-        <div className="mb-3">Feature's List</div>
+        <div className="mb-3">Type's List</div>
         <Box sx={{ height: 600, width: "100%" }}>
           <DataGrid
             rows={rows}
@@ -183,8 +183,8 @@ console.log("storfeat",featuresStore);
           <div className="d-flex justify-content-center align-items-center">
            
             {`Are you sure you want to delete `}
-            <span style={{ color: "red" ,margin:"10px"}}>{labelOfDelete}</span>
-            {` Feature?`}
+            <span style={{ color: "red" ,margin:"10px"}}>{titleOfDelete}</span>
+            {` Type?`}
           </div>
         }
         confirm={() => {
@@ -205,10 +205,10 @@ console.log("storfeat",featuresStore);
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={editLabel}
-              label="Label"
+              value={editTitle}
+              label="Title"
               onChange={(e) => {
-                setEditLabel(e.target.value);
+                setEditTitle(e.target.value);
               }}
             />
           </div>
@@ -219,4 +219,4 @@ console.log("storfeat",featuresStore);
   );
 }
 
-export default Featuress;
+export default SessionTypesDataGrid;

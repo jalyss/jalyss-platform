@@ -90,12 +90,7 @@ function Sessions() {
             onClick={() => navigate(`detail-training/${id}`)}
             color="success"
           />,
-          <GridActionsCellItem
-            icon={<AiFillEdit style={{ color: "blue" }} />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => navigate(`update-training/${id}`)}
-          />,
+          
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"

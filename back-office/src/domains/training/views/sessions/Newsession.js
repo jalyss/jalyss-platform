@@ -71,23 +71,21 @@ const AddSession = () => {
   const [tarif, setTarif] = useState(null);
   const [lecture, setLecture] = useState(null);
   const [rows, setRows] = useState([]);
-
+  const [idOfDelete, setIdOfDelete] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
   const [index, setIndex] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const [previousSessionId, setPreviousSessionId] = useState(null);
-
   const [showAddTarifModal, setShowAddTarifModal] = useState(false);
   const [showAddLectureModal, setShowAddLectureModal] = useState(false);
-
   const fileInputRef = useRef(null); // Reference to the file input element
-  const [idOfDelete, setIdOfDelete] = useState("");
-
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [titleOfDelete, setTitleOfDelete] = useState(null);
   const take = sessions?.count || 10;
   const skip = 0;
-
+  console.log("addsession", addSession);
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchFeatures());
@@ -96,7 +94,7 @@ const AddSession = () => {
     dispatch(fetchsessionstypes());
     dispatch(fetchcours());
   }, [dispatch]);
-
+  console.log("lect", lecture);
   useEffect(() => {
     dispatch(fetchsessions({ take, skip }));
   }, [dispatch, take]);
@@ -104,6 +102,15 @@ const AddSession = () => {
   useEffect(() => {
     setAddSession({ ...addSession, tarifs: [] });
   }, [selectedFeatures]);
+
+  useEffect(() => {
+    if (deleteModal && idOfDelete) {
+      const row = rows.find((row) => row.id === idOfDelete);
+      if (row) {
+        setTitleOfDelete(row.title);
+      }
+    }
+  }, [idOfDelete, rows]);
 
   const handleAddSessionChange = (e) => {
     const { name, value } = e.target;
@@ -117,15 +124,7 @@ const AddSession = () => {
     e.preventDefault();
 
     let auxLectures = [...addSession.lectures, lecture];
-    // if (isEdit) {
-    //   auxLectures[index] = tarif;
-    //   setIsEdit(false);
-    // } else {
-    // auxTarifs = [...auxTarifs, tarif];
-    // }
-    // auxTarifs = auxTarifs.sort((a, b) => {
-    //   return a.price - b.price;
-    // });
+
     setAddSession((AddSession) => ({
       ...AddSession,
       lectures: auxLectures,
@@ -156,6 +155,19 @@ const AddSession = () => {
     setTarif(null);
     setIndex(null);
     setShowAddTarifModal(false);
+  };
+
+  const handleDeleteLecture = () => {
+    const updatedLectures = addSession.lectures.filter(
+      (lecture) => lecture.lectureId !== idOfDelete
+    );
+
+    setAddSession((AddSession) => ({
+      ...AddSession,
+      lectures: updatedLectures,
+    }));
+
+    setDeleteModal(false);
   };
 
   const submitsession = async (event) => {
@@ -270,19 +282,13 @@ const AddSession = () => {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit style={{ color: "blue" }} />}
-            label="Edit"
-            className="textPrimary"
-            color="inherit"
-          />,
-          <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
             color="error"
-            // onClick={() => {
-            //   toggleShow();
-            //   setIdOfDelete(id);
-            // }}
+            onClick={() => {
+              setDeleteModal(!deleteModal);
+              setIdOfDelete(id);
+            }}
           />,
         ];
       },
@@ -442,7 +448,7 @@ const AddSession = () => {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell className="fw-bold">Start-End-Date:</TableCell>
-                 
+
                   <TableCell>
                     <RangePicker
                       onChange={onChange}
@@ -591,47 +597,47 @@ const AddSession = () => {
                 }}
                 content="Add Lecture"
               />
-              {addSession?.lectures?.length > 0 && 
-                  <Box sx={{ height: 300, width: "99%" }}>
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  getRowId={generateRowId}
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 10,
+              {addSession?.lectures?.length > 0 && (
+                <Box sx={{ height: 300, width: "99%" }}>
+                  <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    getRowId={generateRowId}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 10,
+                        },
                       },
-                    },
-                  }}
-                  pageSizeOptions={[5]}
-                  checkboxSelection
-                  disableRowSelectionOnClick
-                />
-              </Box>}
-          
+                    }}
+                    pageSizeOptions={[5]}
+                    checkboxSelection
+                    disableRowSelectionOnClick
+                  />
+                </Box>
+              )}
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center mt-2">
               <div className="d-flex">
-              <AddButton
-                disabled={selectedFeatures.length ? false : true}
-                onClick={() => {
-                  setShowAddTarifModal(true);
-                  setTarif({
-                    ...tarif,
-                    features: selectedFeatures.map((elem) => ({
-                      ...elem,
-                      isAvailable: false,
-                    })),
-                  });
-                }}
-                content="Add Tarif"
-              />
-                  <DisplayLottie
-              animationData={pricing1}
-              style={{ width: "30px", height: "30px" }}
-            />
-            </div>
+                <AddButton
+                  disabled={selectedFeatures.length ? false : true}
+                  onClick={() => {
+                    setShowAddTarifModal(true);
+                    setTarif({
+                      ...tarif,
+                      features: selectedFeatures.map((elem) => ({
+                        ...elem,
+                        isAvailable: false,
+                      })),
+                    });
+                  }}
+                  content="Add Tarif"
+                />
+                <DisplayLottie
+                  animationData={pricing1}
+                  style={{ width: "30px", height: "30px" }}
+                />
+              </div>
               <div className="mt-4">
                 <TrainingPricing
                   session={addSession}
@@ -645,8 +651,6 @@ const AddSession = () => {
                   header={true}
                 />
               </div>
-
-          
             </div>
           </div>
 
@@ -712,7 +716,7 @@ const AddSession = () => {
         basicModal={showAddLectureModal}
         setBasicModal={setShowAddLectureModal}
         normal={true}
-        title="Add new Tarif"
+        title="Add new Lecture"
         noButtons={true}
         noFooter={true}
         body={
@@ -739,6 +743,22 @@ const AddSession = () => {
             </div>
           </form>
         }
+      />
+
+      <Modal
+        basicModal={deleteModal}
+        setBasicModal={setDeleteModal}
+        toggleShow={() => setDeleteModal(!deleteModal)}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            {`Are you sure you want to delete `}
+            <span style={{ color: "red", margin: "10px" }}>
+              {titleOfDelete}
+            </span>
+          </div>
+        }
+        confirm={handleDeleteLecture}
       />
     </div>
   );

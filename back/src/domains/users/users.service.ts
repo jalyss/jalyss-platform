@@ -46,7 +46,7 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true, avatar: true },
+      include: { Media: true, avatar: true,client:true },
     });
   }
 

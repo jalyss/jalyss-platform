@@ -541,6 +541,8 @@ model SessionHasSessionType {
 model SessionType {
   id       String                  @id @default(uuid())
   title    String
+  
+  createdAt                  DateTime                     @default(now())
   sessions SessionHasSessionType[] //*many to many relation to Session
 }
 
