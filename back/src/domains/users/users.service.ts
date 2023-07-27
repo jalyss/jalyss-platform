@@ -98,7 +98,7 @@ export class UsersService {
   findOne(id: string) {
     return this.prisma.user.findUniqueOrThrow({
       where: { id: id },
-      include: { avatar: true },
+      include: { avatar: true ,client:true },
     });
   }
 
