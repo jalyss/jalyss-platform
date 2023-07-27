@@ -36,7 +36,7 @@ export class ChatRoomController {
   }
   
 
-  @Get('by-user/:userId')
+  @Get(':userId')
   findAll(@Param('userId') userId: string) {
     return this.chatRoomService.findAll(userId);
   }
