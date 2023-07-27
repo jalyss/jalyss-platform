@@ -8,6 +8,7 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
 function Signup() {
   const { t, i18n } = useTranslation();
@@ -27,7 +28,7 @@ function Signup() {
         setPasswordError(false);
       }
     }
-  }, [user.password,user.confirmPassword]);
+  }, [user.password, user.confirmPassword]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((User) => ({ ...User, [name]: value }));
@@ -35,8 +36,8 @@ function Signup() {
 
   const submitSignup = async (event) => {
     event.preventDefault();
-    if(passwordError){
-      showErrorToast(t('errorPassword'));
+    if (passwordError) {
+      showErrorToast(t("errorPassword"));
       return;
     }
 
@@ -49,13 +50,13 @@ function Signup() {
         image
       );
       aux.avatarId = response.data.id;
-      
     }
-    delete aux.confirmPassword
+    delete aux.confirmPassword;
+    aux.isClient=true
     dispatch(register(aux)).then((res) => {
       if (!res.error) {
         showSuccessToast(t("user.created"));
-        navigate("/profile");
+        navigate("/profile")
       } else {
         console.log(res);
         showErrorToast(res.error.message);
@@ -65,13 +66,6 @@ function Signup() {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    // const reader = new FileReader()
-    // if (file) {
-    //   reader.readAsDataURL(file)
-    // }
-    // reader.onloadend = () => {
-    //   setPreview(reader.result)
-    // }
     setPreview(URL.createObjectURL(file));
     setAvatar(file);
   };
@@ -81,8 +75,7 @@ function Signup() {
       <h2>{t("signup")}</h2>
       <form className="checkout-form" onSubmit={submitSignup}>
         <div className="d-flex flex-wrap">
-          <div className="position-relative m-3">
-            <label id="image">{t("image")}</label>
+          <div className=" m-3">
             <div class="image-upload">
               <img
                 src={
@@ -92,25 +85,35 @@ function Signup() {
                 }
                 alt=""
               />
-              <input
+              {!preview && (<input
                 id="image"
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-              />
+              />)}
+              {preview && (
+                <button
+                  type="button"
+                  style={{
+                    backgroundColor: "red",
+                    position: "absolute",
+                    width: 20,
+                    height: 20,
+                    padding: 0,
+                    borderRadius: 5,
+                    bottom: 15,
+                    right: 20,
+                  }}
+                  className=" d-flex justify-content-center align-items-center"
+                  onClick={() => {
+                    setPreview(null);
+                    setAvatar(null);
+                  }}
+                >
+                  <MdOutlineDeleteForever />
+                </button>
+              )}
             </div>
-            {preview && (
-              <button
-                type="button"
-                class="delete-button"
-                onClick={() => {
-                  setPreview(null);
-                  setAvatar(null);
-                }}
-              >
-                X
-              </button>
-            )}
           </div>
           <div className=" m-3">
             <div class="row">
@@ -172,7 +175,7 @@ function Signup() {
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
-                  // required
+                  required
                   type="tel"
                   class="form-control mt-2"
                   id="tel"
@@ -192,7 +195,13 @@ function Signup() {
                   <input
                     style={{ width: "100%" }}
                     required
-                    className={`form-control ${passwordError ? "is-invalid" :user.password&&user.confirmPassword?"is-valid":""}`}
+                    className={`form-control ${
+                      passwordError
+                        ? "is-invalid"
+                        : user.password && user.confirmPassword
+                        ? "is-valid"
+                        : ""
+                    }`}
                     id="password"
                     name="password"
                     type={isShowPassword ? "text" : "password"}
@@ -202,7 +211,7 @@ function Signup() {
                   <div className="position-relative w-0">
                     <div
                       style={{
-                        left: i18n.languages[0] === "ar" ? 15 : -25,
+                        left: i18n.languages[0] === "ar" ? 15 : -45,
                         top: 5,
                       }}
                       className="icon-eye"
@@ -228,7 +237,13 @@ function Signup() {
                   <input
                     style={{ width: "100%" }}
                     required
-                    className={`form-control ${passwordError ? "is-invalid" : user.password&&user.confirmPassword?"is-valid":""}`}
+                    className={`form-control ${
+                      passwordError
+                        ? "is-invalid"
+                        : user.password && user.confirmPassword
+                        ? "is-valid"
+                        : ""
+                    }`}
                     id="confirmPassword"
                     name="confirmPassword"
                     type={isShowPassword ? "text" : "password"}
@@ -238,7 +253,7 @@ function Signup() {
                   <div className="position-relative w-0">
                     <div
                       style={{
-                        left: i18n.languages[0] === "ar" ? 15 : -25,
+                        left: i18n.languages[0] === "ar" ? 15 : -45,
                         top: 5,
                       }}
                       className="icon-eye"
@@ -255,7 +270,7 @@ function Signup() {
               </div>
             </div>
             {passwordError && (
-              <div style={{color:'red'}} >
+              <div style={{ color: "red" }}>
                 Password and confirm password are not muched
               </div>
             )}
@@ -266,7 +281,7 @@ function Signup() {
                   <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
-                  // required
+                  required
                   class="form-control mt-2"
                   id="address"
                   name="address"
@@ -341,7 +356,7 @@ function Signup() {
               <div class="col mb-3 "></div>
             </div>*/}
           </div>
-        </div> 
+        </div>
 
         <div className="w-100 d-flex justify-content-center">
           <button

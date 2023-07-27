@@ -83,7 +83,9 @@ const SessionDetails = () => {
   const [editFeatures, setEditFeatures] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const [previousSessionId, setPreviousSessionId] = useState(null);
-  const [rows, setRows] = useState([]);
+  const [elementToDelete, setElementToDelete] = useState(null);
+
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const [showAddTarifModal, setShowAddTarifModal] = useState(false);
   const [showAddLectureModal, setShowAddLectureModal] = useState(false);
@@ -102,33 +104,45 @@ const SessionDetails = () => {
       headerName: "Title",
       width: 250,
       editable: false,
+      valueGetter: (params) => {
+        return params.row?.title ? params.row.title : params.row.lectures.title;
+      },
     },
     {
       field: "startAt",
       headerName: "StartAt",
       width: 120,
       sortable: false,
+      valueGetter: (params) => {
+        return params.row?.startAt.slice(0, 10);
+      },
     },
     {
       field: "endAt",
       headerName: "EndAt",
       width: 120,
       sortable: false,
+      valueGetter: (params) => {
+        return params.row?.endAt.slice(0, 10);
+      },
     },
-    {
+    !readOnly && {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       width: 330,
       cellClassName: "actions",
-      getActions: ({ id }) => {
+      getActions: (row) => {
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit style={{ color: "blue" }} />}
-            label="Edit"
-            className="textPrimary"
-            color="inherit"
-          />
+            icon={<AiFillDelete />}
+            label="Delete"
+            color="error"
+            onClick={() => {
+              setDeleteModal(!deleteModal);
+              setElementToDelete(row);
+            }}
+          />,
         ];
       },
     },
@@ -197,6 +211,7 @@ const SessionDetails = () => {
       [name]: value,
     }));
   };
+
   const submitTarif = (e) => {
     e.preventDefault();
 
@@ -303,6 +318,18 @@ const SessionDetails = () => {
     });
   };
 
+  const handleDeleteLecture = () => {
+    const updatedLectures = addSession.lectures.filter(
+      (lecture) => lecture.lectureId !== elementToDelete.id
+    );
+
+    setAddSession((AddSession) => ({
+      ...AddSession,
+      lectures: updatedLectures,
+    }));
+
+    setDeleteModal(false);
+  };
   const generateRowId = (row) => {
     return row.lectureId;
   };
@@ -696,25 +723,22 @@ const SessionDetails = () => {
                   content="Add Lecture"
                 />
               )}
-              {addSession?.lectures?.length > 0 && (
-                <Box sx={{ height: 300 }}>
-                  <DataGrid
-                    rows={addSession?.lectures}
-                    columns={columns}
-                    getRowId={generateRowId}
-                    initialState={{
-                      pagination: {
-                        paginationModel: {
-                          pageSize: 10,
-                        },
+
+              <Box sx={{ height: 300 }}>
+                <DataGrid
+                  rows={addSession?.lectures}
+                  columns={columns}
+                  getRowId={generateRowId}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
                       },
-                    }}
-                    pageSizeOptions={[5]}
-                    checkboxSelection
-                    disableRowSelectionOnClick
-                  />
-                </Box>
-              )}
+                    },
+                  }}
+                  pageSizeOptions={[5]}
+                />
+              </Box>
             </div>
           </div>
           <div className="d-flex flex-column justify-content-center align-items-center ">
@@ -855,6 +879,21 @@ const SessionDetails = () => {
             </div>
           </form>
         }
+      />
+      <Modal
+        basicModal={deleteModal}
+        setBasicModal={setDeleteModal}
+        toggleShow={() => setDeleteModal(!deleteModal)}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            {`Are you sure you want to delete `}
+            <span style={{ color: "red", margin: "10px" }}>
+              {elementToDelete?.title}
+            </span>
+          </div>
+        }
+        confirm={handleDeleteLecture}
       />
     </div>
   );

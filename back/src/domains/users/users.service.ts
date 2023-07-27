@@ -33,20 +33,51 @@ export interface FormatLogin extends Partial<User> {
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateUserDto) {
+  async create(dto: CreateUserDto) {
+    const { tel, address, ...rest } = dto;
     const salt = await bcrypt.genSalt();
-    data.password = await bcrypt.hash(data.password, salt);
-
-    const user = await this.prisma.user.create({
-      data,
+    dto.password = await bcrypt.hash(dto.password, salt);
+    return await this.prisma.$transaction(async (prisma) => {
+      let data = {
+        fullNameAr: dto.fullNameAr,
+        fullNameEn: dto.fullNameEn,
+        tel: tel,
+        address: address,
+        email: dto.email,
+      };
+      if (dto.avatarId) data['avatarId'] = dto.avatarId;
+      if (dto.isClient) {
+        const client = await prisma.client.create({
+          data,
+        });
+        const user = await prisma.user.create({
+          data: {
+            ...rest,
+            password: dto.password,
+            clientId: client.id,
+          },
+        });
+        return user;
+      } else {
+        const employee = await prisma.employee.create({
+          data,
+        });
+        const user = await prisma.user.create({
+          data: {
+            ...rest,
+            isClient: false,
+            password: dto.password,
+            employeeId: employee.id,
+          },
+        });
+        return user;
+      }
     });
-    
-    return user;
   }
 
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true, avatar: true,client:true },
+      include: { Media: true, avatar: true, client: true },
     });
   }
 
@@ -91,9 +122,11 @@ export class UsersService {
       data,
     });
   }
+
   remove(id: string) {
     return this.prisma.user.delete({ where: { id } });
   }
+
   async findByLogin({ email, password }: UserLogin): Promise<FormatLogin> {
     const user = await this.prisma.user.findFirst({
       where: { email },
@@ -119,6 +152,7 @@ export class UsersService {
     const { password: p, confirmkey: k, ...rest } = user;
     return rest;
   }
+
   async findByPayload({ email }: any): Promise<any> {
     let user = {};
     user = await this.prisma.user.findFirst({
@@ -130,6 +164,7 @@ export class UsersService {
       });
     return user;
   }
+
   async updatePassword(payload: UpdatePasswordDto, id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id },
