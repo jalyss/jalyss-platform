@@ -1,14 +1,17 @@
 import { Box, Checkbox, Container, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import {createCommand} from "../../../store/command"
+import {findArticleTitleAndId} from "../../../store/article"
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { useDispatch, useSelector } from "react-redux";
+import Selecto from "react-select";
 
 function CreateCommand() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [value, setValue] = useState([]);
   const [clientName,setclientName]=useState()
   const [clientAddress,setclientAddress]=useState()
   const [clientTel,setclientTel]=useState()
@@ -19,6 +22,25 @@ function CreateCommand() {
   const [countryId,setcountryId]=useState()
   const [cityId,setcityId]=useState()
   const [branshId,setBranshId]=useState()
+  const [Id,setId]=useState()
+
+  const articleTitleAndId = useSelector((state) => state.article.article)
+  console.log(value,'ar')
+
+  useEffect(() => {
+    dispatch(findArticleTitleAndId())
+
+  }, [])
+   useEffect(() => {
+      if (articleTitleAndId) {
+       setValue(
+        articleTitleAndId.map((participant) => ({
+           value: participant.id,
+           label: participant.title,
+         }))
+       );
+     }
+   }, []);
 
   const handleSubmit = () => {
  const aux ={
@@ -32,6 +54,13 @@ function CreateCommand() {
   "countryId": countryId,
   "cityId": cityId,
   "branshId": branshId,
+  "commandLine": [
+    {
+       "articleByBranchId": "286e0af6-031f-41cb-a67c-0ab5e6c5730c",
+        "quantity": 20
+      }
+      ]
+    
 }
     
     dispatch(createCommand(aux)).then((res) => {
@@ -145,13 +174,14 @@ function CreateCommand() {
           </Box>
         </div>
         <Box mt={3} mb={3} >
-          <TextField
-            label="Command line"
-            variant="outlined"
-            fullWidth
-            required
-            margin="normal"
-          />
+        <Selecto
+                onChange={(e) => {
+                  console.log(e);
+                }}
+                placeholder="Search by users"
+                options={value}
+                isMulti
+              />
         </Box>
         <div className='row'>
 
