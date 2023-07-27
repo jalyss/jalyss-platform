@@ -71,7 +71,7 @@ const AddSession = () => {
   const [tarif, setTarif] = useState(null);
   const [lecture, setLecture] = useState(null);
   const [rows, setRows] = useState([]);
-  const [idOfDelete, setIdOfDelete] = useState("");
+  const [idOfDelete, setIdOfDelete] = useState(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [index, setIndex] = useState(null);
   const [isEdit, setIsEdit] = useState(false);

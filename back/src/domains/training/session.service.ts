@@ -114,10 +114,17 @@ export class SessionService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    orderBy = { createdAt: 'desc' };
+
     return await this.prisma.$transaction(async (prisma) => {
+      let params = { where };
+      if (take) {
+        params['take'] = take;
+      }
+      if (skip) {
+        params['skip'] = skip;
+      }
       let items = await this.prisma.session.findMany({
-        where,
+        ...params,
         include: {
           tarifs: true,
           sessionType: true,
@@ -125,9 +132,7 @@ export class SessionService {
           category: true,
           cover: true,
         },
-        orderBy,
-        take,
-        skip,
+        orderBy: { createdAt: 'desc' },
       });
 
       let count = await prisma.session.count({ where });
@@ -190,8 +195,7 @@ export class SessionService {
       lectures,
       ...rest
     } = dto;
-    
-    
+
     return await this.prisma.$transaction(async (prisma) => {
       if (SessionHasFeaturesIds?.length)
         await prisma.sessionHasFeatures.deleteMany({
@@ -235,7 +239,7 @@ export class SessionService {
             sessionId: id,
           },
         });
-        
+
       return await prisma.session.update({
         where: { id },
         data: {

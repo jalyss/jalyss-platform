@@ -140,7 +140,7 @@ export default function ProfilePage() {
                       alt=" "
                       style={{
                         width: "200px",
-                        height: "100%",
+                        height: "200px",
                         objectFit: "cover",
                       }}
                       className="rounded-circle"
@@ -270,7 +270,7 @@ export default function ProfilePage() {
                     </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{user.tel}</MDBCardText>
+                    <MDBCardText className="text-muted">{user?.client?.tel}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -287,7 +287,7 @@ export default function ProfilePage() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {user.address}
+                      {user?.client?.address}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
