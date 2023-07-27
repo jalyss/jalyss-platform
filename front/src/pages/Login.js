@@ -36,7 +36,7 @@ function Login() {
         <div class="row">
           <div class="col mb-3 ">
             <label for="email">
-              {t('address')}<span style={{ color: 'red' }}>*</span>
+              {t('email')}<span style={{ color: 'red' }}>*</span>
             </label>
             <input
               required

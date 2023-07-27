@@ -26,7 +26,11 @@ export const navbarTrainigData = [
   {
     name: "Prerequire",
     path: "/training/prerequires",
-  }
+  },
+  {
+    name: "Type",
+    path: "/training/types",
+  },
   
 
 ];

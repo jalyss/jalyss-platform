@@ -1,10 +1,10 @@
-import React, { useState,useEffect} from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { purple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { editcours, fetchOnecouse } from "../../../../store/courses";
+import { editCours, fetchOnecouse } from "../../../../store/courses";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,181 +12,190 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
+import StyledInput from "../../../../components/Commun/inputs/StyledInput";
+import AutoCompleteFilter from "../../../../components/Commun/AutoCompleteFilter";
 
 const Coursdetail = () => {
-const lecture=useSelector((state)=>state.courses.cours)
-  const  dispatch=useDispatch()
- const navigate=useNavigate()
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  // const [enddate, setEnddate] = useState("");
-  // const [startdate, setStartdate] = useState("");
-  const { t, i18n } = useTranslation();
-  const [editMode, setEditMode] = useState(false)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const lecture = useSelector((state) => state.courses.cours);
+  const gainsStore = useSelector((state) => state.gain);
+  const { gains } = gainsStore;
+  const coacheStore = useSelector((state) => state.user);
+  const { users } = coacheStore;
+  const [selectedGains, setSelectedGains] = useState([]);
+  const [selectedCoach, setSelectedCoach] = useState([]);
+  const [addcours, setAddcours] = useState({});
+  const [editMode, setEditMode] = useState(false);
 
-  console.log('cours is here ',lecture)
-  const {lectureId}=useParams()
-  
+  const { lectureId } = useParams();
 
- useEffect(()=>{
-  dispatch(fetchOnecouse(lectureId)) 
-  }, [lectureId])
+  useEffect(() => {
+    dispatch(fetchOnecouse(lectureId));
+  }, [lectureId]);
 
- 
+  useEffect(() => {
+    setAddcours({ ...addcours, ...lecture });
+    setSelectedGains(
+      lecture?.LectureHasWhatYouWillLearn?.map((elem) => elem.WhatYouWillLearn)
+    );
+    setSelectedCoach(lecture?.coaching?.map((elem) => elem.user));
+  }, [lecture, editMode]);
 
-  useEffect(()=>{
-    setTitle(lecture?.title)
-    setContent(lecture?.description)
-   
-  },[])
+  const handleAddcoursChange = (e) => {
+    const { name, value } = e.target;
+    console.log(addcours);
 
-  // const handlecoursChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setCours((Cours) => ({ 
-  //     ...Cours,
-  //      [name]: value ? parseFloat(value) : null }));
-  // };
+    setAddcours((addcours) => ({
+      ...addcours,
+      [name]: value,
+    }));
+  };
+  const handleSubmitUpdate = async (event) => {
+    if (editMode) {
+      event.preventDefault();
+      addcours.lecturesHasGainsIds = selectedGains.map((e) => e.id);
+      addcours.cochingIds = selectedCoach.map((e) => e.id);
+      dispatch(editCours(addcours)).then((res) => {
+        if (!res.error) {
+          showSuccessToast(t("cours.updated"));
+          setEditMode(false);
+        } else {
+          console.log(res);
+          showErrorToast(res.error.message);
+        }
+      });
+    } else {
+      setEditMode(true);
+    }
+  };
 
-
-  
-  
-  const submitEditcours=async(event)=>{
-    if(!editMode){
-      event.preventDefault()
-      setEditMode(true)
-    }else{
-      let body ={
-        title,
-        content,
-      }
-    
-        dispatch(editcours({id:lectureId,body}) ).then((res)=>{
-          if (res.error) {
-            showErrorToast(res.error.message)
-          } else {
-            showSuccessToast('lecture has been updted')
-            navigate(-1)
-          }
-        })
-        setEditMode(false);
-      }
-  }
-
-
-    
   return (
-    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2> Courses</h2>
-      <form className="checkout-form">
-        <div className="d-flex flex-wrap">
-          <div className="d-flex justify-content-center w-100 m-3">
-            <TableContainer className="w-100" component={Paper}>
-              <Table aria-label="simple table">
-                <TableBody>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("titel")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          id="titel"
-                          value={title}
-                          name="titel"
-                          type="text"
-                          className="form-control"
-                          onChange={(e)=>{setTitle(e.target.value)}}
-                        />
-                      ) : (
-                        <span>{lecture?.title} </span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("content")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          name="content"
-                          value={content}
-                          type="text"
-                          className="form-control"
-                          onChange={(e)=>{setContent(e.target.value)}}
-                        />
-                      ) : (
-                        <span>{lecture?.content}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    {/* <TableCell className="fw-bold" align="right">
-                      {t("startAt")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          name="startAt"
-                        
-                          type="date"
-                          className="form-control"
-                          onChange={(e)=>{setStartdate(e.target.value)}}
-                        />
-                      ) : (
-                        <span>{lecture?.startAt}</span>
-                      )}
-                    </TableCell> */}
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    {/* <TableCell className="fw-bold" align="right">
-                      {t("end")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-            
-                          name="End"
-                          
-                          type="date"
-                          className="form-control"
-                          onChange={(e)=>{setEnddate(e.target.value)}}
-                        />
-                      ) : (
-                        <span>{lecture?.endAt}</span>
-                      )}
-                    </TableCell> */}
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  ></TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  ></TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
-        </div>
+    <div className="d-flex flex-column justify-content-center w-100 m-3 ">
+      <TableContainer
+        className="w-100"
+        component={Paper}
+        style={{ marginTop: 80 }}
+      >
+        <Table aria-label="simple table">
+          <TableBody>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell className="fw-bold">Title</TableCell>
+              <TableCell>
+                {editMode ? (
+                  <StyledInput
+                    value={addcours.title || ""}
+                    onChange={handleAddcoursChange}
+                    label="Title"
+                    name="title"
+                  />
+                ) : (
+                  <span>{lecture?.title} </span>
+                )}
+              </TableCell>
 
-        <div className="w-100 d-flex justify-content-center">
-          <button
-            type="submit"
-            className="confirm-button mt-3"
-            onClick={submitEditcours}
-          >
-            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
-          </button>
-        </div>
-      </form>
+              <TableCell className="fw-bold">Content</TableCell>
+              <TableCell>
+                {editMode ? (
+                  <StyledInput
+                    value={addcours.content || ""}
+                    onChange={handleAddcoursChange}
+                    label="Content"
+                    name="content"
+                  />
+                ) : (
+                  <span>{lecture?.content}</span>
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell className="fw-bold">Gains:</TableCell>
+              <TableCell>
+                {editMode ? (
+                  <>
+                    <div className="d-flex">
+                      <AutoCompleteFilter
+                        value={selectedGains}
+                        required
+                        data={gains?.items}
+                        labelOptionName="content"
+                        label="Add gains"
+                        onChange={setSelectedGains}
+                        placeholder="Add Your session's gain"
+                        width={280}
+                      />
+                      <span style={{ color: "red" }}>*</span>
+                    </div>
+                    <div>
+                      {!selectedGains.length && (
+                        <p style={{ color: "red", textAlign: "start" }}>
+                          You must select gains for the session !{" "}
+                        </p>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {selectedGains?.map((elem, i) => (
+                      <div key={i}>{elem.content}</div>
+                    ))}
+                  </>
+                )}
+              </TableCell>
+
+              <TableCell className="fw-bold">Coachs:</TableCell>
+              <TableCell>
+                {editMode ? (
+                  <>
+                    <div className="d-flex">
+                      <AutoCompleteFilter
+                        value={selectedCoach}
+                        required
+                        data={users?.items.filter(
+                          (elem) => elem.isCoach === true
+                        )}
+                        labelOptionName="fullNameEn"
+                        label="Add coachs"
+                        onChange={setSelectedCoach}
+                        placeholder="Add Your lecture coachs"
+                        width={280}
+                      />
+                      <span style={{ color: "red" }}>*</span>
+                    </div>
+                    <div>
+                      {!selectedCoach.length && (
+                        <p style={{ color: "red", textAlign: "start" }}>
+                          You must select coachs for the lecture !{" "}
+                        </p>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {selectedCoach?.map((elem, i) => (
+                      <div key={i}>{elem.fullNameEn}</div>
+                    ))}
+                  </>
+                )}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <div className="w-100 d-flex justify-content-center">
+        <button
+          type="submit"
+          className="confirm-button mt-3"
+          onClick={handleSubmitUpdate}
+        >
+          <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,7 @@
+.ant-picker {
+    border-color: #bfbab7
+  }
+
+  .ant-picker-dropdown{
+    z-index: 1056;
+}
