@@ -20,15 +20,9 @@ const TrainingPricing = ({ session }) => {
 
 const dispatch=useDispatch()
   function customSort(arr) {
-    // const order = ["Basic", "Pro", "Companies"];
     
     const sortedArr = [...arr];
-  
     sortedArr.sort((a, b) => {
-      // const indexA = order.indexOf(a.title);
-      // const indexB = order.indexOf(b.title);
-  
-      // return indexA - indexB;
       return a.price - b.price
     });
   
@@ -41,9 +35,6 @@ const dispatch=useDispatch()
 
 
 console.log("sorted",customSort(wiw))
-
-
-
 
   return (
     <div id="ele">
@@ -85,13 +76,13 @@ console.log("sorted",customSort(wiw))
                   return sortedFeatures.map((element, idx) => (
                     <li
                       className={`mb-3 ${
-                        element.feature.isAvailable
+                        element.isAvailable
                           ? ""
                           : "text-muted text-decoration-line-through"
                       }`}
                       key={idx}
                     >
-                      {element.feature.isAvailable ? (
+                      {element.isAvailable ? (
                         <FaCheck color="#48184c" />
                       ) : (
                         <FaTimes color="gray" />

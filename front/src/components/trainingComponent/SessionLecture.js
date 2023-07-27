@@ -34,7 +34,7 @@ let displayLec = showMore? lectures : lectures?.slice(0,2)
               <ul class="timeline-1 text-black">
                 {displayLec?.map((element, indexx) => (
                   <li class="event" 
-                  data-date={element.lectures.startAt.slice(0,10)}
+                  data-date={element.lectures.startAt}
                   >
                     <div className="mb-3">
                       <span
