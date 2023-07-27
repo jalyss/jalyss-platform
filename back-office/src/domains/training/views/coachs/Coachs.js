@@ -155,7 +155,7 @@ const [coachId,setCoachId]=useState(null)
     {
       field: "city",
       headerName: "City",
-      width: 150,
+      width: 100,
       editable: true,
       sortable: false,
     },
