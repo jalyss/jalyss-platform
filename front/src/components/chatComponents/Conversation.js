@@ -72,8 +72,6 @@ const Conversation = ({
     if (selectedUser) scrollToBottom();
   }, [inbox, selectedUser]);
 
-
-
   useEffect(() => {
     axios
       .get(
@@ -82,15 +80,13 @@ const Conversation = ({
         }/${myId}`
       )
       .then((res) => {
-        
         setExist(res.data.id);
-        if(!selectedUser)
-        setSelectedUser(
-          res.data.participants.filter(
-            (participant) => participant.userId !== myId
-          )[0]
-        );
-        
+        if (!selectedUser)
+          setSelectedUser(
+            res.data.participants.filter(
+              (participant) => participant.userId !== myId
+            )[0]
+          );
       })
       .catch((err) =>
         axios
@@ -100,11 +96,11 @@ const Conversation = ({
             }`
           )
           .then((res) => {
-            if(!selectedUser)
-            setSelectedUser(res.data)
+            if (!selectedUser) setSelectedUser(res.data);
             setExist(res.data.id);
-            setInbox([])
-          }).catch(err=>console.log(err))
+            setInbox([]);
+          })
+          .catch((err) => console.log(err))
       );
   }, [myId, userId]);
 
@@ -139,7 +135,7 @@ const Conversation = ({
           userId: myId,
           num: number,
         };
-        console.log('seen');
+        console.log("seen");
         socket.emit("msg-seen", payload);
       }
     }
@@ -173,12 +169,11 @@ const Conversation = ({
     }
     function getInbox(data) {
       let aux = [];
-          for (let i = data.length - 1; i >= 0; i--) {
-            aux.push(data[i]);
-          }
+      for (let i = data.length - 1; i >= 0; i--) {
+        aux.push(data[i]);
+      }
 
-          setInbox(aux);
-     
+      setInbox(aux);
     }
     function getChatRoomCreated(data) {
       setExist(data.id);
@@ -262,7 +257,14 @@ const Conversation = ({
                     }}
                     variant="dot"
                   >
-                    <Avatar alt="profile picture" src={Icon} />
+                    <Avatar
+                      alt="profile picture"
+                      src={
+                        selectedUser?.user?.avatar
+                          ? selectedUser?.user?.avatar.path
+                          : Icon
+                      }
+                    />
                   </StyledBadge>
                 </Box>
                 <Stack spacing={0.2}>
@@ -320,7 +322,7 @@ const Conversation = ({
                       width: "40px",
                       height: "40px",
                       borderRadius: "50%",
-                      objectFit:"cover"
+                      objectFit: "cover",
                     }}
                   />
                   <div>
