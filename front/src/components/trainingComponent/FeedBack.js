@@ -54,6 +54,7 @@ console.log("subscribedIds",subscribedIds);
 
   return (
     <div className="mb-5">
+      
       <TrainingHeading
         subtitle={subtitle}
         title="Wanna Be one of them!"

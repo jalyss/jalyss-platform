@@ -54,6 +54,7 @@ function SessionDetails() {
   const displayColumn1 = showMore ? column1 : column1?.slice(0, 5);
   const displayColumn2 = showMore ? column2 : column2?.slice(0, 5);
   const currentDate = new Date();
+  const renderedCoaches = new Set();
   return (
     <div className="container">
       <div className="goBackLink mt-2" onClick={() => navigate(-1)}>
@@ -123,21 +124,22 @@ function SessionDetails() {
           <div className="coaches gap-3 ">
             <div className="d-flex align-items-center fw-bold">Coaches:</div>
             {seletedSession?.lectures?.map((lecture, lectureIndex) =>
-              lecture.lectures.coaching.map((coach, coachIndex) => (
-                <div
-                  className="coachZone mt-2 "
-                  // data-bs-placement="bottom"
-                  title={coach.user.fullNameEn}
-                >
-                  <img
-                    key={coachIndex}
-                    src={coach.user.avatar?.path}
-                    alt="avatar"
-                    className="rounded-circle col-8"
-                    style={{ width: "50px", height: "50px", margin: "0 5px" }}
-                  />
-                </div>
-              ))
+              lecture.lectures.coaching.map((coach, coachIndex) => {
+                if (renderedCoaches.has(coach.user.id)) {
+                  return null;
+                }
+                renderedCoaches.add(coach.user.id);
+                return (
+                  <div key={coachIndex} title={coach.user.fullNameEn}>
+                    <img
+                      src={coach.user.avatar?.path}
+                      alt="avatar"
+                      className="rounded-circle col-8"
+                      style={{ width: "50px", height: "50px", margin: "0 5px" }}
+                    />
+                  </div>
+                );
+              })
             )}
           </div>
           <div className="d-flex  justify-content-between mt-3">
