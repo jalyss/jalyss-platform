@@ -8,8 +8,25 @@ export class LectureService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateLectureDto) {
+    const { lecturesHasGainsIds,cochingIds, ...rest } = dto;
     return await this.prisma.lecture.create({
-      data: { ...dto },
+      data: {
+        ...rest,
+        LectureHasWhatYouWillLearn: {
+          create: lecturesHasGainsIds.map((id) => {
+            return {
+              WhatYouWillLearnId: id,
+            };
+          }),
+        },
+        coaching: {
+          create: cochingIds.map((id) => {
+            return {
+              userId: id,
+            };
+          }),
+        },
+      },
     });
   }
 
@@ -20,6 +37,7 @@ export class LectureService {
       },
       include: {
         coaching: true,
+        LectureHasWhatYouWillLearn :{include:{WhatYouWillLearn:true}},
         assesments: true,
         sessions: {
           include: {
@@ -33,14 +51,11 @@ export class LectureService {
       },
     });
   }
-  
-  
-  
 
   async findOne(id: string) {
     return await this.prisma.lecture.findUnique({
       where: { id },
-      
+      include:{LectureHasWhatYouWillLearn:{include:{WhatYouWillLearn:true}},coaching:{include:{user:true}}}
     });
   }
 
