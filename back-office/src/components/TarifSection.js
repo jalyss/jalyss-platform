@@ -2,7 +2,8 @@ import React from "react";
 import { useState } from "react";
 import StyledInput from "./Commun/inputs/StyledInput";
 
-function TarifSection({  setTarif ,tarif}) {
+function TarifSection({ setTarif, tarif, edit }) {
+  console.log(tarif);
   return (
     <div>
       <div className="d-flex gap-3 justify-content-between fw-bold py-3">
@@ -22,12 +23,17 @@ function TarifSection({  setTarif ,tarif}) {
           <>
             {tarif?.features.map((elem, index) => (
               <div>
-                <hr style={{ height: 2, background: "black", margin: 0 }} />
+                <hr
+                  className="mb-2"
+                  style={{ height: 1, background: "black", margin: 0 }}
+                />
                 <div
                   key={index}
                   className="d-flex gap-3 justify-content-between align-items-center"
                 >
-                  <div style={{ width: 200 }}>{elem.label}</div>
+                  <div style={{ width: 200 }}>
+                    {elem.label || elem.feature.label}
+                  </div>
                   <div style={{ width: 100 }} className="text-center">
                     <input
                       type="checkbox"
@@ -35,11 +41,11 @@ function TarifSection({  setTarif ,tarif}) {
                       onChange={(e) => {
                         if (e.target.checked) {
                           let array = [...tarif.features];
-                          array[index].isAvailable = true;
+                          array[index] = { ...array[index], isAvailable: true };
 
                           setTarif((Tarif) => ({
                             ...Tarif,
-                            features: array
+                            features: array,
                           }));
                         }
                       }}
@@ -52,11 +58,13 @@ function TarifSection({  setTarif ,tarif}) {
                       onChange={(e) => {
                         if (e.target.checked) {
                           let array = [...tarif.features];
-                          array[index].isAvailable = false;
-
+                          array[index] = {
+                            ...array[index],
+                            isAvailable: false,
+                          };
                           setTarif((Tarif) => ({
                             ...Tarif,
-                            features: array
+                            features: array,
                           }));
                         }
                       }}
@@ -66,14 +74,10 @@ function TarifSection({  setTarif ,tarif}) {
               </div>
             ))}
           </>
-        ) : (
-          null
-        )}
+        ) : null}
       </div>
     </div>
   );
 }
 
 export default TarifSection;
-
-

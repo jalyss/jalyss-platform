@@ -13,7 +13,7 @@ import command from "./command";
 import sessions from "./sessions";
 import courses from "./courses";
 import coach from "./coach";
-import sessiontyps from "./sessiontyps";
+import sessiontypes from "./sessiontypes";
 import service from "./service";
 import space from "./space";
 import tarifSession from "./tarifSession";
@@ -39,7 +39,7 @@ export const store = configureStore({
     sessions,
     courses,
     coach,
-    sessiontyps,
+    sessiontypes,
     service,
     space,
     tarifSession,

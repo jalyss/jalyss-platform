@@ -3,21 +3,17 @@ import React from "react";
 import TrainingHeading from "./TrainingHeading";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
-
-
-
-const TrainingPricing = ({ session,  fn }) => {
-
-  
-
+const TrainingPricing = ({ session, fn, header, readOnly }) => {
   return (
     <div>
-      <TrainingHeading
-        subtitle="PRICING"
-        title="Choose The Right Plan"
-        mt={20}
-        mb={40}
-      />
+      {!header && (
+        <TrainingHeading
+          subtitle="PRICING"
+          title="Choose The Right Plan"
+          mt={20}
+          mb={40}
+        />
+      )}
 
       <div className="d-flex flex-wrap justify-content-center align-items-center gap-3 mb-5">
         {session.tarifs.map((tarif, i) => (
@@ -58,26 +54,29 @@ const TrainingPricing = ({ session,  fn }) => {
                       ) : (
                         <FaTimes color="gray" />
                       )}{" "}
-                      {feature.label}
+                      {feature?.label || feature?.feature?.label}
                     </li>
                   ));
                 })()}
               </ul>
-              <button
-                className="btn btn-block p-2 shadow rounded-pill "
-                style={{
-                  backgroundColor: "#48184c",
-                  color: "#fff",
-                  width: "200px",
-                }}
-                id="basic-primary-trigger"
-                onClick={() => {
-                  console.log(tarif,i,'pricing card');
-                  fn(tarif, i);
-                }}
-              >
-                Edit
-              </button>
+              {!readOnly && (
+                <button
+                  type="button"
+                  className="btn btn-block p-2 shadow rounded-pill "
+                  style={{
+                    backgroundColor: "#48184c",
+                    color: "#fff",
+                    width: "200px",
+                  }}
+                  id="basic-primary-trigger"
+                  onClick={() => {
+                    console.log(tarif, i, "pricing card");
+                    fn(tarif, i);
+                  }}
+                >
+                  Edit
+                </button>
+              )}
             </div>
           </div>
         ))}

@@ -130,6 +130,7 @@ function BlogsList() {
         <hr></hr>
 
         <AutoCompleteFilter
+        value={selectedSituation}
           data={situations}
           valueOptionName="value"
           labelOptionName="label"

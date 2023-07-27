@@ -1822,8 +1822,7 @@ async function main() {
       data: {
         title: 'My Lecture ' + i,
         content: 'Hello, this is a new lecture',
-        startAt: new Date(Date.now()),
-        endAt: new Date(Date.now()),
+       
       },
     });
     lectures.push(lecture);
@@ -1972,7 +1971,7 @@ async function main() {
       if (search(sesId, lectId)) {
         sHL.push(
           await prisma.sessionHasLecture.create({
-            data: { sessionId: sesId, lectureId: lectId },
+            data: { sessionId: sesId, lectureId: lectId,startAt: new Date().toISOString(),endAt:new Date().toISOString() },
           }),
         );
       }

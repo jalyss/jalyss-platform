@@ -1,65 +1,101 @@
 import React, { useEffect, useState } from "react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deletcours, fetchcours } from "../../../../store/courses";
 import {
-  CreateSessionHasLecture,
-  fetchsessions,
-  findAllSessionTitles,
-} from "../../../../store/sessions";
+  CreateNeswcours,
+  deletcours,
+  editcours,
+  fetchcours,
+} from "../../../../store/courses";
+
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
-import Select from "react-select";
-import AutoCompleteFilter from "../../../../components/Commun/AutoCompleteFilter";
-import CloseButton from "../../../../components/Commun/buttons/CloseButton";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { Box } from "@mui/material";
+import CreateButton from "../../../../components/Commun/buttons/CreateButton";
+import Modal from "../../../../components/Commun/Modal";
+import StyledInput from "../../../../components/Commun/inputs/StyledInput";
+import { Form } from "react-bootstrap";
 
 const Courses = () => {
-  const [titles, setTitles] = useState();
-  const [data, setData] = useState();
   const coursStore = useSelector((state) => state.courses.courses.items);
-  const sessionStore = useSelector((state) => state.sessions);
-  const { sessions } = sessionStore;
+  const [rows, setRows] = useState([]);
+  const [basicModal, setBasicModal] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
+  const [idOfDelete, setIdOfDelete] = useState("");
+  const [contentOfDelete, setContentOfDelete] = useState("");
+  const [addcours,setAddcours] = useState({});
+  const [editModal, setEditModal] = useState(false);
+  const [editRowId, setEditRowId] = useState("");
+  const [editedTitle, setEditedTitle] = useState(false);
+  const [editedContent, setEditedContent] = useState(false);
 
-  const titlesData = useSelector((state) => state.sessions.session);
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [sessionIds, setSessionIds] = useState([]);
-  const existingIds = [];
-  selectedCourse?.sessions.forEach((el) => {
-    existingIds.push(el.sessionId);
-  });
-  console.log("selec", selectedCourse);
-  console.log("selecIds", existingIds);
-  console.log(sessionIds, "eeee");
+
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const navigate = useNavigate();
-  const open = Boolean(anchorEl);
-  const take = sessions?.items.count;
-  const skip = 0;
-  useEffect(() => {
-    dispatch(fetchsessions({ take, skip }));
-  }, [take]);
-  console.log("sss", sessions);
+
   useEffect(() => {
     dispatch(fetchcours());
-    dispatch(findAllSessionTitles());
-    const updatedTitles = titlesData?.map((post) => ({
-      value: post.title,
-      label: post.title,
-    }));
-    setTitles(updatedTitles);
-  }, [data]);
+  }, [dispatch]);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  useEffect(() => {
+    if (basicModal && idOfDelete) {
+      const courseToDelete = coursStore.find(
+        (course) => course.id === idOfDelete
+      );
+      if (courseToDelete) {
+        setContentOfDelete(courseToDelete.title);
+      }
+    }
+  }, [basicModal, idOfDelete, coursStore]);
+
+  useEffect(() => {
+    if (coursStore.length) {
+      let aux = coursStore.map((e) => {
+        return {
+          ...e,
+          title: e.title,
+          content: e.content,
+          createdAt: e.createdAt.slice(0, 10),
+        };
+      });
+      setRows(aux);
+    }
+  }, [coursStore]);
+
+  useEffect(() => {
+  
+    if (editModal && editRowId) {
+      const row = rows.find((row) => row.id === editRowId);
+      if (row) {
+        setEditedTitle(row.title);
+        setEditedContent(row.content);
+
+      }
+    }
+  }, [editModal, editRowId, rows]);
+  const handleAddcoursChange = (e) => {
+    const { name, value } = e.target;
+    console.log(addcours);
+
+    setAddcours((addcours) => ({
+      ...addcours,
+      [name]: value,
+    }));
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const Addcours = async (event) => {
+    event.preventDefault();
+
+    dispatch(CreateNeswcours(addcours)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("cours.created");
+        setAddcours({});
+        toggleShowOfCreate();
+      } else {
+        console.log(res);
+        showErrorToast(res.error.message);
+      }
+    });
   };
 
   const handleDeletecoursClick = (id) => {
@@ -71,212 +107,181 @@ const Courses = () => {
       }
     });
   };
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
+  const toggleShowOfCreate = () => {
+    setCreateModal(!createModal);
+  };
+  const handleEdit = () => {
+   let body={
+    title:editedTitle,
+    content:editedContent
+   }
+    dispatch(editcours({ id: editRowId, body}))
+      .then((res) => {
+        if (res.error) {
+          showErrorToast(res.error.message);
+        } else {
+          showSuccessToast("Lecture has been Updated");
+          setEditedContent("")
+          setEditedTitle("")
+        }
+      })
+      .catch((error) => {
+        showErrorToast(error.message);
+      });
+
+    setEditRowId("");
+ 
+    setEditModal(!editModal)
+  };
+
+  const columns = [
+    {
+      field: "title",
+      headerName: "Title",
+      width: 230,
+      editable: false,
+    },
+    {
+      field: "content",
+      headerName: "Content",
+      width: 230,
+      editable: false,
+    },
+    {
+      field: "createdAt",
+      headerName: "CreatedAt",
+      width: 230,
+      sortable: false,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 330,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<AiFillEdit style={{ color: "blue" }} />}
+            label="Edit"
+            className="textPrimary"
+            color="inherit"
+            onClick={() => {
+              setEditRowId(id);
+              setEditModal(true)
+            }}
+          />,
+          <GridActionsCellItem
+            icon={<AiFillDelete />}
+            label="Delete"
+            color="error"
+            onClick={() => {
+              toggleShow();
+              setIdOfDelete(id);
+            }}
+          />,
+        ];
+      },
+    },
+  ];
 
   return (
-    <div className="bg-light">
-      <div className="button category">
-        <div className="button add">
-          <Button
-            sx={{ marginLeft: "900px" }}
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={() => {
-              navigate("/training/courses/AddNewCours");
-            }}
-          >
-            add new course
-          </Button>
-        </div>
-      </div>
-      <label
-        className="d-flex justify-content-center"
-        style={{ width: "100%", marginTop: "5px" }}
-      >
-        <div>
-          <Select
-            onChange={(e) => {
-              setData(e);
-            }}
-            placeholder="Search by sessions"
-            options={titles}
-            isMulti
-          />
-        </div>
-      </label>
-      {!data?.length ? (
-        <div
-          className="cart"
-          style={{
-            marginLeft: 30,
-            marginTop: "100px",
-            boxShadow: 20,
-            display: "grid",
-            gridTemplateColumns: "repeat(3 ,1fr)",
-            gap: "20px",
+    <div className="mx-5">
+      <CreateButton
+        title={"add new Lecture"}
+        mt={20}
+        mb={20}
+        onClick={toggleShowOfCreate}
+      />
+      <div className="mb-3">Lectures's List</div>
+      <Box sx={{ height: 600, width: "100%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 10,
+              },
+            },
           }}
-        >
-          {coursStore.map((el, i) => (
-            < div className="d-flex flex-wrap">
-              <Card style={{ width: 300 }} key={i}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    title: {el.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Content: {el.content}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Start-At: {el.startAt?.slice(0, 10)}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    End-At: {el.endAt?.slice(0, 10)}
-                  </Typography>
-
-                  {el.sessions && el.sessions.length > 0 && (
-                    <Typography variant="body2" color="text.secondary">
-                      Sessions:
-                      {el.sessions.map((session, index) => (
-                        <span key={index}> {session.session.title},</span>
-                      ))}
-                    </Typography>
-                  )}
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    onClick={() => handleDeletecoursClick(el.id)}
-                  >
-                    Delete
-                  </Button>
-                  <Button size="small" onClick={() => navigate(`${el.id}`)}>
-                    Update
-                  </Button>
-                  <Button size="small" onClick={() => setSelectedCourse(el)}>
-                    Link It to a session
-                  </Button>
-                </CardActions>
-                <div style={{ margin: "20px" }}></div>
-              </Card>
-            <>
-                {selectedCourse === el && (
-                  <div className="d-flex justify-content-center align-items-center mt-2">
-                    <AutoCompleteFilter
-                      data={sessions?.items.items.filter(
-                        (session) => !existingIds.includes(session.id)
-                      )}
-                      valueOptionName="id"
-                      labelOptionName="title"
-                      label="Add sessions to it"
-                      fullWidth={true}
-                      onChange={setSessionIds}
-                      placeholder="select sessions"
-                    />
-
-                    <CloseButton
-                      modifTitle="Link"
-                      onClick={() => {
-                        dispatch(
-                          CreateSessionHasLecture({
-                            lectureId: selectedCourse.id,
-                            sessionId: sessionIds,
-                          })
-                        );
-                      }}
-                    />
-                  </div>
-                )}
-              </>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div
-          className="cart"
-          style={{ marginLeft: 30, marginTop: "100px", boxShadow: 20 }}
-        >
-          <div
-            className="cart"
-            style={{
-              marginLeft: 30,
-              marginTop: "100px",
-              boxShadow: 20,
-              display: "grid",
-              gridTemplateColumns: "repeat(3 ,1fr)",
-              gap: "20px",
-            }}
-          >
-            {coursStore
-              .filter((el) =>
-                el.sessions.some((session) =>
-                  data.some(
-                    (selectedSession) =>
-                      selectedSession.label === session.session.title
-                  )
-                )
-              )
-              .map((el, i) => (
-                <Card style={{ width: 300 }} key={i}>
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      Title: {el.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Content: {el.content}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Start-At: {el.startAt}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      End-At: {el.endAt}
-                    </Typography>
-
-                    {el.sessions && el.sessions.length > 0 && (
-                      <Typography variant="body2" color="text.secondary">
-                        Sessions:
-                        {el.sessions.map((session, index) => (
-                          <span key={index}> {session.session.title},</span>
-                        ))}
-                      </Typography>
-                    )}
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      onClick={() => handleDeletecoursClick(el.id)}
-                    >
-                      Delete
-                    </Button>
-                    <Button size="small" onClick={() => navigate(`${el.id}`)}>
-                      Update
-                    </Button>
-                  </CardActions>
-                </Card>
-              ))}
+          pageSizeOptions={[5]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </Box>
+      <Modal
+        basicModal={basicModal}
+        setBasicModal={setBasicModal}
+        toggleShow={toggleShow}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            {`Are you sure you want to delete `}
+            <span style={{ color: "red", margin: "10px" }}>
+              {contentOfDelete}
+            </span>
+            {`course ?`}
           </div>
-        </div>
-      )}
-      {/* Check if the filtered array is empty */}
-      {data?.length > 0 &&
-        coursStore.filter((el) =>
-          el.sessions.some((session) =>
-            data.some(
-              (selectedSession) =>
-                selectedSession.label === session.session.title
-            )
-          )
-        ).length === 0 && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              marginTop: "10pc",
-            }}
-          >
-            <div style={{ color: "grey" }}>No users to show</div>
+        }
+        confirm={() => {
+          handleDeletecoursClick(idOfDelete);
+          setBasicModal(false);
+        }}
+      />
+      <Modal
+        toggleShow={toggleShowOfCreate}
+        basicModal={createModal}
+        setBasicModal={setCreateModal}
+        normal={true}
+        title="Add new lecture"
+        body={
+          <div className="d-flex flex-column justify-content-center align-items-center gap-3">
+            <StyledInput
+              value={addcours.title || ""}
+              onChange={handleAddcoursChange}
+              label="Title"
+              name="title"
+            />
+
+            <StyledInput
+              value={addcours.content || ""}
+              onChange={handleAddcoursChange}
+              label="Content"
+              name="content"
+            />
           </div>
-        )}
+        }
+        fn={Addcours}
+      />
+        <Modal
+        basicModal={editModal}
+        setBasicModal={setEditModal}
+        toggleShow={()=>{setEditModal(!editModal)}}
+        normal={true}
+        title="Edit Lecture"
+        body={
+          <div className="d-flex flex-column justify-content-center align-items-center gap-3">
+            <StyledInput
+              value={editedTitle}
+              onChange={(e)=>{setEditedTitle(e.target.value)}}
+              label="Title"
+             
+            />
+
+            <StyledInput
+                value={editedContent}
+              onChange={(e)=>{setEditedContent(e.target.value)}}
+              label="Content"
+             
+            />
+          </div>
+        }
+        fn={handleEdit}
+      />
     </div>
   );
 };

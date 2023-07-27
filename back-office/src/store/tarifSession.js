@@ -17,7 +17,7 @@ export const CreateFeature = createAsyncThunk(
 );
 export const fetchFeatures = createAsyncThunk("features/features", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/features`);
-
+console.log("fff",response.data);
   return response.data;
 });
 
