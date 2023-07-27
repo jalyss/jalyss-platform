@@ -34,15 +34,15 @@ function Cart({ handleClose }) {
         <div className="container h-min-content py-initial">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col">
-              <div className="table-responsive" style={{ maxHeight: "300px", overflowY: "auto" }}>
+              <div className="table-responsive" style={{ maxHeight: "800px", overflowY: "auto",  maxWidth: "100%"}}>
                 <table className="table">
                   <thead>
                     <tr>
-                      <th scope="col" className="h5">
+                      <th scope="col" className="h5" style={{ width: "50%" }}>
                         {t('offCanvas.shop')}
                       </th>
-                      <th scope="col">{t('offCanvas.quan')}</th>
-                      <th scope="col">{t('offCanvas.price')}</th>
+                      <th scope="col" style={{ width: "25%" }} >{t('offCanvas.quan')}</th>
+                      <th scope="col" style={{ width: "25%" }} >{t('offCanvas.price')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -63,7 +63,7 @@ function Cart({ handleClose }) {
 
                         <td className="align-middle">
                           <div className="d-flex flex-row">
-                            <button onClick={() => handleUpdateQuantity(item.id, (quantityMap[item.id] || item.quantity) - 1)}>-</button>
+                            <button className="bma" onClick={() => handleUpdateQuantity(item.id, (quantityMap[item.id] || item.quantity) - 1)}>-</button>
                             <input
                     id="form1"
                     min="0"
@@ -74,7 +74,7 @@ function Cart({ handleClose }) {
                     className="form-control form-control-sm cart-quantity-input" 
                     onChange={(e) => handleUpdateQuantity(item.id, parseInt(e.target.value))}
                   />
-                            <button onClick={() => handleUpdateQuantity(item.id, (quantityMap[item.id] || item.quantity) + 1)}>+</button>
+                            <button className="bma" onClick={() => handleUpdateQuantity(item.id, (quantityMap[item.id] || item.quantity) + 1)}>+</button>
                           </div>
                         </td>
                         <td className="align-middle">
@@ -97,6 +97,7 @@ function Cart({ handleClose }) {
         <div className="subtotal">
           <div>
             <span className="label">{t('offCanvas.total')} </span>
+            &nbsp;
             <span className="price-wrapper">{cartTotal}</span>
           </div>
         </div>
@@ -105,18 +106,18 @@ function Cart({ handleClose }) {
 
 
 
-      <div className="double-btn" style={{ position: "fixed", bottom: "10px", left: "10px" }}>
+      <div className="d-btn" style={{ position: "fixed"}}>
         <div>
           <button onClick={() => {
             handleClose();
             navigate('/checkout');
-          }} className="offCanvas-btn1">
-            <span className="label-btn">{t('offCanvas.checkout')}</span>
+          }} className="d-btn1" >
+            <span>{t('offCanvas.checkout')}</span>
           </button>
         </div>
         <div>
-          <button onClick={() => emptyCart()} className="offCanvas-btn2">
-            <span className="label-btn"> {t('offCanvas.clear')} </span>
+          <button onClick={() => emptyCart()} className="d-btn2">
+            <span> {t('offCanvas.clear')} </span>
           </button>
         </div>
       </div>
