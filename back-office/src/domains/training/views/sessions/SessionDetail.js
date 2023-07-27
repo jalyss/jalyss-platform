@@ -84,9 +84,9 @@ const SessionDetails = () => {
   const [categoryId, setCategoryId] = useState(null);
   const [previousSessionId, setPreviousSessionId] = useState(null);
   const [elementToDelete, setElementToDelete] = useState(null);
+  const [sessionMedias, setSessionMedias] = useState(null);
 
   const [deleteModal, setDeleteModal] = useState(false);
-
   const [showAddTarifModal, setShowAddTarifModal] = useState(false);
   const [showAddLectureModal, setShowAddLectureModal] = useState(false);
 
@@ -298,7 +298,6 @@ const SessionDetails = () => {
     aux.sessionHasGainsIds = selectedGains.map((e) => e.id);
     aux.sessionTypesIds = selectedTypes.map((e) => e.id);
     aux.previousSessionId = previousSessionId;
-    console.log(aux);
     aux.tarifs = aux.tarifs.map((elem) => ({
       title: elem.title,
       price: elem.price,
@@ -317,7 +316,26 @@ const SessionDetails = () => {
       }
     });
   };
-
+  const handleAddSessionMedia = async () => {
+    if (sessionMedias !== null) {
+      const image = new FormData();
+      for (let i = 0; i < sessionMedias.length; i++) {
+        image.append("files", sessionMedias[i]);
+      }
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_ENDPOINT}/uploads`,
+        image
+      );
+      let aux = response.data.map((elem) => elem.id);
+      const responseMedia = await axios.post(
+        `${process.env.REACT_APP_API_ENDPOINT}/session/media/${sessionsId}`,
+        aux
+      );
+      dispatch(fetchOnesession(sessionsId)).then((res) => {
+        setSessionMedias(null);
+      });
+    }
+  };
   const handleDeleteLecture = () => {
     const updatedLectures = addSession.lectures.filter(
       (lecture) => lecture.lectureId !== elementToDelete.id
@@ -333,8 +351,6 @@ const SessionDetails = () => {
   const generateRowId = (row) => {
     return row.lectureId;
   };
-
-  console.log(selectedFeatures);
 
   return (
     <div>
@@ -578,7 +594,7 @@ const SessionDetails = () => {
                     {readOnly ? (
                       <>
                         {selectedGains?.map((elem, i) => (
-                          <span key={i}>{elem.content}</span>
+                          <p key={i}>{elem.content}</p>
                         ))}
                       </>
                     ) : (
@@ -610,7 +626,7 @@ const SessionDetails = () => {
                   <TableCell>
                     {readOnly ? (
                       selectedPrerequire?.map((elem, i) => (
-                        <span key={i}>{elem.content}</span>
+                        <p key={i}>{elem.content}</p>
                       ))
                     ) : (
                       <>
@@ -646,7 +662,7 @@ const SessionDetails = () => {
                   <TableCell>
                     {readOnly ? (
                       selectedFeatures?.map((elem, i) => (
-                        <span key={i}>{elem.label}</span>
+                        <p key={i}>{elem.label}</p>
                       ))
                     ) : (
                       <>
@@ -680,7 +696,7 @@ const SessionDetails = () => {
                   <TableCell>
                     {readOnly ? (
                       selectedTypes?.map((elem, i) => (
-                        <span key={i}>{elem.title}</span>
+                        <p key={i}>{elem.title}</p>
                       ))
                     ) : (
                       <>
@@ -800,6 +816,58 @@ const SessionDetails = () => {
           )}
         </div>
       </form>
+      <div className="p-5">
+        <input
+          type="file"
+          accept="image/*"
+          className="form-control visually-hidden"
+          id="sessionMediasUpload"
+          onChange={(e) => {
+            console.log(e.target.files);
+            let array = Object.values(e.target.files);
+            setSessionMedias(array);
+          }}
+          ref={fileInputRef}
+          multiple
+        />
+        <AddButton
+          onClick={() => {
+            document.getElementById("sessionMediasUpload").click();
+          }}
+          content="Add Media"
+        />
+
+        {sessionMedias && (
+          <div
+            className="d-flex flex-wrap  gap-3 p-3"
+            style={{ backgroundColor: "rgb(0, 0, 0,0.5)" }}
+          >
+            {sessionMedias?.map((elem, i) => (
+              <img
+                alt="preview"
+                src={URL.createObjectURL(elem)}
+                key={i}
+                style={{ height: 70, objectFit: "contain" }}
+              />
+            ))}
+            <div className="d-flex align-items-end">
+              {sessionMedias?.length ? (
+                <SaveButton onClick={handleAddSessionMedia} type="button" />
+              ) : null}
+            </div>
+          </div>
+        )}
+        <div className="d-flex flex-wrap gap-3">
+          {session?.MediaSession?.map((elem, i) => (
+            <img
+              alt=""
+              src={elem?.media?.path}
+              key={i}
+              style={{ height: 200, objectFit: "contain" }}
+            />
+          ))}
+        </div>
+      </div>
       <Modal
         toggleShow={() => setShowAddTarifModal(false)}
         basicModal={showAddTarifModal}
