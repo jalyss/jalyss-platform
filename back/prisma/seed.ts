@@ -1616,8 +1616,7 @@ async function main() {
     },
   });
 
-  console.log(users);
-  console.log(articles);
+  
 
   let rating = [];
   for (let i = 0; i < articles.length; i += 2) {
@@ -1821,8 +1820,7 @@ async function main() {
     const lecture = await prisma.lecture.create({
       data: {
         title: 'My Lecture ' + i,
-        content: 'Hello, this is a new lecture',
-       
+        content: 'Hello, this is a new lecture'
       },
     });
     lectures.push(lecture);
@@ -2039,6 +2037,8 @@ async function main() {
     featuresIds.push(features.id);
   }
   chatSeed(prisma, usersIds);
+  console.log(users);
+  console.log(articles);
 }
 // execute the main function
 main()
