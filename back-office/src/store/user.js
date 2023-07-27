@@ -46,7 +46,18 @@ export const editUser = createAsyncThunk("users/editUser", async (args, { dispat
   delete args.id
   const response = await axios.patch(`${config.API_ENDPOINT}/users/${id}`, args,configs);
   dispatch(fetchUsers(id))
-  console.log("alllllllllllllllllllllllllllllllllllllllllllll",response.data)
+  return response.data;
+});
+export const editUserCoach = createAsyncThunk("users/editUserCoach", async (args, { dispatch }) => {
+  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+  const configs = {
+    headers: {
+      Authorization: 'Bearer ' + token.Authorization
+    }
+  }
+  
+  const response = await axios.patch(`${config.API_ENDPOINT}/users/isCoach/${id}`, args,configs);
+  dispatch(fetchUsers())
   return response.data;
 });
 

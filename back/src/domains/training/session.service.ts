@@ -7,25 +7,75 @@ import {
   FilterSessionExample,
 } from './entities/training.entity';
 
-
 @Injectable()
 export class SessionService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateSessionDto) {
-    const {SessionHasFeaturesIds, ...rest}=dto
+    const {
+      SessionHasFeaturesIds,
+      sessionHasGainsIds,
+      sessionHasPrerequiresIds,
+      sessionTypesIds,
+      tarifs,
+      lectures,
+      ...rest
+    } = dto;
 
     return await this.prisma.session.create({
-      data:{
+      data: {
         ...rest,
-        SessionHasFeatures:{
-         create:SessionHasFeaturesIds.map((id)=>{
-          return {
-            featureId: id,
-          }
-         })
-  
-        }
+        tarifs: {
+          create: tarifs.map((tarif) => {
+            const { features, ...rest } = tarif;
+            return {
+              ...rest,
+              features: {
+                create: features.map((feature) => ({
+                  featureId: feature.id,
+                  isAvailable: feature.isAvailable,
+                })),
+              },
+            };
+          }),
+        },
+        SessionHasFeatures: {
+          create: SessionHasFeaturesIds.map((id) => {
+            return {
+              featureId: id,
+            };
+          }),
+        },
+        SessionHasWhatYouWillLearn: {
+          create: sessionHasGainsIds.map((id) => {
+            return {
+              WhatYouWillLearnId: id,
+            };
+          }),
+        },
+        sessionHasPrerequire: {
+          create: sessionHasPrerequiresIds.map((id) => {
+            return {
+              prerequireId: id,
+            };
+          }),
+        },
+        sessionType: {
+          create: sessionTypesIds.map((id) => {
+            return {
+              sessionTypeId: id,
+            };
+          }),
+        },
+        lectures: {
+          create: lectures.map((lecture) => {
+            return {
+              lectureId: lecture.lectureId,
+              startAt: lecture.startAt,
+              endAt: lecture.endAt,
+            };
+          }),
+        },
       },
     });
   }
@@ -64,10 +114,17 @@ export class SessionService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    orderBy = { createdAt: 'desc' };
+
     return await this.prisma.$transaction(async (prisma) => {
+      let params = { where };
+      if (take) {
+        params['take'] = take;
+      }
+      if (skip) {
+        params['skip'] = skip;
+      }
       let items = await this.prisma.session.findMany({
-        where,
+        ...params,
         include: {
           tarifs: true,
           sessionType: true,
@@ -75,9 +132,7 @@ export class SessionService {
           category: true,
           cover: true,
         },
-        orderBy,
-        take,
-        skip,
+        orderBy: { createdAt: 'desc' },
       });
 
       let count = await prisma.session.count({ where });
@@ -125,15 +180,123 @@ export class SessionService {
         cover: true,
         sessionType: { include: { sessiontype: true } },
         MediaSession: { include: { media: true } },
-        SessionHasFeatures:{include:{feature:true}}
+        SessionHasFeatures: { include: { feature: true } },
       },
     });
   }
 
   async update(id: string, dto: UpdateSessionDto) {
-    return await this.prisma.session.update({
-      where: { id },
-      data: { ...dto },
+    const {
+      SessionHasFeaturesIds,
+      sessionHasGainsIds,
+      sessionHasPrerequiresIds,
+      sessionTypesIds,
+      tarifs,
+      lectures,
+      ...rest
+    } = dto;
+
+    return await this.prisma.$transaction(async (prisma) => {
+      if (SessionHasFeaturesIds?.length)
+        await prisma.sessionHasFeatures.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+      if (sessionHasGainsIds?.length)
+        await prisma.sessionHasWhatYouWillLearn.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+      if (sessionHasPrerequiresIds?.length)
+        await prisma.sessionHasPrerequire.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+      if (sessionTypesIds?.length)
+        await prisma.sessionHasSessionType.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+      if (sessionHasGainsIds?.length)
+        await prisma.sessionHasWhatYouWillLearn.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+      if (tarifs?.length)
+        await prisma.sessionTarif.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+      if (lectures?.length)
+        await prisma.sessionHasLecture.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+
+      return await prisma.session.update({
+        where: { id },
+        data: {
+          ...rest,
+          tarifs: {
+            create: tarifs.map((tarif) => {
+              const { features, ...rest } = tarif;
+              return {
+                ...rest,
+                features: {
+                  create: features.map((feature) => ({
+                    featureId: feature.id,
+                    isAvailable: feature.isAvailable,
+                  })),
+                },
+              };
+            }),
+          },
+          SessionHasFeatures: {
+            create: SessionHasFeaturesIds.map((id) => {
+              return {
+                featureId: id,
+              };
+            }),
+          },
+          SessionHasWhatYouWillLearn: {
+            create: sessionHasGainsIds.map((id) => {
+              return {
+                WhatYouWillLearnId: id,
+              };
+            }),
+          },
+          sessionHasPrerequire: {
+            create: sessionHasPrerequiresIds.map((id) => {
+              return {
+                prerequireId: id,
+              };
+            }),
+          },
+          sessionType: {
+            create: sessionTypesIds.map((id) => {
+              return {
+                sessionTypeId: id,
+              };
+            }),
+          },
+          lectures: {
+            create: lectures.map((lecture) => {
+              return {
+                lectureId: lecture.lectureId,
+                startAt: lecture.startAt,
+                endAt: lecture.endAt,
+              };
+            }),
+          },
+        },
+      });
     });
   }
 

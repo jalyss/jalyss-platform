@@ -37,9 +37,7 @@ export class FeaturesService {
       orderBy: {
         createdAt: 'desc',
       },
-      include:{
-        SessionTarifHasFeatures:{include:{sessionTarif:true}}
-      }
+   
     });
   }
   

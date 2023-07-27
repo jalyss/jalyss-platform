@@ -2,72 +2,104 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { UpdateUserDto, UpdateUserStatusDto } from './dto/update-user.dto';
+import {
+  UpdateUserDto,
+  UpdateUserIsCoach,
+  UpdateUserStatusDto,
+} from './dto/update-user.dto';
 import { UpdatePasswordDto, UserLogin } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
-import { Media, User } from '@prisma/client';
+import { Client, Employee, Media, User } from '@prisma/client';
 
 export interface FormatLogin extends Partial<User> {
   id: string;
   fullNameEn: string;
   fullNameAr: string;
+  isClient: boolean;
+  clientId: string;
+  employeeId: string;
   email: string;
-  address: string;
-  tel: string;
   avatarId: string;
   createdAt: Date;
   updatedAt: Date;
-  accountBalance: number;
-  categoryId: string;
-  educationLevelId: string;
-  functionalAreaId: string;
-  jobTitleId: string;
   avatar: Media;
+  client: Client;
+  employee: Employee;
 }
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateUserDto) {
+  async create(dto: CreateUserDto) {
+    const { tel, address, ...rest } = dto;
     const salt = await bcrypt.genSalt();
-    data.password = await bcrypt.hash(data.password, salt);
-
-    const user= await this.prisma.user.create({
-      data,
+    dto.password = await bcrypt.hash(dto.password, salt);
+    return await this.prisma.$transaction(async (prisma) => {
+      let data = {
+        fullNameAr: dto.fullNameAr,
+        fullNameEn: dto.fullNameEn,
+        tel: tel,
+        address: address,
+        email: dto.email,
+      };
+      if (dto.avatarId) data['avatarId'] = dto.avatarId;
+      if (dto.isClient) {
+        const client = await prisma.client.create({
+          data,
+        });
+        const user = await prisma.user.create({
+          data: {
+            ...rest,
+            password: dto.password,
+            clientId: client.id,
+          },
+        });
+        return user;
+      } else {
+        const employee = await prisma.employee.create({
+          data,
+        });
+        const user = await prisma.user.create({
+          data: {
+            ...rest,
+            isClient: false,
+            password: dto.password,
+            employeeId: employee.id,
+          },
+        });
+        return user;
+      }
     });
-    console.log(user);
-    return user
-    
   }
 
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true, avatar: true },
+      include: { Media: true, avatar: true, client: true },
     });
   }
 
-
-  
   authorList() {
     return this.prisma.user.findMany({
       where: {
         Blog: {
           some: {
             confirm: 'confirmed',
-          }
-          ,
+          },
         },
       },
-      
-      select:{fullNameEn:true,fullNameAr:true,id:true,avatar:true}
+
+      select: { fullNameEn: true, fullNameAr: true, id: true, avatar: true },
     });
   }
 
   findOne(id: string) {
-    return this.prisma.user.findUniqueOrThrow({ where: { id: id },include:{avatar:true } } );
+    return this.prisma.user.findUniqueOrThrow({
+      where: { id: id },
+      include: { avatar: true },
+    });
   }
 
   update(id: string, data: UpdateUserDto) {
@@ -83,15 +115,26 @@ export class UsersService {
       data,
     });
   }
+
+  updateUserCoach(id: string, data: UpdateUserIsCoach) {
+    return this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
   remove(id: string) {
     return this.prisma.user.delete({ where: { id } });
   }
+
   async findByLogin({ email, password }: UserLogin): Promise<FormatLogin> {
     const user = await this.prisma.user.findFirst({
       where: { email },
       include: {
         Media: true,
         avatar: true,
+        client: true,
+        employee: true,
       },
     });
 
@@ -109,6 +152,7 @@ export class UsersService {
     const { password: p, confirmkey: k, ...rest } = user;
     return rest;
   }
+
   async findByPayload({ email }: any): Promise<any> {
     let user = {};
     user = await this.prisma.user.findFirst({
@@ -120,6 +164,7 @@ export class UsersService {
       });
     return user;
   }
+
   async updatePassword(payload: UpdatePasswordDto, id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { id },

@@ -107,7 +107,7 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
         boxShadow: "0px 0px 2px",
       }}
     >
-      <Stack p={3} spacing={2}>
+      <Stack p={3}  spacing={2}>
         <Stack
           direction="row"
           alignItems="center"

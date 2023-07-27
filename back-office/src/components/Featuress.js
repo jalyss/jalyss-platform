@@ -1,34 +1,53 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifss";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifSession";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  
+} from "@mui/x-data-grid";
+
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Modal from "../components/Commun/Modal";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
+import StyledInput from "./Commun/inputs/StyledInput";
 
 function Featuress() {
   const dispatch = useDispatch();
+  const featuresStore = useSelector((state) => state.tarifSession);
+  const { features } = featuresStore;
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
   const [editLabel, setEditLabel] = useState("");
   const [editRowId, setEditRowId] = useState("");
-  const [editInputVisible, setEditInputVisible] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [labelOfDelete, setLabelOfDelete] = useState("");
+console.log("storfeat",featuresStore);
+ 
 
-  const navigate = useNavigate();
-  const featuresStore = useSelector((state) => state.tarifss);
-  const { features } = featuresStore;
+  useEffect(() => {
+    if (editModal && editRowId) {
+      const row = rows.find((row) => row.id === editRowId);
+      if (row) {
+        setEditLabel(row.label);
+      }
+    }
+    if (basicModal && editRowId) {
+      const row = rows.find((row) => row.id === editRowId);
+      if (row) {
+        setEditLabel(row.label);
+      }
+    }
+  }, [editModal, editRowId, rows]);
 
   useEffect(() => {
     dispatch(fetchFeatures());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (features?.items.length) {
+    if (features?.items?.length) {
       let aux = features?.items.map((e) => {
         return {
           ...e,
@@ -38,11 +57,22 @@ function Featuress() {
       });
       setRows(aux);
     }
-  }, [features.items]);
+  }, [features?.items]);
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
+  const toggleShow2 = () => {
+    setEditModal(!editModal);
+  };
+  useEffect(() => {
+    if (basicModal && idOfDelete) {
+      const row = rows.find((row) => row.id === idOfDelete);
+      if (row) {
+        setLabelOfDelete(row.label);
+      }
+    }
+  }, [basicModal, idOfDelete, rows]);
 
   const handleDeleteFeatureClick = (id) => {
     dispatch(deleteFeatures(id))
@@ -58,63 +88,32 @@ function Featuress() {
       });
   };
 
-  const handleEditLabelClick = (rowId, currentLabel) => {
-    setEditRowId(rowId);
-    setEditLabel(currentLabel);
-    setEditInputVisible(true);
-  };
+  const handleEdit = () => {
+    const label = editLabel;
+    dispatch(editFeature({ id: editRowId, label: label }))
+      .then((res) => {
+        if (res.error) {
+          showErrorToast(res.error.message);
+        } else {
+          showSuccessToast("Features has been Updated");
+        }
+      })
+      .catch((error) => {
+        showErrorToast(error.message);
+      });
 
-  const handleEditLabelChange = (e) => {
-    setEditLabel(e.target.value);
-  };
-console.log("editlab",editLabel);
-  const handleEditLabelSave = () => {
- const label=editLabel
-    dispatch(editFeature({id:editRowId,label:label})).then((res) => {
-      if (res.error) {
-        showErrorToast(res.error.message);
-      } else {
-        showSuccessToast("Features has been Updated");
-      }
-    })
-    .catch((error) => {
-      showErrorToast(error.message);
-    });
-    // Clear the edit state
     setEditRowId("");
     setEditLabel("");
-    setEditInputVisible(false);
-  };
-
-  const handleEditLabelKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleEditLabelSave();
-    }
+    toggleShow2();
   };
 
   const columns = [
-   {
-    field: "label",
-    headerName: "Label",
-    width: 330,
-    editable: false,
-    renderCell: (params) => {
-      console.log(params,"params");
-      if (params.row.id === editRowId && editInputVisible) {
-        return (
-          <input
-            type="text"
-            value={editLabel}
-            onChange={handleEditLabelChange}
-            onKeyPress={handleEditLabelKeyPress}
-            autoFocus
-          />
-        );
-      } else {
-        return params.value;
-      }
+    {
+      field: "label",
+      headerName: "Label",
+      width: 330,
+      editable: false,
     },
-  },,
     {
       field: "createdAt",
       headerName: "CreatedAt",
@@ -127,19 +126,22 @@ console.log("editlab",editLabel);
       headerName: "Actions",
       width: 330,
       cellClassName: "actions",
-      getActions: ({ id, label }) => {
+      getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
+            icon={<AiFillEdit style={{ color: "blue" }} />}
             label="Edit"
             className="textPrimary"
             color="inherit"
-            onClick={() => handleEditLabelClick(id, label)}
+            onClick={() => {
+              toggleShow2();
+              setEditRowId(id);
+            }}
           />,
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
-            color="inherit"
+            color="error"
             onClick={() => {
               toggleShow();
               setIdOfDelete(id);
@@ -168,6 +170,7 @@ console.log("editlab",editLabel);
             pageSizeOptions={[5]}
             checkboxSelection
             disableRowSelectionOnClick
+           
           />
         </Box>
       </div>
@@ -178,13 +181,39 @@ console.log("editlab",editLabel);
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-            Are you sure you want to delete this feature?
+           
+            {`Are you sure you want to delete `}
+            <span style={{ color: "red" ,margin:"10px"}}>{labelOfDelete}</span>
+            {` Feature?`}
           </div>
         }
         confirm={() => {
           handleDeleteFeatureClick(idOfDelete);
           setBasicModal(false);
         }}
+      />
+
+      <Modal
+        basicModal={editModal}
+        setBasicModal={setEditModal}
+        toggleShow={toggleShow2}
+        normal={true}
+        title="Edit feature"
+        body={
+          <div
+            className="d-flex justify-content-center align-items-center "
+            style={{ marginRight: "50px" }}
+          >
+            <StyledInput
+              value={editLabel}
+              label="Label"
+              onChange={(e) => {
+                setEditLabel(e.target.value);
+              }}
+            />
+          </div>
+        }
+        fn={handleEdit}
       />
     </div>
   );

@@ -130,8 +130,8 @@ async findAllCommandLIne(){
               in: command.commandLine.map((l) => l.articleByBranchId),
             },
           },
-          create: dto.commandLine.map((elem) => ({
-            ...elem,
+           create: dto.commandLine.map((elem) => ({
+             ...elem,
           })),
         },
       },
@@ -139,7 +139,7 @@ async findAllCommandLIne(){
   }
 
   remove(id: string) {
-    return `This action removes a #${id} command`;
+    return this.prisma.command.delete({ where: { id } });
   }
 
 

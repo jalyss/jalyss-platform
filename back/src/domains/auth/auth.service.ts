@@ -19,7 +19,7 @@ import { Socket } from 'socket.io';
 
 @Injectable()
 export class AuthService {
-  private connectedUsers: { [userId: string]: Socket } = {}
+  private connectedUsers: { [userId: string]: Socket } = {};
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
@@ -28,6 +28,7 @@ export class AuthService {
     private readonly employeeService: EmployeeService,
   ) {}
   async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
+   
     let status: RegistrationStatus = {
       success: true,
       message: 'ACCOUNT_CREATE_SUCCESS',
@@ -35,6 +36,8 @@ export class AuthService {
 
     try {
       status.data = await this.usersService.create(userDto);
+      console.log(status.data);
+      
     } catch (err) {
       status = {
         success: false,
@@ -47,7 +50,9 @@ export class AuthService {
   async login(loginUserDto: UserLogin): Promise<any> {
     // find user in db
     const user = await this.usersService.findByLogin(loginUserDto);
-
+    if (!user.isClient) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
     // generate and sign token
     const token = this._createToken(user);
 
@@ -55,20 +60,14 @@ export class AuthService {
     // data: user
   }
   //////////////:admin auth
-  async loginAdmin(loginEmployeeDto: EmployeeLogin): Promise<any> {
-    const employee = await this.employeeService.findByLogin(loginEmployeeDto);
-
-    const token = this._createTokenAdmin(employee);
+  async loginAdmin(dto: UserLogin): Promise<any> {
+    const user = await this.usersService.findByLogin(dto);
+    if (user.isClient) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+    const token = this._createToken(user);
 
     return token;
-  }
-  private _createTokenAdmin(args: FormatLoginAdmin): any {
-    const employee: FormatLoginAdmin = args;
-    const Authorization = this.jwtService.sign(employee);
-    return {
-      expiresIn: process.env.EXPIRESIN,
-      Authorization,
-    };
   }
 
   async meAdmin(tokenAdmin: string) {
@@ -130,7 +129,7 @@ export class AuthService {
   async verificationCode(code: string, email: string) {
     const result = await this.prisma.user.findUnique({
       where: { email },
-      include: { avatar: true },
+      include: { avatar: true, client: true, employee: true },
     });
     console.log(result);
 
@@ -167,24 +166,15 @@ export class AuthService {
     }
   }
   async update(id: string, dto: UpdateUserDto) {
-    const user= await this.prisma.user.update({
+    const user = await this.prisma.user.update({
       where: { id },
       data: dto,
-      include:{avatar:true}
+      include: { avatar: true, client: true, employee: true },
     });
-    return this._createToken(user)
-  }
-  trackUserConnection(userId: string, socket: Socket) {
-    this.connectedUsers[userId] = socket;
+    return this._createToken(user);
   }
 
-  trackUserDisconnection(userId: string) {
-    delete this.connectedUsers[userId];
-  }
 
-  getConnectedUsers(): string[] {
-    return Object.keys(this.connectedUsers);
-  }
 }
 
 export interface RegistrationStatus {

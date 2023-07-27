@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "../assets/styles/profile.css";
-import auth, { authUpdate, register } from "../store/auth";
+import { authUpdate } from "../store/auth";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
-import Edit from "../components/Profile/Edit";
-import MyBlogs from "../components/Profile/MyBlogs";
-import MyBookmarks from "../components/Profile/MyBookmarks";
-import Bio from "../components/Profile/bio";
+
 import { navBarDataProfile } from "../constants/NavBarDataProfile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import CropEasy from "../../src/components/Commun/inputs/CropEasy";
+import Modal from "../components/Commun/Modal";
+import Dropdown from "react-bootstrap/Dropdown";
 
 import {
   MDBCol,
@@ -28,26 +30,18 @@ import {
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const authStore = useSelector((state) => state.auth);
-  const blogStore = useSelector((state) => state.blog);
-  const navigate = useNavigate();
-  const me = useSelector((state) => state.me);
+
   const path = useLocation().pathname;
 
-  const blogs = blogStore;
-
   const [user, setUser] = useState({});
-  const [editMode, setEditMode] = useState(false);
+
   const [preview, setPreview] = useState(null);
   const [avatar, setAvatar] = useState(null);
-
-  const [showBio, setShowBio] = useState(false);
-  const [showMyBlogs, setShowMyBlogs] = useState(false);
-  const [showMyBookmarks, setShowMyBookmarks] = useState(false);
-  const [showOrderHistory, setShowOrderHistory] = useState(false);
-  const [showBalance, setShowBalance] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [openCrop, setOpenCrop] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     if (authStore.me) {
@@ -56,23 +50,17 @@ export default function ProfilePage() {
     }
   }, [authStore.me]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser((User) => ({ ...User, [name]: value }));
+  const toggleShowDeleteModal = () => {
+    setShowDeleteModal(!showDeleteModal);
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setPreview(URL.createObjectURL(file));
     setAvatar(file);
-    setEditMode(true);
+    setOpenCrop(true);
   };
-
-  const submitEditProfile = async (event) => {
-    event.preventDefault();
-
-    let aux = { ...user };
-
+  const submitEditAvatar = async () => {
+    let aux = { id: user.id };
     if (avatar !== null) {
       const image = new FormData();
       image.append("file", avatar);
@@ -84,6 +72,20 @@ export default function ProfilePage() {
     } else if (preview === null && user.avatar !== null) {
       aux.avatarId = null;
     }
+    dispatch(authUpdate(aux)).then((res) => {
+      if (!res.error) {
+        showSuccessToast(t("user.updated"));
+        setPreview(null);
+      } else {
+        console.log(res);
+        showErrorToast(res.error.message);
+      }
+    });
+  };
+  const submitEditProfile = async (event) => {
+    event.preventDefault();
+
+    let aux = { ...user };
 
     delete aux.avatar;
     delete aux.Media;
@@ -93,7 +95,6 @@ export default function ProfilePage() {
     dispatch(authUpdate(aux)).then((res) => {
       if (!res.error) {
         showSuccessToast(t("user.updated"));
-        setEditMode(false);
       } else {
         console.log(res);
         showErrorToast(res.error.message);
@@ -102,21 +103,17 @@ export default function ProfilePage() {
   };
 
   const handleRemoveImage = () => {
-    let aux = { ...user };
+    let aux = { id: user.id };
     setPreview(null);
     setAvatar(null);
-
-    delete aux.avatar;
-    delete aux.Media;
-    delete aux.exp;
-    delete aux.iat;
 
     aux.avatarId = null;
 
     dispatch(authUpdate(aux)).then((res) => {
       if (!res.error) {
         showSuccessToast(t("user.updated"));
-        setEditMode(false);
+
+        toggleShowDeleteModal();
       } else {
         console.log(res);
         showErrorToast(res.error.message);
@@ -124,72 +121,98 @@ export default function ProfilePage() {
     });
   };
 
-  return (
+  return !openCrop ? (
     <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
         <MDBRow>
           <MDBCol lg="4">
             <MDBCard className="mb-4">
-              <MDBCardBody className="text-center">
-                {user.avatar || preview ? (
-                  <MDBCardImage
-                    src={preview ? preview : authStore?.me?.avatar?.path}
-                    alt=" "
-                    className="rounded-circle"
-                    style={{ width: "125px" }}
-                    fluid
-                  />
-                ) : (
-                  <MDBCardImage
-                    className="rounded-circle"
-                    style={{ width: "125px" }}
-                    src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
-                    alt="avatar"
-                    fluid
-                  />
-                )}
-                <div className="d-flex justify-content-between align-items-center p-3">
-                  <label htmlFor="upload-image">
-                    <span className="material-symbols-outlined upbtn">
-                      &#128247;
-                    </span>
-                  </label>
-                  <input
-                    id="upload-image"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageChange}
-                  />
+              <MDBCardBody>
+                <div className="text-center d-flex justify-content-center ">
+                  <div className="position-relative" style={{ width: 200 }}>
+                    <MDBCardImage
+                      src={
+                        preview
+                          ? preview
+                          : user?.avatar?.path ||
+                            "https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                      }
+                      alt=" "
+                      style={{
+                        width: "200px",
+                        height: "200px",
+                        objectFit: "cover",
+                      }}
+                      className="rounded-circle"
+                      fluid
+                    />
 
-                  {user.avatar && (
-                    <button
-                      type="button"
-                      className="delete-button"
-                      onClick={handleRemoveImage}
+                    <Dropdown
+                      className="position-absolute"
+                      style={{ bottom: 15, right: 15 }}
                     >
-                      Delete Image
-                    </button>
-                  )}
+                      <Dropdown.Toggle
+                        className="ellipsis-btn dropdownToggleBlogCard upbtn"
+                        style={{
+                          all: "unset",
+                          // backgroundColor:'purple', borderRadius:30
+                        }}
+                      >
+                        <span style={{ color: "white" }}>&#8942;</span>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu size="sm" title="">
+                        <>
+                          <Dropdown.Item
+                            style={{ position: "relative" }}
+                            onClick={(event) => {
+                              document.getElementById("upload-image").click();
+                            }}
+                          >
+                            Upload new Avatar
+                          </Dropdown.Item>
+                          <input
+                            id="upload-image"
+                            type="file"
+                            accept="image/*"
+                            style={{
+                              display: "none",
+                            }}
+                            onChange={handleImageChange}
+                          />
+                        </>
+                        {user.avatar && (
+                          <Dropdown.Item onClick={toggleShowDeleteModal}>
+                            Delete{" "}
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="delete-icon"
+                            />
+                          </Dropdown.Item>
+                        )}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
                 </div>
 
-                { editMode && (user.avatar || preview) && (
-                  <>
+                {preview && (
+                  <div className="d-flex gap-3 justify-content-center m-3">
                     <button
                       type="button"
                       className="cancel-button"
-                      onClick={() => setEditMode(false)}
+                      onClick={() => {
+                        setPreview(false);
+                      }}
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
                       className="save-button"
-                      onClick={submitEditProfile}
+                      onClick={submitEditAvatar}
                     >
                       Save
                     </button>
-                  </>
+                  </div>
                 )}
               </MDBCardBody>
             </MDBCard>
@@ -200,7 +223,14 @@ export default function ProfilePage() {
               <MDBCardBody>
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Full Name</MDBCardText>
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Full Name
+                    </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
@@ -211,7 +241,14 @@ export default function ProfilePage() {
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Email</MDBCardText>
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Email
+                    </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
@@ -223,20 +260,34 @@ export default function ProfilePage() {
 
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Mobile</MDBCardText>
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Mobile
+                    </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{user.tel}</MDBCardText>
+                    <MDBCardText className="text-muted">{user?.client?.tel}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Address</MDBCardText>
+                    <MDBCardText
+                      style={{
+                        color: "rgb(156 39 176 / 70%)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Address
+                    </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {user.address}
+                      {user?.client?.address}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -250,16 +301,26 @@ export default function ProfilePage() {
             {navBarDataProfile.map((elem, i) => (
               <MDBNavbarItem
                 key={i}
+                className="label-btn pointer"
                 style={{
                   backgroundColor:
                     elem.path === path ? "rgb(156 39 176 / 34%)" : "",
+                  borderRadius: "10px",
+                  padding: "5px 10px",
+                  margin: "0 5px",
+                  minWidth: 100,
                 }}
               >
                 <MDBNavbarLink
                   onClick={() => {
                     navigate(elem.path);
                   }}
-                  className="label-btn"
+                  // className="label-btn pointer"
+                  style={{
+                    color: elem.path === path ? "#fff" : "rgb(156 39 176 )",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                  }}
                 >
                   {elem.name}
                 </MDBNavbarLink>
@@ -270,6 +331,16 @@ export default function ProfilePage() {
 
         <Outlet />
       </MDBContainer>
+      <Modal
+        yesFunc={handleRemoveImage}
+        toggleShow={toggleShowDeleteModal}
+        setBasicModal={setShowDeleteModal}
+        basicModal={showDeleteModal}
+        bodOfDelete="Are you sure ro delete you avatar?"
+        ofDelete={true}
+      />
     </section>
+  ) : (
+    <CropEasy {...{ preview, setPreview, setOpenCrop, avatar, setAvatar }} />
   );
 }

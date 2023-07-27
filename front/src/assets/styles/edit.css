@@ -1,0 +1,43 @@
+
+.checkout-form {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .two-column-form {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .form-column {
+    flex: 1;
+  }
+  
+  .two-column-form input,
+  .two-column-form span {
+  
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .two-column-form span {
+ 
+    padding: 8px 12px;
+    display: inline-block;
+  }
+  
+  .confirm-button {
+    background-color: #6d007e;
+    color: #6d007e;
+    padding: 15px 20px; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+ 
+    width: '400px';
+  }
+
+    

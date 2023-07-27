@@ -19,8 +19,60 @@ export const fetchsessions = createAsyncThunk(
   }
 );
 
+export const fetchsessionsRequest = createAsyncThunk(
+  "session/fetchsessionsRequest",
+  async () => {
+    const response = await axios.get(`${config.API_ENDPOINT}/SessionRequest`);
 
+    return response.data;
+  }
+);
+export const fetchOnesessionReq = createAsyncThunk(
+  "session/sessionReq",
+  async (id) => {
+    const response = await axios.get(`${config.API_ENDPOINT}/SessionRequest/${id}`);
+    return response.data;
+  }
+);
+export const editReq = createAsyncThunk(
+  "sessions/editReq",
+  async (args) => {
+    const { id, status } = args;
+    let token = JSON.parse(localStorage.getItem("token"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/SessionRequest/${id}`,
+      status,
+      configs
+    );
+   
+    return response.data;
+  }
+);
 
+export const deletsessionsReq = createAsyncThunk(
+  "session/deletsessionsReq",
+  async (id, { dispatch }) => {
+   
+    let token = JSON.parse(localStorage.getItem("tokensession"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/SessionRequest/${id}`,
+      configs
+    );
+    dispatch(fetchsessionsRequest());
+
+    return response.data;
+  }
+);
 
 export const fetchOnesession = createAsyncThunk(
   "session/session",
@@ -61,7 +113,7 @@ export const deletsessions = createAsyncThunk(
 export const editsession = createAsyncThunk(
   "sessions/Updtsessions",
   async (args, { dispatch }) => {
-    const { id, body } = args;
+    const { id,... body } = args;
     let token = JSON.parse(localStorage.getItem("token"));
     const configs = {
       headers: {
@@ -73,7 +125,7 @@ export const editsession = createAsyncThunk(
       body,
       configs
     );
-    // dispatch(fetchsessions(id))
+    dispatch(fetchsessions({take:10,skip:0}))
     return response.data;
   }
 );
@@ -93,7 +145,6 @@ export const FetchSessionsHasLectures = createAsyncThunk(
       `${config.API_ENDPOINT}/SessionHasLecture`
     );
 
-    
     return response.data;
   }
 );
@@ -101,12 +152,11 @@ export const FetchSessionsHasLectures = createAsyncThunk(
 export const CreateSessionHasLecture = createAsyncThunk(
   "sessionHasLect/addSessionHasLect",
   async (body, { dispatch }) => {
-    
     const response = await axios.post(
       `${config.API_ENDPOINT}/SessionHasLecture`,
       body
     );
-    dispatch(fetchcours())
+    dispatch(fetchcours());
     return response.data;
   }
 );
@@ -115,11 +165,15 @@ export const sessionSlice = createSlice({
   name: "sessions",
   initialState: {
     session: null,
+    request:null,
     sessions: {
       items: [],
       count: 0,
     },
     sessionHasLect: {
+      items: [],
+    },
+    sessionRequest: {
       items: [],
     },
     error: null,
@@ -130,13 +184,20 @@ export const sessionSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchsessions.fulfilled, (state, action) => {
-      state.sessions.items = action.payload;
+      state.sessions.items = action.payload.items;
+      state.sessions.count = action.payload.count;
     });
     builder.addCase(fetchOnesession.fulfilled, (state, action) => {
       state.session = action.payload;
     });
+    builder.addCase(fetchOnesessionReq.fulfilled, (state, action) => {
+      state.request = action.payload;
+    });
     builder.addCase(FetchSessionsHasLectures.fulfilled, (state, action) => {
       state.sessionHasLect = action.payload;
+    });
+    builder.addCase(fetchsessionsRequest.fulfilled, (state, action) => {
+      state.sessionRequest = action.payload;
     });
   },
 });

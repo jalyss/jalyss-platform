@@ -1,15 +1,16 @@
-import React from 'react'
+import React from "react";
 
-function UpdateButton({mt,mb,onClick}) {
+function UpdateButton({ mt, mb, onClick, content, type }) {
   return (
     <button
-        className="outline"
-        style={{ marginTop: mt, marginBottom: mb ,fontWeight:500}}
-        onClick={onClick}
-      >
-       Update
-      </button>
-  )
+      type={type}
+      className="outline"
+      style={{ marginTop: mt, marginBottom: mb, fontWeight: 500 }}
+      onClick={onClick}
+    >
+      {content ? content : "Update"}
+    </button>
+  );
 }
 
-export default UpdateButton
+export default UpdateButton;
