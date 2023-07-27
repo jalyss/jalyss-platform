@@ -101,7 +101,7 @@ function Header() {
                     }}
                   />
                   <div className="d-flex align-items-center ">
-                    <form className="form-inline mt-3 mb-3">
+                    <form className="form-inline mt-3 mb-3" onSubmit={(e)=>e.preventDefault()}>
                       <input
                         className="form-control form-control-sm ml-4 w-125"
                         type="text"
