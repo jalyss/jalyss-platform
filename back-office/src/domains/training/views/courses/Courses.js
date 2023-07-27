@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CreateNeswcours,
-  deletcours,
-  editcours,
-  fetchcours,
-} from "../../../../store/courses";
+import { deletcours, fetchcours } from "../../../../store/courses";
 
 import { showErrorToast, showSuccessToast } from "../../../../utils/toast";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
@@ -15,10 +10,6 @@ import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
 import CreateButton from "../../../../components/Commun/buttons/CreateButton";
 import Modal from "../../../../components/Commun/Modal";
-import StyledInput from "../../../../components/Commun/inputs/StyledInput";
-import AutoCompleteFilter from "../../../../components/Commun/AutoCompleteFilter";
-import { fetchGains } from "../../../../store/gain";
-import { fetchUsers } from "../../../../store/user";
 
 const Courses = () => {
   const coursStore = useSelector((state) => state.courses.courses.items);
@@ -44,7 +35,6 @@ const Courses = () => {
   const navigate = useNavigate();
   useEffect(() => {
     dispatch(fetchcours());
-  
   }, [dispatch]);
 
   useEffect(() => {
@@ -81,8 +71,7 @@ const Courses = () => {
       }
     }
   }, [editModal, editRowId, rows]);
- 
- 
+
   const handleDeletecoursClick = (id) => {
     dispatch(deletcours(id)).then((res) => {
       if (res.error) {
@@ -95,31 +84,7 @@ const Courses = () => {
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
- 
-  const handleEdit = () => {
-    let body = {
-      title: editedTitle,
-      content: editedContent,
-    };
-    dispatch(editcours({ id: editRowId, body }))
-      .then((res) => {
-        if (res.error) {
-          showErrorToast(res.error.message);
-        } else {
-          showSuccessToast("Lecture has been Updated");
-          setEditedContent("");
-          setEditedTitle("");
-        }
-      })
-      .catch((error) => {
-        showErrorToast(error.message);
-      });
 
-    setEditRowId("");
-
-    setEditModal(!editModal);
-  };
- 
   const columns = [
     {
       field: "title",
@@ -153,7 +118,7 @@ const Courses = () => {
             className="textPrimary"
             color="inherit"
             onClick={() => {
-              navigate(`${id}`)
+              navigate(`${id}`);
             }}
           />,
           <GridActionsCellItem
@@ -214,8 +179,6 @@ const Courses = () => {
           setBasicModal(false);
         }}
       />
-      
-     
     </div>
   );
 };
