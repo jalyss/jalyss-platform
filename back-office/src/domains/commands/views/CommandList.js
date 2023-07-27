@@ -4,24 +4,26 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux'
 import isEnglish from '../../../helpers/isEnglish';
 import { useNavigate } from 'react-router-dom';
-import { GiConfirmed ,GiCancel} from 'react-icons/gi';
+import { GiConfirmed, GiCancel } from 'react-icons/gi';
 import { AiFillDelete, AiFillEdit, AiOutlineEye } from "react-icons/ai";
 import { FcCancel } from 'react-icons/fc';
 import { GrAdd } from 'react-icons/gr';
 import { TbTruckDelivery } from 'react-icons/tb';
+import DeleteModal from "../../../components/Commun/Modal";
 
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import Modal from 'react-bootstrap/Modal';
-import { fetchCommands } from '../../../store/command';
+import { fetchCommands, deleteCommand } from '../../../store/command';
 
 function CommandList() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
+  const [elementId, setElementId] = useState();
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const columns = [
-    
+
     // {
     //   field: '',
     //   headerName: 'TOTAL',
@@ -71,8 +73,8 @@ function CommandList() {
         ];
       },
     },
-    
-  
+
+
     {
       field: 'hasDelivery',
       headerName: 'HAS DELIVERY',
@@ -81,7 +83,7 @@ function CommandList() {
       renderCell: ({ value }) => (value ? 'Yes' : 'No'), // Render 'Yes' or 'No' instead of boolean
 
     },
- 
+
     {
       field: 'confirm',
       type: 'actions',
@@ -168,7 +170,9 @@ function CommandList() {
             icon={<AiFillDelete />}
             label="Delete"
             onClick={() => {
-              toggleShowDelete(id);
+              setElementId(id)
+              setBasicModalDelete(!basicModalDelete);
+
             }}
             color="error"
           />,
@@ -181,7 +185,7 @@ function CommandList() {
   ];
 
   const commandStore = useSelector((state) => state.command)
-  console.log(commandStore,"lol")
+  console.log(commandStore, "lol")
   const dispatch = useDispatch()
   const isEng = isEnglish()
   const navigate = useNavigate()
@@ -212,17 +216,36 @@ function CommandList() {
     navigate(`detail/${id}`)
 
   };
-  const handleClick = (id) => {
-    console.log(id);
-    navigate(`edit/${id}`)
 
+  const handleDelete = (id) => {
+    dispatch(deleteCommand(elementId)).then((res) => {
+      if (res.error) {
+        showErrorToast(res.error.message);
+      } else {
+        showSuccessToast("Command has been deleted");
+        dispatch(fetchCommands());
+        setBasicModalDelete(false);
+      }
+    });
   };
+
   return (
-
-
     <div>
-
-
+      <DeleteModal
+        toggleShow={() => { setBasicModalDelete(!true) }}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        normal={!true}
+        ofDelete={true}
+        bodOfDelete={
+          <div className="d-flex justify-content-center align-items-center">
+            You want to Delete this command ?
+          </div>
+        }
+        confirm={() => {
+          handleDelete();
+        }}
+      />
       <div>
         <Button type='button' onClick={() => navigate(`create`)} variant="outlined" endIcon={<GrAdd />} >
           <span className='btn btn-sm '>

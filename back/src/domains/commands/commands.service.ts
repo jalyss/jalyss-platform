@@ -139,7 +139,7 @@ async findAllCommandLIne(){
   }
 
   remove(id: string) {
-    return `This action removes a #${id} command`;
+    return this.prisma.command.delete({ where: { id } });
   }
 
 

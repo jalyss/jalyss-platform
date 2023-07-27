@@ -47,6 +47,16 @@ export class ArticleService {
     });
   }
 
+  findArticleTitleAndId() {
+    return this.prisma.article.findMany({
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+  }
+  
+
   async findAllByBranch(branchId: string, filters: FilterArticle) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
       .id;

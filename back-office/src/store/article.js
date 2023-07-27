@@ -6,6 +6,7 @@ export const fetchArticles = createAsyncThunk("articles/articles", async (id) =>
   const response = await axios.get(`${config.API_ENDPOINT}/articles/`);
   return response.data;
 });
+
 export const fetchArticlesByBranch = createAsyncThunk(
   "articles/articlesbyBranch",
   async (args) => {
@@ -22,6 +23,13 @@ export const fetchArticle = createAsyncThunk(
     const response = await axios.get(`${config.API_ENDPOINT}/articles/one/${id}`);
     return response.data;
   });
+  export const findArticleTitleAndId = createAsyncThunk(
+    "articles/article",
+    async (id) => {
+      const response = await axios.get(`${config.API_ENDPOINT}/articles/getArticleTitles`);
+      return response.data;
+    });
+  
 
 export const fetchArticleByBranch = createAsyncThunk("articles/articleByBranch", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/articles/one-by-branch/${id}`);
@@ -93,7 +101,6 @@ export const articleSlice = createSlice({
     builder.addCase(fetchArticleByBranch.fulfilled, (state, action) => {
       state.article = action.payload;
     });
-
   },
 });
 export default articleSlice.reducer;
