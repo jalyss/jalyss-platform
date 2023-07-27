@@ -14,16 +14,19 @@ console.log(gal,"gall");
 
   return (
     <div className='mb-5'>
-    <TrainingHeading
-    subtitle={subtitle}
-    title="Best moments"
-    mt={20}
-    mb={40}
-  />
-   <CarouselImages images={gal} 
- br={"20px"}
- height={"450px"}
-  />
+      {gal.length >0 &&
+      <>
+      <TrainingHeading
+      subtitle={subtitle}
+      title="Best moments"
+      mt={20}
+      mb={40}
+    />
+     <CarouselImages images={gal} 
+   br={"20px"}
+   height={"450px"}
+    /> </>}
+    
   </div>
   )
 }
