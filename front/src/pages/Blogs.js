@@ -148,7 +148,9 @@ function Blogs() {
                         marginLeft: "20px",
                       }}
                       onClick={() => {
-                        navigate("/BlogsForm");
+                        if(me)
+                        navigate("/BlogsForm")
+                        else navigate("/login")
                       }}
                     >
                       Write yours

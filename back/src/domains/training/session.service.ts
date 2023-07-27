@@ -313,4 +313,10 @@ export class SessionService {
       },
     });
   }
+  // Session Media
+  async createSessionMedia(id: string, mediaIds: string[]) {
+    await this.prisma.mediaSession.createMany({
+      data: mediaIds.map((elem) => ({ mediaId: elem, sessionId: id })),
+    });
+  }
 }
