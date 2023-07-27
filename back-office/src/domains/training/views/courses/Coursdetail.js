@@ -4,7 +4,7 @@ import { purple } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { editcours, fetchOnecouse } from "../../../../store/courses";
+import { editCours, fetchOnecouse } from "../../../../store/courses";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -36,7 +36,6 @@ const Coursdetail = () => {
 
   useEffect(() => {
     setAddcours({ ...addcours, ...lecture });
-
     setSelectedGains(
       lecture?.LectureHasWhatYouWillLearn?.map((elem) => elem.WhatYouWillLearn)
     );
@@ -52,10 +51,32 @@ const Coursdetail = () => {
       [name]: value,
     }));
   };
+  const handleSubmitUpdate = async (event) => {
+    if (editMode) {
+      event.preventDefault();
+      addcours.lecturesHasGainsIds = selectedGains.map((e) => e.id);
+      addcours.cochingIds = selectedCoach.map((e) => e.id);
+      dispatch(editCours(addcours)).then((res) => {
+        if (!res.error) {
+          showSuccessToast(t("cours.updated"));
+          setEditMode(false);
+        } else {
+          console.log(res);
+          showErrorToast(res.error.message);
+        }
+      });
+    } else {
+      setEditMode(true);
+    }
+  };
 
   return (
     <div className="d-flex flex-column justify-content-center w-100 m-3 ">
-      <TableContainer className="w-100" component={Paper} style={{marginTop:80}}>
+      <TableContainer
+        className="w-100"
+        component={Paper}
+        style={{ marginTop: 80 }}
+      >
         <Table aria-label="simple table">
           <TableBody>
             <TableRow
@@ -170,9 +191,7 @@ const Coursdetail = () => {
         <button
           type="submit"
           className="confirm-button mt-3"
-          onClick={() => {
-            setEditMode(true);
-          }}
+          onClick={handleSubmitUpdate}
         >
           <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
         </button>

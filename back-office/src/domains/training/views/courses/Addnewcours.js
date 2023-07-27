@@ -33,9 +33,9 @@ const Addnewcours = () => {
 
   useEffect(() => {
     dispatch(fetchGains());
-
     dispatch(fetchUsers());
   }, [dispatch]);
+
   const Addcours = async (event) => {
     event.preventDefault();
     addcours.lecturesHasGainsIds = selectedGains.map((e) => e.id);
