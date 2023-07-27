@@ -728,7 +728,7 @@ const SessionDetails = () => {
             </Table>
           </TableContainer>
         </div>
-        <div className="p-5">
+        <div className="p-5 d-flex flex-column gap-3">
           <div className="d-flex justify-content-center">
             <div className="d-flex flex-column justify-content-center align-items-center ">
               {!readOnly && (
@@ -739,7 +739,7 @@ const SessionDetails = () => {
                   content="Add Lecture"
                 />
               )}
-
+              <h3>Session Program</h3>
               <Box sx={{ height: 300 }}>
                 <DataGrid
                   rows={addSession?.lectures}
@@ -757,7 +757,7 @@ const SessionDetails = () => {
               </Box>
             </div>
           </div>
-          <div className="d-flex flex-column justify-content-center align-items-center ">
+          <div className="d-flex flex-column justify-content-center align-items-center  ">
             {!readOnly && (
               <AddButton
                 disabled={selectedFeatures?.length ? false : true}
@@ -774,7 +774,7 @@ const SessionDetails = () => {
                 content="Add Tarif"
               />
             )}
-
+            <h3>Session Tarifs</h3>
             <DisplayLottie
               animationData={pricing1}
               style={{ width: "120px", height: "80px" }}
@@ -816,26 +816,27 @@ const SessionDetails = () => {
           )}
         </div>
       </form>
-      <div className="p-5">
-        <input
-          type="file"
-          accept="image/*"
-          className="form-control visually-hidden"
-          id="sessionMediasUpload"
-          onChange={(e) => {
-            console.log(e.target.files);
-            let array = Object.values(e.target.files);
-            setSessionMedias(array);
-          }}
-          ref={fileInputRef}
-          multiple
-        />
-        <AddButton
-          onClick={() => {
-            document.getElementById("sessionMediasUpload").click();
-          }}
-          content="Add Media"
-        />
+      <div className="p-5  ">
+        <div className="d-flex justify-content-end m-2">
+          <input
+            type="file"
+            accept="image/*"
+            className="form-control visually-hidden"
+            id="sessionMediasUpload"
+            onChange={(e) => {
+              console.log(e.target.files);
+              let array = Object.values(e.target.files);
+              setSessionMedias(array);
+            }}
+            multiple
+          />
+          <AddButton
+            onClick={() => {
+              document.getElementById("sessionMediasUpload").click();
+            }}
+            content="Add Media"
+          />
+        </div>
 
         {sessionMedias && (
           <div
