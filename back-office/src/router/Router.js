@@ -97,6 +97,7 @@ import CreateCommand from "../domains/commands/views/CreateCommand";
 import Features from "../domains/training/views/features/Features";
 
 import SessionDetail from "../domains/training/views/sessions/SessionDetail";
+import CommandDetail from "../domains/commands/views/CommandDetail";
 import Requests from "../domains/training/views/requests/Requests";
 import DetailRequest from "../domains/training/views/requests/DetailRequest";
 import Gains from "../domains/training/views/gain/Gains";
@@ -237,6 +238,7 @@ function Router() {
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
               <Route path="create" element={<CreateCommand />} />
+              <Route path="detail/:commandId" element={<CommandDetail/>} />
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
             {/* <Route path="charts" element={<ChartTabs />} /> */}

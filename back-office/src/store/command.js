@@ -21,10 +21,19 @@ export const fetchCommand = createAsyncThunk("commands/command", async (id) => {
 });
 
 export const createCommand = createAsyncThunk("commands/createCommand", async (body, { dispatch }) => {
-  const response = await axios.post(`${config.API_ENDPOINT}/commands/TUN/`, body);
+const x= body.branshId
+delete body.branshId
+  const response = await axios.post(`${config.API_ENDPOINT}/commands/${x}/`, body);
   dispatch(fetchCommand(response.data.id)) // for dispath the result on state.command to see its data in the next page after checkout
   return response.data;
 });
+
+export const updateCommand = createAsyncThunk("commands/createCommand", async (body, { dispatch }) => {
+  const response = await axios.post(`${config.API_ENDPOINT}/commands/one`, body);
+  dispatch(fetchCommand(response.data.id)) // for dispath the result on state.command to see its data in the next page after checkout
+  return response.data;
+});
+
 export const fetchCommandLine = createAsyncThunk("commands/commandLine", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/commands/commandLine/all`)
   return response.data;

@@ -130,8 +130,8 @@ async findAllCommandLIne(){
               in: command.commandLine.map((l) => l.articleByBranchId),
             },
           },
-          create: dto.commandLine.map((elem) => ({
-            ...elem,
+           create: dto.commandLine.map((elem) => ({
+             ...elem,
           })),
         },
       },

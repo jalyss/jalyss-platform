@@ -34,5 +34,5 @@ class CreateCommandLineDto {
     // commandId: string;
     articleByBranchId: string;
     quantity: number
-
 }
+
