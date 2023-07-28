@@ -4,7 +4,6 @@ import { Avatar, Box, IconButton, Switch } from "@mui/material";
 import { Phone, ChatCircleDots, Users, Broadcast } from "phosphor-react";
 
 
-import Conversation from "../components/chatComponents/Conversation";
 import axios from "axios";
 import { useSelector, } from "react-redux";
 import ConnectedUsers from "../components/chatComponents/ConnectedUsers";
