@@ -87,6 +87,7 @@
 
     
     "rsuite": "^5.37.1",
+    "socket.io-client": "^4.7.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
