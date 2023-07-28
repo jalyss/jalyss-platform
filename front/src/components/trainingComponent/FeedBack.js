@@ -1,7 +1,7 @@
 import React from "react";
 import TrainingHeading from "../Commun/TrainingHeading";
-import icon from "../../assets/styles/profile.png";
-import send from "../../assets/styles/send.png"
+import icon from "../../assets/images/profile.png";
+import send from "../../assets/images/send.png"
 
 import StyledInput from "../Commun/inputs/StyledInput";
 import { useState } from "react";

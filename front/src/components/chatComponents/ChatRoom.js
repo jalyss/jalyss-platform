@@ -17,10 +17,10 @@ import React, { useEffect, useState } from "react";
 import Search from "../Commun/Search";
 import SearchIconWrapper from "../Commun/SearchIconWrapper";
 import StyledInputBase from "../Commun/inputs/SearchInputBase";
-import Icon from "../../assets/styles/profile.png";
+import Icon from "../../assets/images/profile.png";
 import StyledBadge from "../Commun/StyledBadge";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchOneRoom, notSeenMessages } from "../../store/chat";
+
 import { useNavigate } from "react-router-dom";
 
 const ChatRoom = ({
@@ -32,11 +32,9 @@ const ChatRoom = ({
   screen,
 }) => {
   const navigate = useNavigate();
-  const authStore = useSelector((state) => state.auth?.me);
-  const chatStore = useSelector((state) => state.chat);
-  const { notSeen } = chatStore;
-  let number = notSeen;
-  const dispatch = useDispatch();
+  const authStore = useSelector((state) => state.auth?.meAdmin);
+ 
+
 
   const [searchText, setSearchText] = useState("");
   const [identifier, setIdentifier] = useState("");
