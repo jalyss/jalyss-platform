@@ -85,6 +85,7 @@
     "reactstrap": "8.8.1",
     "recharts": "^2.5.0",
     "rsuite": "^5.37.1",
+    "socket.io-client": "^4.7.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
