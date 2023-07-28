@@ -6,7 +6,12 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { CircleDashed, MagnifyingGlass, WifiHigh, ChatText } from "phosphor-react";
+import {
+  CircleDashed,
+  MagnifyingGlass,
+  WifiHigh,
+  ChatText,
+} from "phosphor-react";
 import React, { useEffect, useState, useMemo } from "react";
 import Search from "../Commun/Search";
 import SearchIconWrapper from "../Commun/SearchIconWrapper";
@@ -17,42 +22,45 @@ import StyledBadge from "../Commun/StyledBadge";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-
-const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen }) => {
+const ConnectedUsers = ({
+  socket,
+  setActiveComponent,
+  setSelectedUser,
+  screen,
+}) => {
   const authStore = useSelector((state) => state.auth);
 
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const navigate=useNavigate()
-
+  const navigate = useNavigate();
 
   const handleChatTextClick = (user) => {
     setSelectedUser(user);
-    if (screen === 'md')
-      setActiveComponent("conversation");
-      navigate(`/chat/${user?.userId}`)
+    if (screen === "md") setActiveComponent("conversation");
+    navigate(`/chat-box/user/${user?.userId}`);
   };
 
-
   useEffect(() => {
-    if (authStore.me) {
-      socket.emit("online-users", authStore.me.id);
+    if (authStore.meAdmin) {
+      socket.emit("online-users", authStore.meAdmin.id);
     }
-  }, [socket, authStore.me]);
+  }, [socket, authStore.meAdmin]);
 
   useEffect(() => {
-    if (authStore.me) {
+    if (authStore.meAdmin) {
       function listConnectedUsers(users) {
-      
+        console.log('connected user',users);
         setConnectedUsers(users);
       }
-      socket.on(`connected-users/${authStore.me.id}`, listConnectedUsers);
+      socket.on(`connected-users/${authStore.meAdmin.id}`, listConnectedUsers);
       return () => {
-        socket.off(`connected-users/${authStore.me.id}`, listConnectedUsers);
+        socket.off(
+          `connected-users/${authStore.meAdmin.id}`,
+          listConnectedUsers
+        );
       };
     }
-  }, [socket, authStore.me]);
-
+  }, [socket, authStore.meAdmin]);
 
   const ChatElement = ({ user }) => {
     return (
@@ -61,7 +69,6 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
           width: "100%",
           height: 65,
           borderRadius: 1,
-
         }}
       >
         <Stack
@@ -75,9 +82,10 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               variant="dot"
             >
-              <Avatar src={user.user.avatar?user.user.avatar.path : Icon} />
+              <Avatar src={user.user.avatar ? user.user.avatar.path : Icon} />
             </StyledBadge>
-            <Stack direction="row"
+            <Stack
+              direction="row"
               alignItems="center"
               justifyContent="space-between"
               spacing={19}
@@ -85,11 +93,12 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
               <Typography variant="subtitle1">
                 {user.user.fullNameEn}
               </Typography>
-              <IconButton >
-                <ChatText color="#57385c" onClick={() => handleChatTextClick(user)} />
-
+              <IconButton>
+                <ChatText
+                  color="#57385c"
+                  onClick={() => handleChatTextClick(user)}
+                />
               </IconButton>
-
             </Stack>
           </Stack>
         </Stack>
@@ -102,12 +111,12 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
       sx={{
         position: "relative",
         height: "100vh",
-        width: '100%',
+        width: "100%",
         backgroundColor: "#F8FAFF",
         boxShadow: "0px 0px 2px",
       }}
     >
-      <Stack p={3}  spacing={2}>
+      <Stack p={3} spacing={2}>
         <Stack
           direction="row"
           alignItems="center"
@@ -125,14 +134,22 @@ const ConnectedUsers = ({ socket, setActiveComponent, setSelectedUser, screen })
             <SearchIconWrapper>
               <MagnifyingGlass color="#57385c" />
             </SearchIconWrapper>
-            <StyledInputBase placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
+            <StyledInputBase
+              placeholder="Search"
+              onChange={(e) => setSearchText(e.target.value)}
+            />
           </Search>
           <Divider />
           {connectedUsers
-            .filter((u) => u.userId !== authStore.me?.id)
-            .filter((u) => u.user.fullNameEn.toLowerCase().includes(searchText.toLowerCase()))
+            .filter((u) => u.userId !== authStore.meAdmin?.id)
+            .filter((u) =>
+              u.user.fullNameEn.toLowerCase().includes(searchText.toLowerCase())
+            )
             .map((user) => (
-              <ChatElement user={user} handleChatTextClick={handleChatTextClick} />
+              <ChatElement
+                user={user}
+                handleChatTextClick={handleChatTextClick}
+              />
             ))}
         </Stack>
       </Stack>
