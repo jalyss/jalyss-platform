@@ -7,34 +7,32 @@ import { createTrainingBooking } from "../../store/trainingBooking";
 import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import Modal from "../Commun/Modal";
 import { useState } from "react";
-import DisplayLottie from './../../pages/DisplayLottie';
-import warning from "../../constants/warning.json"
-import done from "../../constants/done.json"
+import DisplayLottie from "./../../pages/DisplayLottie";
+import warning from "../../constants/warning.json";
+import done from "../../constants/done.json";
 
 const TrainingPricing = ({ session }) => {
-  const [basicModal,setBasicModal]=useState(false)
+  const [basicModal, setBasicModal] = useState(false);
   const [isError, setIsError] = useState(false);
-  const toggleShow=()=>{
- setBasicModal(!basicModal)
-  }
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
 
-const dispatch=useDispatch()
+  const dispatch = useDispatch();
   function customSort(arr) {
-    
     const sortedArr = [...arr];
     sortedArr.sort((a, b) => {
-      return a.price - b.price
+      return a.price - b.price;
     });
-  
+
     return sortedArr;
   }
 
   console.log("priceSession", session);
- let wiw = []
- Array.isArray(session?.tarifs) ? wiw =session?.tarifs : wiw = [] 
+  let wiw = [];
+  Array.isArray(session?.tarifs) ? (wiw = session?.tarifs) : (wiw = []);
 
-
-console.log("sorted",customSort(wiw))
+  console.log("sorted", customSort(wiw));
 
   return (
     <div id="ele">
@@ -59,19 +57,17 @@ console.log("sorted",customSort(wiw))
               ></div>
               <ul className="list-unstyled my-5 text-small text-left">
                 {(() => {
-                  const sortedFeatures = elem.features
-                    ?.slice()
-                    .sort((a, b) => {
-                      if (a.feature.isAvailable && !b.feature.isAvailable) {
-                        return -1;
-                      } else if (
-                        !a.feature.isAvailable &&
-                        b.feature.isAvailable
-                      ) {
-                        return 1;
-                      }
-                      return 0;
-                    });
+                  const sortedFeatures = elem.features?.slice().sort((a, b) => {
+                    if (a.feature.isAvailable && !b.feature.isAvailable) {
+                      return -1;
+                    } else if (
+                      !a.feature.isAvailable &&
+                      b.feature.isAvailable
+                    ) {
+                      return 1;
+                    }
+                    return 0;
+                  });
 
                   return sortedFeatures.map((element, idx) => (
                     <li
@@ -102,49 +98,56 @@ console.log("sorted",customSort(wiw))
                 id="basic-primary-trigger"
                 onClick={async () => {
                   try {
-                    const res = await dispatch(createTrainingBooking({ sessionTarifId: elem.id }));
+                    const res = await dispatch(
+                      createTrainingBooking({ sessionTarifId: elem.id })
+                    );
                     if (res.error) {
-                      showErrorToast(res.error.message);
-                      setIsError(true)
-                      toggleShow()
-
+                      setIsError(true);
+                      toggleShow();
                     } else {
-                      showSuccessToast("Reservation done!");
-                     toggleShow()
+                      toggleShow();
                     }
                   } catch (error) {
                     showErrorToast(error.message);
-                    setIsError(true)
+                    setIsError(true);
                   }
                 }}
-                
-                
               >
                 Subscribe
               </button>
             </div>
           </div>
         ))}
-      <Modal
-  setBasicModal={setBasicModal}
-  basicModal={basicModal}
-  toggleShow={toggleShow}
-  body={isError ?(
-    <div className="d-flex flex-column justify-content-center align-items-center mb-3">
-<DisplayLottie animationData={warning} style={{ width: "120px", height: "120px" }}  />
-<span>You are alredy Subscribed !</span>
-    </div>
-    
-    ):(  <div className="d-flex flex-column justify-content-center align-items-center mb-3">
-    <DisplayLottie animationData={done} style={{ width: "120px", height: "120px" }}  />
-    <div className="text-center">Reservation has been created successfully. We will contact you soon for the confirmation.</div>
-        </div>)}
-  normal={true}
-  title={isError ? "Error":"Success Reservation"}
-  withoutSave={true}
-/>
-                       
-   
+        <Modal
+          setBasicModal={setBasicModal}
+          basicModal={basicModal}
+          toggleShow={toggleShow}
+          body={
+            isError ? (
+              <div className="d-flex flex-column justify-content-center align-items-center mb-3">
+                <DisplayLottie
+                  animationData={warning}
+                  style={{ width: "120px", height: "120px" }}
+                />
+                <span>You are alredy Subscribed !</span>
+              </div>
+            ) : (
+              <div className="d-flex flex-column justify-content-center align-items-center mb-3">
+                <DisplayLottie
+                  animationData={done}
+                  style={{ width: "120px", height: "120px" }}
+                />
+                <div className="text-center">
+                  Reservation has been created successfully. We will contact you
+                  soon for the confirmation.
+                </div>
+              </div>
+            )
+          }
+          normal={true}
+          title={isError ? "Error" : "Success Reservation"}
+          withoutSave={true}
+        />
       </div>
     </div>
   );
