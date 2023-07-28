@@ -34,7 +34,7 @@ const ChatRoom = ({
   screen,
 }) => {
   const navigate = useNavigate();
-  const authStore = useSelector((state) => state.auth?.me);
+  const authStore = useSelector((state) => state.auth?.meAdmin);
   const chatStore = useSelector((state) => state.chat);
   const { notSeen } = chatStore;
   let number = notSeen;
@@ -57,12 +57,7 @@ const ChatRoom = ({
   };
 
   const ChatElement = () => {
-    // const filteredUsers = filteredChatRooms.filter(
-    //   (e) => e.participants.length === 2
-    // );
-    // const filteredGroups = filteredChatRooms.filter(
-    //   (e) => e.participants.length > 2
-    // );
+
     return (
       <Box
         sx={{
@@ -95,7 +90,7 @@ const ChatRoom = ({
                 
                 if (screen === 'md')
                 setActiveComponent("conversation")
-                navigate(`/chat/${chatRoom.id}`)
+                navigate(`/chat-box/group/${chatRoom.id}`)
 
               }}
             >

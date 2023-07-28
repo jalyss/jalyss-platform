@@ -1,5 +1,3 @@
-
-
 import {
   Avatar,
   Box,
@@ -34,16 +32,14 @@ const ChatRoom = ({
   screen,
 }) => {
   const navigate = useNavigate();
-  const authStore = useSelector((state) => state.auth?.me);
+  const authStore = useSelector((state) => state.auth?.meAdmin);
   const chatStore = useSelector((state) => state.chat);
   const { notSeen } = chatStore;
   let number = notSeen;
   const dispatch = useDispatch();
 
   const [searchText, setSearchText] = useState("");
-  const [identifier, setIdentifier] = useState("")
-
-
+  const [identifier, setIdentifier] = useState("");
 
   const filteredChatRooms = chatRoomList.filter((chatRoom) => {
     let name = chatRoom.participants.filter(
@@ -57,12 +53,6 @@ const ChatRoom = ({
   };
 
   const ChatElement = () => {
-    // const filteredUsers = filteredChatRooms.filter(
-    //   (e) => e.participants.length === 2
-    // );
-    // const filteredGroups = filteredChatRooms.filter(
-    //   (e) => e.participants.length > 2
-    // );
     return (
       <Box
         sx={{
@@ -75,28 +65,29 @@ const ChatRoom = ({
         {filteredChatRooms.map((chatRoom, i) => {
           setIdentifier(chatRoom.id);
 
-
-          let name = ''
-          let user = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0]
+          let name = "";
+          let user = chatRoom.participants.filter(
+            (p) => p.userId !== authStore?.id
+          )[0];
           if (chatRoom.name === null)
-            name = chatRoom.participants.filter(p => p.userId !== authStore?.id)[0].user.fullNameEn
+            name = chatRoom.participants.filter(
+              (p) => p.userId !== authStore?.id
+            )[0].user.fullNameEn;
           else {
-            name = chatRoom.name
+            name = chatRoom.name;
           }
           return (
             <Stack
-              direction="row"
               className="pointer"
+              direction="row"
               alignItems="center"
               justifyContent="space-between"
               key={i}
               onClick={() => {
-                setSelectedUser(chatRoom)
-                
-                if (screen === 'md')
-                setActiveComponent("conversation")
-                navigate(`/chat/${chatRoom.id}`)
+                setSelectedUser(user);
 
+                if (screen === "md") setActiveComponent("conversation");
+                navigate(`/chat-box/user/${user?.userId}`);
               }}
             >
               <Stack direction="row" spacing={2}>
@@ -105,32 +96,35 @@ const ChatRoom = ({
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   variant="dot"
                 >
-                  <Avatar src={Icon} />
+                  <Avatar src={user?.user?.avatar ? user?.user?.avatar?.path : Icon} />
                 </StyledBadge>
                 <Stack>
                   <Typography variant="subtitle1">{name}</Typography>
-                  <Typography variant="caption">{chatRoom.messages[0].text}</Typography>
+                  <Typography variant="caption">
+                    {chatRoom.messages[0]?.text}
+                  </Typography>
                 </Stack>
-
               </Stack>
               <Stack spacing={2} alignItems="center">
                 <Typography sx={{ fontWeight: 600 }} variant="caption">
-                  {chatRoom.messages[0].createdAt.slice(11, 16)}
+                  {chatRoom.messages[0]?.createdAt.slice(11, 16)}
                 </Typography>
-                {chatRoom?._count?.messages? <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> : chatRoom.messages[0].userId !== authStore.id ? (<Checks size={25} weight="thin" color="green" />) :
+                {chatRoom?._count?.messages ? (
+                  <Badge
+                    color="primary"
+                    badgeContent={chatRoom?._count?.messages}
+                  ></Badge>
+                ) : chatRoom.messages[0]?.userId !== authStore.id ? (
+                  <Checks size={25} weight="thin" color="green" />
+                ) : (
+                  <Checks size={25} weight="light" color="blue" />
+                )}
 
-                  (
-                    <Checks size={25} weight="light" color="blue" />
-
-                  )}
-                 
                 {/* <Badge color="primary" badgeContent={chatRoom?._count?.messages}></Badge> */}
               </Stack>
             </Stack>
-          )
-        }
-
-        )}
+          );
+        })}
       </Box>
     );
   };
@@ -150,7 +144,7 @@ const ChatRoom = ({
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">Groups</Typography>
+          <Typography variant="h5">Discussion</Typography>
           <IconButton>
             <BookOpen />
           </IconButton>

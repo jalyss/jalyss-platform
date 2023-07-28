@@ -28,7 +28,6 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import "../../assets/styles/conversation.css";
 
-
 import Lottie from "lottie-react";
 import typing from "../../assets/typing.json";
 import { useRef } from "react";
@@ -36,22 +35,11 @@ import { useRef } from "react";
 import { useParams } from "react-router-dom";
 
 import config from "../../configs";
-import { set } from "lodash";
+import { SocketContext } from "../../apps/Branch";
 
-const Conversation = ({
-  setChatRoomList,
-  room,
-  selectedUser,
-  socket,
-  setSelectedUser,
-}) => {
-  const myId = useSelector((state) => state.auth.me?.id);
-  const userStore = useSelector((state) => state.user);
-  const { user } = userStore;
-
-  // const socket = useContext(SocketContext);
-  const dispatch = useDispatch();
-
+const Conversation = ({}) => {
+  const myId = useSelector((state) => state.auth.meAdmin?.id);
+  const socket = useContext(SocketContext);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [openPicker, setPicker] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -63,46 +51,48 @@ const Conversation = ({
   const [exist, setExist] = useState(null);
 
   const messagesEndRef = useRef(null);
-  const { userId } = useParams();
+  const { userId, groupId } = useParams();
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
   useEffect(() => {
     if (selectedUser) scrollToBottom();
-  }, [inbox, selectedUser]);
+  }, [inbox, userId, groupId]);
 
   useEffect(() => {
-    axios
-      .get(
-        `${config.API_ENDPOINT}/chatRoom/by-participants/${
-          userId ? userId : selectedUser?.userId
-        }/${myId}`
-      )
-      .then((res) => {
-        setExist(res.data.id);
-        if (!selectedUser)
-          setSelectedUser(
-            res.data.participants.filter(
-              (participant) => participant.userId !== myId
-            )[0]
-          );
-      })
-      .catch((err) =>
-        axios
-          .get(
-            `${config.API_ENDPOINT}/chatRoom/one/${
-              userId ? userId : selectedUser?.userId
-            }`
-          )
-          .then((res) => {
-            if (!selectedUser) setSelectedUser(res.data);
-            setExist(res.data.id);
-            setInbox([]);
-          })
-          .catch((err) => console.log(err))
-      );
-  }, [myId, userId]);
+    setInbox([]);
+    if (userId) {
+      axios
+        .get(
+          `${config.API_ENDPOINT}/chatRoom/by-participants/${userId}/${myId}`
+        )
+        .then((res) => {
+          setExist(res.data.id);
+          if (!selectedUser)
+            setSelectedUser(
+              res.data.participants.filter(
+                (participant) => participant.userId !== myId
+              )[0]
+            );
+        })
+        .catch((err) =>
+          axios
+            .get(`${config.API_ENDPOINT}/users/one/${userId}/`)
+            .then((res) => setSelectedUser({ user: res.data }))
+        );
+    } else {
+      axios
+        .get(`${config.API_ENDPOINT}/chatRoom/one/${groupId}`)
+        .then((res) => {
+          if (!selectedUser) setSelectedUser(res.data);
+          setExist(res.data.id);
+          setInbox([]);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [myId, userId, groupId]);
 
   useEffect(() => {
     if (exist) {
@@ -205,7 +195,7 @@ const Conversation = ({
         socket.emit("msg-to-server", payload);
       } else {
         let payload = {
-          receiverId: userId ? userId : selectedUser?.userId,
+          receiverId: userId,
           senderId: myId,
           text: message,
         };
