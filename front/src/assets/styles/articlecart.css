@@ -1,0 +1,29 @@
+/* CSS for larger screens */
+.article-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 300px; 
+}
+
+.article-image {
+  width: 100%;
+  height: auto;
+}
+
+
+@media (max-width: 576px) {
+  .article-card {
+    max-width: 100%; 
+  }
+
+  .article-content {
+    text-align: center;
+  }
+
+  .icon-group {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -459,7 +459,9 @@ CREATE TABLE "SessionType" (
 -- CreateTable
 CREATE TABLE "SessionHasLecture" (
     "sessionId" TEXT NOT NULL,
-    "lectureId" TEXT NOT NULL
+    "lectureId" TEXT NOT NULL,
+    "startAt" TIMESTAMP(3) NOT NULL,
+    "endAt" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateTable

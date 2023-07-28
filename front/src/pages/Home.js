@@ -9,7 +9,7 @@ import { fetchArticlesByBranch } from '../store/article'
 import { identifier } from '../constants/identifier/identifier'
 import ArticleCard from '../components/ArticleCard'
 import TrainingHeading from '../components/Commun/TrainingHeading'
-
+import '../assets/styles/home.css'
 function Home() {
   const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
@@ -29,23 +29,29 @@ function Home() {
           'https://jalyss.com/modules/cz_imageslider/views/img/4ac709113ead13b8f3c71c0e4bed81f0a435d809_25555-01.jpg',
         ]}
       />
-      <HorizontalMenu>
-        {publishingHouseStore.publishingHouses.items.map(({ id, logo,name }) => (
-          <div key={id} className="horizontal-item horizontal-item-publishingHouse ">
-            <img key={id} draggable="false" src={logo?.path} alt={name} />
-          </div>
-        ))}
-      </HorizontalMenu>
-      <TrainingHeading title="Best Sellers"/>
 
       
-      <HorizontalMenu>
-        {articleStore.articles.items.map((element) => (
-          <div key={element.id} className="horizontal-item horizontal-item-article">
-            <ArticleCard article={element} />
+      <HorizontalMenu className="HorizontalMenu">
+        {publishingHouseStore.publishingHouses.items.map(({ id, logo, name }) => (
+        <div key={id} className="horizontal-item horizontal-item-publishingHouse">
+        <img key={id} draggable="false" src={logo?.path} alt={name} />
           </div>
-        ))}
-      </HorizontalMenu>
+           ))}
+</HorizontalMenu>
+
+
+
+      <TrainingHeading className="TrainingHeading" title="Best Sellers" />
+       
+        <HorizontalMenu className="HorizontalMenu">
+         {articleStore.articles.items.map((element) => (
+      
+          <ArticleCard article={element}/>
+  
+          ))}
+          </HorizontalMenu>
+
+
 
       <MDBContainer>
         <MDBRow className="text-center mb-5">
