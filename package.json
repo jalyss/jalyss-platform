@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": "turbo run start --parallel",
-    "build": "yarn workspace front run build && yarn workspace back run build && yarn workspace back-office run build",
+    "build": " NODE_OPTIONS=--max-old-space-size=4096 yarn workspace back-office run build && yarn workspace back run build",
     "watch": "yarn workspaces foreach run build:watch",
     "test": "yarn workspaces foreach run test",
     "lint": "eslint \"{src,back,front,test}/**/*.ts\"",
