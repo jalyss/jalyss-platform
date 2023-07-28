@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { socket } from "../utils/socketIo";
+import { socket } from "../utils/SocketIo";
 
 export const SocketContext = createContext();
 
