@@ -173,7 +173,7 @@ function Prereq() {
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
+         
             disableRowSelectionOnClick
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}

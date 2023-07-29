@@ -157,7 +157,7 @@ function Gainss() {
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
+            
             disableRowSelectionOnClick
            
           />

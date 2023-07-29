@@ -22,7 +22,7 @@ import chat from "./chatStore";
 import blogs from "./blogs";
 import gain from "./gain";
 import provider from "./provider";
-
+import trainingBooking from "./trainingBooking"
 export const store = configureStore({
   reducer: {
     auth,
@@ -48,6 +48,7 @@ export const store = configureStore({
     provider,
     chat,
     gain,
+    trainingBooking
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

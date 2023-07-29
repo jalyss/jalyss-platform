@@ -24,7 +24,7 @@ function Sessions() {
     setBasicModal(!basicModal);
   };
 
-  const take = 10;
+  const take = sessionStore?.count;
 
   useEffect(() => {
     dispatch(fetchsessions({ take, skip }));
@@ -41,9 +41,7 @@ function Sessions() {
     });
   };
 
-  if (sessionStore.length === 0) {
-    return <div>Loading...</div>;
-  }
+ 
   const columns = [
     {
       field: "title",
@@ -131,7 +129,7 @@ function Sessions() {
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
+            
             disableRowSelectionOnClick
           />
         </Box>

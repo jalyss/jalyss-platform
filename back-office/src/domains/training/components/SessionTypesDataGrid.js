@@ -168,7 +168,7 @@ console.log("types",types);
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
+           
             disableRowSelectionOnClick
            
           />
