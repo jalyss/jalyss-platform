@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChatRoomDto } from './dto/create-chatRoom.dto';
+import {
+  CreateChatRoomDto,
+  CreateChatRoomGroupDto,
+} from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -88,6 +91,9 @@ export class ChatRoomService {
 
   findAllRoooooooooooooms() {
     return this.prisma.chatRoom.findMany({
+      where: {
+        isGroup: true,
+      },
       include: {
         messages: true,
         participants: {
@@ -134,6 +140,8 @@ export class ChatRoomService {
   async update(id: string, dto: UpdateChatDto) {
     let chatRoom = await this.findOne(id);
     return await this.prisma.$transaction(async (prisma) => {
+      let toDelete = [];
+
       for (let i = 0; i < chatRoom.participants.length; i++) {
         let response = false;
         for (let j = 0; j < dto.participants.length; j++) {
@@ -141,16 +149,21 @@ export class ChatRoomService {
             response = true;
         }
         if (!response) {
+          toDelete.push(chatRoom.participants[i].userId);
+        }
+      }
+      await Promise.all(
+        toDelete.map(async (elem) => {
           await prisma.userChatRoom.delete({
             where: {
               joinerRoom: {
                 chatRoomId: id,
-                userId: chatRoom.participants[i].userId,
+                userId: elem,
               },
             },
           });
-        }
-      }
+        }),
+      );
 
       return await prisma.chatRoom.update({
         where: { id },
@@ -169,6 +182,26 @@ export class ChatRoomService {
           },
         },
       });
+    });
+  }
+  async createChatRoomGroup(dto: CreateChatRoomGroupDto, user: any) {
+    return await this.prisma.chatRoom.create({
+      data: {
+        name: dto.name,
+        isGroup: true,
+        participants: {
+          create: dto.participants.map((participant) => ({
+            userId: participant.value,
+          })),
+        },
+        messages: {
+          create: { userId: user.id, text: 'hi' },
+        },
+      },
+      include: {
+        participants: true,
+        messages: true,
+      },
     });
   }
 

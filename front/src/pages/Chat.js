@@ -13,6 +13,8 @@ import ChatRoom from "../components/chatComponents/ChatRoom";
 import GroupChat from "../components/chatComponents/GroupChat";
 import { styled } from "@mui/system";
 import { fetchMessages, fetchChatRoom } from "../store/chat";
+import config from "../configs";
+
 
 const Stack0 = styled("div")(({ theme }) => ({
   display: "flex",
@@ -106,7 +108,7 @@ const Chat = () => {
   useEffect(() => {
     if (myId) {
       axios
-        .get(`http://localhost:3001/api/v1/chatRoom/${myId}`)
+        .get(`${config.API_ENDPOINT}/chatRoom/by-user/${myId}`)
         .then((response) => {
           const data = response.data;
           setChatRoomList(data);

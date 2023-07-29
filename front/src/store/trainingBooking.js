@@ -2,7 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-
+export const fetchTrainingBookings = createAsyncThunk("training/bookingss", async () => {
+  const response = await axios.get(`${config.API_ENDPOINT}/trainingBooking`);
+  return response.data;
+});
 
 
 
@@ -45,7 +48,9 @@ export const trainingBookingSlice = createSlice({
     builder.addCase(createTrainingBooking.fulfilled, (state, action) => {
       state.trainingBookings.items = action.payload;
     });
-   
+    builder.addCase(fetchTrainingBookings.fulfilled, (state, action) => {
+      state.trainingBookings.items = action.payload;
+    });
    
   },
 });

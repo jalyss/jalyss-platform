@@ -19,6 +19,11 @@ export class TrainingBookingController {
     return this.trainingBookingService.create(dto,user.id);
   }
 
+  @Get('/bySession/:sessionId')
+  findAllBySession(@Param('sessionId') sessionId: string) {
+    return this.trainingBookingService.findAllBySession(sessionId);
+  }
+
   @Get()
   findAll() {
     return this.trainingBookingService.findAll();

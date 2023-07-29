@@ -95,11 +95,13 @@ export class UsersService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.user.findUniqueOrThrow({
+  async findOne(id: string) {
+    const user = await this.prisma.user.findUniqueOrThrow({
       where: { id: id },
-      include: { avatar: true },
+      include: { avatar: true, client: true },
     });
+    const { confirmkey, password, ...rest } = user;
+    return rest;
   }
 
   update(id: string, data: UpdateUserDto) {

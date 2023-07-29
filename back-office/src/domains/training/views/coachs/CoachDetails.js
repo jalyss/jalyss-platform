@@ -42,10 +42,10 @@ function CoachDetails() {
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile coches</h2>
       <form className="checkout-form">
-        <div className="d-flex flex-wrap">
-          <label id="image">{t("image")}</label>
+        <div className="">
+         
 
-          <div class="image-upload">
+          <div class="d-flex justify-content-center align-items-center image-upload">
 
             <img src={user?.avatar?.path} alt="image" style={{ width: '100%', marginBottom: '10px' }} /> 
           </div>
@@ -53,66 +53,58 @@ function CoachDetails() {
        
 
           <div className="d-flex justify-content-center w-100 m-3">
-            {/* <TableContainer className="w-100" component={Paper}>
+            <TableContainer className="w-100" component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
+                    <TableCell className="fw-bold" >
                       {t("nameAr")}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell >
                     
-                        <span>{coach?.user?.fullNameEn}</span>
+                        <span>{user?.fullNameEn}</span>
+                      
+                    </TableCell>
+                    <TableCell className="fw-bold" >
+                      Email
+                    </TableCell>
+                    <TableCell >
+                      
+                        <span>{user?.email}</span>
                       
                     </TableCell>
                   </TableRow>
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
-                      {t("nameEn")}
-                    </TableCell>
-                    <TableCell align="right">
-                      
-                        <span>{coach?.user?.email}</span>
-                      
-                    </TableCell>
+                  
                   </TableRow>
                   <TableRow
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
-                      {t("email")}
+                    <TableCell className="fw-bold" >
+                      adress
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell >
                      
-                        <span>{coach?.user?.address}</span>
+                        <span>{user?.client.address}</span>
                       
                     </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
+                    <TableCell className="fw-bold" >
                       {t("phone")}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell >
                      
-                        <span>{coach?.user?.tel}</span>
+                        <span>{user?.client.tel}</span>
                       
                     </TableCell>
                   </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  ></TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  ></TableRow>
+                 
                 </TableBody>
               </Table>
-            </TableContainer> */}
+            </TableContainer>
           </div>
         </div>
 

@@ -246,7 +246,7 @@ function Requests() {
             },
           }}
           pageSizeOptions={[5]}
-          checkboxSelection
+        
           disableRowSelectionOnClick
         />
       </Box>
