@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import TrainingHeading from "../Commun/TrainingHeading";
 import { FaCheck, FaTimes } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createTrainingBooking } from "../../store/trainingBooking";
 import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import Modal from "../Commun/Modal";
@@ -10,10 +10,13 @@ import { useState } from "react";
 import DisplayLottie from "./../../pages/DisplayLottie";
 import warning from "../../constants/warning.json";
 import done from "../../constants/done.json";
+import { useNavigate } from "react-router-dom";
 
 const TrainingPricing = ({ session }) => {
   const [basicModal, setBasicModal] = useState(false);
   const [isError, setIsError] = useState(false);
+  const me = useSelector((state) => state.auth.me);
+const navigate=useNavigate()
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
@@ -32,7 +35,7 @@ const TrainingPricing = ({ session }) => {
   let wiw = [];
   Array.isArray(session?.tarifs) ? (wiw = session?.tarifs) : (wiw = []);
 
-  console.log("sorted", customSort(wiw));
+  console.log("sorted", me);
 
   return (
     <div id="ele">
@@ -97,21 +100,24 @@ const TrainingPricing = ({ session }) => {
                 }}
                 id="basic-primary-trigger"
                 onClick={async () => {
-                  try {
-                    const res = await dispatch(
-                      createTrainingBooking({ sessionTarifId: elem.id })
-                    );
-                    if (res.error) {
+                  if (me) {
+                    try {
+                      const res = await dispatch(createTrainingBooking({ sessionTarifId: elem.id }));
+                      if (res.error) {
+                        setIsError(true);
+                        toggleShow();
+                      } else {
+                        toggleShow();
+                      }
+                    } catch (error) {
+                      showErrorToast(error.message);
                       setIsError(true);
-                      toggleShow();
-                    } else {
-                      toggleShow();
                     }
-                  } catch (error) {
-                    showErrorToast(error.message);
-                    setIsError(true);
+                  } else {
+                    navigate("/login");
                   }
                 }}
+                
               >
                 Subscribe
               </button>

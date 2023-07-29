@@ -50,6 +50,7 @@ import UpdateButton from "../../../../components/Commun/buttons/UpdateButton";
 import uploadImage from "../../../../assets/images/uploadImage.png";
 import AddLecture from "../../components/AddLecture";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import Subscribers from "../../components/Subscribers";
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
@@ -869,6 +870,7 @@ const SessionDetails = () => {
           ))}
         </div>
       </div>
+      <Subscribers/>
       <Modal
         toggleShow={() => setShowAddTarifModal(false)}
         basicModal={showAddTarifModal}

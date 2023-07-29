@@ -168,7 +168,6 @@ console.log("storfeat",featuresStore);
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
             disableRowSelectionOnClick
            
           />
