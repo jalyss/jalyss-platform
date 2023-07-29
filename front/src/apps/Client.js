@@ -13,40 +13,40 @@ export const SocketContext = createContext();
 
 function Client() {
   const isRtl = useContext(RtlContext);
-  const dispatch = useDispatch()
-  const authStore = useSelector(state => state.auth)
+  const dispatch = useDispatch();
+  const authStore = useSelector((state) => state.auth);
 
   useEffect(() => {
-    let aux = localStorage.getItem('token')
+    let aux = localStorage.getItem("token");
     if (aux) {
-      let token = JSON.parse(aux).Authorization
-      dispatch(me(token))
+      let token = JSON.parse(aux).Authorization;
+      dispatch(me(token));
     }
-  }, [dispatch])
+  }, [dispatch]);
   // for connect
   useEffect(() => {
-    if (authStore.me)
-      socket.emit('connection', { userId: authStore.me.id })
-  }, [authStore.me])
-  //for list Connected Users
-  
+    if (authStore.me) socket.emit("connection", { userId: authStore.me.id });
+  }, [authStore.me]);
+
   // for reconnection
   useEffect(() => {
     if (authStore.me) {
       function disconnect(users) {
-        socket.emit('connection', { userId: authStore.me.id })
+        socket.emit("connection", { userId: authStore.me.id });
       }
-      socket.on(`disconnect/${authStore.me.id}`, disconnect)
-      return () => { socket.off(`disconnect/${authStore.me.id}`, disconnect) }
+      socket.on(`disconnect/${authStore.me.id}`, disconnect);
+      return () => {
+        socket.off(`disconnect/${authStore.me.id}`, disconnect);
+      };
     }
-  }, [socket, authStore.me])
+  }, [socket, authStore.me]);
 
   return (
     <div className={`${isRtl}`}>
       <SocketContext.Provider value={socket}>
         <CartProvider>
           <Navbar />
-          
+
           <Outlet />
           <Footer />
         </CartProvider>

@@ -17,6 +17,7 @@ import { ChatCircleDots } from "phosphor-react";
 import { IconButton } from "@mui/material";
 
 import Container from "react-bootstrap/Container";
+import isEnglish from "../helpers/isEnglish";
 
 function Header() {
   const { t, i18n } = useTranslation();
@@ -27,6 +28,7 @@ function Header() {
   const { isEmpty, totalItems, cartTotal } = useCart();
   const categoryStore = useSelector((state) => state.category);
   const [showArticleMenu, setShowArticleMenu] = useState(false);
+  const isEng = isEnglish();
   const currentLanguage = useMemo(() => i18n?.languages[0], [i18n?.languages]);
 
   const [show, setShow] = useState(false);
@@ -54,11 +56,16 @@ function Header() {
       <Navbar expand="lg" className="bg-darkPurple p-0" variant="dark">
         <Container fluid className="p-0">
           <div className="w-100">
-            <div className="w-100 d-flex align-items-center  justify-content-between ">
-              <div className="hidden-padding">
+            <div className="w-100 d-flex align-items-center  justify-content-between p-3">
+              <div
+                className="hidden-padding"
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
                 <img
                   className="lg-hide "
-                  height={70}
+                  height={50}
                   alt="Jalyss logo"
                   src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
                 />
@@ -66,7 +73,7 @@ function Header() {
               <div className="position-relative header-icon-responsive p-4">
                 <button
                   variant="primary"
-                  onClick={handleShow}
+                  // onClick={handleShow}
                   className="cart_offcanvas"
                 >
                   <BiCartDownload size="40px" color="white" />
@@ -83,15 +90,18 @@ function Header() {
 
             <Navbar.Collapse id="navbarScroll">
               <div className="w-100">
-                <div className="d-flex justify-content-between align-items-center p-4  flex-wrap">
+                <div className="d-flex justify-content-between align-items-center p-4 pt-0  flex-wrap">
                   <img
                     className="md-hide"
                     height={70}
                     alt=""
                     src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
+                    onClick={() => {
+                      navigate("/");
+                    }}
                   />
                   <div className="d-flex align-items-center ">
-                    <form className="form-inline mt-3 mb-3">
+                    <form className="form-inline mt-3 mb-3" onSubmit={(e)=>e.preventDefault()}>
                       <input
                         className="form-control form-control-sm ml-4 w-125"
                         type="text"
@@ -126,7 +136,8 @@ function Header() {
                       </div>
                     )}
                   </div>
-                  <div>
+                  <div className="flex-column d-flex">
+                    
                     {me ? (
                       <Dropdown>
                         <Dropdown.Toggle
@@ -155,7 +166,7 @@ function Header() {
                           <Dropdown.Item
                             onClick={() => {
                               localStorage.removeItem("token");
-                              window.location.pathname="/login";
+                              window.location.pathname = "/login";
                             }}
                           >
                             LogOut
@@ -180,12 +191,17 @@ function Header() {
                         </button>
                       </div>
                     )}
+                    {me ? (
+                      <span className="" style={{ color: "white" }}>
+                        {isEng ? me.fullNameEn : me.fullNameAr}
+                      </span>
+                    ) : null}
                   </div>
-                  <div className="d-flex align-items-center mx-3 ">
+                  <div className="d-flex align-items-center mx-3 flex-column">
                     <div className="position-relative md-hide">
                       <button
                         variant="primary"
-                        onClick={handleShow}
+                        // onClick={handleShow}
                         className="cart_offcanvas"
                       >
                         <BiCartDownload size="40px" color="white" />
@@ -197,7 +213,7 @@ function Header() {
                     </div>
                     <div className="text-white mx-2 md-hide">
                       <p className="m-0 text-right">{t("navbar.cart")}</p>
-                      <p className="m-0">
+                      <p className="m-0 text-center">
                         {cartTotal} {t("navbar.tot")}{" "}
                       </p>
                     </div>
@@ -207,50 +223,18 @@ function Header() {
                   className="d-flex gap-2 fs-5 justify-content-around align-items-center bg-white flex-wrap"
                   style={{ height: 70 }}
                 >
-                  <li className="nav-item dropdown mx-2">
-                    <a
-                      className="nav-link dropdown-toggle"
-                      onClick={() => {
-                        navigate("/articles");
-                      }}
-                      id="articles-dropdown"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="true"
-                    >
-                      {t("navbar.articles")}
-                    </a>
-                    <ul
-                      className="dropdown-menu"
-                      aria-labelledby="articles-dropdown"
-                    >
-                      {categoryStore.categories.items.map((elem, i) => (
-                        <li key={i}>
-                          <a
-                            onClick={() => {
-                              navigate(`/articles/cat/${elem.id}`);
-                            }}
-                            className="dropdown-item"
-                          >
-                            {currentLanguage === "en"
-                              ? elem.nameEn
-                              : elem.nameAr}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-
-                  <li className="nav-item active mx-2">
+                  {/* <li className="nav-item active mx-2">
                     <button
                       className="nav-link btn btn-link"
                       onClick={() => {
-                        navigate("/spaceJalyss");
+                        navigate("/");
                       }}
                     >
-                      {t("navbar.space")}
+                      {t("navbar.home")}
                     </button>
-                  </li>
+                  </li> */}
+
+                  
                   <li className="nav-item active mx-2">
                     <button
                       className="nav-link btn btn-link"
@@ -270,6 +254,57 @@ function Header() {
                     >
                       {t("navbar.blogs")}
                     </button>
+                  </li>
+                  <li className="nav-item active mx-2">
+                    <button
+                      className="nav-link btn btn-link"
+                      onClick={() => {
+                        navigate("/spaceJalyss");
+                      }}
+                    >
+                      {t("navbar.space")}
+                    </button>
+                  </li>
+                  <li className="nav-item dropdown mx-2">
+                    <button
+                      className="nav-link btn btn-link"
+                      onClick={() => {
+                        navigate("/articles");
+                      }}
+                    >
+                      {t("navbar.market")}
+                    </button>
+                    {/*<a
+                      className="nav-link dropdown-toggle"
+                      onClick={() => {
+                        navigate("/articles");
+                      }}
+                      id="articles-dropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="true"
+                    >
+                      {t("navbar.articles")}
+                    </a>
+                     <ul
+                      className="dropdown-menu"
+                      aria-labelledby="articles-dropdown"
+                    >
+                      {categoryStore.categories.items.map((elem, i) => (
+                        <li key={i}>
+                          <a
+                            onClick={() => {
+                              navigate(`/articles/cat/${elem.id}`);
+                            }}
+                            className="dropdown-item"
+                          >
+                            {currentLanguage === "en"
+                              ? elem.nameEn
+                              : elem.nameAr}
+                          </a>
+                        </li>
+                      ))}
+                    </ul> */}
                   </li>
                 </div>
               </div>

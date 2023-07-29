@@ -1,11 +1,6 @@
 {
-  "dependencies": {
-    "@nestjs/mapped-types": "*"
-    
-   
-  },
+  "dependencies": {},
   "name": "@jalyss-platform/root",
-  "packageManager": "yarn@3.2.0",
   "private": true,
   "workspaces": [
     "back",
@@ -42,6 +37,6 @@
     "tls": false
   },
   "engines": {
-    "node": ">=18 "
+    "node": ">=18 <=19"
   }
 }

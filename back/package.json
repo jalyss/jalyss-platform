@@ -28,6 +28,7 @@
     "prisma:build": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
+    "@angular-devkit/schematics": "^15.2.1",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.3.10",
     "@nestjs/config": "^2.3.1",
@@ -37,6 +38,7 @@
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/platform-socket.io": "^9.4.0",
+    "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^6.2.1",
     "@nestjs/websockets": "^9.4.0",
     "@prisma/client": "^4.15.0",
@@ -45,6 +47,7 @@
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "events": "^3.3.0",
     "liquidjs": "^10.6.1",
     "liquidjs-color-filters": "^1.0.0",
     "multer": "^1.4.5-lts.1",

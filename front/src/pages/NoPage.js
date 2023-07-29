@@ -28,7 +28,7 @@ function NoPage() {
         </div>
 
 
-        <div className="objects">
+        {/* <div className="objects">
 
           <div className="box_astronaut">
             <img
@@ -39,8 +39,8 @@ function NoPage() {
           </div>
 
 
-        </div>
-        <div className="objects">
+        </div> */}
+        {/* <div className="objects">
 
           <div className="box_astronaut">
             <img
@@ -50,7 +50,7 @@ function NoPage() {
             />
           </div>
 
-        </div>
+        </div> */}
 
 
         <div className="glowing_stars">

@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -22,6 +27,9 @@ import { WorkSpacesModule } from './domains/work-spaces/work-spaces.module';
 import { LikesModule } from './likes/likes.module';
 import { TrainingModule } from './domains/training/training.module';
 import { QuestionsModule } from './domains/questions/questions.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+// import { FrontendMiddleware } from './middlewere/front.middlewere';
 
 import { ProvidersModule } from './domains/providers/providers.module';
 import { FunctionalAreasModule } from './domains/functional-areas/functional-areas.module';
@@ -47,6 +55,17 @@ import { FunctionalAreasModule } from './domains/functional-areas/functional-are
     LikesModule,
     TrainingModule,
     QuestionsModule,
+    ServeStaticModule.forRoot({
+      serveStaticOptions: {
+        maxAge: 604800, // one week
+        cacheControl: false,
+        etag: false,
+      },
+      rootPath: join(__dirname, '../../../back-office', 'build'),
+      // serveRoot: '/back-office',
+      // renderPath: '/back-office',
+    }),
+    
    
     ProvidersModule,
    FunctionalAreasModule
@@ -55,4 +74,9 @@ import { FunctionalAreasModule } from './domains/functional-areas/functional-are
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+  //   consumer.apply(FrontendMiddleware).forRoutes('*');
+  }
+
+}

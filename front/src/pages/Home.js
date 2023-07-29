@@ -29,25 +29,25 @@ function Home() {
           'https://jalyss.com/modules/cz_imageslider/views/img/4ac709113ead13b8f3c71c0e4bed81f0a435d809_25555-01.jpg',
         ]}
       />
-      <HorizontalMenu>
+      {/* <HorizontalMenu>
         {publishingHouseStore.publishingHouses.items.map(({ id, logo,name }) => (
           <div key={id} className="horizontal-item horizontal-item-publishingHouse ">
             <img key={id} draggable="false" src={logo?.path} alt={name} />
           </div>
         ))}
       </HorizontalMenu>
-      <TrainingHeading title="Best Sellers"/>
+      <TrainingHeading title="Best Sellers"/> */}
 
       
-      <HorizontalMenu>
+      {/* <HorizontalMenu>
         {articleStore.articles.items.map((element) => (
           <div key={element.id} className="horizontal-item horizontal-item-article">
             <ArticleCard article={element} />
           </div>
         ))}
-      </HorizontalMenu>
+      </HorizontalMenu> */}
 
-      <MDBContainer>
+      {/* <MDBContainer>
         <MDBRow className="text-center mb-5">
           <MDBCol>
             <img
@@ -86,7 +86,7 @@ function Home() {
             <p className="text-color-grey">صفحتنا بالإنستاغرام</p>
           </MDBCol>
         </MDBRow>
-      </MDBContainer>
+      </MDBContainer> */}
     </>
   )
 }

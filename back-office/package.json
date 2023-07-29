@@ -6,8 +6,9 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@bumaga/tabs": "^0.2.0",
     "@emoji-mart/data": "^1.1.2",
+    "@emoji-mart/react": "^1.1.1",
     "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
+    "@emotion/styled": "^11.11.0",
     "@faker-js/faker": "^7.6.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -86,6 +87,8 @@
     "react-whatsapp-chat-widget": "^1.1.6",
     "reactstrap": "8.8.1",
     "recharts": "^2.5.0",
+
+    
     "rsuite": "^5.37.1",
     "socket.io-client": "^4.7.1",
     "web-vitals": "^2.1.4"

@@ -1,20 +1,20 @@
 {
-    "navbar": {
-        "cart": "Your Cart",
-        "tot" : " TND ",
-        "language":"Language",
-        "devise":"Devise",
-       
-        "account": {
-            "profile": "My Profile",
-            "signup": "Sign Up"
-        },
-        "searchInput":"Search....",
-        "searchButton":"Searching",
-        "articles":"Articles",
-        "home":"Home",
-        "space":"Spaces",
-        "training":"Traning",
-        "blogs":"Blogs"
-    }
+  "navbar": {
+    "cart": "Your Cart",
+    "tot": " TND ",
+    "language": "Language",
+    "devise": "Devise",
+
+    "account": {
+      "profile": "My Profile",
+      "signup": "Sign Up"
+    },
+    "searchInput": "Search....",
+    "searchButton": "Searching",
+    "market": "Market",
+    "home": "Home",
+    "space": "Spaces",
+    "training": "Traning",
+    "blogs": "Blogs"
+  }
 }
