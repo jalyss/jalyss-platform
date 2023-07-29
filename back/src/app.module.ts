@@ -24,6 +24,7 @@ import { TrainingModule } from './domains/training/training.module';
 import { QuestionsModule } from './domains/questions/questions.module';
 
 import { ProvidersModule } from './domains/providers/providers.module';
+import { FunctionalAreasModule } from './domains/functional-areas/functional-areas.module';
 
 
 @Module({
@@ -48,7 +49,7 @@ import { ProvidersModule } from './domains/providers/providers.module';
     QuestionsModule,
    
     ProvidersModule,
-   
+   FunctionalAreasModule
     
   ],
   controllers: [AppController],

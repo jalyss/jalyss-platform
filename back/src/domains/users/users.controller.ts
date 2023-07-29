@@ -78,7 +78,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiSecurity('Aaccess-key')
+  @ApiSecurity('apiKey')
   @UseInterceptors(ClassSerializerInterceptor)
   @Put('isActive/:id')
   public async updateUser(@Param('id') id: string, @Body()

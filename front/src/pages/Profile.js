@@ -270,7 +270,9 @@ export default function ProfilePage() {
                     </MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{user?.client?.tel}</MDBCardText>
+                    <MDBCardText className="text-muted">
+                      {user?.client?.tel}
+                    </MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />

@@ -557,10 +557,10 @@ const SessionDetails = () => {
                       </Form.Item>
                     )}
                   </TableCell>
-                  <TableCell className="fw-bold">Previous Session:</TableCell>
+                 {session?.previousSesion &&  <TableCell className="fw-bold">Previous Session:</TableCell>}
                   <TableCell>
                     {readOnly ? (
-                      <span>{session?.previousSesion.title}</span>
+                      <span>{session?.previousSesion?.title}</span>
                     ) : (
                       <select
                         value={previousSessionId}

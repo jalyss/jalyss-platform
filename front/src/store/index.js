@@ -19,6 +19,7 @@ import service from "./space";
 import mentorRequest from "./mentorRequest";
 import sessionFeedback from "./sessionFeedback";
 import trainingBooking from "./trainingBooking";
+import functionalArea from "./functionalArea";
 export const store = configureStore({
   reducer: {
     article,
@@ -28,6 +29,7 @@ export const store = configureStore({
     author,
     country,
     city,
+    functionalArea,
     command,
     auth,
     blog,
@@ -37,9 +39,9 @@ export const store = configureStore({
     chat,
     faq,
     service,
- sessionFeedback,
- mentorRequest,
- trainingBooking
+    sessionFeedback,
+    mentorRequest,
+    trainingBooking,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

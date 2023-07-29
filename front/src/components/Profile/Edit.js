@@ -13,8 +13,17 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
+import { fetchCountries } from "../../store/country";
+import { fetchCities } from "../../store/city";
+import { fetchFunctionalAreas } from "../../store/functionalArea";
 
 const Edit = () => {
+  const countryStore = useSelector((state) => state.country);
+  const { countries } = countryStore;
+  const cityStore = useSelector((state) => state.city);
+  const { cities } = cityStore;
+  const functionalAreasStore = useSelector((state) => state.functionalArea);
+  const { functionalAreas } = functionalAreasStore;
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const authStore = useSelector((state) => state.auth);
@@ -28,22 +37,33 @@ const Edit = () => {
   const [editMode, setEditMode] = useState(false);
   const [preview, setPreview] = useState(null);
   const [avatar, setAvatar] = useState(null);
+  const [countryId, setCountryId] = useState(null);
+  const [cityId, setCityId] = useState(null);
+  const [functionalAreaId, setFunctionalAreaId] = useState(null);
 
   useEffect(() => {
     if (authStore.me) {
       setUser(authStore.me);
     }
-  }, [authStore.me]);
+    dispatch(fetchCountries());
+    dispatch(fetchFunctionalAreas());
+  }, [authStore.me, dispatch]);
+  console.log(functionalAreas);
+
+  useEffect(() => {
+    dispatch(fetchCities(user.countryId));
+  }, [user.countryId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((User) => ({ ...User, [name]: value }));
   };
+  console.log("countryId", user.countryId);
   // fama hajet m3ach mawjoudin fil user direct walou mawjoudin fil client ma3neha user.client
-// l back khadmou khayri 
-// ena badel wala 3ana user w el user ynajem ykoun client w ynajem ykoun employee eyy fhmtek 
-// hatta fil bach office fama hajet user.employee eyy kima lcoach bravo
-
+  // l back khadmou khayri
+  // ena badel wala 3ana user w el user ynajem ykoun client w ynajem ykoun employee eyy fhmtek
+  // hatta fil bach office fama hajet user.employee eyy kima lcoach bravo
+console.log("user",user);
   const submitEditProfile = async (event) => {
     if (!editMode) {
       event.preventDefault();
@@ -211,15 +231,31 @@ const Edit = () => {
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
-                      <input
-                        type="tel"
-                        class="form-control mt-2"
-                        id="country"
-                        name="countryId"
-                        value={user?.client?.country?.nameAr}
+                      <select
+                        value={user.countryId}
+                        class="form-select"
+                        aria-label="Default select example"
                         onChange={handleChange}
-                      />
+                        name="countryId"
+                      >
+                        <option disabled selected>
+                          Select your country
+                        </option>
+                        {countries?.items.map((country, index) => (
+                          <option key={index} value={country.id}>
+                            {country.nameEn}
+                          </option>
+                        ))}
+                      </select>
                     ) : (
+                      // <input
+                      //   type="tel"
+                      //   class="form-control mt-2"
+                      //   id="country"
+                      //   name="countryId"
+                      //   value={user?.client?.country?.nameAr}
+                      //   onChange={handleChange}
+                      // />
                       <span>{user?.client?.country?.nameAr}</span>
                     )}
                   </TableCell>
@@ -234,14 +270,30 @@ const Edit = () => {
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
-                      <input
-                        class="form-control mt-2"
-                        id="city"
+                      <select
+                        value={user.cityId}
                         name="cityId"
-                        value={user?.client?.city?.nameAr}
+                        class="form-select"
+                        aria-label="Default select example"
                         onChange={handleChange}
-                      />
+                      >
+                        <option disabled selected>
+                          Select your city
+                        </option>
+                        {cities?.items.map((city, index) => (
+                          <option key={index} value={city.id}>
+                            {city.nameEn}
+                          </option>
+                        ))}
+                      </select>
                     ) : (
+                      // <input
+                      //   class="form-control mt-2"
+                      //   id="city"
+                      //   name="cityId"
+                      //   value={user?.client?.city?.nameAr}
+                      //   onChange={handleChange}
+                      // />
                       <span>{user?.client?.city?.nameAr}</span>
                     )}
                   </TableCell>
@@ -256,14 +308,30 @@ const Edit = () => {
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
-                      <input
-                        class="form-control mt-2"
-                        id="functionalArea"
+                      <select
+                        value={user.functionalAreaId}
                         name="functionalAreaId"
-                        value={user?.client?.functionalArea?.nameAr}
+                        class="form-select"
+                        aria-label="Default select example"
                         onChange={handleChange}
-                      />
+                      >
+                        <option disabled selected>
+                          Select your functionalArea
+                        </option>
+                        {functionalAreas?.items.map((functionalArea, index) => (
+                          <option key={index} value={functionalArea.id}>
+                            {functionalArea.nameEn}
+                          </option>
+                        ))}
+                      </select>
                     ) : (
+                      // <input
+                      //   class="form-control mt-2"
+                      //   id="functionalArea"
+                      //   name="functionalAreaId"
+                      //   value={user?.client?.functionalArea?.nameAr}
+                      //   onChange={handleChange}
+                      // />
                       <span>{user?.client?.functionalArea?.nameAr}</span>
                     )}
                   </TableCell>
@@ -309,9 +377,8 @@ const Edit = () => {
                       />
                     ) : (
                       <span>{user?.client?.jobTitle?.nameAr}</span>
-                    )}  </TableCell>
-                   
-                 
+                    )}{" "}
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -327,7 +394,6 @@ const Edit = () => {
           <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
         </button>
       </div>
-     
     </form>
   );
 };

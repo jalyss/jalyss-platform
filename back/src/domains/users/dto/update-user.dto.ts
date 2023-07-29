@@ -8,6 +8,7 @@ export class UpdateUserDto {
     fullNameAr!: string
     @ApiProperty({ required: true })
     email!: string;
+   
     @ApiProperty({ required: true })
     address!: string
     @ApiProperty({ required: true })
@@ -24,6 +25,10 @@ export class UpdateUserDto {
     functionalAreaId?: string
     @ApiProperty({ required: false })
     jobTitleId?: string
+    @ApiProperty({ required: false })
+    countryId?: string
+    @ApiProperty({ required: false })
+    cityId?: string
 }
 export class UpdateUserStatusDto {
     @ApiProperty({required:true})

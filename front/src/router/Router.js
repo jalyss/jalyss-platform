@@ -71,7 +71,7 @@ function Router() {
             <Route path="one-article/:articleId" element={<OneArticle />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
-            {user && (
+            {user ? (
               <Route path="profile" element={<Profile />}>
                 <Route index element={<MyBlogs />} />
                 <Route path="my-bookmarks" element={<MyBookmarks />} />
@@ -79,13 +79,17 @@ function Router() {
 
                 <Route path="orders-history" element={<OrderHistory />} />
               </Route>
+            ):(
+              <>
+              <Route path="login" element={<Login />} />
+              <Route path="signup" element={<Signup />} />
+              <Route path="reset-password" element={<ResetPassword />} />
+              <Route path="new-password" element={<NewPassword />} />
+              </>
             )}
 
             
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Signup />} />
-                <Route path="reset-password" element={<ResetPassword />} />
-                <Route path="new-password" element={<NewPassword />} />
+             
             
 
             <Route path="*" element={<NoPage />} />
