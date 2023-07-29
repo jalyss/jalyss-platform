@@ -194,22 +194,18 @@ function CommandList() {
     dispatch(fetchCommands())
 
   }, [])
+
   useEffect(() => {
     if (commandStore.commands.items.length) {
       let aux = commandStore.commands.items.map(e => {
-
         return {
           ...e, createdAt: e.createdAt.slice(0, 10),
-
         }
-
       })
       console.log(aux);
       setRows(aux)
     }
   }, [commandStore.commands.items])
-
-
 
   const handleEditClick = (id) => {
     console.log(id);
@@ -217,7 +213,8 @@ function CommandList() {
 
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = () => {
+    console.log(elementId)
     dispatch(deleteCommand(elementId)).then((res) => {
       if (res.error) {
         showErrorToast(res.error.message);

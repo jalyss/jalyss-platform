@@ -26,9 +26,7 @@ function ProvidersList() {
     setBasicModal(!basicModal);
   };
 
-  const handleEditClick = (id) => {
-    navigate(`edit/${id}`);
-  };
+  
 
   const handleDeleteProviderClick = (id) => {
     const updatedRows = rows.filter((row) => row.id !== id);
@@ -122,7 +120,7 @@ function ProvidersList() {
             icon={<AiFillEdit />}
             label="Edit"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={() => navigate(`editArticle/${id}`)}
             color="inherit"
           />,
           <GridActionsCellItem

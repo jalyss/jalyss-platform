@@ -25,6 +25,11 @@ export class CitiesController {
     return this.citiesService.findOne(id);
   }
 
+  @Get()
+  findAllCitites() {
+    return this.citiesService.findAllCitites();
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCiteDto: UpdateCiteDto) {
     return this.citiesService.update(id, updateCiteDto);

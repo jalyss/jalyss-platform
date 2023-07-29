@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-
 import { BranchesService } from 'src/domains/branches/branches.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -50,12 +49,13 @@ export class ArticleService {
   findArticleTitleAndId() {
     return this.prisma.article.findMany({
       select: {
-        id: true,
         title: true,
+        ArticlesByBranch: {
+          select: { id: true },
+        },
       },
     });
   }
-  
 
   async findAllByBranch(branchId: string, filters: FilterArticle) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
@@ -151,6 +151,7 @@ export class ArticleService {
         },
       });
     }
+    
     const articlesByBranch = await this.prisma.articlesByBranch.findMany({
       where: {
         ...insideWhere,
@@ -232,7 +233,12 @@ export class ArticleService {
         id,
       },
 
-      include: { category: true, publishingHouse: true, type: true,ArticlesByBranch:true },
+      include: {
+        category: true,
+        publishingHouse: true,
+        type: true,
+        ArticlesByBranch: true,
+      },
     });
   }
 
