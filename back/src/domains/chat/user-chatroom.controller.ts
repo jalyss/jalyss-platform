@@ -16,6 +16,7 @@ export class UserChatroomController {
     return this.userChatroomService.create(createUserChatroomDto);
   }
 
+
   @Delete()
   remove(@Body() updateUserChatroomDto: UpdateUserChatroomDto) {
     return this.userChatroomService.remove(updateUserChatroomDto);

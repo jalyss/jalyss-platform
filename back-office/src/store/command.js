@@ -31,10 +31,10 @@ delete body.branshId
   return response.data;
 });
 
- export const updateCommand = createAsyncThunk("commands/createCommand", async (body, { dispatch }) => {
-  const x = body.branshId
-  delete body.branshId
-   const response = await axios.post(`${config.API_ENDPOINT}/commands/${x}`, body);
+ export const updateCommand = createAsyncThunk("commands/createCommand", async (args, { dispatch }) => {
+  const {id,...body}=args
+
+   const response = await axios.patch(`${config.API_ENDPOINT}/commands/${id}`, body);
    dispatch(fetchCommand(response.data.id)) 
    return response.data;
  });

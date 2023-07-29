@@ -9,9 +9,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class ChatRoomService {
   constructor(private readonly prisma: PrismaService) {}
-
-  async create2(dto: CreateChatRoomDto, senderId: string) {
-    console.log(dto)
+  async create(dto: CreateChatRoomDto, senderId: string) {
     return await this.prisma.chatRoom.create({
       data: {
         name: dto.name,
@@ -20,7 +18,7 @@ export class ChatRoomService {
             {
               userId: senderId,
             },
-            
+            { userId: dto.receiverId },
           ],
         },
         messages: {
@@ -89,7 +87,7 @@ export class ChatRoomService {
     });
   }
 
-  findAllRoooooooooooooms() {
+  findAllRoomsGroup() {
     return this.prisma.chatRoom.findMany({
       where: {
         isGroup: true,

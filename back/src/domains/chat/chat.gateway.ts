@@ -90,7 +90,7 @@ export class ChatGateway {
     const { senderId, ...rest } = payload;
     
     
-    const response = await this.ChatRoomService.create2(rest, senderId);
+    const response = await this.ChatRoomService.create(rest, senderId);
     this.server.emit(`chat-room-created/${senderId}`,response)
     await this.chatRoomList(response.participants);
   }
