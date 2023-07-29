@@ -15,6 +15,7 @@ export class CommandsService {
   ) {}
   async create(dto: CreateCommandDto, branchId: string) {
     // validateOrReject(dto);
+    console.log(dto)
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
     );
@@ -82,7 +83,7 @@ async findAll(){
         branchId,
       },
       include: {
-        commandLine: true,
+        commandLine: true
       },
     });
   }
@@ -95,7 +96,10 @@ async findAll(){
       include: {
         commandLine: {include:{articleByBranch:{include:{article:true}}}},
         country:true,
-        city:true
+        city:true,
+          branch: {
+            select: { name: true },
+        },
       },
     });
   }
@@ -110,6 +114,7 @@ async findAllCommandLIne(){
 }
 
   async update(id: string, dto: UpdateCommandDto) {
+    console.log(dto)
     const branchId = (await this.prisma.command.findFirstOrThrow({
       where: {
         id,
@@ -130,17 +135,14 @@ async findAllCommandLIne(){
               in: command.commandLine.map((l) => l.articleByBranchId),
             },
           },
-           create: dto.commandLine.map((elem) => ({
-             ...elem,
+          create: dto.commandLine.map((elem) => ({
+            ...elem,
           })),
         },
       },
     });
   }
-
   remove(id: string) {
     return this.prisma.command.delete({ where: { id } });
   }
-
-
 }

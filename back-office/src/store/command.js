@@ -4,9 +4,11 @@ import config from "../configs";
 
 
 export const fetchCommands = createAsyncThunk("commands/commands", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/commands/TUN`);
+  const response = await axios.get(`${config.API_ENDPOINT}/commands`);
   return response.data;
 });
+
+
 
 export const  nonDeliveredCommands = createAsyncThunk("commands/commands", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/commands/nonDeliveredCommands`);
@@ -29,11 +31,13 @@ delete body.branshId
   return response.data;
 });
 
-// export const updateCommand = createAsyncThunk("commands/createCommand", async (body, { dispatch }) => {
-//   const response = await axios.post(`${config.API_ENDPOINT}/commands/one`, body);
-//   dispatch(fetchCommand(response.data.id)) // for dispath the result on state.command to see its data in the next page after checkout
-//   return response.data;
-// });
+ export const updateCommand = createAsyncThunk("commands/createCommand", async (body, { dispatch }) => {
+  const x = body.branshId
+  delete body.branshId
+   const response = await axios.post(`${config.API_ENDPOINT}/commands/${x}`, body);
+   dispatch(fetchCommand(response.data.id)) 
+   return response.data;
+ });
 
  export const deleteCommand = createAsyncThunk("commands/createCommand", async (body, { dispatch }) => {
    const response = await axios.delete(`${config.API_ENDPOINT}/commands/${body}`, body);

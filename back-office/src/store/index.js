@@ -23,6 +23,8 @@ import blogs from "./blogs";
 import gain from "./gain";
 import provider from "./provider";
 import trainingBooking from "./trainingBooking"
+import country from "./Country";
+
 export const store = configureStore({
   reducer: {
     auth,
@@ -46,6 +48,7 @@ export const store = configureStore({
     tarif,
     blogs,
     provider,
+    country,
     chat,
     gain,
     trainingBooking

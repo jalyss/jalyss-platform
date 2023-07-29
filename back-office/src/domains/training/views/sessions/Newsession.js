@@ -30,12 +30,6 @@ import {
 } from "@mui/material";
 import CloseButton from "../../../../components/Commun/buttons/CloseButton";
 import TrainingPricing from "../../components/TrainingPricing";
-const columns = [
-  { field: "title", headerName: "Title" },
-  { field: "price", headerName: "Price" },
-];
-
-const Addtarif = () => {
 import { fetchGains, fetchPrerequires } from "../../../../store/gain";
 import { fetchsessionstypes } from "../../../../store/sessiontypes";
 
@@ -50,6 +44,7 @@ import UpdateButton from "../../../../components/Commun/buttons/UpdateButton";
 
 const { RangePicker } = DatePicker;
 
+const AddSession = () => {
   const dispatch = useDispatch();
   const sessionStore = useSelector((state) => state.sessions);
   const { sessions } = sessionStore;
