@@ -105,7 +105,7 @@ import Prerequires from "../domains/training/views/prerequire/Prerequires";
 import SessionType from "../domains/training/views/sessionType/SessionType";
 import ChatBox from "../pages/ChatBox";
 import Conversation from "../components/chatComponents/Conversation";
-
+import Subscriber from "../domains/training/views/sessions/Subscriber";
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -220,7 +220,12 @@ function Router() {
               <Route
                 path="detail-training/:sessionsId"
                 element={<SessionDetail />}
-              ></Route>
+              >
+
+
+              </Route>
+              <Route path="subscriber/:id" element={<Subscriber />} />
+
               <Route path="newsession" element={<Newsession />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses/:lectureId" element={<Coursdetail />} />

@@ -40,9 +40,24 @@ export class TrainingBookingService {
     });
   }
 
+  async findAllBySession(sessionId:string) {
+    return await this.prisma.trainingBooking.findMany({
+      where: {
+        sessiontarif: {
+          session: {
+            id: sessionId
+          }
+        }
+      },
+      include:{user:{include:{avatar:true,client:true}},sessiontarif:true}
+    });
+  }
+  
+
   async findOne(id: string) {
     return await this.prisma.trainingBooking.findUnique({
       where: { id },
+      include:{user:{include:{avatar:true,client:true},}}
     });
   }
 

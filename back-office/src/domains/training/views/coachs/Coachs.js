@@ -213,7 +213,7 @@ const [coachId,setCoachId]=useState(null)
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
+            
             disableRowSelectionOnClick
           />
         </Box>
