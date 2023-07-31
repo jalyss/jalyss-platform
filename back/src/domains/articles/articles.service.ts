@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-
 import { BranchesService } from 'src/domains/branches/branches.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -43,6 +42,17 @@ export class ArticleService {
         publishingHouse: true,
         category: true,
         type: true,
+      },
+    });
+  }
+
+  findArticleTitleAndId() {
+    return this.prisma.article.findMany({
+      select: {
+        title: true,
+        ArticlesByBranch: {
+          select: { id: true },
+        },
       },
     });
   }
@@ -141,6 +151,7 @@ export class ArticleService {
         },
       });
     }
+    
     const articlesByBranch = await this.prisma.articlesByBranch.findMany({
       where: {
         ...insideWhere,
@@ -222,7 +233,12 @@ export class ArticleService {
         id,
       },
 
-      include: { category: true, publishingHouse: true, type: true,ArticlesByBranch:true },
+      include: {
+        category: true,
+        publishingHouse: true,
+        type: true,
+        ArticlesByBranch: true,
+      },
     });
   }
 

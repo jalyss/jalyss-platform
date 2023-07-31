@@ -67,15 +67,15 @@ export class SessionService {
             };
           }),
         },
-        // lectures: {
-        //   create: lectures.map((lecture) => {
-        //     return {
-        //       lectureId: lecture.lectureId,
-        //       startAt: lecture.startAt,
-        //       endAt: lecture.endAt,
-        //     };
-        //   }),
-        // },
+        lectures: {
+          create: lectures.map((lecture) => {
+            return {
+              lectureId: lecture.lectureId,
+              startAt: lecture.startAt,
+              endAt: lecture.endAt,
+            };
+          }),
+        },
       },
     });
   }
@@ -114,10 +114,17 @@ export class SessionService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    orderBy = { createdAt: 'desc' };
+
     return await this.prisma.$transaction(async (prisma) => {
+      let params = { where };
+      if (take) {
+        params['take'] = take;
+      }
+      if (skip) {
+        params['skip'] = skip;
+      }
       let items = await this.prisma.session.findMany({
-        where,
+        ...params,
         include: {
           tarifs: true,
           sessionType: true,
@@ -125,9 +132,7 @@ export class SessionService {
           category: true,
           cover: true,
         },
-        orderBy,
-        take,
-        skip,
+        orderBy: { createdAt: 'desc' },
       });
 
       let count = await prisma.session.count({ where });
@@ -190,7 +195,8 @@ export class SessionService {
       lectures,
       ...rest
     } = dto;
-    await this.prisma.$transaction(async (prisma) => {
+
+    return await this.prisma.$transaction(async (prisma) => {
       if (SessionHasFeaturesIds?.length)
         await prisma.sessionHasFeatures.deleteMany({
           where: {
@@ -227,6 +233,13 @@ export class SessionService {
             sessionId: id,
           },
         });
+      if (lectures?.length)
+        await prisma.sessionHasLecture.deleteMany({
+          where: {
+            sessionId: id,
+          },
+        });
+
       return await prisma.session.update({
         where: { id },
         data: {
@@ -298,6 +311,12 @@ export class SessionService {
       select: {
         title: true,
       },
+    });
+  }
+  // Session Media
+  async createSessionMedia(id: string, mediaIds: string[]) {
+    await this.prisma.mediaSession.createMany({
+      data: mediaIds.map((elem) => ({ mediaId: elem, sessionId: id })),
     });
   }
 }

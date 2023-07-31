@@ -137,6 +137,7 @@ function Header() {
                             <img
                               src={me.avatar.path}
                               alt="avatar"
+                              style={{objectFit:"cover"}}
                               className="rounded-circle sm avatar-img"
                             />
                           ) : (

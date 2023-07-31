@@ -52,4 +52,10 @@ export class SessionController {
   remove(@Param('id') id: string) {
     return this.sessionService.remove(id);
   }
+
+  // Session Medias
+  @Post('media/:id')
+  createSessionMedia(@Body() dto: string[],@Param('id') id:string ) {
+    return this.sessionService.createSessionMedia(id,dto);
+  }
 }

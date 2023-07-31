@@ -9,14 +9,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags,ApiSecurity } from '@nestjs/swagger';
+import { ApiTags, ApiSecurity } from '@nestjs/swagger';
 import { CommandsService } from './commands.service';
 import { CreateCommandDto } from './dto/create-command.dto';
 import { UpdateCommandDto } from './dto/update-command.dto';
 import { FilterCommand } from './types';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/currentUser';
-
 
 @ApiTags('commands')
 @Controller('commands')
@@ -36,34 +35,32 @@ export class CommandsController {
     return this.commandsService.findAll();
   }
 
-
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Get('/by-user')
-  findAllByUserId(@CurrentUser()user:any) {
+  findAllByUserId(@CurrentUser() user: any) {
     return this.commandsService.findAllByUserId(user.id);
   }
 
-
   @Get(':branchId')
-  findAllByBranchId(@Param('branchId') branchId: string,
-  @Query() filters:FilterCommand) {
-    return this.commandsService.findAllByBranchIdentifier(branchId,filters);
+  findAllByBranchId(
+    @Param('branchId') branchId: string,
+    @Query() filters: FilterCommand,
+  ) {
+    return this.commandsService.findAllByBranchIdentifier(branchId, filters);
   }
 
   @Get('one/:id')
   findOne(@Param('id') id: string) {
     return this.commandsService.findOne(id);
   }
-@Get('commandLine/all')
-findAllCommanLIne(){
-  return this.commandsService.findAllCommandLIne();
-}
+  @Get('commandLine/all')
+  findAllCommanLIne() {
+    return this.commandsService.findAllCommandLIne();
+  }
 
   @Patch(':id')
-  update(@Param('id') id: string, 
-  @Body() updateCommandDto: UpdateCommandDto
-  ) {
+  update(@Param('id') id: string, @Body() updateCommandDto: UpdateCommandDto) {
     return this.commandsService.update(id, updateCommandDto);
   }
 

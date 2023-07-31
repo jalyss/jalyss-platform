@@ -26,9 +26,7 @@ function ProvidersList() {
     setBasicModal(!basicModal);
   };
 
-  const handleEditClick = (id) => {
-    navigate(`edit/${id}`);
-  };
+  
 
   const handleDeleteProviderClick = (id) => {
     const updatedRows = rows.filter((row) => row.id !== id);
@@ -118,13 +116,13 @@ function ProvidersList() {
       cellClassName: "actions",
       getActions: ({ id }) => {
         return [
-          <GridActionsCellItem
-            icon={<AiFillEdit />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
+          // <GridActionsCellItem
+          //   icon={<AiFillEdit />}
+          //   label="Edit"
+          //   className="textPrimary"
+          //   onClick={() => navigate(`editArticle/${id}`)}
+          //   color="inherit"
+          // />,
           <GridActionsCellItem
             icon={<AiOutlineEye />}
             label="Add"
