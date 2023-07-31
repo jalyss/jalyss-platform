@@ -28,9 +28,9 @@ const Edit = () => {
   const functionalAreasStore = useSelector((state) => state.functionalArea);
   const { functionalAreas } = functionalAreasStore;
   const educationLevelsStore = useSelector((state) => state.educationLevel);
-  const { educationLevels } = educationLevelsStore
+  const { educationLevels } = educationLevelsStore;
   const jobTitleStore = useSelector((state) => state.jobTitle);
-  const { jobTitles } =  jobTitleStore;
+  const { jobTitles } = jobTitleStore;
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const authStore = useSelector((state) => state.auth);
@@ -56,54 +56,42 @@ const Edit = () => {
     dispatch(fetchFunctionalAreas());
     dispatch(fetchJobTitles());
     dispatch(fetchEducationLevels());
-
   }, [authStore.me, dispatch]);
-  console.log("j",jobTitles)
-  console.log("e",educationLevels);
-  
 
   useEffect(() => {
-    dispatch(fetchCities(user.countryId));
-  }, [user.countryId]);
+    dispatch(fetchCities(user?.client?.country?.id));
+  }, [user?.client?.country?.id]);
 
-  const handleChange = (e) => {
+  const handleChange = (e, key, isSelect, array) => {
     const { name, value } = e.target;
-    setUser((User) => ({ ...User, [name]: value }));
+    if (key) {
+      setUser((User) => ({
+        ...User,
+        [key]: {
+          ...user[key],
+          [name]: isSelect ? array.find((elem) => elem.id === value) : value,
+        },
+      }));
+    } else {
+      setUser((User) => ({ ...User, [name]: value }));
+    }
   };
-  console.log("countryId", user.countryId);
+
   // fama hajet m3ach mawjoudin fil user direct walou mawjoudin fil client ma3neha user.client
   // l back khadmou khayri
   // ena badel wala 3ana user w el user ynajem ykoun client w ynajem ykoun employee eyy fhmtek
   // hatta fil bach office fama hajet user.employee eyy kima lcoach bravo
-console.log("user",user);
+
   const submitEditProfile = async (event) => {
+    event.preventDefault();
     if (!editMode) {
-      event.preventDefault();
       setEditMode(true);
     } else {
-      event.preventDefault();
-      let aux = Object.assign({}, user);
-      if (avatar !== null) {
-        console.log("in if");
-        const image = new FormData();
-        image.append("file", avatar);
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          image
-        );
-        aux.avatarId = response.data.id;
-        aux.clientId = me.clientId
-      }
-      delete aux.avatar;
-      delete aux.Media;
-      delete aux.exp;
-      delete aux.iat;
-      dispatch(updateUser(aux)).then((res) => {
+      dispatch(authUpdate(user)).then((res) => {
         if (!res.error) {
           showSuccessToast(t("user.updated"));
           setEditMode(false);
         } else {
-          console.log(res);
           showErrorToast(res.error.message);
         }
       });
@@ -204,7 +192,7 @@ console.log("user",user);
                         id="tel"
                         name="tel"
                         value={user?.client?.tel}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, "client")}
                       />
                     ) : (
                       <span>{user?.client?.tel}</span>
@@ -227,7 +215,7 @@ console.log("user",user);
                         id="address"
                         name="address"
                         value={user?.client?.address}
-                        onChange={handleChange}
+                        onChange={(e) => handleChange(e, "client")}
                       />
                     ) : (
                       <span>{user?.client?.address}</span>
@@ -245,11 +233,13 @@ console.log("user",user);
                   <TableCell align="right">
                     {editMode ? (
                       <select
-                        value={user.countryId}
+                        value={user?.client?.country?.id}
                         class="form-select"
                         aria-label="Default select example"
-                        onChange={handleChange}
-                        name="countryId"
+                        onChange={(e) =>
+                          handleChange(e, "client", true, countries.items)
+                        }
+                        name="country"
                       >
                         <option disabled selected>
                           Select your country
@@ -284,11 +274,13 @@ console.log("user",user);
                   <TableCell align="right">
                     {editMode ? (
                       <select
-                        value={user.cityId}
-                        name="cityId"
+                        value={user?.client?.city?.id}
+                        name="city"
                         class="form-select"
                         aria-label="Default select example"
-                        onChange={handleChange}
+                        onChange={(e) =>
+                          handleChange(e, "client", true, cities.items)
+                        }
                       >
                         <option disabled selected>
                           Select your city
@@ -322,11 +314,13 @@ console.log("user",user);
                   <TableCell align="right">
                     {editMode ? (
                       <select
-                        value={user.functionalAreaId}
-                        name="functionalAreaId"
+                        value={user?.client?.functionalArea?.id}
+                        name="functionalArea"
                         class="form-select"
                         aria-label="Default select example"
-                        onChange={handleChange}
+                        onChange={(e) =>
+                          handleChange(e, "client", true, functionalAreas.items)
+                        }
                       >
                         <option disabled selected>
                           Select your functionalArea
@@ -359,22 +353,25 @@ console.log("user",user);
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
-                         <select
-                         value={user.educationLevelId}
-                         name="educationLevelId"
-                         class="form-select"
-                         aria-label="Default select example"
-                         onChange={handleChange}
-                       >
-                         <option disabled selected>
-                           Select your educationLevel
-                         </option>
-                         {educationLevels?.items.map((educationLevel, index) => (
-                           <option key={index} value={educationLevel.id}>
-                             {educationLevel.nameEn}
-                           </option>
-                         ))}
-                       </select>
+                      <select
+                        value={user?.client?.educationLevel?.id}
+                        name="educationLevel"
+                        class="form-select"
+                        aria-label="Default select example"
+                        onChange={(e) =>
+                          handleChange(e, "client", true, educationLevels.items)
+                        }
+                      >
+                        <option disabled selected>
+                          Select your educationLevel
+                        </option>
+                        {educationLevels?.items.map((educationLevel, index) => (
+                          <option key={index} value={educationLevel.id}>
+                            {educationLevel.nameEn}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
                       // <input
                       //   class="form-control"
                       //   id="educationLevel"
@@ -382,7 +379,6 @@ console.log("user",user);
                       //   value={user?.client?.educationLevel?.nameAr}
                       //   onChange={handleChange}
                       // />
-                    ) : (
                       <span>{user?.client?.educationLevel?.nameAr} </span>
                     )}
                   </TableCell>
@@ -398,21 +394,23 @@ console.log("user",user);
                   <TableCell align="right">
                     {editMode ? (
                       <select
-                      value={user.jobTitleId}
-                      name="jobTitlelId"
-                      class="form-select"
-                      aria-label="Default select example"
-                      onChange={handleChange}
-                    >
-                      <option disabled selected>
-                        Select your jobTitle
-                      </option>
-                      {jobTitles?.items.map((jobTitle, index) => (
-                        <option key={index} value={jobTitle.id}>
-                          {jobTitle.nameEn}
+                        value={user?.client?.jobTitle?.id}
+                        name="jobTitle"
+                        class="form-select"
+                        aria-label="Default select example"
+                        onChange={(e) =>
+                          handleChange(e, "client", true, jobTitles.items)
+                        }
+                      >
+                        <option disabled selected>
+                          Select your jobTitle
                         </option>
-                      ))}
-                    </select>
+                        {jobTitles?.items.map((jobTitle, index) => (
+                          <option key={index} value={jobTitle.id}>
+                            {jobTitle.nameEn}
+                          </option>
+                        ))}
+                      </select>
                     ) : (
                       <span>{user?.client?.jobTitle?.nameAr}</span>
                     )}{" "}

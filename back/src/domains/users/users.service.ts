@@ -98,21 +98,41 @@ export class UsersService {
   async findOne(id: string) {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { id: id },
-      include: { avatar: true, client: true },
+      include: {
+        avatar: true,
+        client: {
+          include: {
+            country: true,
+            city: true,
+            functionalArea: true,
+            jobTitle: true,
+            educationLevel: true,
+          },
+        },
+      },
     });
     const { confirmkey, password, ...rest } = user;
     return rest;
   }
 
   async update(id: string, data: UpdateUserDto) {
-    const { tel, address,countryId,cityId,clientId,educationLevelId,jobTitleId, ...rest } = data;
+    const {
+      tel,
+      address,
+      countryId,
+      cityId,
+      clientId,
+      educationLevelId,
+      jobTitleId,
+      ...rest
+    } = data;
 
     const updatedUser = await this.prisma.user.update({
       where: { id },
       data: {
-        fullNameAr:data.fullNameAr,
-        fullNameEn:data.fullNameEn,
-        email:data.email
+        fullNameAr: data.fullNameAr,
+        fullNameEn: data.fullNameEn,
+        email: data.email,
       },
     });
 
@@ -126,11 +146,11 @@ export class UsersService {
           countryId,
           cityId,
           educationLevelId,
-          jobTitleId
+          jobTitleId,
         },
       });
     }
-  
+
     return updatedUser;
   }
 
@@ -158,7 +178,15 @@ export class UsersService {
       include: {
         Media: true,
         avatar: true,
-        client: true,
+        client: {
+          include: {
+            country: true,
+            city: true,
+            functionalArea: true,
+            jobTitle: true,
+            educationLevel: true,
+          },
+        },
         employee: true,
       },
     });
