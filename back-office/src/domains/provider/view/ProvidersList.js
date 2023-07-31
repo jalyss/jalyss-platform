@@ -55,6 +55,7 @@ function ProvidersList() {
       setRows(aux);
     }
   }, [providerStore.providers.items]);
+  
   const [open, setOpen] = useState(false);
   const [selectedLogo, setSelectedLogo] = useState(null);
 
@@ -116,13 +117,13 @@ function ProvidersList() {
       cellClassName: "actions",
       getActions: ({ id }) => {
         return [
-          <GridActionsCellItem
-            icon={<AiFillEdit />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => navigate(`editArticle/${id}`)}
-            color="inherit"
-          />,
+          // <GridActionsCellItem
+          //   icon={<AiFillEdit />}
+          //   label="Edit"
+          //   className="textPrimary"
+          //   onClick={() => navigate(`edit/${id}`)}
+          //   color="inherit"
+          // />,
           <GridActionsCellItem
             icon={<AiOutlineEye />}
             label="Add"
