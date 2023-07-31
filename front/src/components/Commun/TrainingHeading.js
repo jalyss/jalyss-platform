@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TrainingHeading = ({ subtitle, title,mt,mb }) => {
+const   TrainingHeading = ({ subtitle, title,mt,mb }) => {
   return (
     <>
     <div id='TrainingHeading'>

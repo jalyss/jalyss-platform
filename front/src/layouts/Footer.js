@@ -11,6 +11,8 @@ import { CiDiscount1 } from 'react-icons/ci'
 import { TbDiscount2 } from 'react-icons/tb'
 import { BsTruck } from 'react-icons/bs'
 
+
+
 function Footer() {
   const { t } = useTranslation()
 
@@ -249,6 +251,8 @@ function Footer() {
           <MDBCol className="text-reset fw-bold" href="https://jalyss.com/">
             © 2023 Copyright: JALYSS.COM
           </MDBCol>
+          
+         
         </MDBRow>
       </MDBContainer>
     </MDBFooter>

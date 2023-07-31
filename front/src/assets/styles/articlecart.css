@@ -1,29 +1,37 @@
-/* CSS for larger screens */
+
 .article-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 300px; 
+  background-color: white; 
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(212, 9, 215, 0.1);
+
+  padding: 16px;
+  transition: box-shadow 0.3s ease;
+}
+
+.article-card:hover {
+  box-shadow: 0 4px 8px rgba(169, 0, 147, 0.949);
 }
 
 .article-image {
-  width: 100%;
-  height: auto;
+  border-radius: 2px;
+}
+
+.stock-label {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  
+  padding: 4px 8px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+.rating {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
 }
 
 
-@media (max-width: 576px) {
-  .article-card {
-    max-width: 100%; 
-  }
 
-  .article-content {
-    text-align: center;
-  }
 
-  .icon-group {
-    display: flex;
-    justify-content: center;
-  }
-}
