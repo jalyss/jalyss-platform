@@ -48,7 +48,7 @@ function EditProvider() {
       tel,
       address,
     };
-console.log(logo,'fr')
+
     try {
       if (logo) {
         const formData = new FormData();
@@ -63,8 +63,6 @@ console.log(logo,'fr')
       }
 
       const editedProvider = { ...body, providerId };
-      console.log(editedProvider, "fr");
-
       dispatch(editProvider(editedProvider));
       showSuccessToast("Provider edited successfully");
       navigate(-1);

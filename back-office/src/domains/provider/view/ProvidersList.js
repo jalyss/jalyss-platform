@@ -55,7 +55,6 @@ function ProvidersList() {
       setRows(aux);
     }
   }, [providerStore.providers.items]);
-  
   const [open, setOpen] = useState(false);
   const [selectedLogo, setSelectedLogo] = useState(null);
 
@@ -121,7 +120,7 @@ function ProvidersList() {
           //   icon={<AiFillEdit />}
           //   label="Edit"
           //   className="textPrimary"
-          //   onClick={() => navigate(`edit/${id}`)}
+          //   onClick={() => navigate(`editArticle/${id}`)}
           //   color="inherit"
           // />,
           <GridActionsCellItem

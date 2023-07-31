@@ -33,7 +33,6 @@ export class ProvidersService {
   }
 
   async update(id: string, dto: UpdateProviderDto) {
-    console.log(dto)
     return await this.prisma.provider.update({ where: { id }, data: dto });
 
   }

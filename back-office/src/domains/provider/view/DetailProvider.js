@@ -48,11 +48,9 @@ function DetailProvider() {
   };
 
   const handleSubmit = async () => {
-    console.log(editProviderData);
     const body = {
       ...editProviderData,
     };
-    console.log(editProviderData, "here");
     try {
       if (selectedFile) {
         const formData = new FormData();
@@ -66,10 +64,8 @@ function DetailProvider() {
       }
       delete body.logo;
       delete body.MediaProvider;
-      console.log(body, "body");
 
       const editedProvider = { ...body, providerId };
-      console.log(editedProvider, "fr");
       dispatch(editProvider(editedProvider));
       showSuccessToast("Provider edited successfully");
       navigate(-1);
@@ -79,7 +75,6 @@ function DetailProvider() {
     }
   };
   const toggleShowDelete = (id) => {
-
     setBasicModalDelete(!basicModalDelete);
   };
   return (
