@@ -452,6 +452,7 @@ CREATE TABLE "SessionHasSessionType" (
 CREATE TABLE "SessionType" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "SessionType_pkey" PRIMARY KEY ("id")
 );
@@ -469,8 +470,6 @@ CREATE TABLE "Lecture" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "startAt" TIMESTAMP(3),
-    "endAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Lecture_pkey" PRIMARY KEY ("id")
