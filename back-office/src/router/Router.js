@@ -19,6 +19,7 @@ import EditEmployee from "../domains/employees/views/EditEmployee";
 import Article from "../domains/articles/Article";
 import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
+import EditArticle from "../domains/articles/views/EditArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
@@ -103,7 +104,9 @@ import DetailRequest from "../domains/training/views/requests/DetailRequest";
 import Gains from "../domains/training/views/gain/Gains";
 import Prerequires from "../domains/training/views/prerequire/Prerequires";
 import SessionType from "../domains/training/views/sessionType/SessionType";
-
+import ChatBox from "../pages/ChatBox";
+import Conversation from "../components/chatComponents/Conversation";
+import Subscriber from "../domains/training/views/sessions/Subscriber";
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -144,6 +147,10 @@ function Router() {
             </Route>
 
             <Route path="profile" element={<Profile />} />
+            <Route path="chat-box" element={<ChatBox />}>
+              <Route path="user/:userId" element={<Conversation />} />
+              <Route path="group/:groupId" element={<Conversation />} />
+            </Route>
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
@@ -207,14 +214,21 @@ function Router() {
                 element={<ArticleByBranchList />}
               />
               <Route path="create" element={<CreateArticle />} />
+              <Route path="editArticle" element={<EditArticle />} />
             </Route>
+            
 
             <Route path="training" element={<Training />}>
               <Route index element={<Sessions />} />
               <Route
                 path="detail-training/:sessionsId"
                 element={<SessionDetail />}
-              ></Route>
+              >
+
+
+              </Route>
+              <Route path="subscriber/:id" element={<Subscriber />} />
+
               <Route path="newsession" element={<Newsession />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses/:lectureId" element={<Coursdetail />} />
@@ -230,7 +244,6 @@ function Router() {
               <Route path="gains" element={<Gains />} />
               <Route path="prerequires" element={<Prerequires />} />
               <Route path="types" element={<SessionType />} />
-
             </Route>
 
             {/* <Route path="charts" element={<Charts />} /> */}
@@ -238,7 +251,7 @@ function Router() {
             <Route path="commands" element={<Command />}>
               <Route index element={<CommandList />} />
               <Route path="create" element={<CreateCommand />} />
-              <Route path="detail/:commandId" element={<CommandDetail/>} />
+              <Route path="detail/:commandId" element={<CommandDetail />} />
               <Route path="edit/:commandId" element={<EditCommand />} />
             </Route>
             {/* <Route path="charts" element={<ChartTabs />} /> */}

@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateChatRoomDto, CreateChatRoomGroupDto } from './dto/create-chatRoom.dto';
+import {
+  CreateChatRoomDto,
+  CreateChatRoomGroupDto,
+} from './dto/create-chatRoom.dto';
 import { UpdateChatDto } from './dto/update-chatRoom.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -32,7 +35,6 @@ export class ChatRoomService {
     });
   }
 
-  
   async findAll(id: string) {
     const rooms = await this.prisma.chatRoom.findMany({
       where: {
@@ -87,8 +89,8 @@ export class ChatRoomService {
 
   findAllRoomsGroup() {
     return this.prisma.chatRoom.findMany({
-      where:{
-        isGroup:true
+      where: {
+        isGroup: true,
       },
       include: {
         messages: true,
@@ -136,30 +138,30 @@ export class ChatRoomService {
   async update(id: string, dto: UpdateChatDto) {
     let chatRoom = await this.findOne(id);
     return await this.prisma.$transaction(async (prisma) => {
+      let toDelete = [];
+
       for (let i = 0; i < chatRoom.participants.length; i++) {
         let response = false;
         for (let j = 0; j < dto.participants.length; j++) {
           if (dto.participants[j].value === chatRoom.participants[i].userId)
             response = true;
         }
-        if (!response ) {
-          await prisma.userChatRoom.delete({
-            where: {
-              joinerRoom: {
-                chatRoomId: id,
-                userId: chatRoom.participants[i].userId,
-              },
-            },
-          });
+        if (!response) {
+          toDelete.push(chatRoom.participants[i].userId);
         }
       }
 
       return await prisma.chatRoom.update({
         where: { id },
-        include:{participants:true},
+        include: { participants: true },
         data: {
           name: dto.name,
           participants: {
+            deleteMany: {
+              userId: {
+                in: toDelete,
+              },
+            },
             connectOrCreate: dto.participants.map((participant) => ({
               where: {
                 joinerRoom: { chatRoomId: id, userId: participant.value },
@@ -173,18 +175,19 @@ export class ChatRoomService {
       });
     });
   }
-  async createChatRoomGroup(dto:CreateChatRoomGroupDto,user:any){
+  async createChatRoomGroup(dto: CreateChatRoomGroupDto, user: any) {
     return await this.prisma.chatRoom.create({
       data: {
         name: dto.name,
-        isGroup:true,
+        isGroup: true,
         participants: {
-          create: dto.participants.map(participant=>({userId:participant.value}))
+          create: dto.participants.map((participant) => ({
+            userId: participant.value,
+          })),
         },
-        messages:{
-          create:{userId:user.id,text:'hi'}
-        }
-        
+        messages: {
+          create: { userId: user.id, text: 'hi' },
+        },
       },
       include: {
         participants: true,

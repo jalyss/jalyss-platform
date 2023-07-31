@@ -12,8 +12,11 @@ import axios from "axios";
 import ReactDOM from "react-dom";
 import CloseButton from "./../components/Commun/buttons/CloseButton";
 import { Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function MentorPage() {
+  const me = useSelector((state) => state.auth.me);
+const navigate=useNavigate()
   const [formSubmitted, setFormSubmitted] = useState(false);
   const categoriesStore = useSelector((state) => state.category);
   const { categories } = categoriesStore;
@@ -24,7 +27,6 @@ function MentorPage() {
   const [formValidated, setFormValidated] = useState(false);
   const [submitCheck, setSubmitCheck] = useState(false);
 
-  const me = useSelector((state) => state.auth.me);
 
   const dispatch = useDispatch();
   const useStyles = makeStyles((theme) =>
@@ -39,7 +41,9 @@ function MentorPage() {
   const classes = useStyles();
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+    if(me){
     setSubmitCheck(true);
     const form = e.target;
     console.log("form", form);
@@ -77,8 +81,11 @@ function MentorPage() {
         console.error("Error uploading resume file:", error);
       }
     }
-  };
+}else{
+  navigate("/login")
+}
 
+  };
   const handleDropzoneChange = (files) => {
     setPdfFile(files[0]);
     // setFormValidated(true);
@@ -128,7 +135,7 @@ function MentorPage() {
         />
         <div className="container m-3">
           <div className="row d-flex justify-content-center align-items-center">
-            <div className="col-lg-9 col-md-12"  >
+            <div className="col-lg-9 col-md-12">
               <div id="regForm">
                 <h1 id="register">{!formSubmitted ? "Request Mentor" : ""}</h1>
                 {formSubmitted ? (
@@ -141,26 +148,20 @@ function MentorPage() {
                     </span>
                   </div>
                 ) : (
-             
                   <form
                     onSubmit={handleSubmit}
                     className="d-flex flex-column justify-content-center"
                   >
-                 
-           
-                      <AutoCompleteFilter
-                        data={categories.items}
-                        valueOptionName="id"
-                        labelOptionName="nameEn"
-                        label="Filter by Category"
-                        onChange={setCategoryId}
-                        required
-                        fullWidth={true}
-                        
-                      />
-                    
-                
-                   
+                    <AutoCompleteFilter
+                      data={categories.items}
+                      valueOptionName="id"
+                      labelOptionName="nameEn"
+                      label="Filter by Category"
+                      onChange={setCategoryId}
+                      required
+                      fullWidth={true}
+                    />
+
                     {!formValidated &&
                       categoryId.length === 0 &&
                       submitCheck && (
@@ -211,7 +212,11 @@ function MentorPage() {
                       </div>
                     </div>
 
-                    {shown && ReactDOM.createPortal(modalBody(), document.getElementById("portal"))}
+                    {shown &&
+                      ReactDOM.createPortal(
+                        modalBody(),
+                        document.getElementById("portal")
+                      )}
 
                     <div className="d-flex justify-content-center align-items-center gap-2">
                       <button
@@ -240,7 +245,6 @@ function MentorPage() {
         />
       </div>
     </Fragment>
-
   );
 }
 
