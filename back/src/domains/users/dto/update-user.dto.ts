@@ -24,6 +24,12 @@ export class UpdateUserDto {
     functionalAreaId?: string
     @ApiProperty({ required: false })
     jobTitleId?: string
+    @ApiProperty({ required: false })
+    cityId?: string
+    @ApiProperty({ required: false })
+    countryId?: string
+    @ApiProperty({ required: false })
+    clientId?: string
 }
 export class UpdateUserStatusDto {
     @ApiProperty({required:true})

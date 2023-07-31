@@ -104,11 +104,34 @@ export class UsersService {
     return rest;
   }
 
-  update(id: string, data: UpdateUserDto) {
-    return this.prisma.user.update({
+  async update(id: string, data: UpdateUserDto) {
+    const { tel, address,countryId,cityId,clientId,educationLevelId,jobTitleId, ...rest } = data;
+
+    const updatedUser = await this.prisma.user.update({
       where: { id },
-      data,
+      data: {
+        fullNameAr:data.fullNameAr,
+        fullNameEn:data.fullNameEn,
+        email:data.email
+      },
     });
+
+    if (clientId) {
+      await this.prisma.client.update({
+        where: { id: clientId },
+        data: {
+          ...rest,
+          tel,
+          address,
+          countryId,
+          cityId,
+          educationLevelId,
+          jobTitleId
+        },
+      });
+    }
+  
+    return updatedUser;
   }
 
   updateUserStatus(id: string, data: UpdateUserStatusDto) {

@@ -16,6 +16,9 @@ import axios from "axios";
 import { fetchCountries } from "../../store/country";
 import { fetchCities } from "../../store/city";
 import { fetchFunctionalAreas } from "../../store/functionalArea";
+import { fetchJobTitles } from "../../store/jobTitle";
+import { fetchEducationLevels } from "../../store/educationLevel";
+import { updateUser } from "../../store/user";
 
 const Edit = () => {
   const countryStore = useSelector((state) => state.country);
@@ -24,6 +27,10 @@ const Edit = () => {
   const { cities } = cityStore;
   const functionalAreasStore = useSelector((state) => state.functionalArea);
   const { functionalAreas } = functionalAreasStore;
+  const educationLevelsStore = useSelector((state) => state.educationLevel);
+  const { educationLevels } = educationLevelsStore
+  const jobTitleStore = useSelector((state) => state.jobTitle);
+  const { jobTitles } =  jobTitleStore;
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const authStore = useSelector((state) => state.auth);
@@ -47,8 +54,13 @@ const Edit = () => {
     }
     dispatch(fetchCountries());
     dispatch(fetchFunctionalAreas());
+    dispatch(fetchJobTitles());
+    dispatch(fetchEducationLevels());
+
   }, [authStore.me, dispatch]);
-  console.log(functionalAreas);
+  console.log("j",jobTitles)
+  console.log("e",educationLevels);
+  
 
   useEffect(() => {
     dispatch(fetchCities(user.countryId));
@@ -80,12 +92,13 @@ console.log("user",user);
           image
         );
         aux.avatarId = response.data.id;
+        aux.clientId = me.clientId
       }
       delete aux.avatar;
       delete aux.Media;
       delete aux.exp;
       delete aux.iat;
-      dispatch(authUpdate(aux)).then((res) => {
+      dispatch(updateUser(aux)).then((res) => {
         if (!res.error) {
           showSuccessToast(t("user.updated"));
           setEditMode(false);
@@ -140,8 +153,8 @@ console.log("user",user);
                       <input
                         class="form-control mt-2"
                         required
-                        name="fullNameAr"
-                        id="fullNameAr"
+                        name="fullNameEn"
+                        id="fullNameEn"
                         value={user?.fullNameEn}
                         onChange={handleChange}
                       />
@@ -346,13 +359,29 @@ console.log("user",user);
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
-                      <input
-                        class="form-control"
-                        id="educationLevel"
-                        name="educationLevelId"
-                        value={user?.client?.educationLevel?.nameAr}
-                        onChange={handleChange}
-                      />
+                         <select
+                         value={user.educationLevelId}
+                         name="educationLevelId"
+                         class="form-select"
+                         aria-label="Default select example"
+                         onChange={handleChange}
+                       >
+                         <option disabled selected>
+                           Select your educationLevel
+                         </option>
+                         {educationLevels?.items.map((educationLevel, index) => (
+                           <option key={index} value={educationLevel.id}>
+                             {educationLevel.nameEn}
+                           </option>
+                         ))}
+                       </select>
+                      // <input
+                      //   class="form-control"
+                      //   id="educationLevel"
+                      //   name="educationLevelId"
+                      //   value={user?.client?.educationLevel?.nameAr}
+                      //   onChange={handleChange}
+                      // />
                     ) : (
                       <span>{user?.client?.educationLevel?.nameAr} </span>
                     )}
@@ -368,13 +397,22 @@ console.log("user",user);
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
-                      <input
-                        class="form-control mt-2"
-                        id="jobTitle"
-                        name="jobTitleId"
-                        value={user?.client?.jobTitle?.nameAr}
-                        onChange={handleChange}
-                      />
+                      <select
+                      value={user.jobTitleId}
+                      name="jobTitlelId"
+                      class="form-select"
+                      aria-label="Default select example"
+                      onChange={handleChange}
+                    >
+                      <option disabled selected>
+                        Select your jobTitle
+                      </option>
+                      {jobTitles?.items.map((jobTitle, index) => (
+                        <option key={index} value={jobTitle.id}>
+                          {jobTitle.nameEn}
+                        </option>
+                      ))}
+                    </select>
                     ) : (
                       <span>{user?.client?.jobTitle?.nameAr}</span>
                     )}{" "}

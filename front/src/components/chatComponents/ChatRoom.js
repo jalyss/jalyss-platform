@@ -32,9 +32,11 @@ const ChatRoom = ({
   screen,
 }) => {
   const navigate = useNavigate();
-  const authStore = useSelector((state) => state.auth?.meAdmin);
- 
-
+  const authStore = useSelector((state) => state.auth?.me);
+  const chatStore = useSelector((state) => state.chat);
+  const { notSeen } = chatStore;
+  let number = notSeen;
+  const dispatch = useDispatch();
 
   const [searchText, setSearchText] = useState("");
   const [identifier, setIdentifier] = useState("");
@@ -85,7 +87,7 @@ const ChatRoom = ({
                 setSelectedUser(user);
 
                 if (screen === "md") setActiveComponent("conversation");
-                navigate(`/chat/${user?.userId}`);
+                navigate(`/chat-box/user/${user?.userId}`);
               }}
             >
               <Stack direction="row" spacing={2}>
