@@ -35,7 +35,7 @@ function DetailProvider() {
 
   useEffect(() => {
     setEditProviderData({ ...provider });
-  }, []);
+  }, [provider]);
 
   const toggleView = () => {
     setRenderEditView(!renderEditView);
@@ -77,6 +77,11 @@ function DetailProvider() {
   const toggleShowDelete = (id) => {
     setBasicModalDelete(!basicModalDelete);
   };
+  const onCanceltoggleShowDelete = (id) => {
+    setBasicModalDelete(!basicModalDelete);
+    setRenderEditView(false)
+  };
+
   return (
     <Box sx={{ maxWidth: "90%", height: "100%", margin: "auto" }}>
       <CardContent>
@@ -443,7 +448,7 @@ function DetailProvider() {
         )}
       </Box>
       <EditModal
-        toggleShow={toggleShowDelete}
+        toggleShow={onCanceltoggleShowDelete}
         basicModal={basicModalDelete}
         setBasicModal={setBasicModalDelete}
         normal={true}

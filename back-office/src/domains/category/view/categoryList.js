@@ -77,7 +77,7 @@ function CategoryList() {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
+            icon={<AiOutlineEye />}
             label="Edit"
             className="textPrimary"
             onClick={() => handleEditClick(id)}
@@ -132,7 +132,7 @@ function CategoryList() {
         normal={!true}
         ofDelete={true}
         bodOfDelete={<div className="d-flex justify-content-center align-items-center">You want to Delete this category ?</div>}
-        fn={()=>{handleDeleteClick()}}
+        confirm={()=>{handleDeleteClick()}}
       />
       <div>
         <div className="container">
