@@ -26,6 +26,7 @@ import { UpdatePasswordDto } from './entities/user.entity';
 import { AuthService } from 'src/domains/auth/auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto, UpdateUserIsCoach, UpdateUserStatusDto } from './dto/update-user.dto';
+import { CurrentUser } from '../auth/decorators/currentUser';
 
 
 @ApiTags('users')
@@ -55,10 +56,10 @@ export class UsersController {
     return this.usersService.create(dto)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  //   return this.usersService.update(id, updateUserDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
@@ -70,7 +71,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiSecurity('Aaccess-key')
   @UseInterceptors(ClassSerializerInterceptor) 
-  @Put('update/:id')
+  @Put('isActive/:id')
   public async updateUserStatus(@Param('id') id: string, @Body()
   updateUserStatusDto: UpdateUserStatusDto) {
     return await this.usersService
@@ -78,13 +79,14 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiSecurity('Aaccess-key')
+  @ApiSecurity('apiKey')
+
   @UseInterceptors(ClassSerializerInterceptor)
-  @Put('isActive/:id')
-  public async updateUser(@Param('id') id: string, @Body()
-  updateUserDto: UpdateUserDto) {
+  @Put('update')
+  public async updateUser(@CurrentUser() user: any, @Body()
+  updateUserDto: UpdateUserDto ,) {
     return await this.usersService
-      .update(id, updateUserDto,);
+      .update(user.id, updateUserDto,);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -21,6 +21,30 @@ export const fetchUser = createAsyncThunk("users/fetchUser", async (id) => {
   return response.data;
 });
 
+export const updateUser = createAsyncThunk(
+  "auth/update",
+  async (body, { dispatch }) => {
+    
+    let token = JSON.parse(localStorage.getItem("token")).Authorization;
+    console.log(token);
+    let configs = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/users/update`,
+     body,
+      configs
+    );
+    // localStorage.setItem("token", JSON.stringify(response.data));
+    // dispatch(me());
+    console.log("ress",response.data);
+    return response.data;
+  }
+);
+
+
 
 export const userSlice = createSlice({
   name: "user",
