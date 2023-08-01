@@ -120,7 +120,7 @@ function Header() {
 
                     {authStore.me && (
                       <div>
-                        <IconButton href="/chat">
+                        <IconButton href="/chat-box">
                           <ChatCircleDots size={32} color="#ccaa00" />
                         </IconButton>
                       </div>
