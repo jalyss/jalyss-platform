@@ -55,8 +55,9 @@ function Home() {
 
     <div class="custom-text-container">
       <CardContent>
+      
         <Typography gutterBottom variant="h2" component="div">
-          WHAT IS JALYSSCOM
+          ABOUT JALYSSCOM
         </Typography>
         <Typography variant="h6" color="text.secondary">
           This impressive paella is a perfect party dish and a fun meal to cook together with your guests.
@@ -72,39 +73,27 @@ function Home() {
     </div>
  
 
-    <div class='part-two'>
+
+    <div className='bestsellerss'>
+        <h3>CHECK OUR PARTENER</h3>
+        </div>
+      <div className='Menuhorizontal' >
+        {publishingHouseStore.publishingHouses.items.map(({ id, logo, name }) => (
+        <div key={id}  className="horizontal-item horizontal-item-publishingHouse">
+        <img key={id} draggable="false" src={logo?.path} alt={name} />
+           </div>
+           ))}
+          
+</div>
+
+<div class='part-two'>
   <div class='card'>
-  
+    <h1 >HI!</h1>
     <h2 >WELLCOME-TO JALYSSCOM</h2>
     <p>
     Discover the latest updates and join our vibrant community by simply clicking on any social media icon on our website. Stay connected with us effortlessly!
     </p>
-    <div class="social-icons">
-      <a
-        class="text-reset"
-        href="https://www.instagram.com/your_instagram_account"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i class="fab fa-instagram fa-lg mx-2"></i>
-      </a>
-      <a
-        class="text-reset"
-        href="https://twitter.com/your_twitter_account"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i class="fab fa-twitter fa-lg mx-2"></i>
-      </a>
-      <a
-        class="text-reset"
-        href="https://www.facebook.com/your_facebook_account"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i class="fab fa-facebook fa-lg mx-2"></i>
-      </a>
-    </div>
+   
   </div>
   <div class='image-3'>
     <img
@@ -115,28 +104,21 @@ function Home() {
   </div>
 </div>
 
+      {/* <TrainingHeading  title="Best Sellers" /> */}
 
-
-
-      <TrainingHeading className='Best-Sellers' title="Best Sellers" />
-       
-        <HorizontalMenu className="HorizontalMenu">
+      <div className='bestsellerss'>
+        <h3>Best Sellers</h3>
+        </div>
+        <HorizontalMenu className="HorizontalMenu" >
          {articleStore.articles.items.map((element) => (
           <ArticleCard article={element}/>
   
           ))}
           </HorizontalMenu>
-
+       
 
       
-      {/* <HorizontalMenu className="HorizontalMenu">
-        {publishingHouseStore.publishingHouses.items.map(({ id, logo, name }) => (
-        <div key={id}  className="horizontal-item horizontal-item-publishingHouse">
-        <img key={id} draggable="false" src={logo?.path} alt={name} />
-          </div>
-           ))}
-          
-</HorizontalMenu> */}
+  
 
       {/* <MDBContainer>
         <MDBRow className="text-center mb-5">
