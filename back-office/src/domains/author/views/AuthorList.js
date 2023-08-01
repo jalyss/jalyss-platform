@@ -56,7 +56,6 @@ function AuthorList() {
                 
             }
         })
-        console.log(aux);
         setRows(aux)
     }
 }, [authorStore.authors.items])
@@ -77,14 +76,7 @@ function AuthorList() {
         getActions: ({ id }) => {
   
           return [
-            <GridActionsCellItem
-              icon={<AiFillEdit />}
-              label="Edit"
-              className="textPrimary"
-              onClick={() => handleEditClick(id)}
-              color="inherit"
-  
-            />,
+
             <GridActionsCellItem
               icon={<AiOutlineEye />}
               label="Add"
@@ -131,7 +123,7 @@ function AuthorList() {
                     />
                 </Box>
               
-                 <Modal  bodOfDelete={"are"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={() => handleDeleteauthorClick(selectedAuthorId)} /> 
+                 <Modal  bodOfDelete={"are you sure ?"} basicModal={basicModal} toggleShow={toggleShow} ofDelete={true} confirm={() => handleDeleteauthorClick(selectedAuthorId)} /> 
             </div>
         </div>
     )
