@@ -250,7 +250,7 @@ function DetailAuthor() {
         normal={true}
         ofDelete={!true}
         title={
-          <div className="d-flex justify-content-center align-items-center">
+          <div style={{width:"200%",marginLeft:"100%"}} className="d-flex justify-content-center align-items-center">
             Are you sure !
           </div>
         }
