@@ -237,7 +237,7 @@ function DetailAritcle() {
               />
                <TextField
                 label="Author"
-                value={article?.author}
+                value={article?.authorIds}
                 disabled
                 fullWidth
                 variant="outlined"

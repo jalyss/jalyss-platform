@@ -6,37 +6,43 @@ import {
   FormControl,
   Grid,
   Input,
+  Box,
   InputLabel,
   MenuItem,
   Select,
   Button,
   TextField,
 } from "@mui/material";
-import {
-  updateArticleByBranch,
-  fetchArticle,
-  
-} from "../../../store/article";
+import { updateArticleByBranch, fetchArticle } from "../../../store/article";
 import { fetchAuthors } from "../../../store/author";
 import { fetchArticleTypes } from "../../../store/articleType";
 import { fetchPublishingHouses } from "../../../store/publishingHouse";
 import { fetchCategories } from "../../../store/category";
-import { fetchBranches } from "../../../store/branche";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 function EditArticle() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { articleId } = useParams();
-
   const articleStore = useSelector((state) => state.article.article);
   const authorStore = useSelector((state) => state.author);
   const articleTypeStore = useSelector((state) => state.articleType);
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
   const categoryStore = useSelector((state) => state.category);
-  const branchStore = useSelector((state) => state.branch);
 
-  const [article, setArticle] = useState({});
+  const [title, setTitle] = useState(articleStore?.title);
+  const [weight, setWeight] = useState(articleStore?.weight);
+  const [pageNumber, setPageNumber] = useState(articleStore?.pageNumber);
+  const [code, setCode] = useState(articleStore?.code);
+  const [shortDescriptionEn, setShortDescriptionEn] = useState(
+    articleStore?.shortDescriptionEn
+  );
+  const [longDescriptionEn, setLongDescriptionEn] = useState(
+    articleStore?.longDescriptionEn
+  );
+  const [nameEn, setNameEn] = useState(articleStore?.category?.nameEn);
+  const [name, setName] = useState(articleStore?.publishingHouse?.name);
+  const [typeNameEn, setTypeNameEn] = useState(articleStore?.type?.nameEn);
   const [cover, setCover] = useState(null);
 
   useEffect(() => {
@@ -45,26 +51,47 @@ function EditArticle() {
     dispatch(fetchArticleTypes());
     dispatch(fetchPublishingHouses());
     dispatch(fetchCategories());
-    dispatch(fetchBranches());
   }, [dispatch, articleId]);
 
   useEffect(() => {
     if (articleStore && articleStore.article) {
-      setArticle(articleStore.article);
+      const {
+        title,
+        weight,
+        pageNumber,
+        code,
+        shortDescriptionEn,
+        longDescriptionEn,
+        nameEn,
+        name,
+        typeNameEn,
+      } = providerStore.provider;
+      setTitle(title);
+      setWeight(weight.toString());
+      setPageNumber(pageNumber.toString());
+      setCode(code);
+      setShortDescriptionEn(shortDescriptionEn);
+      setLongDescriptionEn(longDescriptionEn);
+      setNameEn(nameEn);
+      setName(name);
+      setTypeNameEn(typeNameEn);
     }
   }, [articleStore]);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setArticle((prevArticle) => ({ ...prevArticle, [name]: value }));
-  };
-
-  const handleCoverChange = (event) => {
-    setCover(event.target.files[0]);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const body = {
+      title,
+      weight: Number(weight),
+      pageNumber:Number(pageNumber),
+      code,
+      shortDescriptionEn,
+      longDescriptionEn,
+      nameEn,
+      name,
+      typeNameEn,
+    };
 
     try {
       if (cover) {
@@ -76,12 +103,12 @@ function EditArticle() {
           formData
         );
 
-        article.coverId = response.data.id;
+        body.coverId = response.data.id;
       }
 
-      const editedArticle = { ...article, articleId };
+      const editedArticle = { ...body, articleId };
       dispatch(updateArticleByBranch(editedArticle));
-      showSuccessToast("Article edited successfully");
+      showSuccessToast("article edited successfully");
       navigate(-1);
     } catch (error) {
       console.error("Error editing article:", error);
@@ -101,8 +128,8 @@ function EditArticle() {
                 variant="outlined"
                 fullWidth
                 name="title"
-                value={article.title || ""}
-                onChange={handleChange}
+                value={title }
+               onChange={(e) => setTitle(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -113,41 +140,41 @@ function EditArticle() {
                 fullWidth
                 type="number"
                 name="weight"
-                value={article.weight || ""}
-                onChange={handleChange}
+                value={weight}
+               onChange={(e) => setWeight(e.target.value)}
                 margin="normal"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Short Description (Arabic)"
+                label="Short Description "
                 variant="outlined"
                 fullWidth
-                name="shortDescriptionAr"
-                value={article.shortDescriptionAr || ""}
-                onChange={handleChange}
+                name="shortDescriptionEn"
+                value={shortDescriptionEn}
+               onChange={(e) => setShortDescriptionEn(e.target.value)}
                 margin="normal"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Long Description (Arabic)"
+                label="Long Description "
                 variant="outlined"
                 fullWidth
-                name="longDescriptionAr"
-                value={article.longDescriptionAr || ""}
-                onChange={handleChange}
+                name="longDescriptionEn"
+                value={longDescriptionEn}
+               onChange={(e) => setLongDescriptionEn(e.target.value)}
                 margin="normal"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth >
+              <FormControl fullWidth>
                 <InputLabel id="category">Category</InputLabel>
                 <Select
                   labelId="category"
                   name="category"
-                  value={article.category || ""}
-                  onChange={handleChange}
+                  value={nameEn }
+                 onChange={(e) => setNameEn(e.target.value)}
                 >
                   <MenuItem value="">--select option--</MenuItem>
                   {categoryStore.categories.items.map((item) => (
@@ -159,13 +186,13 @@ function EditArticle() {
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth >
+              <FormControl fullWidth>
                 <InputLabel id="publishingHouse">Publishing House</InputLabel>
                 <Select
                   labelId="publishingHouse"
                   name="publishingHouse"
-                  value={article.publishingHouse || ""}
-                  onChange={handleChange}
+                  value={name }
+                 onChange={(e) => setName(e.target.value)}
                 >
                   <MenuItem value="">--select option--</MenuItem>
                   {publishingHouseStore.publishingHouses.items.map((item) => (
@@ -177,13 +204,13 @@ function EditArticle() {
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth >
+              <FormControl fullWidth>
                 <InputLabel id="type">Type</InputLabel>
                 <Select
                   labelId="type"
                   name="type"
-                  value={article.type || ""}
-                  onChange={handleChange}
+                  value={typeNameEn}
+                 onChange={(e) => setTypeNameEn(e.target.value)}
                 >
                   <MenuItem value="">--select option--</MenuItem>
                   {articleTypeStore.articleTypes.items.map((item) => (
@@ -194,48 +221,29 @@ function EditArticle() {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth >
-                <InputLabel id="author">Author</InputLabel>
-                <Select
-                  labelId="author"
-                  name="author"
-                  multiple
-                  value={article.author || []}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="">--select option--</MenuItem>
-                  {authorStore.authors.items.map((item) => (
-                    <MenuItem key={item.id} value={item.id}>
-                      {item.nameAr}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+           
+           
           </Grid>
         </div>
-        <div className="w-100 d-flex justify-content-center">
+        <Box my={2}>
           <input
             type="file"
             accept="image/*"
             id="cover-file"
             style={{ display: "none" }}
-            onChange={handleCoverChange}
+            onChange={(e) => setCover(e.target.files[0])}
           />
           <label htmlFor="cover-file">
             <Button variant="outlined" component="span">
-              Upload Cover
+              Upload cover
             </Button>
           </label>
-          <Button
-            type="submit"
-            className="confirm-button mt-3"
-            variant="contained"
-          >
-            Update Article
+        </Box>
+        <Box display="flex" justifyContent="center">
+          <Button type="submit" variant="contained" color="primary">
+            Update Provider
           </Button>
-        </div>
+          </Box>
       </form>
     </div>
   );

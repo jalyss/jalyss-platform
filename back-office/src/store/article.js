@@ -83,12 +83,16 @@ export const createArticleByBranchRating = createAsyncThunk(
 export const updateArticleByBranch = createAsyncThunk(
   "articles/updateArticleByBranch",
   async (args) => {
-    const { id, ...rest } = args;
-    const response = await axios.put(`${config.API_ENDPOINT}/articles/${id}`, {
-      ...rest,
-    });
+    const { articleId, ...rest } = args;
+    console.log(args,"args")
+    console.log(rest,"rest")
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/articles/${articleId}`, {
+      ...rest});
+      console.log(response.data,'response.data')
 
     return response.data;
+
   }
 );
 

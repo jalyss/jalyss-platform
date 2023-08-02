@@ -222,12 +222,17 @@ export class ArticleService {
         id,
       },
 
-      include: { category: true, publishingHouse: true, type: true,ArticlesByBranch:true },
+      include: {
+        category: true,
+        publishingHouse: true,
+        type: true,
+        ArticlesByBranch: true,
+      },
     });
   }
 
-  update(id: string, dto: UpdateArticleDto) {
-    return `This action updates a #${id} article`;
+  async update(id: string, dto: UpdateArticleDto) {
+    return await this.prisma.article.update({ where: { id }, data: dto });
   }
   async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
     return await this.prisma.articlesByBranch.update({
@@ -236,8 +241,8 @@ export class ArticleService {
     });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} article`;
+  async remove(id: string) {
+    return await this.prisma.article.delete({ where: { id } });
   }
 
   //Rating services
