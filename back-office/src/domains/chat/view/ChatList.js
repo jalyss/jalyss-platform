@@ -7,60 +7,34 @@ import isEnglish from "../../../helpers/isEnglish";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { IoIosPersonAdd } from "react-icons/io";
-import { findAllRooms,deleteChatRoom } from "../../../store/chatStore";
+import { findAllRooms, deleteChatRoom } from "../../../store/chatStore";
 import DeleteModal from "../../../components/Commun/Modal";
 import Select from "react-select";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import "../../../assets/styles/chatRoom.css";
 
 function ChatList() {
-  const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
-  const [rows, setRows] = useState(null);
   const dispatch = useDispatch();
+  const isEng = isEnglish();
+  const Navigate = useNavigate();
+
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [basicModalDeleteid, setBasicModalDeleteid] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const  AllchatRooms = useSelector((state) => state.chat.AllchatRooms.items);
+  const AllchatRooms = useSelector((state) => state.chat.allChatRooms.items);
   const handleOpen = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
     dispatch(findAllRooms());
-  }, []);
+  }, [dispatch]);
 
-   useEffect(() => {
-     if ( AllchatRooms) {
-       let chatRoomData =  AllchatRooms.map((e, index) => {
-         return {
-           ...e,
-           index: index,
-         };
-       });
-       setRows(chatRoomData);
-     }
-   }, [AllchatRooms]);
+ 
 
   const columns = [
     { field: "name", headerName: "Name", width: 150, editable: false },
-    // {
-    //   field: "participants",
-    //   headerName: "Participants",
-    //   width: 150,
-    //   editable: false,
-    //   valueGetter: (params) => {
-    //     const { participants } = params.row;
-    //     // Assuming each participant has a property named "fullNameEn"
-    //     const participantNames = participants.map(
-    //       (participant) => participant.user.fullNameEn
-    //     );
-    //     return participantNames.join(", ");
-    //   },
-    // },
-   
-
     {
       field: "createdAt",
       headerName: "createdAt",
@@ -117,19 +91,17 @@ function ChatList() {
       },
     },
   ];
-  const isEng = isEnglish();
-  const Navigate = useNavigate();
 
   const handleDeleteClick = (id) => {
-     dispatch(deleteChatRoom(basicModalDeleteid)).then((res) => {
-       if (res.error) {
-         showErrorToast(res.error.message);
-       } else {
-         showSuccessToast("Chat Room has been deleted");
-         dispatch(findAllRooms());
-         setBasicModalDelete(false);
-       }
-     });
+    dispatch(deleteChatRoom(basicModalDeleteid)).then((res) => {
+      if (res.error) {
+        showErrorToast(res.error.message);
+      } else {
+        showSuccessToast("Chat Room has been deleted");
+        dispatch(findAllRooms());
+        setBasicModalDelete(false);
+      }
+    });
   };
 
   const toggleShowDelete = (id) => {
@@ -177,23 +149,21 @@ function ChatList() {
           >
             <span className="btn btn-sm ">Add Chat</span>
           </Button>
-         
-          <Box>
-            {rows?.length > 0 ? (
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 5,
-                    },
+
+          <Box height={300}>
+            <DataGrid
+              rows={AllchatRooms}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
                   },
-                }}
-                pageSizeOptions={[5]}
-                disableRowSelectionOnClick
-              />
-            ) : null}
+                },
+              }}
+              pageSizeOptions={[5]}
+              disableRowSelectionOnClick
+            />
           </Box>
         </div>
       </div>

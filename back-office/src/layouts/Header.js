@@ -1,63 +1,64 @@
-import React, { useMemo } from 'react'
-import { Navbar, Container} from 'react-bootstrap'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { sidebarDataBranch } from '../constants/sidebarDataBranch'
-import isEnglish from '../helpers/isEnglish'
-import Typography from '@mui/material/Typography'
-import Menu from '@mui/material/Menu'
-import Avatar from '@mui/material/Avatar'
-import { FiSettings } from 'react-icons/fi'
-import { useSelector } from 'react-redux'
-import MenuItem from '@mui/material/MenuItem'
-import WhiteSelect from '../components/WhiteSelect'
-import { useTranslation } from 'react-i18next'
-import { useLanguage } from '../hooks/useLanguage'
-import { Box, Stack } from '@mui/material'
+import React, { useMemo } from "react";
+import { Navbar, Container } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import { sidebarDataBranch } from "../constants/sidebarDataBranch";
+import isEnglish from "../helpers/isEnglish";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Avatar from "@mui/material/Avatar";
+import { FiSettings } from "react-icons/fi";
+import { useSelector } from "react-redux";
+import MenuItem from "@mui/material/MenuItem";
+import WhiteSelect from "../components/WhiteSelect";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../hooks/useLanguage";
+import { Box, Stack } from "@mui/material";
+import { BsChatFill } from "react-icons/bs";
 
 function Header() {
-  const { t, i18n } = useTranslation()
-  const currentLanguage = useLanguage()
-  const [anchorElUser, setAnchorElUser] = React.useState(null)
-  const navigate = useNavigate()
+  const { t, i18n } = useTranslation();
+  const currentLanguage = useLanguage();
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
   const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget)
-  }
-  const userStore = useSelector((state) => state.auth)
+    setAnchorElUser(event.currentTarget);
+  };
+  const userStore = useSelector((state) => state.auth);
 
   const onChangeLanguage = (event) => {
-    console.log('hello')
-    console.log(event.target.value)
-    i18n.changeLanguage(event.target.value)
-    localStorage.setItem('lg', event.target.value)
-  }
+    console.log("hello");
+    console.log(event.target.value);
+    i18n.changeLanguage(event.target.value);
+    localStorage.setItem("lg", event.target.value);
+  };
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
-  }
+    setAnchorElUser(null);
+  };
 
-  const location = useLocation()
-  const isEng = isEnglish()
-  const isRtl = useMemo(() => i18n?.languages[0] === 'ar', [i18n?.languages])
+  const location = useLocation();
+  const isEng = isEnglish();
+  const isRtl = useMemo(() => i18n?.languages[0] === "ar", [i18n?.languages]);
 
   const getBrandText = () => {
     const currentPath = location.pathname;
-  
+
     for (let i = 0; i < sidebarDataBranch.length; i++) {
       const item = sidebarDataBranch[i];
-  
+
       if (currentPath === `/${item.path}`) {
         return isEng ? item.nameEn : item.nameAr;
       }
-  
+
       for (let j = 0; j < item.children.length; j++) {
         const child = item.children[j];
-  
+
         if (currentPath.endsWith(`/${child.path}`)) {
           return isEng ? child.nameEn : child.nameAr;
         }
       }
     }
-    return 'MasterKnowledgeAcademy'
-  }
+    return "MasterKnowledgeAcademy";
+  };
 
   return (
     <Box
@@ -66,8 +67,8 @@ function Header() {
       position="fixed"
       width="calc(100% - 260px)"
       borderBottom="1px solid #d9d9d9"
-      mr={isRtl && '260px'}
-      ml={!isRtl && '260px'}
+      mr={isRtl && "260px"}
+      ml={!isRtl && "260px"}
     >
       <Navbar>
         <Container>
@@ -88,11 +89,13 @@ function Header() {
                 ]}
                 helper={t("Language")}
               />
-
+              <div className="d-flex align-items-center">
+                <BsChatFill color="purple" size={22} className="pointer" onClick={()=>navigate('/chat-box')} />
+              </div>
               <Box
-                sx={{ cursor: 'pointer' }}
-                display='flex'
-                justifyContent='center'
+                sx={{ cursor: "pointer" }}
+                display="flex"
+                justifyContent="center"
                 alignItems="center"
                 onClick={handleOpenUserMenu}
                 px={1.5}
@@ -131,9 +134,12 @@ function Header() {
             >
               <MenuItem onClick={handleCloseUserMenu}>
                 <MenuItem>
-                  <Typography textAlign="center" onClick={()=>{
-                    navigate("/profile")
-                  }}>
+                  <Typography
+                    textAlign="center"
+                    onClick={() => {
+                      navigate("/profile");
+                    }}
+                  >
                     <span className="no-icon">Profile</span>
                   </Typography>
                 </MenuItem>
@@ -141,9 +147,9 @@ function Header() {
                   <Typography>
                     <span
                       onClick={(e) => {
-                        e.preventDefault()
-                        localStorage.removeItem('tokenAdmin')
-                        window.location.pathname = '/'
+                        e.preventDefault();
+                        localStorage.removeItem("tokenAdmin");
+                        window.location.pathname = "/";
                       }}
                       className="no-icon"
                     >
@@ -157,7 +163,7 @@ function Header() {
         </Container>
       </Navbar>
     </Box>
-  )
+  );
 }
 
-export default Header
+export default Header;

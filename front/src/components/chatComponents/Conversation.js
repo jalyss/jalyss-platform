@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import StyledBadge from "../Commun/StyledBadge";
-import Icon from "../../assets/styles/profile.png";
+import Icon from "../../assets/images/profile.png";
 import {
   CaretDown,
   LinkSimple,
@@ -28,30 +28,19 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import "../../assets/styles/conversation.css";
 
-import { fetchMessages } from "../../store/chat";
 import Lottie from "lottie-react";
 import typing from "../../assets/typing.json";
 import { useRef } from "react";
-import { SocketContext } from "../../apps/Client";
+
 import { useParams } from "react-router-dom";
-import { fetchUser } from "../../store/user";
+
 import config from "../../configs";
-import { set } from "lodash";
+import { SocketContext } from "../../apps/Client";
 
-const Conversation = ({
-  setChatRoomList,
-  room,
-  selectedUser,
-  socket,
-  setSelectedUser,
-}) => {
+
+const Conversation = ({}) => {
   const myId = useSelector((state) => state.auth.me?.id);
-  const userStore = useSelector((state) => state.user);
-  const { user } = userStore;
-
-  // const socket = useContext(SocketContext);
-  const dispatch = useDispatch();
-
+  const socket = useContext(SocketContext);
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [openPicker, setPicker] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -63,50 +52,48 @@ const Conversation = ({
   const [exist, setExist] = useState(null);
 
   const messagesEndRef = useRef(null);
-  const { userId } = useParams();
+  const { userId, groupId } = useParams();
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   };
   useEffect(() => {
     if (selectedUser) scrollToBottom();
-  }, [inbox, selectedUser]);
-
-
+  }, [inbox, userId, groupId]);
 
   useEffect(() => {
-    axios
-      .get(
-        `${config.API_ENDPOINT}/chatRoom/by-participants/${
-          userId ? userId : selectedUser?.userId
-        }/${myId}`
-      )
-      .then((res) => {
-        
-        setExist(res.data.id);
-        if(!selectedUser)
-        setSelectedUser(
-          res.data.participants.filter(
-            (participant) => participant.userId !== myId
-          )[0]
+    setInbox([]);
+    if (userId) {
+      axios
+        .get(
+          `${config.API_ENDPOINT}/chatRoom/by-participants/${userId}/${myId}`
+        )
+        .then((res) => {
+          setExist(res.data.id);
+          if (!selectedUser)
+            setSelectedUser(
+              res.data.participants.filter(
+                (participant) => participant.userId !== myId
+              )[0]
+            );
+        })
+        .catch((err) =>
+          axios
+            .get(`${config.API_ENDPOINT}/users/one/${userId}/`)
+            .then((res) => setSelectedUser({ user: res.data }))
         );
-        
-      })
-      .catch((err) =>
-        axios
-          .get(
-            `${config.API_ENDPOINT}/chatRoom/one/${
-              userId ? userId : selectedUser?.userId
-            }`
-          )
-          .then((res) => {
-            if(!selectedUser)
-            setSelectedUser(res.data)
-            setExist(res.data.id);
-            setInbox([])
-          }).catch(err=>console.log(err))
-      );
-  }, [myId, userId]);
+    } else {
+      axios
+        .get(`${config.API_ENDPOINT}/chatRoom/one/${groupId}`)
+        .then((res) => {
+          if (!selectedUser) setSelectedUser(res.data);
+          setExist(res.data.id);
+          setInbox([]);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [myId, userId, groupId]);
 
   useEffect(() => {
     if (exist) {
@@ -139,7 +126,7 @@ const Conversation = ({
           userId: myId,
           num: number,
         };
-        console.log('seen');
+        console.log("seen");
         socket.emit("msg-seen", payload);
       }
     }
@@ -173,12 +160,11 @@ const Conversation = ({
     }
     function getInbox(data) {
       let aux = [];
-          for (let i = data.length - 1; i >= 0; i--) {
-            aux.push(data[i]);
-          }
+      for (let i = data.length - 1; i >= 0; i--) {
+        aux.push(data[i]);
+      }
 
-          setInbox(aux);
-     
+      setInbox(aux);
     }
     function getChatRoomCreated(data) {
       setExist(data.id);
@@ -210,7 +196,7 @@ const Conversation = ({
         socket.emit("msg-to-server", payload);
       } else {
         let payload = {
-          receiverId: userId ? userId : selectedUser?.userId,
+          receiverId: userId,
           senderId: myId,
           text: message,
         };
@@ -262,7 +248,14 @@ const Conversation = ({
                     }}
                     variant="dot"
                   >
-                    <Avatar alt="profile picture" src={Icon} />
+                    <Avatar
+                      alt="profile picture"
+                      src={
+                        selectedUser?.user?.avatar
+                          ? selectedUser?.user?.avatar.path
+                          : Icon
+                      }
+                    />
                   </StyledBadge>
                 </Box>
                 <Stack spacing={0.2}>
@@ -320,6 +313,7 @@ const Conversation = ({
                       width: "40px",
                       height: "40px",
                       borderRadius: "50%",
+                      objectFit: "cover",
                     }}
                   />
                   <div>

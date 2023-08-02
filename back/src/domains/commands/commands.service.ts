@@ -15,15 +15,16 @@ export class CommandsService {
   ) {}
   async create(dto: CreateCommandDto, branchId: string) {
     // validateOrReject(dto);
+    console.log(dto);
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
     );
-    console.log(branchId,branch.id);
-    
+    console.log(branchId, branch.id);
+
     // if(!dto.commandLine){
     //   throw new HttpException("don't have items", HttpStatus.BAD_REQUEST)
     // }
-    
+
     return await this.prisma.command.create({
       data: {
         ...dto,
@@ -33,9 +34,9 @@ export class CommandsService {
     });
   }
 
-  async findAllByUserId(clientId :string) {
+  async findAllByUserId(clientId: string) {
     return await this.prisma.command.findMany({
-      where: { clientId  },
+      where: { clientId },
       include: {
         commandLine: true,
         branch: true,
@@ -43,9 +44,9 @@ export class CommandsService {
     });
   }
 
-async findAll(){
-  return this.prisma.command.findMany()
-}
+  async findAll() {
+    return this.prisma.command.findMany();
+  }
 
   async findAllByBranchIdentifier(branchId: string, filters: FilterCommand) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
@@ -93,21 +94,27 @@ async findAll(){
         id,
       },
       include: {
-        commandLine: {include:{articleByBranch:{include:{article:true}}}},
-        country:true,
-        city:true
+        commandLine: {
+          include: { articleByBranch: { include: { article: true } } },
+        },
+        country: true,
+        city: true,
+        branch: {
+          select: { name: true },
+        },
       },
     });
   }
 
-async findAllCommandLIne(){
-  return await this.prisma.commandLine.findMany({
-    include :{
-      articleByBranch:{include:{article:{include:{category:true}},branch:true}}
-    }
-  })
-
-}
+  async findAllCommandLIne() {
+    return await this.prisma.commandLine.findMany({
+      include: {
+        articleByBranch: {
+          include: { article: { include: { category: true } }, branch: true },
+        },
+      },
+    });
+  }
 
   async update(id: string, dto: UpdateCommandDto) {
     const branchId = (await this.prisma.command.findFirstOrThrow({
@@ -115,6 +122,8 @@ async findAllCommandLIne(){
         id,
       },
     }))!.branchId;
+    console.log(branchId);
+
     const command = await this.findOne(id);
 
     return await this.prisma.command.update({
@@ -131,16 +140,14 @@ async findAllCommandLIne(){
             },
           },
           create: dto.commandLine.map((elem) => ({
-            ...elem,
+            articleByBranchId: elem.articleByBranchId,
+            quantity: elem.quantity,
           })),
         },
       },
     });
   }
-
   remove(id: string) {
-    return `This action removes a #${id} command`;
+    return this.prisma.command.delete({ where: { id } });
   }
-
-
 }

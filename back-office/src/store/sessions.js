@@ -113,7 +113,7 @@ export const deletsessions = createAsyncThunk(
 export const editsession = createAsyncThunk(
   "sessions/Updtsessions",
   async (args, { dispatch }) => {
-    const { id, body } = args;
+    const { id,... body } = args;
     let token = JSON.parse(localStorage.getItem("token"));
     const configs = {
       headers: {
@@ -125,7 +125,7 @@ export const editsession = createAsyncThunk(
       body,
       configs
     );
-    // dispatch(fetchsessions(id))
+    dispatch(fetchsessions({take:10,skip:0}))
     return response.data;
   }
 );

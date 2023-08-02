@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Client from "../apps/Client";
@@ -38,14 +38,28 @@ import OrderHistory from "../components/Profile/OrderHistory";
 
 import Chat from "../pages/Chat";
 
-
 import SessionDetails from "../pages/SessionDetails";
 
-import ReserveMeeting from "../pages/space/SpaceReservation"
+import ReserveMeeting from "../pages/space/SpaceReservation";
 import Conversation from "../components/chatComponents/Conversation";
-
+import { useDispatch, useSelector } from "react-redux";
+import { me } from "../store/auth";
 
 function Router() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.me);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    if (token) {
+      const Authorization = token.Authorization;
+      dispatch(me(Authorization)).then((res) => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, [dispatch]);
+
   return (
     <div>
       <BrowserRouter>
@@ -57,24 +71,27 @@ function Router() {
             <Route path="one-article/:articleId" element={<OneArticle />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
-            <Route path="profile" element={<Profile />}>
-              <Route index element={<MyBlogs />} />
-              <Route path="my-bookmarks" element={<MyBookmarks />} />
-              <Route path="bio" element={<Edit />} />
-             
-              <Route path="orders-history" element={<OrderHistory />} />
-            </Route>
+            {user && (
+              <Route path="profile" element={<Profile />}>
+                <Route index element={<MyBlogs />} />
+                <Route path="my-bookmarks" element={<MyBookmarks />} />
+                <Route path="bio" element={<Edit />} />
 
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<Signup />} />
-            <Route path="reset-password" element={<ResetPassword />} />
-            <Route path="new-password" element={<NewPassword />} />
+                <Route path="orders-history" element={<OrderHistory />} />
+              </Route>
+            )}
+
             
-            <Route path="*" element={<NoPage />} />
-            <Route path="/chat" element={<Chat />}>
-            <Route path="/chat/:userId" element={<Conversation />} />
-           
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<Signup />} />
+                <Route path="reset-password" element={<ResetPassword />} />
+                <Route path="new-password" element={<NewPassword />} />
+            
 
+            <Route path="*" element={<NoPage />} />
+            <Route path="chat-box" element={<Chat />}>
+              <Route path="user/:userId" element={<Conversation />} />
+              <Route path="group/:groupId" element={<Conversation />} />
             </Route>
             <Route path="training" element={<TrainingPage />} />
             <Route path="mentor" element={<MentorPage />} />
@@ -88,14 +105,12 @@ function Router() {
               path="spaceJalyss/:serviceIdentifier"
               element={<ServiceSpace />}
             />
-           
-
 
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
-            <Route path="sessions/:sessionId" element={<SessionDetails />}/>
-           
+            <Route path="sessions/:sessionId" element={<SessionDetails />} />
+
             <Route path="RegisterForm" element={<RegisterForm />} />
-            <Route  path="SpaceReservation" element={ <SpaceReservation/>}/>
+            <Route path="SpaceReservation" element={<SpaceReservation />} />
           </Route>
         </Routes>
       </BrowserRouter>
@@ -104,4 +119,3 @@ function Router() {
 }
 
 export default Router;
-

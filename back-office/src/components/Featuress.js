@@ -15,7 +15,7 @@ import StyledInput from "./Commun/inputs/StyledInput";
 
 function Featuress() {
   const dispatch = useDispatch();
-  const featuresStore = useSelector((state) => state.tarifss);
+  const featuresStore = useSelector((state) => state.tarifSession);
   const { features } = featuresStore;
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
@@ -24,15 +24,8 @@ function Featuress() {
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
   const [labelOfDelete, setLabelOfDelete] = useState("");
-
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: 5,
-    page: 0,
-  });
-  const [rowCount, setRowCount] = React.useState(0);
-  React.useEffect(() => {
-    setRowCount(features.items?.length);
-  }, [rowCount]);
+console.log("storfeat",featuresStore);
+ 
 
   useEffect(() => {
     if (editModal && editRowId) {
@@ -51,10 +44,10 @@ function Featuress() {
 
   useEffect(() => {
     dispatch(fetchFeatures());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (features?.items.length) {
+    if (features?.items?.length) {
       let aux = features?.items.map((e) => {
         return {
           ...e,
@@ -64,7 +57,7 @@ function Featuress() {
       });
       setRows(aux);
     }
-  }, [features.items]);
+  }, [features?.items]);
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
@@ -175,12 +168,8 @@ function Featuress() {
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
             disableRowSelectionOnClick
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rowCount={rowCount}
-            paginationMode="server"
+           
           />
         </Box>
       </div>

@@ -26,7 +26,7 @@ import {
 import { EmployeeLogin } from '../employee/entities/employee.entity';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CurrentUser } from './decorators/currentUser';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { ChangePasswordDto, UpdateAuthDto } from './dto/update-auth.dto';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
 
 @ApiTags('auth')
@@ -41,7 +41,7 @@ export class AuthController {
     const result: RegistrationStatus = await this.authService.register(
       createUserDto,
     );
-    console.log(result);
+ 
     
     if (!result.success) {
       throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
@@ -108,7 +108,7 @@ export class AuthController {
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Post('change-password')
-  changePassword(@CurrentUser() user: any, @Body() body: UpdateAuthDto) {
+  changePassword(@CurrentUser() user: any, @Body() body: ChangePasswordDto) {
     return this.authService.changePassword(
       user.email,
       body.password,
@@ -119,7 +119,7 @@ export class AuthController {
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Patch('update')
-  update(@CurrentUser() user: any, @Body() dto: UpdateUserDto) {
+  update(@CurrentUser() user: any, @Body() dto: UpdateAuthDto) {
     return this.authService.update(user.id, dto);
   }
 }

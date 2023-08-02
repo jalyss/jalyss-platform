@@ -24,7 +24,7 @@ function Sessions() {
     setBasicModal(!basicModal);
   };
 
-  const take = 10;
+  const take = sessionStore?.count;
 
   useEffect(() => {
     dispatch(fetchsessions({ take, skip }));
@@ -41,9 +41,7 @@ function Sessions() {
     });
   };
 
-  if (sessionStore.length === 0) {
-    return <div>Loading...</div>;
-  }
+ 
   const columns = [
     {
       field: "title",
@@ -90,12 +88,7 @@ function Sessions() {
             onClick={() => navigate(`detail-training/${id}`)}
             color="success"
           />,
-          <GridActionsCellItem
-            icon={<AiFillEdit style={{ color: "blue" }} />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => navigate(`update-training/${id}`)}
-          />,
+          
           <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
@@ -122,7 +115,7 @@ function Sessions() {
           mb={20}
         />
       </div>
-      <div className="position-relative">
+      <div className="position-relative mx-3">
         Session List
         <Box sx={{ height: 600, width: "100%" }}>
           <DataGrid
@@ -136,7 +129,7 @@ function Sessions() {
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
+            
             disableRowSelectionOnClick
           />
         </Box>

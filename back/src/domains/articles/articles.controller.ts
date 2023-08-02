@@ -40,6 +40,11 @@ export class ArticleController {
     return this.articleService.findAll();
   }
 
+  @Get("/getArticleTitles")
+  findArticleTitleAndId() {
+    return this.articleService.findArticleTitleAndId();
+  }
+  
   @Get(':branchId')
   findAllByBranch(
     @Param('branchId') branchId: string,

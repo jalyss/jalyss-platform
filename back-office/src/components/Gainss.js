@@ -20,14 +20,7 @@ function Gainss() {
   const [editModal, setEditModal] = useState(false);
   const [contentOfDelete, setContentOfDelete] = useState("");
 
-  const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: 5,
-    page: 0,
-  });
-  const [rowCount, setRowCount] = React.useState(0);
-  React.useEffect(() => {
-    setRowCount(gains.items?.length);
-  }, [rowCount]);
+ 
 
   useEffect(() => {
     dispatch(fetchGains());
@@ -164,12 +157,9 @@ function Gainss() {
               },
             }}
             pageSizeOptions={[5]}
-            checkboxSelection
+            
             disableRowSelectionOnClick
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rowCount={rowCount}
-            paginationMode="server"
+           
           />
         </Box>
       </div>

@@ -66,8 +66,8 @@ function Requests() {
           createdAt: item.createdAt.slice(0, 10),
           resume: item.resume?.path,
           fullName: item.user.fullNameEn,
-          city: item.user.address,
-          phone: item.user.tel,
+          city: item.user.client.address ,
+          phone: item.user.client.tel,
           email: item.user.email,
           status: item.status,
           // field: item.RequestCategories
@@ -246,7 +246,7 @@ function Requests() {
             },
           }}
           pageSizeOptions={[5]}
-          checkboxSelection
+        
           disableRowSelectionOnClick
         />
       </Box>
