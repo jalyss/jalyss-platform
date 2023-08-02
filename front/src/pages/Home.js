@@ -89,8 +89,8 @@ function Home() {
 <div class='part-two'>
   <div class='card'>
     <h1 >HI!</h1>
-    <h2 >WELLCOME-TO JALYSSCOM</h2>
-    <p>
+    <h2>WELLCOME-TO JALYSSCOM</h2>
+    <p className='text-p'>
     Discover the latest updates and join our vibrant community by simply clicking on any social media icon on our website. Stay connected with us effortlessly!
     </p>
    
