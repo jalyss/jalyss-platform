@@ -47,13 +47,14 @@ CREATE TABLE "JobTitle" (
 );
 
 -- CreateTable
-CREATE TABLE "Client" (
+CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "fullNameEn" TEXT NOT NULL,
     "fullNameAr" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "tel" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "avatarId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -64,24 +65,6 @@ CREATE TABLE "Client" (
     "jobTitleId" TEXT,
     "countryId" TEXT,
     "cityId" TEXT,
-    "isCoach" BOOLEAN DEFAULT false,
-
-    CONSTRAINT "Client_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
-    "fullNameEn" TEXT NOT NULL,
-    "fullNameAr" TEXT NOT NULL,
-    "isClient" BOOLEAN NOT NULL DEFAULT true,
-    "employeeId" TEXT,
-    "clientId" TEXT,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "avatarId" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "confirmkey" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "isCoach" BOOLEAN DEFAULT false,
@@ -256,6 +239,7 @@ CREATE TABLE "Employee" (
     "address" TEXT NOT NULL,
     "tel" TEXT NOT NULL,
     "avatarId" TEXT,
+    "password" TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "branch_id" TEXT,
     "roleId" TEXT,
@@ -452,7 +436,6 @@ CREATE TABLE "SessionHasSessionType" (
 CREATE TABLE "SessionType" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "SessionType_pkey" PRIMARY KEY ("id")
 );
@@ -460,9 +443,7 @@ CREATE TABLE "SessionType" (
 -- CreateTable
 CREATE TABLE "SessionHasLecture" (
     "sessionId" TEXT NOT NULL,
-    "lectureId" TEXT NOT NULL,
-    "startAt" TIMESTAMP(3) NOT NULL,
-    "endAt" TIMESTAMP(3) NOT NULL
+    "lectureId" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -470,6 +451,8 @@ CREATE TABLE "Lecture" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
+    "startAt" TIMESTAMP(3),
+    "endAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Lecture_pkey" PRIMARY KEY ("id")
@@ -506,7 +489,7 @@ CREATE TABLE "Feature" (
 -- CreateTable
 CREATE TABLE "SessionTarifHasFeatures" (
     "featureId" TEXT NOT NULL,
-    "tarifId" TEXT NOT NULL,
+    "sessionId" TEXT NOT NULL,
     "isAvailable" BOOLEAN NOT NULL
 );
 
@@ -539,13 +522,13 @@ CREATE TABLE "TrainingBooking" (
 );
 
 -- CreateTable
-CREATE TABLE "ClientPayment" (
+CREATE TABLE "UserPayment" (
     "id" TEXT NOT NULL,
-    "clientId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "ClientPayment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UserPayment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -773,9 +756,6 @@ CREATE TABLE "ContentSubComponent" (
 CREATE UNIQUE INDEX "JobTitleByFunctioanArea_functionalAreaId_jobTitleId_key" ON "JobTitleByFunctioanArea"("functionalAreaId", "jobTitleId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Client_email_key" ON "Client"("email");
-
--- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
@@ -836,7 +816,7 @@ CREATE UNIQUE INDEX "SessionHasSessionType_sessionId_sessionTypeId_key" ON "Sess
 CREATE UNIQUE INDEX "SessionHasLecture_sessionId_lectureId_key" ON "SessionHasLecture"("sessionId", "lectureId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_tarifId_key" ON "SessionTarifHasFeatures"("featureId", "tarifId");
+CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_sessionId_key" ON "SessionTarifHasFeatures"("featureId", "sessionId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SessionHasFeatures_featureId_sessionId_key" ON "SessionHasFeatures"("featureId", "sessionId");
@@ -884,34 +864,25 @@ ALTER TABLE "JobTitleByFunctioanArea" ADD CONSTRAINT "JobTitleByFunctioanArea_fu
 ALTER TABLE "JobTitleByFunctioanArea" ADD CONSTRAINT "JobTitleByFunctioanArea_jobTitleId_fkey" FOREIGN KEY ("jobTitleId") REFERENCES "JobTitle"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "UserCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_educationLevelId_fkey" FOREIGN KEY ("educationLevelId") REFERENCES "EducationLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_functionalAreaId_fkey" FOREIGN KEY ("functionalAreaId") REFERENCES "FunctionalArea"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_jobTitleId_fkey" FOREIGN KEY ("jobTitleId") REFERENCES "JobTitle"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "UserCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_educationLevelId_fkey" FOREIGN KEY ("educationLevelId") REFERENCES "EducationLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_functionalAreaId_fkey" FOREIGN KEY ("functionalAreaId") REFERENCES "FunctionalArea"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_jobTitleId_fkey" FOREIGN KEY ("jobTitleId") REFERENCES "JobTitle"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -986,13 +957,13 @@ ALTER TABLE "Employee" ADD CONSTRAINT "Employee_branch_id_fkey" FOREIGN KEY ("br
 ALTER TABLE "Employee" ADD CONSTRAINT "Employee_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Command" ADD CONSTRAINT "Command_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "Client"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Command" ADD CONSTRAINT "Command_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Command" ADD CONSTRAINT "Command_branch_id_fkey" FOREIGN KEY ("branch_id") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Command" ADD CONSTRAINT "Command_intermediate_id_fkey" FOREIGN KEY ("intermediate_id") REFERENCES "Client"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Command" ADD CONSTRAINT "Command_intermediate_id_fkey" FOREIGN KEY ("intermediate_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Command" ADD CONSTRAINT "Command_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -1091,7 +1062,7 @@ ALTER TABLE "Assessments" ADD CONSTRAINT "Assessments_lectureId_fkey" FOREIGN KE
 ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_tarifId_fkey" FOREIGN KEY ("tarifId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SessionHasFeatures" ADD CONSTRAINT "SessionHasFeatures_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1109,7 +1080,7 @@ ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_userId_fkey" FOREI
 ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_sessionTarifId_fkey" FOREIGN KEY ("sessionTarifId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ClientPayment" ADD CONSTRAINT "ClientPayment_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserPayment" ADD CONSTRAINT "UserPayment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaProvider" ADD CONSTRAINT "MediaProvider_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
