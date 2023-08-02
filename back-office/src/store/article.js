@@ -38,17 +38,23 @@ export const fetchArticleByBranch = createAsyncThunk(
   }
 );
 
-export const addTransactionStock = createAsyncThunk("mvt/createMvt", async (args, { dispatch }) => {
-  const response = await axios.post(`${config.API_ENDPOINT}/mvts`, args)
-  dispatch(fetchArticles())
-  return response.data;
-})
+export const addTransactionStock = createAsyncThunk(
+  "mvt/createMvt",
+  async (args, { dispatch }) => {
+    const response = await axios.post(`${config.API_ENDPOINT}/mvts`, args);
+    dispatch(fetchArticles());
+    return response.data;
+  }
+);
 
-export const createArticle = createAsyncThunk("articles/createArticle", async (body, { dispatch }) => {
-  const response = await axios.post(`${config.API_ENDPOINT}/articles/`, body);
-  dispatch(fetchArticle(response.data.id))
-  return response.data;
-});
+export const createArticle = createAsyncThunk(
+  "articles/createArticle",
+  async (body, { dispatch }) => {
+    const response = await axios.post(`${config.API_ENDPOINT}/articles/`, body);
+    dispatch(fetchArticle(response.data.id));
+    return response.data;
+  }
+);
 
 export const createArticleByBranchRating = createAsyncThunk(
   "articles/rating",
@@ -71,16 +77,36 @@ export const createArticleByBranchRating = createAsyncThunk(
     );
     dispatch(fetchArticleByBranch(articleByBranchId));
     return response.data;
-  });
+  }
+);
 
-export const updateArticleByBranch = createAsyncThunk("articles/updateArticleByBranch", async (args, { dispatch }) => {
-  const { id, ...rest } = args
-  const response = await axios.put(`${config.API_ENDPOINT}/articles/${id}`, rest);
-  dispatch(fetchArticles())
-  return response.data;
-});
+export const updateArticleByBranch = createAsyncThunk(
+  "articles/updateArticleByBranch",
+  async (args, { dispatch }) => {
+    const { articleId, ...rest } = args;
+    console.log(args, "args");
+    console.log(rest, "rest");
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/articles/${articleId}`,
+      { ...rest }
+    );
 
+    console.log(response.data, "response.data");
 
+    return response.data;
+  }
+);
+export const removeArticle = createAsyncThunk(
+  "articles/removeArticle",
+  async (id) => {
+ 
+      const response = await axios.delete(
+        `${config.API_ENDPOINT}/articles/${id}`
+      );
+      return response.data;
+   
+  }
+);
 export const articleSlice = createSlice({
   name: "article",
   initialState: {
