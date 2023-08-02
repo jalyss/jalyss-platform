@@ -33,7 +33,7 @@ function EditChat() {
     if (oneRoom) {
       setName(oneRoom.name);
       setValue(
-        oneRoom.participants.map((participant) => ({
+        oneRoom?.participants.map((participant) => ({
           value: participant.userId,
           label: participant.user.fullNameEn,
         }))

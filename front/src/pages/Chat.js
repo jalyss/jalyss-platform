@@ -1,19 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Avatar, Box, Divider, IconButton, Stack, Switch } from "@mui/material";
-import { useTheme } from "@emotion/react";
+import { Avatar, Box, IconButton, Switch } from "@mui/material";
+
 import { Phone, ChatCircleDots, Users, Broadcast } from "phosphor-react";
-import { Link } from "react-router-dom";
+
 
 import Conversation from "../components/chatComponents/Conversation";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, } from "react-redux";
 import ConnectedUsers from "../components/chatComponents/ConnectedUsers";
 import { SocketContext } from "../apps/Client";
 import ChatRoom from "../components/chatComponents/ChatRoom";
 import GroupChat from "../components/chatComponents/GroupChat";
 import { styled } from "@mui/system";
-import { fetchMessages, fetchChatRoom } from "../store/chat";
+
 import config from "../configs";
+import { Outlet } from "react-router-dom";
 
 
 const Stack0 = styled("div")(({ theme }) => ({
@@ -61,14 +62,7 @@ const Box1 = styled("div")(({ theme }) => ({
   },
 }));
 
-const BoxDiscussion = styled("div")(({ theme }) => ({
-  backgroundColor: "#57385c",
-  borderRadius: 6,
-  padding: 8,
-  [theme.breakpoints.up("md")]: {
-    display: "none",
-  },
-}));
+
 
 const BoxLg = styled("div")(({ theme }) => ({
   width: 500,
@@ -91,10 +85,10 @@ const BoxLgConversation = styled("div")(({ theme }) => ({
   },
 }));
 
-const Chat = () => {
-  const dispatch = useDispatch();
+const ChatBox = () => {
+ 
   const socket = useContext(SocketContext);
-  const theme = useTheme();
+  
 
   const myId = useSelector((state) => state.auth.me?.id);
 
@@ -112,9 +106,6 @@ const Chat = () => {
         .then((response) => {
           const data = response.data;
           setChatRoomList(data);
-          // setSelectedUser(
-          //   data[0].participants.find((participant) => participant.user.id !== myId)
-          // );
         })
         .catch((err) => console.log(err));
     }
@@ -131,6 +122,7 @@ const Chat = () => {
       socket.off(`chat-rooms/${myId}`, handleChatRooms);
     };
   }, [socket, myId]);
+
   const handleChangeComponent = (string) => {
     setActiveComponentLg(string);
     setActiveComponentMd(string);
@@ -220,15 +212,7 @@ const Chat = () => {
         </BoxLg>
       )}
 
-      <BoxLgConversation>
-        <Conversation
-          // setChatRoomList={setChatRoomList}
-          // room={room}
-          selectedUser={selectedUser}
-          socket={socket}
-          setSelectedUser={setSelectedUser}
-        />
-      </BoxLgConversation>
+      
 
       {activeComponentMd === "connectedUsers" && (
         <BoxMd>
@@ -267,17 +251,28 @@ const Chat = () => {
         </BoxMd>
       )}
 
-      {activeComponentMd === "conversation" && (
+      {activeComponentMd === "conversation" ? (
         <BoxMd>
-          <Conversation
+          <Outlet />
+          {/* <Conversation
             selectedUser={selectedUser}
             socket={socket}
             setSelectedUser={setSelectedUser}
-          />
+          /> */}
         </BoxMd>
-      )}
+      ):
+      <BoxLgConversation>
+         <Outlet />
+        {/* <Conversation
+          // setChatRoomList={setChatRoomList}
+          // room={room}
+          selectedUser={selectedUser}
+          socket={socket}
+          setSelectedUser={setSelectedUser}
+        /> */}
+      </BoxLgConversation>}
     </div>
   );
 };
 
-export default Chat;
+export default ChatBox;

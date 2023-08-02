@@ -90,8 +90,9 @@ function Router() {
             
 
             <Route path="*" element={<NoPage />} />
-            <Route path="/chat" element={<Chat />}>
-              <Route path="/chat/:userId" element={<Conversation />} />
+            <Route path="chat-box" element={<Chat />}>
+              <Route path="user/:userId" element={<Conversation />} />
+              <Route path="group/:groupId" element={<Conversation />} />
             </Route>
             <Route path="training" element={<TrainingPage />} />
             <Route path="mentor" element={<MentorPage />} />
