@@ -23,7 +23,7 @@ function ArticleCard({ article }) {
           className="w-100 object-fit-contain"
           alt=""
         />
-        <div className="rating">
+        <div className="rating-home">
           <Rating edit={false} rating={article?.rating} />
         </div>
       </div>

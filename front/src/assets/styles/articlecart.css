@@ -1,19 +1,5 @@
 
-.article-image {
-  border-radius: 2px;
-}
-
-.stock-label {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  
-  padding: 4px 8px;
-  border-radius: 2px;
-  font-size: 12px;
-}
-
-.rating {
+.rating-home{
   position: absolute;
   bottom: 8px;
   left: 8px;
