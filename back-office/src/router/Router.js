@@ -107,6 +107,11 @@ import SessionType from "../domains/training/views/sessionType/SessionType";
 import ChatBox from "../pages/ChatBox";
 import Conversation from "../components/chatComponents/Conversation";
 import Subscriber from "../domains/training/views/sessions/Subscriber";
+import Client from "../domains/Client/Client";
+import Clientlist from "../domains/Client/views/Clientlist";
+
+
+
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -148,20 +153,25 @@ function Router() {
 
             <Route path="profile" element={<Profile />} />
             <Route path="chat-box" element={<ChatBox />}>
-              <Route path="user/:userId" element={<Conversation />} />
-              <Route path="group/:groupId" element={<Conversation />} />
+            <Route path="user/:userId" element={<Conversation />} />
+            <Route path="group/:groupId" element={<Conversation />} />
             </Route>
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
               <Route path="edit/:userId" element={<EditUser />} />
             </Route>
+            
 
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
               <Route path="edit/:employeeId" element={<EditEmployee />} />
             </Route>
+
+            <Route path="client" element={<Client/>}>
+              <Route index element={<Clientlist/>}/>
+              </Route>
 
             <Route path="blogs" element={<Blogs />}>
               <Route index element={<BlogsList />} />
@@ -227,6 +237,9 @@ function Router() {
 
 
               </Route>
+            
+
+
               <Route path="subscriber/:id" element={<Subscriber />} />
 
               <Route path="newsession" element={<Newsession />} />
