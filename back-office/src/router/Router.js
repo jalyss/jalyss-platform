@@ -110,7 +110,7 @@ import Subscriber from "../domains/training/views/sessions/Subscriber";
 import Client from "../domains/Client/Client";
 import Clientlist from "../domains/Client/views/Clientlist";
 import Addclient from "../domains/Client/views/Addclient";
-import Profieclient from "../domains/Client/views/Profieclient";
+import Profileclient from "../domains/Client/views/Profileclient";
 
 
 function Router() {
@@ -173,7 +173,7 @@ function Router() {
             <Route path="client" element={<Client/>}>
               <Route index element={<Clientlist/>}/>
               <Route path="addclient" element={<Addclient/>}/>
-              <Route path="profilclient" element={<Profieclient/>}/>
+             <Route path="profilclient" element={<Profileclient/>}/>
               </Route>
 
             <Route path="blogs" element={<Blogs />}>

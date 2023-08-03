@@ -7,13 +7,23 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useTranslation } from "react-i18next";
 
-const profieclient = () => {
+const profileclient = () => {
+   const [isPaid, setIsPaid] = useState(false);
+   const[isdelivered,setIsdelivered]=useState(false)
+   const[isconfirm,setIsconfirm]=useState(false)
+  const handleEditModeToggle = () => {
+    setEditMode(!editMode);
+  };
+
+  const handleInputChange = (event) => {
+    setIsPaid(event.target.value);
+  };
     const [editMode, setEditMode] = useState(false);
     const [preview, setPreview] = useState(null);
     const { t, i18n } = useTranslation();
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-    <h2>Profile client </h2>
+    <h2>Profile client</h2>
     <form className="checkout-form" >
       <div className="d-flex flex-wrap justify-content-center">
    
@@ -31,7 +41,6 @@ const profieclient = () => {
           <button
             type="button"
             class="delete-button"
-
           >
             X
           </button>
@@ -112,8 +121,7 @@ const profieclient = () => {
                         type="tel"
                         class="form-control mt-2"
                         id="tel"
-                        name="tel"
-                    
+                        name="tel" 
                       />
                     ) : (
                       <span></span>
@@ -121,8 +129,7 @@ const profieclient = () => {
                   </TableCell>
                 </TableRow>
                 <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
                   <TableCell className="fw-bold" align="right">
                     العنوان
                   </TableCell>
@@ -138,6 +145,124 @@ const profieclient = () => {
                     ) : (
                       <span></span>
                     )}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
+                  <TableCell className="fw-bold" align="right">
+                  delivered  
+                  </TableCell>
+                  <TableCell align="right">
+                    {editMode ? (
+                      <input  
+                        required
+                        class="form-control mt-2"
+                        id="delivered"
+                        name="delivered"  
+                        value={isdelivered}
+                        onChange={handleInputChange}
+                      />
+                    ) : (
+                      <span  style={{
+                        padding: '5px 10px',
+                        borderRadius: '5px',
+                        backgroundColor: isdelivered ? '#4CAF50' : '#FFC107',
+                        color: '#fff',
+                      }}>{isdelivered? 'delivered' : 'Not delivered  '}</span>
+                    )}
+                    <button
+          style={{
+            marginLeft: '10px',
+            padding: '5px 10px',
+            borderRadius: '5px',
+            backgroundColor: editMode ? '#2196F3' : '#4CAF50',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+          onClick={handleEditModeToggle}
+        >
+          {editMode ? 'Save' : 'Edit'}
+        </button>
+                    
+                  </TableCell>
+                </TableRow>
+                <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+      <TableCell className="fw-bold" align="right">
+        paid
+      </TableCell>
+      <TableCell align="right">
+        {editMode ? (
+          <input
+            required
+            className="form-control mt-2"
+            id="delivered"
+            name="paid"
+            value={isPaid}
+            onChange={handleInputChange}
+          />
+        ) : (
+          <span  style={{
+            padding: '5px 10px',
+            borderRadius: '5px',
+            backgroundColor: isPaid ? '#4CAF50' : '#FFC107',
+            color: '#fff',
+          }}>{isPaid ? 'Paid' : 'Not Paid'}</span>
+        )}
+        <button
+          style={{
+            marginLeft: '10px',
+            padding: '5px 10px',
+            borderRadius: '5px',
+            backgroundColor: editMode ? '#2196F3' : '#4CAF50',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+          onClick={handleEditModeToggle}
+        >
+          {editMode ? 'Save' : 'Edit'}
+        </button>
+      </TableCell>
+    </TableRow>
+    <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
+                  <TableCell className="fw-bold" align="right">
+                  confirm 
+                  </TableCell>
+                  <TableCell align="right">
+                    {editMode ? (
+                      <input  
+                        required
+                        class="form-control mt-2"
+                        id=" confirm "
+                        name=" confirm "  
+                        value={isconfirm}
+                        onChange={handleInputChange}
+                      />
+                    ) : (
+                      <span  style={{
+                        padding: '5px 10px',
+                        borderRadius: '5px',
+                        backgroundColor: isconfirm ? '#4CAF50' : '#FFC107',
+                        color: '#fff',
+                      }}>{isconfirm? ' confirm ' : 'Not  confirm   '}</span>
+                    )}
+                   <button
+          style={{
+            marginLeft: '10px',
+            padding: '5px 10px',
+            borderRadius: '5px',
+            backgroundColor: editMode ? '#2196F3' : '#4CAF50',
+            color: '#fff',
+            border: 'none',
+            cursor: 'pointer',
+          }}
+          onClick={handleEditModeToggle}
+        >
+          {editMode ? 'Save' : 'Edit'}
+        </button>
+                    
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -160,4 +285,4 @@ const profieclient = () => {
   )
 }
 
-export default profieclient
+export default profileclient
