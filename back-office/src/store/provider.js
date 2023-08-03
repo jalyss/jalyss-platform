@@ -23,12 +23,6 @@ export const fetchProvider = createAsyncThunk(
   }
 );
 
-export const createProvider = createAsyncThunk("providers/createProvider", async (body, { dispatch }) => {
-  const response = await axios.post(`${config.API_ENDPOINT}/providers/`, body);
-  dispatch(fetchProvider(response.data.id))
-  return response.data;
-});
-
 
 export const editProvider = createAsyncThunk(
   "providers/editProvider",
@@ -39,20 +33,26 @@ export const editProvider = createAsyncThunk(
       const response = await axios.patch(
         `${config.API_ENDPOINT}/providers/${providerId}`,
         {...rest}
+        );
+        console.log(response.data,'response.data')
+        return response.data;
+        
+      }
       );
-      console.log(response.data,'response.data')
-      return response.data;
-   
-  }
-);
+      export const createProvider = createAsyncThunk("providers/createProvider", async (body, { dispatch }) => {
+        const response = await axios.post(`${config.API_ENDPOINT}/providers/`, body);
+        dispatch(fetchProvider(response.data.id))
+        return response.data;
+      });
+      
 
-export const removeProvider = createAsyncThunk(
-  "providers/removeProvider",
-  async (id) => {
+export const removeProvider = createAsyncThunk("providers/removeProvider",async (id,{ dispatch }) => {
  
       const response = await axios.delete(
         `${config.API_ENDPOINT}/providers/${id}`
       );
+      dispatch(fetchProviders())
+
       return response.data;
    
   }

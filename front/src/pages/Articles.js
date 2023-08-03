@@ -45,10 +45,21 @@ function Articles() {
     skip: 0,
   })
 
-  console.log(publishingHouseStore)
+  console.log(publishingHouseStore.publishingHouses.items,"publishingHouse")
 
   const lg = i18n.languages[0] === 'en'
   const [showFilters, setShowFilters] = useState(false)
+
+
+  function onMouseMoveHandler(event) {
+    // Check if elementRef.current is not null before accessing its properties
+    if (elementRef.current) {
+      const rect = elementRef.current.getBoundingClientRect();
+      // Now you can safely use the rect object
+      console.log("Element's bounding rect:", rect);
+    }
+  }
+
 
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }))
@@ -78,7 +89,7 @@ function Articles() {
                 <Slider
                   range
                   draggableTrack
-                  min={0}
+                  min={1}
                   max={1000}
                   defaultValue={[1, 1000]}
                   tipFormatter={(value) => `TND${value}`}
@@ -244,9 +255,9 @@ function Articles() {
     [articleStore.articles.items]
   )
 
-  console.log(filters.categories)
-  console.log(groupedArticles)
-  console.log(articleStore.articles.items)
+  console.log(filters.categories,"ctaegories")
+  console.log(groupedArticles,"grpdArticles")
+  console.log(articleStore.articles.items,"article store")
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
