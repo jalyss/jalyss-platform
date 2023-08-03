@@ -77,10 +77,6 @@ const Edit = () => {
     }
   };
 
-  // fama hajet m3ach mawjoudin fil user direct walou mawjoudin fil client ma3neha user.client
-  // l back khadmou khayri
-  // ena badel wala 3ana user w el user ynajem ykoun client w ynajem ykoun employee eyy fhmtek
-  // hatta fil bach office fama hajet user.employee eyy kima lcoach bravo
 
   const submitEditProfile = async (event) => {
     event.preventDefault();

@@ -62,7 +62,7 @@ function EditCommand() {
 
     command?.commandLine?.map((item, i) => {
       res.commandLine.push({
-        title: item.articleByBranch.article.title,
+        title: item.articleByBranch.article?.title,
         quantity: item.quantity,
         articleByBranchId: item.articleByBranchId,
       });
@@ -71,11 +71,6 @@ function EditCommand() {
     setEditCommand({ ...command });
   }, [command]);
 
-  // const handleDelete = (index) => {
-  //   const updatedCommandLine = [...commandLine];
-  //   updatedCommandLine.splice(index, 1);
-  //   setcommandLine(updatedCommandLine);
-  // };
   console.log(editCommand);
 
   const toggleEditMode = () => {
@@ -102,7 +97,6 @@ function EditCommand() {
           <Form.Select
             disabled={!editCommanLineIndexes.includes(i)}
             value={editCommand.commandLine[i].articleByBranchId}
-            // placeholder={titles[i] ? titles[i] : null}
             onChange={(e) => {
               let aux = [...editCommand.commandLine];
               aux[i].articleByBranchId = e.target.value;
@@ -112,7 +106,7 @@ function EditCommand() {
           >
             {articlesByBranch?.map((elem, i) => (
               <option key={i} value={elem.id}>
-                {elem.article.title}
+                {elem.article?.title}
               </option>
             ))}
           </Form.Select>
@@ -135,7 +129,6 @@ function EditCommand() {
               {!editCommanLineIndexes.includes(i) ? (
                 <div style={{ marginLeft: "10px" }}>
                   <FaTrash
-                    // onClick={() => handleDelete(i)}
                     style={{ cursor: "pointer" }}
                   />
                   <GrEdit
@@ -164,9 +157,6 @@ function EditCommand() {
           <Form.Select
             disabled={!editMode}
             value={newCommandLine?.articleByBranchId}
-            // className="w-50"
-            // value={editCommand.commandLine[i].articleByBranchId}
-            // placeholder={titles[i] ? titles[i] : null}
             onChange={(e) => {
               console.log(e.target.value);
               setNewCommandLine({
@@ -174,16 +164,15 @@ function EditCommand() {
                 article: {
                   title: articlesByBranch.filter(
                     (elem) => elem.id === e.target.value
-                  )[0].article.title,
+                  )[0].article?.title,
                 },
                 articleByBranchId: e.target.value,
               });
             }}
-            // style={{ flex: 1, marginRight: "10px" }}
           >
             {articlesByBranch?.map((elem, i) => (
               <option key={i} value={elem.id}>
-                {elem.article.title}
+                {elem.article?.title}
               </option>
             ))}
           </Form.Select>
