@@ -49,14 +49,13 @@ function Home() {
                 ABOUT JALYSSCOM
               </Typography>
               <Typography variant="h6" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like. What is a paragraph? Paragraphs
-                are the building blocks of papers. Many students define
-                paragraphs in terms of length: a paragraph is a group of at
-                least five sentences, a paragraph is half a page long, etc. In
-                reality, though, the unity and coherence of ideas among
-                sentences are what constitutes a paragraph.
+                Welcome to jalyss.com your premier online destination for books
+                and education. Delve into our handpicked collection that spans
+                diverse genres, from captivating classics to cutting-edge
+                educational resources. Whether you're a passionate reader or a
+                dedicated learner , jalyss.com provides a gateway to endless
+                knowledge and inspiration. Join us in exploring the captivating
+                world of literature and education.
               </Typography>
             </CardContent>
           </div>
