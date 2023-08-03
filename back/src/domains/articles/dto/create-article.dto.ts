@@ -2,15 +2,15 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateArticleDto {
   @ApiProperty({ required: true })
-  title: string;
+  title:string;
   @ApiProperty({ required: false })
-  coverId: string;
+  coverId:string;
   @ApiProperty({ required: false })
-  weight: number;
+  weight:number;
   @ApiProperty({ required: false })
-  pageNumber: number;
+  pageNumber:number;
   @ApiProperty({ required: false })
-  code: string;
+  code:string;
   @ApiProperty({ required: false })
   shortDescriptionAr: string;
   @ApiProperty({ required: false })

@@ -143,9 +143,55 @@ function DetailAritcle() {
                     },
                 }}
               />
+               <TextField
+                label="shortDescriptionAr"
+                value={article?.shortDescriptionAr}
+                disabled
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: "#4b0082", 
+                  },
+                }}
+                sx={{
+                  color: "#8a2be2", 
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2", 
+                  },
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "#8a2be2",  
+                    },
+                }}
+              />
               <TextField
                 label="longDescriptionEn"
                 value={article?.longDescriptionEn}
+                disabled
+                fullWidth
+                variant="outlined"
+                margin="normal"
+                InputLabelProps={{
+                  style: {
+                    color: "#4b0082", 
+                  },
+                }}
+                sx={{
+                  color: "#8a2be2", 
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2", 
+                  },
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "#8a2be2",  
+                    },
+                }}
+              />
+              <TextField
+                label="longDescriptionAr"
+                value={article?.longDescriptionAr}
                 disabled
                 fullWidth
                 variant="outlined"

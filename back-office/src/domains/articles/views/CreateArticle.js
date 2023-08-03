@@ -167,7 +167,7 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm ={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -179,7 +179,20 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+             
+              <Grid item xs={12} sm ={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                
+                  name="shortDescriptionAr"
+                  label="Short Description in arabic"
+                  rows={4}
+                  value={article?.shortDescriptionAr || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm ={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -188,6 +201,18 @@ function CreateArticle() {
                   label="Long Description"
                   rows={4}
                   value={article?.longDescriptionEn || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm ={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                  
+                  name="longDescriptionAr"
+                  label="Long Description in Arabic "
+                  rows={4}
+                  value={article?.longDescriptionAr || ""}
                   onChange={handleChange}
                 />
               </Grid>
@@ -247,9 +272,6 @@ function CreateArticle() {
                   </Select>
                 </FormControl>
               </Grid>
-             
-             
-            
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
                   <InputLabel id="author">Author</InputLabel>

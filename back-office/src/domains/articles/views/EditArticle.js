@@ -40,6 +40,12 @@ function EditArticle() {
   const [longDescriptionEn, setLongDescriptionEn] = useState(
     articleStore?.longDescriptionEn
   );
+  const [shortDescriptionAr, setShortDescriptionAr] = useState(
+    articleStore?.shortDescriptionAr
+  );
+  const [longDescriptionAr, setLongDescriptionAr] = useState(
+    articleStore?.longDescriptionAr
+  );
   const [nameEn, setNameEn] = useState(articleStore?.category?.nameEn);
   const [name, setName] = useState(articleStore?.publishingHouse?.name);
   const [typeNameEn, setTypeNameEn] = useState(articleStore?.type?.nameEn);
@@ -51,6 +57,7 @@ function EditArticle() {
     dispatch(fetchArticleTypes());
     dispatch(fetchPublishingHouses());
     dispatch(fetchCategories());
+
   }, [dispatch, articleId]);
 
   useEffect(() => {
@@ -62,6 +69,8 @@ function EditArticle() {
         code,
         shortDescriptionEn,
         longDescriptionEn,
+        shortDescriptionAr,
+        longDescriptionAr,
         nameEn,
         name,
         typeNameEn,
@@ -72,6 +81,8 @@ function EditArticle() {
       setCode(code);
       setShortDescriptionEn(shortDescriptionEn);
       setLongDescriptionEn(longDescriptionEn);
+      setShortDescriptionAr(shortDescriptionAr);
+      setLongDescriptionAr(longDescriptionAr);
       setNameEn(nameEn);
       setName(name);
       setTypeNameEn(typeNameEn);
@@ -88,13 +99,15 @@ function EditArticle() {
       code,
       shortDescriptionEn,
       longDescriptionEn,
-      nameEn,
-      name,
-      typeNameEn,
+      shortDescriptionAr,
+      longDescriptionAr,
+      categoryId:nameEn,
+      publishingHouseId:name,
+      typeId:typeNameEn,
     };
 
     try {
-      if (cover) {
+      if (cover !== null) {
         const formData = new FormData();
         formData.append("file", cover);
 
@@ -106,7 +119,7 @@ function EditArticle() {
         body.coverId = response.data.id;
       }
 
-      const editedArticle = { ...body, articleId };
+      const editedArticle = {  articleId,...body };
       dispatch(updateArticleByBranch(editedArticle));
       showSuccessToast("article edited successfully");
       navigate(-1);
@@ -147,12 +160,45 @@ function EditArticle() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Short Description "
+                label="page Number"
+                variant="outlined"
+                fullWidth
+                name="pageNumber"
+                value={pageNumber }
+               onChange={(e) => setPageNumber(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="code"
+                variant="outlined"
+                fullWidth
+                name="code"
+                value={code }
+               onChange={(e) => setCode(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Short Description"
                 variant="outlined"
                 fullWidth
                 name="shortDescriptionEn"
                 value={shortDescriptionEn}
                onChange={(e) => setShortDescriptionEn(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Short Description in Arabic"
+                variant="outlined"
+                fullWidth
+                name="shortDescriptionAr"
+                value={shortDescriptionAr}
+               onChange={(e) => setShortDescriptionAr(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -164,6 +210,17 @@ function EditArticle() {
                 name="longDescriptionEn"
                 value={longDescriptionEn}
                onChange={(e) => setLongDescriptionEn(e.target.value)}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Long Description in Arabic"
+                variant="outlined"
+                fullWidth
+                name="longDescriptionAr"
+                value={longDescriptionAr}
+               onChange={(e) => setLongDescriptionAr(e.target.value)}
                 margin="normal"
               />
             </Grid>
