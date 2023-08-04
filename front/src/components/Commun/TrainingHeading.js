@@ -1,9 +1,9 @@
 import React from 'react'
 
-const TrainingHeading = ({ subtitle, title,mt,mb }) => {
+const   TrainingHeading = ({ subtitle, title,mt,mb }) => {
   return (
     <>
-    <div id='TrainingHeading' style={{marginTop:mt,marginBottom:mb}} >
+    <div id='TrainingHeading' style={{marginTop:mt,marginBottom:mb}}>
       <h3>{subtitle} </h3>
       <h1>{title} </h1>
     </div>
@@ -11,4 +11,4 @@ const TrainingHeading = ({ subtitle, title,mt,mb }) => {
   )
 }
 
-export default TrainingHeading
+export default TrainingHeading;

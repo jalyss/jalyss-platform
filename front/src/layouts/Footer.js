@@ -11,6 +11,8 @@ import { CiDiscount1 } from 'react-icons/ci'
 import { TbDiscount2 } from 'react-icons/tb'
 import { BsTruck } from 'react-icons/bs'
 
+
+
 function Footer() {
   const { t } = useTranslation()
 
@@ -249,6 +251,33 @@ function Footer() {
           <MDBCol className="text-reset fw-bold" href="https://jalyss.com/">
             © 2023 Copyright: JALYSS.COM
           </MDBCol>
+          <div class="social-icons">
+      <a
+        class="text-reset"
+        href="https://www.instagram.com/your_instagram_account"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fab fa-instagram fa-lg mx-2"></i>
+      </a>
+      <a
+        class="text-reset"
+        href="https://twitter.com/your_twitter_account"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fab fa-twitter fa-lg mx-2"></i>
+      </a>
+      <a
+        class="text-reset"
+        href="https://www.facebook.com/your_facebook_account"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fab fa-facebook fa-lg mx-2"></i>
+      </a>
+    </div>
+         
         </MDBRow>
       </MDBContainer>
     </MDBFooter>
