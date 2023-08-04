@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "react-use-cart";
 import { BsBagXFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
+import "../assets/styles/Cart.css"
 
-
-function Cart({handleClose}) {
+function Cart({ handleClose }) {
   const {
     isEmpty,
     items,
@@ -14,8 +14,19 @@ function Cart({handleClose}) {
     removeItem,
     emptyCart,
   } = useCart();
-const navigate=useNavigate()
-const { t, i18n } = useTranslation()
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
+  const [quantityMap, setQuantityMap] = useState({});
+
+
+  const handleUpdateQuantity = (itemId, newQuantity) => {
+    setQuantityMap((prevQuantityMap) => ({
+      ...prevQuantityMap,
+      [itemId]: newQuantity,
+    }));
+    updateItemQuantity(itemId, newQuantity);
+  };
 
   return (
     <div>
@@ -23,21 +34,20 @@ const { t, i18n } = useTranslation()
         <div className="container h-min-content py-initial">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col">
-              <div className="table-responsive">
+              <div className="table-responsive" style={{ maxHeight: "800px", overflowY: "auto",  maxWidth: "100%"}}>
                 <table className="table">
                   <thead>
                     <tr>
-                      <th scope="col" className="h5">
+                      <th scope="col" className="h5" style={{ width: "50%" }}>
                         {t('offCanvas.shop')}
                       </th>
-
-                      <th scope="col">{t('offCanvas.quan')}</th>
-                      <th scope="col">{t('offCanvas.price')}</th>
+                      <th scope="col" style={{ width: "25%" }} >{t('offCanvas.quan')}</th>
+                      <th scope="col" style={{ width: "25%" }} >{t('offCanvas.price')}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {items.map((item) => (
-                      <tr>
+                      <tr key={item.id}>
                         <th scope="row">
                           <div className="flex-column ms-4">
                             <p className="mb-2">{item.article.title}</p>
@@ -53,29 +63,28 @@ const { t, i18n } = useTranslation()
 
                         <td className="align-middle">
                           <div className="d-flex flex-row">
-                            <button onClick={() => updateItemQuantity(item.id, item.quantity - 1)}>-</button>
+                            <button className="bma" onClick={() => handleUpdateQuantity(item.id, (quantityMap[item.id] || item.quantity) - 1)}>-</button>
                             <input
-                              id="form1"
-                              min="0"
-                              name="quantity"
-                              value={item.quantity}
-                              type="number"
-                              className="form-control form-control-sm"
-                            />
-                            <button onClick={() => updateItemQuantity(item.id, item.quantity + 1)}>+</button>
-
+                    id="form1"
+                    min="0"
+                    name="quantity"
+                    value={quantityMap[item.id] || item.quantity}
+                    type="text"
+                    style={{ width: "60px", textAlign: "center", fontSize: "14px" }} 
+                    className="form-control form-control-sm cart-quantity-input" 
+                    onChange={(e) => handleUpdateQuantity(item.id, parseInt(e.target.value))}
+                  />
+                            <button className="bma" onClick={() => handleUpdateQuantity(item.id, (quantityMap[item.id] || item.quantity) + 1)}>+</button>
                           </div>
-
                         </td>
                         <td className="align-middle">
                           <p className="mb-0">TND {item.price}</p>
-                          <div  >
+                          <div>
                             <BsBagXFill type="button" size="30px" color="black" 
-                              onClick={() =>removeItem(item.id)}
+                              onClick={() => removeItem(item.id)}
                             />
                           </div>
                         </td>
-
                       </tr>
                     ))}
                   </tbody>
@@ -84,29 +93,31 @@ const { t, i18n } = useTranslation()
             </div>
           </div>
         </div>
-      </div>
-      <div>
+      <div >
         <div className="subtotal">
           <div>
             <span className="label">{t('offCanvas.total')} </span>
-
+            &nbsp;
             <span className="price-wrapper">{cartTotal}</span>
           </div>
         </div>
       </div>
+      </div>
 
-      <div className="double-btn">
+
+
+      <div className="d-btn" style={{ position: "fixed"}}>
         <div>
-          <button  onClick={()=>{
-            handleClose()
-            navigate('/checkout')}} className="offCanvas-btn1">
-            <span className="label-btn">{t('offCanvas.checkout')}</span>
+          <button onClick={() => {
+            handleClose();
+            navigate('/checkout');
+          }} className="d-btn1" >
+            <span>{t('offCanvas.checkout')}</span>
           </button>
         </div>
         <div>
-          <button onClick={()=>{
-            emptyCart()}} className="offCanvas-btn2" >
-            <span className="label-btn"> {t('offCanvas.clear')}  </span>
+          <button onClick={() => emptyCart()} className="d-btn2">
+            <span> {t('offCanvas.clear')} </span>
           </button>
         </div>
       </div>
