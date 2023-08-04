@@ -230,7 +230,7 @@ function EditArticle() {
                 <Select
                   labelId="category"
                   name="category"
-                  value={nameEn }
+                  value={nameEn}
                  onChange={(e) => setNameEn(e.target.value)}
                 >
                   <MenuItem value="">--select option--</MenuItem>
@@ -298,7 +298,7 @@ function EditArticle() {
         </Box>
         <Box display="flex" justifyContent="center">
           <Button type="submit" variant="contained" color="primary">
-            Update Provider
+            Update Article
           </Button>
           </Box>
       </form>

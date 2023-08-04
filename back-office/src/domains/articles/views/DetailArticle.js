@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Box, CardContent, CardMedia, TextField } from "@mui/material";
+import { Grid, CardContent, CardMedia, TextField, Box } from "@mui/material";
 import { fetchArticle } from "../../../store/article";
 
 function DetailAritcle() {
@@ -15,18 +15,30 @@ function DetailAritcle() {
   }, [dispatch, articleId]);
   console.log("=>>>>>",article)
   return (
-    <Box sx={{ maxWidth: "100%",height: "100%", margin: "auto" }}>
-       <CardContent>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexWrap: "wrap",
-              height: "100%",
-            }}
-          >
-            <Box sx={{ flexBasis: "45%", my: 3,ml:5 }}>
+    <Box sx={{ maxWidth: "100%", height: "100%", margin: "auto" }}>
+    <CardContent>
+      <Grid container spacing={2}>
+    
+      <Grid container justifyContent="center">
+  <Grid item xs={12} sm={6}>
+    <div style={{ display: "flex", justifyContent: "center", margin: "1.5rem" }}>
+    {article?.cover ? (
+      <img
+        style={{ width: "120%", borderRadius: "15px" }}
+        src={article?.cover?.path}
+        alt="cover"
+      />
+      ) : (
+        <img
+          style={{ width: "120%", borderRadius: "15px" }}
+          src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+          alt="cover"
+        />
+      )}
+    </div>
+  </Grid>
+</Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="title"
                 value={article?.title}
@@ -50,7 +62,8 @@ function DetailAritcle() {
                   },
                 
                 }}
-              />
+              /></Grid>
+              <Grid item xs={12} sm={6}>
               <TextField
                 label="weight"
                 value={article?.weight}
@@ -73,7 +86,9 @@ function DetailAritcle() {
                       borderColor: "#8a2be2",  
                     },
                 }}
-              />
+              /></Grid>
+              <Grid item xs={12} sm={6}>
+
               <TextField
                 label="pageNumber"
                 value={article?.pageNumber}
@@ -96,7 +111,9 @@ function DetailAritcle() {
                       borderColor: "#8a2be2",  
                     },
                 }}
-              />
+              /></Grid>
+            <Grid item xs={12} sm={6}>
+
                <TextField
                 label="code"
                 value={article?.code}
@@ -120,6 +137,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="shortDescriptionEn"
                 value={article?.shortDescriptionEn}
@@ -143,6 +162,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
                <TextField
                 label="shortDescriptionAr"
                 value={article?.shortDescriptionAr}
@@ -166,6 +187,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="longDescriptionEn"
                 value={article?.longDescriptionEn}
@@ -189,6 +212,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="longDescriptionAr"
                 value={article?.longDescriptionAr}
@@ -212,6 +237,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Category"
                 value={article?.category?.nameEn}
@@ -235,6 +262,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="PublishingHouse"
                 value={article?.publishingHouse?.name}
@@ -258,6 +287,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Type"
                 value={article?.type?.nameEn}
@@ -281,6 +312,8 @@ function DetailAritcle() {
                     },
                 }}
               />
+              </Grid>
+            <Grid item xs={12} sm={6}>
                <TextField
                 label="Author"
                 value={article?.authorIds}
@@ -304,14 +337,11 @@ function DetailAritcle() {
                     },
                 }}
               />
-            </Box>
+            </Grid>
 
            
-          </Box>
-        </CardContent>
-      
-       
-      
+        </Grid>
+      </CardContent>
     </Box>
   );
 }
