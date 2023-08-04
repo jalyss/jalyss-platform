@@ -15,7 +15,7 @@ export class ArticleService {
     private readonly branchService: BranchesService,
   ) {}
 
-  async create(dto: CreateArticleDto, branchId: string) {
+  async create(dto: CreateArticleDto) {
     const { authorIds, ...rest } = dto;
     return await this.prisma.article.create({
       data: {
@@ -242,8 +242,8 @@ export class ArticleService {
     });
   }
 
-  update(id: string, dto: UpdateArticleDto) {
-    return `This action updates a #${id} article`;
+  async update(id: string, dto: UpdateArticleDto) {
+    return await this.prisma.article.update({ where: { id }, data: dto });
   }
   async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
     return await this.prisma.articlesByBranch.update({
@@ -252,8 +252,8 @@ export class ArticleService {
     });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} article`;
+  async remove(id: string) {
+    return await this.prisma.article.delete({ where: { id } });
   }
 
   //Rating services

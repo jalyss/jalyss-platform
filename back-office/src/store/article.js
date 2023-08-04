@@ -9,7 +9,6 @@ export const fetchArticles = createAsyncThunk(
     return response.data;
   }
 );
-
 export const fetchArticlesByBranch = createAsyncThunk(
   "articles/articlesbyBranch",
   async (args) => {
@@ -51,13 +50,7 @@ export const addTransactionStock = createAsyncThunk(
 export const createArticle = createAsyncThunk(
   "articles/createArticle",
   async (body, { dispatch }) => {
-    let x = body.branchId;
-    delete body.branchId;
-
-    const response = await axios.post(
-      `${config.API_ENDPOINT}/articles/${x}`,
-      body
-    );
+    const response = await axios.post(`${config.API_ENDPOINT}/articles/`, body);
     dispatch(fetchArticle(response.data.id));
     return response.data;
   }
@@ -90,26 +83,30 @@ export const createArticleByBranchRating = createAsyncThunk(
 export const updateArticleByBranch = createAsyncThunk(
   "articles/updateArticleByBranch",
   async (args, { dispatch }) => {
-    const { id, ...rest } = args;
-    const response = await axios.put(
-      `${config.API_ENDPOINT}/articles/${id}`,
-      rest
+    const { articleId, ...rest } = args;
+    console.log(args, "args");
+    console.log(rest, "rest");
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/articles/${articleId}`,
+      { ...rest }
     );
-    dispatch(fetchArticles());
+
+    console.log(response.data, "response.data");
+
     return response.data;
   }
 );
-
-// export const findArticleTitleAndId = createAsyncThunk(
-//   "articles/article",
-//   async (id) => {
-//     const response = await axios.get(
-//       `${config.API_ENDPOINT}/articles/getArticleTitles`
-//     );
-//     return response.data;
-//   }
-// );
-
+export const removeArticle = createAsyncThunk(
+  "articles/removeArticle",
+  async (id) => {
+ 
+      const response = await axios.delete(
+        `${config.API_ENDPOINT}/articles/${id}`
+      );
+      return response.data;
+   
+  }
+);
 export const articleSlice = createSlice({
   name: "article",
   initialState: {
