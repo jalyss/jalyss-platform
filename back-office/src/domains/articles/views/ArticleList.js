@@ -10,7 +10,7 @@ import { AiFillEdit ,AiOutlineEye ,AiFillDelete } from "react-icons/ai";
 import { IoIosPersonAdd } from "react-icons/io";
 import Modal from "../../../components/Commun/Modal";
 
-import { fetchArticles } from "../../../store/article";
+import { fetchArticles , removeArticle} from "../../../store/article";
 
 function ArticleList() {
   const articleStore = useSelector((state) => state.article);
@@ -24,13 +24,17 @@ function ArticleList() {
     setBasicModal(!basicModal);
   };
 
-  const handleDeleteArticleClick = (id) => {
-    const updatedRows = rows.filter((row) => row.id !== id);
-    setRows(updatedRows);
-    showSuccessToast("Article has been deleted");
-    toggleShow();
+  const handleDeleteArticleClick = () => {
+   
+    dispatch(removeArticle(selectedArticleId)).then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('Article has been deleted')
+        toggleShow()
+      }
+    }) 
   };
-
   useEffect(() => {
     dispatch(fetchArticles());
   }, [dispatch]);
@@ -184,7 +188,7 @@ function ArticleList() {
             basicModal={basicModal}
             ofDelete={true}
             toggleShow={toggleShow}
-            confirm={() => handleDeleteArticleClick(selectedArticleId)}
+            confirm={() => handleDeleteArticleClick()}
           />
       </div>
     </div>
