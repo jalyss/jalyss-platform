@@ -70,24 +70,34 @@ function Footer() {
         <MDBRow className="text-center mb-5 justify-content-center">
           <MDBCol>
             <RiCustomerService2Line size="50px" fill="white" className="mb-2" />
-            <Typography className="text-color-grey">{t("footer.support")}</Typography>
+            <Typography className="text-color-grey">
+              {t("footer.support")}
+            </Typography>
           </MDBCol>
           <MDBCol>
             <MdPayment size="50px" fill="white" className="mb-2" />
-            <Typography className="text-color-grey">{t("footer.secure")}</Typography>
+            <Typography className="text-color-grey">
+              {t("footer.secure")}
+            </Typography>
           </MDBCol>
           <MDBCol>
             <CiDiscount1 size="50px" color="white" />
-            <Typography className="text-color-grey">{t("footer.shipping")}</Typography>
+            <Typography className="text-color-grey">
+              {t("footer.shipping")}
+            </Typography>
           </MDBCol>
         </MDBRow>
 
         <MDBRow className="mt-3 mb-4 text-center ">
           <MDBCol>
-            <Typography variant="h5" className="mb-4 text-color-white  fw-bold ">
+            <Typography variant="h5" className="mb-4 text-color-white  fw-bold">
               {t("storeInfo.infoStore")}
             </Typography>
-            <List className="p-0 text-color-grey text-center " id="footer_account_list" style={{marginLeft:50}}>
+            <List
+              className="p-0 text-color-grey text-center"
+              id="footer_account_list"
+              style={{ marginLeft: 50, color: "grey" }} // Add the inline style to set the color to grey
+            >
               <ListItem className="mb-2">
                 <Button
                   component="a"
@@ -96,6 +106,7 @@ function Footer() {
                   rel="noopener noreferrer"
                   className="text-decoration-none text-color-white m-0"
                   startIcon={<LocationOnIcon />}
+                  style={{ color: "#E1D7C6" }}
                 >
                   {t("storeInfo.adress")}
                 </Button>
@@ -104,8 +115,9 @@ function Footer() {
                 <Button
                   component="a"
                   href="tel:+21651165003"
-                  className="text-decoration-none text-color-white m-0"
+                  className="text-decoration-none text-color-white m-0 "
                   startIcon={<PhoneIcon />}
+                  style={{ color: "#E1D7C6" }}
                 >
                   {t("ourcompany.callUs")}
                 </Button>
@@ -116,23 +128,29 @@ function Footer() {
                   href="mailto:jalysscom.book@gmail.com"
                   className="text-decoration-none text-color-white m-0"
                   startIcon={<EmailIcon />}
+                  style={{ color: "#E1D7C6" }}
                 >
                   jalysscom.book@gmail.com
                 </Button>
               </ListItem>
             </List>
           </MDBCol>
+
           <MDBCol>
-          <Typography variant="h5" className="mb-4 text-color-white  fw-bold">
+            <Typography variant="h5" className="mb-4 text-color-white  fw-bold">
               {t("joinMailingList")}
             </Typography>
-            <List className="p-0 text-color-grey" id="footer_account_list" style={{marginLeft:50}}>
-              <ListItem className="mb-2">
+            <List
+              className="p-0 text-color-grey"
+              id="footer_account_list"
+              style={{ marginLeft: 50 }}
+            >
+              <ListItem className="mb-2" style={{ whiteSpace: "nowrap" }}>
                 <Typography className="text-decoration-none text-color-grey">
                   {t("Would you like to join our mailing list ?")}
                 </Typography>
               </ListItem>
-              <ListItem>
+              <ListItem style={{ whiteSpace: "nowrap" }}>
                 <Typography className="text-decoration-none text-color-grey">
                   {t("Please enter your email address here :")}
                 </Typography>
@@ -166,13 +184,13 @@ function Footer() {
             </List>
           </MDBCol>
           <MDBCol>
-          <Typography variant="h5" className="mb-4 text-color-white  fw-bold">
+            <Typography variant="h5" className="mb-4 text-color-white  fw-bold">
               Keep in touch on
             </Typography>
             <List
               className="p-0 text-color-grey  "
               id="footer_account_list"
-              style={{marginLeft:110}}
+              style={{ marginLeft: 110 }}
             >
               <ListItem>
                 <Link
