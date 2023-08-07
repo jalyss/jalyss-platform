@@ -77,7 +77,7 @@ function Router() {
                 <Route index element={<MyBlogs />} />
                 <Route path="my-bookmarks" element={<MyBookmarks />} />
                 <Route path="bio" element={<Edit />} />
-                <Route path="saved-tarining" element={<SavedTraining />} />
+                <Route path="saved-tarining/:userId" element={<SavedTraining />} />
                 <Route path="orders-history" element={<OrderHistory />} />
               </Route>
             )}

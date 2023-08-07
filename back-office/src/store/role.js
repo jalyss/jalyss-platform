@@ -12,6 +12,17 @@ export const fetchRole = createAsyncThunk("roles/role", async (id) => {
   return response.data;
 });
 
+
+export const deleteRole = createAsyncThunk(
+  "roles/roles",
+  async (id) => {
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/roles/${id}`
+    );
+    return response.data;
+  }
+);
+
 export const roleSlice = createSlice({
   name: "role",
   initialState: {
