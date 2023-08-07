@@ -108,19 +108,16 @@ import SessionType from "../domains/training/views/sessionType/SessionType";
 import ChatBox from "../pages/ChatBox";
 import Conversation from "../components/chatComponents/Conversation";
 import Subscriber from "../domains/training/views/sessions/Subscriber";
-<<<<<<< HEAD
 import Role from "../domains/roles/Role";
 import RolesList from "../domains/roles/view/RolesList";
 import EditRole from "../domains/roles/view/EditRole";
 import DetailRole from "../domains/roles/view/DetailRole";
 import CreateRole from "../domains/roles/view/CreateRole";
 
-=======
 import Client from "../domains/Client/Client";
 import Clientlist from "../domains/Client/views/Clientlist";
 import Addclient from "../domains/Client/views/Addclient";
 import Profileclient from "../domains/Client/views/Profileclient";
->>>>>>> 180b705501e89495348cb31f9964ce1326968cae
 
 
 function Router() {
