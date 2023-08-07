@@ -20,6 +20,7 @@ import Article from "../domains/articles/Article";
 import ArticleList from "../domains/articles/views/ArticleList";
 import CreateArticle from "../domains/articles/views/CreateArticle";
 import EditArticle from "../domains/articles/views/EditArticle";
+import DetailAritcle from "../domains/articles/views/DetailArticle";
 import ArticleByBranchList from "../domains/articles/views/ArticleByBranchList";
 import Dashboard from "../domains/dashboard/Dashboard";
 // import Charts from "../domains/charts/Charts";
@@ -107,12 +108,19 @@ import SessionType from "../domains/training/views/sessionType/SessionType";
 import ChatBox from "../pages/ChatBox";
 import Conversation from "../components/chatComponents/Conversation";
 import Subscriber from "../domains/training/views/sessions/Subscriber";
+<<<<<<< HEAD
 import Role from "../domains/roles/Role";
 import RolesList from "../domains/roles/view/RolesList";
 import EditRole from "../domains/roles/view/EditRole";
 import DetailRole from "../domains/roles/view/DetailRole";
 import CreateRole from "../domains/roles/view/CreateRole";
 
+=======
+import Client from "../domains/Client/Client";
+import Clientlist from "../domains/Client/views/Clientlist";
+import Addclient from "../domains/Client/views/Addclient";
+import Profileclient from "../domains/Client/views/Profileclient";
+>>>>>>> 180b705501e89495348cb31f9964ce1326968cae
 
 
 function Router() {
@@ -156,20 +164,27 @@ function Router() {
 
             <Route path="profile" element={<Profile />} />
             <Route path="chat-box" element={<ChatBox />}>
-              <Route path="user/:userId" element={<Conversation />} />
-              <Route path="group/:groupId" element={<Conversation />} />
+            <Route path="user/:userId" element={<Conversation />} />
+            <Route path="group/:groupId" element={<Conversation />} />
             </Route>
             <Route path="users" element={<User />}>
               <Route index element={<UserList />} />
               <Route path="create" element={<CreateUser />} />
               <Route path="edit/:userId" element={<EditUser />} />
             </Route>
+            
 
             <Route path="employee" element={<Employee />}>
               <Route index element={<EmployeeList />} />
               <Route path="create" element={<CreateEmployee />} />
               <Route path="edit/:employeeId" element={<EditEmployee />} />
             </Route>
+
+            <Route path="client" element={<Client/>}>
+              <Route index element={<Clientlist/>}/>
+              <Route path="addclient" element={<Addclient/>}/>
+             <Route path="profilclient" element={<Profileclient/>}/>
+              </Route>
 
             <Route path="blogs" element={<Blogs />}>
               <Route index element={<BlogsList />} />
@@ -178,7 +193,7 @@ function Router() {
 
             <Route path="provider" element={<Providers />}>
               <Route index element={<ProvidersList />} />
-              <Route path="edit/:providerId" element={<EditProvider />} />
+              <Route path="editProvider/:providerId" element={<EditProvider />} />
               <Route path="detail/:providerId" element={<DetailProvider />} />
               <Route path="create" element={<CreateProvider />} />
             </Route>
@@ -229,7 +244,9 @@ function Router() {
                 element={<ArticleByBranchList />}
               />
               <Route path="create" element={<CreateArticle />} />
-              <Route path="editArticle" element={<EditArticle />} />
+              <Route path="editArticle/:articleId" element={<EditArticle />} />
+              <Route path="detail/:articleId" element={<DetailAritcle />} />
+
             </Route>
             
 
@@ -242,6 +259,9 @@ function Router() {
 
 
               </Route>
+            
+
+
               <Route path="subscriber/:id" element={<Subscriber />} />
 
               <Route path="newsession" element={<Newsession />} />

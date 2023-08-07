@@ -1,14 +1,18 @@
-import Rating from '../components/Commun/Rating'
-import { FiEye } from 'react-icons/fi'
-import { BsBag } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+// ArticleCard.js
+import React from 'react';
+import Rating from '../components/Commun/Rating';
+import { FiEye } from 'react-icons/fi';
+import { BsBag } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from 'react-use-cart';
+import '../assets/styles/card.css';
+import { purple } from '@mui/material/colors';
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 
 function ArticleCard({ article }) {
   const { addItem } = useCart();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     if (handleButtonClick.error) {
@@ -31,19 +35,19 @@ function ArticleCard({ article }) {
           className="w-100 object-fit-contain article-image "
           alt=""
         />
-        <div className="rating">
-          <Rating
-            edit={false}
-            rating={article?.rating}
-          />
+        <div className="rating-home">
+          <Rating edit={false} rating={article?.rating} />
         </div>
       </div>
+      <p>{article.price}TND</p>
+      
+      <div className="d-flex flex-column justify-content-between align-items-center mt-2">
+        <h6 className="m-0">{article.article.title}</h6>
 
-      <div className="d-flex justify-content-between align-items-center mt-2">
-        <h6 className='m-0'>{article.article.title}</h6>
-        <div className="d-flex ">
-          <div
-            className="bg-yellow p-1 rounded article-card-icon pointer m-1"
+        <div className="d-flex  mb-2">
+          <div 
+          style={{backgroundColor:'white',color:'purple '}}
+            className="bg-purple p-1 rounded article-card-icon pointer m-1" 
             onClick={() => navigate('/one-article/' + article.id)}
           >
             <FiEye size={20} />
@@ -54,9 +58,8 @@ function ArticleCard({ article }) {
           </div>
         </div>
       </div>
-      <p>{article.price} </p>
     </div>
-  )
+  );
 }
 
-export default ArticleCard
+export default ArticleCard;

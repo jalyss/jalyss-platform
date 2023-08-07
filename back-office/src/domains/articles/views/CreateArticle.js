@@ -167,7 +167,7 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm ={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -179,7 +179,20 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+             
+              <Grid item xs={12} sm ={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                
+                  name="shortDescriptionAr"
+                  label="Short Description in arabic"
+                  rows={4}
+                  value={article?.shortDescriptionAr || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm ={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -191,10 +204,42 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
+              <Grid item xs={12} sm ={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                  
+                  name="longDescriptionAr"
+                  label="Long Description in Arabic "
+                  rows={4}
+                  value={article?.longDescriptionAr || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
+                  <InputLabel id="type">Type</InputLabel>
+                  <Select
+                    labelId="type"
+                    name="typeId"
+                    value={article?.typeId || ""}
+                    onChange={handleChange}
+                  >
+                    
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {articleTypeStore.articleTypes.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
                   <InputLabel id="category">Category</InputLabel>
                   <Select
+                  variant="outlined"
                     labelId="category"
                     name="categoryId"
                     value={article?.categoryId || ""}
@@ -229,42 +274,6 @@ function CreateArticle() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
-                  <InputLabel id="type">Type</InputLabel>
-                  <Select
-                    labelId="type"
-                    name="typeId"
-                    value={article?.typeId || ""}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {articleTypeStore.articleTypes.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="branch">Branch</InputLabel>
-                  <Select
-                    labelId="branch"
-                    name="branchId"
-                    value={article?.branchId || ""}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="">--select option--</MenuItem>
-                    {branchStore.branches.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth required>
                   <InputLabel id="author">Author</InputLabel>
                   <Select
                     labelId="author"
@@ -273,7 +282,7 @@ function CreateArticle() {
                     value={article?.authorIds || []}
                     onChange={handleChange}
                   >
-                    <MenuItem value="">--select option--</MenuItem>
+                    <MenuItem value={null}>--select option--</MenuItem>
                     {authorStore.authors.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
                         {item.nameAr}

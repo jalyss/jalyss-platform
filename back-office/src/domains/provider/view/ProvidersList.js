@@ -11,6 +11,8 @@ import Modal from "../../../components/Commun/Modal";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+
+
 function ProvidersList() {
   const [show, setShow] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
@@ -120,13 +122,13 @@ function ProvidersList() {
       cellClassName: "actions",
       getActions: ({ id }) => {
         return [
-          // <GridActionsCellItem
-          //   icon={<AiFillEdit />}
-          //   label="Edit"
-          //   className="textPrimary"
-          //   onClick={() => navigate(`editArticle/${id}`)}
-          //   color="inherit"
-          // />,
+          <GridActionsCellItem
+            icon={<AiFillEdit />}
+            label="Edit"
+            className="textPrimary"
+            onClick={() => navigate(`editProvider/${id}`)}
+            color="inherit"
+          />,
           <GridActionsCellItem
             icon={<AiOutlineEye />}
             label="Add"
