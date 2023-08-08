@@ -57,7 +57,7 @@ function Header() {
             <div className="w-100 d-flex align-items-center  justify-content-between ">
               <div className="hidden-padding">
                 <img
-                  className="lg-hide "
+                  className="lg-hide"
                   height={70}
                   alt="Jalyss logo"
                   src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
@@ -84,12 +84,18 @@ function Header() {
             <Navbar.Collapse id="navbarScroll">
               <div className="w-100">
                 <div className="d-flex justify-content-between align-items-center p-4  flex-wrap">
-                  <img
-                    className="md-hide"
-                    height={70}
-                    alt=""
-                    src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
-                  />
+                  <a
+                    onClick={() => {
+                      navigate("/");
+                    }}
+                  >
+                    <img
+                      className="md-hide"
+                      height={70}
+                      alt=""
+                      src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
+                    />
+                  </a>
                   <div className="d-flex align-items-center ">
                     <form className="form-inline mt-3 mb-3">
                       <input
@@ -137,7 +143,7 @@ function Header() {
                             <img
                               src={me.avatar.path}
                               alt="avatar"
-                              style={{objectFit:"cover"}}
+                              style={{ objectFit: "cover" }}
                               className="rounded-circle sm avatar-img"
                             />
                           ) : (
@@ -155,7 +161,7 @@ function Header() {
                           <Dropdown.Item
                             onClick={() => {
                               localStorage.removeItem("token");
-                              window.location.pathname="/login";
+                              window.location.pathname = "/login";
                             }}
                           >
                             LogOut

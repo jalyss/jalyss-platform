@@ -15,7 +15,6 @@ import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 
 function ProvidersList() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
   const [basicModal, setBasicModal] = useState(false);
   const providerStore = useSelector((state) => state.provider);
   const dispatch = useDispatch();
@@ -30,11 +29,16 @@ function ProvidersList() {
 
   
 
-  const handleDeleteProviderClick = (id) => {
-    const updatedRows = rows.filter((row) => row.id !== id);
-    setRows(updatedRows);
-    showSuccessToast("Provider has been deleted");
-    toggleShow();
+  const handleDeleteProviderClick = () => {
+   
+    dispatch(removeProvider(selectedProviderId)).then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('Provider has been deleted')
+        toggleShow()
+      }
+    }) 
   };
 
   useEffect(() => {
@@ -118,13 +122,13 @@ function ProvidersList() {
       cellClassName: "actions",
       getActions: ({ id }) => {
         return [
-          // <GridActionsCellItem
-          //   icon={<AiFillEdit />}
-          //   label="Edit"
-          //   className="textPrimary"
-          //   onClick={() => navigate(`editArticle/${id}`)}
-          //   color="inherit"
-          // />,
+          <GridActionsCellItem
+            icon={<AiFillEdit />}
+            label="Edit"
+            className="textPrimary"
+            onClick={() => navigate(`editProvider/${id}`)}
+            color="inherit"
+          />,
           <GridActionsCellItem
             icon={<AiOutlineEye />}
             label="Add"
@@ -177,7 +181,7 @@ function ProvidersList() {
             basicModal={basicModal}
             ofDelete={true}
             toggleShow={toggleShow}
-            confirm={() => handleDeleteProviderClick(selectedProviderId)}
+            confirm={() => handleDeleteProviderClick()}
           />
         </div>
       </div>
