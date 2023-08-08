@@ -19,9 +19,7 @@ export class ClientsService {
   findAll() {
     return this.prisma.client.findMany();
   }
-  findAllCitites() {
-    return this.prisma.client.findMany();
-  }
+  
 
   async findOne(id: string) {
     return await this.prisma.client.findFirst({

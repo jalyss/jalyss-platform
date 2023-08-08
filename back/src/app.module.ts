@@ -27,8 +27,7 @@ import { ProvidersModule } from './domains/providers/providers.module';
 import { FunctionalAreasModule } from './domains/functional-areas/functional-areas.module';
 import { JobTitlesModule } from './domains/job-titles/job-titles.module';
 import { EducationLevelsModule } from './domains/education-levels/education-levels.module';
-
-
+import { ClientsModule } from './domains/client/client.module';
 
 @Module({
   imports: [
@@ -58,7 +57,7 @@ import { EducationLevelsModule } from './domains/education-levels/education-leve
     JobTitlesModule,
    
     EducationLevelsModule,
-   
+    ClientsModule,
     
   ],
   controllers: [AppController],
