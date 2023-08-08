@@ -44,6 +44,7 @@ import ReserveMeeting from "../pages/space/SpaceReservation";
 import Conversation from "../components/chatComponents/Conversation";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "../store/auth";
+import SavedTraining from "../components/Profile/SavedTraining";
 
 function Router() {
   const dispatch = useDispatch();
@@ -76,7 +77,7 @@ function Router() {
                 <Route index element={<MyBlogs />} />
                 <Route path="my-bookmarks" element={<MyBookmarks />} />
                 <Route path="bio" element={<Edit />} />
-
+                <Route path="saved-tarining" element={<SavedTraining />} />
                 <Route path="orders-history" element={<OrderHistory />} />
               </Route>
             )}
