@@ -10,13 +10,14 @@ import { UpdateMvtArticleDto } from "./dto/update-mvt.dto";
 export class MvtsService {
     constructor(
         private readonly prisma: PrismaService,
-    ) { }
+    ) {}
 
     async create(dto: CreateMvtArticleDto) {
+        console.log(dto)
         const mvt = await this.prisma.mvtArticle.create({
             data: {
                 ...dto,
-                date: new Date(dto.date).toISOString()
+                date: new Date('2023-07-27 14:53:46.534').toISOString()
             },
         });
         if (dto.status === 'delivered') {
