@@ -17,7 +17,7 @@ export class MvtsService {
         const mvt = await this.prisma.mvtArticle.create({
             data: {
                 ...dto,
-                date: new Date('2023-07-27 14:53:46.534').toISOString()
+                date: new Date(dto.date).toISOString()
             },
         });
         if (dto.status === 'delivered') {

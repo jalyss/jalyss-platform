@@ -81,7 +81,7 @@ function BrancheList() {
     });
   };
 
-  function getCurrentDateTime() {
+  function handleTransiction() {
     const now = new Date();
 
     // Get individual date and time components
@@ -97,18 +97,8 @@ function BrancheList() {
     // Combine the components to form the desired format
     const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
 
-    return formattedDateTime;
-  }
-  const myDate = new Date("2023-08-01 10:30:00");
-
-  const handleTransiction = () => {
-    setTransiction({
-      ...transiction,
-      date: getCurrentDateTime(),
-    });
-    let data = { ...transiction };
+    let data = { ...transiction, date: formattedDateTime };
     let aux = Object.assign({}, data);
-    console.log(aux, "aux");
 
     dispatch(addTransactionStock(aux)).then((res) => {
       if (!res.error) {
@@ -119,7 +109,7 @@ function BrancheList() {
         showErrorToast(res.error.message);
       }
     });
-  };
+  }
 
   const handleAddClick = (id) => {
     navigate(`detail/${id}`);
