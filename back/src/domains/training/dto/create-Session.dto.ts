@@ -3,7 +3,9 @@ import { Feature, SessionHasLecture, SessionTarif, SessionTarifHasFeatures } fro
 
 export class CreateSessionDto {
   @ApiProperty()
-  title: string;
+  titleEn: string;
+  @ApiProperty()
+  titleAr: string;
   @ApiProperty()
   description: string;
   @ApiProperty()
@@ -30,7 +32,8 @@ export class CreateSessionDto {
   lectures: SessionHasLecture[];
 }
 export class TarifsSesssionDto {
-  title: string;
+  titleEn: string;
+  titleAr: string;
   price: number;
   features: FeatureTarifSessionDto[];
 }

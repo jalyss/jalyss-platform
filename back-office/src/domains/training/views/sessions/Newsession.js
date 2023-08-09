@@ -83,9 +83,9 @@ const AddSession = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [titleOfDelete, setTitleOfDelete] = useState(null);
-  const take = sessions?.count || 10;
+  const take = sessions?.count
   const skip = 0;
-  console.log("addsession", addSession);
+ 
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchFeatures());
@@ -94,7 +94,7 @@ const AddSession = () => {
     dispatch(fetchsessionstypes());
     dispatch(fetchcours());
   }, [dispatch]);
-  console.log("lect", lecture);
+
   useEffect(() => {
     dispatch(fetchsessions({ take, skip }));
   }, [dispatch, take]);
@@ -297,6 +297,7 @@ const AddSession = () => {
   const generateRowId = (row) => {
     return row.lectureId;
   };
+
   return (
     <div>
       <input
@@ -380,25 +381,34 @@ const AddSession = () => {
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell className="fw-bold">Cover:</TableCell>
+                  <TableCell className="fw-bold">TitleEn:</TableCell>
                   <TableCell>
-                    {!cover && (
+                  <input
+                      required
+                      type="text"
+                      placeholder="Enter titleEn"
+                      name="titleEn"
+                      value={addSession?.TitleEn}
+                      onChange={handleAddSessionChange}
+                      style={{ border: "1px solid #bfbab7", width: 290 }}
+                    />
+                    {/* {!cover && (
                       <input
                         type="file"
                         className="form-control "
                         onChange={handleImageChange}
                         style={{ border: "1px solid #bfbab7", width: 290 }}
                       />
-                    )}
+                    )} */}
                   </TableCell>
-                  <TableCell className="fw-bold">Title:</TableCell>
+                  <TableCell className="fw-bold">TitleAr:</TableCell>
                   <TableCell>
                     <input
                       required
                       type="text"
-                      placeholder="Enter title"
-                      name="title"
-                      value={addSession?.Title}
+                      placeholder="Enter titleAr"
+                      name="titleAr"
+                      value={addSession?.TitleAr}
                       onChange={handleAddSessionChange}
                       style={{ border: "1px solid #bfbab7", width: 290 }}
                     />
@@ -476,7 +486,7 @@ const AddSession = () => {
                       </option>
                       {sessions?.items?.map((session, index) => (
                         <option key={index} value={session.id}>
-                          {session.title}
+                          {session.titleEn}
                         </option>
                       ))}
                     </select>
@@ -492,7 +502,7 @@ const AddSession = () => {
                         value={selectedGains}
                         required
                         data={gains?.items}
-                        labelOptionName="content"
+                        labelOptionName="contentEn"
                         label="Add gains"
                         onChange={setSelectedGains}
                         placeholder="Add Your session's gain"
@@ -515,7 +525,7 @@ const AddSession = () => {
                         required
                         value={selectedPrerequire}
                         data={prerequires?.items}
-                        labelOptionName="content"
+                        labelOptionName="contentEn"
                         label="Add prerequires"
                         onChange={setSelectedPrerequire}
                         placeholder="Add Your session's prerequire"
@@ -543,7 +553,7 @@ const AddSession = () => {
                         value={selectedFeatures}
                         required
                         data={featuresStore?.items}
-                        labelOptionName="label"
+                        labelOptionName="labelEn"
                         label="Add features"
                         onChange={setSelectedFeatures}
                         placeholder="Add features"
@@ -567,7 +577,7 @@ const AddSession = () => {
                         required
                         value={selectedTypes}
                         data={types?.items}
-                        labelOptionName="title"
+                        labelOptionName="titleEn"
                         label="Add types"
                         onChange={setSelectedTypes}
                         placeholder="Select your session types !"

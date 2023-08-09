@@ -15,7 +15,7 @@ function Gainss() {
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
-  const [editContent, setEditContent] = useState("");
+  const [content, setContent] = useState(null);
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
   const [contentOfDelete, setContentOfDelete] = useState("");
@@ -30,7 +30,7 @@ function Gainss() {
     if (editModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
-        setEditContent(row.content);
+        setContent({contentEn:row.contentEn,contentAr:row.contentAr});
       }
     }
   }, [editModal, editRowId, rows]);
@@ -40,7 +40,7 @@ function Gainss() {
       let aux = gains?.items.map((e) => {
         return {
           ...e,
-          content: e.content,
+          content: e.contentEn,
           createdAt: e.createdAt.slice(0, 10),
         };
       });
@@ -58,7 +58,9 @@ function Gainss() {
     if (basicModal && idOfDelete) {
       const gainToDelete = gains.items.find((gain) => gain.id === idOfDelete);
       if (gainToDelete) {
-        setContentOfDelete(gainToDelete.content);
+         setContentOfDelete(gainToDelete.contentEn);
+         setContentOfDelete(gainToDelete.contentEn);
+         console.log("ff",gainToDelete)
       }
     }
   }, [basicModal, idOfDelete, gains.items]);
@@ -78,8 +80,8 @@ function Gainss() {
   };
 
   const handleEdit = () => {
-    const content = editContent;
-    dispatch(editGain({ id: editRowId, content: content }))
+   
+    dispatch(editGain({ id: editRowId, contentEn:content.contentEn,contentAr:content.contentAr }))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -92,10 +94,14 @@ function Gainss() {
       });
 
     setEditRowId("");
-    setEditContent("");
+    setContent("");
     toggleShow2();
   };
 
+  const handleChange=(e)=>{
+    const {name,value}=e.target
+    setContent((content)=>({...content , [name]:value}))
+  }
   const columns = [
     {
       field: "content",
@@ -191,15 +197,22 @@ function Gainss() {
         title="Edit Gain"
         body={
           <div
-            className="d-flex justify-content-center align-items-center "
+            className="d-flex flex-column gap-3 justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={editContent}
+              value={content?.contentEn}
               label="Content"
-              onChange={(e) => {
-                setEditContent(e.target.value);
-              }}
+              name="contentEn"
+              onChange={handleChange}
+
+            />
+             <StyledInput
+              value={content?.contentAr}
+              label="Content"
+              name="contentAr"
+
+              onChange={handleChange}
             />
           </div>
         }

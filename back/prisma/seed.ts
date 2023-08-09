@@ -1645,7 +1645,9 @@ async function main() {
   for (let i = 0; i < data.length; i++) {
     const whatYouWillLearn = await prisma.whatYouWillLearn.create({
       data: {
-        content: data[i],
+        contentEn: data[i],
+        contentAr: data[i],
+
       },
     });
     whatYouWillLearnIds.push(whatYouWillLearn.id);
@@ -1657,7 +1659,9 @@ async function main() {
   for (let i = 0; i < 2; i++) {
     let sessionType = await prisma.sessionType.create({
       data: {
-        title: titles[Math.floor(Math.random() * titles.length)],
+        titleEn: titles[Math.floor(Math.random() * titles.length)],
+        titleAr: titles[Math.floor(Math.random() * titles.length)],
+
       },
     });
 
@@ -1819,8 +1823,11 @@ async function main() {
   for (let i = 0; i < 50; i++) {
     const lecture = await prisma.lecture.create({
       data: {
-        title: 'My Lecture ' + i,
-        content: 'Hello, this is a new lecture'
+        titleEn: 'My Lecture ' + i,
+        titleAr: 'My Lecture ' + i,
+        contentEn: 'Hello, this is a new lecture',
+        contentAr: 'Hello, this is a new lecture',
+
       },
     });
     lectures.push(lecture);
@@ -1846,7 +1853,9 @@ async function main() {
         MediaSession: {
           create: MediaSessionIds.map((mediaId) => ({ mediaId })),
         },
-        title: 'My Session Post ' + i,
+        titleEn: 'My Session Post ' + i,
+        titleAr: 'My Session Post ' + i,
+
         description: 'Hello, this is a new session',
         startDate: new Date('2022-01-01'),
         endDate: new Date('2022-02-02'),
@@ -1898,7 +1907,8 @@ async function main() {
     const priceST = [20, 50, 90];
     const sessionTarif = await prisma.sessionTarif.create({
       data: {
-        title: titleST[Math.floor(Math.random() * titleST.length)],
+        titleEn: titleST[Math.floor(Math.random() * titleST.length)],
+        titleAr: titleST[Math.floor(Math.random() * titleST.length)],
         price: priceST[Math.floor(Math.random() * priceST.length)],
         sessionId: sessionIds[Math.floor(Math.random() * sessionIds.length)],
         bookings: { create: usersIds.map((userId) => ({ userId })) },
@@ -1938,7 +1948,9 @@ async function main() {
 
     let sessionPrerequis = await prisma.prerequire.create({
       data: {
-        content: prerequis[Math.floor(Math.random() * prerequis.length)],
+        contentEn: prerequis[Math.floor(Math.random() * prerequis.length)],
+        contentAr: prerequis[Math.floor(Math.random() * prerequis.length)],
+
       },
     });
     preRequireIds.push(sessionPrerequis.id);
@@ -2031,7 +2043,9 @@ async function main() {
   for (let i = 0; i < 7; i++) {
     const features = await prisma.feature.create({
       data: {
-        label: label[i],
+        labelEn: label[i],
+        labelAr: label[i],
+
       },
     });
     featuresIds.push(features.id);

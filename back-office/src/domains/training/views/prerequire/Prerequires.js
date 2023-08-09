@@ -11,8 +11,14 @@ import { CreatePrereq } from "../../../../store/gain";
 import Prereq from "../../../../components/Prereq";
 
 function Prerequire() {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState({});
   const [basicModal, setBasicModal] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setContent((content) => ({ ...content, [name]: value }));
+  };
+
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
@@ -20,7 +26,7 @@ function Prerequire() {
 
   const dispatch = useDispatch();
   const addPrereq = () => {
-    dispatch(CreatePrereq({ content }))
+    dispatch(CreatePrereq(content))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -35,7 +41,7 @@ function Prerequire() {
 
   const handleSave = () => {
     addPrereq();
-    setContent("");
+    setContent({});
     toggleShow();
   };
   return (
@@ -58,15 +64,21 @@ function Prerequire() {
         title="Add new prerequire"
         body={
           <div
-            className="d-flex justify-content-center align-items-center "
+            className="d-flex flex-column gap-3 justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={content}
-              label="content"
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
+              value={content.contentEn}
+              label="contentEn"
+              name="contentEn"
+              onChange={handleChange}
+            />
+            <StyledInput
+              value={content.contentAr}
+              label="contentAr"
+              name="contentAr"
+
+              onChange={handleChange}
             />
           </div>
         }
