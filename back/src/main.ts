@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
 import { Liquid } from 'liquidjs';
+import { ValidationPipe } from '@nestjs/common';
 // import * as express from 'express';
 import { liquidColorFilters } from 'liquidjs-color-filters';
 
@@ -12,10 +13,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   app.useStaticAssets('upload',{prefix:'/upload'})
+
   app.useStaticAssets(join(__dirname, '../../../front', 'build'))
   
   
   app.setGlobalPrefix('/api/v1');
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('Median')
