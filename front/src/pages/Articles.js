@@ -37,6 +37,7 @@ function Articles() {
   const authorStore = useSelector((state) => state.author)
   const articleTypeStore = useSelector((state) => state.articleType)
 
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [price, setPrice] = useState([1, 1000])
   const [filters, setFilters] = useState({
     categories: [],
@@ -76,20 +77,22 @@ function Articles() {
     }
   }, [categoryId])
 
+  const onMouseMoveHandler = (event) => {
+    if (containerRef.current){
+      const rect = containerRef.current.getBoundingClientRect()
+      console.log("Element's bounding rect:", rect);  
+  }
+}
+console.log(containerRef, 'yalaa')
   const Filters = () => {
-    const onMouseMoveHandler = (event) => {
-      if (containerRef.current ) {
-        const rect = containerRef.current.getBoundingClientRect()
-        console.log("Element's bounding rect:", rect);  
-    }
-    }
+   
     return (
-      <div className="filters"  ref={containerRef} onMouseMove={onMouseMoveHandler}>
+      <div className="filters" >
         <Fragment >
           <Accordion  
             title={t('filter.Price')}
             content={
-              <div className="px-3 pt-3" >
+              <div className="px-3 pt-3"  ref={containerRef} onMouseMove={onMouseMoveHandler} >
                 <Slider 
                   range
                   draggableTrack={false}
@@ -321,7 +324,6 @@ function Articles() {
     <div
       style={{maxWidth:'100%'}}
       key={el.id}
-   
     >
       <ArticleCard article={el} />
     </div>
