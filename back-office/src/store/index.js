@@ -24,7 +24,7 @@ import gain from "./gain";
 import provider from "./provider";
 import trainingBooking from "./trainingBooking"
 import country from "./Country";
-
+import client from "./client";
 export const store = configureStore({
   reducer: {
     auth,
@@ -51,7 +51,8 @@ export const store = configureStore({
     country,
     chat,
     gain,
-    trainingBooking
+    trainingBooking,
+    client
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

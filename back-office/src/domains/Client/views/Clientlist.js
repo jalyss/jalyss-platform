@@ -19,7 +19,7 @@ function ClientsList() {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [selectedClientId, setSelectedclientId] = useState("");
-
+console.log(clientStore,'hhhhhhhhhhhh')
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };

@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const fetchClients = createAsyncThunk("clients/clients", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/clients`);
-  console.log("hhhhhhhhhhhh",response.data)
+ 
   return response.data;
 });
 
@@ -12,7 +12,7 @@ export const fetchClient = createAsyncThunk(
   "clients/fetchclient",
   async (id) => {
     const response = await axios.get(
-      `${config.API_ENDPOINT}/clients/one/${id}`
+      `${config.API_ENDPOINT}/clients/${id}`
     );
     return response.data;
   }

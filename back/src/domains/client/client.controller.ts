@@ -8,17 +8,17 @@ import { UpdateClientDto } from './dto/update-client.dto';
 export class clientsController {
   constructor(private readonly clientsService: ClientsService) { }
 
-  @Post('create')
+  @Post()
   create(@Body() createClientDto: CreateClientDto) {
     return this.clientsService.create(createClientDto);
   }
 
-  @Get('clients')
+  @Get()
   findAll( ) {
     return this.clientsService.findAll();
   }
 
-  @Get('one/:id')
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.clientsService.findOne(id);
   }
