@@ -2,7 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs
 import { LikesService } from './likes.service';
 import { CreateLikeDto } from './dto/create-like.dto';
 import { UpdateLikeDto } from './dto/update-like.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Likes')
 @Controller('Likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
