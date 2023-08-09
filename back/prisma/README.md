@@ -9,7 +9,7 @@ yarn migrate:deploy <!-- deploy all new  migration in the database -->
 # for generate and reset
 <!--chourouk-->
 yarn generate 
-yarn migrate:reset <!-- drop database and deploy all migration  and run the seed -->
+c <!-- drop database and deploy all migration  and run the seed -->
 yarn migrate:deploy <!-- drop database and deploy all migration  and run the seed -->
 
 # for create new migrate 
