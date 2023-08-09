@@ -10,9 +10,7 @@ export class ClientsService {
 ) { }
   async create(dto: CreateClientDto) {
     return await this.prisma.client.create({
-      data: {
-          ...dto,
-      },
+    data:dto
   });
   }
 
