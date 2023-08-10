@@ -150,7 +150,7 @@ const profileclient = () => {
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
                   <TableCell className="fw-bold" align="right">
-                  delivered  
+                  Delivered  
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
@@ -189,7 +189,7 @@ const profileclient = () => {
                 </TableRow>
                 <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell className="fw-bold" align="right">
-        paid
+        Paid
       </TableCell>
       <TableCell align="right">
         {editMode ? (
@@ -228,7 +228,7 @@ const profileclient = () => {
     <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
                   <TableCell className="fw-bold" align="right">
-                  confirm 
+                  Confirm 
                   </TableCell>
                   <TableCell align="right">
                     {editMode ? (
