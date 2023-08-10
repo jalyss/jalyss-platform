@@ -12,6 +12,7 @@ import { FormControlLabel, Radio } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { fetchCountries } from "../store/country";
 import { fetchCities } from "../store/city";
+import { purple } from "@mui/material/colors";
 
 function Checkout({}) {
   const { t } = useTranslation();
@@ -203,85 +204,96 @@ function Checkout({}) {
         </div>
       </form>
 
-      <div className="cart-container">
-        <div className="container h-min-content py-initial">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col">
-              <div className="table-responsive">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col" className="h5">
-                        {t("label.cart")}
-                      </th>
+      <div className="cart-container" style={{marginLeft:'100px',height:'100%'}}>
+  <div className="container h-min-content py-initial">
+    <div className="row d-flex justify-content-center align-items-center h-100">
+      <div className="col">
+        <div className="table-responsive" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          <table className="table">
+            <thead >
+              <tr >
+                <th scope="col" className="h5" >
+                  {t("Shopping Bag")}
+                </th>
+               
+              </tr>
+            </thead>
+            <tbody className="d-flex align-items-center flex-column ms-4">
+              {items.map((item) => (
+                <tr className="align-items-center">
+                  <th scope="row">
+                    <div className="flex-column ms-4">
+                      <p className="mb-2">{item.article.title}</p>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={item.article.cover.path}
+                        className="img-fluid rounded-3"
+                        alt={item.article.cover.alt}
+                      />
+                    </div>
+                  </th>
 
-                      <th scope="col">{t("label.quantity")}</th>
-                      <th scope="col">{t("label.price")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item) => (
-                      <tr>
-                        <th scope="row">
-                          <div className="flex-column ms-4">
-                            <p className="mb-2">{item.article.title}</p>
-                          </div>
-                          <div className="d-flex align-items-center">
-                            <img
-                              src={item.article.cover.path}
-                              className="img-fluid rounded-3"
-                              alt={item.article.cover.alt}
-                            />
-                          </div>
-                        </th>
-
-                        <td className="align-middle">
-                          <div className="d-flex flex-row">
-                            <button
-                              onClick={() =>
-                                updateItemQuantity(item.id, item.quantity - 1)
-                              }
-                            >
-                              -
-                            </button>
-                            <input
-                              id="form1"
-                              min="0"
-                              name="quantity"
-                              value={item.quantity}
-                              type="number"
-                              className="form-control form-control-sm"
-                            />
-                            <button
-                              onClick={() =>
-                                updateItemQuantity(item.id, item.quantity + 1)
-                              }
-                            >
-                              +
-                            </button>
-                          </div>
-                        </td>
-                        <td className="align-middle">
-                          <p className="mb-0">
-                            {t("label.devise")} {item.price}
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="d-flex justify-content-between w-100">
-            <span className="label">{t("label.total")}</span>
-            <span className="price-wrapper">{cartTotal}</span>
-          </div>
+                  <td className="align-middle">
+                  <th scope="col">{t("label.quantity")}</th>
+                    <div className="d-flex flex-row">
+                      <button
+                        style={{
+                          borderRadius: "5px",
+                          backgroundColor: "rgb(70, 4, 74)"
+                        }}
+                        onClick={() =>
+                          updateItemQuantity(item.id, item.quantity - 1)
+                        }
+                      >
+                        -
+                      </button>
+                      <input
+                        id="form1"
+                        min="0"
+                        name="quantity"
+                        value={item.quantity}
+                        type="number"
+                        className="form-control form-control-sm"
+                      />
+                      <button
+                        style={{
+                          borderRadius: "5px",
+                          backgroundColor: "rgb(70, 4, 74)"
+                        }}
+                        onClick={() =>
+                          updateItemQuantity(item.id, item.quantity + 1)
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
+                  <td className="align-middle">
+                <th scope="col">{t("label.price")}</th>
+                    <p className="mb-0">
+                      {t("label.devise")} {item.price}
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
+  <div>
+    <div className="d-flex justify-content-between w-100">
+      <span className="label">{t("label.total")}</span>
+      <span className="price-wrapper">{cartTotal}</span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+   
   );
 }
 
