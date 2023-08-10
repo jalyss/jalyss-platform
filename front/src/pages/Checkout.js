@@ -12,7 +12,27 @@ import { FormControlLabel, Radio } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { fetchCountries } from "../store/country";
 import { fetchCities } from "../store/city";
-import { purple } from "@mui/material/colors";
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Container,
+  Grid,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  CardContent,
+  Typography,
+} from '@material-ui/core';
+import SaveButton from "../components/Commun/buttons/SaveButton";
 
 function Checkout({}) {
   const { t } = useTranslation();
@@ -81,221 +101,246 @@ function Checkout({}) {
       }
     });
   };
-
-  return (
-    <div class="mx-auto d-flex " >
-    <div className="d-flex p-4 ">
-      <form className="checkout-form" onSubmit={submitCommand}>
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="clientName">
-              {t("label.name")} <span style={{ color: "red" }}>*</span>
-            </label>
-
-            <input
-              class="form-control mt-2"
-              required
-              id="clientName"
-              value={command?.clientName}
-              name="clientName"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="clientEmail">
-              {t("label.email")}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-
-            <input
-              class="form-control mt-2"
-              required
-              id="clientEmail"
-              value={command?.clientEmail}
-              name="clientEmail"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="clientTel">
-              {t("label.phone")}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            <input
-              required
-              type="tel"
-              class="form-control mt-2"
-              id="clientTel"
-              value={command?.clientTel}
-              name="clientTel"
-              onChange={handleChange}
-            />
-          </div>
-          <div class="col mb-3 ">
-            <label for="clientAddress">
-              {t("label.address")}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            <input
-              required
-              name="clientAddress"
-              class="form-control mt-2"
-              id="clientAddress"
-              value={command?.clientAddress}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="country">{t("label.country")}</label>
-            <select
-              name="countryId"
-              class="form-control mt-2"
-              id="country"
-              value={command?.countryId}
-              onChange={handleChange}
-            >
-              <option value={null}>--{t("label.selectCountry")}--</option>
-              {countryStore.countries.items.map((item) => (
-                <option value={item.id}>{item.nameAr}</option>
-              ))}
-            </select>
-          </div>
-
-          <div class="col mb-3 ">
-            <label for="city">{t("label.city")}</label>
-            <select
-              name="cityId"
-              class="form-control mt-2"
-              id="city"
-              value={command?.cityId}
-              onChange={handleChange}
-            >
-              <option value={null}>--{t("label.selectCity")}--</option>
-              {cityStore.cities.items.map((item) => (
-                <option value={item.id}>{item.nameAr}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <label for="delivery">{t("label.delivery")}</label>
-        <input
-          type="checkbox"
-          id="delivery"
-          checked={command?.hasDelivery}
-          onChange={handleChecked}
-        />
-
-        <div className="w-100 d-flex justify-content-center">
-          <button
-            type="submit"
-            className="confirm-button mt-3"
-            onSubmit={submitCommand}
-            disabled={items.length === 0 ? true : false}
-          >
-            <span className="label-btn">{t("label.btnConfirm")}</span>
-          </button>
-        </div>
-      </form>
-
-      <div className="cart-container" >
-  <div className="container h-min-content py-initial" >
-    <div className="row d-flex justify-content-center align-items-center h-100">
-      <div className="col">
-        <div className="table-responsive rounded" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-          <table className="table" >
-            <thead >
-              <tr >
-                <th scope="col" className="h5" >
-                  {t("Shopping Bag")}
-                </th>
-               
-              </tr>
-            </thead>
-            <tbody className="d-flex align-items-center flex-column ms-4">
-              {items.map((item) => (
-                <tr className="align-items-center">
-                  <th scope="row">
-                    <div className="flex-column ms-4">
-                      <p className="mb-2">{item.article.title}</p>
-                    </div>
-                    <div className="d-flex align-items-center">
-                      <img
-                        src={item.article.cover.path}
-                        className="img-fluid rounded-3"
-                        alt={item.article.cover.alt}
-                      />
-                    </div>
-                  </th>
-
-                  <td className="align-middle">
-                  <th scope="col">{t("label.quantity")}</th>
-                    <div className="d-flex flex-row">
-                      <button
-                        style={{
-                          borderRadius: "5px",
-                          backgroundColor: "rgb(70, 4, 74)"
-                        }}
-                        onClick={() =>
-                          updateItemQuantity(item.id, item.quantity - 1)
-                        }
-                      >
-                        -
-                      </button>
-                      <input
-                        id="form1"
-                        min="0"
-                        name="quantity"
-                        value={item.quantity}
-                        type="number"
-                        className="form-control form-control-sm"
-                      />
-                      <button
-                        style={{
-                          borderRadius: "5px",
-                          backgroundColor: "rgb(70, 4, 74)"
-                        }}
-                        onClick={() =>
-                          updateItemQuantity(item.id, item.quantity + 1)
-                        }
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td className="align-middle">
-                <th scope="col">{t("label.price")}</th>
-                    <p className="mb-0">
-                      {t("label.devise")} {item.price}
-                    </p>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div>
-    <div className="d-flex justify-content-between w-100">
-      <span className="label">{t("label.total")}</span>
-      <span className="price-wrapper">{cartTotal}</span>
-    </div>
-  </div>
-</div>
-
-</div>
-</div>
+  const useStyles = makeStyles((theme) => ({
+    root: {
+    
+      display: 'flex',
+      justifyContent: 'center',
+      margin: theme.spacing(2),
    
-  );
-}
+    },
+    formcontainer: {
+      marginleft: theme.spacing(1),
+      maxwidth: '80%',
+     marginLeft:'10%'
+    },
+    cartContainer: {
+     overflowY: 'hidden',
+      marginleft:'100px',
+      flex: 1,
+     
+    },
+    tableContainer: {
+      marginLeft: '10%',
+      maxHeight: '400px',
+       
+      overflowY: 'auto',  
+      
+      borderRadius: theme.spacing(1),
+    },
+   
+  }));
 
-export default Checkout;
+ 
+    const classes = useStyles();
+  
+    return (
+      <div className={classes.root}>
+        <Grid container spacing={2}>
+        <Grid item xs={12} md={6} className={classes.cartContainer}>
+            <div className={classes.tableContainer}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className={classes.tableCellHeader}>
+                      {t("Shopping Bag")}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {items.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell  className={classes.imageArt}>
+                        <div>
+                          <p>{item.article.title}</p>
+                          </div>
+                           <div>
+                          <img
+                            src={item.article.cover.path}
+                            alt={item.article.cover.alt}
+                            style={{ maxWidth: '60%', height: 'auto' }}
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                      <th scope="col">{t("label.quantity")}</th>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        
+                          <button
+                            style={{
+                              borderRadius: "5px",
+                              backgroundColor: "rgb(70, 4, 74)"
+                            }}
+                            onClick={() =>
+                              updateItemQuantity(item.id, item.quantity - 1)
+                            }
+                          >
+                            -
+                          </button>
+                          <input
+                          style={{maxWidth:'50px'}}
+                            min="0"
+                            name="quantity"
+                            value={item.quantity}
+                           
+                          />
+                          <button
+                            style={{
+                              borderRadius: "5px",
+                              backgroundColor: "rgb(70, 4, 74)"
+                            }}
+                            onClick={() =>
+                              updateItemQuantity(item.id, item.quantity + 1)
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                      <th scope="col">{t("label.price")}</th>
+                        <p>
+                          {t("label.devise")} {item.price}
+                        </p>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <CardContent>
+              <Typography variant="body1">{t("label.total")}</Typography>
+              <Typography variant="h6">{cartTotal}</Typography>
+              </CardContent>
+            </div>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <form className={classes.formcontainer} onSubmit={submitCommand}>
+             <div class="row">
+            <div class="col mb-3 ">
+              <label for="clientName">
+                {t("label.name")} <span style={{ color: "red" }}>*</span>
+              </label>
+  
+              <input
+                class="form-control mt-2"
+                required
+                id="clientName"
+                value={command?.clientName}
+                name="clientName"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col mb-3 ">
+              <label for="clientEmail">
+                {t("label.email")}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+  
+              <input
+                class="form-control mt-2"
+                required
+                id="clientEmail"
+                value={command?.clientEmail}
+                name="clientEmail"
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col mb-3 ">
+              <label for="clientTel">
+                {t("label.phone")}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                required
+                type="tel"
+                class="form-control mt-2"
+                id="clientTel"
+                value={command?.clientTel}
+                name="clientTel"
+                onChange={handleChange}
+              />
+            </div>
+            <div class="col mb-3 ">
+              <label for="clientAddress">
+                {t("label.address")}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                required
+                name="clientAddress"
+                class="form-control mt-2"
+                id="clientAddress"
+                value={command?.clientAddress}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3 ">
+              <label for="country">{t("label.country")}</label>
+              <select
+                name="countryId"
+                class="form-control mt-2"
+                id="country"
+                value={command?.countryId}
+                onChange={handleChange}
+              >
+                <option value={null}>--{t("label.selectCountry")}--</option>
+                {countryStore.countries.items.map((item) => (
+                  <option value={item.id}>{item.nameAr}</option>
+                ))}
+              </select>
+            </div>
+  
+            <div class="col mb-3 ">
+              <label for="city">{t("label.city")}</label>
+              <select
+                name="cityId"
+                class="form-control mt-2"
+                id="city"
+                value={command?.cityId}
+                onChange={handleChange}
+              >
+                <option value={null}>--{t("label.selectCity")}--</option>
+                {cityStore.cities.items.map((item) => (
+                  <option value={item.id}>{item.nameAr}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <label for="delivery">{t("label.delivery")}</label>
+          <input
+            type="checkbox"
+            id="delivery"
+            checked={command?.hasDelivery}
+            onChange={handleChecked}
+          />
+  
+          <div className="w-100 d-flex justify-content-center">
+            <SaveButton
+              type="submit"
+              // className="confirm-button mt-3"
+              onSubmit={submitCommand}
+              disabled={items.length === 0 ? true : false}
+            >
+              <span className="label-btn">{t("label.btnConfirm")}</span>
+            </SaveButton>
+          </div>
+    </form>
+          </Grid>
+         
+        </Grid>
+      </div>
+    );
+  };
+
+
+export default Checkout
