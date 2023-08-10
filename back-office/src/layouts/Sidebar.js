@@ -47,34 +47,33 @@ function Sidebar() {
                 style={{ textDecoration: "none", color: "#000" }}
                 to={"Branche"}
               >
-              <div
-                onClick={() => handleItemClick(elem.path)}
-                style={{
-                  borderLeft: isActive && !isEng && "2px solid #48184c",
-                  borderRight: isActive && isEng && "2px solid #48184c",
-                }}
-                className={`sidebarItem ${
-                  isActive && "activeSidebarItem"
-                } justify-content-between`}
-              >
-                {elem.nameEn === "Branches" ? (
-                    
+                <div
+                  onClick={() => handleItemClick(elem.path)}
+                  style={{
+                    borderLeft: isActive && !isEng && "2px solid #48184c",
+                    borderRight: isActive && isEng && "2px solid #48184c",
+                  }}
+                  className={`sidebarItem ${
+                    isActive && "activeSidebarItem"
+                  } justify-content-between`}
+                >
+                  {elem.nameEn === "Branches" ? (
                     <Typography fontWeight={isActive && "bold"}>
                       {isEng ? elem.nameEn : elem.nameAr}
                     </Typography>
-                ) : (
-                  <Typography fontWeight={isActive && "bold"}>
-                    {isEng ? elem.nameEn : elem.nameAr}
-                  </Typography>
-                )}
-                {elem.children.length !== 0 &&
-                  (!isActive ? (
-                    <AiOutlineDown color="black" />
+                  ) : (
+                    <Typography fontWeight={isActive && "bold"}>
+                      {isEng ? elem.nameEn : elem.nameAr}
+                    </Typography>
+                  )}
+                  {elem.children.length !== 0 &&
+                    (!isActive ? (
+                      <AiOutlineDown color="black" />
                     ) : (
                       <AiOutlineUp color="black" />
-                      ))}
-              </div>
-                      </Link>
+                    ))}
+                </div>
+              </Link>
               {isActive && elem.children.length > 0 && (
                 <div className="sidebarChildren">
                   {elem.children.map((el, j) => {

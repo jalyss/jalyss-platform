@@ -260,7 +260,10 @@ model ArticlesByBranch {
   CommandLine CommandLine[]
 
   @@unique([branchId, articleId])
+
 }
+
+// newtable b1 b2 artids date status
 
 model MvtArticle {
   id               String    @id @default(uuid())
@@ -275,7 +278,6 @@ model MvtArticle {
   status           StatusMvt @default(pending)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
-
   @@unique(fields: [branchReceiverId, branchSenderId, articleId, date], name: "mvtArticle")
 }
 

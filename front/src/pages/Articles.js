@@ -1,40 +1,40 @@
-import Slider from 'rc-slider'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import Offcanvas from 'react-bootstrap/Offcanvas'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import ArticleCard from '../components/ArticleCard'
-import { fetchArticlesByBranch } from '../store/article'
-import { fetchArticleTypes } from '../store/articleType'
-import { fetchCategories } from '../store/category'
-import { fetchPublishingHouses } from '../store/publishingHouse'
-import { fetchAuthors } from '../store/author'
-import { identifier } from '../constants/identifier/identifier'
-import Accordion from '../components/Commun/Accordion'
-import '../assets/styles/filters.css'
-import useMeta from '../hooks/useMeta'
-import DocumentMeta from 'react-document-meta'
-import { BsFilterSquare } from 'react-icons/bs'
-import 'rc-tooltip/assets/bootstrap.css'
-import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
-import 'rc-slider/assets/index.css'
-import { groupBy, isEmpty, map } from 'lodash'
-import HorizontalMenu from '../components/Commun/DragContainter'
+import Slider from "rc-slider";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import ArticleCard from "../components/ArticleCard";
+import { fetchArticlesByBranch } from "../store/article";
+import { fetchArticleTypes } from "../store/articleType";
+import { fetchCategories } from "../store/category";
+import { fetchPublishingHouses } from "../store/publishingHouse";
+import { fetchAuthors } from "../store/author";
+import { identifier } from "../constants/identifier/identifier";
+import Accordion from "../components/Commun/Accordion";
+import "../assets/styles/filters.css";
+import useMeta from "../hooks/useMeta";
+import DocumentMeta from "react-document-meta";
+import { BsFilterSquare } from "react-icons/bs";
+import "rc-tooltip/assets/bootstrap.css";
+import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
+import "rc-slider/assets/index.css";
+import { groupBy, isEmpty, map } from "lodash";
+import HorizontalMenu from "../components/Commun/DragContainter";
 
 function Articles() {
-  const dispatch = useDispatch()
-  const { t, i18n } = useTranslation()
-  const meta = useMeta(t('articles.pageName'), t('articles.pageDescription'))
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
+  const meta = useMeta(t("articles.pageName"), t("articles.pageDescription"));
 
-  const { categoryId } = useParams()
-  const articleStore = useSelector((state) => state.article)
-  const categoryStore = useSelector((state) => state.category)
-  const publishingHouseStore = useSelector((state) => state.publishingHouse)
-  const authorStore = useSelector((state) => state.author)
-  const articleTypeStore = useSelector((state) => state.articleType)
+  const { categoryId } = useParams();
+  const articleStore = useSelector((state) => state.article);
+  const categoryStore = useSelector((state) => state.category);
+  const publishingHouseStore = useSelector((state) => state.publishingHouse);
+  const authorStore = useSelector((state) => state.author);
+  const articleTypeStore = useSelector((state) => state.articleType);
 
-  const [price, setPrice] = useState([1, 1000])
+  const [price, setPrice] = useState([1, 1000]);
   const [filters, setFilters] = useState({
     categories: [],
     publishingHouses: [],
@@ -43,13 +43,12 @@ function Articles() {
     lte: null,
     gte: null,
     skip: 0,
-  })
+  });
 
-  console.log(publishingHouseStore.publishingHouses.items,"publishingHouse")
+  console.log(publishingHouseStore.publishingHouses.items, "publishingHouse");
 
-  const lg = i18n.languages[0] === 'en'
-  const [showFilters, setShowFilters] = useState(false)
-
+  const lg = i18n.languages[0] === "en";
+  const [showFilters, setShowFilters] = useState(false);
 
   function onMouseMoveHandler(event) {
     // Check if elementRef.current is not null before accessing its properties
@@ -60,60 +59,28 @@ function Articles() {
     }
   }
 
+  useEffect(() => {
+    dispatch(fetchArticlesByBranch({ ...filters, identifier }));
+  }, [dispatch, filters]);
 
   useEffect(() => {
-    dispatch(fetchArticlesByBranch({ ...filters, identifier }))
-  }, [dispatch, filters])
-
-  useEffect(() => {
-    dispatch(fetchCategories())
-    dispatch(fetchPublishingHouses())
-    dispatch(fetchArticleTypes())
-    dispatch(fetchAuthors())
-  }, [dispatch])
+    dispatch(fetchCategories());
+    dispatch(fetchPublishingHouses());
+    dispatch(fetchArticleTypes());
+    dispatch(fetchAuthors());
+  }, [dispatch]);
 
   useEffect(() => {
     if (categoryId) {
-      setFilters((Filters) => ({ ...Filters, categories: [categoryId] }))
+      setFilters((Filters) => ({ ...Filters, categories: [categoryId] }));
     }
-  }, [categoryId])
+  }, [categoryId]);
 
   const Filters = () => {
     return (
       <div className="filters ">
-        <Fragment>
-          <Accordion
-            title={t('filter.price')}
-            content={
-              <div className="px-3 pt-3">
-                <Slider
-                  range
-                  draggableTrack
-                  min={1}
-                  max={1000}
-                  defaultValue={[1, 1000]}
-                  tipFormatter={(value) => `TND${value}`}
-                  allowCross={false}
-                  value={price}
-                  onChange={(price) => {
-                    setPrice(price)
-                    setFilters((Filters) => ({
-                      ...Filters,
-                      gte: price[0],
-                      lte: price[1],
-                    }))
-                  }}
-                />
-                <div className="d-flex justify-content-between mt-1">
-                  <p>{price[1]}</p>
-                  <p>{price[0]}</p>
-                </div>
-              </div>
-            }
-          />
-        </Fragment>
         <Accordion
-          title={t('filter.category')}
+          title={t("filter.category")}
           content={
             <>
               {categoryStore.categories.items.map((element, i) => (
@@ -133,7 +100,7 @@ function Articles() {
                             categories: Filter.categories.filter(
                               (elem, j) => elem !== element.id
                             ),
-                          }))
+                          }));
                     }}
                     checked={filters.categories.includes(element.id)}
                   />
@@ -147,7 +114,7 @@ function Articles() {
         />
 
         <Accordion
-          title={t('filter.articleType')}
+          title={t("filter.articleType")}
           content={
             <>
               {articleTypeStore.articleTypes.items.map((element, i) => (
@@ -166,7 +133,7 @@ function Articles() {
                             articleTypes: Filter.articleTypes.filter(
                               (elem, j) => elem !== element.id
                             ),
-                          }))
+                          }));
                     }}
                     checked={filters.articleTypes.includes(element.id)}
                   />
@@ -180,7 +147,7 @@ function Articles() {
         />
 
         <Accordion
-          title={t('filter.publishingHouse')}
+          title={t("filter.publishingHouse")}
           content={
             <>
               {publishingHouseStore.publishingHouses.items.map((element, i) => (
@@ -202,7 +169,7 @@ function Articles() {
                             publishingHouses: Filter.publishingHouses.filter(
                               (elem, j) => elem !== element.id
                             ),
-                          }))
+                          }));
                     }}
                     checked={filters.publishingHouses.includes(element.id)}
                   />
@@ -214,7 +181,7 @@ function Articles() {
         />
 
         <Accordion
-          title={t('filter.author')}
+          title={t("filter.author")}
           content={
             <>
               {authorStore.authors.items.map((element, i) => (
@@ -233,7 +200,7 @@ function Articles() {
                             authors: Filter.authors.filter(
                               (elem, j) => elem !== element.id
                             ),
-                          }))
+                          }));
                     }}
                     checked={filters.authors.includes(element.id)}
                   />
@@ -246,23 +213,23 @@ function Articles() {
           }
         />
       </div>
-    )
-  }
+    );
+  };
 
   const groupedArticles = useMemo(
     () =>
       groupBy(articleStore.articles.items, (item) => item.article.categoryId),
     [articleStore.articles.items]
-  )
+  );
 
-  console.log(filters.categories,"ctaegories")
-  console.log(groupedArticles,"grpdArticles")
-  console.log(articleStore.articles.items,"article store")
+  console.log(filters.categories, "ctaegories");
+  console.log(groupedArticles, "grpdArticles");
+  console.log(articleStore.articles.items, "article store");
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
-        <p>{t('title')}</p>
+        <p>{t("title")}</p>
         <div className="filters-button">
           <BsFilterSquare onClick={() => setShowFilters(true)} />
         </div>
@@ -275,19 +242,81 @@ function Articles() {
       >
         <Offcanvas.Header closeButton />
         <Offcanvas.Body>
+          <Fragment>
+            <Accordion
+              title={t("filter.price")}
+              content={
+                <div className="px-3 pt-3">
+                  <Slider
+                    range
+                    draggableTrack
+                    min={1}
+                    max={1000}
+                    defaultValue={[1, 1000]}
+                    tipFormatter={(value) => `TND${value}`}
+                    allowCross={false}
+                    value={price}
+                    onChange={(price) => {
+                      setPrice(price);
+                      setFilters((Filters) => ({
+                        ...Filters,
+                        gte: price[0],
+                        lte: price[1],
+                      }));
+                    }}
+                  />
+                  <div className="d-flex justify-content-between mt-1">
+                    <p>{price[1]}</p>
+                    <p>{price[0]}</p>
+                  </div>
+                </div>
+              }
+            />
+          </Fragment>
           <Filters />
         </Offcanvas.Body>
       </Offcanvas>
 
       <div className="d-flex p-2 ">
         <div className="responsive-filters">
+          <Fragment>
+            <Accordion
+              title={t("filter.price")}
+              content={
+                <div className="px-3 pt-3">
+                  <Slider
+                    range
+                    draggableTrack
+                    min={1}
+                    max={1000}
+                    defaultValue={[1, 1000]}
+                    tipFormatter={(value) => `TND${value}`}
+                    allowCross={false}
+                    value={price}
+                    onChange={(price) => {
+                      setPrice(price);
+                      setFilters((Filters) => ({
+                        ...Filters,
+                        gte: price[0],
+                        lte: price[1],
+                      }));
+                    }}
+                  />
+                  <div className="d-flex justify-content-between mt-1">
+                    <p>{price[0]}</p>
+                    <p>{price[1]}</p>
+                  </div>
+                </div>
+              }
+            />
+          </Fragment>
           <Filters />
         </div>
         <div className="px-3">
           {!isEmpty(filters.categories) ? (
             map(groupedArticles, (element) => (
               <>
-                <p>{element[0].article.category[lg ? 'nameEn' : 'nameAr']}</p>
+                <p>{element[0].article.category[lg ? "nameEn" : "nameAr"]}</p>
 
                 <HorizontalMenu>
                   {element.map((el) => (
@@ -318,7 +347,7 @@ function Articles() {
             setFilters((Filters) => ({ ...Filters, skip: filters.skip - 5 }))
           }
         >
-          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t('prev')}
+          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t("prev")}
         </button>
         <button
           className=" bg-yellow px-4 py-2 border-0 mx-2"
@@ -326,11 +355,11 @@ function Articles() {
             setFilters((Filters) => ({ ...Filters, skip: filters.skip + 5 }))
           }
         >
-          {t('next')} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
+          {t("next")} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
         </button>
       </div>
     </DocumentMeta>
-  )
+  );
 }
 
-export default Articles
+export default Articles;
