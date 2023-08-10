@@ -108,6 +108,12 @@ import SessionType from "../domains/training/views/sessionType/SessionType";
 import ChatBox from "../pages/ChatBox";
 import Conversation from "../components/chatComponents/Conversation";
 import Subscriber from "../domains/training/views/sessions/Subscriber";
+import Role from "../domains/roles/Role";
+import RolesList from "../domains/roles/view/RolesList";
+import EditRole from "../domains/roles/view/EditRole";
+import DetailRole from "../domains/roles/view/DetailRole";
+import CreateRole from "../domains/roles/view/CreateRole";
+
 import Client from "../domains/Client/Client";
 import Clientlist from "../domains/Client/views/Clientlist";
 import Addclient from "../domains/Client/views/Addclient";
@@ -219,6 +225,13 @@ function Router() {
               <Route path="edit/:typeId" element={<EditType />} />
               <Route path="detail/:typeId" element={<DetailType />} />
               <Route path="create" element={<CreateType />} />
+            </Route>
+
+            <Route path="role" element={<Role />}>
+              <Route index element={<RolesList />} />
+              <Route path="edit/:roleId" element={<EditRole />} />
+              <Route path="detail/:roleId" element={<DetailRole />} />
+              <Route path="create" element={<CreateRole />} />
             </Route>
 
             <Route path="articles" element={<Article />}>

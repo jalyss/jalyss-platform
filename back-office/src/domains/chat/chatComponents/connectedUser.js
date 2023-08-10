@@ -7,7 +7,7 @@ import {
     Typography,
   } from "@mui/material";
   import { CircleDashed, MagnifyingGlass, WifiHigh, ChatText } from "phosphor-react";
-  import React, { useEffect, useState, useContext } from "react";
+  import React, { useEffect, useState } from "react";
   import Search from "../../../components/Commun/Search";
 
   import SearchIconWrapper from "../../../components/Commun/SearchIconWrapper";
