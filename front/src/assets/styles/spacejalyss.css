@@ -22,7 +22,7 @@
 .card {
   position: relative;
   border-radius: 20px;
-  transition: all 1.4s ease-in-out;
+  /* transition: all 1.4s ease-in-out; */
 }
 
 .carousell {

@@ -190,20 +190,21 @@ function SpaceJalyss() {
                 }}
               >
                 <div className="card-body">
-                  <h5 className="card-title">{elem.name}</h5>
+                  <h5 className="card-title" style={{marginBottom:15}}>{elem.name}</h5>
                   <button
-                    className="btn btn-primary"
+                    className="btn "
                     style={{
                       width: 170,
-                      marginLeft: 25,
-                      backgroundColor: "rgb(230, 229, 232)",
+                      
+                      backgroundColor: "rgb(144, 48, 152)",
                       borderRadius: 30,
                       color: "black",
+                      borderColor: "white"
                     }}
                   >
                     <Link
                       to={elem?.identifier}
-                      style={{ textDecoration: "none", color: "black" }}
+                      style={{ textDecoration: "none", color: "white" }}
                     >
                       Reserve
                     </Link>

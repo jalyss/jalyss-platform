@@ -9,9 +9,9 @@ spaceJalyssCom
   .transition:hover{
     transform: scale(1.1);
   }
-  .headerspaceitem:hover {
+  /* .headerspaceitem:hover {
     transform: scale(1.1);
-  }
+  } */
   .carousell{
     width: 1460px;
      height: 650px;
