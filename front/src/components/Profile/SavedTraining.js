@@ -13,7 +13,7 @@ const SavedTraining = () => {
     const dispatch = useDispatch();
     const { userId } = useParams();
     const trainingStore = useSelector((state) => state.trainingBooking.trainingBookings);
-    const { training } = trainingStore;
+    const count = trainingStore?.count   
     const [skip, setSkip] = useState(0);
     let take = 6;
     
@@ -27,7 +27,6 @@ const SavedTraining = () => {
     };
 
     console.log('test', trainingStore)
-    console.log("count",training);
 
     return (
 
@@ -66,22 +65,19 @@ const SavedTraining = () => {
                     
                 ))}
 
-                
-             {/* <div className="d-flex justify-content-center my-5">
-                      <Pagination
-                        count={
-                            training.count % take === 0
-                                ? Math.floor(training.count / take)
-                                : Math.floor(training.count / take) + 1
-                        }
-                        color="secondary"
-                        variant="outlined"
-                        onChange={handleChange}
-                    />  
-                </div> */}
-
+             
             </div>
            
+   
+            <div className="d-flex justify-content-center my-5">
+              <Pagination
+    count={count % take === 0 ? Math.floor(count / take)
+     : Math.floor(count / take) + 1}
+    color="secondary"
+    variant="outlined"
+    onChange={handleChange}
+/>
+                </div> 
 
         </div>
 
