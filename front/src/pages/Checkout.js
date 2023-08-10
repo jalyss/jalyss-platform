@@ -143,7 +143,7 @@ function Checkout({}) {
               <Table >
                 <TableHead >
                   <TableRow>
-                    <TableCell className={classes.tableCellHeader}>
+                    <TableCell variant="body1" className={classes.tableCellHeader}>
                       {t("Shopping Bag")}
                     </TableCell>
                   </TableRow>
@@ -165,7 +165,7 @@ function Checkout({}) {
                       </TableCell>
                       <TableCell>
                       <th scope="col">{t("label.quantity")}</th>
-                        <div style={{ display: 'flex', alignItems: 'center',}}>
+                        <div style={{ display: 'flex', alignItems: 'center'}}>
                         
                           <button
                             style={{
@@ -317,13 +317,19 @@ function Checkout({}) {
               </select>
             </div>
           </div>
+          <div style={{ display: 'flex', alignItems: 'center'}}>
           <label for="delivery">{t("label.delivery")}</label>
-          <input
+          <input style={{
+            marginRight:'350px'
+          }}
             type="checkbox"
             id="delivery"
             checked={command?.hasDelivery}
             onChange={handleChecked}
           />
+     
+        </div>
+         
   
           <div className="w-100 d-flex justify-content-center">
             <Button
@@ -331,8 +337,6 @@ function Checkout({}) {
             maxHeight:'100px',
             maxwidth:'300px',
             backgroundColor:'rgb(70, 4, 74)',
-
-            
            }}
               type="submit"
               // className="confirm-button mt-3"
