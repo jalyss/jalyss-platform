@@ -216,7 +216,7 @@ function SpaceJalyss() {
 
         <div
           className="card-body d-flex flex-column flex-md-row justify-content-around mb-3"
-          style={{ marginTop: 30,padding:"10px" }}
+          style={{ marginTop: 30, padding: "10px" }}
         >
           <div
             className="card p-1 "
@@ -256,39 +256,43 @@ function SpaceJalyss() {
                     JalyssCom
                   </h3>
                 </div>
+                <div className="container">
+                  <p className="my-2 text-start" style={{ fontSize: "1.15rem", padding: "10px" }}>
+                    At JalyssCom We value adaptability and initiative in whatever we
+                    do as business owners.
+                    <br />
+                    Our offers can be tailored to your needs and financial situation.
+                    <br />
+                    Our workspaces encourage collaboration, promote performance, and
+                    inspire creativity.
+                    <br />
+                    They were designed with these goals in mind. Our spaces are
+                    secured <br />
+                    and available around-the-clock,
+                    <br />
+                    include natural light that is good for your staff's wellbeing, and
+                    are located in a high-rise building in the middle of a renowned
+                    business district.
+                    <br />
+                    JalyssCom is another place for planned events. Whether it's a
+                    workshop, seminar, or other type of training, JalyssCom is always
+                    active!
+                  </p>
+
+                </div>
+
               </div>
             </div>
 
-            <p className="my-2 text-start" style={{ fontSize: "1.15rem" ,padding:"10px"}}>
-              At JalyssCom We value adaptability and initiative in whatever we
-              do as business owners.
-              <br />
-              Our offers can be tailored to your needs and financial situation.
-              <br />
-              Our workspaces encourage collaboration, promote performance, and
-              inspire creativity.
-              <br />
-              They were designed with these goals in mind. Our spaces are
-              secured <br />
-              and available around-the-clock,
-              <br />
-              include natural light that is good for your staff's wellbeing, and
-              are located in a high-rise building in the middle of a renowned
-              business district.
-              <br />
-              JalyssCom is another place for planned events. Whether it's a
-              workshop, seminar, or other type of training, JalyssCom is always
-              active!
-            </p>
+
           </div>
         </div>
       </div>
-
       <div className="card-body">
         <div className="d-flex flex-wrap justify-content-around">
           <div
             className="card  "
-            style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
+            style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" , marginLeft:20 }}
           >
             <div className="card-body">
               <div className="card-icon">

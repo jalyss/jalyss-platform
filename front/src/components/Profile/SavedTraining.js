@@ -13,20 +13,20 @@ const SavedTraining = () => {
     const dispatch = useDispatch();
     const { userId } = useParams();
     const trainingStore = useSelector((state) => state.trainingBooking.trainingBookings);
-    const count = trainingStore?.count   
+    
+    const { items, count } = trainingStore;
     const [skip, setSkip] = useState(0);
     let take = 6;
-    
+   
 
     useEffect(() => {
         dispatch(fetchTrainingBookingByUserId(userId));
-    }, [dispatch, userId]);
+    }, [ userId]);
 
     const handleChange = (event, value) => {
         setSkip((value - 1) * take);
     };
 
-    console.log('test', trainingStore)
 
     return (
 
@@ -62,22 +62,25 @@ const SavedTraining = () => {
                         </div>
 
                     </div>
-                    
+
                 ))}
 
-             
+
             </div>
-           
-   
-            <div className="d-flex justify-content-center my-5">
-              <Pagination
-    count={count % take === 0 ? Math.floor(count / take)
-     : Math.floor(count / take) + 1}
-    color="secondary"
-    variant="outlined"
-    onChange={handleChange}
-/>
-                </div> 
+
+
+            {/* <div className="d-flex justify-content-center my-5">
+            <Pagination
+                    count={
+                        count % take === 0
+                            ? Math.floor(count / take)
+                            : Math.floor(count / take) + 1
+                    }
+                    color="secondary"
+                    variant="outlined"
+                    onChange={handleChange}
+                />
+            </div> */}
 
         </div>
 
