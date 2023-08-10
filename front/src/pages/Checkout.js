@@ -83,7 +83,8 @@ function Checkout({}) {
   };
 
   return (
-    <div className="d-flex p-4">
+    <div class="mx-auto d-flex " >
+    <div className="d-flex p-4 ">
       <form className="checkout-form" onSubmit={submitCommand}>
         <div class="row">
           <div class="col mb-3 ">
@@ -204,12 +205,12 @@ function Checkout({}) {
         </div>
       </form>
 
-      <div className="cart-container" style={{marginLeft:'100px',height:'100%'}}>
-  <div className="container h-min-content py-initial">
+      <div className="cart-container" >
+  <div className="container h-min-content py-initial" >
     <div className="row d-flex justify-content-center align-items-center h-100">
       <div className="col">
-        <div className="table-responsive" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-          <table className="table">
+        <div className="table-responsive rounded" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          <table className="table" >
             <thead >
               <tr >
                 <th scope="col" className="h5" >
@@ -292,7 +293,7 @@ function Checkout({}) {
 </div>
 
 </div>
-
+</div>
    
   );
 }
