@@ -31,8 +31,10 @@ import {
   TableRow,
   CardContent,
   Typography,
+  Card,
 } from '@material-ui/core';
 import SaveButton from "../components/Commun/buttons/SaveButton";
+import { red } from "@mui/material/colors";
 
 function Checkout({}) {
   const { t } = useTranslation();
@@ -103,29 +105,28 @@ function Checkout({}) {
   };
   const useStyles = makeStyles((theme) => ({
     root: {
-    
       display: 'flex',
       justifyContent: 'center',
-      margin: theme.spacing(2),
-   
+      margin: theme.spacing(10),
+  
     },
     formcontainer: {
-      marginleft: theme.spacing(1),
-      maxwidth: '80%',
-     marginLeft:'10%'
+    
+      maxwidth: '60%',
+     marginLeft:'20%'
     },
     cartContainer: {
-     overflowY: 'hidden',
-      marginleft:'100px',
-      flex: 1,
+    maxHeight:'90%',
+      maxWidth:'40%',
+      marginLeft:'50px'
+      
      
     },
     tableContainer: {
       marginLeft: '10%',
-      maxHeight: '400px',
-       
+      maxHeight: '350px',
+      overflowY: 'hidden',
       overflowY: 'auto',  
-      
       borderRadius: theme.spacing(1),
     },
    
@@ -137,10 +138,10 @@ function Checkout({}) {
     return (
       <div className={classes.root}>
         <Grid container spacing={2}>
-        <Grid item xs={12} md={6} className={classes.cartContainer}>
+        <Card item xs={10} md={5} className={classes.cartContainer} >
             <div className={classes.tableContainer}>
-              <Table>
-                <TableHead>
+              <Table >
+                <TableHead >
                   <TableRow>
                     <TableCell className={classes.tableCellHeader}>
                       {t("Shopping Bag")}
@@ -158,13 +159,13 @@ function Checkout({}) {
                           <img
                             src={item.article.cover.path}
                             alt={item.article.cover.alt}
-                            style={{ maxWidth: '60%', height: 'auto' }}
+                            style={{ maxWidth: '90%', height: 'auto' }}
                           />
                         </div>
                       </TableCell>
                       <TableCell>
                       <th scope="col">{t("label.quantity")}</th>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center',}}>
                         
                           <button
                             style={{
@@ -209,12 +210,12 @@ function Checkout({}) {
               </Table>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <CardContent>
-              <Typography variant="body1">{t("label.total")}</Typography>
+         
+              <Typography variant="body1">{t("TOTAL")}</Typography>
               <Typography variant="h6">{cartTotal}</Typography>
-              </CardContent>
+
             </div>
-          </Grid>
+          </Card>
           <Grid item xs={12} md={6}>
             <form className={classes.formcontainer} onSubmit={submitCommand}>
              <div class="row">
@@ -325,14 +326,21 @@ function Checkout({}) {
           />
   
           <div className="w-100 d-flex justify-content-center">
-            <SaveButton
+            <Button
+           style={{
+            maxHeight:'100px',
+            maxwidth:'300px',
+            backgroundColor:'rgb(70, 4, 74)',
+
+            
+           }}
               type="submit"
               // className="confirm-button mt-3"
               onSubmit={submitCommand}
               disabled={items.length === 0 ? true : false}
             >
-              <span className="label-btn">{t("label.btnConfirm")}</span>
-            </SaveButton>
+              <span style={{color:"white",backgroundColor:'rgb(70, 4, 74)'}} >{t("label.btnConfirm")}</span>
+            </Button>
           </div>
     </form>
           </Grid>
