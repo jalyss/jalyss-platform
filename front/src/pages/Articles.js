@@ -52,10 +52,10 @@ function Articles() {
 
 
   function onMouseMoveHandler(event) {
-    // Check if elementRef.current is not null before accessing its properties
-    if (elementRef.current) {
+
+    if (elementRef.current || null) {
       const rect = elementRef.current.getBoundingClientRect();
-      // Now you can safely use the rect object
+
       console.log("Element's bounding rect:", rect);
     }
   }
