@@ -316,31 +316,7 @@ function Articles() {
           {!isEmpty(filters.categories) ? (
             map(groupedArticles, (element) => (
               <>
-<<<<<<< HEAD
                 <p>{element[0].article.category[lg ? "nameEn" : "nameAr"]}</p>
-=======
-                 <p style={{fontSize: '20px',
-  color: '#333',
-  padding: '5px 10px',
-  backgroundColor:'#f0f0f0',
-  borderRadius: '5px'
-  }}>{element[0].article.category[lg ? 'nameEn' : 'nameAr']}</p>
-
-   <div className='d-flex flex-wrap px-4 '>
-  {element.map((el, index) => (
-    <div
-      style={{maxWidth:'100%'}}
-      key={el.id}
-    >
-        <ArticleCard article={el}/>
-        
-    </div>
-  ))}
-</div>
-
-
-
->>>>>>> d155bce79cfa334f54aa9822ea4c1a3b2b10edc8
 
                 <HorizontalMenu>
                   {element.map((el) => (
