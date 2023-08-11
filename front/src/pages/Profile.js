@@ -299,18 +299,19 @@ export default function ProfilePage() {
         <MDBNavbar className=" d-flex justify-content-center align-items-center bg-light rounded-3  mb-4 ">
           <MDBNavbarNav className=" justify-content-center align-items-center ">
             {navBarDataProfile.map((elem, i) => (
+              <>
               <MDBNavbarItem
                 key={i}
                 className="label-btn pointer"
                 style={{
                   backgroundColor:
-                    elem.path === path ? "rgb(156 39 176 / 34%)" : "",
+                  elem.path === path ? "rgb(156 39 176 / 34%)" : "",
                   borderRadius: "10px",
                   padding: "5px 10px",
                   margin: "0 5px",
                   minWidth: 100,
                 }}
-              >
+                >
                 <MDBNavbarLink
                   onClick={() => {
                     navigate(elem.path);
@@ -321,11 +322,37 @@ export default function ProfilePage() {
                     textDecoration: "none",
                     fontWeight: "bold",
                   }}
-                >
+                  >
                   {elem.name}
                 </MDBNavbarLink>
               </MDBNavbarItem>
+                  </>
             ))}
+              <MDBNavbarItem
+                className="label-btn pointer"
+                style={{
+                  backgroundColor:
+                    "/profile/saved-tarining" === path ? "rgb(156 39 176 / 34%)" : "",
+                  borderRadius: "10px",
+                  padding: "5px 10px",
+                  margin: "0 5px",
+                  minWidth: 100,
+                }}
+              >
+                <MDBNavbarLink
+                  onClick={() => {
+                    navigate("/profile/saved-tarining/"+user.id);
+                  }}
+                  // className="label-btn pointer"
+                  style={{
+                    color: "/profile/saved-tarining" === path ? "#fff" : "rgb(156 39 176 )",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Saved Training
+                </MDBNavbarLink>
+              </MDBNavbarItem>
           </MDBNavbarNav>
         </MDBNavbar>
 
