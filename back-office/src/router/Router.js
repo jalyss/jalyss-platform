@@ -174,7 +174,7 @@ function Router() {
             <Route path="client" element={<Client/>}>
               <Route index element={<Clientlist/>}/>
               <Route path="addclient" element={<Addclient/>}/>
-             <Route path="profilclient" element={<Profileclient/>}/>
+             <Route path="profilclient/:id" element={<Profileclient/>}/>
               </Route>
 
             <Route path="blogs" element={<Blogs />}>

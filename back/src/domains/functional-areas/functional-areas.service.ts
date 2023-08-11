@@ -13,9 +13,22 @@ export class FunctionalAreasService {
     });
   }
 
-  
   async findAll() {
-    return await this.prisma.functionalArea.findMany({});
+    return await this.prisma.functionalArea.findMany();
+  }
+  
+  async findOne(id: string) {
+    return await this.prisma.functionalArea.findUnique({ where: { id } });
   }
 
+  async update(id: string, dto: UpdateFunctionalAreaDto) {
+    return await this.prisma.functionalArea.update({
+      where: { id },
+      data: { ...dto },
+    });
+  }
+
+  async remove(id: string) {
+    return await this.prisma.functionalArea.delete({ where: { id } });
+  }
 }

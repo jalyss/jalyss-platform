@@ -21,7 +21,7 @@ export const fetchClient = createAsyncThunk(
 export const createClient = createAsyncThunk(
     "clients/createclient",
     async (body, { dispatch }) => {
-      const response = await axios.post(`${config.API_ENDPOINT}/create/`, body);
+      const response = await axios.post(`${config.API_ENDPOINT}/clients`, body);
       dispatch(fetchClient(response.data.id));
       return response.data;
     }

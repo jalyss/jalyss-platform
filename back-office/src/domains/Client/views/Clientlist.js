@@ -7,6 +7,8 @@ import isEnglish from "../../../helpers/isEnglish";
 import { useNavigate } from "react-router-dom";
 import AddButton from "../../../components/Commun/buttons/AddButton";
 import Modal from "../../../components/Commun/Modal";
+import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 
@@ -18,8 +20,8 @@ function ClientsList() {
   const isEng = isEnglish();
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
-  const [selectedClientId, setSelectedclientId] = useState("");
-console.log(clientStore,'hhhhhhhhhhhh')
+  const [selectedClientId, setSelectedClientId] = useState("");
+  console.log(clientStore, "clientStore");
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
@@ -45,36 +47,82 @@ console.log(clientStore,'hhhhhhhhhhhh')
         return {
           id: e.id,
           fullNameEn: e.fullNameEn,
-          fullNameAr: e.fullNameAr,
+          avatar: e.avatar?.path,
           email: e.email,
           address: e.address,
           tel: e.tel,
           accountBalance: e.accountBalance,
+          isCoach: e.isCoach,
         };
       });
       setRows(aux);
     }
   }, [clientStore.clients.items]);
+  const [open, setOpen] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
 
+  const handleClick = (avatar) => {
+    setSelectedAvatar(avatar);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const columns = [
+    {
+      field: "avatar",
+      headerName: "avatar",
+      width: 120,
+      editable: false,
+      renderCell: (params) => (
+        <>
+          <img
+            src={params.value}
+            alt="avatar"
+            style={{
+              width: "60%",
+              borderRadius: "40px",
+              height: "110%",
+              cursor: "pointer",
+            }}
+            onClick={() => handleClick(params.value)}
+          />
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            style={{ borderRadius: "50px" }}
+          >
+            <DialogContent>
+              <img
+                src={selectedAvatar}
+                alt="avatar"
+                style={{ width: "100%", borderRadius: "40px" }}
+              />
+            </DialogContent>
+          </Dialog>
+        </>
+      ),
+    },
     {
       field: "fullNameEn",
       headerName: "fullNameEn",
       width: 155,
       editable: false,
     },
-    {
-      field: "fullNameAr",
-      headerName: "fullNameAr",
-      width: 155,
-      editable: false,
-    },
+
     { field: "email", headerName: "Email", width: 155, editable: false },
     { field: "address", headerName: "Address", width: 155, editable: false },
     { field: "tel", headerName: "Tel", width: 155, editable: false },
     {
       field: "accountBalance",
       headerName: "Account",
+      width: 155,
+      editable: false,
+    },
+    {
+      field: "isCoach",
+      headerName: "isCoach",
       width: 155,
       editable: false,
     },
@@ -90,7 +138,7 @@ console.log(clientStore,'hhhhhhhhhhhh')
             icon={<AiOutlineEye />}
             label="Add"
             className="textPrimary"
-            onClick={() => navigate(`detail/${id}`)}
+            onClick={() => navigate(`profilclient/${id}`)}
             color="success"
           />,
           <GridActionsCellItem
@@ -116,7 +164,7 @@ console.log(clientStore,'hhhhhhhhhhhh')
           <AddButton
             title={"Add client"}
             mb={20}
-            onClick={() => navigate("create")}
+            onClick={() => navigate("addclient")}
           />
           <Box sx={{ height: 400, width: "100%" }}>
             <DataGrid

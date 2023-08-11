@@ -20,18 +20,18 @@ export class FunctionalAreasController {
     return this.functionalAreasService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.functionalAreasService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.functionalAreasService.findOne(id);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateFunctionalAreaDto: UpdateFunctionalAreaDto) {
-  //   return this.functionalAreasService.update(+id, updateFunctionalAreaDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateFunctionalAreaDto: UpdateFunctionalAreaDto) {
+    return this.functionalAreasService.update(id, updateFunctionalAreaDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.functionalAreasService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.functionalAreasService.remove(id);
+  }
 }

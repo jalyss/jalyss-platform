@@ -19,18 +19,18 @@ export class EducationLevelsController {
     return this.educationLevelsService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.educationLevelsService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.educationLevelsService.findOne(id);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateEducationLevelDto: UpdateEducationLevelDto) {
-  //   return this.educationLevelsService.update(+id, updateEducationLevelDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateEducationLevelDto: UpdateEducationLevelDto) {
+    return this.educationLevelsService.update(id, updateEducationLevelDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.educationLevelsService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.educationLevelsService.remove(id);
+  }
 }
