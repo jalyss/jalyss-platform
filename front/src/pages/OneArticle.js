@@ -68,12 +68,9 @@ function OneArticle() {
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
-      <div className="book d-felx">
-        <div className="book-content"
-          >
+      <div className=" d-flex justify-content-center">
+        <div className="book-content " style={{marginRight:'200px'}} >
              <img
-          
-           
             src={article?.article?.cover?.path}
             alt={article?.article?.title}
             className="book-content-img"
