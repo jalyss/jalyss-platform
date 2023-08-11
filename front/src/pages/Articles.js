@@ -54,23 +54,6 @@ function Articles() {
   const lg = i18n.languages[0] === 'en'
   const [showFilters, setShowFilters] = useState(false)
 
-
-<<<<<<< HEAD
-  function onMouseMoveHandler(event) {
-
-    if (elementRef.current || null) {
-      const rect = elementRef.current.getBoundingClientRect();
-
-      console.log("Element's bounding rect:", rect);
-    }
-  }
-=======
-  console.log('lenaa',filters)
-  console.log('lenaa ',price)
->>>>>>> d155bce79cfa334f54aa9822ea4c1a3b2b10edc8
-
- 
-
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }))
   }, [dispatch, filters])
