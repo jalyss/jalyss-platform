@@ -70,9 +70,7 @@ export const educationLevelSlice = createSlice({
     builder.addCase(fetchEducationLevels.fulfilled, (state, action) => {
       state.educationLevels.items = action.payload;
     });
-    builder.addCase(fetchEducationLevel.fulfilled, (state, action) => {
-      state.educationLevel = action.payload;
-    });
+   
   },
 });
 export default educationLevelSlice.reducer;

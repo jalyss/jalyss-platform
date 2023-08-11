@@ -8,24 +8,28 @@ import { JobTitlesController } from '../job-titles/job-titles.controller';
 import { CitiesController } from '../cites/cities.controller';
 import { countriesController } from '../country/countries.controller';
 import { EducationLevelsService } from '../education-levels/education-levels.service';
-import { JobTitlesModule } from '../job-titles/job-titles.module';
-import { FunctionalAreasModule } from '../functional-areas/functional-areas.module';
 import { CitiesService } from '../cites/cities.service';
 import { countriesService } from '../country/countries.service';
+import { JobTitlesService } from '../job-titles/job-titles.service';
+import { FunctionalAreasService } from '../functional-areas/functional-areas.service';
 
 @Module({
-  controllers: [clientsController,
-  EducationLevelsController,
-FunctionalAreasController,
-JobTitlesController,
-CitiesController,
-countriesController],
-  providers: [ClientsService,PrismaService ,
-  EducationLevelsService,
-JobTitlesModule,
-FunctionalAreasModule,
-CitiesService,
-countriesService,
-]
+  controllers: [
+    clientsController,
+    EducationLevelsController,
+    FunctionalAreasController,
+    JobTitlesController,
+    CitiesController,
+    countriesController,
+  ],
+  providers: [
+    ClientsService,
+    PrismaService,
+    EducationLevelsService,
+    JobTitlesService,
+    FunctionalAreasService,
+    CitiesService,
+    countriesService,
+  ],
 })
 export class ClientsModule {}

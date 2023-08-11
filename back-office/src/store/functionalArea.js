@@ -70,9 +70,7 @@ export const functionalAreaSlice = createSlice({
     builder.addCase(fetchFunctionalAreas.fulfilled, (state, action) => {
       state.functionalAreas.items = action.payload;
     });
-    builder.addCase(fetchFunctionalArea.fulfilled, (state, action) => {
-      state.functionalArea = action.payload;
-    });
+   
   },
 });
 export default functionalAreaSlice.reducer;

@@ -25,6 +25,9 @@ import provider from "./provider";
 import trainingBooking from "./trainingBooking"
 import country from "./Country";
 import client from "./client";
+import jobTitle from "./jobTitle";
+import functionalArea from "./functionalArea";
+import educationLevel from "./educationLevel";
 export const store = configureStore({
   reducer: {
     auth,
@@ -52,7 +55,10 @@ export const store = configureStore({
     chat,
     gain,
     trainingBooking,
-    client
+    client,
+    jobTitle,
+    functionalArea,
+    educationLevel,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

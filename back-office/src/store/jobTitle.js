@@ -70,9 +70,7 @@ export const jobTitleSlice = createSlice({
     builder.addCase(fetchJobTitles.fulfilled, (state, action) => {
       state.jobTitles.items = action.payload;
     });
-    builder.addCase(fetchJobTitle.fulfilled, (state, action) => {
-      state.jobTitle = action.payload;
-    });
+  
   },
 });
 export default jobTitleSlice.reducer;
