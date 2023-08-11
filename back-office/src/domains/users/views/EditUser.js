@@ -38,7 +38,8 @@ function EditUser() {
   }, []);
 
   useEffect(() => {
-    if (userStore.user) setUser(userStore.user);
+    if (userStore.user) 
+    setUser(userStore.user);
   }, [userStore.user]);
 
   const handleChange = (e) => {
