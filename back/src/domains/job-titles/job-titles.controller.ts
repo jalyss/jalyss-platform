@@ -4,9 +4,9 @@ import { CreateJobTitleDto } from './dto/create-job-title.dto';
 import { UpdateJobTitleDto } from './dto/update-job-title.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('job-titles')
+@ApiTags('jobTitle')
 
-@Controller('job-titles')
+@Controller('jobTitle')
 export class JobTitlesController {
   constructor(private readonly jobTitlesService: JobTitlesService) {}
 

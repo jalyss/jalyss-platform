@@ -6,14 +6,15 @@ import { UpdateClientDto } from './dto/update-client.dto';
 @Injectable()
 export class ClientsService {
   constructor(private readonly prisma: PrismaService) {}
+  
   async create(dto: CreateClientDto) {
     return await this.prisma.client.create({
       data: dto,
     });
   }
 
-  findAll() {
-    return this.prisma.client.findMany({
+  async findAll() {
+    return await this.prisma.client.findMany({
       include: {
         avatar: true,
       },

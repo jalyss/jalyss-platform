@@ -4,8 +4,8 @@ import { CreateFunctionalAreaDto } from './dto/create-functional-area.dto';
 import { UpdateFunctionalAreaDto } from './dto/update-functional-area.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('functional-areas')
-@Controller('functional-areas')
+@ApiTags('functionalArea')
+@Controller('functionalArea')
 export class FunctionalAreasController {
   constructor(private readonly functionalAreasService: FunctionalAreasService) {}
 

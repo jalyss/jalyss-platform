@@ -4,8 +4,8 @@ import { CreateEducationLevelDto } from './dto/create-education-level.dto';
 import { UpdateEducationLevelDto } from './dto/update-education-level.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('education-levels')
-@Controller('education-levels')
+@ApiTags('educationLevel')
+@Controller('educationLevel')
 export class EducationLevelsController {
   constructor(private readonly educationLevelsService: EducationLevelsService) {}
 
