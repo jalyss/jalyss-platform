@@ -227,17 +227,18 @@ export class ArticleService {
       rating: Math.floor(rating[0]._sum.rate / rating[0]._count.rate),
     };
   }
+
+
   async findOne(id: string) {
     return await this.prisma.article.findFirst({
       where: {
         id,
       },
-
       include: {
-        category: true,
-        publishingHouse: true,
-        type: true,
-        ArticlesByBranch: true,
+        category:true,
+        publishingHouse:true,
+        type:true,
+        ArticlesByBranch:true,
       },
     });
   }

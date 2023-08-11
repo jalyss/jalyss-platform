@@ -325,7 +325,8 @@ console.log(containerRef, 'yalaa')
       style={{maxWidth:'100%'}}
       key={el.id}
     >
-      <ArticleCard article={el} />
+        <ArticleCard article={el}/>
+        
     </div>
   ))}
 </div>
