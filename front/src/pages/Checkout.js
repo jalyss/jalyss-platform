@@ -12,6 +12,29 @@ import { FormControlLabel, Radio } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { fetchCountries } from "../store/country";
 import { fetchCities } from "../store/city";
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Container,
+  Grid,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  CardContent,
+  Typography,
+  Card,
+} from '@material-ui/core';
+import SaveButton from "../components/Commun/buttons/SaveButton";
+import { red } from "@mui/material/colors";
 
 function Checkout({}) {
   const { t } = useTranslation();
@@ -80,209 +103,256 @@ function Checkout({}) {
       }
     });
   };
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: 'flex',
+      justifyContent: 'center',
+      margin: theme.spacing(10),
+  
+    },
+    formcontainer: {
+    
+      maxwidth: '60%',
+     marginLeft:'20%'
+    },
+    cartContainer: {
+    maxHeight:'90%',
+      maxWidth:'40%',
+      marginLeft:'50px'
+      
+     
+    },
+    tableContainer: {
+      marginLeft: '10%',
+      maxHeight: '350px',
+      overflowY: 'hidden',
+      overflowY: 'auto',  
+      borderRadius: theme.spacing(1),
+    },
+   
+  }));
 
-  return (
-    <div className="d-flex p-4">
-      <form className="checkout-form" onSubmit={submitCommand}>
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="clientName">
-              {t("label.name")} <span style={{ color: "red" }}>*</span>
-            </label>
-
-            <input
-              class="form-control mt-2"
-              required
-              id="clientName"
-              value={command?.clientName}
-              name="clientName"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="clientEmail">
-              {t("label.email")}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-
-            <input
-              class="form-control mt-2"
-              required
-              id="clientEmail"
-              value={command?.clientEmail}
-              name="clientEmail"
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="clientTel">
-              {t("label.phone")}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            <input
-              required
-              type="tel"
-              class="form-control mt-2"
-              id="clientTel"
-              value={command?.clientTel}
-              name="clientTel"
-              onChange={handleChange}
-            />
-          </div>
-          <div class="col mb-3 ">
-            <label for="clientAddress">
-              {t("label.address")}
-              <span style={{ color: "red" }}>*</span>
-            </label>
-            <input
-              required
-              name="clientAddress"
-              class="form-control mt-2"
-              id="clientAddress"
-              value={command?.clientAddress}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col mb-3 ">
-            <label for="country">{t("label.country")}</label>
-            <select
-              name="countryId"
-              class="form-control mt-2"
-              id="country"
-              value={command?.countryId}
-              onChange={handleChange}
-            >
-              <option value={null}>--{t("label.selectCountry")}--</option>
-              {countryStore.countries.items.map((item) => (
-                <option value={item.id}>{item.nameAr}</option>
-              ))}
-            </select>
-          </div>
-
-          <div class="col mb-3 ">
-            <label for="city">{t("label.city")}</label>
-            <select
-              name="cityId"
-              class="form-control mt-2"
-              id="city"
-              value={command?.cityId}
-              onChange={handleChange}
-            >
-              <option value={null}>--{t("label.selectCity")}--</option>
-              {cityStore.cities.items.map((item) => (
-                <option value={item.id}>{item.nameAr}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <label for="delivery">{t("label.delivery")}</label>
-        <input
-          type="checkbox"
-          id="delivery"
-          checked={command?.hasDelivery}
-          onChange={handleChecked}
-        />
-
-        <div className="w-100 d-flex justify-content-center">
-          <button
-            type="submit"
-            className="confirm-button mt-3"
-            onSubmit={submitCommand}
-            disabled={items.length === 0 ? true : false}
-          >
-            <span className="label-btn">{t("label.btnConfirm")}</span>
-          </button>
-        </div>
-      </form>
-
-      <div className="cart-container">
-        <div className="container h-min-content py-initial">
-          <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col">
-              <div className="table-responsive">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th scope="col" className="h5">
-                        {t("label.cart")}
-                      </th>
-
+ 
+    const classes = useStyles();
+  
+    return (
+      <div className={classes.root}>
+        <Grid container spacing={2}>
+        <Card item xs={10} md={5} className={classes.cartContainer} >
+            <div className={classes.tableContainer}>
+              <Table >
+                <TableHead >
+                  <TableRow>
+                    <TableCell variant="body1" className={classes.tableCellHeader}>
+                      {t("Shopping Bag")}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {items.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell  className={classes.imageArt}>
+                        <div>
+                          <p>{item.article.title}</p>
+                          </div>
+                           <div>
+                          <img
+                            src={item.article.cover.path}
+                            alt={item.article.cover.alt}
+                            style={{ maxWidth: '90%', height: 'auto' }}
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell>
                       <th scope="col">{t("label.quantity")}</th>
+                        <div style={{ display: 'flex', alignItems: 'center'}}>
+                        
+                          <button
+                            style={{
+                              borderRadius: "5px",
+                              backgroundColor: "rgb(70, 4, 74)"
+                            }}
+                            onClick={() =>
+                              updateItemQuantity(item.id, item.quantity - 1)
+                            }
+                          >
+                            -
+                          </button>
+                          <input
+                          style={{maxWidth:'50px'}}
+                            min="0"
+                            name="quantity"
+                            value={item.quantity}
+                           
+                          />
+                          <button
+                            style={{
+                              borderRadius: "5px",
+                              backgroundColor: "rgb(70, 4, 74)"
+                            }}
+                            onClick={() =>
+                              updateItemQuantity(item.id, item.quantity + 1)
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      </TableCell>
+                      <TableCell>
                       <th scope="col">{t("label.price")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item) => (
-                      <tr>
-                        <th scope="row">
-                          <div className="flex-column ms-4">
-                            <p className="mb-2">{item.article.title}</p>
-                          </div>
-                          <div className="d-flex align-items-center">
-                            <img
-                              src={item.article.cover.path}
-                              className="img-fluid rounded-3"
-                              alt={item.article.cover.alt}
-                            />
-                          </div>
-                        </th>
+                        <p>
+                          {t("label.devise")} {item.price}
+                        </p>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+         
+              <Typography variant="body1">{t("TOTAL")}</Typography>
+              <Typography variant="h6">{cartTotal}</Typography>
 
-                        <td className="align-middle">
-                          <div className="d-flex flex-row">
-                            <button
-                              onClick={() =>
-                                updateItemQuantity(item.id, item.quantity - 1)
-                              }
-                            >
-                              -
-                            </button>
-                            <input
-                              id="form1"
-                              min="0"
-                              name="quantity"
-                              value={item.quantity}
-                              type="number"
-                              className="form-control form-control-sm"
-                            />
-                            <button
-                              onClick={() =>
-                                updateItemQuantity(item.id, item.quantity + 1)
-                              }
-                            >
-                              +
-                            </button>
-                          </div>
-                        </td>
-                        <td className="align-middle">
-                          <p className="mb-0">
-                            {t("label.devise")} {item.price}
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            </div>
+          </Card>
+          <Grid item xs={12} md={6}>
+            <form className={classes.formcontainer} onSubmit={submitCommand}>
+             <div class="row">
+            <div class="col mb-3 ">
+              <label for="clientName">
+                {t("label.name")} <span style={{ color: "red" }}>*</span>
+              </label>
+  
+              <input
+                class="form-control mt-2"
+                required
+                id="clientName"
+                value={command?.clientName}
+                name="clientName"
+                onChange={handleChange}
+              />
             </div>
           </div>
-        </div>
-        <div>
-          <div className="d-flex justify-content-between w-100">
-            <span className="label">{t("label.total")}</span>
-            <span className="price-wrapper">{cartTotal}</span>
+  
+          <div class="row">
+            <div class="col mb-3 ">
+              <label for="clientEmail">
+                {t("label.email")}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+  
+              <input
+                class="form-control mt-2"
+                required
+                id="clientEmail"
+                value={command?.clientEmail}
+                name="clientEmail"
+                onChange={handleChange}
+              />
+            </div>
           </div>
+  
+          <div class="row">
+            <div class="col mb-3 ">
+              <label for="clientTel">
+                {t("label.phone")}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                required
+                type="tel"
+                class="form-control mt-2"
+                id="clientTel"
+                value={command?.clientTel}
+                name="clientTel"
+                onChange={handleChange}
+              />
+            </div>
+            <div class="col mb-3 ">
+              <label for="clientAddress">
+                {t("label.address")}
+                <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                required
+                name="clientAddress"
+                class="form-control mt-2"
+                id="clientAddress"
+                value={command?.clientAddress}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3 ">
+              <label for="country">{t("label.country")}</label>
+              <select
+                name="countryId"
+                class="form-control mt-2"
+                id="country"
+                value={command?.countryId}
+                onChange={handleChange}
+              >
+                <option value={null}>--{t("label.selectCountry")}--</option>
+                {countryStore.countries.items.map((item) => (
+                  <option value={item.id}>{item.nameAr}</option>
+                ))}
+              </select>
+            </div>
+  
+            <div class="col mb-3 ">
+              <label for="city">{t("label.city")}</label>
+              <select
+                name="cityId"
+                class="form-control mt-2"
+                id="city"
+                value={command?.cityId}
+                onChange={handleChange}
+              >
+                <option value={null}>--{t("label.selectCity")}--</option>
+                {cityStore.cities.items.map((item) => (
+                  <option value={item.id}>{item.nameAr}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center'}}>
+          <label for="delivery">{t("label.delivery")}</label>
+          <input style={{
+            marginRight:'350px'
+          }}
+            type="checkbox"
+            id="delivery"
+            checked={command?.hasDelivery}
+            onChange={handleChecked}
+          />
+     
         </div>
+         
+  
+          <div className="w-100 d-flex justify-content-center">
+            <Button
+           style={{
+            maxHeight:'100px',
+            maxwidth:'300px',
+            backgroundColor:'rgb(70, 4, 74)',
+           }}
+              type="submit"
+              // className="confirm-button mt-3"
+              onSubmit={submitCommand}
+              disabled={items.length === 0 ? true : false}
+            >
+              <span style={{color:"white",backgroundColor:'rgb(70, 4, 74)'}} >{t("label.btnConfirm")}</span>
+            </Button>
+          </div>
+    </form>
+          </Grid>
+         
+        </Grid>
       </div>
-    </div>
-  );
-}
+    );
+  };
 
-export default Checkout;
+
+export default Checkout
