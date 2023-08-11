@@ -186,9 +186,9 @@ function ServiceSpace() {
                   }}
                 >
                   <div className="card-body  ">
-                    <h5 className="card-title">{elem.name}</h5>
+                    <h5 className="card-title" style={{marginLeft: 25,}}>{elem.name}</h5>
                     <button
-                      className="btn btn-primary"
+                      className="btn "
                       style={{
                         width: 170,
                         marginLeft: 25,

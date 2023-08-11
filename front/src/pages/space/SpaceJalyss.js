@@ -108,7 +108,7 @@ function SpaceJalyss() {
           >
             <div className="d-flex justify-content-between align-items-center">
               <span>
-                <h3 style={{ fontSize: "3rem", color: "darkred" }}>
+                <h3 style={{ fontSize: "3rem", color: "rgb(128, 0, 128)" }}>
                   <FaShieldAlt className="me-2" />
                   Quality
                 </h3>
@@ -131,7 +131,7 @@ function SpaceJalyss() {
             }}
           >
             <div className="d-flex justify-content-between align-items-center">
-              <h3 style={{ fontSize: "3rem", color: "darkred" }}>
+              <h3 style={{ fontSize: "3rem", color: "rgb(128, 0, 128)" }}>
                 <FaRegHandshake /> Flexibility
               </h3>
             </div>
@@ -152,7 +152,7 @@ function SpaceJalyss() {
             }}
           >
             <div className="d-flex justify-content-between align-items-center">
-              <h3 style={{ fontSize: "3rem", color: "darkred" }}>
+              <h3 style={{ fontSize: "3rem", color: "rgb(128, 0, 128)" }}>
                 <FaUsers /> Community
               </h3>
             </div>
@@ -296,10 +296,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" , marginLeft:20 }}
           >
             <div className="card-body">
-              <div className="card-icon">
+              <div className="row">
+              <div className="card-icon col-2">
                 <FaMapMarker />
               </div>
-              <h5 className="card-title">2 Espaces coworking</h5>
+              <h6 className="card-title col-9" style={{marginTop:20}}>2 Espaces coworking</h6>
+            </div>
             </div>
           </div>
           <div
@@ -307,10 +309,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaCommentDots />
               </div>
-              <h5 className="card-title">Active Community</h5>
+              <h6 className="card-title col-9"  style={{marginTop:20}}>Active Community</h6>
+            </div>
             </div>
           </div>
           <div
@@ -318,10 +322,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaChair />
               </div>
-              <h5 className="card-title">Comfortable Seating</h5>
+              <h6 className="card-title col-9" style={{marginTop:20}}>Comfortable Seating</h6>
+            </div>
             </div>
           </div>
           <div
@@ -329,10 +335,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaWifi />
               </div>
-              <h5 className="card-title">Free Wi-Fi</h5>
+              <h6 className="card-title col-9"style={{marginTop:20}}>Free Wi-Fi</h6>
+            </div>
             </div>
           </div>
           <div
@@ -340,10 +348,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaCalendarAlt />
               </div>
-              <h5 className="card-title">Events</h5>
+              <h6 className="card-title col-9"style={{marginTop:20}}>Events</h6>
+            </div>
             </div>
           </div>
         </div>
