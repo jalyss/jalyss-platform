@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-export const fetchArticles = createAsyncThunk("articles/articles", async (id) => {
+export const fetchArticles= createAsyncThunk("articles/articles",async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/articles/`);
   return response.data;
 });
@@ -12,7 +12,7 @@ export const fetchArticlesByBranch = createAsyncThunk(
     const identifier = args.identifier
     delete args.identifier
     console.log(args);
-    const response = await axios.get(`${config.API_ENDPOINT}/articles/${identifier}`, { params: args });
+    const response = await axios.get(`${config.API_ENDPOINT}/articles/${identifier}`,{ params: args });
     return response.data;
   });
 
