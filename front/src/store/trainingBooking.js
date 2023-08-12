@@ -54,6 +54,7 @@ export const trainingBookingSlice = createSlice({
     builder.addCase(createTrainingBooking.fulfilled, (state, action) => {
       state.trainingBookings.items = action.payload;
     });
+   
     builder.addCase(fetchTrainingBookings.fulfilled, (state, action) => {
       state.trainingBookings.items = action.payload;
     });

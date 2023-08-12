@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import KeyValueStyled from '../Commun/KeyValueStyled';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTrainingBookingByUserId } from '../../store/trainingBooking';
@@ -11,18 +11,22 @@ import { useParams } from 'react-router-dom';
 
 const SavedTraining = () => {
     const dispatch = useDispatch();
-    const  {userId}  = useParams();
-console.log('idddddd' , userId)
+    const { userId } = useParams();
     const trainingStore = useSelector((state) => state.trainingBooking.trainingBookings);
-    const take = 6;
-    const handleChange = (event, value) => {
-        setSkip((value - 1) * take);
-      };
+    
+    const { items, count } = trainingStore;
+    const [skip, setSkip] = useState(0);
+    let take = 6;
+   
+
     useEffect(() => {
         dispatch(fetchTrainingBookingByUserId(userId));
-    }, [dispatch,userId]);
+    }, [ userId]);
 
-    console.log('test', trainingStore)
+    const handleChange = (event, value) => {
+        setSkip((value - 1) * take);
+    };
+
 
     return (
 
@@ -34,7 +38,7 @@ console.log('idddddd' , userId)
 
 
             <div className="blogListWrapper">
-                { trainingStore?.items?.map((trainingBooking) => (
+                {trainingStore?.items?.map((trainingBooking) => (
                     <div key={trainingBooking.id}>
                         <Card
                             cover={trainingBooking?.sessiontarif?.session?.cover?.path}
@@ -58,21 +62,25 @@ console.log('idddddd' , userId)
                         </div>
 
                     </div>
+
                 ))}
+
+
             </div>
 
-            <div className="d-flex justify-content-center my-5">
-          <Pagination
-            count={
-                trainingStore.count % take === 0
-                ? Math.floor(trainingStore.count / take)
-                : Math.floor(trainingStore.count / take) + 1
-            }
-            color="secondary"
-            variant="outlined"
-            onChange={handleChange}
-          />
-        </div>
+
+            {/* <div className="d-flex justify-content-center my-5">
+            <Pagination
+                    count={
+                        count % take === 0
+                            ? Math.floor(count / take)
+                            : Math.floor(count / take) + 1
+                    }
+                    color="secondary"
+                    variant="outlined"
+                    onChange={handleChange}
+                />
+            </div> */}
 
         </div>
 

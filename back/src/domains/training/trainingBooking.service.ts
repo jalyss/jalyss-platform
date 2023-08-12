@@ -77,8 +77,13 @@ export class TrainingBookingService {
       {
         include:
         {
-          session:
-          true
+          session: {
+            include:
+            {
+              category: true
+              , cover: true,
+            }
+          } 
         }
       }
     }
