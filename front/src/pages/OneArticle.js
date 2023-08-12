@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Rating from '../components/Commun/Rating'
 import 'bootstrap/dist/css/bootstrap.min.css'; 
-
+import { Grid} from '@mui/material'; 
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,7 +20,7 @@ import DocumentMeta from 'react-document-meta'
 
 import { useCart } from 'react-use-cart';
 import axios from 'axios';
-import { showErrorToast } from '../utils/toast';
+import { showErrorToast ,showSuccessToast} from '../utils/toast';
 
 function OneArticle() {
   const [rating, setRating] = useState(0);
@@ -53,44 +53,51 @@ function OneArticle() {
 
   const handleRatingChange = async (rate) => {
     dispatch(createArticleByBranchRating({ rate, articleByBranchId: articleId, commit: '' }))
-
-
-    //     .then((res) => {
-    //       if (!res.error) {
-    //         showErrorToast('Rating saved successfully')
-    //       } else {
-    //         console.log(res);
-    //         showErrorToast(res.error.message)
-    //       }
-    //     })
+        .then((res) => {
+          if (!res.error) {
+            showSuccessToast("Rating has been saved");
+          } else {
+            showErrorToast("alredy saved");
+          }
+        })
   };
 
 
   return (
-    <DocumentMeta {...meta} className="container-fluid">
-      <div className=" d-flex justify-content-center">
-        <div className="book-content " style={{marginRight:'200px'}} >
+    <DocumentMeta {...meta} className="container-fluid justify-content-center" >
+      <Grid>
+       <Grid container justifyContent="center">
+           <Grid item xs={12} md={6} lg={8} xl={6}>
+            
+          <div className=" justify-content-center">
+           <div className="book-content " style={{marginRight:'200px'}}>
              <img
-            src={article?.article?.cover?.path}
-            alt={article?.article?.title}
-            className="book-content-img"
-            style={{
-              marginLeft:100,
+               src={article?.article?.cover?.path}
+               alt={article?.article?.title}
+              
+              style={{
+              marginLeft:200,
               color:'trasparent',
               baackgroundcolor:'trasparent',
               }}
-          />
-          <div className="w-100">
-            <div className="book-content-info">
-              <h1 className="book-title">{article?.article?.title}</h1>
-            </div>
-          
+              />
+              
            
-            <TableContainer className="mx-auto mt-3 " style={{ width:'400px' }} component={Paper}>
-      <Table aria-label="simple table">    
+                  </div>
+                </div>
+        </Grid>
+        <Grid>
+        <Grid>
+        <div className="book-content-info">
+              <h1 className="book-title">{article?.article?.title}</h1>
+      
+
+           
+            <TableContainer className="mx-auto mt-3 " style={{ width:'350px'}} component={Paper}>
+              <Table aria-label="simple table">    
              <TableRow>
-            <TableCell>
-            <Rating
+              <TableCell>
+               <Rating
               rating={article?.rating}
               onChangeRate={handleRatingChange}
               edit={true}
@@ -128,29 +135,24 @@ function OneArticle() {
                 className="book-add-to-cart-input"
               />
 
-              <button className="book-add-to-cart-btn d-flex align-items-center "
+              <button className="book-add-to-cart-btn d-flex align-items-center"
               style={{
                 marginLeft:'100px'
               }}
-
                 onClick={() => addItem(article)}
-
               >
-
                 <MdOutlineAddShoppingCart size="30px" color="p" />
-
                 <p className="m-0">{t('OneArticle.addCart')}</p>
 
               </button>
             </div>
             <p className="book-description">{article?.article?.longDescription}</p>
-    </TableContainer>
-
-           
-          </div>
-        </div>
-       
-      </div>
+                    </TableContainer>
+                     </div>
+        </Grid>
+     </Grid>
+      </Grid>    
+     </Grid>
     </DocumentMeta>
   )
 }
