@@ -13,6 +13,23 @@ export const fetchRole = createAsyncThunk("roles/role", async (id) => {
 });
 
 
+export const createRole = createAsyncThunk(
+  "roles/role",
+  async (dto) => {
+    try {
+      const response = await axios.post(`${config.API_ENDPOINT}/roles/create`,
+        dto
+      );
+      return response.data;
+    } catch (error) {
+      // Handle error
+      console.error('Error creating role:', error);
+      throw error;
+    }
+  }
+);
+
+
 export const deleteRole = createAsyncThunk(
   "roles/roles",
   async (id) => {
