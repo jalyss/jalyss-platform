@@ -10,9 +10,9 @@ export const fetchClients = createAsyncThunk("clients/clients", async () => {
 
 export const fetchClient = createAsyncThunk(
   "clients/fetchclient",
-  async (id) => {
+  async (clientId) => {
     const response = await axios.get(
-      `${config.API_ENDPOINT}/clients/${id}`
+      `${config.API_ENDPOINT}/clients/${clientId}`
     );
     return response.data;
   }

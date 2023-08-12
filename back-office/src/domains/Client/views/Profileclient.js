@@ -1,288 +1,650 @@
-import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import EditModal from "../../../components/Commun/Modal";
+
+import {
+  Box,
+  Button,
+  CardContent,
+  CardMedia,
+  TextField,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+
+import { editClient, fetchClient } from "../../../store/client";
+import { fetchCommand } from "../../../store/command";
+import EditIcon from "@mui/icons-material/Edit";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 const profileclient = () => {
-   const [isPaid, setIsPaid] = useState(false);
-   const[isdelivered,setIsdelivered]=useState(false)
-   const[isconfirm,setIsconfirm]=useState(false)
-  const handleEditModeToggle = () => {
-    setEditMode(!editMode);
+  const client = useSelector((state) => state.client);
+  const commandStore = useSelector((state) => state.command);
+
+  const [editClientData, setEditClientData] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [basicModalDelete, setBasicModalDelete] = useState(false);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const [renderEditView, setRenderEditView] = useState(false);
+  const navigate = useNavigate();
+  const [rows, setRows] = useState([]);
+  const [row, setRow] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchClient(id));
+  }, [dispatch, id]);
+  useEffect(() => {
+    dispatch(fetchCommand(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    setEditClientData({ ...client });
+  }, [client]);
+
+  const toggleView = () => {
+    setRenderEditView(!renderEditView);
+  };
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+  console.log(id, "aaaaaaaaaaaa");
+
+  const handleSubmit = async () => {
+    const body = {
+      ...editClientData,
+    };
+    try {
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          formData
+        );
+        body.logoId = response.data.id;
+      }
+      delete body.logo;
+      delete body.Mediaclient;
+
+      const editedClient = { ...body, clientId };
+      dispatch(editClient(editedClient));
+      showSuccessToast("client edited successfully");
+      navigate(-1);
+    } catch (error) {
+      console.error("Error editing client:", error);
+      showErrorToast(error.message);
+    }
+  };
+  const toggleShowDelete = (id) => {
+    setBasicModalDelete(!basicModalDelete);
+  };
+  const onCanceltoggleShowDelete = (id) => {
+    setBasicModalDelete(!basicModalDelete);
+    setRenderEditView(false);
+  };
+  const mapClientItems = (items) => {
+    return items.map((e) => ({
+      id: e.id,
+      educationLevel: e.educationLevel,
+      functionalArea: e.functionalArea,
+      jobTitle: e.jobTitle,
+      country: e.country,
+      city: e.city,
+      isCoach: e.isCoach,
+    }));
   };
 
-  const handleInputChange = (event) => {
-    setIsPaid(event.target.value);
+  const mapCommandItems = (items) => {
+    return items.map((e) => ({
+      id: e.id,
+      city: e.city,
+      confirm: e.confirm,
+      delivered: e.delivered,
+      paid: e.paid,
+      hasDelivery: e.hasDelivery,
+      branchId: e.branchId,
+    }));
   };
-    const [editMode, setEditMode] = useState(false);
-    const [preview, setPreview] = useState(null);
-    const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    if (client?.clients?.items) {
+      setRows(mapClientItems(client.clients.items));
+    }
+  }, [client.clients.items]);
+  const columns = [
+    {
+      field: "educationLevel",
+      headerName: "educationLevel",
+      width: 155,
+      editable: false,
+    },
+
+    { field: "functionalArea", headerName: "functionalArea", width: 155, editable: false },
+    { field: "jobTitle", headerName: "jobTitle", width: 155, editable: false },
+    { field: "country", headerName: "country", width: 155, editable: false },
+    {
+      field: "city",
+      headerName: "city",
+      width: 155,
+      editable: false,
+    },
+    {
+      field: "isCoach",
+      headerName: "isCoach",
+      width: 155,
+      editable: false,
+    },
+  ];
+  useEffect(() => {
+    if (commandStore?.commands?.items) {
+      setRow(mapCommandItems(commandStore.commands.items));
+    }
+  }, [commandStore?.commands.items]);
+  const column = [
+    {
+      field: "city",
+      headerName: "city",
+      width: 155,
+      editable: false,
+    },
+
+    { field: "confirm", headerName: "confirm", width: 155, editable: false },
+    { field: "delivered", headerName: "delivered", width: 155, editable: false },
+    { field: "paid", headerName: "paid", width: 155, editable: false },
+    {
+      field: "hasDelivery",
+      headerName: "hasDelivery",
+      width: 155,
+      editable: false,
+    },
+    {
+      field: "branchId",
+      headerName: "branchId",
+      width: 155,
+      editable: false,
+    },
+  ];
   return (
-    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-    <h2>Profile client</h2>
-    <form className="checkout-form" >
-      <div className="d-flex flex-wrap justify-content-center">
-   
-        <div className="image-upload">
-          <img src="https://images.pexels.com/photos/17742455/pexels-photo-17742455/free-photo-of-portrait-of-brunette-woman.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="taswira" />
-          {editMode && (
-            <input
-              id="image"
-              type="file"
-              accept="image/*"
-            />
-          )}
-        </div>
-        {preview && editMode && (
-          <button
-            type="button"
-            class="delete-button"
+    <Box sx={{ maxWidth: "90%", height: "100%", margin: "auto" }}>
+      <CardContent>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            flexWrap: "wrap",
+            height: "100%",
+          }}
+        >
+          <Box sx={{ flexBasis: "45%", my: 3, ml: 5 }}>
+            {!renderEditView ? (
+              <>
+                <div className="table-container">
+                  <Typography
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      full name (English):
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {client?.fullNameEn}
+                    </span>
+                  </Typography>
+                  <Typography
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      full name (Arab):
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {client?.fullNameAr}
+                    </span>
+                  </Typography>
+                  <Typography
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      Email:
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {client?.email}
+                    </span>
+                  </Typography>
+
+                  <Typography
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      Adresse:
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {client?.address}
+                    </span>
+                  </Typography>
+                  <Typography
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      Telephone Number:
+                    </span>
+                    <span style={{ display: "table-cell" }}>{client?.tel}</span>
+                  </Typography>
+                  <Typography
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      Account Balance:
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {client?.accountBalance}
+                    </span>
+                  </Typography>
+                </div>
+              </>
+            ) : (
+              <>
+                <TextField
+                  label="Name"
+                  value={editClientData?.fullNameEn || ""}
+                  onChange={(e) => {
+                    setEditClientData({
+                      ...editClientData,
+                      name: e.target.value,
+                    });
+                  }}
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  InputLabelProps={{
+                    style: {
+                      color: "#4b0082",
+                    },
+                  }}
+                  sx={{
+                    color: "#8a2be2",
+                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                  }}
+                />
+                <TextField
+                  label="Name"
+                  value={editClientData?.fullNameAr || ""}
+                  onChange={(e) => {
+                    setEditClientData({
+                      ...editClientData,
+                      name: e.target.value,
+                    });
+                  }}
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  InputLabelProps={{
+                    style: {
+                      color: "#4b0082",
+                    },
+                  }}
+                  sx={{
+                    color: "#8a2be2",
+                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                  }}
+                />
+                <TextField
+                  label="Email"
+                  value={editClientData?.email || ""}
+                  onChange={(e) => {
+                    setEditClientData({
+                      ...editClientData,
+                      email: e.target.value,
+                    });
+                  }}
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  InputLabelProps={{
+                    style: {
+                      color: "#4b0082",
+                    },
+                  }}
+                  sx={{
+                    color: "#8a2be2",
+                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                  }}
+                />
+
+                <TextField
+                  label="Adresse"
+                  value={editClientData?.address || ""}
+                  onChange={(e) => {
+                    setEditClientData({
+                      ...editClientData,
+                      address: e.target.value,
+                    });
+                  }}
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  InputLabelProps={{
+                    style: {
+                      color: "#4b0082",
+                    },
+                  }}
+                  sx={{
+                    color: "#8a2be2",
+                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                  }}
+                />
+                <TextField
+                  label="Telephone Number"
+                  value={editClientData?.tel || ""}
+                  onChange={(e) => {
+                    setEditClientData({
+                      ...editClientData,
+                      tel: e.target.value,
+                    });
+                  }}
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  InputLabelProps={{
+                    style: {
+                      color: "#4b0082",
+                    },
+                  }}
+                  sx={{
+                    color: "#8a2be2",
+                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                  }}
+                />
+                <TextField
+                  label="Account Balance"
+                  value={editClientData?.accountBalance || ""}
+                  onChange={(e) => {
+                    setEditClientData({
+                      ...editClientData,
+                      accountBalance: +e.target.value,
+                    });
+                  }}
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  InputLabelProps={{
+                    style: {
+                      color: "#4b0082",
+                    },
+                  }}
+                  sx={{
+                    color: "#8a2be2",
+                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                  }}
+                />
+              </>
+            )}
+          </Box>
+          <Box
+            sx={{
+              flexBasis: "45%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              position: "relative",
+              mr: 5,
+            }}
           >
-            X
-          </button>
-        )}
+            <div
+              className="position-relative"
+              style={{ height: "55%", width: "80%" }}
+            >
+              <img
+                className="img-fluid mt-1"
+                src={
+                  selectedFile
+                    ? URL.createObjectURL(selectedFile)
+                    : editClientData?.avatar?.path ||
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
+                }
+                alt="Card image cap"
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: "8px",
+                  filter: "blur(0.5px)",
+                }}
+              />
+              <div className="position-absolute top-50 start-50 translate-middle">
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                />
 
-        <div className="d-flex justify-content-center w-100 m-3">
-          <TableContainer className="w-100" component={Paper}>
-            <Table aria-label="simple table">
-              <TableBody>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell className="fw-bold" align="right">
-                    {t("nameAr")}
-                  </TableCell>
-                  <TableCell align="right">
-                    {editMode ? (
-                      <input
-                        class="form-control mt-2"
-                        required
-                        name="fullNameAr"
-                        id="fullNameAr"
-                      />
-                    ) : (
-                      <span></span>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell className="fw-bold" align="right">
-                    {t("nameEn")}
-                  </TableCell>
-                  <TableCell align="right">
-                    {editMode ? (
-                      <input
-                         required
-                        class="form-control mt-2"
-                        name="fullNameEn"
-                        id="fullNameEn"
-                      />
-                    ) : (
-                      <span></span>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell className="fw-bold" align="right">
-                    {t("email")}
-                  </TableCell>
-                  <TableCell align="right">
-                    {editMode ? (
-                      <input
-                        required
-                        class="form-control mt-2"
-                        type="email"
-                        id="email"
-                        name="email"
-                      />
-                    ) : (
-                      <span></span>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell className="fw-bold" align="right">
-                    {t("phone")}
-                  </TableCell>
-                  <TableCell align="right">
-                    {editMode ? (
-                      <input
-                        required
-                        type="tel"
-                        class="form-control mt-2"
-                        id="tel"
-                        name="tel" 
-                      />
-                    ) : (
-                      <span></span>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
-                  <TableCell className="fw-bold" align="right">
-                    العنوان
-                  </TableCell>
-                  <TableCell align="right">
-                    {editMode ? (
-                      <input  
-                        required
-                        class="form-control mt-2"
-                        id="address"
-                        name="address"
-                        
-                      />
-                    ) : (
-                      <span></span>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
-                  <TableCell className="fw-bold" align="right">
-                  delivered  
-                  </TableCell>
-                  <TableCell align="right">
-                    {editMode ? (
-                      <input  
-                        required
-                        class="form-control mt-2"
-                        id="delivered"
-                        name="delivered"  
-                        value={isdelivered}
-                        onChange={handleInputChange}
-                      />
-                    ) : (
-                      <span  style={{
-                        padding: '5px 10px',
-                        borderRadius: '5px',
-                        backgroundColor: isdelivered ? '#4CAF50' : '#FFC107',
-                        color: '#fff',
-                      }}>{isdelivered? 'delivered' : 'Not delivered  '}</span>
-                    )}
-                    <button
-          style={{
-            marginLeft: '10px',
-            padding: '5px 10px',
-            borderRadius: '5px',
-            backgroundColor: editMode ? '#2196F3' : '#4CAF50',
-            color: '#fff',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-          onClick={handleEditModeToggle}
-        >
-          {editMode ? 'Save' : 'Edit'}
-        </button>
-                    
-                  </TableCell>
-                </TableRow>
-                <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-      <TableCell className="fw-bold" align="right">
-        paid
-      </TableCell>
-      <TableCell align="right">
-        {editMode ? (
-          <input
-            required
-            className="form-control mt-2"
-            id="delivered"
-            name="paid"
-            value={isPaid}
-            onChange={handleInputChange}
-          />
+                {renderEditView && (
+                  <IconButton
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "62%",
+                      transform: "translate(-50%, -50%)",
+                      color: "#8a2be2",
+                      backgroundColor: "#fff",
+                      border: "1px solid #8a2be2",
+                      "&:hover": {
+                        backgroundColor: "#8a2be2",
+                        color: "#fff",
+                      },
+                    }}
+                    onClick={handleButtonClick}
+                  >
+                    <EditIcon fontSize="large" />
+                  </IconButton>
+                )}
+              </div>
+            </div>
+          </Box>
+        </Box>
+      </CardContent>
+    
+        <Box sx={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 2,
+                  },
+                },
+              }}
+              pageSizeOptions={[2]}
+              disableRowSelectionOnClick
+            />
+          </Box>
+          <Box sx={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={row}
+              columns={column}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 10,
+                  },
+                },
+              }}
+              pageSizeOptions={[10]}
+              disableRowSelectionOnClick
+            />
+          </Box>
+          <Box display="flex" justifyContent="center" mt={9}>
+        {renderEditView ? (
+          <Button
+            onClick={() => {
+              toggleShowDelete();
+            }}
+            variant="contained"
+            color="primary"
+          >
+            Save Client
+          </Button>
         ) : (
-          <span  style={{
-            padding: '5px 10px',
-            borderRadius: '5px',
-            backgroundColor: isPaid ? '#4CAF50' : '#FFC107',
-            color: '#fff',
-          }}>{isPaid ? 'Paid' : 'Not Paid'}</span>
+          <Button
+            onClick={() => {
+              toggleView();
+            }}
+            variant="contained"
+            color="primary"
+          >
+            Update Client
+          </Button>
         )}
-        <button
-          style={{
-            marginLeft: '10px',
-            padding: '5px 10px',
-            borderRadius: '5px',
-            backgroundColor: editMode ? '#2196F3' : '#4CAF50',
-            color: '#fff',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-          onClick={handleEditModeToggle}
-        >
-          {editMode ? 'Save' : 'Edit'}
-        </button>
-      </TableCell>
-    </TableRow>
-    <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }} >
-                  <TableCell className="fw-bold" align="right">
-                  confirm 
-                  </TableCell>
-                  <TableCell align="right">
-                    {editMode ? (
-                      <input  
-                        required
-                        class="form-control mt-2"
-                        id=" confirm "
-                        name=" confirm "  
-                        value={isconfirm}
-                        onChange={handleInputChange}
-                      />
-                    ) : (
-                      <span  style={{
-                        padding: '5px 10px',
-                        borderRadius: '5px',
-                        backgroundColor: isconfirm ? '#4CAF50' : '#FFC107',
-                        color: '#fff',
-                      }}>{isconfirm? ' confirm ' : 'Not  confirm   '}</span>
-                    )}
-                   <button
-          style={{
-            marginLeft: '10px',
-            padding: '5px 10px',
-            borderRadius: '5px',
-            backgroundColor: editMode ? '#2196F3' : '#4CAF50',
-            color: '#fff',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-          onClick={handleEditModeToggle}
-        >
-          {editMode ? 'Save' : 'Edit'}
-        </button>
-                    
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
-      </div>
+      </Box>
+      <EditModal
+        toggleShow={onCanceltoggleShowDelete}
+        basicModal={basicModalDelete}
+        setBasicModal={setBasicModalDelete}
+        normal={true}
+        ofDelete={!true}
+        title={
+          <div
+            style={{ width: "200%", marginLeft: "100%" }}
+            className="d-flex justify-content-center text-align-center"
+          >
+            Are you sure !
+          </div>
+        }
+        body={
+          <div className="d-flex justify-content-center align-items-center">
+            You want to edit this client ?
+          </div>
+        }
+        fn={() => {
+          handleSubmit();
+        }}
+      />
+    </Box>
+  );
+};
 
-      <div className="w-100 d-flex justify-content-center">
-        <button
-          type="submit"
-          className="confirm-button mt-3"
-        //   onSubmit={submitEditProfile}
-        >
-          <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
-        </button>
-      </div>
-    </form>
-  </div>
-  )
-}
-
-export default profileclient
+export default profileclient;
