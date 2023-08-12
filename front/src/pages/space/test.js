@@ -16,14 +16,11 @@ import {
 } from "@mui/material";
 
 import { Select, MenuItem } from "@mui/material";
-import dayjs from "dayjs";
-
+import dayjs from "dayjs"; // Make sure dayjs is imported
 
 import { updateFormData } from "../forms/reducers";
 
 const SpaceReservation = () => {
-  const [value, setValue] = useState(dayjs("2022-04-17"));
-
   const dispatch = useDispatch();
   const serviceStore = useSelector((state) => state.service);
   const { service } = serviceStore;
@@ -42,9 +39,9 @@ const SpaceReservation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
+
     console.log("Form submitted");
-    dispatch(updateFormData()); 
+    dispatch(updateFormData());
   };
 
   useEffect(() => {
@@ -57,7 +54,8 @@ const SpaceReservation = () => {
       style={{ margin: "auto", maxWidth: 900, padding: 25 }}
     >
       <div>
-        {name === "Co-Working Zone" ? (
+        {/* Render logic for passType */}
+        {name === "Co-Working Zone" && (
           <Typography variant="h6" align="center" sx={{ mb: 5 }}>
             {updateFormData.passType === "dayPass"
               ? "Day Pass"
@@ -67,7 +65,8 @@ const SpaceReservation = () => {
               ? "Full Time"
               : "Coworking Zone Pass"}
           </Typography>
-        ) : name === "Meeting Space" ? (
+        )}
+        {name === "Meeting Space" && (
           <Typography variant="h6" align="center" sx={{ mb: 5 }}>
             {updateFormData.passType === "MeetingRoom"
               ? "Meeting Room (Capacity: 2 to 4 people)"
@@ -77,7 +76,7 @@ const SpaceReservation = () => {
               ? "Training Room (Capacity: 15 people)"
               : "Meeting Space Pass"}
           </Typography>
-        ) : null}
+        )}
 
         <RegisterForm />
 
@@ -94,42 +93,28 @@ const SpaceReservation = () => {
                 <MenuItem value="option1">2-4 personne</MenuItem>
                 <MenuItem value="option2">4-6 personne</MenuItem>
                 <MenuItem value="option3">6-10 personne</MenuItem>
-                <MenuItem value="option4">more than 10 personne </MenuItem>
+                <MenuItem value="option4">more than 10 personne</MenuItem>
               </Select>
             </Grid>
             <Grid item xs={12}>
-  <FormLabel component="legend">Choose your day</FormLabel>
-  <input
-    type="date"
-    name="selectedDate"
-    value={updateFormData.selectedDate || ""}
-    onChange={handleFormChange}
-    required
-  />
-</Grid>
-<Grid item xs={12}>
-  <FormLabel component="legend">Choose your arrival time</FormLabel>
-  <div>
-    <label>From:</label>
-    <input
-      type="time"
-      name="startTime"
-      value={updateFormData.startTime || ""}
-      onChange={handleFormChange}
-      required
-    />
-  </div>
-  <div>
-    <label>To:</label>
-    <input
-      type="time"
-      name="endTime"
-      value={updateFormData.endTime || ""}
-      onChange={handleFormChange}
-      required
-    />
-  </div>
-</Grid>
+              <FormLabel component="legend">Choose your day</FormLabel>
+              <input
+                type="date"
+                name="fromDate"
+                onChange={handleFormChange}
+                value={updateFormData.fromDate || ""}
+              />
+              <input
+                type="date"
+                name="toDate"
+                onChange={handleFormChange}
+                value={updateFormData.toDate || ""}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormLabel component="legend">Choose your arrival time</FormLabel>
+              {/* MultiInputTimeRangeField code */}
+            </Grid>
           </div>
         )}
 
@@ -138,7 +123,7 @@ const SpaceReservation = () => {
             <Grid>
               <FormControl component="fieldset">
                 <FormLabel component="legend">
-                  Choose your  Pass to secure your spot.
+                  Choose your Pass to secure your spot.
                 </FormLabel>
                 <RadioGroup
                   aria-label="passType"
@@ -147,80 +132,24 @@ const SpaceReservation = () => {
                   onChange={handleFormChange}
                 >
                   <Stack direction="row" spacing={3}>
-                    {name === "Co-Working Zone" ? (
-                      <>
-                        <FormControlLabel
-                          value="dayPass"
-                          control={<Radio />}
-                          label="Daily Pass (25dt)"
-                        />
-                        <FormControlLabel
-                          value="weekPass"
-                          control={<Radio />}
-                          label="WeeK Pass (99dt)"
-                        />
-                        <FormControlLabel
-                          value="fullTime"
-                          control={<Radio />}
-                          label="Full Time (299dt)"
-                        />
-                      </>
-                    ) : name === "Meeting Space" ? (
-                      <>
-                        <FormControlLabel
-                          value="MeetingRoom"
-                          control={<Radio />}
-                          label="Meeting Room (25dt/Hr)"
-                        />
-                        <FormControlLabel
-                          value="Meeting_Room"
-                          control={<Radio />}
-                          label="Meeting Room (30dt/Hr)"
-                        />
-                        <FormControlLabel
-                          value="Training_Room"
-                          control={<Radio />}
-                          label="Training Room(40dt/Hr) "
-                        />
-                      </>
-                    ) : null}
+                    {/* Radio buttons */}
                   </Stack>
                 </RadioGroup>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-  <FormLabel component="legend">Choose your day</FormLabel>
-  <input
-    type="date"
-    name="selectedDate"
-    value={updateFormData.selectedDate || ""}
-    onChange={handleFormChange}
-    required
-  />
-</Grid>
-<Grid item xs={12}>
-  <FormLabel component="legend">Choose your arrival time</FormLabel>
-  <div>
-    <label>From:</label>
-    <input
-      type="time"
-      name="startTime"
-      value={updateFormData.startTime || ""}
-      onChange={handleFormChange}
-      required
-    />
-  </div>
-  <div>
-    <label>To:</label>
-    <input
-      type="time"
-      name="endTime"
-      value={updateFormData.endTime || ""}
-      onChange={handleFormChange}
-      required
-    />
-  </div>
-</Grid>
+              <FormLabel component="legend">Choose your day</FormLabel>
+              <input
+                type="date"
+                name="selectedDate"
+                onChange={handleFormChange}
+                value={updateFormData.selectedDate || ""}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormLabel component="legend">Choose your arrival time</FormLabel>
+              {/* MultiInputTimeRangeField code */}
+            </Grid>
           </>
         )}
 
