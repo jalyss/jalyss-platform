@@ -67,33 +67,24 @@ function OneArticle() {
     <DocumentMeta {...meta} className="container-fluid justify-content-center" >
       <Grid>
        <Grid container justifyContent="center">
-           <Grid item xs={12} md={6} lg={8} xl={6}>
-            
-          <div className=" justify-content-center">
-           <div className="book-content " style={{marginRight:'200px'}}>
+           <Grid >
+
              <img
                src={article?.article?.cover?.path}
                alt={article?.article?.title}
-              
               style={{
-              marginLeft:200,
               color:'trasparent',
               baackgroundcolor:'trasparent',
-              }}
+              marginTop:50,
+              marginRight:50,
+             
+               }}
               />
-              
-           
-                  </div>
-                </div>
-        </Grid>
-        <Grid>
-        <Grid>
-        <div className="book-content-info">
+       </Grid>
+        <Grid  justifyContent="center">          
+    <div className="book-content-info ">
               <h1 className="book-title">{article?.article?.title}</h1>
-      
-
-           
-            <TableContainer className="mx-auto mt-3 " style={{ width:'350px'}} component={Paper}>
+              <TableContainer className="mx-auto mt-3" style={{ width: '400px', marginBottom: '50px' }} component={Paper}>
               <Table aria-label="simple table">    
              <TableRow>
               <TableCell>
@@ -102,8 +93,6 @@ function OneArticle() {
               onChangeRate={handleRatingChange}
               edit={true}
             />
-            {/* <p className="mt-2">{t('OneArticle.ref')}</p>
-            <p className="mt-2">{t('OneArticle.info')}</p> */}
             </TableCell>
             </TableRow>
  
@@ -149,7 +138,7 @@ function OneArticle() {
             <p className="book-description">{article?.article?.longDescription}</p>
                     </TableContainer>
                      </div>
-        </Grid>
+       
      </Grid>
       </Grid>    
      </Grid>
