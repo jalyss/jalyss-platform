@@ -1855,8 +1855,8 @@ async function main() {
         },
         titleEn: 'My Session Post ' + i,
         titleAr: 'My Session Post ' + i,
-
-        description: 'Hello, this is a new session',
+        descriptionEn: 'Hello, this is a new session',
+        descriptionAr: 'Hello, this is a new session',
         startDate: new Date('2022-01-01'),
         endDate: new Date('2022-02-02'),
         categoryId:

@@ -7,7 +7,9 @@ export class CreateSessionDto {
   @ApiProperty()
   titleAr: string;
   @ApiProperty()
-  description: string;
+  descriptionEn: string;
+  @ApiProperty()
+  descriptionAr: string;
   @ApiProperty()
   startDate: Date;
   @ApiProperty()

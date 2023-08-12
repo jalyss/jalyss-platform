@@ -107,7 +107,7 @@ const AddSession = () => {
     if (deleteModal && idOfDelete) {
       const row = rows.find((row) => row.id === idOfDelete);
       if (row) {
-        setTitleOfDelete(row.title);
+        setTitleOfDelete(row.titleEn);
       }
     }
   }, [idOfDelete, rows]);
@@ -241,16 +241,19 @@ const AddSession = () => {
 
   useEffect(() => {
     if (addSession?.lectures.length) {
+      // console.log("arra",addSession?.lectures);
       let aux = addSession?.lectures?.map((e) => {
         const formattedStartAt = moment(e.startAt).format("YYYY-MM-DD");
         const formattedEndAt = moment(e.endAt).format("YYYY-MM-DD");
         return {
           ...e,
-          title: e.title,
+          title:e.titleEn,
           startAt: formattedStartAt,
           endAt: formattedEndAt,
         };
       });
+      console.log("aux",aux);
+
       setRows(aux);
     }
   }, [addSession?.lectures]);
@@ -417,19 +420,36 @@ const AddSession = () => {
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell className="fw-bold">Description:</TableCell>
+                  <TableCell className="fw-bold">DescriptionEn:</TableCell>
                   <TableCell>
                     <input
                       required
                       type="text"
-                      value={addSession?.description}
-                      placeholder="Enter description"
-                      name="description"
+                      value={addSession?.descriptionEn}
+                      placeholder="Enter description en english"
+                      name="descriptionEn"
                       onChange={handleAddSessionChange}
                       style={{ border: "1px solid #bfbab7", width: 290 }}
                     />
                   </TableCell>
-                  <TableCell className="fw-bold">Category:</TableCell>
+                  <TableCell className="fw-bold">DescriptionAr:</TableCell>
+                  <TableCell>
+                    <input
+                      required
+                      type="text"
+                      value={addSession?.descriptionAr}
+                      placeholder="Enter description en arabe"
+                      name="descriptionAr"
+                      onChange={handleAddSessionChange}
+                      style={{ border: "1px solid #bfbab7", width: 290 }}
+                    />
+                  </TableCell>
+                 
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                   <TableCell className="fw-bold">Category:</TableCell>
                   <TableCell>
                     <select
                       value={categoryId}
@@ -453,10 +473,6 @@ const AddSession = () => {
                       ))}
                     </select>
                   </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
                   <TableCell className="fw-bold">Start-End-Date:</TableCell>
 
                   <TableCell>
@@ -466,7 +482,7 @@ const AddSession = () => {
                       className=""
                     />
                   </TableCell>
-                  <TableCell className="fw-bold">Previous Session:</TableCell>
+                  {/* <TableCell className="fw-bold">Previous Session:</TableCell>
                   <TableCell>
                     <select
                       value={previousSessionId}
@@ -490,7 +506,7 @@ const AddSession = () => {
                         </option>
                       ))}
                     </select>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -593,7 +609,35 @@ const AddSession = () => {
                       )}
                     </div>
                   </TableCell>
+                
                 </TableRow>
+                <TableRow>
+                  <TableCell className="fw-bold">Previous Session:</TableCell>
+                  <TableCell>
+                    <select
+                      value={previousSessionId}
+                      class="form-select "
+                      aria-label="Default select example"
+                      onChange={(e) => {
+                        setPreviousSessionId(e.target.value);
+                      }}
+                      style={{
+                        border: "1px solid #bfbab7",
+                        width: 290,
+                        height: 42,
+                      }}
+                    >
+                      <option value="" disabled selected>
+                        Choose your previous Session
+                      </option>
+                      {sessions?.items?.map((session, index) => (
+                        <option key={index} value={session.id}>
+                          {session.titleEn}
+                        </option>
+                      ))}
+                    </select>
+                  </TableCell>
+                  </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
@@ -691,11 +735,19 @@ const AddSession = () => {
           >
             <div className="gap-3 d-flex ">
               <StyledInput
-                value={tarif?.title || ""}
-                label="Title"
+                value={tarif?.titleEn || ""}
+                label="TitleEn"
                 required
                 onChange={(e) => {
-                  setTarif((Tarif) => ({ ...Tarif, title: e.target.value }));
+                  setTarif((Tarif) => ({ ...Tarif, titleEn: e.target.value }));
+                }}
+              />
+              <StyledInput
+                value={tarif?.titleAr || ""}
+                label="TitleAr"
+                required
+                onChange={(e) => {
+                  setTarif((Tarif) => ({ ...Tarif, titleAr: e.target.value }));
                 }}
               />
               <StyledInput

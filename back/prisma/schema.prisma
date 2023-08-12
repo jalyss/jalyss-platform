@@ -444,7 +444,8 @@ model Session {
   id                         String                       @id @default(uuid())
   titleEn                    String
   titleAr                    String
-  description                String
+  descriptionEn              String?
+  descriptionAr              String?
   createdAt                  DateTime                     @default(now())
   updatedAt                  DateTime                     @updatedAt
   startDate                  DateTime
@@ -513,9 +514,9 @@ model LectureHasWhatYouWillLearn {
 }
 
 model Prerequire {
-  id        String   @id @default(uuid())
-  contentEn   String
-  contentAr   String
+  id        String @id @default(uuid())
+  contentEn String
+  contentAr String
 
   createdAt DateTime @default(now())
 
@@ -566,8 +567,8 @@ model Lecture {
   id                         String                       @id @default(uuid())
   titleEn                    String
   titleAr                    String
-  contentEn                   String
-  contentAr                   String
+  contentEn                  String
+  contentAr                  String
   createdAt                  DateTime                     @default(now())
   sessions                   SessionHasLecture[]
   assesments                 Assessments[]

@@ -106,7 +106,7 @@ const SessionDetails = () => {
       width: 250,
       editable: false,
       valueGetter: (params) => {
-        return params.row?.title ? params.row.title : params.row.lectures.title;
+        return params.row?.title ? params.row.titleEn : params.row.lectures.titleEn;
       },
     },
     {
@@ -300,7 +300,9 @@ const SessionDetails = () => {
     aux.sessionTypesIds = selectedTypes.map((e) => e.id);
     aux.previousSessionId = previousSessionId;
     aux.tarifs = aux.tarifs.map((elem) => ({
-      title: elem.title,
+      titleEn: elem.titleEn,
+      titleAr: elem.titleAr,
+
       price: elem.price,
       features: elem.features.map((el) => ({
         id: el?.id ? el.id : el?.feature?.id,
@@ -460,17 +462,33 @@ const SessionDetails = () => {
                       />
                     )}
                   </TableCell> */}
-                  <TableCell className="fw-bold">Title:</TableCell>
+                  <TableCell className="fw-bold">TitleEn:</TableCell>
                   <TableCell>
                     {readOnly ? (
-                      <span>{session?.title}</span>
+                      <span>{session?.titleEn}</span>
                     ) : (
                       <input
                         required
                         type="text"
                         placeholder="Enter title"
-                        name="title"
-                        value={addSession?.title}
+                        name="titleEn"
+                        value={addSession?.titleEn}
+                        onChange={handleAddSessionChange}
+                        style={{ border: "1px solid #bfbab7", width: 290 }}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell className="fw-bold">TitleAr:</TableCell>
+                  <TableCell>
+                    {readOnly ? (
+                      <span>{session?.titleAr}</span>
+                    ) : (
+                      <input
+                        required
+                        type="text"
+                        placeholder="Enter title en arabe"
+                        name="titleAr"
+                        value={addSession?.titleAr}
                         onChange={handleAddSessionChange}
                         style={{ border: "1px solid #bfbab7", width: 290 }}
                       />
@@ -480,23 +498,43 @@ const SessionDetails = () => {
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell className="fw-bold">Description:</TableCell>
+                  <TableCell className="fw-bold">DescriptionEn:</TableCell>
                   <TableCell>
                     {readOnly ? (
-                      <span>{session?.description}</span>
+                      <span>{session?.descriptionEn}</span>
                     ) : (
                       <input
                         required
                         type="text"
-                        value={addSession?.description}
+                        value={addSession?.descriptionEn}
                         placeholder="Enter description"
-                        name="description"
+                        name="descriptionEn"
                         onChange={handleAddSessionChange}
                         style={{ border: "1px solid #bfbab7", width: 290 }}
                       />
                     )}
                   </TableCell>
-                  <TableCell className="fw-bold">Category:</TableCell>
+                  <TableCell className="fw-bold">DescriptionAr:</TableCell>
+                  <TableCell>
+                    {readOnly ? (
+                      <span>{session?.descriptionAr}</span>
+                    ) : (
+                      <input
+                        required
+                        type="text"
+                        value={addSession?.descriptionAr}
+                        placeholder="Enter description en arabe"
+                        name="descriptionAr"
+                        onChange={handleAddSessionChange}
+                        style={{ border: "1px solid #bfbab7", width: 290 }}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                   <TableCell className="fw-bold">Category:</TableCell>
                   <TableCell>
                     {readOnly ? (
                       <span>{session?.category.nameEn}</span>
@@ -524,10 +562,6 @@ const SessionDetails = () => {
                       </select>
                     )}
                   </TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
                   <TableCell className="fw-bold">Start-End-Date:</TableCell>
 
                   <TableCell>
@@ -557,10 +591,10 @@ const SessionDetails = () => {
                       </Form.Item>
                     )}
                   </TableCell>
-                  <TableCell className="fw-bold">Previous Session:</TableCell>
+                  {/* <TableCell className="fw-bold">Previous Session:</TableCell>
                   <TableCell>
                     {readOnly ? (
-                      <span>{session?.previousSesion.title}</span>
+                      <span>{session?.previousSesion.titleEn}</span>
                     ) : (
                       <select
                         value={previousSessionId}
@@ -580,12 +614,12 @@ const SessionDetails = () => {
                         </option>
                         {sessions?.items.map((session, index) => (
                           <option key={index} value={session.id}>
-                            {session.title}
+                            {session.titleEn}
                           </option>
                         ))}
                       </select>
                     )}
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -595,7 +629,7 @@ const SessionDetails = () => {
                     {readOnly ? (
                       <>
                         {selectedGains?.map((elem, i) => (
-                          <p key={i}>{elem.content}</p>
+                          <p key={i}>{elem.contentEn}</p>
                         ))}
                       </>
                     ) : (
@@ -605,7 +639,7 @@ const SessionDetails = () => {
                             required
                             value={selectedGains}
                             data={gains?.items}
-                            labelOptionName="content"
+                            labelOptionName="contentEn"
                             label="Add gains"
                             onChange={setSelectedGains}
                             placeholder="Add Your session's gain"
@@ -627,7 +661,7 @@ const SessionDetails = () => {
                   <TableCell>
                     {readOnly ? (
                       selectedPrerequire?.map((elem, i) => (
-                        <p key={i}>{elem.content}</p>
+                        <p key={i}>{elem.contentEn}</p>
                       ))
                     ) : (
                       <>
@@ -636,7 +670,7 @@ const SessionDetails = () => {
                             required
                             value={selectedPrerequire}
                             data={prerequires?.items}
-                            labelOptionName="content"
+                            labelOptionName="contentEn"
                             label="Add prerequires"
                             onChange={setSelectedPrerequire}
                             placeholder="Add Your session's prerequire"
@@ -663,7 +697,7 @@ const SessionDetails = () => {
                   <TableCell>
                     {readOnly ? (
                       selectedFeatures?.map((elem, i) => (
-                        <p key={i}>{elem.label}</p>
+                        <p key={i}>{elem.labelEn}</p>
                       ))
                     ) : (
                       <>
@@ -672,7 +706,7 @@ const SessionDetails = () => {
                             required
                             data={featuresStore?.items}
                             value={selectedFeatures}
-                            labelOptionName="label"
+                            labelOptionName="labelEn"
                             label="Add features"
                             onChange={(value) => {
                               setSelectedFeatures(value);
@@ -697,7 +731,7 @@ const SessionDetails = () => {
                   <TableCell>
                     {readOnly ? (
                       selectedTypes?.map((elem, i) => (
-                        <p key={i}>{elem.title}</p>
+                        <p key={i}>{elem.titleEn}</p>
                       ))
                     ) : (
                       <>
@@ -706,7 +740,7 @@ const SessionDetails = () => {
                             required
                             value={selectedTypes}
                             data={types?.items}
-                            labelOptionName="title"
+                            labelOptionName="titleEn"
                             label="Add types"
                             onChange={setSelectedTypes}
                             placeholder="Select your session types !"
@@ -722,6 +756,37 @@ const SessionDetails = () => {
                           )}
                         </div>
                       </>
+                    )}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell className="fw-bold">Previous Session:</TableCell>
+                  <TableCell>
+                    {readOnly ? (
+                      <span>{session?.previousSesion.titleEn}</span>
+                    ) : (
+                      <select
+                        value={previousSessionId}
+                        class="form-select "
+                        aria-label="Default select example"
+                        onChange={(e) => {
+                          setPreviousSessionId(e.target.value);
+                        }}
+                        style={{
+                          border: "1px solid #bfbab7",
+                          width: 290,
+                          height: 42,
+                        }}
+                      >
+                        <option value="" disabled selected>
+                          Choose your previous Session
+                        </option>
+                        {sessions?.items.map((session, index) => (
+                          <option key={index} value={session.id}>
+                            {session.titleEn}
+                          </option>
+                        ))}
+                      </select>
                     )}
                   </TableCell>
                 </TableRow>
@@ -888,11 +953,19 @@ const SessionDetails = () => {
           >
             <div className="gap-3 d-flex ">
               <StyledInput
-                value={tarif?.title || ""}
-                label="Title"
+                value={tarif?.titleEn || ""}
+                label="TitleEn"
                 required
                 onChange={(e) => {
-                  setTarif((Tarif) => ({ ...Tarif, title: e.target.value }));
+                  setTarif((Tarif) => ({ ...Tarif, titleEn: e.target.value }));
+                }}
+              />
+                  <StyledInput
+                value={tarif?.titleAr || ""}
+                label="TitleAr"
+                required
+                onChange={(e) => {
+                  setTarif((Tarif) => ({ ...Tarif, titleAr: e.target.value }));
                 }}
               />
               <StyledInput
