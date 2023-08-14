@@ -1,7 +1,5 @@
-import { GridActionsCellItem } from "@mui/x-data-grid";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
@@ -15,6 +13,8 @@ import {
 import Modal from "../../../components/Commun/Modal";
 import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 import { CiShare1 } from "react-icons/ci";
+import { FaTrash } from "react-icons/fa";
+import Selecto from "react-select";
 
 function BrancheList() {
   const dispatch = useDispatch();
@@ -29,6 +29,11 @@ function BrancheList() {
   const [branchId, setBranshId] = useState("");
   const [transiction, setTransiction] = useState("");
 
+  const [inputsNumber, setinputsNumber] = useState(1);
+  const [value, setValue] = useState([]);
+  const [commandLine, setcommandLine] = useState([0]);
+  const [dataaa, setdata] = useState({});
+  const [data0, setdata0] = useState([]);
   const columns = [
     {
       field: "id",
@@ -63,6 +68,15 @@ function BrancheList() {
 
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ identifier: selectedBranch[0] }));
+  }, [selectedBranch]);
+
+  useEffect(() => {
+    setValue(
+      articles.map((e) => ({
+        value: e?.article?.id,
+        label: e?.article?.title,
+      }))
+    );
   }, [selectedBranch]);
 
   const toggleShow = (id) => {
@@ -111,8 +125,61 @@ function BrancheList() {
     });
   }
 
-  const handleAddClick = (id) => {
-    navigate(`detail/${id}`);
+  console.log(data0,"zzz")
+
+  const addData0Entry = () => {
+    // Extract the articleId and quantity from the current data0 entry
+    const { articleId, quantity } = dataaa;
+
+    // Create a new object with the articleId and quantity properties
+    const newEntry = { articleId, quantity };
+
+    // Update the array with the new entry
+    setdata0([...data0, newEntry]);
+  };
+
+  console.log(data0,'aha')
+
+
+  const renderInputs = () => {
+    return Array.from({ length: data0.length }).map((e, i) => (
+      <Box key={i} mt={3} mb={3} display="flex" alignItems="center">
+        <div style={{ flex: 2 }}>
+          <Selecto
+            placeholder="Search by users"
+            options={value}
+            style={{ flex: 1, marginRight: "10px" }}
+            onChange={(e) => {
+              setdata({...dataaa,articleId:e.value}); // Pass the event and index to rigldata
+            }}
+          />
+        </div>
+        <div style={{ marginLeft: "10px", fontSize: "10px" }}>
+          <input
+            type="number"
+            placeholder="Quantity"
+            onChange={(e) => {
+              setdata({...dataaa,quantity:e.target.value}); // Pass a placeholder event and index to rigldata
+           
+            }}
+          />
+        </div>
+        <div style={{ marginLeft: "10px" }}>
+          <FaTrash
+            onClick={() => handleDelete(e.articleId)}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+      </Box>
+    ));
+  };
+
+
+  const handleDelete = (articleByBranchId) => {
+    const updatedCommandLine = commandLine.filter(
+      (item) => item.articleByBranchId !== articleByBranchId
+    );
+    setdata0(updatedCommandLine);
   };
 
   return (
@@ -150,28 +217,29 @@ function BrancheList() {
                 pageSizeOptions={[10, 20, 50]}
                 disableRowSelectionOnClick
               />
-            </Box>
+            </Box> 
           </div>
           <div className="m-5" style={{ width: "100%" }}>
             <div>Send</div>
             <div className="mt-2 w-100" style={{ width: "100%" }}>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                value={transiction.articleId}
-                onChange={(e) => {
-                  setTransiction({ ...transiction, articleId: e.target.value });
+              {renderInputs()}
+              <div
+                class="button-container"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <option value="">Select article</option>
-                {articles.map((e, i) => {
-                  return (
-                    <option key={i} value={e?.article?.id}>
-                      {e?.article?.title}
-                    </option>
-                  );
-                })}
-              </select>
+                <button onClick={() => {addData0Entry(), setinputsNumber(inputsNumber + 1)}}>
+                  +
+                </button>
+                {inputsNumber > 1 ? (
+                  <button onClick={() => setinputsNumber(inputsNumber - 1)}>
+                    -
+                  </button>
+                ) : null}
+              </div>
             </div>
             <div className="mt-1">from </div>
             <div className="mt-2">
@@ -209,15 +277,7 @@ function BrancheList() {
                 })}
               </select>
             </div>
-            <div className="mt-1">quantity </div>
-            <div className="mt-2">
-              <input
-                onChange={(e) => {
-                  setTransiction({ ...transiction, quantity: +e.target.value });
-                }}
-                type="number"
-              />
-            </div>
+
             <div>Status</div>
             <div className="mt-2 w-100" style={{ width: "100%" }}>
               <select

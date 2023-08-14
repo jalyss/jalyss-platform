@@ -108,7 +108,7 @@ function SpaceJalyss() {
           >
             <div className="d-flex justify-content-between align-items-center">
               <span>
-                <h3 style={{ fontSize: "3rem", color: "darkred" }}>
+                <h3 style={{ fontSize: "3rem", color: "rgb(128, 0, 128)" }}>
                   <FaShieldAlt className="me-2" />
                   Quality
                 </h3>
@@ -131,7 +131,7 @@ function SpaceJalyss() {
             }}
           >
             <div className="d-flex justify-content-between align-items-center">
-              <h3 style={{ fontSize: "3rem", color: "darkred" }}>
+              <h3 style={{ fontSize: "3rem", color: "rgb(128, 0, 128)" }}>
                 <FaRegHandshake /> Flexibility
               </h3>
             </div>
@@ -152,7 +152,7 @@ function SpaceJalyss() {
             }}
           >
             <div className="d-flex justify-content-between align-items-center">
-              <h3 style={{ fontSize: "3rem", color: "darkred" }}>
+              <h3 style={{ fontSize: "3rem", color: "rgb(128, 0, 128)" }}>
                 <FaUsers /> Community
               </h3>
             </div>
@@ -190,20 +190,21 @@ function SpaceJalyss() {
                 }}
               >
                 <div className="card-body">
-                  <h5 className="card-title">{elem.name}</h5>
+                  <h5 className="card-title" style={{marginBottom:15}}>{elem.name}</h5>
                   <button
-                    className="btn btn-primary"
+                    className="btn "
                     style={{
                       width: 170,
-                      marginLeft: 25,
-                      backgroundColor: "rgb(230, 229, 232)",
+                      
+                      backgroundColor: "rgb(144, 48, 152)",
                       borderRadius: 30,
                       color: "black",
+                      borderColor: "white"
                     }}
                   >
                     <Link
                       to={elem?.identifier}
-                      style={{ textDecoration: "none", color: "black" }}
+                      style={{ textDecoration: "none", color: "white" }}
                     >
                       Reserve
                     </Link>
@@ -216,7 +217,7 @@ function SpaceJalyss() {
 
         <div
           className="card-body d-flex flex-column flex-md-row justify-content-around mb-3"
-          style={{ marginTop: 30,padding:"10px" }}
+          style={{ marginTop: 30, padding: "10px" }}
         >
           <div
             className="card p-1 "
@@ -256,45 +257,51 @@ function SpaceJalyss() {
                     JalyssCom
                   </h3>
                 </div>
+                <div className="container">
+                  <p className="my-2 text-start" style={{ fontSize: "1.15rem", padding: "10px" }}>
+                    At JalyssCom We value adaptability and initiative in whatever we
+                    do as business owners.
+                    <br />
+                    Our offers can be tailored to your needs and financial situation.
+                    <br />
+                    Our workspaces encourage collaboration, promote performance, and
+                    inspire creativity.
+                    <br />
+                    They were designed with these goals in mind. Our spaces are
+                    secured <br />
+                    and available around-the-clock,
+                    <br />
+                    include natural light that is good for your staff's wellbeing, and
+                    are located in a high-rise building in the middle of a renowned
+                    business district.
+                    <br />
+                    JalyssCom is another place for planned events. Whether it's a
+                    workshop, seminar, or other type of training, JalyssCom is always
+                    active!
+                  </p>
+
+                </div>
+
               </div>
             </div>
 
-            <p className="my-2 text-start" style={{ fontSize: "1.15rem" ,padding:"10px"}}>
-              At JalyssCom We value adaptability and initiative in whatever we
-              do as business owners.
-              <br />
-              Our offers can be tailored to your needs and financial situation.
-              <br />
-              Our workspaces encourage collaboration, promote performance, and
-              inspire creativity.
-              <br />
-              They were designed with these goals in mind. Our spaces are
-              secured <br />
-              and available around-the-clock,
-              <br />
-              include natural light that is good for your staff's wellbeing, and
-              are located in a high-rise building in the middle of a renowned
-              business district.
-              <br />
-              JalyssCom is another place for planned events. Whether it's a
-              workshop, seminar, or other type of training, JalyssCom is always
-              active!
-            </p>
+
           </div>
         </div>
       </div>
-
       <div className="card-body">
         <div className="d-flex flex-wrap justify-content-around">
           <div
             className="card  "
-            style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
+            style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" , marginLeft:20 }}
           >
             <div className="card-body">
-              <div className="card-icon">
+              <div className="row">
+              <div className="card-icon col-2">
                 <FaMapMarker />
               </div>
-              <h5 className="card-title">2 Espaces coworking</h5>
+              <h6 className="card-title col-9" style={{marginTop:20}}>2 Espaces coworking</h6>
+            </div>
             </div>
           </div>
           <div
@@ -302,10 +309,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaCommentDots />
               </div>
-              <h5 className="card-title">Active Community</h5>
+              <h6 className="card-title col-9"  style={{marginTop:20}}>Active Community</h6>
+            </div>
             </div>
           </div>
           <div
@@ -313,10 +322,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaChair />
               </div>
-              <h5 className="card-title">Comfortable Seating</h5>
+              <h6 className="card-title col-9" style={{marginTop:20}}>Comfortable Seating</h6>
+            </div>
             </div>
           </div>
           <div
@@ -324,10 +335,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaWifi />
               </div>
-              <h5 className="card-title">Free Wi-Fi</h5>
+              <h6 className="card-title col-9"style={{marginTop:20}}>Free Wi-Fi</h6>
+            </div>
             </div>
           </div>
           <div
@@ -335,10 +348,12 @@ function SpaceJalyss() {
             style={{ width: "10.2rem", borderRadius: 25, marginBottom: "10px" }}
           >
             <div className="card-body">
-              <div className="card-icon">
+            <div className="row">
+              <div className="card-icon col-2">
                 <FaCalendarAlt />
               </div>
-              <h5 className="card-title">Events</h5>
+              <h6 className="card-title col-9"style={{marginTop:20}}>Events</h6>
+            </div>
             </div>
           </div>
         </div>

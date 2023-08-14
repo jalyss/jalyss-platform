@@ -40,7 +40,6 @@ export const fetchArticleByBranch = createAsyncThunk(
 export const addTransactionStock = createAsyncThunk(
   "mvt/createMvt",
   async (args, { dispatch }) => {
-    console.log(args,'a777a')
     const response = await axios.post(`${config.API_ENDPOINT}/mvts`, args);
     dispatch(fetchArticles());
     return response.data;

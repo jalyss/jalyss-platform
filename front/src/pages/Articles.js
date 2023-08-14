@@ -53,9 +53,6 @@ function Articles() {
   const lg = i18n.languages[0] === "en";
   const [showFilters, setShowFilters] = useState(false);
 
-  console.log("lenaa", filters);
-  console.log("lenaa ", price);
-
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }));
   }, [dispatch, filters]);
