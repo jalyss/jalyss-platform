@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import DeleteModal from "../../../components/Commun/Modal";
 import { Box, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoles } from '../../../store/role';
+import { deleteRole, fetchRoles } from '../../../store/role';
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 
@@ -98,7 +98,7 @@ function RolesList() {
         normal={!true}
         ofDelete={true}
         bodOfDelete={<div className="d-flex justify-content-center align-items-center">You want to Delete this Role ?</div>}
-        confirm={() => { handleDeleteClick() }}
+        confirm={() => {handleDeleteClick() }}
       />
       <div>
         <div className="container">
