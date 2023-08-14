@@ -4,28 +4,23 @@ import axios from "axios";
 
 export const fetchClients = createAsyncThunk("clients/clients", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/clients`);
- 
+
   return response.data;
 });
 
-export const fetchClient = createAsyncThunk(
-  "clients/fetchclient",
-  async (clientId) => {
-    const response = await axios.get(
-      `${config.API_ENDPOINT}/clients/${clientId}`
-    );
+export const fetchClient = createAsyncThunk("clients/client", async (id) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/clients/${id}`);
+  return response.data;
+});
+
+export const createClient = createAsyncThunk(
+  "clients/createclient",
+  async (body, { dispatch }) => {
+    const response = await axios.post(`${config.API_ENDPOINT}/clients`, body);
+    dispatch(fetchClient(response.data.id));
     return response.data;
   }
 );
-
-export const createClient = createAsyncThunk(
-    "clients/createclient",
-    async (body, { dispatch }) => {
-      const response = await axios.post(`${config.API_ENDPOINT}/clients`, body);
-      dispatch(fetchClient(response.data.id));
-      return response.data;
-    }
-  );
 export const editClient = createAsyncThunk(
   "clients/editclient",
   async (args) => {
@@ -40,8 +35,6 @@ export const editClient = createAsyncThunk(
     return response.data;
   }
 );
-
-
 
 export const removeClient = createAsyncThunk(
   "clients/removeclient",

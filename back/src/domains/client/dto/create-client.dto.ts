@@ -14,6 +14,8 @@ export class CreateClientDto {
     @ApiProperty({ required: true })
     accountBalance: number;
     @ApiProperty({ required: false })
+    isCoach: boolean
+    @ApiProperty({ required: false })
     avatarId: string
     @ApiProperty({ required: false })
     categoryId: string

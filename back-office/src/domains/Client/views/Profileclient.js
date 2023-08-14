@@ -21,7 +21,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 const profileclient = () => {
-  const client = useSelector((state) => state.client);
+  const client = useSelector((state) => state.client?.client);
   const commandStore = useSelector((state) => state.command);
 
   const [editClientData, setEditClientData] = useState(null);
@@ -56,8 +56,8 @@ const profileclient = () => {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-  console.log(id, "aaaaaaaaaaaa");
-
+  console.log(id, "clientId");
+  console.log(client, "hedha");
   const handleSubmit = async () => {
     const body = {
       ...editClientData,
@@ -76,7 +76,7 @@ const profileclient = () => {
       delete body.logo;
       delete body.Mediaclient;
 
-      const editedClient = { ...body, clientId };
+      const editedClient = { ...body, id };
       dispatch(editClient(editedClient));
       showSuccessToast("client edited successfully");
       navigate(-1);
@@ -92,17 +92,21 @@ const profileclient = () => {
     setBasicModalDelete(!basicModalDelete);
     setRenderEditView(false);
   };
-  const mapClientItems = (items) => {
-    return items.map((e) => ({
-      id: e.id,
-      educationLevel: e.educationLevel,
-      functionalArea: e.functionalArea,
-      jobTitle: e.jobTitle,
-      country: e.country,
-      city: e.city,
-      isCoach: e.isCoach,
-    }));
-  };
+  useEffect(() => {
+    if (client?.cilent?.clients?.items) {
+      let aux = client.cilent?.clients.items.map((e) => {
+        return {
+          id: e.id,
+          educationLevelId: e.educationLevelId,
+          functionalAreaId: e.functionalAreaId,
+          jobTitle: e.jobTitle,
+          country: e.country,
+          city: e.city,
+        };
+      });
+      setRows(aux);
+    }
+  }, [client?.cilent?.clients.items]);
 
   const mapCommandItems = (items) => {
     return items.map((e) => ({
@@ -115,12 +119,7 @@ const profileclient = () => {
       branchId: e.branchId,
     }));
   };
-
-  useEffect(() => {
-    if (client?.clients?.items) {
-      setRows(mapClientItems(client.clients.items));
-    }
-  }, [client.clients.items]);
+console.log(client?.jobTitleId,'hhhh')
   const columns = [
     {
       field: "educationLevel",
@@ -129,18 +128,17 @@ const profileclient = () => {
       editable: false,
     },
 
-    { field: "functionalArea", headerName: "functionalArea", width: 155, editable: false },
+    {
+      field: "functionalArea",
+      headerName: "functionalArea",
+      width: 155,
+      editable: false,
+    },
     { field: "jobTitle", headerName: "jobTitle", width: 155, editable: false },
     { field: "country", headerName: "country", width: 155, editable: false },
     {
       field: "city",
       headerName: "city",
-      width: 155,
-      editable: false,
-    },
-    {
-      field: "isCoach",
-      headerName: "isCoach",
       width: 155,
       editable: false,
     },
@@ -159,7 +157,12 @@ const profileclient = () => {
     },
 
     { field: "confirm", headerName: "confirm", width: 155, editable: false },
-    { field: "delivered", headerName: "delivered", width: 155, editable: false },
+    {
+      field: "delivered",
+      headerName: "delivered",
+      width: 155,
+      editable: false,
+    },
     { field: "paid", headerName: "paid", width: 155, editable: false },
     {
       field: "hasDelivery",
@@ -256,7 +259,6 @@ const profileclient = () => {
                       {client?.email}
                     </span>
                   </Typography>
-
                   <Typography
                     style={{
                       fontFamily: "Arial",
@@ -319,6 +321,28 @@ const profileclient = () => {
                     </span>
                     <span style={{ display: "table-cell" }}>
                       {client?.accountBalance}
+                    </span>
+                  </Typography>
+                  <Typography
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      is Coach:
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {client?.isCoach === true ? "Yes" : "No"}
                     </span>
                   </Typography>
                 </div>
@@ -412,7 +436,6 @@ const profileclient = () => {
                       },
                   }}
                 />
-
                 <TextField
                   label="Adresse"
                   value={editClientData?.address || ""}
@@ -500,6 +523,35 @@ const profileclient = () => {
                       },
                   }}
                 />
+                <TextField
+                  label="isCoach"
+                  value={editClientData?.isCoach || ""}
+                  onChange={(e) => {
+                    setEditClientData({
+                      ...editClientData,
+                      isCoach: e.target.value === "true", // Convert the value to a boolean
+                    });
+                  }}
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  InputLabelProps={{
+                    style: {
+                      color: "#4b0082",
+                    },
+                  }}
+                  sx={{
+                    color: "#8a2be2",
+                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                      {
+                        borderColor: "#8a2be2",
+                      },
+                  }}
+                />{" "}
               </>
             )}
           </Box>
@@ -566,38 +618,38 @@ const profileclient = () => {
           </Box>
         </Box>
       </CardContent>
-    
-        <Box sx={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 2,
-                  },
-                },
-              }}
-              pageSizeOptions={[2]}
-              disableRowSelectionOnClick
-            />
-          </Box>
-          <Box sx={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={row}
-              columns={column}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 10,
-                  },
-                },
-              }}
-              pageSizeOptions={[10]}
-              disableRowSelectionOnClick
-            />
-          </Box>
-          <Box display="flex" justifyContent="center" mt={9}>
+
+      <Box sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 2,
+              },
+            },
+          }}
+          pageSizeOptions={[2]}
+          disableRowSelectionOnClick
+        />
+      </Box>
+      <Box sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={row}
+          columns={column}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 10,
+              },
+            },
+          }}
+          pageSizeOptions={[10]}
+          disableRowSelectionOnClick
+        />
+      </Box>
+      <Box display="flex" justifyContent="center" mt={9}>
         {renderEditView ? (
           <Button
             onClick={() => {
