@@ -128,8 +128,8 @@ export default function ProfilePage() {
           <MDBCol lg="4">
             <MDBCard className="mb-4">
               <MDBCardBody>
-                <div className="text-center d-flex justify-content-center ">
-                  <div className="position-relative" style={{ width: 200 }}>
+                <div className="text-center d-flex justify-content-center " style={{marginleft:100}}>
+                  <div className="position-relative">
                     <MDBCardImage
                       src={
                         preview
@@ -218,7 +218,7 @@ export default function ProfilePage() {
             </MDBCard>
           </MDBCol>
 
-          <MDBCol lg="8">
+          <MDBCol lg="8" >
             <MDBCard className="mb-4" >
               <MDBCardBody>
                 <MDBRow>
@@ -296,15 +296,16 @@ export default function ProfilePage() {
           </MDBCol>
         </MDBRow>
 
-        <MDBNavbar className=" d-flex justify-content-center align-items-center bg-light rounded-3  mb-4 ">
+<MDBNavbar className="justify-content-center align-items-center bg-light rounded-2 mb-4" style={{ width: "98%", margin: "0 "}}>
+
           <MDBNavbarNav className=" justify-content-center align-items-center ">
           {navBarDataProfile.map((elem, i) => (
               <>
     
               <MDBNavbarItem
                 key={i}
-                className="label-btn pointer"
-                style={{
+                // className="label-btn pointer"
+                  style={{
                   backgroundColor:
                   elem.path === path ? "rgb(156 39 176 / 34%)" : "",
                   borderRadius: "10px",
