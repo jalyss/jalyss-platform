@@ -30,9 +30,6 @@ console.log('idddddd' , userId)
             <div className="d-flex flex-wrap justify-content-center align-items-center">
                 <h1>Training List</h1>
             </div>
-
-
-
             <div className="blogListWrapper">
                 { trainingStore?.items?.map((trainingBooking) => (
                     <div key={trainingBooking.id}>

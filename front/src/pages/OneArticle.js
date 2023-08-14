@@ -132,7 +132,6 @@ function OneArticle() {
               >
                 <MdOutlineAddShoppingCart size="30px" color="p" />
                 <p className="m-0">{t('OneArticle.addCart')}</p>
-
               </button>
             </div>
             <p className="book-description">{article?.article?.longDescription}</p>
