@@ -1,5 +1,7 @@
+// import Slider from '@mui/material/Slider';
+
 import Slider from "rc-slider";
-import React, { Fragment, useEffect, useMemo, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +28,7 @@ function Articles() {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("articles.pageName"), t("articles.pageDescription"));
-
+  const containerRef = useRef(null);
   const { categoryId } = useParams();
   const articleStore = useSelector((state) => state.article);
   const categoryStore = useSelector((state) => state.category);
@@ -34,6 +36,7 @@ function Articles() {
   const authorStore = useSelector((state) => state.author);
   const articleTypeStore = useSelector((state) => state.articleType);
 
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [price, setPrice] = useState([1, 1000]);
   const [filters, setFilters] = useState({
     categories: [],
@@ -50,14 +53,8 @@ function Articles() {
   const lg = i18n.languages[0] === "en";
   const [showFilters, setShowFilters] = useState(false);
 
-  function onMouseMoveHandler(event) {
-    // Check if elementRef.current is not null before accessing its properties
-    if (elementRef.current) {
-      const rect = elementRef.current.getBoundingClientRect();
-      // Now you can safely use the rect object
-      console.log("Element's bounding rect:", rect);
-    }
-  }
+  console.log("lenaa", filters);
+  console.log("lenaa ", price);
 
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }));
@@ -76,9 +73,16 @@ function Articles() {
     }
   }, [categoryId]);
 
+  const onMouseMoveHandler = (event) => {
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      console.log("Element's bounding rect:", rect);
+    }
+  };
+  console.log(containerRef, "yalaa");
   const Filters = () => {
     return (
-      <div className="filters ">
+      <div className="filters">
         <Accordion
           title={t("filter.category")}
           content={
@@ -229,7 +233,6 @@ function Articles() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
-        <p>{t("title")}</p>
         <div className="filters-button">
           <BsFilterSquare onClick={() => setShowFilters(true)} />
         </div>
@@ -244,15 +247,19 @@ function Articles() {
         <Offcanvas.Body>
           <Fragment>
             <Accordion
-              title={t("filter.price")}
+              title={t("filter.Price")}
               content={
-                <div className="px-3 pt-3">
+                <div
+                  className="px-3 pt-3"
+                  ref={containerRef}
+                  onMouseMove={onMouseMoveHandler}
+                >
                   <Slider
                     range
-                    draggableTrack
+                    draggableTrack={false}
                     min={1}
                     max={1000}
-                    defaultValue={[1, 1000]}
+                    defaultValue={[1000, 1]}
                     tipFormatter={(value) => `TND${value}`}
                     allowCross={false}
                     value={price}
@@ -265,9 +272,10 @@ function Articles() {
                       }));
                     }}
                   />
+
                   <div className="d-flex justify-content-between mt-1">
-                    <p>{price[1]}</p>
                     <p>{price[0]}</p>
+                    <p>{price[1]}</p>
                   </div>
                 </div>
               }
@@ -281,15 +289,19 @@ function Articles() {
         <div className="responsive-filters">
           <Fragment>
             <Accordion
-              title={t("filter.price")}
+              title={t("filter.Price")}
               content={
-                <div className="px-3 pt-3">
+                <div
+                  className="px-3 pt-3"
+                  ref={containerRef}
+                  onMouseMove={onMouseMoveHandler}
+                >
                   <Slider
                     range
-                    draggableTrack
+                    draggableTrack={false}
                     min={1}
                     max={1000}
-                    defaultValue={[1, 1000]}
+                    defaultValue={[1000, 1]}
                     tipFormatter={(value) => `TND${value}`}
                     allowCross={false}
                     value={price}
@@ -302,6 +314,7 @@ function Articles() {
                       }));
                     }}
                   />
+
                   <div className="d-flex justify-content-between mt-1">
                     <p>{price[0]}</p>
                     <p>{price[1]}</p>
@@ -316,18 +329,25 @@ function Articles() {
           {!isEmpty(filters.categories) ? (
             map(groupedArticles, (element) => (
               <>
-                <p>{element[0].article.category[lg ? "nameEn" : "nameAr"]}</p>
+                <p
+                  style={{
+                    fontSize: "20px",
+                    color: "#333",
+                    padding: "5px 10px",
+                    backgroundColor: "#f0f0f0",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {element[0].article.category[lg ? "nameEn" : "nameAr"]}
+                </p>
 
-                <HorizontalMenu>
-                  {element.map((el) => (
-                    <div
-                      key={el.id}
-                      className="horizontal-item horizontal-item-article"
-                    >
+                <div className="d-flex flex-wrap px-4 ">
+                  {element.map((el, index) => (
+                    <div style={{ maxWidth: "100%" }} key={el.id}>
                       <ArticleCard article={el} />
                     </div>
                   ))}
-                </HorizontalMenu>
+                </div>
               </>
             ))
           ) : (

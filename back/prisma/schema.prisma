@@ -336,7 +336,6 @@ model Branch {
   address            String
   mainBranch         Boolean            @default(false)
   articlesByBranch   ArticlesByBranch[]
-  
   commands           Command[]
   employee           Employee[]
   MvtArticleSender   MvtArticle[]       @relation("sender")
