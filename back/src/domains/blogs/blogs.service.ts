@@ -29,7 +29,7 @@ export class BlogsService {
 
   async findAll(filters: FilterBlog) {
     let errors = [];
-    let where = {};
+    let where = { }; 
     let orderBy = {};
     Object.entries(filters).forEach(([key, value], i) => {
       if (!(key in FilterBlogExample)) {
@@ -41,6 +41,7 @@ export class BlogsService {
         } else {
           where = {
             ...where,
+            confirm:"confirmed",
             [key]:  value,
         }
       }
@@ -66,12 +67,12 @@ export class BlogsService {
           _count: 'desc',
         },
       };
-      let blogs = await this.searchBlogs(this.prisma, {}, 6, 0, orderBy);
+      let blogs = await this.searchBlogs(this.prisma, {}, 6, 0, orderBy,true);
      
-
       return blogs;
     } else {
       orderBy = { createdAt: 'desc' };
+      
       return await this.prisma.$transaction(async (prisma) => {
         let items = await this.searchBlogs(
           prisma,
@@ -135,6 +136,20 @@ export class BlogsService {
     } });
   }
 
+  async findAllConfirmedBlogs() {
+    const where = { confirm: 'confirmed' }; 
+    const orderBy = { createdAt: 'desc' };
+
+    return await this.searchBlogs(
+      this.prisma, 
+      where, 
+      3,
+      0, 
+      orderBy
+    );
+  }
+
+
   async remove(id: string) {
     return await this.prisma.blog.delete({ where: { id } });
   }
@@ -144,7 +159,11 @@ export class BlogsService {
     take: number,
     skip: number,
     orderBy: any,
-  ) {
+    confirmedTrends: boolean = false,
+    ) {
+      if (confirmedTrends) {
+        where = { ...where, confirm: 'confirmed' }; 
+      }
     return await prisma.blog.findMany({
       where,
       include: {

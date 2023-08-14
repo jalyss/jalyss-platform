@@ -350,7 +350,7 @@ export default function ProfilePage() {
                     fontWeight: "bold",
                   }}
                 >
-                  Saved Training
+                 Session booked
                 </MDBNavbarLink>
               </MDBNavbarItem> */}
           </MDBNavbarNav>
