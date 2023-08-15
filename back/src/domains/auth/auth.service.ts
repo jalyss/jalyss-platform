@@ -16,6 +16,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { MailService } from 'src/domains/mail/mail.service';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { Socket } from 'socket.io';
+import { UpdateAuthDto } from './dto/update-auth.dto';
+import { FunctionalArea } from './../functional-areas/entities/functional-area.entity';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +30,6 @@ export class AuthService {
     private readonly employeeService: EmployeeService,
   ) {}
   async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
-   
     let status: RegistrationStatus = {
       success: true,
       message: 'ACCOUNT_CREATE_SUCCESS',
@@ -37,7 +38,6 @@ export class AuthService {
     try {
       status.data = await this.usersService.create(userDto);
       console.log(status.data);
-      
     } catch (err) {
       status = {
         success: false,
@@ -165,16 +165,83 @@ export class AuthService {
       throw new HttpException('passwords not match ', HttpStatus.BAD_REQUEST);
     }
   }
-  async update(id: string, dto: UpdateUserDto) {
-    const user = await this.prisma.user.update({
-      where: { id },
-      data: dto,
-      include: { avatar: true, client: true, employee: true },
+  async update(id: string, dto: UpdateAuthDto) {
+    const { fullNameEn, fullNameAr, email, client, avatarId } = dto;
+    console.log(client, 'log');
+
+    let data = {};
+    const user = await this.prisma.$transaction(async (prisma) => {
+      if (fullNameAr) {
+        data = { ...data, fullNameAr };
+      }
+      if (fullNameEn) {
+        data = { ...data, fullNameEn };
+      }
+      if (email) {
+        data = { ...data, email };
+      }
+      if (avatarId) {
+        data = { ...data, avatarId };
+      }
+
+      const auxUser = await prisma.user.update({
+        where: { id },
+        data,
+        include: { avatar: true, client: true, employee: true },
+      });
+      if (client?.address) {
+        data = { ...data, address: client?.address };
+      }
+      if (client?.tel) {
+        data = { ...data, tel: client?.tel };
+      }
+      if (client?.country) {
+        data = { ...data, countryId: client?.country?.id };
+      }
+      if (client?.city) {
+        data = { ...data, cityId: client?.city?.id };
+      }
+      if (client?.educationLevel) {
+        data = {
+          ...data,
+          educationLevelId: client?.educationLevel?.id,
+        };
+      }
+      if (client?.functionalArea) {
+        data = {
+          ...data,
+          functionalAreaId: client?.functionalArea?.id,
+        };
+      }
+      if (client?.jobTitle) {
+        data = { ...data, jobTitleId: client?.jobTitle?.id };
+      }
+
+      const auxClient = await prisma.client.update({
+        where: { id: auxUser.clientId },
+        data,
+      });
+      return await prisma.user.findFirst({
+        where: { id },
+        include: {
+          Media: true,
+          avatar: true,
+          client: {
+            include: {
+              country: true,
+              city: true,
+              functionalArea: true,
+              jobTitle: true,
+              educationLevel: true,
+            },
+          },
+          employee: true,
+        },
+      });
     });
+
     return this._createToken(user);
   }
-
-
 }
 
 export interface RegistrationStatus {

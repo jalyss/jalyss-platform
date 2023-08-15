@@ -150,18 +150,6 @@ export class ChatRoomService {
           toDelete.push(chatRoom.participants[i].userId);
         }
       }
-      await Promise.all(
-        toDelete.map(async (elem) => {
-          await prisma.userChatRoom.delete({
-            where: {
-              joinerRoom: {
-                chatRoomId: id,
-                userId: elem,
-              },
-            },
-          });
-        }),
-      );
 
       return await prisma.chatRoom.update({
         where: { id },
@@ -169,6 +157,11 @@ export class ChatRoomService {
         data: {
           name: dto.name,
           participants: {
+            deleteMany: {
+              userId: {
+                in: toDelete,
+              },
+            },
             connectOrCreate: dto.participants.map((participant) => ({
               where: {
                 joinerRoom: { chatRoomId: id, userId: participant.value },

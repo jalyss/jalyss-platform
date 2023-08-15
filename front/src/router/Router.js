@@ -44,6 +44,7 @@ import ReserveMeeting from "../pages/space/SpaceReservation";
 import Conversation from "../components/chatComponents/Conversation";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "../store/auth";
+import SavedTraining from "../components/Profile/SavedTraining";
 
 function Router() {
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ function Router() {
                 <Route index element={<MyBlogs />} />
                 <Route path="my-bookmarks" element={<MyBookmarks />} />
                 <Route path="bio" element={<Edit />} />
-
+                <Route path="saved-tarining/:userId" element={<SavedTraining />} />
                 <Route path="orders-history" element={<OrderHistory />} />
               </Route>
             ) : (
@@ -90,8 +91,9 @@ function Router() {
             )}
 
             <Route path="*" element={<NoPage />} />
-            <Route path="/chat" element={<Chat />}>
-              <Route path="/chat/:userId" element={<Conversation />} />
+            <Route path="chat-box" element={<Chat />}>
+              <Route path="user/:userId" element={<Conversation />} />
+              <Route path="group/:groupId" element={<Conversation />} />
             </Route>
             <Route path="training" element={<TrainingPage />} />
             <Route path="mentor" element={<MentorPage />} />

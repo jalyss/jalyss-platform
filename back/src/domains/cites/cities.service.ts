@@ -21,6 +21,9 @@ export class CitiesService {
       where:{countryId}
     });
   }
+  findAllCitites() {
+    return this.prisma.city.findMany();
+  }
 
   async findOne(id: string) {
     return await this.prisma.city.findFirst({

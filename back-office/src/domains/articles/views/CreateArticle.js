@@ -33,7 +33,7 @@ function CreateArticle() {
   const [article, setArticle] = useState({});
   const [cover, setCover] = useState(null);
   const [progress, setProgress] = useState(null);
-  
+
   const authorStore = useSelector((state) => state.author);
   const articleTypeStore = useSelector((state) => state.articleType);
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
@@ -83,7 +83,7 @@ function CreateArticle() {
     setCover(file);
   };
 
-    return (
+  return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Add Article</h2>
       <form className="checkout-form" onSubmit={submitCreate}>
@@ -167,7 +167,7 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm ={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -179,7 +179,20 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+             
+              <Grid item xs={12} sm ={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                
+                  name="shortDescriptionAr"
+                  label="Short Description in arabic"
+                  rows={4}
+                  value={article?.shortDescriptionAr || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm ={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -191,13 +204,42 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
+              <Grid item xs={12} sm ={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                  
+                  name="longDescriptionAr"
+                  label="Long Description in Arabic "
+                  rows={4}
+                  value={article?.longDescriptionAr || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required >
+                <FormControl fullWidth required>
+                  <InputLabel id="type">Type</InputLabel>
+                  <Select
+                    labelId="type"
+                    name="typeId"
+                    value={article?.typeId || ""}
+                    onChange={handleChange}
+                  >
+                    
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {articleTypeStore.articleTypes.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth required>
                   <InputLabel id="category">Category</InputLabel>
                   <Select
-                 
-                
-                   
+                  variant="outlined"
                     labelId="category"
                     name="categoryId"
                     value={article?.categoryId || ""}
@@ -216,8 +258,6 @@ function CreateArticle() {
                 <FormControl fullWidth required>
                   <InputLabel id="publishingHouse">Publishing House</InputLabel>
                   <Select
-                  
-                 
                     labelId="publishingHouse"
                     name="publishingHouseId"
                     value={article?.publishingHouseId || ""}
@@ -234,53 +274,12 @@ function CreateArticle() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth required>
-                  <InputLabel id="type">Type</InputLabel>
-                  <Select
-                  
-                 
-                    labelId="type"
-                    name="typeId"
-                    value={article?.typeId || ""}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {articleTypeStore.articleTypes.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="branch">Branch</InputLabel>
-                  <Select
-                  
-                  
-                    labelId="branch"
-                    name="branchId"
-                    value={article?.ArticleByBranch?.branchId || ""}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {branchStore.branches.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth required>
                   <InputLabel id="author">Author</InputLabel>
                   <Select
-                  
-                  
                     labelId="author"
                     name="authorIds"
-                    value={article?.ArticleByAuthor?.authorId || ""}
+                    multiple
+                    value={article?.authorIds || []}
                     onChange={handleChange}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
@@ -295,9 +294,7 @@ function CreateArticle() {
             </Grid>
           </div>
         </div>
-        {progress && (
-          <ProgressBar now={progress} label={`${progress}%`} />
-        )}
+        {progress && <ProgressBar now={progress} label={`${progress}%`} />}
         <div className="w-100 d-flex justify-content-center">
           <Button
             type="submit"

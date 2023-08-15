@@ -25,13 +25,13 @@ import { UpdateArticleByBranchDto } from './dto/update-article.ByBranch.dto';
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) { }
 
-  @Post(':branchId')
+  @Post()
   create(
     @Body() createArticleDto: CreateArticleDto,
-    @Param('branchId') branchId: string,
+    
 
   ) {
-    return this.articleService.create(createArticleDto, branchId);
+    return this.articleService.create(createArticleDto);
   }
 
 

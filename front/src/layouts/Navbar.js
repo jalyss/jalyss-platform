@@ -130,7 +130,7 @@ function Header() {
 
                     {authStore.me && (
                       <div>
-                        <IconButton href="/chat">
+                        <IconButton href="/chat-box">
                           <ChatCircleDots size={32} color="#ccaa00" />
                         </IconButton>
                       </div>
@@ -148,7 +148,7 @@ function Header() {
                             <img
                               src={me.avatar.path}
                               alt="avatar"
-                              style={{objectFit:"cover"}}
+                              style={{ objectFit: "cover" }}
                               className="rounded-circle sm avatar-img"
                             />
                           ) : (

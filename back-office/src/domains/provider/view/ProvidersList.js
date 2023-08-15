@@ -11,9 +11,10 @@ import Modal from "../../../components/Commun/Modal";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+
+
 function ProvidersList() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState(null);
   const [basicModal, setBasicModal] = useState(false);
   const providerStore = useSelector((state) => state.provider);
   const dispatch = useDispatch();
@@ -26,15 +27,18 @@ function ProvidersList() {
     setBasicModal(!basicModal);
   };
 
-  const handleEditClick = (id) => {
-    navigate(`edit/${id}`);
-  };
+  
 
-  const handleDeleteProviderClick = (id) => {
-    const updatedRows = rows.filter((row) => row.id !== id);
-    setRows(updatedRows);
-    showSuccessToast("Provider has been deleted");
-    toggleShow();
+  const handleDeleteProviderClick = () => {
+   
+    dispatch(removeProvider(selectedProviderId)).then(res => {
+      if (res.error) {
+        showErrorToast(res.error.message)
+      } else {
+        showSuccessToast('Provider has been deleted')
+        toggleShow()
+      }
+    }) 
   };
 
   useEffect(() => {
@@ -122,7 +126,7 @@ function ProvidersList() {
             icon={<AiFillEdit />}
             label="Edit"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
+            onClick={() => navigate(`editProvider/${id}`)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -177,7 +181,7 @@ function ProvidersList() {
             basicModal={basicModal}
             ofDelete={true}
             toggleShow={toggleShow}
-            confirm={() => handleDeleteProviderClick(selectedProviderId)}
+            confirm={() => handleDeleteProviderClick()}
           />
         </div>
       </div>

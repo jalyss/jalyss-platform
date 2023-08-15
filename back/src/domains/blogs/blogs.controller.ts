@@ -46,6 +46,11 @@ export class BlogsController {
     return this.blogsService.findOne(confirm);
   }
 
+  @Get('confirmed')
+  findAllConfirmedBlogs() {
+    return this.blogsService.findAllConfirmedBlogs();
+  }
+
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Patch(':id')

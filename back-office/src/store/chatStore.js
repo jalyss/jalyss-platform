@@ -139,7 +139,7 @@ export const chatSlice = createSlice({
       count: 0,
     },
 
-    AllchatRooms: {
+    allChatRooms: {
       items: [],
       count: 0,
     },
@@ -162,7 +162,7 @@ export const chatSlice = createSlice({
       state.chat = action.payload;
     });
     builder.addCase(findAllRooms.fulfilled, (state, action) => {
-      state.AllchatRooms.items = action.payload;
+      state.allChatRooms.items = action.payload;
     });
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
       state.messagess.items = action.payload;

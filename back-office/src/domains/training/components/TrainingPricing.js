@@ -20,7 +20,7 @@ const TrainingPricing = ({ session, fn, header, readOnly }) => {
           <div className="text-center" key={i}>
             <div className="bg-white p-3 rounded-lg shadow">
               <h1 className="h6 text-uppercase font-weight-bold mb-4">
-                {tarif.title}
+                {tarif.titleEn}
               </h1>
               <h2 className="h1 font-wieght-bold">${tarif.price}</h2>
               <div
@@ -54,7 +54,7 @@ const TrainingPricing = ({ session, fn, header, readOnly }) => {
                       ) : (
                         <FaTimes color="gray" />
                       )}{" "}
-                      {feature?.label || feature?.feature?.label}
+                      {feature?.labelEn || feature?.feature?.labelEn}
                     </li>
                   ));
                 })()}

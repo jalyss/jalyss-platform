@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TrainingBookingService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
   async create(dto: CreateTrainingBookingDto, userId: string) {
     const session = await this.prisma.session.findFirst({
       where: { tarifs: { some: { id: dto.sessionTarifId } } },
@@ -35,12 +35,18 @@ export class TrainingBookingService {
     return await this.prisma.trainingBooking.findMany({
       include: {
         user: true,
-        sessiontarif: { include: { session: true } },
+        sessiontarif: { include: { session: {
+          include:
+          {
+            category: true
+            , cover: true,
+          }
+        } } },
       },
     });
   }
 
-  async findAllBySession(sessionId:string) {
+  async findAllBySession(sessionId: string) {
     return await this.prisma.trainingBooking.findMany({
       where: {
         sessiontarif: {
@@ -49,15 +55,62 @@ export class TrainingBookingService {
           }
         }
       },
-      include:{user:{include:{avatar:true,client:true}},sessiontarif:true}
+      include: { user: { include: { avatar: true, client: true } }, sessiontarif: true }
     });
   }
-  
+
+   async findAllByuser(userId: string) {
+     return await this.prisma.trainingBooking.findMany({
+       where: {
+        user:{id:userId}
+       },
+         include:
+
+        {
+          user:{
+            include: {
+          avatar: true,
+          client: true,
+        }
+        },
+      sessiontarif:
+      {
+        include:
+        {
+          session: {
+            include:
+            {
+              category: true
+              , cover: true,
+            }
+          } 
+        }
+      }
+    }
+     });
+   }
+
 
   async findOne(id: string) {
     return await this.prisma.trainingBooking.findUnique({
       where: { id },
-      include:{user:{include:{avatar:true,client:true},}}
+      include: {
+        user: {
+          include:
+          {
+            avatar: true,
+            client: true
+          },
+        },
+        sessiontarif:
+        {
+          include:
+          {
+            session:
+            true
+          }
+        }
+      }
     });
   }
 

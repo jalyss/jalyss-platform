@@ -28,8 +28,8 @@ const Courses = () => {
   const [addcours, setAddcours] = useState({});
   const [editModal, setEditModal] = useState(false);
   const [editRowId, setEditRowId] = useState("");
-  const [editedTitle, setEditedTitle] = useState(false);
-  const [editedContent, setEditedContent] = useState(false);
+  const [lecture, setLecture] = useState(false);
+  
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,8 +53,8 @@ const Courses = () => {
       let aux = coursStore.map((e) => {
         return {
           ...e,
-          title: e.title,
-          content: e.content,
+          title: e.titleEn,
+          content: e.contentEn,
           createdAt: e.createdAt.slice(0, 10),
         };
       });
@@ -84,17 +84,33 @@ const Courses = () => {
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setContent((lecture) => ({ ...lecture, [name]: value }));
+  };
 
   const columns = [
     {
-      field: "title",
-      headerName: "Title",
+      field: "titleEn",
+      headerName: "TitleEn",
       width: 230,
       editable: false,
     },
     {
-      field: "content",
-      headerName: "Content",
+      field: "titleAr",
+      headerName: "TitleAr",
+      width: 230,
+      editable: false,
+    },
+    {
+      field: "contentEn",
+      headerName: "ContentEn",
+      width: 230,
+      editable: false,
+    },
+    {
+      field: "contentAr",
+      headerName: "ContentAr",
       width: 230,
       editable: false,
     },

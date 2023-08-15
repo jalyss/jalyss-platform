@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-
 import { BranchesService } from 'src/domains/branches/branches.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -16,7 +15,7 @@ export class ArticleService {
     private readonly branchService: BranchesService,
   ) {}
 
-  async create(dto: CreateArticleDto, branchId: string) {
+  async create(dto: CreateArticleDto) {
     const { authorIds, ...rest } = dto;
     return await this.prisma.article.create({
       data: {
@@ -50,12 +49,13 @@ export class ArticleService {
   findArticleTitleAndId() {
     return this.prisma.article.findMany({
       select: {
-        id: true,
         title: true,
+        ArticlesByBranch: {
+          select: { id: true },
+        },
       },
     });
   }
-  
 
   async findAllByBranch(branchId: string, filters: FilterArticle) {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
@@ -151,6 +151,7 @@ export class ArticleService {
         },
       });
     }
+    
     const articlesByBranch = await this.prisma.articlesByBranch.findMany({
       where: {
         ...insideWhere,
@@ -226,18 +227,24 @@ export class ArticleService {
       rating: Math.floor(rating[0]._sum.rate / rating[0]._count.rate),
     };
   }
+
+
   async findOne(id: string) {
     return await this.prisma.article.findFirst({
       where: {
         id,
       },
-
-      include: { category: true, publishingHouse: true, type: true,ArticlesByBranch:true },
+      include: {
+        category:true,
+        publishingHouse:true,
+        type:true,
+        ArticlesByBranch:true,
+      },
     });
   }
 
-  update(id: string, dto: UpdateArticleDto) {
-    return `This action updates a #${id} article`;
+  async update(id: string, dto: UpdateArticleDto) {
+    return await this.prisma.article.update({ where: { id }, data: dto });
   }
   async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
     return await this.prisma.articlesByBranch.update({
@@ -246,8 +253,8 @@ export class ArticleService {
     });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} article`;
+  async remove(id: string) {
+    return await this.prisma.article.delete({ where: { id } });
   }
 
   //Rating services

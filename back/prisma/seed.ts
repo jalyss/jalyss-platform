@@ -1633,34 +1633,38 @@ async function main() {
   //   );
   // }
 
-  let data = [
-    "Understanding React's component-based architecture",
-    'Working with JSX syntax',
-    'Managing state and props',
-    'Handling events in React',
-  ];
-  let whatYouWillLearnIds = [];
-  for (let i = 0; i < data.length; i++) {
-    const whatYouWillLearn = await prisma.whatYouWillLearn.create({
-      data: {
-        content: data[i],
-      },
-    });
-    whatYouWillLearnIds.push(whatYouWillLearn.id);
-  }
+  // let data = [
+  //   "Understanding React's component-based architecture",
+  //   'Working with JSX syntax',
+  //   'Managing state and props',
+  //   'Handling events in React',
+  // ];
+  // let whatYouWillLearnIds = [];
+  // for (let i = 0; i < data.length; i++) {
+  //   const whatYouWillLearn = await prisma.whatYouWillLearn.create({
+  //     data: {
+  //       contentEn: data[i],
+  //       contentAr: data[i],
+
+  //     },
+  //   });
+  //   whatYouWillLearnIds.push(whatYouWillLearn.id);
+  // }
 
   // create session type
   // let sessionTypeIds = [];
-  let titles = ['online', 'surSite'];
-  for (let i = 0; i < 2; i++) {
-    let sessionType = await prisma.sessionType.create({
-      data: {
-        title: titles[Math.floor(Math.random() * titles.length)],
-      },
-    });
+  // let titles = ['online', 'surSite'];
+  // for (let i = 0; i < 2; i++) {
+  //   let sessionType = await prisma.sessionType.create({
+  //     data: {
+  //       titleEn: titles[Math.floor(Math.random() * titles.length)],
+  //       titleAr: titles[Math.floor(Math.random() * titles.length)],
+
+  //     },
+  //   });
 
     // sessionTypeIds.push(sessionType.id);
-  }
+  // }
 
   // create cover session
   // let mediaSessionIds = [];
@@ -1920,26 +1924,28 @@ async function main() {
   // });
 
   // let preRequireIds = [];
-  let prerequis = [
-    'front-end skills',
-    'back-end',
-    'challenger',
-    'SQL experience',
-    'pythons killer',
-    'Get up and move',
-    'Get enough sleep',
-    'eat the rigth food',
-    'find other steams of income',
-    'track expenses',
-    'live in harmony',
-  ];
-  for (let i = 0; i < prerequis.length; i++) {
-    let sessionPrerequis = await prisma.prerequire.create({
-      data: {
-        content: prerequis[i],
-      },
-    });
-  }
+  // let prerequis = [
+  //   'front-end skills',
+  //   'back-end',
+  //   'challenger',
+  //   'SQL experience',
+  //   'pythons killer',
+  //   'Get up and move',
+  //   'Get enough sleep',
+  //   'eat the rigth food',
+  //   'find other steams of income',
+  //   'track expenses',
+  //   'live in harmony',
+  // ];
+  // for (let i = 0; i < prerequis.length; i++) {
+  //   let sessionPrerequis = await prisma.prerequire.create({
+  //     data: {
+  //       contentEn: prerequis[Math.floor(Math.random() * prerequis.length)],
+  //       contentAr: prerequis[Math.floor(Math.random() * prerequis.length)],
+
+  //     },
+  //   });
+  // }
   // preRequireIds.push(sessionPrerequis.id);
 
   // let w = sessionIds[Math.floor(Math.random() * sessionIds.length)];
@@ -1990,51 +1996,53 @@ async function main() {
   // }
 
   // create dummy FrequenclyAsked
-  let questions = [
-    'How to Enroll This Online Courses?',
-    'Where It is hidden by default, until the collapse?',
-    'Where It is hidden by default, until the collapse?',
-    'How to Enline Courses?',
-    'Wherefault, until the collapse?',
-    'How It is hidden by default, until the collapse?',
-  ];
-  let answer = [
-    'Choose a course: Start by identifying the online course you want to enroll in. Consider factors such as the subject, duration, cost, and the reputation of the course provider.',
-    'Research the course provider: Look for reviews or information about the institution or platform offering the course. Ensure that it is a legitimate and reputable source of online education',
-    'Visit the course website: Go to the website of the course provider to gather more details about the course. Look for information regarding enrollment, prerequisites, course content, and any specific requirements',
-    'Review the course requirements: Check if there are any prerequisites or specific requirements for enrolling in the course. Ensure that you meet these requirements or are willing to fulfill them before proceeding',
-    'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a "Sign Up" or "Create an Account" option on the website and provide the necessary information to register',
-    'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a Sign Up or "Create an Account" option on the website and provide the necessary information to register',
-  ];
-  for (let i = 0; i < 6; i++) {
-    let Freq = await prisma.frequentilyQuestion.create({
-      data: {
-        question: questions[i],
-        answer: answer[i],
-      },
-    });
-  }
+  // let questions = [
+  //   'How to Enroll This Online Courses?',
+  //   'Where It is hidden by default, until the collapse?',
+  //   'Where It is hidden by default, until the collapse?',
+  //   'How to Enline Courses?',
+  //   'Wherefault, until the collapse?',
+  //   'How It is hidden by default, until the collapse?',
+  // ];
+  // let answer = [
+  //   'Choose a course: Start by identifying the online course you want to enroll in. Consider factors such as the subject, duration, cost, and the reputation of the course provider.',
+  //   'Research the course provider: Look for reviews or information about the institution or platform offering the course. Ensure that it is a legitimate and reputable source of online education',
+  //   'Visit the course website: Go to the website of the course provider to gather more details about the course. Look for information regarding enrollment, prerequisites, course content, and any specific requirements',
+  //   'Review the course requirements: Check if there are any prerequisites or specific requirements for enrolling in the course. Ensure that you meet these requirements or are willing to fulfill them before proceeding',
+  //   'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a "Sign Up" or "Create an Account" option on the website and provide the necessary information to register',
+  //   'Create an account: Many online course platforms require you to create an account before you can enroll. Look for a Sign Up or "Create an Account" option on the website and provide the necessary information to register',
+  // ];
+  // for (let i = 0; i < 6; i++) {
+  //   let Freq = await prisma.frequentilyQuestion.create({
+  //     data: {
+  //       question: questions[i],
+  //       answer: answer[i],
+  //     },
+  //   });
+  // }
 
   // create feedbacks
 
-  const label = [
-    '5 online courses gratuit',
-    'free Book',
-    'Certificates of Participation',
-    'Access to Premium or VIP Content',
-    'Gift Cards or Vouchers',
-    'Exclusive Content or Resources',
-    'Discounts or Coupons',
-  ];
+  // const label = [
+  //   '5 online courses gratuit',
+  //   'free Book',
+  //   'Certificates of Participation',
+  //   'Access to Premium or VIP Content',
+  //   'Gift Cards or Vouchers',
+  //   'Exclusive Content or Resources',
+  //   'Discounts or Coupons',
+  // ];
 
-  for (let i = 0; i < 7; i++) {
-    const features = await prisma.feature.create({
-      data: {
-        label: label[i],
-      },
-    });
+  // for (let i = 0; i < 7; i++) {
+  //   const features = await prisma.feature.create({
+  //     data: {
+  //       labelEn: label[i],
+  //       labelAr: label[i],
+
+  //     },
+  //   });
     // featuresIds.push(features.id);
-  }
+  // }
   // chatSeed(prisma, usersIds);
   // console.log(users);
   // console.log(articles);

@@ -32,6 +32,10 @@ import { join } from 'path';
 // import { FrontendMiddleware } from './middlewere/front.middlewere';
 
 import { ProvidersModule } from './domains/providers/providers.module';
+import { FunctionalAreasModule } from './domains/functional-areas/functional-areas.module';
+import { JobTitlesModule } from './domains/job-titles/job-titles.module';
+import { EducationLevelsModule } from './domains/education-levels/education-levels.module';
+
 
 
 @Module({
@@ -67,6 +71,13 @@ import { ProvidersModule } from './domains/providers/providers.module';
     
    
     ProvidersModule,
+   
+    FunctionalAreasModule,
+   
+    JobTitlesModule,
+   
+    EducationLevelsModule,
+   
    
     
   ],

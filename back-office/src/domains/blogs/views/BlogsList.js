@@ -34,8 +34,8 @@ function BlogsList() {
   ];
   const buttonStyle = {
     backgroundColor: colorReference,
-    color: "white",
-    borderRadius: "5px",
+    color: 'white',
+    borderRadius: '5px',
   };
   const columns = [
     {
@@ -66,11 +66,11 @@ function BlogsList() {
       editable: false,
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
       width: 150,
-      cellClassName: "actions",
+      cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
@@ -126,9 +126,7 @@ function BlogsList() {
   return (
     <div>
       <div className="container">
-        <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>
-          List of people who create blogs
-        </h2>
+        <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List of people who create blogs</h2>
         <hr></hr>
 
         <AutoCompleteFilter
@@ -141,7 +139,15 @@ function BlogsList() {
           multiple
         />
 
-        <Box sx={{ height: 400, width: "100%" }}>
+        <AutoCompleteFilter
+          data={situations}
+          valueOptionName="value"
+          labelOptionName="label"
+          label="Filter by situation"
+          onChange={(selectedValue) => setSelectedSituation(selectedValue?.value)}
+        />
+
+        <Box sx={{ height: 400, width: '100%' }}>
           <DataGrid
             rows={rows}
             columns={columns}
