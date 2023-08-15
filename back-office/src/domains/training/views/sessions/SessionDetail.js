@@ -764,7 +764,7 @@ const SessionDetails = () => {
                 <TableCell className="fw-bold">Previous Session:</TableCell>
                   <TableCell>
                     {readOnly ? (
-                      <span>{session?.previousSesion.titleEn}</span>
+                      <span>{session?.previousSesion?.titleEn}</span>
                     ) : (
                       <select
                         value={previousSessionId}
