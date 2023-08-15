@@ -101,8 +101,8 @@ const ChatBox = () => {
 
   useEffect(() => {
     if (myId) {
-      axios
-        .get(`${config.API_ENDPOINT}/chatRoom/by-user/${myId}`)
+      axios.get(`${config.API_ENDPOINT}/chatRoom/by-user/${myId}`)
+        
         .then((response) => {
           const data = response.data;
           setChatRoomList(data);
