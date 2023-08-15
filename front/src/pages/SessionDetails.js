@@ -55,6 +55,7 @@ function SessionDetails() {
   const displayColumn2 = showMore ? column2 : column2?.slice(0, 5);
   const currentDate = new Date();
   const renderedCoaches = new Set();
+  
   return (
     <div className="container">
       <div className="goBackLink mt-2" onClick={() => navigate(-1)}>
@@ -103,7 +104,7 @@ function SessionDetails() {
           <KeyValueStyled
             label="Type"
             value={seletedSession?.sessionType
-              ?.map((elem) => elem.sessiontype.title)
+              ?.map((elem) => elem.sessiontype.titleEn)
               .join(", ")}
           />
           <KeyValueStyled
@@ -184,7 +185,7 @@ function SessionDetails() {
                   {displayColumn1?.map((topic, index) => (
                     <div key={index} className="d-flex gap-2 mt-2">
                       <span>&#10003; </span>
-                      <div className="">{topic.WhatYouWillLearn.content}</div>
+                      <div className="">{topic.WhatYouWillLearn.contentEn}</div>
                       <br />
                     </div>
                   ))}
@@ -193,7 +194,7 @@ function SessionDetails() {
                   {displayColumn2?.map((topic, index) => (
                     <div key={index} className="d-flex gap-2 mt-2">
                       <span>&#10003; </span>
-                      <div>{topic.WhatYouWillLearn.content}</div>
+                      <div>{topic.WhatYouWillLearn.contentEn}</div>
                       <br />
                     </div>
                   ))}
@@ -236,7 +237,7 @@ function SessionDetails() {
               {session?.sessionHasPrerequire.map((info, index) => (
                 <p key={index}>
                   <span style={{ fontSize: "1.2rem" }}>&#8226;</span>{" "}
-                  {info.prerequire.content}
+                  {info.prerequire.contentEn}
                 </p>
               ))}
             </MDBCardBody>

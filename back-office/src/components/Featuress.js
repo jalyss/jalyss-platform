@@ -109,8 +109,14 @@ console.log("lllllllll",label);
 
   const columns = [
     {
-      field: "label",
-      headerName: "Label",
+      field: "labelEn",
+      headerName: "LabelEn",
+      width: 330,
+      editable: false,
+    },
+    {
+      field: "labelAr",
+      headerName: "LabelAr",
       width: 330,
       editable: false,
     },

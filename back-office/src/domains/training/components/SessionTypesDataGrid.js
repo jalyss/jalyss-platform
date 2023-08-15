@@ -55,6 +55,8 @@ console.log("types",types);
         return {
           ...e,
           titleEn: e.titleEn,
+          titleAr: e.titleAr,
+
           createdAt:formattedCreatAt,
         };
       });
@@ -115,7 +117,13 @@ console.log("types",types);
   const columns = [
     {
       field: "titleEn",
-      headerName: "Title",
+      headerName: "TitleEn",
+      width: 330,
+      editable: false,
+    },
+    {
+      field: "titleAr",
+      headerName: "TitleAr",
       width: 330,
       editable: false,
     },

@@ -104,8 +104,14 @@ function Gainss() {
   }
   const columns = [
     {
-      field: "content",
-      headerName: "Content",
+      field: "contentEn",
+      headerName: "ContentEn",
+      width: 330,
+      editable: false,
+    },
+    {
+      field: "contentAr",
+      headerName: "ContentAr",
       width: 330,
       editable: false,
     },

@@ -751,7 +751,7 @@ const AddSession = () => {
                 }}
               />
               <StyledInput
-                value={tarif?.price || ""}
+                value={tarif?.price !== undefined ? tarif.price : 0}
                 label="Price"
                 type="number"
                 required

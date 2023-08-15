@@ -106,7 +106,7 @@ const SessionDetails = () => {
       width: 250,
       editable: false,
       valueGetter: (params) => {
-        return params.row?.title ? params.row.titleEn : params.row.lectures.titleEn;
+        return params.row?.titleEn ? params.row.titleEn : params.row.lectures.titleEn;
       },
     },
     {
@@ -115,7 +115,7 @@ const SessionDetails = () => {
       width: 120,
       sortable: false,
       valueGetter: (params) => {
-        return params.row?.startAt.slice(0, 10);
+        return params.row?.startAt;
       },
     },
     {
@@ -124,7 +124,7 @@ const SessionDetails = () => {
       width: 120,
       sortable: false,
       valueGetter: (params) => {
-        return params.row?.endAt.slice(0, 10);
+        return params.row?.endAt;
       },
     },
     !readOnly && {
@@ -277,8 +277,8 @@ const SessionDetails = () => {
     }
     let aux = {
       id: addSession.id,
-      title: addSession.title,
-      description: addSession.description,
+      titleEn: addSession.titleEn,
+      descriptionEn: addSession.descriptionEn,
       tarifs: addSession.tarifs,
       lectures: addSession.lectures,
     };
@@ -318,6 +318,7 @@ const SessionDetails = () => {
         showErrorToast(res.error.message);
       }
     });
+    console.log("aux",aux);
   };
   const handleAddSessionMedia = async () => {
     if (sessionMedias !== null) {
@@ -470,7 +471,7 @@ const SessionDetails = () => {
                       <input
                         required
                         type="text"
-                        placeholder="Enter title"
+                        placeholder="Enter the title en english"
                         name="titleEn"
                         value={addSession?.titleEn}
                         onChange={handleAddSessionChange}

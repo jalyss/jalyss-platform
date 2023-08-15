@@ -91,14 +91,26 @@ const Courses = () => {
 
   const columns = [
     {
-      field: "title",
-      headerName: "Title",
+      field: "titleEn",
+      headerName: "TitleEn",
       width: 230,
       editable: false,
     },
     {
-      field: "content",
-      headerName: "Content",
+      field: "titleAr",
+      headerName: "TitleAr",
+      width: 230,
+      editable: false,
+    },
+    {
+      field: "contentEn",
+      headerName: "ContentEn",
+      width: 230,
+      editable: false,
+    },
+    {
+      field: "contentAr",
+      headerName: "ContentAr",
       width: 230,
       editable: false,
     },

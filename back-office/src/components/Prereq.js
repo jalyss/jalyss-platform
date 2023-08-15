@@ -47,7 +47,9 @@ console.log("cont",content);
       let aux = prerequires?.items.map((e) => {
         return {
           ...e,
-          content: e.contentEn,
+          contentEn: e.contentEn,
+          contentAr: e.contentAr,
+
           createdAt: e.createdAt.slice(0, 10),
         };
       });
@@ -119,8 +121,14 @@ const handleChange=(e)=>{
 }
   const columns = [
     {
-      field: "content",
-      headerName: "Content",
+      field: "contentEn",
+      headerName: "ContentEn",
+      width: 330,
+      editable: false,
+    },
+    {
+      field: "contentAr",
+      headerName: "ContentAr",
       width: 330,
       editable: false,
     },

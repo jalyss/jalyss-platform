@@ -30,7 +30,7 @@ import {
   MDBCol,
 } from "mdb-react-ui-kit";
 import { fetchCoachs } from "../../../../store/coach";
-import { editUser, fetchUsers } from "../../../../store/user";
+import { editUser, editUserCoach, fetchUsers } from "../../../../store/user";
 
 import Modal from "../../../../components/Commun/Modal";
 import { editReq } from "../../../../store/sessions";
@@ -103,7 +103,7 @@ const [coachId,setCoachId]=useState(null)
   };
   const handleSave = () => {
     const args = { id: coachId, isCoach: true };
-    dispatch(editUser(args)).then((res) => {
+    dispatch(editUserCoach(args)).then((res) => {
       if (res.error) {
         showErrorToast(res.error.message);
       } else {
