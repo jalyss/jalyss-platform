@@ -107,6 +107,8 @@ const ChatBox = () => {
           const data = response.data;
           setChatRoomList(data);
         })
+
+        // fetch rooms by user
         .catch((err) => console.log(err));
     }
   }, [myId]);
