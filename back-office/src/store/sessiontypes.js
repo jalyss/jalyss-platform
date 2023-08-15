@@ -32,7 +32,7 @@ export const deleteSessionType = createAsyncThunk(
 export const editSessionType = createAsyncThunk(
   "types/editType",
   async (args, { dispatch }) => {
-    const { id, title } = args;
+    const { id, ...body } = args;
     console.log("argsss", args);
     let token = JSON.parse(localStorage.getItem("token"));
     const configs = {
@@ -43,7 +43,7 @@ export const editSessionType = createAsyncThunk(
 
     const response = await axios.patch(
       `${config.API_ENDPOINT}/sessionType/${id}`,
-      { title: title },
+      body,
       configs
     );
 

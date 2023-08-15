@@ -32,7 +32,7 @@ function TarifSection({ setTarif, tarif, edit }) {
                   className="d-flex gap-3 justify-content-between align-items-center"
                 >
                   <div style={{ width: 200 }}>
-                    {elem.label || elem.feature.label}
+                    {elem?.labelEn || elem?.feature?.labelEn}
                   </div>
                   <div style={{ width: 100 }} className="text-center">
                     <input
