@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
+import { useNavigate,useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { fetchService } from "../../store/space";
+import { createBooking } from "../../store/booking";
+
 import dayjs from "dayjs";
 import { updateFormData } from "../forms/reducers";
 import {
   Grid,
-  FormControlLabel,
   Button,
   FormLabel,
   FormControl,
@@ -15,40 +19,49 @@ import {
 
 
 const SpaceReservation = () => {
-  // const [value, setValue] = useState(dayjs("2022-04-17"));
 
   const dispatch = useDispatch();
   const serviceStore = useSelector((state) => state.service);
   const { service } = serviceStore;
+  const { tarifId } = useParams();
   const name = service?.name;
+
+console.log(tarifId,'ahla bel tarif');
 
   const [firstName, setFirstName ] = useState("");
   const [lastName, setLastName ] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [companyName, setCompanyName ] = useState("");
   const [email, setEmail ] = useState("");
-  const [selectedDate, setSelectedDate ] = useState(dayjs(""));
+  const [date, setDate ] = useState(dayjs());
   const [startTime,setStartTime ] = useState("");
   const [endTime, setEndTime] = useState("");
   const [freeSpace, setFreeSpace ] = useState("");
-  const [tarifId, setTarifId ] = useState("");
 
 
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleFormChange = (event) => {
-    const { name, value } = event.target;
-
-    dispatch(updateFormData({ [name]: value }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    console.log("Form submitted");
-    dispatch(updateFormData());
+    let body = {
+      firstName,
+      lastName,
+      phoneNumber,
+      companyName,
+      email,
+      date,
+      startTime,
+      endTime,
+      freeSpace,
+      tarifId,
+    };
+    dispatch(createBooking(body)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Reservation has been created");
+        navigate(-1);
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
   };
 
   useEffect(() => {
@@ -79,8 +92,7 @@ const SpaceReservation = () => {
             <input
               type="text"
               name="firstName"
-              value={updateFormData.firstName || ""}
-              onChange={handleFormChange}
+              onChange={(e)=>setFirstName(e.target.value)}
               required
             />
           </FormControl>
@@ -91,8 +103,7 @@ const SpaceReservation = () => {
             <input
               type="text"
               name="lastName"
-              value={updateFormData.lastName || ""}
-              onChange={handleFormChange}
+              onChange={(e)=>setLastName(e.target.value)}
               required
             />
           </FormControl>
@@ -103,8 +114,7 @@ const SpaceReservation = () => {
             <input
               type="tel"
               name="phoneNumber"
-              value={updateFormData.phoneNumber || ""}
-              onChange={handleFormChange}
+              onChange={(e)=>setPhoneNumber(e.target.value)}
               required
             />
           </FormControl>
@@ -115,8 +125,7 @@ const SpaceReservation = () => {
             <input
               type="text"
               name="companyName"
-              value={updateFormData.companyName || ""}
-              onChange={handleFormChange}
+              onChange={(e)=>setCompanyName(e.target.value)}
             />
           </FormControl>
         </Grid>
@@ -126,8 +135,7 @@ const SpaceReservation = () => {
             <input
               type="email"
               name="email"
-              value={updateFormData.email || ""}
-              onChange={handleFormChange}
+              onChange={(e)=>setEmail(e.target.value)}
               required
             />
           </FormControl>
@@ -137,8 +145,7 @@ const SpaceReservation = () => {
           <input
             type="date"
             name="selectedDate"
-            value={updateFormData.selectedDate || ""}
-            onChange={handleFormChange}
+            onChange={(e)=>setDate(e.target.value)}
             required
           />
         </Grid>
@@ -149,8 +156,7 @@ const SpaceReservation = () => {
             <input
               type="time"
               name="startTime"
-              value={updateFormData.startTime || ""}
-              onChange={handleFormChange}
+              onChange={(e)=>setStartTime(e.target.value)}
               required
             />
           </div>
@@ -159,8 +165,7 @@ const SpaceReservation = () => {
             <input
               type="time"
               name="endTime"
-              value={updateFormData.endTime || ""}
-              onChange={handleFormChange}
+              onChange={(e)=>setEndTime(e.target.value)}
               required
             />
           </div>
@@ -172,7 +177,6 @@ const SpaceReservation = () => {
             required
             id="freeSpace"
             name="freeSpace"
-            label="Free Space Needed (in square meters)"
             fullWidth
             autoComplete="off"
             variant="outlined"
@@ -181,7 +185,7 @@ const SpaceReservation = () => {
             multiline
             rows={4}
             value={updateFormData.freeSpace}
-            onChange={handleFormChange}
+            onChange={(e)=>setFreeSpace(e.target.value)}
           />
           </div>
         </Grid>
@@ -191,7 +195,6 @@ const SpaceReservation = () => {
             color="primary"
             type="submit"
             fullWidth
-            disabled={!updateFormData.agreeToTerms}
           >
             Submit
           </Button>
