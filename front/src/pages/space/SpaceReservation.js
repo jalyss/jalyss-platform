@@ -5,8 +5,6 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { fetchService } from "../../store/space";
 import { createBooking } from "../../store/booking";
-
-import dayjs from "dayjs";
 import { updateFormData } from "../forms/reducers";
 import {
   Grid,
@@ -25,6 +23,7 @@ const SpaceReservation = () => {
   const { service } = serviceStore;
   const { tarifId } = useParams();
   const name = service?.name;
+  const navigate = useNavigate();
 
 console.log(tarifId,'ahla bel tarif');
 
@@ -33,7 +32,7 @@ console.log(tarifId,'ahla bel tarif');
   const [phoneNumber, setPhoneNumber] = useState("");
   const [companyName, setCompanyName ] = useState("");
   const [email, setEmail ] = useState("");
-  const [date, setDate ] = useState(dayjs());
+  const [date, setDate ] = useState("");
   const [startTime,setStartTime ] = useState("");
   const [endTime, setEndTime] = useState("");
   const [freeSpace, setFreeSpace ] = useState("");
@@ -42,13 +41,17 @@ console.log(tarifId,'ahla bel tarif');
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const currentDate = new Date();
+    const isoFormattedDate = currentDate.toISOString();
+    
+
     let body = {
       firstName,
       lastName,
       phoneNumber,
       companyName,
       email,
-      date,
+      date:isoFormattedDate,
       startTime,
       endTime,
       freeSpace,
@@ -63,6 +66,10 @@ console.log(tarifId,'ahla bel tarif');
       }
     });
   };
+
+ 
+  
+
 
   useEffect(() => {
     dispatch(fetchService());
@@ -140,15 +147,15 @@ console.log(tarifId,'ahla bel tarif');
             />
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormLabel component="legend">Choose your day</FormLabel>
           <input
             type="date"
-            name="selectedDate"
-            onChange={(e)=>setDate(e.target.value)}
+            name="date"
+            onChange={(e)=>setDate("2023-08-16T12:34:56.789Z")}
             required
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12}>
           <label>Choose your arrival time</label>
           <div>
