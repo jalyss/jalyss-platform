@@ -10,16 +10,16 @@ import { CreateFeature } from "../../../../store/tarifSession";
 import Modal from "../../../../components/Commun/Modal";
 function Features() {
 
-  const [label, setLabel] = useState("");
+  const [label, setLabel] = useState(null);
   const [basicModal, setBasicModal] = useState(false);
 
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
-
+console.log("l",label);
   const dispatch = useDispatch();
   const addFea = () => {
-    dispatch(CreateFeature({ label }))
+    dispatch(CreateFeature(label))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -34,9 +34,15 @@ function Features() {
 
   const handleSave = () => {
     addFea();
-    setLabel("");
+    setLabel({});
     toggleShow();
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLabel((label) => ({ ...label, [name]: value }));
+  };
+
 
   return (
     <div className="mx-5">
@@ -58,15 +64,21 @@ function Features() {
         title="Add new feature"
         body={
           <div
-            className="d-flex justify-content-center align-items-center "
+            className="d-flex flex-column gap-3 justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-            value={label}
-              label="Label"
-              onChange={(e) => {
-                setLabel(e.target.value);
-              }}
+            value={label?.labelEn}
+              label="LabelEn"
+              name="labelEn"
+              onChange={handleChange}
+            />
+            <StyledInput
+            value={label?.labelAr}
+              label="LabelAr"
+              name="labelAr"
+
+              onChange={handleChange}
             />
           </div>
         }

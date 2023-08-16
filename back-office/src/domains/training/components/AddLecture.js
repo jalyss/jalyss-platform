@@ -48,8 +48,8 @@ function AddLecture({ setLecture, lecture, session, startDate, endDate }) {
           setLecture((Lecture) => ({
             ...Lecture,
             lectureId: e.target.value,
-            title: coursStore.filter((elem) => elem.id === e.target.value)[0]
-              .title,
+            titleEn: coursStore.filter((elem) => elem.id === e.target.value)[0]
+              .titleEn,
           }));
         }}
         required
@@ -63,8 +63,8 @@ function AddLecture({ setLecture, lecture, session, startDate, endDate }) {
           Choose your lecture Session
         </option>
         {coursStore.map((course, index) => (
-          <option key={index} value={course.id} name={course.title}>
-            {course.title}
+          <option key={index} value={course.id} name={course.titleEn}>
+            {course.titleEn}
           </option>
         ))}
       </select>

@@ -2,5 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateGainDto {
   @ApiProperty()
-  content: string;
+  contentEn: string;
+  @ApiProperty()
+  contentAr: string;
+
 }

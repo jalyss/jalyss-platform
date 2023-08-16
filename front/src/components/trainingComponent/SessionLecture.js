@@ -27,13 +27,13 @@ function SessionLecture({ lectures }) {
                   <li class="event" data-date={element.lectures.startAt}>
                     <div className="mb-3">
                       <span className=" rounded fs-4" style={{}}>
-                        {element.lectures.title}
+                        {element.lectures.titleEn}
                       </span>
                     </div>
 
                     <KeyValueStyled
                       label="content"
-                      value={element.lectures.content}
+                      value={element.lectures.contentEn}
                     />
                     <div className="d-flex gap-3">
                       <div className="d-flex align-items-center fw-bold">
@@ -64,7 +64,7 @@ function SessionLecture({ lectures }) {
                       label="What you will learn"
                       value={element.lectures.LectureHasWhatYouWillLearn?.map(
                         (el) => {
-                          return <div>{el.WhatYouWillLearn.content}</div>;
+                          return <div>{el.WhatYouWillLearn.contentEn}</div>;
                         }
                       )}
                     />

@@ -8,7 +8,9 @@ export class FeatureWithAvailability {
   }
 export class CreateSessionTarifDto {
   @ApiProperty()
-  title: string;
+  titleEn: string;
+  @ApiProperty()
+  titleAr: string;
 
   @ApiProperty()
   sessionId: string;

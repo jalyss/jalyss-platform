@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFeatures, editFeature, fetchFeatures } from "../store/tarifSession";
 import {
-  DataGrid,
-  GridActionsCellItem,
-  
-} from "@mui/x-data-grid";
+  deleteFeatures,
+  editFeature,
+  fetchFeatures,
+} from "../store/tarifSession";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Box } from "@mui/material";
@@ -20,38 +20,33 @@ function Featuress() {
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
-  const [editLabel, setEditLabel] = useState("");
+  const [label, setLabel] = useState(null);
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
   const [labelOfDelete, setLabelOfDelete] = useState("");
-console.log("storfeat",featuresStore);
- 
+  console.log("storfeat", featuresStore);
 
   useEffect(() => {
     if (editModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
-        setEditLabel(row.label);
+     
+        setLabel({labelEn:row.labelEn,labelAr:row.labelAr});
       }
     }
-    if (basicModal && editRowId) {
-      const row = rows.find((row) => row.id === editRowId);
-      if (row) {
-        setEditLabel(row.label);
-      }
-    }
+   
   }, [editModal, editRowId, rows]);
 
   useEffect(() => {
     dispatch(fetchFeatures());
   }, [dispatch]);
-
+console.log("lllllllll",label);
   useEffect(() => {
     if (features?.items?.length) {
       let aux = features?.items.map((e) => {
         return {
           ...e,
-          label: e.label,
+          label: e.labelEn,
           createdAt: e.createdAt.slice(0, 10),
         };
       });
@@ -89,8 +84,8 @@ console.log("storfeat",featuresStore);
   };
 
   const handleEdit = () => {
-    const label = editLabel;
-    dispatch(editFeature({ id: editRowId, label: label }))
+   
+    dispatch(editFeature({ id: editRowId, labelEn:label.labelEn , labelAr:label.labelAr }))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -103,14 +98,25 @@ console.log("storfeat",featuresStore);
       });
 
     setEditRowId("");
-    setEditLabel("");
+    setLabel({});
     toggleShow2();
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLabel((label) => ({ ...label, [name]: value }));
   };
 
   const columns = [
     {
-      field: "label",
-      headerName: "Label",
+      field: "labelEn",
+      headerName: "LabelEn",
+      width: 330,
+      editable: false,
+    },
+    {
+      field: "labelAr",
+      headerName: "LabelAr",
       width: 330,
       editable: false,
     },
@@ -169,7 +175,6 @@ console.log("storfeat",featuresStore);
             }}
             pageSizeOptions={[5]}
             disableRowSelectionOnClick
-           
           />
         </Box>
       </div>
@@ -180,9 +185,10 @@ console.log("storfeat",featuresStore);
         ofDelete={true}
         bodOfDelete={
           <div className="d-flex justify-content-center align-items-center">
-           
             {`Are you sure you want to delete `}
-            <span style={{ color: "red" ,margin:"10px"}}>{labelOfDelete}</span>
+            <span style={{ color: "red", margin: "10px" }}>
+              {labelOfDelete}
+            </span>
             {` Feature?`}
           </div>
         }
@@ -200,15 +206,20 @@ console.log("storfeat",featuresStore);
         title="Edit feature"
         body={
           <div
-            className="d-flex justify-content-center align-items-center "
+            className="d-flex flex-column gap-3 justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={editLabel}
-              label="Label"
-              onChange={(e) => {
-                setEditLabel(e.target.value);
-              }}
+              value={label?.labelEn}
+              label="LabelEn"
+              name="labelEn"
+              onChange={handleChange}
+            />
+            <StyledInput
+              value={label?.labelAr}
+              label="LabelAr"
+              name="labelAr"
+              onChange={handleChange}
             />
           </div>
         }

@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-
 export const fetchUsers = createAsyncThunk("users/users", async () => {
   const response = await axios.get(`${config.API_ENDPOINT}/users/all`);
   return response.data;
@@ -12,54 +11,81 @@ export const fetchUser = createAsyncThunk("users/user", async (id) => {
   return response.data;
 });
 
-export const createUser = createAsyncThunk("users/createUser", async (body, {dispatch  }) => {
-  let token = JSON.parse(localStorage.getItem('token'))
-  const configs = {
-    headers: {
-      Authorization: 'Bearer ' + token.Authorization
-    }
+export const createUser = createAsyncThunk(
+  "users/createUser",
+  async (body, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem("token"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+    const response = await axios.post(
+      `${config.API_ENDPOINT}/users/create`,
+      body,
+      configs
+    );
+    dispatch(fetchUsers());
+    return response.data;
   }
-  const response = await axios.post(`${config.API_ENDPOINT}/users/create`, body, configs);
-  dispatch(fetchUsers())
-  return response.data;
-});
-export const removeUser = createAsyncThunk("users/deleteUser", async (id,{dispatch}) => {
-  let token = JSON.parse(localStorage.getItem('token'))
-  const configs = {
-    headers: {
-      Authorization: 'Bearer ' + token.Authorization
-    }
+);
+export const removeUser = createAsyncThunk(
+  "users/deleteUser",
+  async (id, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem("token"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/users/${id}`,
+      configs
+    );
+    dispatch(fetchUsers());
+    return response.data;
   }
-  const response = await axios.delete(`${config.API_ENDPOINT}/users/${id}`,configs);
-  dispatch(fetchUsers())
-  return response.data;
-});
+);
 
-export const editUser = createAsyncThunk("users/editUser", async (args, { dispatch }) => {
-  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
-  const configs = {
-    headers: {
-      Authorization: 'Bearer ' + token.Authorization
-    }
+export const editUser = createAsyncThunk(
+  "users/editUser",
+  async (args, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+    const {id,...body}=args
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/users/${id}`,
+      body,
+      configs
+    );
+    dispatch(fetchUsers());
+    return response.data;
   }
-  let id=args.id
-  delete args.id
-  const response = await axios.patch(`${config.API_ENDPOINT}/users/${id}`, args,configs);
-  dispatch(fetchUsers(id))
-  return response.data;
-});
-export const editUserCoach = createAsyncThunk("users/editUserCoach", async (args, { dispatch }) => {
-  let token = JSON.parse(localStorage.getItem('tokenAdmin'))
-  const configs = {
-    headers: {
-      Authorization: 'Bearer ' + token.Authorization
-    }
+);
+export const editUserCoach = createAsyncThunk(
+  "users/editUserCoach",
+  async (args, { dispatch }) => {
+    const { id, ...body } = args;
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+
+    const response = await axios.put(
+      `${config.API_ENDPOINT}/users/isCoach/${id}`,
+      body,
+      configs
+    );
+    dispatch(fetchUsers());
+    return response.data;
   }
-  
-  const response = await axios.patch(`${config.API_ENDPOINT}/users/isCoach/${id}`, args,configs);
-  dispatch(fetchUsers())
-  return response.data;
-});
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -85,5 +111,3 @@ export const userSlice = createSlice({
   },
 });
 export default userSlice.reducer;
-
-
