@@ -2,31 +2,31 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateClientDto {
     @ApiProperty({ required: true })
-    fullNameEn: string
+    fullNameEn: string;
     @ApiProperty({ required: true })
     fullNameAr: string;
     @ApiProperty({ required: true })
     email: string;
     @ApiProperty({ required: true })
-    address: string
+    address: string;
     @ApiProperty({ required: true })
     tel: string;
     @ApiProperty({ required: true })
     accountBalance: number;
     @ApiProperty({ required: false })
-    isCoach: boolean
+    isCoach: boolean;
     @ApiProperty({ required: false })
-    avatarId: string
+    avatarId: string;
     @ApiProperty({ required: false })
-    categoryId: string
+    categoryId: string;
     @ApiProperty({ required: false })
-    educationLevelId: string
+    educationLevelId: string;
     @ApiProperty({ required: false })
-    functionalAreaId: string
+    functionalAreaId: string;
     @ApiProperty({ required: false })
-    jobTitleId: string
+    jobTitleId: string;
     @ApiProperty({ required: false })
-    countryId: string
+    countryId: string;
     @ApiProperty({ required: false })
-    cityId: string
+    cityId: string;
 }

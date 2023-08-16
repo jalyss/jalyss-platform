@@ -8,7 +8,6 @@ import {
   Box,
   Button,
   CardContent,
-  CardMedia,
   TextField,
   Typography,
   IconButton,
@@ -16,13 +15,16 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 
 import { editClient, fetchClient } from "../../../store/client";
-import { fetchCommand } from "../../../store/command";
+
 import EditIcon from "@mui/icons-material/Edit";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 const profileclient = () => {
   const client = useSelector((state) => state.client?.client);
-  const commandStore = useSelector((state) => state.command);
+  const clientStore = useSelector((state) => state.client.client);
+  const clientCommands = useSelector(
+    (state) => state.client?.client?.clientCommands[0]?.commandLine
+  );
 
   const [editClientData, setEditClientData] = useState(null);
 
@@ -57,7 +59,7 @@ const profileclient = () => {
     fileInputRef.current.click();
   };
   console.log(id, "clientId");
-  console.log(client, "hedha");
+  console.log(row, "heeeeeedha");
   const handleSubmit = async () => {
     const body = {
       ...editClientData,
@@ -93,88 +95,89 @@ const profileclient = () => {
     setRenderEditView(false);
   };
   useEffect(() => {
-    if (client?.cilent?.clients?.items) {
-      let aux = client.cilent?.clients.items.map((e) => {
+    if (true) {
+      let ress = [];
+      ress.push(clientStore);
+      let aux = ress.map((e, i) => {
         return {
-          id: e.id,
-          educationLevelId: e.educationLevelId,
-          functionalAreaId: e.functionalAreaId,
-          jobTitle: e.jobTitle,
-          country: e.country,
-          city: e.city,
+          id: e?.id || i,
+          ...e,
         };
       });
       setRows(aux);
     }
-  }, [client?.cilent?.clients.items]);
+  }, []);
 
-  const mapCommandItems = (items) => {
-    return items.map((e) => ({
-      id: e.id,
-      city: e.city,
-      confirm: e.confirm,
-      delivered: e.delivered,
-      paid: e.paid,
-      hasDelivery: e.hasDelivery,
-      branchId: e.branchId,
-    }));
-  };
-console.log(client?.jobTitleId,'hhhh')
   const columns = [
     {
       field: "educationLevel",
       headerName: "educationLevel",
       width: 155,
       editable: false,
+      valueGetter: (params) => params?.row?.educationLevel?.nameEn,
     },
 
+    {
+      field: "jobTitle",
+      headerName: "jobTitle",
+      width: 155,
+      editable: false,
+      valueGetter: (params) => params?.row?.jobTitle?.nameEn,
+    },
     {
       field: "functionalArea",
       headerName: "functionalArea",
       width: 155,
       editable: false,
+      valueGetter: (params) => params?.row?.functionalArea?.nameEn,
     },
-    { field: "jobTitle", headerName: "jobTitle", width: 155, editable: false },
-    { field: "country", headerName: "country", width: 155, editable: false },
+    {
+      field: "countryId",
+      headerName: "countryId",
+      width: 155,
+      editable: false,
+      valueGetter: (params) => params?.row?.country?.nameEn,
+    },
     {
       field: "city",
       headerName: "city",
       width: 155,
       editable: false,
+      valueGetter: (params) => params?.row?.city?.nameEn,
     },
   ];
+
   useEffect(() => {
-    if (commandStore?.commands?.items) {
-      setRow(mapCommandItems(commandStore.commands.items));
-    }
-  }, [commandStore?.commands.items]);
+    let aux = clientCommands?.map((e, i) => {
+      return {
+        id: e?.id || i,
+        ...e,
+      };
+    });
+    setRow(aux);
+  }, []);
+
   const column = [
     {
-      field: "city",
-      headerName: "city",
+      field: "title",
+      headerName: "title",
       width: 155,
       editable: false,
-    },
-
-    { field: "confirm", headerName: "confirm", width: 155, editable: false },
-    {
-      field: "delivered",
-      headerName: "delivered",
-      width: 155,
-      editable: false,
-    },
-    { field: "paid", headerName: "paid", width: 155, editable: false },
-    {
-      field: "hasDelivery",
-      headerName: "hasDelivery",
-      width: 155,
-      editable: false,
+      valueGetter: (params) => params?.row?.articleByBranch.article.title,
     },
     {
-      field: "branchId",
-      headerName: "branchId",
+      field: "Price",
+      headerName: "Price",
       width: 155,
       editable: false,
+      valueGetter: (params) => params?.row?.articleByBranch.price,
+    },
+    {
+      field: "quantity",
+      headerName: "quantity",
+      width: 155,
+      editable: false,
+      valueGetter: (params) => params?.row?.quantity,
     },
   ];
   return (

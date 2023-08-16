@@ -28,6 +28,12 @@ export class ClientsService {
       },
       include: {
         avatar: true,
+        country:true,
+        city:true,
+        educationLevel:true,
+        functionalArea:true,
+        jobTitle:true,
+        clientCommands:{include:{commandLine:{include:{articleByBranch:{include:{article:true}}}}}},
       },
     });
   }
