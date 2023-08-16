@@ -329,11 +329,11 @@ export default function ProfilePage() {
               </MDBNavbarItem>
               </>
             ))}
-              {/* <MDBNavbarItem
-                className="label-btn pointer"
+              <MDBNavbarItem
+                // className="label-btn pointer"
                 style={{
-                  backgroundColor:
-                    "/profile/saved-tarining" === path ? "rgb(156 39 176 / 34%)" : "",
+                   backgroundColor:
+                   "/profile/saved-tarining" ===  path  ? "rgb(156 39 176 / 34%)" : "",
                   borderRadius: "10px",
                   padding: "5px 10px",
                   margin: "0 5px",
@@ -341,19 +341,20 @@ export default function ProfilePage() {
                 }}
               >
                 <MDBNavbarLink
+                
                   onClick={() => {
                     navigate("/profile/saved-tarining/"+user.id);
                   }}
-                  className="label-btn pointer"
+                  // className="label-btn pointer"
                   style={{
-                    color: "/profile/saved-tarining" === path ? "#fff" : "rgba(156, 39, 176, 0.34)",
+                    color:"/profile/saved-tarining" ===  path ? "#fff" : "rgb(156 39 176)",
                     textDecoration: "none",
                     fontWeight: "bold",
                   }}
                 >
                  Session booked
                 </MDBNavbarLink>
-              </MDBNavbarItem> */}
+              </MDBNavbarItem>
           </MDBNavbarNav>
         </MDBNavbar>
 

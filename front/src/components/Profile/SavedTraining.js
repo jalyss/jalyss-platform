@@ -45,8 +45,7 @@ const SavedTraining = () => {
                             endTime={trainingBooking?.sessiontarif?.session?.endDate?.slice(0, 10)}
                         />
                         <div className="d-flex flex-wrap justify-content-center align-items-center">
-
-                            <div class="card " style={{ width: 300, marginTop: 25 }}>
+                            <div class="card  " style={{ width: 300, marginTop: 25 ,backgroundColor:"rgb(156 39 176 / 34%)",marginLeft:'20px'}}>
                                 <div class="card-body" style={{ textAlign: "center" }}>
                                     <h4>{trainingBooking?.sessiontarif?.title} </h4>
                                     <hr></hr>

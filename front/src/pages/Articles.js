@@ -21,7 +21,7 @@ import { BsFilterSquare } from 'react-icons/bs'
 import 'rc-tooltip/assets/bootstrap.css'
 import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
 import 'rc-slider/assets/index.css'
-import { groupBy, isEmpty, map } from 'lodash'
+import { filter, groupBy, isEmpty, map } from 'lodash'
 import HorizontalMenu from '../components/Commun/DragContainter'
 
 
@@ -336,24 +336,46 @@ console.log(containerRef, 'yalaa')
           )}
         </div>
       </div>
-      <div className="d-flex justify-content-center mb-3 ">
+      <div className="d-flex justify-content-center mb-3 " style={{marginLeft:'200px'}}>
         <button
+        style={{
+          color:'white',
+          borderRadius:'5px',
+          backgroundColor:'rgba(70, 4, 74, 0.781)'
+
+        }}
           className="bg-yellow px-4 py-2  border-0  mx-2 "
           onClick={() =>
             filters.skip > 0 &&
-            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 5}))
+            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 1}))
           }
         >
-          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t('prev')}
+          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t('back')}
         </button>
         <button
-          className=" bg-yellow px-4 py-2 border-0 mx-2"
-          onClick={() =>
-            setFilters((Filters) => ({ ...Filters, skip: filters.skip + 5 }))
-          }
-        >
-          {t('next')} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
-        </button>
+         style={{
+          color: 'white',
+          borderRadius: '5px',
+    backgroundColor: 'rgba(70, 4, 74, 0.781)',
+  }}
+  className="bg-yellow px-4 py-2 border-0 mx-2"
+  onClick={() =>
+    setFilters((Filters) => {
+      const nextSkip = Filters.skip + 1;
+      if (nextSkip >= articleStore.articles.items.length) {
+        return Filters; 
+      }
+      return { ...Filters, skip: nextSkip };
+    })
+  }
+  disabled={
+   
+    filters.skip + 1 >= articleStore.articles.items.length ||
+    articleStore.articles.items.length === 0
+  }
+>
+  {t('next')} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
+</button>
       </div>
     </DocumentMeta>
   )
