@@ -128,8 +128,8 @@ export default function ProfilePage() {
           <MDBCol lg="4">
             <MDBCard className="mb-4">
               <MDBCardBody>
-                <div className="text-center d-flex justify-content-center ">
-                  <div className="position-relative" style={{ width: 200 }}>
+                <div className="text-center d-flex justify-content-center " style={{marginleft:100}}>
+                  <div className="position-relative">
                     <MDBCardImage
                       src={
                         preview
@@ -218,8 +218,8 @@ export default function ProfilePage() {
             </MDBCard>
           </MDBCol>
 
-          <MDBCol lg="8">
-            <MDBCard className="mb-4">
+          <MDBCol lg="8" >
+            <MDBCard className="mb-4" >
               <MDBCardBody>
                 <MDBRow>
                   <MDBCol sm="3">
@@ -296,15 +296,44 @@ export default function ProfilePage() {
           </MDBCol>
         </MDBRow>
 
-        <MDBNavbar className=" d-flex justify-content-center align-items-center bg-light rounded-3  mb-4 ">
+<MDBNavbar className="justify-content-center align-items-center bg-light rounded-2 mb-4" style={{ width: "98%", margin: "0 "}}>
+
           <MDBNavbarNav className=" justify-content-center align-items-center ">
-            {navBarDataProfile.map((elem, i) => (
+          {navBarDataProfile.map((elem, i) => (
+              <>
+    
               <MDBNavbarItem
                 key={i}
-                className="label-btn pointer"
-                style={{
+                // className="label-btn pointer"
+                  style={{
                   backgroundColor:
-                    elem.path === path ? "rgb(156 39 176 / 34%)" : "",
+                  elem.path === path ? "rgb(156 39 176 / 34%)" : "",
+                  borderRadius: "10px",
+                  padding: "5px 10px",
+                  margin: "0 5px",
+                  minWidth: 100,
+                }}
+                >
+                <MDBNavbarLink
+                  onClick={() => {
+                    navigate(elem.path);
+                  }}
+                  style={{
+                    color: elem.path === path ? "#fff" : "rgb(156 39 176 )",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                  }}
+                  >
+                  {elem.name}
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              </>
+            ))}
+              <MDBNavbarItem
+                // className="label-btn pointer"
+                style={{
+                   backgroundColor:
+                   "/profile/saved-tarining" ===  path  ? "rgb(156 39 176 / 34%)" : "",
                   borderRadius: "10px",
                   padding: "5px 10px",
                   margin: "0 5px",
@@ -312,20 +341,20 @@ export default function ProfilePage() {
                 }}
               >
                 <MDBNavbarLink
+                
                   onClick={() => {
-                    navigate(elem.path);
+                    navigate("/profile/saved-tarining/"+user.id);
                   }}
                   // className="label-btn pointer"
                   style={{
-                    color: elem.path === path ? "#fff" : "rgb(156 39 176 )",
+                    color:"/profile/saved-tarining" ===  path ? "#fff" : "rgb(156 39 176)",
                     textDecoration: "none",
                     fontWeight: "bold",
                   }}
                 >
-                  {elem.name}
+                 Session booked
                 </MDBNavbarLink>
               </MDBNavbarItem>
-            ))}
           </MDBNavbarNav>
         </MDBNavbar>
 

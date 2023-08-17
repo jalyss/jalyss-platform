@@ -29,7 +29,7 @@ export const deleteGain = createAsyncThunk(
 export const editGain = createAsyncThunk(
   "gains/editgain",
   async (args, { dispatch }) => {
-    const { id, content } = args;
+    const { id, ...body } = args;
     console.log("argsss", args);
     let token = JSON.parse(localStorage.getItem("token"));
     const configs = {
@@ -40,7 +40,7 @@ export const editGain = createAsyncThunk(
 
     const response = await axios.patch(
       `${config.API_ENDPOINT}/gains/${id}`,
-      { content: content },
+      body,
       configs
     );
 
@@ -60,6 +60,7 @@ export const fetchPrerequires = createAsyncThunk(
 );
 export const CreatePrereq = createAsyncThunk(
   "prereq/Create-prereq",
+  
   async (body, { dispatch }) => {
     const response = await axios.post(`${config.API_ENDPOINT}/prerequire`, body);
     dispatch(fetchPrerequires());

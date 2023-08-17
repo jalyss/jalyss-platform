@@ -31,7 +31,7 @@ function ArticleCard({ article }) {
           <h6 className="m-0">{article.stock} </h6>
         </div>
         <img
-          src={article.article.cover.path}
+          src={article?.article?.cover.path}
           className="w-100 object-fit-contain article-image "
           alt=""
         />

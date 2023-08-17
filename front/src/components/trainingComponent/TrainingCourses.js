@@ -60,6 +60,7 @@ console.log("count",sessions.count);
                 startTime={course?.startDate.slice(0,10)}
                 endTime={course?.endDate.slice(0,10)}
                 onClick={() => navigate(`/sessions/${course.id}`)} 
+                dropdown={true}
               />
             </div>
           ))}

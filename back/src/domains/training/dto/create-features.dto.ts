@@ -2,7 +2,9 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateFeaturesDto {
  @ApiProperty()
- label:string;
+ labelEn:string;
+ @ApiProperty()
+ labelAr:string;
 
 //  @ApiProperty()
 //  SessionTarifHasFeaturesIds: string[];

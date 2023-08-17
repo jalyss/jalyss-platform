@@ -227,17 +227,18 @@ export class ArticleService {
       rating: Math.floor(rating[0]._sum.rate / rating[0]._count.rate),
     };
   }
+
+
   async findOne(id: string) {
     return await this.prisma.article.findFirst({
       where: {
         id,
       },
-
       include: {
-        category: true,
-        publishingHouse: true,
-        type: true,
-        ArticlesByBranch: true,
+        category:true,
+        publishingHouse:true,
+        type:true,
+        ArticlesByBranch:true,
       },
     });
   }
@@ -245,6 +246,7 @@ export class ArticleService {
   async update(id: string, dto: UpdateArticleDto) {
     return await this.prisma.article.update({ where: { id }, data: dto });
   }
+
   async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
     return await this.prisma.articlesByBranch.update({
       where: { id },
@@ -261,12 +263,12 @@ export class ArticleService {
     dto: CreateRatingDto,
     userId: string,
     articleByBranchId: string,
-  ) {
+   ) {
     return await this.prisma.rating.create({
       data: { ...dto, userId, articleByBranchId },
     });
-  }
-  async updateRating(
+   }
+   async updateRating(
     dto: CreateRatingDto,
     userId: string,
     articleByBranchId: string,

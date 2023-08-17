@@ -12,6 +12,7 @@ function Card({
   startTime,
   endTime,
   onClick,
+  dropdown
 }) {
   return (
     <div className="blogItemWrapper" style={{ cursor: "pointer" }}>
@@ -56,7 +57,8 @@ function Card({
           </div>
         </div>
         <div >
-          <Dropdown content1="Save" content2="Delete" content3="Edit" />
+          {dropdown &&(<Dropdown content1="Save" content2="Delete" content3="Edit" />)}
+          
         </div>
       </div>
     </div>

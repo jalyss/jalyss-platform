@@ -1,5 +1,7 @@
+// import Slider from '@mui/material/Slider';
+
 import Slider from 'rc-slider'
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState,useRef} from 'react'
 import { useTranslation } from 'react-i18next'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,14 +21,15 @@ import { BsFilterSquare } from 'react-icons/bs'
 import 'rc-tooltip/assets/bootstrap.css'
 import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
 import 'rc-slider/assets/index.css'
-import { groupBy, isEmpty, map } from 'lodash'
+import { filter, groupBy, isEmpty, map } from 'lodash'
 import HorizontalMenu from '../components/Commun/DragContainter'
+
 
 function Articles() {
   const dispatch = useDispatch()
   const { t, i18n } = useTranslation()
   const meta = useMeta(t('articles.pageName'), t('articles.pageDescription'))
-
+  const containerRef =useRef(null)
   const { categoryId } = useParams()
   const articleStore = useSelector((state) => state.article)
   const categoryStore = useSelector((state) => state.category)
@@ -34,13 +37,14 @@ function Articles() {
   const authorStore = useSelector((state) => state.author)
   const articleTypeStore = useSelector((state) => state.articleType)
 
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [price, setPrice] = useState([1, 1000])
   const [filters, setFilters] = useState({
     categories: [],
     publishingHouses: [],
     articleTypes: [],
     authors: [],
-    lte: null,
+    lte:null,
     gte: null,
     skip: 0,
   })
@@ -49,17 +53,6 @@ function Articles() {
 
   const lg = i18n.languages[0] === 'en'
   const [showFilters, setShowFilters] = useState(false)
-
-
-  function onMouseMoveHandler(event) {
-    // Check if elementRef.current is not null before accessing its properties
-    if (elementRef.current) {
-      const rect = elementRef.current.getBoundingClientRect();
-      // Now you can safely use the rect object
-      console.log("Element's bounding rect:", rect);
-    }
-  }
-
 
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }))
@@ -74,39 +67,64 @@ function Articles() {
 
   useEffect(() => {
     if (categoryId) {
-      setFilters((Filters) => ({ ...Filters, categories: [categoryId] }))
+      setFilters((Filters) => ({...Filters, categories: [categoryId]}))
     }
   }, [categoryId])
 
+  const onMouseMoveHandler = (event) => {
+    if (containerRef.current){
+      const rect = containerRef.current.getBoundingClientRect()
+      console.log("Element's bounding rect:", rect);  
+  }
+}
+console.log(containerRef, 'yalaa')
   const Filters = () => {
+   
     return (
-      <div className="filters ">
-        <Fragment>
-          <Accordion
-            title={t('filter.price')}
+      <div className="filters" >
+        <Fragment >
+          <Accordion  
+            title={t('filter.Price')}
             content={
-              <div className="px-3 pt-3">
-                <Slider
+              <div className="px-3 pt-3"  ref={containerRef} onMouseMove={onMouseMoveHandler} >
+                <Slider 
                   range
-                  draggableTrack
+                  draggableTrack={false}
                   min={1}
                   max={1000}
-                  defaultValue={[1, 1000]}
-                  tipFormatter={(value) => `TND${value}`}
+                  defaultValue={[1000,1]} 
+                  tipFormatter={(value) =>`TND${value}`}
                   allowCross={false}
                   value={price}
-                  onChange={(price) => {
+                  onChange={(price)=> {
                     setPrice(price)
                     setFilters((Filters) => ({
-                      ...Filters,
+                     ...Filters,
                       gte: price[0],
                       lte: price[1],
                     }))
                   }}
                 />
+                 {/* <Slider
+                 range
+                 draggableTrack={false}
+                 max={1000}
+                 defaultValue={1000} 
+                 tipFormatter={(value) =>`TND${value}`}
+                 allowCross={false}
+                 value={price}
+                 onChange={(price)=> {
+                   setPrice(price)
+                   setFilters((Filters) => ({
+                    ...Filters,
+                    gte: price[0],
+                    lte: price[1],
+                   }))
+                 }}                        
+      /> */}
                 <div className="d-flex justify-content-between mt-1">
-                  <p>{price[1]}</p>
                   <p>{price[0]}</p>
+                  <p>{price[1]}</p>
                 </div>
               </div>
             }
@@ -157,7 +175,7 @@ function Articles() {
                     type="checkbox"
                     onChange={(e) => {
                       e.target.checked === true
-                        ? setFilters((Filter) => ({
+                        ? setFilters((Filter) =>({
                             ...Filter,
                             articleTypes: [...Filter.articleTypes, element.id],
                           }))
@@ -262,7 +280,6 @@ function Articles() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
-        <p>{t('title')}</p>
         <div className="filters-button">
           <BsFilterSquare onClick={() => setShowFilters(true)} />
         </div>
@@ -285,20 +302,29 @@ function Articles() {
         </div>
         <div className="px-3">
           {!isEmpty(filters.categories) ? (
+        
             map(groupedArticles, (element) => (
+           
               <>
-                <p>{element[0].article.category[lg ? 'nameEn' : 'nameAr']}</p>
+                 <p style={{fontSize: '20px',
+  color: '#333',
+  padding: '5px 10px',
+  backgroundColor:'#f0f0f0',
+  borderRadius: '5px'
+  }}>{element[0].article.category[lg ? 'nameEn' : 'nameAr']}</p>
 
-                <HorizontalMenu>
-                  {element.map((el) => (
-                    <div
-                      key={el.id}
-                      className="horizontal-item horizontal-item-article"
-                    >
-                      <ArticleCard article={el} />
-                    </div>
-                  ))}
-                </HorizontalMenu>
+   <div className='d-flex flex-wrap px-4 '>
+  {element.map((el, index) => (
+    <div
+      style={{maxWidth:'100%'}}
+      key={el.id}
+    >
+        <ArticleCard article={el}/>
+        
+    </div>
+  ))}
+</div>
+
               </>
             ))
           ) : (
@@ -310,27 +336,55 @@ function Articles() {
           )}
         </div>
       </div>
-      <div className="d-flex justify-content-center mb-3 ">
+      <div className="d-flex justify-content-center mb-3 " style={{marginLeft:'200px'}}>
         <button
+        style={{
+          color:'white',
+          borderRadius:'5px',
+          backgroundColor:'rgba(70, 4, 74, 0.781)'
+
+        }}
           className="bg-yellow px-4 py-2  border-0  mx-2 "
           onClick={() =>
             filters.skip > 0 &&
-            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 5 }))
+            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 1}))
           }
         >
-          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t('prev')}
+          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t('back')}
         </button>
         <button
-          className=" bg-yellow px-4 py-2 border-0 mx-2"
-          onClick={() =>
-            setFilters((Filters) => ({ ...Filters, skip: filters.skip + 5 }))
-          }
-        >
-          {t('next')} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
-        </button>
+         style={{
+          color: 'white',
+          borderRadius: '5px',
+    backgroundColor: 'rgba(70, 4, 74, 0.781)',
+  }}
+  className="bg-yellow px-4 py-2 border-0 mx-2"
+  onClick={() =>
+    setFilters((Filters) => {
+      const nextSkip = Filters.skip + 1;
+      if (nextSkip >= articleStore.articles.items.length) {
+        return Filters; 
+      }
+      return { ...Filters, skip: nextSkip };
+    })
+  }
+  disabled={
+   
+    filters.skip + 1 >= articleStore.articles.items.length ||
+    articleStore.articles.items.length === 0
+  }
+>
+  {t('next')} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
+</button>
       </div>
     </DocumentMeta>
   )
 }
 
 export default Articles
+
+
+
+
+
+

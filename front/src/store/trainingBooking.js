@@ -7,6 +7,12 @@ export const fetchTrainingBookings = createAsyncThunk("training/bookingss", asyn
   return response.data;
 });
 
+export const fetchTrainingBookingByUserId = createAsyncThunk("training/bookingss", async (userId) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/trainingBooking/byUser/${userId}`);
+  console.log('heloooooooooo',response.data)
+  return response.data;
+});
+
 
 
 export const createTrainingBooking = createAsyncThunk(
@@ -48,9 +54,11 @@ export const trainingBookingSlice = createSlice({
     builder.addCase(createTrainingBooking.fulfilled, (state, action) => {
       state.trainingBookings.items = action.payload;
     });
+   
     builder.addCase(fetchTrainingBookings.fulfilled, (state, action) => {
       state.trainingBookings.items = action.payload;
     });
+   
    
   },
 });

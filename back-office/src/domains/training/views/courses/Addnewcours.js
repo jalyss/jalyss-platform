@@ -27,7 +27,7 @@ const Addnewcours = () => {
   const { users } = coacheStore;
   const [selectedCoach, setSelectedCoach] = useState([]);
   const [addcours, setAddcours] = useState({});
-
+console.log("users",users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -77,22 +77,44 @@ const Addnewcours = () => {
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell className="fw-bold">Title:</TableCell>
+              <TableCell className="fw-bold">TitleEn:</TableCell>
               <TableCell>
                 <StyledInput
-                  value={addcours.title || ""}
+                  value={addcours.titleEn || ""}
                   onChange={handleAddcoursChange}
-                  label="Title"
-                  name="title"
+                  label="TitleEn"
+                  name="titleEn"
                 />
               </TableCell>
-              <TableCell className="fw-bold">Content:</TableCell>
+              <TableCell className="fw-bold">TitleAr:</TableCell>
+              <TableCell>
+              <StyledInput
+                  value={addcours.titleAr || ""}
+                  onChange={handleAddcoursChange}
+                  label="TitleAr"
+                  name="titleAr"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell className="fw-bold">ContentEn:</TableCell>
+              <TableCell>
+              <StyledInput
+                  value={addcours.contentEn || ""}
+                  onChange={handleAddcoursChange}
+                  label="ContentEn"
+                  name="contentEn"
+                />
+              </TableCell>
+              <TableCell className="fw-bold">ContentAr:</TableCell>
               <TableCell>
                 <StyledInput
-                  value={addcours.content || ""}
+                  value={addcours.contentAr || ""}
                   onChange={handleAddcoursChange}
-                  label="Content"
-                  name="content"
+                  label="ContentAr"
+                  name="contentAr"
                 />
               </TableCell>
             </TableRow>
@@ -106,7 +128,7 @@ const Addnewcours = () => {
                     value={selectedGains}
                     required
                     data={gains?.items}
-                    labelOptionName="content"
+                    labelOptionName="contentEn"
                     label="Add gains"
                     onChange={setSelectedGains}
                     placeholder="Add Your session's gain"

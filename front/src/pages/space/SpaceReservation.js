@@ -18,8 +18,8 @@ import {
 import { Select, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
@@ -104,7 +104,7 @@ const SpaceReservation = () => {
             </Grid>
             <Grid item xs={12}>
               <FormLabel component="legend">Choose your day</FormLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker", "DatePicker"]}>
                   <DatePicker label="from" defaultValue={dayjs("2022-04-17")} />
                   <DatePicker
@@ -113,11 +113,11 @@ const SpaceReservation = () => {
                     onChange={(newValue) => setValue(newValue)}
                   />
                 </DemoContainer>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
             </Grid>
             <Grid item xs={12}>
               <FormLabel component="legend">Choose your arrival time</FormLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["MultiInputTimeRangeField"]}>
                   <MultiInputTimeRangeField
                     slotProps={{
@@ -127,7 +127,7 @@ const SpaceReservation = () => {
                     }}
                   />
                 </DemoContainer>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
             </Grid>
           </div>
         )}
@@ -189,18 +189,18 @@ const SpaceReservation = () => {
             </Grid>
             <Grid item xs={12}>
               <FormLabel component="legend">Choose your day</FormLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
                     label="Get Your Day"
                     slotProps={{ textField: { size: "small" } }}
                   />
                 </DemoContainer>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
             </Grid>
             <Grid item xs={12}>
               <FormLabel component="legend">Choose your arrival time</FormLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["MultiInputTimeRangeField"]}>
                   <MultiInputTimeRangeField
                     slotProps={{
@@ -210,7 +210,7 @@ const SpaceReservation = () => {
                     }}
                   />
                 </DemoContainer>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
             </Grid>
           </>
         )}

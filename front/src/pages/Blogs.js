@@ -96,7 +96,7 @@ function Blogs() {
   };
 
  
-  return (
+  return  (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
         <Fade bottom duration={1000} distance="40px">
@@ -113,8 +113,7 @@ function Blogs() {
                   style={{ margin: 20 }}
                 >
                   <h1 className="greetingText">
-                    Welcome to Jalyss Blog <br />
-                    👋
+                    {greeting.title}
                   </h1>
 
                   <p className="fs-4 lh-base" style={{ color: "#868e96" }}>
@@ -141,16 +140,15 @@ function Blogs() {
 
                     <button
                       type="button"
-                      class="btn btn-outline-danger"
+                      className="btn btn-outline-danger"
                       style={{
                         height: "50px",
                         width: "172px",
                         marginLeft: "20px",
                       }}
                       onClick={() => {
-                        if(me)
-                        navigate("/BlogsForm")
-                        else navigate("/login")
+                        if (me) navigate("/BlogsForm");
+                        else navigate("/login");
                       }}
                     >
                       Write yours
@@ -166,82 +164,85 @@ function Blogs() {
             </div>
           </div>
         </Fade>
-        <Fade bottom duration={3000} distance="40px">
-          <div style={{ alignItems: "normal", margin: "95px 70px" }}>
-            <div className=" d-flex align-items-center">
-              <div className="col-lg-6" style={{ marginTop: "70px" }}>
-                <div>
-                  <DisplayLottie animationData={data} />
-                </div>
-              </div>
-              <div className="col-lg-6">
-                <div className="d-flex">
-                  <div className="d-flex flex-column align-items-center">
-                    <h1
-                      className="text-center"
-                      style={{ marginBottom: "20px", fontSize: "50px" }}
-                    >
-                      Trending on Jalyss <br /> <FaFire />
-                    </h1>
-                    <div className="d-flex flex-wrap justify-content-center">
-                      {trends.map((blog, index) => (
-                        <div
-                          className="d-flex gap-2 align-items-center"
-                          style={{
-                            width: "300px",
-                            marginTop: "20px",
-                            marginBottom: "20px",
-                          }}
-                          key={blog.id}
-                        >
-                          <h3
-                            style={{
-                              color: "#a9a9a9",
-                              fontSize: "1.5rem",
-                              fontWeight: "bold",
-                            }}
-                          >{`${(index + 1).toString().padStart(2, "0")}`}</h3>
 
-                          {blog.author.avatar ? (
-                            <img
+        {/* Conditionally render the trending section */}
+        {trends.length > 0 && (
+          <Fade bottom duration={3000} distance="40px">
+            <div style={{ alignItems: "normal", margin: "95px 70px" }}>
+              <div className="d-flex align-items-center">
+                <div className="col-lg-6" style={{ marginTop: "70px" }}>
+                  <div>
+                    <DisplayLottie animationData={data} />
+                  </div>
+                </div>
+                <div className="col-lg-6">
+                  <div className="d-flex">
+                    <div className="d-flex flex-column align-items-center">
+                      <h1
+                        className="text-center"
+                        style={{ marginBottom: "20px", fontSize: "50px" }}
+                      >
+                        Trending on Jalyss <br /> <FaFire />
+                      </h1>
+                      <div className="d-flex flex-wrap justify-content-center">
+                        {trends.map((blog, index) => (
+                          <div
+                            className="d-flex gap-2 align-items-center"
+                            style={{
+                              width: "300px",
+                              marginTop: "20px",
+                              marginBottom: "20px",
+                            }}
+                            key={blog.id}
+                          >
+                            <h3
                               style={{
-                                width: "4rem",
-                                height: "4rem",
-                                borderRadius: "50%",
+                                color: "#a9a9a9",
+                                fontSize: "1.5rem",
+                                fontWeight: "bold",
                               }}
-                              src={blog.author.avatar?.path}
-                              alt="avatar"
-                            />
-                          ) : (
-                            <img
-                              style={{
-                                width: "4rem",
-                                height: "4rem",
-                                borderRadius: "50%",
-                              }}
-                              src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
-                              alt="avatar"
-                            />
-                          )}
-                          <div className="d-flex flex-column ">
-                            <p style={{ fontSize: "1rem" }}>
-                              {blog.author.fullNameEn}
-                            </p>
-                            <h6 style={{ fontWeight: "bold" }}>{blog.title}</h6>
-                            <p style={{ fontSize: "0.75rem", color: "#666" }}>
-                              {blog.createdAt}
-                            </p>
+                            >{`${(index + 1).toString().padStart(2, "0")}`}</h3>
+
+                            {blog.author.avatar ? (
+                              <img
+                                style={{
+                                  width: "4rem",
+                                  height: "4rem",
+                                  borderRadius: "50%",
+                                }}
+                                src={blog.author.avatar?.path}
+                                alt="avatar"
+                              />
+                            ) : (
+                              <img
+                                style={{
+                                  width: "4rem",
+                                  height: "4rem",
+                                  borderRadius: "50%",
+                                }}
+                                src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                                alt="avatar"
+                              />
+                            )}
+                            <div className="d-flex flex-column ">
+                              <p style={{ fontSize: "1rem" }}>
+                                {blog.author.fullNameEn}
+                              </p>
+                              <h6 style={{ fontWeight: "bold" }}>{blog.title}</h6>
+                              <p style={{ fontSize: "0.75rem", color: "#666" }}>
+                                {blog.createdAt}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Fade>
-
+          </Fade>
+        )}
         <div
           style={{
             borderTop: "0.5px",

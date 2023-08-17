@@ -35,7 +35,7 @@ export const deleteFeatures = createAsyncThunk(
 export const editFeature = createAsyncThunk(
   "features/editfeatures",
   async (args, { dispatch }) => {
-    const { id,label } = args;
+    const { id,...body } = args;
     console.log("argsss", args);
     let token = JSON.parse(localStorage.getItem("token"));
     const configs = {
@@ -46,7 +46,7 @@ export const editFeature = createAsyncThunk(
 
     const response = await axios.patch(
       `${config.API_ENDPOINT}/features/${id}`,
-      { label: label },
+      body,
       configs
     );
     console.log("args",args);

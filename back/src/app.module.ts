@@ -58,6 +58,8 @@ import { ClientsModule } from './domains/client/client.module';
    
     EducationLevelsModule,
     ClientsModule,
+   
+   
     
   ],
   controllers: [AppController],
