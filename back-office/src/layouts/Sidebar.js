@@ -43,10 +43,7 @@ function Sidebar() {
           const isActive = isItemActive(elem.path);
           return (
             <div key={index}>
-              <Link
-                style={{ textDecoration: "none", color: "#000" }}
-                to={"Branche"}
-              >
+          
                 <div
                   onClick={() => handleItemClick(elem.path)}
                   style={{
@@ -57,15 +54,11 @@ function Sidebar() {
                     isActive && "activeSidebarItem"
                   } justify-content-between`}
                 >
-                  {elem.nameEn === "Branches" ? (
+                 
                     <Typography fontWeight={isActive && "bold"}>
                       {isEng ? elem.nameEn : elem.nameAr}
                     </Typography>
-                  ) : (
-                    <Typography fontWeight={isActive && "bold"}>
-                      {isEng ? elem.nameEn : elem.nameAr}
-                    </Typography>
-                  )}
+               
                   {elem.children.length !== 0 &&
                     (!isActive ? (
                       <AiOutlineDown color="black" />
@@ -73,7 +66,7 @@ function Sidebar() {
                       <AiOutlineUp color="black" />
                     ))}
                 </div>
-              </Link>
+            
               {isActive && elem.children.length > 0 && (
                 <div className="sidebarChildren">
                   {elem.children.map((el, j) => {

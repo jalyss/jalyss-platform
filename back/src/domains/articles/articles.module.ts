@@ -13,6 +13,8 @@ import { authorService } from './author.service';
 import { authorController } from './author.controller';
 import { MvtController } from './mvts.controller';
 import { MvtsService } from './mvts.service';
+import { TransactionController } from './transactions.controller';
+import { TransactionService } from './transactions.service';
 
 @Module({
   controllers: [
@@ -21,7 +23,8 @@ import { MvtsService } from './mvts.service';
     PublishingHouseController,
     CategoryController,
     authorController,
-    MvtController
+    MvtController,
+    TransactionController
   ],
   providers: [
     ArticleService,
@@ -31,7 +34,8 @@ import { MvtsService } from './mvts.service';
     PrismaService,
     BranchesService,
     authorService,
-    MvtsService
+    MvtsService,
+    TransactionService
   ],
 })
 export class ArticleModule {}

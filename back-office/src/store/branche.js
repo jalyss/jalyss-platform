@@ -12,6 +12,7 @@ export const fetchBranche = createAsyncThunk("branches/branche", async (id) => {
   return response.data;
 });
 
+
 export const DeleteBranche = createAsyncThunk("branches/branche", async (id) => {
   const response = await axios.delete(`${config.API_ENDPOINT}/branches/${id}`);
   return response.data;

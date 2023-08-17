@@ -55,6 +55,8 @@ import Branches from "../domains/branche/branch";
 import BrancheList from "../domains/branche/view/branchesList";
 import BrancheDetails from "../domains/branche/view/branchesDails";
 import BrancheTransiction from "../domains/branche/view/branchTransiction";
+import TransictionList from "../domains/branche/view/transictionList";
+import TransictionDetails from "../domains/branche/view/transitionsDetails";
 
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/features/Features";
@@ -236,8 +238,11 @@ function Router() {
             </Route> 
              <Route path="Branche" element={<Branches />}>
               <Route index element={<BrancheList />} />
-              <Route path="detail/:typeId" element={<BrancheDetails />} />
-              <Route path="transiction" element={<BrancheTransiction />} />
+              <Route path="transiction/detail/:typeId" element={<BrancheDetails />} />
+              <Route path="transiction" element={<BrancheList />} />
+              <Route path="transactions" element={<TransictionList />} />
+              <Route path="transactions/sent" element={<BrancheTransiction />} />
+              <Route path="transactions/transictionDetails/:id" element={<TransictionDetails />} />
   
             </Route>
 

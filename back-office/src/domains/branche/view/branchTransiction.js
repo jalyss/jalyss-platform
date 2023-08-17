@@ -6,6 +6,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import isEnglish from "../../../helpers/isEnglish";
 import { fetchBranches, DeleteBranche } from "../../../store/branche";
+import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
+import { Typography, TextField } from "@mui/material";
 import {
   fetchArticlesByBranch,
   addTransactionStock,
@@ -95,62 +97,49 @@ function BrancheList() {
     });
   };
 
+  const addData0Entry = () => {
+    const { articleId, quantity } = dataaa;
+    setdata0((prevData) => [...prevData, { articleId, quantity }]);
+  };
+  console.log(" ")
+  
   function handleTransiction() {
+    const { articleId, quantity } = dataaa;
     const now = new Date();
-
-    // Get individual date and time components
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
-
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+    
+      let data = { ...transiction, date: formattedDateTime, articles: data0?.length>1? data0:[{articleId,quantity}] };
+      let aux = Object.assign({}, data);
 
-    // Combine the components to form the desired format
-    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
-
-    let data = { ...transiction, date: formattedDateTime };
-    let aux = Object.assign({}, data);
-
-    dispatch(addTransactionStock(aux)).then((res) => {
-      if (!res.error) {
-        setBasicModalDelete(!basicModalDelete);
-        showSuccessToast("Transiction done");
-        navigate(-1);
-      } else {
-        showErrorToast(res.error.message);
-      }
-    });
+      dispatch(addTransactionStock(aux)).then((res) => {
+        if (!res.error) {
+          setBasicModalDelete(!basicModalDelete);
+          showSuccessToast("Transiction done");
+          navigate(-1);
+        } else {
+          showErrorToast(res.error.message);
+        }
+      });
   }
 
-  console.log(data0,"zzz")
-
-  const addData0Entry = () => {
-    // Extract the articleId and quantity from the current data0 entry
-    const { articleId, quantity } = dataaa;
-
-    // Create a new object with the articleId and quantity properties
-    const newEntry = { articleId, quantity };
-
-    // Update the array with the new entry
-    setdata0([...data0, newEntry]);
-  };
-
-  console.log(data0,'aha')
-
-
   const renderInputs = () => {
-    return Array.from({ length: data0.length }).map((e, i) => (
+    return Array.from({ length: inputsNumber }).map((e, i) => (
       <Box key={i} mt={3} mb={3} display="flex" alignItems="center">
         <div style={{ flex: 2 }}>
           <Selecto
-            placeholder="Search by users"
-            options={value}
+            placeholder="Search by article"
+            options={articles.map((e) => ({
+              value: e?.article?.id,
+              label: e?.article?.title,
+            }))}
             style={{ flex: 1, marginRight: "10px" }}
             onChange={(e) => {
-              setdata({...dataaa,articleId:e.value}); // Pass the event and index to rigldata
+              setdata({ ...dataaa, articleId: e.value });
             }}
           />
         </div>
@@ -159,8 +148,7 @@ function BrancheList() {
             type="number"
             placeholder="Quantity"
             onChange={(e) => {
-              setdata({...dataaa,quantity:e.target.value}); // Pass a placeholder event and index to rigldata
-           
+              setdata({ ...dataaa, quantity: +e.target.value });
             }}
           />
         </div>
@@ -173,7 +161,6 @@ function BrancheList() {
       </Box>
     ));
   };
-
 
   const handleDelete = (articleByBranchId) => {
     const updatedCommandLine = commandLine.filter(
@@ -217,7 +204,7 @@ function BrancheList() {
                 pageSizeOptions={[10, 20, 50]}
                 disableRowSelectionOnClick
               />
-            </Box> 
+            </Box>
           </div>
           <div className="m-5" style={{ width: "100%" }}>
             <div>Send</div>
@@ -231,13 +218,17 @@ function BrancheList() {
                   alignItems: "center",
                 }}
               >
-                <button onClick={() => {addData0Entry(), setinputsNumber(inputsNumber + 1)}}>
-                  +
-                </button>
+                <AiOutlinePlusCircle
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    addData0Entry(), setinputsNumber(inputsNumber + 1);
+                  }}
+                />
                 {inputsNumber > 1 ? (
-                  <button onClick={() => setinputsNumber(inputsNumber - 1)}>
-                    -
-                  </button>
+                  <AiOutlineMinusCircle
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setinputsNumber(inputsNumber - 1)}
+                  />
                 ) : null}
               </div>
             </div>
@@ -277,7 +268,29 @@ function BrancheList() {
                 })}
               </select>
             </div>
-
+            <div className="mt-1">reason </div>
+            <div className="mt-2">
+              <TextField
+                onChange={(e) => {
+                  setTransiction({
+                    ...transiction,
+                    reason: e.target.value,
+                  });
+                }}
+                fullWidth
+                placeholder="reason"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#8a2be2",
+                  },
+                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                    {
+                      borderColor: "#8a2be2",
+                    },
+                }}
+              />
+            </div>
             <div>Status</div>
             <div className="mt-2 w-100" style={{ width: "100%" }}>
               <select
