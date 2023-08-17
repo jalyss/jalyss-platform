@@ -35,12 +35,11 @@ function AddClient() {
   const [tel, setTel] = useState("");
   const [isCoach, setIsCoach] = useState(false);
   const [accountBalance, setAccountBalance] = useState("");
-  const [educationLevel, setEducationLevel] = useState("");
-  const [functionalArea, setFunctionalArea] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
-  const [countrie, setCountrie] = useState("");
-  const [citie, setCitie] = useState("");
-
+  const [educationLevelId, setEducationLevelId] = useState("");
+  const [functionalAreaId, setFunctionalAreaId] = useState("");
+  const [jobTitleId, setJobTitleId] = useState("");
+  const [countrieId, setCountrieId] = useState("");
+  const [cityId, setCityId] = useState("");
 
   const [avatar, setAvatar] = useState(null);
 
@@ -49,8 +48,7 @@ function AddClient() {
   const functionalAreaStore = useSelector((state) => state.functionalArea);
   const jobTitleStore = useSelector((state) => state.jobTitle);
   const CountriesStore = useSelector((state) => state.country);
-  const CitiesStore = useSelector((state) => state.city);
-
+  const citysStore = useSelector((state) => state.country);
 
   useEffect(() => {
     dispatch(fetchClients());
@@ -59,7 +57,6 @@ function AddClient() {
     dispatch(fetchJobTitles());
     dispatch(fetchCountries());
     dispatch(findAllCitites());
-
   }, [dispatch]);
 
   const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
@@ -91,6 +88,11 @@ function AddClient() {
       tel,
       accountBalance,
       isCoach,
+      cityId,
+      educationLevelId,
+      countrieId,
+      functionalAreaId,
+      jobTitleId,
     };
 
     const submitCreate = async () => {
@@ -216,8 +218,8 @@ function AddClient() {
                   <Select
                     labelId="functionalArea"
                     name="functionalAreaId"
-                    value={functionalArea || ""}
-                    onChange={(e) => setFunctionalArea(e.target.value)}
+                    // value={functionalArea || ""}
+                    onChange={(e) => setFunctionalAreaId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
                     {functionalAreaStore.functionalAreas.items.map((item) => (
@@ -234,8 +236,8 @@ function AddClient() {
                   <Select
                     labelId="jobTitle"
                     name="jobTitleId"
-                    value={jobTitle || ""}
-                    onChange={(e) => setJobTitle(e.target.value)}
+                    // value={jobTitle || ""}
+                    onChange={(e) => setJobTitleId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
                     {jobTitleStore.jobTitles.items.map((item) => (
@@ -246,15 +248,15 @@ function AddClient() {
                   </Select>
                 </FormControl>
               </Grid>
-            
+
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel id="educationLevel">Education Level</InputLabel>
                   <Select
                     labelId="educationLevel"
                     name="educationLevelId"
-                    value={educationLevel || ""}
-                    onChange={(e) => setEducationLevel(e.target.value)}
+                    // value={educationLevel || ""}
+                    onChange={(e) => setEducationLevelId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
                     {educationLevelStore.educationLevels.items.map((item) => (
@@ -271,8 +273,7 @@ function AddClient() {
                   <Select
                     labelId="counties"
                     name="countriesId"
-                    value={countrie || ""}
-                    onChange={(e) => setCountrie(e.target.value)}
+                    onChange={(e) => setCountrieId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
                     {CountriesStore?.countries?.items.map((item) => (
@@ -285,15 +286,15 @@ function AddClient() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="cities">city</InputLabel>
+                  <InputLabel id="citys">city</InputLabel>
                   <Select
-                    labelId="cities"
-                    name="citiesId"
-                    value={citie || ""}
-                    onChange={(e) => setCitie(e.target.value)}
+                    labelId="citys"
+                    name="citysId"
+                    // value={clientStore.citys.items.id}
+                    onChange={(e) => setCityId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
-                    {CitiesStore?.citie?.items.map((item) => (
+                    {citysStore?.cities?.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
                         {item.nameAr}
                       </MenuItem>

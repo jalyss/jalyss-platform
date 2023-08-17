@@ -27,7 +27,7 @@ const profileclient = () => {
   const clientCommands = useSelector(
     (state) => state.client?.client?.clientCommands[0]?.commandLine
   );
-
+console.log(client,"clienttttttt");
   const [editClientData, setEditClientData] = useState(null);
 
   const fileInputRef = useRef(null);
