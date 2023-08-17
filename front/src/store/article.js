@@ -39,11 +39,13 @@ export const createArticleByBranchRating = createAsyncThunk(
         Authorization:'Bearer '+ token.Authorization
       }
     }
-    if (!token) return;//if u don't have token inthe localstorage this meaning that u are not a user so will break the function with return nothing
+    if (!token) return;
+    //if u don't have token inthe localstorage this meaning that u are not a user so will break the function with return nothing
     console.log(token);
     const response = await axios.post(`${config.API_ENDPOINT}/articles/rating/${articleByBranchId}`, body,configs);
     dispatch(fetchArticleByBranch(articleByBranchId))
     return response.data;
+  
   });
 
 
