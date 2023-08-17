@@ -450,8 +450,10 @@ model MediaSession {
 
 model Session {
   id                         String                       @id @default(uuid())
-  title                      String
-  description                String
+  titleEn                    String
+  titleAr                    String
+  descriptionEn              String?
+  descriptionAr              String?
   createdAt                  DateTime                     @default(now())
   updatedAt                  DateTime                     @updatedAt
   startDate                  DateTime
@@ -493,10 +495,10 @@ model frequentilyQuestion {
 }
 
 model WhatYouWillLearn {
-  id        String   @id @default(uuid())
-  content   String
-  createdAt DateTime @default(now())
-
+  id                         String                       @id @default(uuid())
+  contentEn                  String
+  contentAr                  String
+  createdAt                  DateTime                     @default(now())
   SessionHasWhatYouWillLearn SessionHasWhatYouWillLearn[]
   LectureHasWhatYouWillLearn LectureHasWhatYouWillLearn[]
 }
@@ -520,8 +522,10 @@ model LectureHasWhatYouWillLearn {
 }
 
 model Prerequire {
-  id        String   @id @default(uuid())
-  content   String
+  id        String @id @default(uuid())
+  contentEn String
+  contentAr String
+
   createdAt DateTime @default(now())
 
   sessionHasPrerequire sessionHasPrerequire[]
@@ -547,8 +551,9 @@ model SessionHasSessionType {
 }
 
 model SessionType {
-  id    String @id @default(uuid())
-  title String
+  id      String @id @default(uuid())
+  titleEn String
+  titleAr String
 
   createdAt DateTime                @default(now())
   sessions  SessionHasSessionType[] //*many to many relation to Session
@@ -568,8 +573,10 @@ model SessionHasLecture {
 
 model Lecture {
   id                         String                       @id @default(uuid())
-  title                      String
-  content                    String
+  titleEn                    String
+  titleAr                    String
+  contentEn                  String
+  contentAr                  String
   createdAt                  DateTime                     @default(now())
   sessions                   SessionHasLecture[]
   assesments                 Assessments[]
@@ -594,10 +601,10 @@ model Assessments {
 }
 
 model Feature {
-  id        String   @id @default(uuid())
-  label     String
-  createdAt DateTime @default(now())
-
+  id                      String                    @id @default(uuid())
+  labelEn                 String
+  labelAr                 String
+  createdAt               DateTime                  @default(now())
   SessionTarifHasFeatures SessionTarifHasFeatures[]
   SessionHasFeatures      SessionHasFeatures[]
 }
@@ -623,7 +630,8 @@ model SessionHasFeatures {
 
 model SessionTarif {
   id        String                    @id @default(uuid())
-  title     String
+  titleEn   String
+  titleAr   String
   price     Float
   createdAt DateTime                  @default(now())
   bookings  TrainingBooking[] // *one to many relation to TrainingBooking

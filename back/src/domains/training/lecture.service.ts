@@ -43,7 +43,7 @@ export class LectureService {
           include: {
             session: {
               select: {
-                title: true,
+                titleEn: true,
               },
             },
           },

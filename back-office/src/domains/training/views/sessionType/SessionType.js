@@ -12,7 +12,9 @@ import { CreateSessionType } from "../../../../store/sessiontypes";
 import SessionTypesDataGrid from "../../components/SessionTypesDataGrid";
 function SessionType() {
 
-  const [title, setTitle] = useState("");
+  const [titleEn, setTitleEn] = useState("");
+  const [titleAr, setTitleAr] = useState("");
+
   const [basicModal, setBasicModal] = useState(false);
 
   const toggleShow = () => {
@@ -21,7 +23,7 @@ function SessionType() {
 
   const dispatch = useDispatch();
   const addType = () => {
-    dispatch(CreateSessionType({ title }))
+    dispatch(CreateSessionType({ titleEn,titleAr }))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -36,7 +38,9 @@ function SessionType() {
 
   const handleSave = () => {
     addType();
-    setTitle("");
+    setTitleEn("");
+    setTitleAr("");
+
     toggleShow();
   };
 
@@ -60,14 +64,21 @@ function SessionType() {
         title="Add new type"
         body={
           <div
-            className="d-flex justify-content-center align-items-center "
+            className="d-flex flex-column gap-3 justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-            value={title}
-              label="title"
+            value={titleEn}
+              label="titleEn"
               onChange={(e) => {
-                setTitle(e.target.value);
+                setTitleEn(e.target.value);
+              }}
+            />
+              <StyledInput
+            value={titleAr}
+              label="titleAr"
+              onChange={(e) => {
+                setTitleAr(e.target.value);
               }}
             />
           </div>

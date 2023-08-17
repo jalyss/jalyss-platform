@@ -19,7 +19,7 @@ function Prereq() {
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
-  const [editContent, setEditContent] = useState("");
+  const [content, setContent] = useState({});
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
   const [contentOfDelete, setContentOfDelete] = useState("");
@@ -37,17 +37,19 @@ function Prereq() {
     if (editModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
-        setEditContent(row.content);
+        setContent({contentEn:row.contentEn,contentAr:row.contentAr});
       }
     }
   }, [editModal, editRowId, rows]);
-
+console.log("cont",content);
   useEffect(() => {
     if (prerequires?.items?.length) {
       let aux = prerequires?.items.map((e) => {
         return {
           ...e,
-          content: e.content,
+          contentEn: e.contentEn,
+          contentAr: e.contentAr,
+
           createdAt: e.createdAt.slice(0, 10),
         };
       });
@@ -69,7 +71,7 @@ function Prereq() {
         (prereq) => prereq.id === idOfDelete
       );
       if (prereqToDelete) {
-        setContentOfDelete(prereqToDelete.content);
+        setContentOfDelete(prereqToDelete.contentEn);
       }
     }
   }, [basicModal, idOfDelete, prerequires.items]);
@@ -89,11 +91,12 @@ function Prereq() {
   };
 
   const handleEdit = () => {
-    const content = editContent;
+   
     dispatch(
       editPrerequire({
         id: editRowId,
-        content: content,
+        contentEn:content.contentEn,
+        contentAr:content.contentAr,
       })
     )
       .then((res) => {
@@ -108,14 +111,24 @@ function Prereq() {
       });
 
     setEditRowId("");
-    setEditContent("");
+    setContent("");
     toggleShow2();
   };
 
+const handleChange=(e)=>{
+  const {name,value}=e.target
+  setContent((content)=>({...content , [name]:value}))
+}
   const columns = [
     {
-      field: "content",
-      headerName: "Content",
+      field: "contentEn",
+      headerName: "ContentEn",
+      width: 330,
+      editable: false,
+    },
+    {
+      field: "contentAr",
+      headerName: "ContentAr",
       width: 330,
       editable: false,
     },
@@ -210,15 +223,21 @@ function Prereq() {
         title="Edit Prerequire"
         body={
           <div
-            className="d-flex justify-content-center align-items-center "
+            className="d-flex flex-column gap-3 justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={editContent}
-              label="Content"
-              onChange={(e) => {
-                setEditContent(e.target.value);
-              }}
+              value={content?.contentEn}
+              label="ContentEn"
+              name="contentEn"
+              onChange={handleChange}
+            />
+              <StyledInput
+              value={content?.contentAr}
+              label="ContentAr"
+              name="contentAr"
+              onChange={handleChange}
+
             />
           </div>
         }

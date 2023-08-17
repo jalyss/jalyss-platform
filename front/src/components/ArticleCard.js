@@ -30,11 +30,11 @@ function ArticleCard({ article }) {
         <div className="stock-label">
           <h6 className="m-0">{article.stock} </h6>
         </div>
-        <img
-          src={article.article.cover.path}
+        {/* <img
+          src={article?.article?.cover.path}
           className="w-100 object-fit-contain article-image "
           alt=""
-        />
+        /> */}
         <div className="rating-home">
           <Rating edit={false} rating={article?.rating} />
         </div>

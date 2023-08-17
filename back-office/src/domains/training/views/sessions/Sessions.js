@@ -44,8 +44,14 @@ function Sessions() {
  
   const columns = [
     {
-      field: "title",
-      headerName: "Title",
+      field: "titleEn",
+      headerName: "TitleEn",
+      width: 230,
+      editable: true,
+    },
+    {
+      field: "titleAr",
+      headerName: "TitleAr",
       width: 230,
       editable: true,
     },
