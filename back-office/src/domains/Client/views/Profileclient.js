@@ -18,10 +18,12 @@ import { editClient, fetchClient } from "../../../store/client";
 
 import EditIcon from "@mui/icons-material/Edit";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import { Dialog, DialogContent } from "@mui/material";
+
 
 const profileclient = () => {
   const client = useSelector((state) => state.client?.client);
-  const clientStore = useSelector((state) => state.client.client);
+  const clientStore = useSelector((state) => state.client?.client);
   const clientCommands = useSelector(
     (state) => state.client?.client?.clientCommands[0]?.commandLine
   );
@@ -36,13 +38,10 @@ const profileclient = () => {
   const [renderEditView, setRenderEditView] = useState(false);
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
-  const [row, setRow] = useState([]);
+  
 
   useEffect(() => {
     dispatch(fetchClient(id));
-  }, [dispatch, id]);
-  useEffect(() => {
-    dispatch(fetchCommand(id));
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -59,7 +58,7 @@ const profileclient = () => {
     fileInputRef.current.click();
   };
   console.log(id, "clientId");
-  console.log(row, "heeeeeedha");
+  console.log(client, "heeeeeedha");
   const handleSubmit = async () => {
     const body = {
       ...editClientData,
@@ -94,59 +93,7 @@ const profileclient = () => {
     setBasicModalDelete(!basicModalDelete);
     setRenderEditView(false);
   };
-  useEffect(() => {
-    if (true) {
-      let ress = [];
-      ress.push(clientStore);
-      let aux = ress.map((e, i) => {
-        return {
-          id: e?.id || i,
-          ...e,
-        };
-      });
-      setRows(aux);
-    }
-  }, []);
-
-  const columns = [
-    {
-      field: "educationLevel",
-      headerName: "educationLevel",
-      width: 155,
-      editable: false,
-      valueGetter: (params) => params?.row?.educationLevel?.nameEn,
-    },
-
-    {
-      field: "jobTitle",
-      headerName: "jobTitle",
-      width: 155,
-      editable: false,
-      valueGetter: (params) => params?.row?.jobTitle?.nameEn,
-    },
-    {
-      field: "functionalArea",
-      headerName: "functionalArea",
-      width: 155,
-      editable: false,
-      valueGetter: (params) => params?.row?.functionalArea?.nameEn,
-    },
-    {
-      field: "countryId",
-      headerName: "countryId",
-      width: 155,
-      editable: false,
-      valueGetter: (params) => params?.row?.country?.nameEn,
-    },
-    {
-      field: "city",
-      headerName: "city",
-      width: 155,
-      editable: false,
-      valueGetter: (params) => params?.row?.city?.nameEn,
-    },
-  ];
-
+ 
   useEffect(() => {
     let aux = clientCommands?.map((e, i) => {
       return {
@@ -154,493 +101,561 @@ const profileclient = () => {
         ...e,
       };
     });
-    setRow(aux);
-  }, []);
+    setRows(aux);
+  }, [clientCommands]);
+  console.log(clientCommands,"clientCommands");
+  const [open, setOpen] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
 
-  const column = [
+  const handleClick = (cover) => {
+    setSelectedAvatar(cover);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const columns = [
+    {
+      field: "cover",
+      headerName: "cover",
+      width: 120,
+      editable: false,
+      renderCell: (params) => (
+        <>
+          <img
+            src={params?.rows?.articleByBranch?.article?.cover}
+            alt="cover"
+            style={{
+              width: "60%",
+              borderRadius: "40px",
+              height: "110%",
+              cursor: "pointer",
+            }}
+            onClick={() => handleClick(params?.rows?.articleByBranch?.article?.cover)}
+          />
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            style={{ borderRadius: "50px" }}
+          >
+            <DialogContent>
+              <img
+                src={selectedAvatar}
+                alt="avatar"
+                style={{ width: "100%", borderRadius: "40px" }}
+              />
+            </DialogContent>
+          </Dialog>
+        </>
+      ),
+    },
     {
       field: "title",
       headerName: "title",
       width: 155,
       editable: false,
-      valueGetter: (params) => params?.row?.articleByBranch.article.title,
+      valueGetter: (params) => params?.rows?.articleByBranch?.article?.title,
     },
     {
       field: "Price",
       headerName: "Price",
       width: 155,
       editable: false,
-      valueGetter: (params) => params?.row?.articleByBranch.price,
+      valueGetter: (params) => params?.rows?.articleByBranch?.price,
     },
     {
       field: "quantity",
       headerName: "quantity",
       width: 155,
       editable: false,
-      valueGetter: (params) => params?.row?.quantity,
+      valueGetter: (params) => params?.rows?.quantity,
+    },
+    {
+      field: "code",
+      headerName: "code",
+      width: 155,
+      editable: false,
+      valueGetter: (params) => params?.rows?.articleByBranch?.article?.code,
     },
   ];
+  console.log(rows,"aaaaaaa")
   return (
     <Box sx={{ maxWidth: "90%", height: "100%", margin: "auto" }}>
-      <CardContent>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-around",
-            alignItems: "center",
-            flexWrap: "wrap",
-            height: "100%",
-          }}
-        >
-          <Box sx={{ flexBasis: "45%", my: 3, ml: 5 }}>
-            {!renderEditView ? (
-              <>
-                <div className="table-container">
-                  <Typography
-                    style={{
-                      fontFamily: "Arial",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "table-row",
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "table-cell",
-                        fontSize: "large",
-                        paddingRight: "40px",
-                      }}
-                    >
-                      full name (English):
-                    </span>
-                    <span style={{ display: "table-cell" }}>
-                      {client?.fullNameEn}
-                    </span>
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontFamily: "Arial",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "table-row",
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "table-cell",
-                        fontSize: "large",
-                        paddingRight: "40px",
-                      }}
-                    >
-                      full name (Arab):
-                    </span>
-                    <span style={{ display: "table-cell" }}>
-                      {client?.fullNameAr}
-                    </span>
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontFamily: "Arial",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "table-row",
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "table-cell",
-                        fontSize: "large",
-                        paddingRight: "40px",
-                      }}
-                    >
-                      Email:
-                    </span>
-                    <span style={{ display: "table-cell" }}>
-                      {client?.email}
-                    </span>
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontFamily: "Arial",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "table-row",
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "table-cell",
-                        fontSize: "large",
-                        paddingRight: "40px",
-                      }}
-                    >
-                      Adresse:
-                    </span>
-                    <span style={{ display: "table-cell" }}>
-                      {client?.address}
-                    </span>
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontFamily: "Arial",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "table-row",
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "table-cell",
-                        fontSize: "large",
-                        paddingRight: "40px",
-                      }}
-                    >
-                      Telephone Number:
-                    </span>
-                    <span style={{ display: "table-cell" }}>{client?.tel}</span>
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontFamily: "Arial",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "table-row",
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "table-cell",
-                        fontSize: "large",
-                        paddingRight: "40px",
-                      }}
-                    >
-                      Account Balance:
-                    </span>
-                    <span style={{ display: "table-cell" }}>
-                      {client?.accountBalance}
-                    </span>
-                  </Typography>
-                  <Typography
-                    style={{
-                      fontFamily: "Arial",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      color: "#333",
-                      display: "table-row",
-                    }}
-                  >
-                    <span
-                      style={{
-                        display: "table-cell",
-                        fontSize: "large",
-                        paddingRight: "40px",
-                      }}
-                    >
-                      is Coach:
-                    </span>
-                    <span style={{ display: "table-cell" }}>
-                      {client?.isCoach === true ? "Yes" : "No"}
-                    </span>
-                  </Typography>
-                </div>
-              </>
-            ) : (
-              <>
-                <TextField
-                  label="Name"
-                  value={editClientData?.fullNameEn || ""}
-                  onChange={(e) => {
-                    setEditClientData({
-                      ...editClientData,
-                      name: e.target.value,
-                    });
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  InputLabelProps={{
-                    style: {
-                      color: "#4b0082",
-                    },
-                  }}
-                  sx={{
-                    color: "#8a2be2",
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                  }}
-                />
-                <TextField
-                  label="Name"
-                  value={editClientData?.fullNameAr || ""}
-                  onChange={(e) => {
-                    setEditClientData({
-                      ...editClientData,
-                      name: e.target.value,
-                    });
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  InputLabelProps={{
-                    style: {
-                      color: "#4b0082",
-                    },
-                  }}
-                  sx={{
-                    color: "#8a2be2",
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                  }}
-                />
-                <TextField
-                  label="Email"
-                  value={editClientData?.email || ""}
-                  onChange={(e) => {
-                    setEditClientData({
-                      ...editClientData,
-                      email: e.target.value,
-                    });
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  InputLabelProps={{
-                    style: {
-                      color: "#4b0082",
-                    },
-                  }}
-                  sx={{
-                    color: "#8a2be2",
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                  }}
-                />
-                <TextField
-                  label="Adresse"
-                  value={editClientData?.address || ""}
-                  onChange={(e) => {
-                    setEditClientData({
-                      ...editClientData,
-                      address: e.target.value,
-                    });
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  InputLabelProps={{
-                    style: {
-                      color: "#4b0082",
-                    },
-                  }}
-                  sx={{
-                    color: "#8a2be2",
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                  }}
-                />
-                <TextField
-                  label="Telephone Number"
-                  value={editClientData?.tel || ""}
-                  onChange={(e) => {
-                    setEditClientData({
-                      ...editClientData,
-                      tel: e.target.value,
-                    });
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  InputLabelProps={{
-                    style: {
-                      color: "#4b0082",
-                    },
-                  }}
-                  sx={{
-                    color: "#8a2be2",
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                  }}
-                />
-                <TextField
-                  label="Account Balance"
-                  value={editClientData?.accountBalance || ""}
-                  onChange={(e) => {
-                    setEditClientData({
-                      ...editClientData,
-                      accountBalance: +e.target.value,
-                    });
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  InputLabelProps={{
-                    style: {
-                      color: "#4b0082",
-                    },
-                  }}
-                  sx={{
-                    color: "#8a2be2",
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                  }}
-                />
-                <TextField
-                  label="isCoach"
-                  value={editClientData?.isCoach || ""}
-                  onChange={(e) => {
-                    setEditClientData({
-                      ...editClientData,
-                      isCoach: e.target.value === "true", // Convert the value to a boolean
-                    });
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  margin="normal"
-                  InputLabelProps={{
-                    style: {
-                      color: "#4b0082",
-                    },
-                  }}
-                  sx={{
-                    color: "#8a2be2",
-                    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                    "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                      {
-                        borderColor: "#8a2be2",
-                      },
-                  }}
-                />{" "}
-              </>
-            )}
-          </Box>
-          <Box
-            sx={{
-              flexBasis: "45%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              position: "relative",
-              mr: 5,
-            }}
-          >
-            <div
-              className="position-relative"
-              style={{ height: "55%", width: "80%" }}
+     <CardContent>
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "space-around",
+      alignItems: "center",
+      flexWrap: "wrap",
+      height: "100%",
+    }}
+  >
+    <Box sx={{ flexBasis: "45%", my: 3, ml: 5 }}>
+      {!renderEditView ? (
+        <div className="table-container">
+          {[
+            { label: "full name (En)", value: client?.fullNameEn },
+            { label: "full name (Ar)", value: client?.fullNameAr },
+            { label: "Email", value: client?.email },
+            { label: "Adresse", value: client?.address },
+            { label: "Telephone Number", value: client?.tel },
+            { label: "Account Balance", value: client?.accountBalance },
+            { label: "is Coach", value: client?.isCoach ? "Yes" : "No" },
+            { label: "city", value: client?.city?.nameEn },
+            { label: "country", value: client?.country?.nameEn },
+            { label: "Functional Area", value: client?.functionalArea?.nameEn },
+            { label: "Job Title", value: client?.jobTitle?.nameEn },
+            {
+              label: "Education Level",
+              value: client?.educationLevel?.nameEn || "No education level yet",
+            },
+          ].map((item, index) => (
+            <Typography
+              key={index}
+              style={{
+                fontFamily: "Arial",
+                fontSize: "16px",
+                fontWeight: "bold",
+                color: "#333",
+                display: "table-row",
+              }}
             >
-              <img
-                className="img-fluid mt-1"
-                src={
-                  selectedFile
-                    ? URL.createObjectURL(selectedFile)
-                    : editClientData?.avatar?.path ||
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
-                }
-                alt="Card image cap"
+              <span
                 style={{
-                  height: "100%",
-                  width: "100%",
-                  borderRadius: "8px",
-                  filter: "blur(0.5px)",
+                  display: "table-cell",
+                  fontSize: "large",
+                  paddingRight: "40px",
                 }}
-              />
-              <div className="position-absolute top-50 start-50 translate-middle">
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                />
+              >
+                {item.label}:
+              </span>
+              <span style={{ display: "table-cell" }}>{item.value}</span>
+            </Typography>
+          ))}
+        </div>
+      ) :  (
+        <>
+          <TextField
+            label="Name"
+            value={editClientData?.fullNameEn || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                name: e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+          <TextField
+            label="Name"
+            value={editClientData?.fullNameAr || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                name: e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+          <TextField
+            label="Email"
+            value={editClientData?.email || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                email: e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+          <TextField
+            label="Adresse"
+            value={editClientData?.address || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                address: e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+          <TextField
+            label="Telephone Number"
+            value={editClientData?.tel || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                tel: e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+          <TextField
+            label="Account Balance"
+            value={editClientData?.accountBalance || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                accountBalance: +e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+          <TextField
+            label="Is Coach"
+            value={editClientData?.isCoach || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                isCoach: e.target.value === "true", // Convert the value to a boolean
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+           <TextField
+            label="City"
+            value={editClientData?.city.nameEn || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                city: +e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+           <TextField
+            label="Country"
+            value={editClientData?.country.nameEn || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                country: +e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+           <TextField
+            label="Functional Area"
+            value={editClientData?.functionalArea.nameEn || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                functionalArea: +e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+           <TextField
+            label="Job Title"
+            value={editClientData?.jobTitle.nameEn  || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                jobTitle: +e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+          
+           <TextField
+            label="Education Level"
+            value={editClientData?.educationLevel?.nameEn || ""}
+            onChange={(e) => {
+              setEditClientData({
+                ...editClientData,
+                educationLevel: +e.target.value,
+              });
+            }}
+            fullWidth
+            variant="outlined"
+            margin="normal"
+            InputLabelProps={{
+              style: {
+                color: "#4b0082",
+              },
+            }}
+            sx={{
+              color: "#8a2be2",
+              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                {
+                  borderColor: "#8a2be2",
+                },
+            }}
+          />
+        </>
+      )}
+    </Box>
+    <Box
+      sx={{
+        flexBasis: "45%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        position: "relative",
+        mr: 5,
+      }}
+    >
+      <div className="position-relative" style={{ height: "55%", width: "80%" }}>
+        <img
+          className="img-fluid mt-1"
+          src={
+            selectedFile
+              ? URL.createObjectURL(selectedFile)
+              : editClientData?.avatar?.path ||
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
+          }
+          alt="Card image cap"
+          style={{
+            height: "100%",
+            width: "100%",
+            borderRadius: "8px",
+            filter: "blur(0.5px)",
+          }}
+        />
+        <div className="position-absolute top-50 start-50 translate-middle">
+          <input
+            type="file"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            style={{ display: "none" }}
+          />
 
-                {renderEditView && (
-                  <IconButton
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "62%",
-                      transform: "translate(-50%, -50%)",
-                      color: "#8a2be2",
-                      backgroundColor: "#fff",
-                      border: "1px solid #8a2be2",
-                      "&:hover": {
-                        backgroundColor: "#8a2be2",
-                        color: "#fff",
-                      },
-                    }}
-                    onClick={handleButtonClick}
-                  >
-                    <EditIcon fontSize="large" />
-                  </IconButton>
-                )}
-              </div>
-            </div>
-          </Box>
-        </Box>
-      </CardContent>
+          {renderEditView && (
+            <IconButton
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "62%",
+                transform: "translate(-50%, -50%)",
+                color: "#8a2be2",
+                backgroundColor: "#fff",
+                border: "1px solid #8a2be2",
+                "&:hover": {
+                  backgroundColor: "#8a2be2",
+                  color: "#fff",
+                },
+              }}
+              onClick={handleButtonClick}
+            >
+              <EditIcon fontSize="large" />
+            </IconButton>
+          )}
+        </div>
+      </div>
+    </Box>
+  </Box>
+</CardContent>
 
-      <Box sx={{ height: 400, width: "100%" }}>
+
+      {/* <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 2,
-              },
-            },
-          }}
-          pageSizeOptions={[2]}
-          disableRowSelectionOnClick
-        />
-      </Box>
-      <Box sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={row}
-          columns={column}
+        
           initialState={{
             pagination: {
               paginationModel: {
@@ -651,7 +666,8 @@ const profileclient = () => {
           pageSizeOptions={[10]}
           disableRowSelectionOnClick
         />
-      </Box>
+      </Box> */}
+     
       <Box display="flex" justifyContent="center" mt={9}>
         {renderEditView ? (
           <Button

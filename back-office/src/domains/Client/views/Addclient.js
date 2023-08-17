@@ -6,6 +6,9 @@ import { createClient, fetchClients } from "../../../store/client";
 import { fetchEducationLevels } from "../../../store/educationLevel";
 import { fetchFunctionalAreas } from "../../../store/functionalArea";
 import { fetchJobTitles } from "../../../store/jobTitle";
+import { fetchCountries } from "../../../store/Country";
+import { findAllCitites } from "../../../store/Country";
+
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import {
   Button,
@@ -35,18 +38,28 @@ function AddClient() {
   const [educationLevel, setEducationLevel] = useState("");
   const [functionalArea, setFunctionalArea] = useState("");
   const [jobTitle, setJobTitle] = useState("");
+  const [countrie, setCountrie] = useState("");
+  const [citie, setCitie] = useState("");
+
+
   const [avatar, setAvatar] = useState(null);
 
   const clientStore = useSelector((state) => state.client);
   const educationLevelStore = useSelector((state) => state.educationLevel);
   const functionalAreaStore = useSelector((state) => state.functionalArea);
   const jobTitleStore = useSelector((state) => state.jobTitle);
+  const CountriesStore = useSelector((state) => state.country);
+  const CitiesStore = useSelector((state) => state.city);
+
 
   useEffect(() => {
     dispatch(fetchClients());
     dispatch(fetchEducationLevels());
     dispatch(fetchFunctionalAreas());
     dispatch(fetchJobTitles());
+    dispatch(fetchCountries());
+    dispatch(findAllCitites());
+
   }, [dispatch]);
 
   const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
@@ -233,6 +246,7 @@ function AddClient() {
                   </Select>
                 </FormControl>
               </Grid>
+            
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel id="educationLevel">Education Level</InputLabel>
@@ -244,6 +258,42 @@ function AddClient() {
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
                     {educationLevelStore.educationLevels.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="counties">counties</InputLabel>
+                  <Select
+                    labelId="counties"
+                    name="countriesId"
+                    value={countrie || ""}
+                    onChange={(e) => setCountrie(e.target.value)}
+                  >
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {CountriesStore?.countries?.items.map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.nameAr}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="cities">city</InputLabel>
+                  <Select
+                    labelId="cities"
+                    name="citiesId"
+                    value={citie || ""}
+                    onChange={(e) => setCitie(e.target.value)}
+                  >
+                    <MenuItem value={null}>--select option--</MenuItem>
+                    {CitiesStore?.citie?.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
                         {item.nameAr}
                       </MenuItem>
