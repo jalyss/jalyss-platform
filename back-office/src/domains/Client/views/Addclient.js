@@ -38,7 +38,7 @@ function AddClient() {
   const [educationLevelId, setEducationLevelId] = useState("");
   const [functionalAreaId, setFunctionalAreaId] = useState("");
   const [jobTitleId, setJobTitleId] = useState("");
-  const [countrieId, setCountrieId] = useState("");
+  const [countryId, setCountryId] = useState("");
   const [cityId, setCityId] = useState("");
 
   const [avatar, setAvatar] = useState(null);
@@ -90,7 +90,7 @@ function AddClient() {
       isCoach,
       cityId,
       educationLevelId,
-      countrieId,
+      countryId,
       functionalAreaId,
       jobTitleId,
     };
@@ -273,7 +273,7 @@ function AddClient() {
                   <Select
                     labelId="counties"
                     name="countriesId"
-                    onChange={(e) => setCountrieId(e.target.value)}
+                    onChange={(e) => setCountryId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
                     {CountriesStore?.countries?.items.map((item) => (
