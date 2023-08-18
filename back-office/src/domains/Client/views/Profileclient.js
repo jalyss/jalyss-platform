@@ -20,14 +20,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { Dialog, DialogContent } from "@mui/material";
 
-
 const profileclient = () => {
   const client = useSelector((state) => state.client?.client);
-  const clientStore = useSelector((state) => state.client?.client);
+
   const clientCommands = useSelector(
     (state) => state.client?.client?.clientCommands[0]?.commandLine
   );
-console.log(client,"clienttttttt");
+  console.log(client, "clienttttttt");
   const [editClientData, setEditClientData] = useState(null);
 
   const fileInputRef = useRef(null);
@@ -38,7 +37,6 @@ console.log(client,"clienttttttt");
   const [renderEditView, setRenderEditView] = useState(false);
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
-  
 
   useEffect(() => {
     dispatch(fetchClient(id));
@@ -58,7 +56,8 @@ console.log(client,"clienttttttt");
     fileInputRef.current.click();
   };
   console.log(id, "clientId");
-  console.log(client, "heeeeeedha");
+  console.log(client, "client");
+
   const handleSubmit = async () => {
     const body = {
       ...editClientData,
@@ -72,10 +71,11 @@ console.log(client,"clienttttttt");
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
           formData
         );
-        body.logoId = response.data.id;
+        body.avatarId = response.data.id;
       }
-      delete body.logo;
+      delete body.avatar;
       delete body.Mediaclient;
+      //you need to change the schema (check with rania )
 
       const editedClient = { ...body, id };
       dispatch(editClient(editedClient));
@@ -93,7 +93,7 @@ console.log(client,"clienttttttt");
     setBasicModalDelete(!basicModalDelete);
     setRenderEditView(false);
   };
- 
+
   useEffect(() => {
     let aux = clientCommands?.map((e, i) => {
       return {
@@ -103,7 +103,7 @@ console.log(client,"clienttttttt");
     });
     setRows(aux);
   }, [clientCommands]);
-  console.log(clientCommands,"clientCommands");
+  console.log(clientCommands, "clientCommands");
   const [open, setOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
 
@@ -132,7 +132,9 @@ console.log(client,"clienttttttt");
               height: "110%",
               cursor: "pointer",
             }}
-            onClick={() => handleClick(params?.rows?.articleByBranch?.article?.cover)}
+            onClick={() =>
+              handleClick(params?.rows?.articleByBranch?.article?.cover)
+            }
           />
           <Dialog
             open={open}
@@ -153,509 +155,343 @@ console.log(client,"clienttttttt");
     {
       field: "title",
       headerName: "title",
-      width: 155,
-      editable: false,
+      width: 130,
+      editable: true,
       valueGetter: (params) => params?.rows?.articleByBranch?.article?.title,
     },
     {
       field: "Price",
       headerName: "Price",
-      width: 155,
-      editable: false,
+      width: 130,
+      editable: true,
       valueGetter: (params) => params?.rows?.articleByBranch?.price,
     },
     {
       field: "quantity",
       headerName: "quantity",
-      width: 155,
-      editable: false,
+      width: 130,
+      editable: true,
       valueGetter: (params) => params?.rows?.quantity,
     },
     {
       field: "code",
       headerName: "code",
-      width: 155,
-      editable: false,
+      width: 130,
+      editable: true,
+      valueGetter: (params) => params?.rows?.articleByBranch?.article?.code,
+    },
+    {
+      field: "code",
+      headerName: "code",
+      width: 130,
+      editable: true,
       valueGetter: (params) => params?.rows?.articleByBranch?.article?.code,
     },
   ];
-  console.log(rows,"aaaaaaa")
+  console.log(rows, "rows");
+
   return (
     <Box sx={{ maxWidth: "90%", height: "100%", margin: "auto" }}>
-     <CardContent>
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "space-around",
-      alignItems: "center",
-      flexWrap: "wrap",
-      height: "100%",
-    }}
-  >
-    <Box sx={{ flexBasis: "45%", my: 3, ml: 5 }}>
-      {!renderEditView ? (
-        <div className="table-container">
-          {[
-            { label: "full name (En)", value: client?.fullNameEn },
-            { label: "full name (Ar)", value: client?.fullNameAr },
-            { label: "Email", value: client?.email },
-            { label: "Adresse", value: client?.address },
-            { label: "Telephone Number", value: client?.tel },
-            { label: "Account Balance", value: client?.accountBalance },
-            { label: "is Coach", value: client?.isCoach ? "Yes" : "No" },
-            { label: "city", value: client?.city?.nameEn },
-            { label: "country", value: client?.country?.nameEn },
-            { label: "Functional Area", value: client?.functionalArea?.nameEn },
-            { label: "Job Title", value: client?.jobTitle?.nameEn },
-            {
-              label: "Education Level",
-              value: client?.educationLevel?.nameEn || "No education level yet",
-            },
-          ].map((item, index) => (
-            <Typography
-              key={index}
-              style={{
-                fontFamily: "Arial",
-                fontSize: "16px",
-                fontWeight: "bold",
-                color: "#333",
-                display: "table-row",
-              }}
-            >
-              <span
-                style={{
-                  display: "table-cell",
-                  fontSize: "large",
-                  paddingRight: "40px",
-                }}
-              >
-                {item.label}:
-              </span>
-              <span style={{ display: "table-cell" }}>{item.value}</span>
-            </Typography>
-          ))}
-        </div>
-      ) :  (
-        <>
-          <TextField
-            label="Name"
-            value={editClientData?.fullNameEn || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                name: e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-          <TextField
-            label="Name"
-            value={editClientData?.fullNameAr || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                name: e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-          <TextField
-            label="Email"
-            value={editClientData?.email || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                email: e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-          <TextField
-            label="Adresse"
-            value={editClientData?.address || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                address: e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-          <TextField
-            label="Telephone Number"
-            value={editClientData?.tel || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                tel: e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-          <TextField
-            label="Account Balance"
-            value={editClientData?.accountBalance || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                accountBalance: +e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-          <TextField
-            label="Is Coach"
-            value={editClientData?.isCoach || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                isCoach: e.target.value === "true", // Convert the value to a boolean
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-           <TextField
-            label="City"
-            value={editClientData?.city.nameEn || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                city: +e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-           <TextField
-            label="Country"
-            value={editClientData?.country.nameEn || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                country: +e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-           <TextField
-            label="Functional Area"
-            value={editClientData?.functionalArea.nameEn || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                functionalArea: +e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-           <TextField
-            label="Job Title"
-            value={editClientData?.jobTitle.nameEn  || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                jobTitle: +e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-          
-           <TextField
-            label="Education Level"
-            value={editClientData?.educationLevel?.nameEn || ""}
-            onChange={(e) => {
-              setEditClientData({
-                ...editClientData,
-                educationLevel: +e.target.value,
-              });
-            }}
-            fullWidth
-            variant="outlined"
-            margin="normal"
-            InputLabelProps={{
-              style: {
-                color: "#4b0082",
-              },
-            }}
-            sx={{
-              color: "#8a2be2",
-              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-              "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                {
-                  borderColor: "#8a2be2",
-                },
-            }}
-          />
-        </>
-      )}
-    </Box>
-    <Box
-      sx={{
-        flexBasis: "45%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        position: "relative",
-        mr: 5,
-      }}
-    >
-      <div className="position-relative" style={{ height: "55%", width: "80%" }}>
-        <img
-          className="img-fluid mt-1"
-          src={
-            selectedFile
-              ? URL.createObjectURL(selectedFile)
-              : editClientData?.avatar?.path ||
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
-          }
-          alt="Card image cap"
-          style={{
+      <CardContent>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            flexWrap: "wrap",
             height: "100%",
-            width: "100%",
-            borderRadius: "8px",
-            filter: "blur(0.5px)",
           }}
-        />
-        <div className="position-absolute top-50 start-50 translate-middle">
-          <input
-            type="file"
-            onChange={handleFileChange}
-            ref={fileInputRef}
-            style={{ display: "none" }}
-          />
+        >
+          <Box sx={{ flexBasis: "45%", my: 3, ml: 5 }}>
+            {!renderEditView ? (
+              <div className="table-container">
+                {[
+                  {
+                    label: "full name (En)",
+                    value: client?.fullNameEn || "Null",
+                  },
+                  {
+                    label: "full name (Ar)",
+                    value: client?.fullNameAr || "Null",
+                  },
+                  { label: "Email", value: client?.email || "Null" },
+                  { label: "Adresse", value: client?.address || "Null" },
+                  { label: "Telephone Number", value: client?.tel || "Null" },
+                  {
+                    label: "Account Balance",
+                    value: client?.accountBalance || "Null",
+                  },
+                  { label: "is Coach", value: client?.isCoach ? "Yes" : "No" },
+                  { label: "city", value: client?.city?.nameEn || "Null" },
+                  {
+                    label: "country",
+                    value: client?.country?.nameEn || "Null",
+                  },
+                  {
+                    label: "Functional Area",
+                    value: client?.functionalArea?.nameEn || "Null",
+                  },
+                  {
+                    label: "Job Title",
+                    value: client?.jobTitle?.nameEn || "Null",
+                  },
+                  {
+                    label: "Education Level",
+                    value: client?.educationLevel?.nameEn || "Null",
+                  },
+                ].map((item, index) => (
+                  <Typography
+                    key={index}
+                    style={{
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      fontWeight: "bold",
+                      color: "#333",
+                      display: "table-row",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      {item.label}:
+                    </span>
+                    <span style={{ display: "table-cell" }}>{item.value}</span>
+                  </Typography>
+                ))}
+              </div>
+            ) : (
+              <div className="details-container">
+                <TextField
+                  label="full name (En)"
+                  value={editClientData?.fullNameEn || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      fullNameEn: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="full name (Ar)"
+                  value={editClientData?.fullNameAr || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      fullNameAr: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="Email"
+                  value={editClientData?.email || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      email: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="Adresse"
+                  value={editClientData?.address || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      address: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="Telephone Number"
+                  value={editClientData?.tel || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      tel: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="Account Balance"
+                  value={editClientData?.accountBalance || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      accountBalance: +e.target.value,
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="is Coach"
+                  value={editClientData?.isCoach ? "Yes" : "No"}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      isCoach: e.target.value === "Yes",
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="city"
+                  value={editClientData?.city?.nameEn || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      city: { nameEn: e.target.value },
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="country"
+                  value={editClientData?.country?.nameEn || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      country: { nameEn: e.target.value },
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
 
-          {renderEditView && (
-            <IconButton
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "62%",
-                transform: "translate(-50%, -50%)",
-                color: "#8a2be2",
-                backgroundColor: "#fff",
-                border: "1px solid #8a2be2",
-                "&:hover": {
-                  backgroundColor: "#8a2be2",
-                  color: "#fff",
-                },
-              }}
-              onClick={handleButtonClick}
+                <TextField
+                  label="Functional Area"
+                  value={editClientData?.functionalArea?.nameEn || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      functionalArea: { nameEn: e.target.value },
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="Job Title"
+                  value={editClientData?.jobTitle?.nameEn || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      jobTitle: { nameEn: e.target.value },
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+                <TextField
+                  label="Education Level"
+                  value={editClientData?.educationLevel?.nameEn || ""}
+                  onChange={(e) =>
+                    setEditClientData({
+                      ...editClientData,
+                      educationLevel: { nameEn: e.target.value },
+                    })
+                  }
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                />
+              </div>
+            )}
+          </Box>
+          <Box
+            sx={{
+              flexBasis: "45%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              position: "relative",
+              mr: 5,
+            }}
+          >
+            <div
+              className="position-relative"
+              style={{ height: "55%", width: "80%" }}
             >
-              <EditIcon fontSize="large" />
-            </IconButton>
-          )}
-        </div>
-      </div>
-    </Box>
-  </Box>
-</CardContent>
+              <img
+                className="img-fluid mt-1"
+                src={
+                  selectedFile
+                    ? URL.createObjectURL(selectedFile)
+                    : editClientData?.avatar?.path ||
+                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
+                }
+                alt="Card image cap"
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: "8px",
+                  filter: "blur(0.5px)",
+                }}
+              />
+              <div className="position-absolute top-50 start-50 translate-middle">
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                />
 
-
-      {/* <Box sx={{ height: 400, width: "100%" }}>
+                {renderEditView && (
+                  <IconButton
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "62%",
+                      transform: "translate(-50%, -50%)",
+                      color: "#8a2be2",
+                      backgroundColor: "#fff",
+                      border: "1px solid #8a2be2",
+                      "&:hover": {
+                        backgroundColor: "#8a2be2",
+                        color: "#fff",
+                      },
+                    }}
+                    onClick={handleButtonClick}
+                  >
+                    <EditIcon fontSize="large" />
+                  </IconButton>
+                )}
+              </div>
+            </div>
+          </Box>
+        </Box>
+      </CardContent>
+      {/* <Box sx={{ height: 600, width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
-        
           initialState={{
             pagination: {
               paginationModel: {
@@ -663,11 +499,12 @@ console.log(client,"clienttttttt");
               },
             },
           }}
-          pageSizeOptions={[10]}
+          pageSizeOptions={[5]}
+          checkboxSelection
           disableRowSelectionOnClick
         />
       </Box> */}
-     
+
       <Box display="flex" justifyContent="center" mt={9}>
         {renderEditView ? (
           <Button
@@ -707,7 +544,7 @@ console.log(client,"clienttttttt");
         }
         body={
           <div className="d-flex justify-content-center align-items-center">
-            You want to edit this client ?
+            You want to edit this client?
           </div>
         }
         fn={() => {

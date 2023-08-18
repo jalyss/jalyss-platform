@@ -168,7 +168,7 @@ function AddClient() {
 
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Account"
+                  label="Account balance"
                   variant="outlined"
                   fullWidth
                   type="number"
@@ -218,7 +218,6 @@ function AddClient() {
                   <Select
                     labelId="functionalArea"
                     name="functionalAreaId"
-                    // value={functionalArea || ""}
                     onChange={(e) => setFunctionalAreaId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
@@ -236,7 +235,6 @@ function AddClient() {
                   <Select
                     labelId="jobTitle"
                     name="jobTitleId"
-                    // value={jobTitle || ""}
                     onChange={(e) => setJobTitleId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
@@ -255,7 +253,6 @@ function AddClient() {
                   <Select
                     labelId="educationLevel"
                     name="educationLevelId"
-                    // value={educationLevel || ""}
                     onChange={(e) => setEducationLevelId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>
@@ -290,7 +287,6 @@ function AddClient() {
                   <Select
                     labelId="citys"
                     name="citysId"
-                    // value={clientStore.citys.items.id}
                     onChange={(e) => setCityId(e.target.value)}
                   >
                     <MenuItem value={null}>--select option--</MenuItem>

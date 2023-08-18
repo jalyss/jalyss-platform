@@ -24,11 +24,11 @@ export const createClient = createAsyncThunk(
 export const editClient = createAsyncThunk(
   "clients/editclient",
   async (args) => {
-    const { clientId, ...rest } = args;
+    const { id, ...rest } = args;
     console.log(args, "args");
     console.log(rest, "rest");
     const response = await axios.patch(
-      `${config.API_ENDPOINT}/clients/${clientId}`,
+      `${config.API_ENDPOINT}/clients/${id}`,
       { ...rest }
     );
     console.log(response.data, "response.data");
