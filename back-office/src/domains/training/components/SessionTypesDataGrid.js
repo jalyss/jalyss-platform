@@ -21,10 +21,11 @@ function SessionTypesDataGrid() {
   const [rows, setRows] = useState([]);
   const [basicModal, setBasicModal] = useState(false);
   const [idOfDelete, setIdOfDelete] = useState("");
-  const [editTitle, setEditTitle] = useState("");
+  const [editTitleEn, setEditTitleEn] = useState("");
+  const [editTitleAr, setEditTitleAr] = useState("");
   const [editRowId, setEditRowId] = useState("");
   const [editModal, setEditModal] = useState(false);
-  const [titleOfDelete, setTitleOfDelete] = useState("");
+  const [titleEnOfDelete, setTitleEnOfDelete] = useState("");
 console.log("types",types);
  
 
@@ -32,7 +33,9 @@ console.log("types",types);
     if (editModal && editRowId) {
       const row = rows.find((row) => row.id === editRowId);
       if (row) {
-        setEditTitle(row.title);
+        setEditTitleEn(row.titleEn);
+        setEditTitleAr(row.titleAr);
+
       }
     }
    
@@ -51,7 +54,9 @@ console.log("types",types);
 
         return {
           ...e,
-          title: e.title,
+          titleEn: e.titleEn,
+          titleAr: e.titleAr,
+
           createdAt:formattedCreatAt,
         };
       });
@@ -69,7 +74,7 @@ console.log("types",types);
     if (basicModal && idOfDelete) {
       const row = rows.find((row) => row.id === idOfDelete);
       if (row) {
-        setTitleOfDelete(row.title);
+        setTitleEnOfDelete(row.titleEn);
       }
     }
   }, [basicModal, idOfDelete, rows]);
@@ -89,8 +94,8 @@ console.log("types",types);
   };
 
   const handleEdit = () => {
-    const title = editTitle;
-    dispatch(editSessionType({ id: editRowId, title: title }))
+    // const titleEn = editTitleEn;
+    dispatch(editSessionType({ id: editRowId,titleEn:editTitleEn,titleAr:editTitleAr }))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -103,14 +108,22 @@ console.log("types",types);
       });
 
     setEditRowId("");
-    setEditTitle("");
+    setEditTitleEn("");
+    setEditTitleAr("");
+
     toggleShow2();
   };
 
   const columns = [
     {
-      field: "title",
-      headerName: "Title",
+      field: "titleEn",
+      headerName: "TitleEn",
+      width: 330,
+      editable: false,
+    },
+    {
+      field: "titleAr",
+      headerName: "TitleAr",
       width: 330,
       editable: false,
     },
@@ -183,7 +196,7 @@ console.log("types",types);
           <div className="d-flex justify-content-center align-items-center">
            
             {`Are you sure you want to delete `}
-            <span style={{ color: "red" ,margin:"10px"}}>{titleOfDelete}</span>
+            <span style={{ color: "red" ,margin:"10px"}}>{titleEnOfDelete}</span>
             {` Type?`}
           </div>
         }
@@ -201,14 +214,21 @@ console.log("types",types);
         title="Edit feature"
         body={
           <div
-            className="d-flex justify-content-center align-items-center "
+            className="d-flex flex-column gap-3 justify-content-center align-items-center "
             style={{ marginRight: "50px" }}
           >
             <StyledInput
-              value={editTitle}
+              value={editTitleEn}
               label="Title"
               onChange={(e) => {
-                setEditTitle(e.target.value);
+                setEditTitleEn(e.target.value);
+              }}
+            />
+              <StyledInput
+              value={editTitleAr}
+              label="Title"
+              onChange={(e) => {
+                setEditTitleAr(e.target.value);
               }}
             />
           </div>

@@ -82,34 +82,64 @@ const Coursdetail = () => {
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell className="fw-bold">Title</TableCell>
+              <TableCell className="fw-bold">TitleEn:</TableCell>
               <TableCell>
                 {editMode ? (
                   <StyledInput
-                    value={addcours.title || ""}
+                    value={addcours.titleEn || ""}
                     onChange={handleAddcoursChange}
-                    label="Title"
-                    name="title"
+                    label="TitleEn"
+                    name="titleEn"
                   />
                 ) : (
-                  <span>{lecture?.title} </span>
+                  <span>{lecture?.titleEn} </span>
                 )}
               </TableCell>
+              <TableCell className="fw-bold">TitleAr:</TableCell>
+              <TableCell>
+              {editMode ? ( <StyledInput
+                  value={addcours.titleAr || ""}
+                  onChange={handleAddcoursChange}
+                  label="TitleAr"
+                  name="titleAr"
+                />):(
+                  <span>{lecture?.titleAr} </span>
 
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
               <TableCell className="fw-bold">Content</TableCell>
               <TableCell>
                 {editMode ? (
                   <StyledInput
-                    value={addcours.content || ""}
+                    value={addcours.contentEn || ""}
                     onChange={handleAddcoursChange}
-                    label="Content"
-                    name="content"
+                    label="ContentEn"
+                    name="contentEn"
                   />
                 ) : (
-                  <span>{lecture?.content}</span>
+                  <span>{lecture?.contentEn} </span>
+                )}
+              </TableCell>
+
+              <TableCell className="fw-bold">ContentAr</TableCell>
+              <TableCell>
+                {editMode ? (
+                  <StyledInput
+                    value={addcours.contentAr || ""}
+                    onChange={handleAddcoursChange}
+                    label="ContentAr"
+                    name="contentAr"
+                  />
+                ) : (
+                  <span>{lecture?.contentAr}</span>
                 )}
               </TableCell>
             </TableRow>
+
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
@@ -122,7 +152,7 @@ const Coursdetail = () => {
                         value={selectedGains}
                         required
                         data={gains?.items}
-                        labelOptionName="content"
+                        labelOptionName="contentEn"
                         label="Add gains"
                         onChange={setSelectedGains}
                         placeholder="Add Your session's gain"
@@ -141,7 +171,7 @@ const Coursdetail = () => {
                 ) : (
                   <>
                     {selectedGains?.map((elem, i) => (
-                      <div key={i}>{elem.content}</div>
+                      <div key={i}>{elem.contentEn}</div>
                     ))}
                   </>
                 )}

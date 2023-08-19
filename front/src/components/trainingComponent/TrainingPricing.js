@@ -51,7 +51,7 @@ const navigate=useNavigate()
           <div className="text-center" key={i}>
             <div className="bg-white p-5 rounded-lg shadow">
               <h1 className="h6 text-uppercase font-weight-bold mb-4">
-                {elem.title}
+                {elem.titleEn}
               </h1>
               <h2 className="h1 font-wieght-bold">${elem.price}</h2>
               <div
@@ -86,7 +86,7 @@ const navigate=useNavigate()
                       ) : (
                         <FaTimes color="gray" />
                       )}{" "}
-                      {element.feature.label}
+                      {element.feature.labelEn}
                     </li>
                   ));
                 })()}

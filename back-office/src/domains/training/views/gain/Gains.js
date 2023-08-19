@@ -12,7 +12,7 @@ import Modal from "../../../../components/Commun/Modal";
 import { CreateGain } from '../../../../store/gain';
 function Gains() {
   
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState({});
   const [basicModal, setBasicModal] = useState(false);
 
   const toggleShow = () => {
@@ -21,7 +21,7 @@ function Gains() {
 
   const dispatch = useDispatch();
   const addGain = () => {
-    dispatch(CreateGain({ content }))
+    dispatch(CreateGain(content))
       .then((res) => {
         if (res.error) {
           showErrorToast(res.error.message);
@@ -34,9 +34,14 @@ function Gains() {
       });
   };
 
+  const handleChange=(e)=>{
+    const {name,value}=e.target
+    setContent((content)=>({...content , [name]:value}))
+  }
+
   const handleSave = () => {
     addGain();
-    setContent("");
+    setContent({});
     toggleShow();
   };
   return (
@@ -59,17 +64,23 @@ function Gains() {
       title="Add new gain"
       body={
         <div
-          className="d-flex justify-content-center align-items-center "
-          style={{ marginRight: "50px" }}
-        >
+        className="d-flex flex-column gap-3 justify-content-center align-items-center "
+        style={{ marginRight: "50px" }}
+      >
+        <StyledInput
+          value={content?.contentEn}
+          label="ContentEn"
+          name="contentEn"
+          onChange={handleChange}
+        />
           <StyledInput
-          value={content}
-            label="Label"
-            onChange={(e) => {
-              setContent(e.target.value);
-            }}
-          />
-        </div>
+          value={content?.contentAr}
+          label="ContentAr"
+          name="contentAr"
+          onChange={handleChange}
+
+        />
+      </div>
       }
       fn={handleSave}
     />

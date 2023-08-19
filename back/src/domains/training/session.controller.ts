@@ -38,10 +38,10 @@ export class SessionController {
     return this.sessionService.findOne(sessionId);
   }
 
-  @Get()
-  findAllSessionTitles() {
-    return this.sessionService.findAllSessionTitles();
-  }
+  // @Get()
+  // findAllSessionTitles() {
+  //   return this.sessionService.findAllSessionTitles();
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateSessionDto) {
