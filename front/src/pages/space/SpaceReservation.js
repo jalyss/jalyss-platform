@@ -41,7 +41,7 @@ console.log(tarifId,'ahla bel tarif');
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const currentDate = new Date();
+    const currentDate = new Date(date);
     const isoFormattedDate = currentDate.toISOString();
     
 
@@ -147,15 +147,15 @@ console.log(tarifId,'ahla bel tarif');
             />
           </FormControl>
         </Grid>
-        {/* <Grid item xs={12}>
+        <Grid item xs={12}>
           <FormLabel component="legend">Choose your day</FormLabel>
           <input
             type="date"
             name="date"
-            onChange={(e)=>setDate("2023-08-16T12:34:56.789Z")}
+            onChange={(e)=>setDate(e.target.value)}
             required
           />
-        </Grid> */}
+        </Grid>
         <Grid item xs={12}>
           <label>Choose your arrival time</label>
           <div>
