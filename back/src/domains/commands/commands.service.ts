@@ -43,6 +43,7 @@ export class CommandsService {
       },
     });
   }
+  
 
   async findAll() {
     return this.prisma.command.findMany();
