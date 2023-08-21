@@ -229,8 +229,8 @@ function Router() {
 
             <Route path="role" element={<Role />}>
               <Route index element={<RolesList />} />
-              <Route path="edit/:roleId" element={<EditRole />} />
-              <Route path="detail/:roleId" element={<DetailRole />} />
+              <Route path="edit/:id" element={<EditRole />} />
+              <Route path="detail/:id" element={<DetailRole />} />
               <Route path="create" element={<CreateRole />} />
             </Route>
 

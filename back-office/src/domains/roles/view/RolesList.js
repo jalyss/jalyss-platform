@@ -136,4 +136,4 @@ function RolesList() {
   )
 }
 
-export default RolesList
+export default RolesList;
