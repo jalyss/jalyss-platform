@@ -68,11 +68,7 @@ export const sidebarDataBranch = [
         nameAr: "المستخدم",
         path: "users"
       },
-      {
-        nameEn: "Client",
-        nameAr: "المستخدم",
-        path: "client"
-      },
+     
       {
         nameEn: "Space",
         nameAr: "الفضاء ",
@@ -116,6 +112,18 @@ export const sidebarDataBranch = [
         nameEn: "Roles",
         nameAr: "الادوار",
         path: "role",
+      },
+    ],
+  },
+  {
+    nameEn: "CRM",
+    nameAr: "",
+    path: "CRM",
+    children: [
+      {
+        nameEn: "Client",
+        nameAr: "المستخدم",
+        path: "client"
       },
     ],
   }

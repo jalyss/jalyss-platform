@@ -41,6 +41,17 @@ export const sidebarDataMain = [
     path: "tarining",
     children: [],
   },
-
+  {
+    nameEn: "CRM",
+    nameAr: "",
+    path: "CRM",
+    children: [
+      {
+        nameEn: "Client",
+        nameAr: "المستخدم",
+        path: "client"
+      },
+    ],
+  }
 
 ];
