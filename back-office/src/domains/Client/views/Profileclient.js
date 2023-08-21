@@ -1,22 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-
 import { fetchClient } from "../../../store/client";
-
 import { Dialog, DialogContent } from "@mui/material";
 
 const profileclient = () => {
   const client = useSelector((state) => state.client?.client);
-
   const { id } = useParams();
   const dispatch = useDispatch();
-
   const [rows, setRows] = useState([]);
-  
 
   useEffect(() => {
     dispatch(fetchClient(id));
@@ -24,30 +18,36 @@ const profileclient = () => {
 
   useEffect(() => {
     if (client?.clientCommands?.commandLine) {
-      let aux = client.clientCommands.commandLine.map((e, i) => ({
-        id: e?.id || i,
-        ...e,
-
-      }));
+      const aux = [];
+      client.clientCommands.forEach((command) => {
+        command.commandLine.forEach((commandLineItem) => {
+          aux.push({
+            id: commandLineItem?.id,
+            title: commandLineItem?.articleByBranch?.article?.title || "N/A",
+            price: commandLineItem?.articleByBranch?.price || "N/A",
+            quantity: commandLineItem?.quantity || "N/A",
+            code: commandLineItem?.articleByBranch?.article?.code || "N/A",
+          });
+        });
+      });
+      console.log(title,'aux');
       setRows(aux);
     }
   }, [client?.clientCommands?.commandLine]);
+
+  
   client?.clientCommands?.forEach((command) => {
     command?.commandLine?.forEach((commandLineItem) => {
       const code = commandLineItem?.articleByBranch?.article?.code;
       const title = commandLineItem?.articleByBranch?.article?.title;
-      const price = commandLineItem?.articleByBranch?.article?.price;
-      const quantity = commandLineItem?.articleByBranch?.article?.quantity;
-      console.log(code, "here");
-      console.log(title, "here");
-      console.log(price, "here");
-      console.log(quantity, "here");
+      const price = commandLineItem?.articleByBranch?.price;
+      const quantity = commandLineItem?.quantity;
+      console.log(code, "code");
+      console.log(title, "title");
+      console.log(price, "price");
+      console.log(quantity, "quantity");
     });
   });
-  console.log(
-    client?.clientCommands?.[0]?.commandLine?.[0]?.articleByBranch,
-    "here"
-  );
   const columns = [
     {
       field: "title",
@@ -56,7 +56,7 @@ const profileclient = () => {
       editable: true,
     },
     {
-      field: "Price",
+      field: "price",
       headerName: "Price",
       width: 130,
       editable: true,
