@@ -246,6 +246,7 @@ export class ArticleService {
   async update(id: string, dto: UpdateArticleDto) {
     return await this.prisma.article.update({ where: { id }, data: dto });
   }
+
   async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
     return await this.prisma.articlesByBranch.update({
       where: { id },
@@ -262,12 +263,12 @@ export class ArticleService {
     dto: CreateRatingDto,
     userId: string,
     articleByBranchId: string,
-  ) {
+   ) {
     return await this.prisma.rating.create({
       data: { ...dto, userId, articleByBranchId },
     });
-  }
-  async updateRating(
+   }
+   async updateRating(
     dto: CreateRatingDto,
     userId: string,
     articleByBranchId: string,

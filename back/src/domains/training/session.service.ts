@@ -306,13 +306,13 @@ export class SessionService {
     });
   }
 
-  async findAllSessionTitles() {
-    return await this.prisma.session.findMany({
-      select: {
-        title: true,
-      },
-    });
-  }
+  // async findAllSessionTitles() {
+  //   return await this.prisma.session.findMany({
+  //     select: {
+  //       title: true,
+  //     },
+  //   });
+  // }
   // Session Media
   async createSessionMedia(id: string, mediaIds: string[]) {
     await this.prisma.mediaSession.createMany({

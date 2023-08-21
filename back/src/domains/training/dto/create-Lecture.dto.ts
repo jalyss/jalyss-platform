@@ -3,9 +3,13 @@ import { lectures } from './../../../../../front/src/dummydata';
 
 export class CreateLectureDto {
   @ApiProperty()
-  title: string;
+  titleEn: string;
   @ApiProperty()
-  content: string;
+  titleAr: string;
+  @ApiProperty()
+  contentAr: string;
+  @ApiProperty()
+  contentEn: string;
   @ApiProperty()
   lecturesHasGainsIds: string[];
   @ApiProperty()
