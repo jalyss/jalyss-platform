@@ -64,6 +64,11 @@ export const sidebarDataBranch = [
         path: "commands",
       },
       {
+        nameEn: "Client",
+        nameAr: "المستخدم",
+        path: "client"
+      },
+      {
         nameEn: "List of users",
         nameAr: "المستخدم",
         path: "users"
@@ -115,17 +120,6 @@ export const sidebarDataBranch = [
       },
     ],
   },
-  {
-    nameEn: "CRM",
-    nameAr: "",
-    path: "CRM",
-    children: [
-      {
-        nameEn: "Client",
-        nameAr: "المستخدم",
-        path: "client"
-      },
-    ],
-  }
+ 
 
 ];

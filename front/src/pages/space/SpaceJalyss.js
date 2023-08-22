@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchServices } from "../../store/service";
 import "../../assets/styles/spacejalyss.css";
+import { Card } from "antd";
 function SpaceJalyss() {
   const { t, i18n } = useTranslation();
   const meta = useMeta(
@@ -215,49 +216,54 @@ function SpaceJalyss() {
           ))}
         </div>
 
-        <div
-          className="card-body d-flex flex-column flex-md-row justify-content-around mb-3"
-          style={{ marginTop: 30, padding: "10px" }}
-        >
-          <div
-            className="card p-1 "
-            style={{
-              position: "relative",
-              borderRadius: 23,
-              transition: "all 1.8s ease-in-out",
-            }}
-          >
-            <div className="d-flex flex-wrap justify-content-between align-items-center">
-              <div className="d-flex align-items-center mb-3 mb-md-0">
-                <img
-                  decoding="async"
-                  width="198"
-                  height="471"
-                  src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
-                  className="attachment-full size-full responsive-img"
-                  alt=""
-                  loading="lazy"
-                  srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
-                  sizes="(max-width: 177px) 100vw, 177px"
-                  style={{
-                    borderRadius: 20,
-                  }}
-                />
-                <div className="d-flex flex-column">
-                  <h6
-                    className="my-2 text-start"
-                    style={{ fontSize: "1rem", color: "red" }}
-                  >
-                    Why....?
-                  </h6>
-                  <h3
-                    className="mb-4 fw-bold text-md-center text-lg-start"
-                    style={{ color: "darkred", margin: 0 }}
-                  >
-                    JalyssCom
-                  </h3>
-                </div>
-                <div className="container">
+        <Card
+      className="card-body d-flex flex-column flex-md-row justify-content-around mb-3"
+      style={{ marginTop: 30, padding: "10px" }}
+    >
+      <div
+        className="card p-1 "
+        style={{
+          position: "relative",
+          borderRadius: 23,
+          transition: "all 1.8s ease-in-out",
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div className="d-md-flex flex-wrap justify-content-between align-items-center">
+          <div className="d-flex align-items-center mb-3 mb-md-0">
+            <img
+              decoding="async"
+              width="198"
+              height="471"
+              src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
+              className="attachment-full size-full responsive-img"
+              alt=""
+              loading="lazy"
+              srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
+              sizes="(max-width: 177px) 100vw, 177px"
+              style={{
+                borderRadius: 20,
+                maxWidth: '100%',
+                height: 'auto',
+              }}
+            />
+            <div className="d-flex flex-column">
+              <h6
+                className="my-2 text-start"
+                style={{ fontSize: "1rem", color: "red" }}
+              >
+                Why....?
+              </h6>
+              <h3
+                className="mb-4 fw-bold text-md-center text-lg-start"
+                style={{ color: "darkred", margin: 0 }}
+              >
+                JalyssCom
+              </h3>
+            </div>
+          </div>
+          <div className="container">
                   <p className="my-2 text-start" style={{ fontSize: "1.15rem", padding: "10px" }}>
                     At JalyssCom We value adaptability and initiative in whatever we
                     do as business owners.
@@ -281,13 +287,9 @@ function SpaceJalyss() {
                   </p>
 
                 </div>
-
-              </div>
-            </div>
-
-
-          </div>
         </div>
+      </div>
+    </Card>
       </div>
       <div className="card-body">
         <div className="d-flex flex-wrap justify-content-around">
