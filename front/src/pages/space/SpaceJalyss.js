@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import DocumentMeta from "react-document-meta";
 import { useTranslation } from "react-i18next";
 import useMeta from "../../hooks/useMeta";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 import {
   FaShieldAlt,
   FaRegHandshake,
@@ -216,81 +218,66 @@ function SpaceJalyss() {
           ))}
         </div>
 
-        <Card
-      className="card-body d-flex flex-column flex-md-row justify-content-around mb-3"
-      style={{ marginTop: 30, padding: "10px" }}
-    >
-      <div
-        className="card p-1 "
-        style={{
-          position: "relative",
-          borderRadius: 23,
-          transition: "all 1.8s ease-in-out",
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <div className="d-md-flex flex-wrap justify-content-between align-items-center">
-          <div className="d-flex align-items-center mb-3 mb-md-0">
-            <img
-              decoding="async"
-              width="198"
-              height="471"
-              src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
-              className="attachment-full size-full responsive-img"
-              alt=""
-              loading="lazy"
-              srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
-              sizes="(max-width: 177px) 100vw, 177px"
-              style={{
-                borderRadius: 20,
-                maxWidth: '100%',
-                height: 'auto',
-              }}
-            />
-            <div className="d-flex flex-column">
-              <h6
-                className="my-2 text-start"
-                style={{ fontSize: "1rem", color: "red" }}
-              >
-                Why....?
-              </h6>
-              <h3
-                className="mb-4 fw-bold text-md-center text-lg-start"
-                style={{ color: "darkred", margin: 0 }}
-              >
-                JalyssCom
-              </h3>
-            </div>
-          </div>
-          <div className="container">
-                  <p className="my-2 text-start" style={{ fontSize: "1.15rem", padding: "10px" }}>
+      
+   
+      </div>
+
+      <div className="responsive-container">
+        <div className="image-container" style={{marginTop:'50px'}}>
+          <img
+           decoding="async"
+           width="198"
+           height="471"
+           src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
+           className="attachment-full size-full responsive-img"
+           alt=""
+           loading="lazy"
+           srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
+           sizes="(max-width: 177px) 100vw, 177px"
+           style={{
+             borderRadius: 20,
+             maxWidth: '100%',
+             height: 'auto',
+           }}
+          />
+        </div>
+        <div class="text-container">
+          <div>
+            <CardContent>
+              <Typography  variant="h3" component="div">
+              Why.....?
+              </Typography>
+              <Typography variant="h3" component="div">
+              JalyssCom
+              </Typography>
+             
+              <p className="text-start"  >
                     At JalyssCom We value adaptability and initiative in whatever we
                     do as business owners.
-                    <br />
+                    <br/>
                     Our offers can be tailored to your needs and financial situation.
-                    <br />
+                    <br/>
                     Our workspaces encourage collaboration, promote performance, and
                     inspire creativity.
-                    <br />
+                    <br/>
                     They were designed with these goals in mind. Our spaces are
-                    secured <br />
+                    secured <br/>
                     and available around-the-clock,
-                    <br />
+                    <br/>
                     include natural light that is good for your staff's wellbeing, and
                     are located in a high-rise building in the middle of a renowned
                     business district.
-                    <br />
+                    <br/>
                     JalyssCom is another place for planned events. Whether it's a
                     workshop, seminar, or other type of training, JalyssCom is always
                     active!
                   </p>
-
-                </div>
+             
+            </CardContent>
+          </div>
         </div>
       </div>
-    </Card>
-      </div>
+
       <div className="card-body">
         <div className="d-flex flex-wrap justify-content-around">
           <div
