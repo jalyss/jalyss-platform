@@ -221,11 +221,11 @@ function SpaceJalyss() {
       
    
       </div>
-<div className=" d-flex flex-wrap justify-content-around align-items-center  ">
+<div className="d-flex flex-wrap justify-content-around align-items-center">
     <div className="responsive-container " style={{ marginBottom: '80px'}}>
           <img
            decoding="async"
-           width="250px"
+           width="200px"
            height="100px"
            src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
            className="attachment-full size-full responsive-img"
@@ -238,7 +238,7 @@ function SpaceJalyss() {
              borderRadius: 20,
              maxWidth: '100%',
              height: 'auto',
-             marginLeft: '50px'
+             marginLeft: '100px'
            }}
           />
          </div>
@@ -247,7 +247,7 @@ function SpaceJalyss() {
               Why.....?<br/>
               JalyssCom
               </Typography>
-              <div variant="h6" >
+              <div  variant="h6" color="text.secondary">
                     At JalyssCom We value adaptability and initiative in whatever we
                     do as business owners.
                     
