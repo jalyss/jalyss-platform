@@ -221,13 +221,12 @@ function SpaceJalyss() {
       
    
       </div>
-
-      <div className="responsive-container">
-        <div className="image-container" style={{marginTop:'50px'}}>
+<div className=" d-flex flex-wrap justify-content-around align-items-center  ">
+    <div className="responsive-container " style={{ marginBottom: '80px'}}>
           <img
            decoding="async"
-           width="198"
-           height="471"
+           width="250px"
+           height="100px"
            src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
            className="attachment-full size-full responsive-img"
            alt=""
@@ -235,48 +234,45 @@ function SpaceJalyss() {
            srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
            sizes="(max-width: 177px) 100vw, 177px"
            style={{
+             marginTop:40,
              borderRadius: 20,
              maxWidth: '100%',
              height: 'auto',
+             marginLeft: '50px'
            }}
           />
-        </div>
+         </div>
         <div class="text-container">
-          <div>
-            <CardContent>
-              <Typography  variant="h3" component="div">
-              Why.....?
-              </Typography>
-              <Typography variant="h3" component="div">
+              <Typography variant="h2" style={{color:'red'}} >
+              Why.....?<br/>
               JalyssCom
               </Typography>
-             
-              <p className="text-start"  >
+              <div variant="h6" >
                     At JalyssCom We value adaptability and initiative in whatever we
                     do as business owners.
-                    <br/>
+                    
                     Our offers can be tailored to your needs and financial situation.
-                    <br/>
+                  
                     Our workspaces encourage collaboration, promote performance, and
                     inspire creativity.
-                    <br/>
+                   
                     They were designed with these goals in mind. Our spaces are
-                    secured <br/>
+                    secured 
                     and available around-the-clock,
-                    <br/>
+                   
                     include natural light that is good for your staff's wellbeing, and
                     are located in a high-rise building in the middle of a renowned
                     business district.
-                    <br/>
+                 
                     JalyssCom is another place for planned events. Whether it's a
                     workshop, seminar, or other type of training, JalyssCom is always
                     active!
-                  </p>
-             
-            </CardContent>
-          </div>
+                  </div>
+    
         </div>
       </div>
+     
+    
 
       <div className="card-body">
         <div className="d-flex flex-wrap justify-content-around">
