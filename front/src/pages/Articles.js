@@ -1,29 +1,28 @@
 // import Slider from '@mui/material/Slider';
 
-import Slider from 'rc-slider'
-import React, { Fragment, useEffect, useMemo, useState,useRef} from 'react'
-import { useTranslation } from 'react-i18next'
-import Offcanvas from 'react-bootstrap/Offcanvas'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import ArticleCard from '../components/ArticleCard'
-import { fetchArticlesByBranch } from '../store/article'
-import { fetchArticleTypes } from '../store/articleType'
-import { fetchCategories } from '../store/category'
-import { fetchPublishingHouses } from '../store/publishingHouse'
-import { fetchAuthors } from '../store/author'
-import { identifier } from '../constants/identifier/identifier'
-import Accordion from '../components/Commun/Accordion'
-import '../assets/styles/filters.css'
-import useMeta from '../hooks/useMeta'
-import DocumentMeta from 'react-document-meta'
-import { BsFilterSquare } from 'react-icons/bs'
-import 'rc-tooltip/assets/bootstrap.css'
-import { RiArrowRightSLine, RiArrowLeftSLine } from 'react-icons/ri'
-import 'rc-slider/assets/index.css'
-import { filter, groupBy, isEmpty, map } from 'lodash'
-import HorizontalMenu from '../components/Commun/DragContainter'
-
+import Slider from "rc-slider";
+import React, { Fragment, useEffect, useMemo, useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import ArticleCard from "../components/ArticleCard";
+import { fetchArticlesByBranch } from "../store/article";
+import { fetchArticleTypes } from "../store/articleType";
+import { fetchCategories } from "../store/category";
+import { fetchPublishingHouses } from "../store/publishingHouse";
+import { fetchAuthors } from "../store/author";
+import { identifier } from "../constants/identifier/identifier";
+import Accordion from "../components/Commun/Accordion";
+import "../assets/styles/filters.css";
+import useMeta from "../hooks/useMeta";
+import DocumentMeta from "react-document-meta";
+import { BsFilterSquare } from "react-icons/bs";
+import "rc-tooltip/assets/bootstrap.css";
+import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
+import "rc-slider/assets/index.css";
+import { filter, groupBy, isEmpty, map } from "lodash";
+import HorizontalMenu from "../components/Commun/DragContainter";
 
 function Articles() {
   const dispatch = useDispatch();
@@ -81,7 +80,6 @@ function Articles() {
   const Filters = () => {
     return (
       <div className="filters">
-      
         <Accordion
           title={t("filter.category")}
           content={
@@ -244,34 +242,34 @@ function Articles() {
       >
         <Offcanvas.Header closeButton />
         <Offcanvas.Body>
-        <Fragment>
-          <Accordion
-            title={t("filter.Price")}
-            content={
-              <div
-                className="px-3 pt-3"
-                ref={containerRef}
-                onMouseMove={onMouseMoveHandler}
-              >
-                <Slider
-                  range
-                  draggableTrack={false}
-                  min={1}
-                  max={1000}
-                  defaultValue={[1000, 1]}
-                  tipFormatter={(value) => `TND${value}`}
-                  allowCross={false}
-                  value={price}
-                  onChange={(price) => {
-                    setPrice(price);
-                    setFilters((Filters) => ({
-                      ...Filters,
-                      gte: price[0],
-                      lte: price[1],
-                    }));
-                  }}
-                />
-                {/* <Slider
+          <Fragment>
+            <Accordion
+              title={t("filter.Price")}
+              content={
+                <div
+                  className="px-3 pt-3"
+                  ref={containerRef}
+                  onMouseMove={onMouseMoveHandler}
+                >
+                  <Slider
+                    range
+                    draggableTrack={false}
+                    min={1}
+                    max={1000}
+                    defaultValue={[1000, 1]}
+                    tipFormatter={(value) => `TND${value}`}
+                    allowCross={false}
+                    value={price}
+                    onChange={(price) => {
+                      setPrice(price);
+                      setFilters((Filters) => ({
+                        ...Filters,
+                        gte: price[0],
+                        lte: price[1],
+                      }));
+                    }}
+                  />
+                  {/* <Slider
                  range
                  draggableTrack={false}
                  max={1000}
@@ -288,48 +286,48 @@ function Articles() {
                    }))
                  }}                        
       /> */}
-                <div className="d-flex justify-content-between mt-1">
-                  <p>{price[0]}</p>
-                  <p>{price[1]}</p>
+                  <div className="d-flex justify-content-between mt-1">
+                    <p>{price[0]}</p>
+                    <p>{price[1]}</p>
+                  </div>
                 </div>
-              </div>
-            }
-          />
-        </Fragment>
+              }
+            />
+          </Fragment>
           <Filters />
         </Offcanvas.Body>
       </Offcanvas>
 
       <div className="d-flex p-2 ">
         <div className="responsive-filters">
-        <Fragment>
-          <Accordion
-            title={t("filter.Price")}
-            content={
-              <div
-                className="px-3 pt-3"
-                ref={containerRef}
-                onMouseMove={onMouseMoveHandler}
-              >
-                <Slider
-                  range
-                  draggableTrack={false}
-                  min={1}
-                  max={1000}
-                  defaultValue={[1000, 1]}
-                  tipFormatter={(value) => `TND${value}`}
-                  allowCross={false}
-                  value={price}
-                  onChange={(price) => {
-                    setPrice(price);
-                    setFilters((Filters) => ({
-                      ...Filters,
-                      gte: price[0],
-                      lte: price[1],
-                    }));
-                  }}
-                />
-                {/* <Slider
+          <Fragment>
+            <Accordion
+              title={t("filter.Price")}
+              content={
+                <div
+                  className="px-3 pt-3"
+                  ref={containerRef}
+                  onMouseMove={onMouseMoveHandler}
+                >
+                  <Slider
+                    range
+                    draggableTrack={false}
+                    min={1}
+                    max={1000}
+                    defaultValue={[1000, 1]}
+                    tipFormatter={(value) => `TND${value}`}
+                    allowCross={false}
+                    value={price}
+                    onChange={(price) => {
+                      setPrice(price);
+                      setFilters((Filters) => ({
+                        ...Filters,
+                        gte: price[0],
+                        lte: price[1],
+                      }));
+                    }}
+                  />
+                  {/* <Slider
                  range
                  draggableTrack={false}
                  max={1000}
@@ -346,14 +344,14 @@ function Articles() {
                    }))
                  }}                        
       /> */}
-                <div className="d-flex justify-content-between mt-1">
-                  <p>{price[0]}</p>
-                  <p>{price[1]}</p>
+                  <div className="d-flex justify-content-between mt-1">
+                    <p>{price[0]}</p>
+                    <p>{price[1]}</p>
+                  </div>
                 </div>
-              </div>
-            }
-          />
-        </Fragment>
+              }
+            />
+          </Fragment>
           <Filters />
         </div>
         <div className="px-3">
@@ -390,46 +388,47 @@ function Articles() {
           )}
         </div>
       </div>
-      <div className="d-flex justify-content-center mb-3 " style={{marginLeft:'200px'}}>
+      <div
+        className="d-flex justify-content-center mb-3 "
+        style={{ marginLeft: "200px" }}
+      >
         <button
-        style={{
-          color:'white',
-          borderRadius:'5px',
-          backgroundColor:'rgba(70, 4, 74, 0.781)'
-
-        }}
+          style={{
+            color: "white",
+            borderRadius: "5px",
+            backgroundColor: "rgba(70, 4, 74, 0.781)",
+          }}
           className="bg-yellow px-4 py-2  border-0  mx-2 "
           onClick={() =>
             filters.skip > 0 &&
-            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 1}))
+            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 1 }))
           }
         >
-          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t('back')}
+          {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t("back")}
         </button>
         <button
-         style={{
-          color: 'white',
-          borderRadius: '5px',
-    backgroundColor: 'rgba(70, 4, 74, 0.781)',
-  }}
-  className="bg-yellow px-4 py-2 border-0 mx-2"
-  onClick={() =>
-    setFilters((Filters) => {
-      const nextSkip = Filters.skip + 1;
-      if (nextSkip >= articleStore.articles.items.length) {
-        return Filters; 
-      }
-      return { ...Filters, skip: nextSkip };
-    })
-  }
-  disabled={
-   
-    filters.skip + 1 >= articleStore.articles.items.length ||
-    articleStore.articles.items.length === 0
-  }
->
-  {t('next')} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
-</button>
+          style={{
+            color: "white",
+            borderRadius: "5px",
+            backgroundColor: "rgba(70, 4, 74, 0.781)",
+          }}
+          className="bg-yellow px-4 py-2 border-0 mx-2"
+          onClick={() =>
+            setFilters((Filters) => {
+              const nextSkip = Filters.skip + 1;
+              if (nextSkip >= articleStore.articles.items.length) {
+                return Filters;
+              }
+              return { ...Filters, skip: nextSkip };
+            })
+          }
+          disabled={
+            filters.skip + 1 >= articleStore.articles.items.length ||
+            articleStore.articles.items.length === 0
+          }
+        >
+          {t("next")} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
+        </button>
       </div>
     </DocumentMeta>
   );

@@ -8,36 +8,6 @@ CREATE TYPE "StatusBlog" AS ENUM ('confirmed', 'pending', 'refused');
 CREATE TYPE "StatusMvt" AS ENUM ('pending', 'in_progress', 'on_hold', 'delivered');
 
 -- CreateTable
-CREATE TABLE "Branch" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "identifier" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "mainBranch" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "Branch_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Country" (
-    "id" TEXT NOT NULL,
-    "nameAr" TEXT NOT NULL,
-    "nameEn" TEXT NOT NULL,
-
-    CONSTRAINT "Country_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "City" (
-    "id" TEXT NOT NULL,
-    "nameAr" TEXT NOT NULL,
-    "nameEn" TEXT NOT NULL,
-    "countryId" TEXT NOT NULL,
-
-    CONSTRAINT "City_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "EducationLevel" (
     "id" TEXT NOT NULL,
     "nameAr" TEXT NOT NULL,
@@ -77,13 +47,14 @@ CREATE TABLE "JobTitle" (
 );
 
 -- CreateTable
-CREATE TABLE "Client" (
+CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "fullNameEn" TEXT NOT NULL,
     "fullNameAr" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "tel" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "avatarId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -94,52 +65,6 @@ CREATE TABLE "Client" (
     "jobTitleId" TEXT,
     "countryId" TEXT,
     "cityId" TEXT,
-    "isCoach" BOOLEAN DEFAULT false,
-
-    CONSTRAINT "Client_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Employee" (
-    "id" TEXT NOT NULL,
-    "fullNameAr" TEXT NOT NULL,
-    "fullNameEn" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "tel" TEXT NOT NULL,
-    "avatarId" TEXT,
-    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
-    "branch_id" TEXT,
-    "roleId" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Employee_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Role" (
-    "id" TEXT NOT NULL,
-    "nameAr" TEXT NOT NULL,
-    "nameEn" TEXT NOT NULL,
-    "permissions" JSONB NOT NULL,
-
-    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
-    "fullNameEn" TEXT NOT NULL,
-    "fullNameAr" TEXT NOT NULL,
-    "isClient" BOOLEAN NOT NULL DEFAULT true,
-    "employeeId" TEXT,
-    "clientId" TEXT,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "avatarId" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "confirmkey" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "isCoach" BOOLEAN DEFAULT false,
@@ -148,14 +73,14 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "UserCategory" (
+CREATE TABLE "ArticleCategory" (
     "id" TEXT NOT NULL,
     "nameAr" TEXT NOT NULL,
     "nameEn" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "UserCategory_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ArticleCategory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -194,14 +119,14 @@ CREATE TABLE "UserChatRoom" (
 );
 
 -- CreateTable
-CREATE TABLE "ArticleCategory" (
+CREATE TABLE "UserCategory" (
     "id" TEXT NOT NULL,
     "nameAr" TEXT NOT NULL,
     "nameEn" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "ArticleCategory_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UserCategory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -227,43 +152,6 @@ CREATE TABLE "PublishingHouse" (
 );
 
 -- CreateTable
-CREATE TABLE "Author" (
-    "id" TEXT NOT NULL,
-    "nameAr" TEXT NOT NULL,
-    "nameEn" TEXT NOT NULL,
-    "biographyAr" TEXT,
-    "biographyEn" TEXT,
-
-    CONSTRAINT "Author_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ArticleByAuthor" (
-    "articleId" TEXT NOT NULL,
-    "authorId" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "Provider" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "address" TEXT NOT NULL,
-    "tel" TEXT NOT NULL,
-    "accountBalance" DOUBLE PRECISION NOT NULL,
-    "logoId" TEXT,
-    "email" TEXT NOT NULL,
-
-    CONSTRAINT "Provider_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Supply" (
-    "providerId" TEXT NOT NULL,
-    "articleId" TEXT NOT NULL,
-    "dateTime" TIMESTAMP(3) NOT NULL
-);
-
--- CreateTable
 CREATE TABLE "Article" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -285,6 +173,23 @@ CREATE TABLE "Article" (
 );
 
 -- CreateTable
+CREATE TABLE "Author" (
+    "id" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "biographyAr" TEXT,
+    "biographyEn" TEXT,
+
+    CONSTRAINT "Author_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ArticleByAuthor" (
+    "articleId" TEXT NOT NULL,
+    "authorId" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "ArticlesByBranch" (
     "id" TEXT NOT NULL,
     "branchId" TEXT NOT NULL,
@@ -297,23 +202,17 @@ CREATE TABLE "ArticlesByBranch" (
 
 -- CreateTable
 CREATE TABLE "MvtArticle" (
-    "articleId" TEXT NOT NULL,
-    "quantity" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "transactionId" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "Transaction" (
     "id" TEXT NOT NULL,
     "branchSenderId" TEXT NOT NULL,
     "branchReceiverId" TEXT NOT NULL,
-    "status" "StatusMvt" NOT NULL DEFAULT 'pending',
-    "reason" TEXT,
+    "articleId" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "status" "StatusMvt" NOT NULL DEFAULT 'pending',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "MvtArticle_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -322,6 +221,53 @@ CREATE TABLE "Rating" (
     "userId" TEXT NOT NULL,
     "rate" INTEGER NOT NULL,
     "commit" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "CommandLine" (
+    "commandId" TEXT NOT NULL,
+    "articleByBranchId" TEXT NOT NULL,
+    "quantity" INTEGER NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Employee" (
+    "id" TEXT NOT NULL,
+    "fullNameAr" TEXT NOT NULL,
+    "fullNameEn" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "tel" TEXT NOT NULL,
+    "avatarId" TEXT,
+    "password" TEXT NOT NULL,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "branch_id" TEXT,
+    "roleId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Employee_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Role" (
+    "id" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "permissions" JSONB NOT NULL,
+
+    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Branch" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "identifier" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "mainBranch" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Branch_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -347,10 +293,42 @@ CREATE TABLE "Command" (
 );
 
 -- CreateTable
-CREATE TABLE "CommandLine" (
-    "commandId" TEXT NOT NULL,
-    "articleByBranchId" TEXT NOT NULL,
-    "quantity" INTEGER NOT NULL
+CREATE TABLE "Country" (
+    "id" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+
+    CONSTRAINT "Country_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "City" (
+    "id" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "countryId" TEXT NOT NULL,
+
+    CONSTRAINT "City_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Supply" (
+    "providerId" TEXT NOT NULL,
+    "articleId" TEXT NOT NULL,
+    "dateTime" TIMESTAMP(3) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Provider" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "tel" TEXT NOT NULL,
+    "accountBalance" DOUBLE PRECISION NOT NULL,
+    "logoId" TEXT,
+    "email" TEXT NOT NULL,
+
+    CONSTRAINT "Provider_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -458,7 +436,6 @@ CREATE TABLE "SessionHasSessionType" (
 CREATE TABLE "SessionType" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "SessionType_pkey" PRIMARY KEY ("id")
 );
@@ -466,9 +443,7 @@ CREATE TABLE "SessionType" (
 -- CreateTable
 CREATE TABLE "SessionHasLecture" (
     "sessionId" TEXT NOT NULL,
-    "lectureId" TEXT NOT NULL,
-    "startAt" TIMESTAMP(3) NOT NULL,
-    "endAt" TIMESTAMP(3) NOT NULL
+    "lectureId" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -476,6 +451,8 @@ CREATE TABLE "Lecture" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,
+    "startAt" TIMESTAMP(3),
+    "endAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Lecture_pkey" PRIMARY KEY ("id")
@@ -512,7 +489,7 @@ CREATE TABLE "Feature" (
 -- CreateTable
 CREATE TABLE "SessionTarifHasFeatures" (
     "featureId" TEXT NOT NULL,
-    "tarifId" TEXT NOT NULL,
+    "sessionId" TEXT NOT NULL,
     "isAvailable" BOOLEAN NOT NULL
 );
 
@@ -545,13 +522,13 @@ CREATE TABLE "TrainingBooking" (
 );
 
 -- CreateTable
-CREATE TABLE "ClientPayment" (
+CREATE TABLE "UserPayment" (
     "id" TEXT NOT NULL,
-    "clientId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "ClientPayment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "UserPayment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -776,16 +753,7 @@ CREATE TABLE "ContentSubComponent" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Branch_identifier_key" ON "Branch"("identifier");
-
--- CreateIndex
 CREATE UNIQUE INDEX "JobTitleByFunctioanArea_functionalAreaId_jobTitleId_key" ON "JobTitleByFunctioanArea"("functionalAreaId", "jobTitleId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Client_email_key" ON "Client"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Employee_email_key" ON "Employee"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
@@ -797,31 +765,34 @@ CREATE UNIQUE INDEX "ConnectedUser_userId_key" ON "ConnectedUser"("userId");
 CREATE UNIQUE INDEX "UserChatRoom_userId_chatRoomId_key" ON "UserChatRoom"("userId", "chatRoomId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ArticleByAuthor_authorId_articleId_key" ON "ArticleByAuthor"("authorId", "articleId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Provider_email_key" ON "Provider"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Supply_articleId_providerId_dateTime_key" ON "Supply"("articleId", "providerId", "dateTime");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Article_code_key" ON "Article"("code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ArticleByAuthor_authorId_articleId_key" ON "ArticleByAuthor"("authorId", "articleId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ArticlesByBranch_branchId_articleId_key" ON "ArticlesByBranch"("branchId", "articleId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "MvtArticle_articleId_transactionId_key" ON "MvtArticle"("articleId", "transactionId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Transaction_branchReceiverId_branchSenderId_date_key" ON "Transaction"("branchReceiverId", "branchSenderId", "date");
+CREATE UNIQUE INDEX "MvtArticle_branchReceiverId_branchSenderId_articleId_date_key" ON "MvtArticle"("branchReceiverId", "branchSenderId", "articleId", "date");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Rating_articleByBranchId_userId_key" ON "Rating"("articleByBranchId", "userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CommandLine_commandId_articleByBranchId_key" ON "CommandLine"("commandId", "articleByBranchId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Employee_email_key" ON "Employee"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Branch_identifier_key" ON "Branch"("identifier");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Supply_articleId_providerId_dateTime_key" ON "Supply"("articleId", "providerId", "dateTime");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Provider_email_key" ON "Provider"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "RequestCategories_categoryId_sessionRequestId_key" ON "RequestCategories"("categoryId", "sessionRequestId");
@@ -845,7 +816,7 @@ CREATE UNIQUE INDEX "SessionHasSessionType_sessionId_sessionTypeId_key" ON "Sess
 CREATE UNIQUE INDEX "SessionHasLecture_sessionId_lectureId_key" ON "SessionHasLecture"("sessionId", "lectureId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_tarifId_key" ON "SessionTarifHasFeatures"("featureId", "tarifId");
+CREATE UNIQUE INDEX "SessionTarifHasFeatures_featureId_sessionId_key" ON "SessionTarifHasFeatures"("featureId", "sessionId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "SessionHasFeatures_featureId_sessionId_key" ON "SessionHasFeatures"("featureId", "sessionId");
@@ -887,52 +858,31 @@ CREATE UNIQUE INDEX "Service_identifier_key" ON "Service"("identifier");
 CREATE UNIQUE INDEX "Booking_userId_tarifId_key" ON "Booking"("userId", "tarifId");
 
 -- AddForeignKey
-ALTER TABLE "City" ADD CONSTRAINT "City_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "JobTitleByFunctioanArea" ADD CONSTRAINT "JobTitleByFunctioanArea_functionalAreaId_fkey" FOREIGN KEY ("functionalAreaId") REFERENCES "FunctionalArea"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "JobTitleByFunctioanArea" ADD CONSTRAINT "JobTitleByFunctioanArea_jobTitleId_fkey" FOREIGN KEY ("jobTitleId") REFERENCES "JobTitle"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "UserCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_educationLevelId_fkey" FOREIGN KEY ("educationLevelId") REFERENCES "EducationLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_functionalAreaId_fkey" FOREIGN KEY ("functionalAreaId") REFERENCES "FunctionalArea"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_jobTitleId_fkey" FOREIGN KEY ("jobTitleId") REFERENCES "JobTitle"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Client" ADD CONSTRAINT "Client_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Employee" ADD CONSTRAINT "Employee_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Employee" ADD CONSTRAINT "Employee_branch_id_fkey" FOREIGN KEY ("branch_id") REFERENCES "Branch"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Employee" ADD CONSTRAINT "Employee_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_employeeId_fkey" FOREIGN KEY ("employeeId") REFERENCES "Employee"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "UserCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_educationLevelId_fkey" FOREIGN KEY ("educationLevelId") REFERENCES "EducationLevel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_functionalAreaId_fkey" FOREIGN KEY ("functionalAreaId") REFERENCES "FunctionalArea"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_jobTitleId_fkey" FOREIGN KEY ("jobTitleId") REFERENCES "JobTitle"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ChatMessage" ADD CONSTRAINT "ChatMessage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -953,21 +903,6 @@ ALTER TABLE "UserChatRoom" ADD CONSTRAINT "UserChatRoom_chatRoomId_fkey" FOREIGN
 ALTER TABLE "PublishingHouse" ADD CONSTRAINT "PublishingHouse_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Author"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Provider" ADD CONSTRAINT "Provider_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Supply" ADD CONSTRAINT "Supply_providerId_fkey" FOREIGN KEY ("providerId") REFERENCES "Provider"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Supply" ADD CONSTRAINT "Supply_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Article" ADD CONSTRAINT "Article_coverId_fkey" FOREIGN KEY ("coverId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -980,22 +915,25 @@ ALTER TABLE "Article" ADD CONSTRAINT "Article_publishingHouseId_fkey" FOREIGN KE
 ALTER TABLE "Article" ADD CONSTRAINT "Article_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "Type"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ArticleByAuthor" ADD CONSTRAINT "ArticleByAuthor_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "Author"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES "Branch"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ArticlesByBranch" ADD CONSTRAINT "ArticlesByBranch_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_branchSenderId_fkey" FOREIGN KEY ("branchSenderId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_branchReceiverId_fkey" FOREIGN KEY ("branchReceiverId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "MvtArticle" ADD CONSTRAINT "MvtArticle_transactionId_fkey" FOREIGN KEY ("transactionId") REFERENCES "Transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_branchSenderId_fkey" FOREIGN KEY ("branchSenderId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_branchReceiverId_fkey" FOREIGN KEY ("branchReceiverId") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Rating" ADD CONSTRAINT "Rating_articleByBranchId_fkey" FOREIGN KEY ("articleByBranchId") REFERENCES "ArticlesByBranch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1004,13 +942,28 @@ ALTER TABLE "Rating" ADD CONSTRAINT "Rating_articleByBranchId_fkey" FOREIGN KEY 
 ALTER TABLE "Rating" ADD CONSTRAINT "Rating_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Command" ADD CONSTRAINT "Command_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "Client"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "CommandLine" ADD CONSTRAINT "CommandLine_commandId_fkey" FOREIGN KEY ("commandId") REFERENCES "Command"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CommandLine" ADD CONSTRAINT "CommandLine_articleByBranchId_fkey" FOREIGN KEY ("articleByBranchId") REFERENCES "ArticlesByBranch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Employee" ADD CONSTRAINT "Employee_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Employee" ADD CONSTRAINT "Employee_branch_id_fkey" FOREIGN KEY ("branch_id") REFERENCES "Branch"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Employee" ADD CONSTRAINT "Employee_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Command" ADD CONSTRAINT "Command_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Command" ADD CONSTRAINT "Command_branch_id_fkey" FOREIGN KEY ("branch_id") REFERENCES "Branch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Command" ADD CONSTRAINT "Command_intermediate_id_fkey" FOREIGN KEY ("intermediate_id") REFERENCES "Client"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Command" ADD CONSTRAINT "Command_intermediate_id_fkey" FOREIGN KEY ("intermediate_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Command" ADD CONSTRAINT "Command_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -1019,10 +972,16 @@ ALTER TABLE "Command" ADD CONSTRAINT "Command_countryId_fkey" FOREIGN KEY ("coun
 ALTER TABLE "Command" ADD CONSTRAINT "Command_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CommandLine" ADD CONSTRAINT "CommandLine_commandId_fkey" FOREIGN KEY ("commandId") REFERENCES "Command"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "City" ADD CONSTRAINT "City_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CommandLine" ADD CONSTRAINT "CommandLine_articleByBranchId_fkey" FOREIGN KEY ("articleByBranchId") REFERENCES "ArticlesByBranch"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Supply" ADD CONSTRAINT "Supply_providerId_fkey" FOREIGN KEY ("providerId") REFERENCES "Provider"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Supply" ADD CONSTRAINT "Supply_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "Article"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Provider" ADD CONSTRAINT "Provider_logoId_fkey" FOREIGN KEY ("logoId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SessionRequest" ADD CONSTRAINT "SessionRequest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -1103,7 +1062,7 @@ ALTER TABLE "Assessments" ADD CONSTRAINT "Assessments_lectureId_fkey" FOREIGN KE
 ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_tarifId_fkey" FOREIGN KEY ("tarifId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SessionTarifHasFeatures" ADD CONSTRAINT "SessionTarifHasFeatures_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SessionHasFeatures" ADD CONSTRAINT "SessionHasFeatures_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1121,7 +1080,7 @@ ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_userId_fkey" FOREI
 ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_sessionTarifId_fkey" FOREIGN KEY ("sessionTarifId") REFERENCES "SessionTarif"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ClientPayment" ADD CONSTRAINT "ClientPayment_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserPayment" ADD CONSTRAINT "UserPayment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaProvider" ADD CONSTRAINT "MediaProvider_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
