@@ -137,7 +137,7 @@ function ServiceSpace() {
                     }}
                   >
                     <Link
-                      to={"/SpaceReservation"}
+                      to={`/SpaceReservation/${item?.id}`}
                       style={{ textDecoration: "none", color: "white" }}
                     >
                       Reserve
@@ -148,7 +148,7 @@ function ServiceSpace() {
             </div>
           ))}
         </div>
-        <p className="firstLine">Autres Service</p>
+        <p className="firstLine">Other Services</p>
         <p className="secondLine">ALL IN ONE PLACE </p>
         <p className="thirdLine">
           We provide practical solutions to help you advance your project. A
