@@ -21,7 +21,7 @@ import { CurrentUser } from '../auth/decorators/currentUser';
 @Controller('commands')
 export class CommandsController {
   constructor(private readonly commandsService: CommandsService) {}
-
+  @UseGuards(JwtAuthGuard)
   @Post(':branchId')
   create(
     @Body() createCommandDto: CreateCommandDto,
