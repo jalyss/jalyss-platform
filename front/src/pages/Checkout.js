@@ -122,8 +122,8 @@ function Checkout({}) {
     },
     cartContainer: {
       maxHeight: "70%",
-      maxWidth: "100%",
-      margin:"7px",
+      maxWidth: "90%",
+      margin: "7px",
       marginBottom: theme.spacing(2),
       [theme.breakpoints.up("md")]: {
         maxHeight: "83%",
