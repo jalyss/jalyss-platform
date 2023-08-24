@@ -25,10 +25,10 @@ export class CommandsController {
   @Post(':branchId')
   create(
     @Body() createCommandDto: CreateCommandDto,
-    @CurrentUser() user:any,
+    // @CurrentUser() user:any,
     @Param('branchId') branchId: string,
   ) {
-    return this.commandsService.create(createCommandDto, branchId ,user.id);
+    return this.commandsService.create(createCommandDto, branchId );
   }
 
   @Get()
