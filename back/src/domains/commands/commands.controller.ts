@@ -21,14 +21,14 @@ import { CurrentUser } from '../auth/decorators/currentUser';
 @Controller('commands')
 export class CommandsController {
   constructor(private readonly commandsService: CommandsService) {}
-
+  @UseGuards(JwtAuthGuard)
   @Post(':branchId')
   create(
     @Body() createCommandDto: CreateCommandDto,
-    @CurrentUser() user:any,
+    @CurrentUser() user: any,
     @Param('branchId') branchId: string,
   ) {
-    return this.commandsService.create(createCommandDto, branchId ,user.id);
+    return this.commandsService.create(createCommandDto, branchId, user.id);
   }
 
   @Get()
