@@ -36,9 +36,11 @@ function Branch() {
   return (
     <SocketContext.Provider value={socket}>
       <div className={`d-flex `}>
+        
         <Sidebar />
         <div className="w-100">
           <Header />
+          
           <Box
             width="calc(100% - 260px)"
             mr={isRtl && "260px"}

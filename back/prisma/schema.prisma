@@ -11,6 +11,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Branch {
+  id               String             @id @default(uuid())
+  name             String
+  identifier       String             @unique
+  address          String
+  mainBranch       Boolean            @default(false)
+  articlesByBranch ArticlesByBranch[]
+  commands         Command[]
+  employee         Employee[]
+
+  TransactionReceiver Transaction[] @relation("receiver")
+  TransactionSender   Transaction[] @relation("sender")
+}
+
+model Country {
+  id      String    @id @default(uuid())
+  nameAr  String
+  nameEn  String
+  City    City[]
+  Command Command[]
+
+  Client Client[]
+}
+
+model City {
+  id        String    @id @default(uuid())
+  nameAr    String
+  nameEn    String
+  country   Country   @relation(fields: [countryId], references: [id])
+  countryId String
+  Command   Command[]
+
+  Client Client[]
+}
+
 model EducationLevel {
   id        String   @id @default(uuid())
   nameAr    String
@@ -84,6 +119,33 @@ model Client {
   payments             ClientPayment[]
 }
 
+model Employee {
+  id         String   @id @default(uuid())
+  fullNameAr String
+  fullNameEn String
+  email      String   @unique
+  address    String
+  tel        String
+  avatarId   String?
+  avatar     Media?   @relation(fields: [avatarId], references: [id])
+  isAdmin    Boolean  @default(false)
+  branch     Branch?  @relation(fields: [branchId], references: [id])
+  branchId   String?  @map("branch_id")
+  role       Role?    @relation(fields: [roleId], references: [id])
+  roleId     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  User       User[]
+}
+
+model Role {
+  id          String     @id @default(uuid())
+  nameAr      String
+  nameEn      String
+  permissions Json
+  employee    Employee[]
+}
+
 model User {
   id                   String             @id @default(uuid())
   fullNameEn           String
@@ -120,18 +182,14 @@ model User {
   SessionFeedBack      SessionFeedback[]
 }
 
-//payment for what ?
+model UserCategory {
+  id        String   @id @default(uuid())
+  nameAr    String
+  nameEn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-model ArticleCategory {
-  id                String              @id @default(uuid())
-  nameAr            String
-  nameEn            String
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-  articles          Article[]
-  Blog              Blog[]
-  Session           Session[]
-  RequestCategories RequestCategories[]
+  Client Client[]
 }
 
 model ChatRoom {
@@ -174,14 +232,16 @@ model UserChatRoom {
   @@unique(fields: [userId, chatRoomId], name: "joinerRoom")
 }
 
-model UserCategory {
-  id        String   @id @default(uuid())
-  nameAr    String
-  nameEn    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Client Client[]
+model ArticleCategory {
+  id                String              @id @default(uuid())
+  nameAr            String
+  nameEn            String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  articles          Article[]
+  Blog              Blog[]
+  Session           Session[]
+  RequestCategories RequestCategories[]
 }
 
 model Type {
@@ -202,6 +262,47 @@ model PublishingHouse {
   updatedAt            DateTime               @updatedAt
   articles             Article[]
   MediaPublishingHouse MediaPublishingHouse[]
+}
+
+model Author {
+  id              String            @id @default(uuid())
+  nameAr          String
+  nameEn          String
+  biographyAr     String?
+  biographyEn     String?
+  ArticleByAuthor ArticleByAuthor[]
+}
+
+model ArticleByAuthor {
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
+  author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+
+  @@unique([authorId, articleId])
+}
+
+model Provider {
+  id             String          @id @default(uuid())
+  name           String
+  address        String
+  tel            String
+  accountBalance Float
+  logoId         String?
+  logo           Media?          @relation(fields: [logoId], references: [id])
+  email          String          @unique
+  Supply         Supply[]
+  MediaProvider  MediaProvider[]
+}
+
+model Supply {
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id])
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id])
+  dateTime   DateTime
+
+  @@unique(fields: [articleId, providerId, dateTime], name: "supplyByTime")
 }
 
 model Article {
@@ -231,24 +332,6 @@ model Article {
   MvtArticle         MvtArticle[]
 }
 
-model Author {
-  id              String            @id @default(uuid())
-  nameAr          String
-  nameEn          String
-  biographyAr     String?
-  biographyEn     String?
-  ArticleByAuthor ArticleByAuthor[]
-}
-
-model ArticleByAuthor {
-  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId String
-  author    Author  @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  String
-
-  @@unique([authorId, articleId])
-}
-
 model ArticlesByBranch {
   id          String        @id @default(uuid())
   branch      Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
@@ -264,21 +347,30 @@ model ArticlesByBranch {
 }
 
 model MvtArticle {
-  id               String    @id @default(uuid())
-  branchSender     Branch    @relation(name: "sender", fields: [branchSenderId], references: [id])
-  branchSenderId   String
-  branchReceiver   Branch    @relation(name: "receiver", fields: [branchReceiverId], references: [id])
-  branchReceiverId String
-  articleId        String
-  article          Article   @relation(fields: [articleId], references: [id])
-  date             DateTime
-  quantity         Int
-  status           StatusMvt @default(pending)
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  @@unique(fields: [branchReceiverId, branchSenderId, articleId, date], name: "mvtArticle")
+  articleId     String
+  article       Article     @relation(fields: [articleId], references: [id])
+  quantity      Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  @@unique(fields: [articleId, transactionId], name: "mvtArticle")
 }
+
+model Transaction {
+  id               String       @id @default(uuid())
+  branchSender     Branch       @relation(name: "sender", fields: [branchSenderId], references: [id])
+  branchSenderId   String
+  branchReceiver   Branch       @relation(name: "receiver", fields: [branchReceiverId], references: [id])
+  branchReceiverId String
+  status           StatusMvt    @default(pending)
+  reason           String?
+  date             DateTime
+  mvtArticle       MvtArticle[]
+  @@unique(fields: [branchReceiverId, branchSenderId, date], name: "transaction")
+}
+
+
 
 model Rating {
   articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
@@ -289,56 +381,6 @@ model Rating {
   commit            String
 
   @@unique(fields: [articleByBranchId, userId], name: "articleUser")
-}
-
-model CommandLine {
-  command           Command          @relation(fields: [commandId], references: [id])
-  commandId         String
-  articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
-  articleByBranchId String
-  quantity          Int
-
-  @@unique(fields: [commandId, articleByBranchId], name: "commandArticle")
-}
-
-model Employee {
-  id         String   @id @default(uuid())
-  fullNameAr String
-  fullNameEn String
-  email      String   @unique
-  address    String
-  tel        String
-  avatarId   String?
-  avatar     Media?   @relation(fields: [avatarId], references: [id])
-  isAdmin    Boolean  @default(false)
-  branch     Branch?  @relation(fields: [branchId], references: [id])
-  branchId   String?  @map("branch_id")
-  role       Role?    @relation(fields: [roleId], references: [id])
-  roleId     String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  User       User[]
-}
-
-model Role {
-  id          String     @id @default(uuid())
-  nameAr      String
-  nameEn      String
-  permissions Json
-  employee    Employee[]
-}
-
-model Branch {
-  id                 String             @id @default(uuid())
-  name               String
-  identifier         String             @unique
-  address            String
-  mainBranch         Boolean            @default(false)
-  articlesByBranch   ArticlesByBranch[]
-  commands           Command[]
-  employee           Employee[]
-  MvtArticleSender   MvtArticle[]       @relation("sender")
-  MvtArticleReceiver MvtArticle[]       @relation("receiver")
 }
 
 model Command {
@@ -366,48 +408,14 @@ model Command {
   commandLine    CommandLine[]
 }
 
-model Country {
-  id      String    @id @default(uuid())
-  nameAr  String
-  nameEn  String
-  City    City[]
-  Command Command[]
+model CommandLine {
+  command           Command          @relation(fields: [commandId], references: [id])
+  commandId         String
+  articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
+  articleByBranchId String
+  quantity          Int
 
-  Client Client[]
-}
-
-model City {
-  id        String    @id @default(uuid())
-  nameAr    String
-  nameEn    String
-  country   Country   @relation(fields: [countryId], references: [id])
-  countryId String
-  Command   Command[]
-
-  Client Client[]
-}
-
-model Supply {
-  providerId String
-  provider   Provider @relation(fields: [providerId], references: [id])
-  articleId  String
-  article    Article  @relation(fields: [articleId], references: [id])
-  dateTime   DateTime
-
-  @@unique(fields: [articleId, providerId, dateTime], name: "supplyByTime")
-}
-
-model Provider {
-  id             String          @id @default(uuid())
-  name           String
-  address        String
-  tel            String
-  accountBalance Float
-  logoId         String?
-  logo           Media?          @relation(fields: [logoId], references: [id])
-  email          String          @unique
-  Supply         Supply[]
-  MediaProvider  MediaProvider[]
+  @@unique(fields: [commandId, articleByBranchId], name: "commandArticle")
 }
 
 //TRAINING

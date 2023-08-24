@@ -9,7 +9,18 @@ export const sidebarDataBranch = [
     nameEn: "Branches",
     nameAr: "المنتج ",
     path: "branches",
-    children: [],
+    children: [
+      {
+        nameEn: "Transactions",
+        nameAr: "المعاملات ",
+        path: "Branche/transactions",
+      },
+      {
+        nameEn: "Branches list",
+        nameAr: "المنتج",
+        path: "Branche/transiction",
+      },
+    ],
   },
   {
     nameEn: "Supplying",
