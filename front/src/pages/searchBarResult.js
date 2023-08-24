@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import Flicky from "../components/flicky/flicky";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchArticles } from "../store/article";
 import funcs from "../helpers/searchFunctions";
+
 const SearchbarResult = () => {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -14,6 +16,7 @@ const SearchbarResult = () => {
     });
     console.log("qcxvbnhjkl", arr);
   };
+
   useEffect(() => {
     console.log("location", location.state);
     dispatch(fetchArticles());
@@ -25,6 +28,13 @@ const SearchbarResult = () => {
   useEffect(() => {
     console.log("location", location);
   }, []);
-  return <div className="search_bar">hello search bar</div>;
+  return (
+    <div className="container-fluid">
+      <h6 className="firstLine">Your searach results</h6>
+      <Flicky />
+      <Flicky />
+      <Flicky />
+    </div>
+  );
 };
 export default SearchbarResult;
