@@ -194,7 +194,7 @@ function SpaceJalyss() {
               >
                 <div className="card-body">
                   <h5 className="card-title" style={{marginBottom:15}}>{elem.name}</h5>
-                  <button
+                    <button
                     className="btn "
                     style={{
                       width: 170,
@@ -246,7 +246,7 @@ function SpaceJalyss() {
          {/* </div> */}
          
          <div class="text-container" style={{marginTop:'80px'}}>
-              <Typography variant="h4" style={{color:'red',}} >
+              <Typography variant="h4" style={{color:'red'}} >
               Why.....?<br/>
               JalyssCom
               </Typography>
