@@ -221,11 +221,11 @@ function SpaceJalyss() {
       
    
       </div>
-<div className="d-flex flex-wrap justify-content-around align-items-center">
-    <div className="responsive-container " style={{ marginBottom: '80px'}}>
+<div className="d-flex flex-wrap " style={{ marginBottom: '80px'}}>
+    {/* <div className="responsive-container " style={{ marginBottom: '80px'}}> */}
           <img
            decoding="async"
-           width="200px"
+           width="200px"         
            height="100px"
            src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
            className="attachment-full size-full responsive-img"
@@ -241,28 +241,29 @@ function SpaceJalyss() {
              marginLeft: '100px'
            }}
           />
-         </div>
-        <div class="text-container">
-              <Typography variant="h2" style={{color:'red'}} >
+           
+           
+         {/* </div> */}
+         
+         <div class="text-container" style={{marginTop:'80px'}}>
+              <Typography variant="h4" style={{color:'red',}} >
               Why.....?<br/>
               JalyssCom
               </Typography>
               <div  variant="h6" color="text.secondary">
                     At JalyssCom We value adaptability and initiative in whatever we
-                    do as business owners.
-                    
-                    Our offers can be tailored to your needs and financial situation.
+                    do as business owners. Our offers can be tailored to your needs and financial situation.<br/>
                   
                     Our workspaces encourage collaboration, promote performance, and
                     inspire creativity.
                    
                     They were designed with these goals in mind. Our spaces are
-                    secured 
+                    secured <br/>
                     and available around-the-clock,
                    
                     include natural light that is good for your staff's wellbeing, and
                     are located in a high-rise building in the middle of a renowned
-                    business district.
+                    business district.<br/>
                  
                     JalyssCom is another place for planned events. Whether it's a
                     workshop, seminar, or other type of training, JalyssCom is always
