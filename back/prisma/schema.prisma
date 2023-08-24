@@ -37,6 +37,7 @@ model FunctionalArea {
   JobTitleByFunctioanArea JobTitleByFunctioanArea[]
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
+  
 
   Client Client[]
 }

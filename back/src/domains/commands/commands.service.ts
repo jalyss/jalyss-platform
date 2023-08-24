@@ -13,7 +13,7 @@ export class CommandsService {
     private readonly prisma: PrismaService,
     private readonly branchService: BranchesService,
   ) {}
-  async create(dto: CreateCommandDto, branchId: string, userId: string) {
+  async create(dto: CreateCommandDto, branchId: string) {
     // validateOrReject(dto);
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
