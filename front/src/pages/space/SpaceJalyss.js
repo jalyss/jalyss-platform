@@ -234,11 +234,12 @@ function SpaceJalyss() {
            srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
            sizes="(max-width: 177px) 100vw, 177px"
            style={{
-             marginTop:40,
+             marginTop:100,
              borderRadius: 20,
              maxWidth: '100%',
-             height: 'auto',
-             marginLeft: '100px'
+             height: '50%',
+             marginLeft: '100px',
+             
            }}
           />
            
@@ -251,13 +252,13 @@ function SpaceJalyss() {
               JalyssCom
               </Typography>
               <div  variant="h6" color="text.secondary">
-                    At JalyssCom We value adaptability and initiative in whatever we
+                    At JalyssCom We value adaptability and initiative in whatever we<br/>
                     do as business owners. Our offers can be tailored to your needs and financial situation.<br/>
                   
-                    Our workspaces encourage collaboration, promote performance, and
+                    Our workspaces encourage collaboration, promote performance, and<br/>
                     inspire creativity.
                    
-                    They were designed with these goals in mind. Our spaces are
+                    They were designed with these goals in mind. Our spaces are<br/>
                     secured <br/>
                     and available around-the-clock,
                    

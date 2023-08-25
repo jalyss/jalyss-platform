@@ -64,16 +64,15 @@ export const sidebarDataBranch = [
         path: "commands",
       },
       {
-        nameEn: "Client",
-        nameAr: "المستخدم",
-        path: "client"
-      },
-      {
         nameEn: "List of users",
         nameAr: "المستخدم",
         path: "users"
       },
-     
+      {
+        nameEn: "Client",
+        nameAr: "المستخدم",
+        path: "client"
+      },
       {
         nameEn: "Space",
         nameAr: "الفضاء ",
@@ -119,7 +118,6 @@ export const sidebarDataBranch = [
         path: "role",
       },
     ],
-  },
- 
+  }
 
 ];
