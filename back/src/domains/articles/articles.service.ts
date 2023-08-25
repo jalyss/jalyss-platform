@@ -45,6 +45,31 @@ export class ArticleService {
       },
     });
   }
+  async findByCategory(categoryId?: string) {
+    let where = {};
+    
+    if (categoryId) {
+      where = {
+        categoryId: categoryId,
+      };
+    }
+  
+    return this.prisma.article.findMany({
+      where,
+      include: {
+        ArticlesByBranch: {
+          include: { rating: true, branch: true, article: true },
+        },
+        media: true,
+        cover: true,
+        publishingHouse: true,
+        category: true,
+        type: true,
+      },
+    });
+  }
+  
+  
 
   findArticleTitleAndId() {
     return this.prisma.article.findMany({
