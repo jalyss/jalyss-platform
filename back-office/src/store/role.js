@@ -9,7 +9,6 @@ export const fetchRoles = createAsyncThunk("roles/roles", async (id) => {
 
 export const fetchRole = createAsyncThunk("roles/role", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/roles/one${id}`);
-  console.log('ress',response.data)
   return response.data;
 });
 
@@ -43,7 +42,6 @@ export const deleteRole = createAsyncThunk(
 
 export const updateRole = createAsyncThunk("roles/role", async (args) => {
   const {id, ...body } = args;
-  console.log('arg',body)
   const response = await axios.patch(`${config.API_ENDPOINT}/roles/${id}`, body);
   return response.data;
 });
