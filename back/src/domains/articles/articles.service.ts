@@ -194,7 +194,7 @@ export class ArticleService {
           },
         },
       },
-      take: 5,
+      take:8,
       skip,
     });
     return await Promise.all(

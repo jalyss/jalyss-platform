@@ -401,7 +401,7 @@ function Articles() {
           className="bg-yellow px-4 py-2  border-0  mx-2 "
           onClick={() =>
             filters.skip > 0 &&
-            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 1 }))
+            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 8 }))
           }
         >
           {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t("back")}
@@ -415,16 +415,15 @@ function Articles() {
           className="bg-yellow px-4 py-2 border-0 mx-2"
           onClick={() =>
             setFilters((Filters) => {
-              const nextSkip = Filters.skip + 1;
-              if (nextSkip >= articleStore.articles.items.length) {
+              const nextSkip = Filters.skip + 8;
+              if (nextSkip >= 20) {
                 return Filters;
               }
               return { ...Filters, skip: nextSkip };
             })
           }
           disabled={
-            filters.skip + 1 >= articleStore.articles.items.length ||
-            articleStore.articles.items.length === 0
+            filters.skip + 1 >= 20 || articleStore.articles.items.length === 0
           }
         >
           {t("next")} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
