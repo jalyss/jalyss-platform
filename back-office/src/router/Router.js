@@ -120,9 +120,8 @@ import RolesList from "../domains/roles/view/RolesList";
 import EditRole from "../domains/roles/view/EditRole";
 import DetailRole from "../domains/roles/view/DetailRole";
 import CreateRole from "../domains/roles/view/CreateRole";
-
+import  Clientlist from "../../src/domains/Client/views/Clientlist"
 import Client from "../domains/Client/Client";
-import Clientlist from "../domains/Client/views/Clientlist";
 import Addclient from "../domains/Client/views/Addclient";
 import Profileclient from "../domains/Client/views/Profileclient";
 

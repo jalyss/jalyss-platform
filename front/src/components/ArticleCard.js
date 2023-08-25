@@ -13,6 +13,8 @@ function ArticleCard({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate();
 
+
+
   const handleButtonClick = () => {
     if (handleButtonClick.error) {
       showErrorToast("alredy saved");
@@ -23,22 +25,23 @@ function ArticleCard({ article }) {
   };
 
   return (
-<div className="article-card position-relative mx-3 mb-2">
-  <div className="position-relative">
-    <div className="stock-label">
-      <h6 className="m-0">{article.stock}</h6>
-    </div>
-    <img
-      src={article?.article?.cover.path}
-      className="w-100 object-fit-contain"
-      alt=""
-    />
-    <div className="rating-home">
-      <Rating edit={false} rating={article?.rating} />
-    </div>
-  </div>
-  <p className="price">{article.price} TND</p>
-
+    <div className="article-card position-relative mx-3 mb-2 ">
+      <div className="position-relative">
+        <div className="stock-label">
+          <h6 className="m-0">{article.stock} </h6>
+        </div>
+        <img
+          src={article?.article?.cover.path}
+          className="w-100 object-fit-contain article-image "
+          alt=""
+        />
+        <div className="rating-home">
+          <Rating edit={false} rating={article?.rating} />
+        </div>
+      </div>
+      <p>{article.price}TND</p>
+      <p style={{color:'black'}}>{article.article.category.nameEn}</p>
+    
   <div className="d-flex flex-column justify-content-between align-items-center mt-2">
     <h6 className="article-title">{article.article?.title}</h6>
 
