@@ -14,6 +14,8 @@ function ArticleCard({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate();
 
+
+
   const handleButtonClick = () => {
     if (handleButtonClick.error) {
       showErrorToast("alredy saved");
@@ -40,7 +42,7 @@ function ArticleCard({ article }) {
         </div>
       </div>
       <p>{article.price}TND</p>
-      
+      <p style={{color:'black'}}>{article.article.category.nameEn}</p>
       <div className="d-flex flex-column justify-content-between align-items-center mt-2">
         <h6 className="m-0">{article.article.title}</h6>
 
