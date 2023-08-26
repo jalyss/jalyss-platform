@@ -35,25 +35,17 @@ function EditRole() {
 
   const [seva, setsaved] = useState([]);
 
-  const handlePermissionChange = (permissions, roleName, permission) => {
-    let x = []
-    x.push(permissions[0]) 
-    seva.map((e,i)=>(
-
-      e.action === x[0].action ? console.log(false) :
-      // setsaved( [...seva,...x,{ action: permission,domain: roleName }])
-console.log(true)
-    ))
-    console.log(seva,"merge")
-    setNewRole(prevRoles => ({
-      ...prevRoles,
-      [roleName]: {
-        ...prevRoles[roleName],
-        [permission]: !prevRoles[roleName][permission],
-      },
-    }));
-
+  const handlePermissionChange = (roleName, permission) => {
+    setNewRole(prevRoles => {
+      const updatedRoles = { ...prevRoles };
+      console.log(prevRoles)
+      const rolePermissions = updatedRoles[roleName];
+      rolePermissions[permission] = true ? false : true;
+      return updatedRoles;
+    });
   };
+
+
 
 
 
@@ -75,12 +67,11 @@ console.log(true)
   const toggleShow = () => {
     setRenderEditView(!renderEditView);
   };
-
-  const domains = [...new Set(role?.permissions?.map(permission => permission.domain))];
-  const initialRoleState = domains.reduce((acc, domain) => {
+  const domains = role?.permissions[0].action ? [...new Set(role?.permissions?.map(permission => permission.domain))]: null ;
+  const initialRoleState =role?.permissions[0].action ? domains.reduce((acc, domain) => {
     const domainPermissions = role.permissions
       .filter(permission => permission.domain === domain)
-      .map(permission => permission.action);
+      .map(permission => permission.action)
 
     acc[domain] = {};
 
@@ -90,9 +81,11 @@ console.log(true)
     });
 
     return acc;
-  }, {});
-  const [newRole, setNewRole] = useState(initialRoleState);
-
+  }, {}):null
+  const [newRole, setNewRole] = useState();
+useEffect(()=>{
+  setNewRole(initialRoleState)
+},[role])
 
   const handleSubmit = () => {
     const body = {
@@ -361,20 +354,22 @@ console.log(true)
                     })}
 
                     <div>
-                      {Object.entries(newRole).map(([roleName, permissions]) => (
+
+                      {newRole && Object.entries(newRole).map(([roleName, permissions]) => (
                         <div className="col-md-4" key={roleName}>
                           <div className="card mb-4">
                             <div className="card-body">
-                              <h5 className="card-title">{roleName}</h5>
+                              <h5 className="card-title">{roleName && roleName}</h5>
                               {Object.keys(permissions).map(permission => (
                                 <div className="d-flex" key={`${roleName}-${permission}`}>
                                   <div className="form-check">
                                     <input
                                       type="checkbox"
                                       className="form-check-input"
-                                      checked={permissions[permission]}
-                                      onChange={() => handlePermissionChange(role.permissions, roleName, permission)}
+                                      checked={permissions && permissions[permission]}
+                                      onChange={() => handlePermissionChange(roleName, permission)}
                                     />
+
 
                                   </div>
                                   <label className="form-check-label h6">
