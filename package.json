@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    
-   
   },
   "name": "@jalyss-platform/root",
   "packageManager": "yarn@3.2.0",
@@ -28,6 +26,7 @@
     "prisma:build": "yarn workspace back prisma:build"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "turbo": "^1.8.3"
   },
   "browser": {
