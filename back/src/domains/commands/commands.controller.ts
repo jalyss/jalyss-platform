@@ -25,16 +25,10 @@ export class CommandsController {
   @Post(':branchId')
   create(
     @Body() createCommandDto: CreateCommandDto,
-<<<<<<< HEAD
-    @Param('branchId') branchId: string,
-  ) {
-    return this.commandsService.create(createCommandDto, branchId);
-=======
     // @CurrentUser() user:any,
     @Param('branchId') branchId: string,
   ) {
     return this.commandsService.create(createCommandDto, branchId );
->>>>>>> 85605acd57b9d48711948ee24f0d5706c11e49a3
   }
 
   @Get()
