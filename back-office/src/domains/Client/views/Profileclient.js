@@ -27,8 +27,7 @@ import { editClient, fetchClient } from "../../../store/client";
 
 import EditIcon from "@mui/icons-material/Edit";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
-
-
+//the client commands table is on the details.js file (just copy past the code )
 const profileclient = () => {
   const client = useSelector((state) => state.client?.client);
   console.log(client, "client");
@@ -53,14 +52,13 @@ const profileclient = () => {
   const CountriesStore = useSelector((state) => state.country);
   const citysStore = useSelector((state) => state.country);
 
-
   useEffect(() => {
     dispatch(fetchClient(id));
     dispatch(fetchEducationLevels());
     dispatch(fetchFunctionalAreas());
     dispatch(fetchJobTitles());
     dispatch(fetchCountries());
-    dispatch(findAllCitites());;
+    dispatch(findAllCitites());
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -79,69 +77,31 @@ const profileclient = () => {
   console.log(id, "clientId");
   console.log(client, "client");
 
-  // const handleSubmit = async () => {
-  //   const body = {
-  //     ...editClientData,
-  //   };
-  //   try {
-  //     if (selectedFile) {
-  //       const formData = new FormData();
-  //       formData.append("file", selectedFile);
-
-  //       const response = await axios.post(
-  //         `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-  //         formData
-  //       );
-  //       body.avatarId = response.data.id;
-  //     }
-  //     delete body.avatar;
-      
-
-  //     const editedClient = { ...body, id };
-  //     dispatch(editClient(editedClient));
-  //     showSuccessToast("client edited successfully");
-  //     navigate(-1);
-  //   } catch (error) {
-  //     console.error("Error editing client:", error);
-  //     showErrorToast(error.message);
-  //   }
-  // };
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const {
-      fullNameEn,
-      fullNameAr,
-      email,
-      address,
-      tel,
-      accountBalance,
-      isCoach,
-      cityId,
-      educationLevelId,
-      countryId,
-      functionalAreaId,
-      jobTitleId,
-    } = editClientData;
-
-    const submitUpdate = async () => {
-      let aux = { ...editClientData, accountBalance: Number(accountBalance) };
-      try {
-        await dispatch(updateClient(id, aux));
-        showSuccessToast("Client updated successfully");
-        navigate(-1);
-      } catch (error) {
-        console.log(error);
-        showErrorToast(error.message);
-      }
+  const handleSubmit = async () => {
+    const body = {
+      ...editClientData,
     };
+    try {
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
 
-    if (selectedFile !== null) {
-      // Upload avatar logic remains the same
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          formData
+        );
+        body.avatarId = response.data.id;
+      }
+      delete body.avatar;
+
+      const editedClient = { ...body, id };
+      dispatch(editClient(editedClient));
+      showSuccessToast("client edited successfully");
+      navigate(-1);
+    } catch (error) {
+      console.error("Error editing client:", error);
+      showErrorToast(error.message);
     }
-
-    submitUpdate();
   };
 
   return (
@@ -310,92 +270,92 @@ const profileclient = () => {
                   variant="outlined"
                   margin="normal"
                 />
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="functionalArea">functional Area</InputLabel>
-                  <Select
-                    labelId="functionalArea"
-                    name="functionalAreaId"
-                    onChange={(e) => setFunctionalAreaId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {functionalAreaStore.functionalAreas.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="jobTitle">job tilte</InputLabel>
-                  <Select
-                    labelId="jobTitle"
-                    name="jobTitleId"
-                    onChange={(e) => setJobTitleId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {jobTitleStore.jobTitles.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="functionalArea">functional Area</InputLabel>
+                    <Select
+                      labelId="functionalArea"
+                      name="functionalAreaId"
+                      onChange={(e) => setFunctionalAreaId(e.target.value)}
+                    >
+                      <MenuItem value={null}>--select option--</MenuItem>
+                      {functionalAreaStore.functionalAreas.items.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.nameAr}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="jobTitle">job tilte</InputLabel>
+                    <Select
+                      labelId="jobTitle"
+                      name="jobTitleId"
+                      onChange={(e) => setJobTitleId(e.target.value)}
+                    >
+                      <MenuItem value={null}>--select option--</MenuItem>
+                      {jobTitleStore.jobTitles.items.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.nameAr}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="educationLevel">Education Level</InputLabel>
-                  <Select
-                    labelId="educationLevel"
-                    name="educationLevelId"
-                    onChange={(e) => setEducationLevelId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {educationLevelStore.educationLevels.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="counties">counties</InputLabel>
-                  <Select
-                    labelId="counties"
-                    name="countriesId"
-                    onChange={(e) => setCountryId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {CountriesStore?.countries?.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="citys">city</InputLabel>
-                  <Select
-                    labelId="citys"
-                    name="citysId"
-                    onChange={(e) => setCityId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {citysStore?.cities?.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="educationLevel">Education Level</InputLabel>
+                    <Select
+                      labelId="educationLevel"
+                      name="educationLevelId"
+                      onChange={(e) => setEducationLevelId(e.target.value)}
+                    >
+                      <MenuItem value={null}>--select option--</MenuItem>
+                      {educationLevelStore.educationLevels.items.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.nameAr}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="counties">counties</InputLabel>
+                    <Select
+                      labelId="counties"
+                      name="countriesId"
+                      onChange={(e) => setCountryId(e.target.value)}
+                    >
+                      <MenuItem value={null}>--select option--</MenuItem>
+                      {CountriesStore?.countries?.items.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.nameAr}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="citys">city</InputLabel>
+                    <Select
+                      labelId="citys"
+                      name="citysId"
+                      onChange={(e) => setCityId(e.target.value)}
+                    >
+                      <MenuItem value={null}>--select option--</MenuItem>
+                      {citysStore?.cities?.items.map((item) => (
+                        <MenuItem key={item.id} value={item.id}>
+                          {item.nameAr}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
               </div>
             )}
           </Box>
@@ -462,23 +422,14 @@ const profileclient = () => {
           </Box>
         </Box>
       </CardContent>
-    
 
       <Box display="flex" justifyContent="center" mt={9}>
         {renderEditView ? (
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            color="primary"
-          >
+          <Button onClick={handleSubmit} variant="contained" color="primary">
             Save Client
           </Button>
         ) : (
-          <Button
-            onClick={toggleView}
-            variant="contained"
-            color="primary"
-          >
+          <Button onClick={toggleView} variant="contained" color="primary">
             Update Client
           </Button>
         )}
@@ -487,4 +438,3 @@ const profileclient = () => {
   );
 };
 export default profileclient;
-
