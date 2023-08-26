@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { LikeCategoryService } from './like-category.service';
 import { CreateLikeCategoryDto } from './dto/create-like-category.dto';
 import { UpdateLikeCategoryDto } from './dto/update-like-category.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('likeCategory')
 @Controller('likeCategory')
 export class LikeCategoryController {
   constructor(private readonly likeCategoryService: LikeCategoryService) {}
@@ -16,7 +26,6 @@ export class LikeCategoryController {
   findAll() {
     return this.likeCategoryService.findAll();
   }
-  
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -24,7 +33,10 @@ export class LikeCategoryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() UpdateLikeCategoryDto: UpdateLikeCategoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() UpdateLikeCategoryDto: UpdateLikeCategoryDto,
+  ) {
     return this.likeCategoryService.update(id, UpdateLikeCategoryDto);
   }
 

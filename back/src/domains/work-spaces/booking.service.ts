@@ -15,6 +15,7 @@ export class BookingService {
 
 
   async create(dto:CreateBookingDto) {
+    console.log(dto,'lol')
     return await this.prisma.booking.create({
       data: dto,
     });

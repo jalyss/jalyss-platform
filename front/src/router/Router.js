@@ -45,6 +45,7 @@ import Conversation from "../components/chatComponents/Conversation";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "../store/auth";
 import SavedTraining from "../components/Profile/SavedTraining";
+import SpaceBooked from "../components/Profile/SpaceBooked";
 
 function Router() {
   const dispatch = useDispatch();
@@ -79,6 +80,8 @@ function Router() {
                 <Route path="bio" element={<Edit />} />
                 <Route path="saved-tarining/:userId" element={<SavedTraining />} />
                 <Route path="orders-history" element={<OrderHistory />} />
+                <Route path="Space-Booked" element={<SpaceBooked/>} />
+
               </Route>
             )}
 
@@ -111,7 +114,7 @@ function Router() {
             <Route path="sessions/:sessionId" element={<SessionDetails />} />
 
             <Route path="RegisterForm" element={<RegisterForm />} />
-            <Route path="SpaceReservation" element={<SpaceReservation />} />
+            <Route path="SpaceReservation/:tarifId" element={<SpaceReservation />} />
           </Route>
         </Routes>
       </BrowserRouter>

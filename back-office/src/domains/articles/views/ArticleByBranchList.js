@@ -307,7 +307,7 @@ function ArticleByBranchList() {
         {articles.map((element, i) => (
           <div className="card">
             <div>
-              <img src={element.cover.path} />
+              <img src={element?.cover?.path} />
             </div>
             <div className="d-flex justify-content-center">
               <div className="">
@@ -324,9 +324,9 @@ function ArticleByBranchList() {
                 </div>
                 {element.ArticlesByBranch.map((elem, j) => (
                   <div className="d-flex py-2">
-                    <div style={{ width: 100 }}>{elem.branch.name}</div>
-                    <div style={{ width: 50 }}>{elem.stock}</div>
-                    <div style={{ width: 50 }}>{elem.price}</div>
+                    <div style={{ width: 100 }}>{elem?.branch?.name}</div>
+                    <div style={{ width: 50 }}>{elem?.stock}</div>
+                    <div style={{ width: 50 }}>{elem?.price}</div>
                     <Button
                       variant="contained"
                       color="warning"
@@ -348,7 +348,7 @@ function ArticleByBranchList() {
                 ))}
                 <div className="d-flex">
                   <div style={{ width: 100 }}>total</div>
-                  <div style={{ width: 100 }}>{element.total}</div>
+                  <div style={{ width: 100 }}>{element?.total}</div>
                 </div>
               </div>
             </div>
@@ -357,7 +357,7 @@ function ArticleByBranchList() {
               <div className="border d-flex justify-content-center w-100">
                 <Button
                   variant="outlined"
-                  onClick={() => handleClickOpen(element.id)}
+                  onClick={() => handleClickOpen(element?.id)}
                 >
                   Add transaction
                 </Button>

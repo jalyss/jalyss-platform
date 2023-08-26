@@ -12,20 +12,21 @@ import {
   } from '@nestjs/common';
 import { ConnectedUsersService } from './connectedUsers.service';
 import { CreateConnectedUserDto } from './dto/create-connectedUsers.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('connected users')
 @Controller('connectedUser')
 
 export class ConnectedUserController {
     constructor(private readonly connectedUserService:ConnectedUsersService){}
 
- @Post('connectedUser')
+ @Post('')
  create(
     @Body() dto : CreateConnectedUserDto,
  ){
     return this.connectedUserService.create(dto)
  }
 
-@Get('connectedUsers')
+@Get('')
 getConnectedUser(
 ){
     return this.connectedUserService.getUsers()
