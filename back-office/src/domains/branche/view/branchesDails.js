@@ -11,17 +11,16 @@ import { DataGrid } from "@mui/x-data-grid";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 
-import {
-  fetchTransitions,
-  removeTransition,
-  findTransitionsByBranchId,
-} from "../../../store/transition";
+import { findTransitionsByBranchId } from "../../../store/transition";
+import { fetchArticlesByBranch } from "../../../store/article";
 function EditBranche() {
   const [renderEditView, setRenderEditView] = useState(false);
   const branche = useSelector((state) => state.branche.branche);
   const transitions = useSelector(
     (state) => state.transition.transitions.items
   );
+  const articles = useSelector((state) => state.article.articles.items);
+
   const [editBrancheData, seteditBrancheData] = useState(null);
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [selectedBranch, setSelectedBranch] = useState("");
@@ -33,6 +32,14 @@ function EditBranche() {
   useEffect(() => {
     dispatch(fetchBranche(typeId));
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      fetchArticlesByBranch({
+        identifier:typeId,
+      })
+    );
+  }, [selectedBranch]);
 
   useEffect(() => {
     seteditBrancheData({ ...branche });
@@ -66,6 +73,35 @@ function EditBranche() {
     setBasicModalDelete(!basicModalDelete);
     setRenderEditView(false);
   };
+
+  const articlesColumns = [
+    {
+      field: "id",
+      headerName: "id",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "articleTitle",
+      headerName: "Article Title",
+      width: 150,
+      editable: false,
+      valueGetter: (params) => params?.row?.article?.title,
+    },
+    {
+      field: "price",
+      headerName: "price",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "stock",
+      headerName: "stock",
+      width: 150,
+      editable: false,
+    },
+  ];
+
   const columns = [
     {
       field: "branch Sender",
@@ -237,89 +273,88 @@ function EditBranche() {
             </>
           ) : (
             <>
-           <div className="container">
-  <div className="row">
-    <div className="col-md-6 mt-3">
-      <label htmlFor="name">Name</label>
-      <input
-        type="text"
-        className="form-control"
-        id="name"
-        placeholder="Name"
-        value={editBrancheData?.name || ""}
-        onChange={(e) => {
-          seteditBrancheData({
-            ...editBrancheData,
-            name: e.target.value,
-          });
-        }}
-      />
-    </div>
-    <div className="col-md-6 mt-3">
-      <label htmlFor="mainBranch">Main Branch</label>
-      <input
-        type="text"
-        className="form-control"
-        id="mainBranch"
-        placeholder="Main Branch"
-        value={editBrancheData?.mainBranch}
-        onChange={(e) => {
-          const value = e.target.value.toLowerCase();
-          seteditBrancheData({
-            ...editBrancheData,
-            mainBranch: value === "true",
-          });
-        }}
-      />
-    </div>
-  </div>
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-6 mt-3">
+                    <label htmlFor="name">Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="name"
+                      placeholder="Name"
+                      value={editBrancheData?.name || ""}
+                      onChange={(e) => {
+                        seteditBrancheData({
+                          ...editBrancheData,
+                          name: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="col-md-6 mt-3">
+                    <label htmlFor="mainBranch">Main Branch</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="mainBranch"
+                      placeholder="Main Branch"
+                      value={editBrancheData?.mainBranch}
+                      onChange={(e) => {
+                        const value = e.target.value.toLowerCase();
+                        seteditBrancheData({
+                          ...editBrancheData,
+                          mainBranch: value === "true",
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
 
-  <div className="row">
-    <div className="col-md-6 mt-3">
-      <label htmlFor="identifier">Identifier</label>
-      <input
-        type="text"
-        className="form-control"
-        id="identifier"
-        placeholder="Identifier"
-        value={editBrancheData?.identifier || ""}
-        onChange={(e) => {
-          seteditBrancheData({
-            ...editBrancheData,
-            identifier: e.target.value,
-          });
-        }}
-      />
-    </div>
-    <div className="col-md-6 mt-3">
-      <label htmlFor="address">Address</label>
-      <input
-        type="text"
-        className="form-control"
-        id="address"
-        placeholder="Address"
-        value={editBrancheData?.address || ""}
-        onChange={(e) => {
-          seteditBrancheData({
-            ...editBrancheData,
-            address: e.target.value,
-          });
-        }}
-      />
-    </div>
-  </div>
+                <div className="row">
+                  <div className="col-md-6 mt-3">
+                    <label htmlFor="identifier">Identifier</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="identifier"
+                      placeholder="Identifier"
+                      value={editBrancheData?.identifier || ""}
+                      onChange={(e) => {
+                        seteditBrancheData({
+                          ...editBrancheData,
+                          identifier: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="col-md-6 mt-3">
+                    <label htmlFor="address">Address</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="address"
+                      placeholder="Address"
+                      value={editBrancheData?.address || ""}
+                      onChange={(e) => {
+                        seteditBrancheData({
+                          ...editBrancheData,
+                          address: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
 
-  <div className="w-100 d-flex justify-content-center mt-5">
-    <button
-      type="submit"
-      onClick={() => toggleShowDelete()}
-      className="btn btn-primary"
-    >
-      Save Changes
-    </button>
-  </div>
-</div>
-
+                <div className="w-100 d-flex justify-content-center mt-5">
+                  <button
+                    type="submit"
+                    onClick={() => toggleShowDelete()}
+                    className="btn btn-primary"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
             </>
           )}
         </div>
@@ -348,7 +383,7 @@ function EditBranche() {
         }}
       />
 
-      <Box sx={{ height: "auto", width: "90%" }}>
+<Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={transitions}
           columns={columns}
@@ -363,6 +398,24 @@ function EditBranche() {
             setParams({ ...params, take: +e.pageSize * (+e.page + 1) });
           }}
           pageSizeOptions={[5, 20, 50]}
+          disableRowSelectionOnClick
+        />
+      </Box>
+      <Box sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={articles}
+          columns={articlesColumns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: params.take,
+              },
+            },
+          }}
+          onPaginationModelChange={(e) => {
+            setParams({ ...params, take: +e.pageSize * (+e.page + 1) });
+          }}
+          pageSizeOptions={[10, 20, 50]}
           disableRowSelectionOnClick
         />
       </Box>

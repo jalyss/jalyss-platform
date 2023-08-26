@@ -45,6 +45,29 @@ export class ArticleService {
       },
     });
   }
+  async findByCategory(categoryId?: string) {
+    let where = {};
+
+    if (categoryId) {
+      where = {
+        categoryId: categoryId,
+      };
+    }
+
+    return this.prisma.article.findMany({
+      where,
+      include: {
+        ArticlesByBranch: {
+          include: { rating: true, branch: true, article: true },
+        },
+        media: true,
+        cover: true,
+        publishingHouse: true,
+        category: true,
+        type: true,
+      },
+    });
+  }
 
   findArticleTitleAndId() {
     return this.prisma.article.findMany({
@@ -151,7 +174,7 @@ export class ArticleService {
         },
       });
     }
-    
+
     const articlesByBranch = await this.prisma.articlesByBranch.findMany({
       where: {
         ...insideWhere,
@@ -169,7 +192,6 @@ export class ArticleService {
           },
         },
       },
-      take: 5,
       skip,
     });
     return await Promise.all(
@@ -228,17 +250,16 @@ export class ArticleService {
     };
   }
 
-
   async findOne(id: string) {
     return await this.prisma.article.findFirst({
       where: {
         id,
       },
       include: {
-        category:true,
-        publishingHouse:true,
-        type:true,
-        ArticlesByBranch:true,
+        category: true,
+        publishingHouse: true,
+        type: true,
+        ArticlesByBranch: true,
       },
     });
   }
@@ -263,12 +284,12 @@ export class ArticleService {
     dto: CreateRatingDto,
     userId: string,
     articleByBranchId: string,
-   ) {
+  ) {
     return await this.prisma.rating.create({
       data: { ...dto, userId, articleByBranchId },
     });
-   }
-   async updateRating(
+  }
+  async updateRating(
     dto: CreateRatingDto,
     userId: string,
     articleByBranchId: string,

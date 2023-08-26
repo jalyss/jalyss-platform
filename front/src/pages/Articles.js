@@ -21,8 +21,7 @@ import { BsFilterSquare } from "react-icons/bs";
 import "rc-tooltip/assets/bootstrap.css";
 import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
 import "rc-slider/assets/index.css";
-import { filter, groupBy, isEmpty, map } from "lodash";
-import HorizontalMenu from "../components/Commun/DragContainter";
+import {groupBy, isEmpty, map } from "lodash";
 
 function Articles() {
   const dispatch = useDispatch();
@@ -35,6 +34,8 @@ function Articles() {
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
   const authorStore = useSelector((state) => state.author);
   const articleTypeStore = useSelector((state) => state.articleType);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setpageSize] = useState(8);
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [price, setPrice] = useState([1, 1000]);
@@ -222,7 +223,10 @@ function Articles() {
       groupBy(articleStore.articles.items, (item) => item.article.categoryId),
     [articleStore.articles.items]
   );
-
+  function paginate(items, pageNumber, pageSize) {
+    const startIndex = (pageNumber - 1) * pageSize;
+    return items.slice(startIndex, startIndex + pageSize);
+  }
   console.log(filters.categories, "ctaegories");
   console.log(groupedArticles, "grpdArticles");
   console.log(articleStore.articles.items, "article store");
@@ -327,23 +331,6 @@ function Articles() {
                       }));
                     }}
                   />
-                  {/* <Slider
-                 range
-                 draggableTrack={false}
-                 max={1000}
-                 defaultValue={1000} 
-                 tipFormatter={(value) =>`TND${value}`}
-                 allowCross={false}
-                 value={price}
-                 onChange={(price)=> {
-                   setPrice(price)
-                   setFilters((Filters) => ({
-                    ...Filters,
-                    gte: price[0],
-                    lte: price[1],
-                   }))
-                 }}                        
-      /> */}
                   <div className="d-flex justify-content-between mt-1">
                     <p>{price[0]}</p>
                     <p>{price[1]}</p>
@@ -370,20 +357,20 @@ function Articles() {
                   {element[0].article.category[lg ? "nameEn" : "nameAr"]}
                 </p>
 
-                <div className="d-flex flex-wrap px-4 ">
+                <div className="d-flex flex-wrap px-3 ">
                   {element.map((el, index) => (
-                    <div style={{ maxWidth: "100%" }} key={el.id}>
-                      <ArticleCard article={el} />
-                    </div>
+                    <ArticleCard article={el} />
                   ))}
                 </div>
               </>
             ))
           ) : (
             <div className="d-flex flex-wrap px-3 ">
-              {articleStore.articles.items.map((element, index) => (
-                <ArticleCard key={index} article={element} />
-              ))}
+              {paginate(articleStore.articles.items, currentPage, pageSize).map(
+                (element, index) => (
+                  <ArticleCard key={index} article={element} />
+                )
+              )}
             </div>
           )}
         </div>
@@ -399,10 +386,8 @@ function Articles() {
             backgroundColor: "rgba(70, 4, 74, 0.781)",
           }}
           className="bg-yellow px-4 py-2  border-0  mx-2 "
-          onClick={() =>
-            filters.skip > 0 &&
-            setFilters((Filters) => ({ ...Filters, skip: filters.skip - 1 }))
-          }
+          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
         >
           {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t("back")}
         </button>
@@ -413,18 +398,9 @@ function Articles() {
             backgroundColor: "rgba(70, 4, 74, 0.781)",
           }}
           className="bg-yellow px-4 py-2 border-0 mx-2"
-          onClick={() =>
-            setFilters((Filters) => {
-              const nextSkip = Filters.skip + 1;
-              if (nextSkip >= articleStore.articles.items.length) {
-                return Filters;
-              }
-              return { ...Filters, skip: nextSkip };
-            })
-          }
+          onClick={() => setCurrentPage(currentPage + 1)}
           disabled={
-            filters.skip + 1 >= articleStore.articles.items.length ||
-            articleStore.articles.items.length === 0
+            currentPage * pageSize >= articleStore.articles.items.length
           }
         >
           {t("next")} {lg ? <RiArrowRightSLine /> : <RiArrowLeftSLine />}
