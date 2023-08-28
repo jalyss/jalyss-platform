@@ -243,6 +243,7 @@ function DetailAuthor() {
           )}
         </div>
       </div>
+      
       <EditModal
         toggleShow={onCanceltoggleShowDelete}
         basicModal={basicModalDelete}

@@ -16,6 +16,16 @@ export const fetchArticlesByBranch = createAsyncThunk(
     return response.data;
   });
 
+  export const findByCategory = createAsyncThunk(
+    "articles",
+    async (args) => {
+      const identifier = args.identifier
+      delete args.identifier
+      console.log(args,"args");
+      const response = await axios.get(`${config.API_ENDPOINT}/findByCategory/${identifier?identifier:null}`);
+      return response.data;
+    });
+
 export const fetchArticle = createAsyncThunk(
   "articles/article",
   async (id) => {
@@ -50,34 +60,37 @@ export const createArticleByBranchRating = createAsyncThunk(
 
 
 
-export const articleSlice = createSlice({
-  name: "article",
-  initialState: {
-    article: null,
-    articles: {
-      items: [],
-      count: 0,
+  export const articleSlice = createSlice({
+    name: "article",
+    initialState: {
+      article: null,
+      articles: {
+        items: [],
+        count: 0,
+      },
+      error: null,
+      deleteError: null,
+      saveError: null,
+      createArticleError: null,
     },
-    error: null,
-    deleteError: null,
-    saveError: null,
-    createArticleError: null,
-  },
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(fetchArticles.fulfilled, (state, action) => {
-      state.articles.items = action.payload;
-    });
-    builder.addCase(fetchArticlesByBranch.fulfilled, (state, action) => {
-      state.articles.items = action.payload;
-    });
-    builder.addCase(fetchArticle.fulfilled, (state, action) => {
-      state.article = action.payload;
-    });
-    builder.addCase(fetchArticleByBranch.fulfilled, (state, action) => {
-      state.article = action.payload;
-    });
-    
-  },
-});
+    reducers: {},
+    extraReducers(builder) {
+      builder.addCase(fetchArticles.fulfilled, (state, action) => {
+        state.articles.items = action.payload;
+      });
+      builder.addCase(fetchArticlesByBranch.fulfilled, (state, action) => {
+        state.articles.items = action.payload;
+      });
+      builder.addCase(findByCategory.fulfilled, (state, action) => {
+        state.articles.items = action.payload;
+      });
+      builder.addCase(fetchArticle.fulfilled, (state, action) => {
+        state.article = action.payload;
+      });
+      builder.addCase(fetchArticleByBranch.fulfilled, (state, action) => {
+        state.article = action.payload;
+      });
+    },
+  });
+  
 export default articleSlice.reducer;

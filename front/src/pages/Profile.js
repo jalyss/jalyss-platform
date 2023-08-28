@@ -332,12 +332,12 @@ export default function ProfilePage() {
               <MDBNavbarItem
                 // className="label-btn pointer"
                 style={{
-                   backgroundColor:
-                   "/profile/saved-tarining" ===  path  ? "rgb(156 39 176 / 34%)" : "",
+                   backgroundColor: "/profile/saved-tarining" ===  path  ? "rgb(156 39 176 / 34%)" : "",
                   borderRadius: "10px",
                   padding: "5px 10px",
                   margin: "0 5px",
                   minWidth: 100,
+                  backgroundColor: "rgb(156 39 176 / 34%)"
                 }}
               >
                 <MDBNavbarLink
@@ -347,9 +347,9 @@ export default function ProfilePage() {
                   }}
                   // className="label-btn pointer"
                   style={{
-                    color:"/profile/saved-tarining" ===  path ? "#fff" : "rgb(156 39 176)",
-                    textDecoration: "none",
+                    color: "/profile/saved-tarining/"+user.id === path ? "#fff" : "rgb(156 39 176 )",
                     fontWeight: "bold",
+                    color:"/profile/saved-tarining/"+user.id === path ? "#fff" : "rgb(156 39 176 )",
                   }}
                 >
                  Session booked

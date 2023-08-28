@@ -6,18 +6,13 @@ import {
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateMessageDto } from './dto/create-message.dto';
+
 import { UsersService } from '../users/users.service';
 import { MessagesService } from './messages.service';
 import { ChatRoomService } from './chatRoom.service';
 
-import { ChatMessage } from '@prisma/client';
-import {
-  ChatRoomSocketio,
-  MessageSocketio,
-  ConnectedUsersio,
-} from './entities/chat.entity';
-import { ConnectedUsersService } from './connectedUsers.service';
+import { ChatRoomSocketio, MessageSocketio } from './entities/chat.entity';
+
 import { CreateConnectedUserDto } from './dto/create-connectedUsers.dto';
 
 @WebSocketGateway({
@@ -32,7 +27,6 @@ export class ChatGateway {
     private readonly userService: UsersService,
     private readonly MessageService: MessagesService,
     private readonly ChatRoomService: ChatRoomService,
-    private readonly connectedUsersService: ConnectedUsersService,
   ) {}
 
   @WebSocketServer() server: Server;
@@ -43,6 +37,8 @@ export class ChatGateway {
     let connectedUser = await this.PrismaService.connectedUser.findFirst({
       where: { userId: payload.userId },
     });
+
+    console.log(payload.userId);
     if (!connectedUser) {
       await this.PrismaService.connectedUser.create({
         data: { userId: payload.userId },
@@ -88,21 +84,19 @@ export class ChatGateway {
   @SubscribeMessage('create-chat-room')
   async createChatRoom(client: Socket, payload: ChatRoomSocketio) {
     const { senderId, ...rest } = payload;
-    
-    
+
     const response = await this.ChatRoomService.create(rest, senderId);
-    this.server.emit(`chat-room-created/${senderId}`,response)
+    this.server.emit(`chat-room-created/${senderId}`, response);
     await this.chatRoomList(response.participants);
   }
 
   @SubscribeMessage('msg-to-server')
   async handleMessage(client: Socket, payload: MessageSocketio) {
     const { userId, chatRoomId, ...rest } = payload;
-    
 
     const response = await this.MessageService.create(rest, userId, chatRoomId);
-   console.log(response);
-   
+    console.log(response);
+
     this.server.emit(`msg-to-client/${chatRoomId}`, response);
     this.server.emit(`no-typing/${chatRoomId}`, { userId });
     const chatRoom = await this.ChatRoomService.findOne(chatRoomId);
@@ -116,12 +110,15 @@ export class ChatGateway {
   ) {
     const { chatRoomId, userId, num } = payload;
     console.log(chatRoomId);
-    
+
     await this.MessageService.MessageSeen(chatRoomId, userId);
     const chatRoom = await this.ChatRoomService.findOne(chatRoomId);
     await this.chatRoomList(chatRoom.participants);
-    
-    const messages = await this.MessageService.getChatRoomMessages(chatRoomId, num);
+
+    const messages = await this.MessageService.getChatRoomMessages(
+      chatRoomId,
+      num,
+    );
     this.server.emit(`messages/${chatRoomId}`, messages);
   }
 
@@ -140,12 +137,10 @@ export class ChatGateway {
     await this.connectedUsersList();
   }
 
-
   private async chatRoomList(participants: any) {
-   await participants.forEach(async (e: any,i:number) => {
+    await participants.forEach(async (e: any, i: number) => {
       const rooms = await this.ChatRoomService.findAll(e.userId);
-      
-      
+
       this.server.emit(`chat-rooms/${e.userId}`, rooms);
     });
   }

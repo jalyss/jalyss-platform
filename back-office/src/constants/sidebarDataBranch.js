@@ -9,7 +9,42 @@ export const sidebarDataBranch = [
     nameEn: "Branches",
     nameAr: "المنتج ",
     path: "branches",
-    children: [],
+    children: [
+      {
+        nameEn: "Transactions",
+        nameAr: "المعاملات ",
+        path: "Branche/transactions",
+      },
+      {
+        nameEn: "Branches list",
+        nameAr: "المنتج",
+        path: "Branche/transiction",
+      },
+    ],
+  },
+  {
+    nameEn: "HR",
+    nameAr: "شئون الموظفين",
+    path: "HR",
+    children: [
+      {
+        nameEn: "Employee",
+        nameAr: "الموظف",
+        path: "employee",
+      },
+    ],
+  },
+  {
+    nameEn: "CRM",
+    nameAr: "إدارة علاقات العملاء",
+    path: "CRM",
+    children: [
+      {
+          nameEn: "Client",
+          nameAr: "المستخدم",
+          path: "client"
+      },
+    ],
   },
   {
     nameEn: "Supplying",
@@ -69,11 +104,6 @@ export const sidebarDataBranch = [
         path: "users"
       },
       {
-        nameEn: "Client",
-        nameAr: "المستخدم",
-        path: "client"
-      },
-      {
         nameEn: "Space",
         nameAr: "الفضاء ",
         path: "space",
@@ -107,11 +137,6 @@ export const sidebarDataBranch = [
     nameAr: " اعدادات المشرف",
     path: "settings",
     children: [
-      {
-        nameEn: "Employee",
-        nameAr: "الموظف",
-        path: "employee",
-      },
       {
         nameEn: "Roles",
         nameAr: "الادوار",

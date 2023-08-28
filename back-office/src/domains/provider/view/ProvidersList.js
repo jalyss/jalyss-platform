@@ -123,13 +123,6 @@ function ProvidersList() {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<AiFillEdit />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => navigate(`editProvider/${id}`)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
             icon={<AiOutlineEye />}
             label="Add"
             className="textPrimary"
