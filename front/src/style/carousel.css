@@ -13,6 +13,7 @@
   transform: translate(0%, -50%) rotate(-180deg);
 }
 .previous {
+  right: 0;
   top: 50%;
   transform: translate(0%, -50%) rotate(180deg);
 }
@@ -39,7 +40,35 @@
   position: relative;
   height: 100%;
 }
+.sessions {
+  /* box-shadow: 4px -4px 5px -1px rgba(213, 184, 255, 0.76); */
+  /* filter: blur(6px); */
+  /* text-align: center; */
+  border: 0px;
+  outline: 0px;
+  background: transparent;
+  border: none;
+  position: relative;
+  max-width: 80vw;
+  height: 100%;
+  /* overflow: hidden; */
+  margin: auto;
+}
 .carousel {
+  /* box-shadow: 4px -4px 5px -1px rgba(213, 184, 255, 0.76); */
+  /* filter: blur(6px); */
+  /* text-align: center; */
+  border: 0px;
+  outline: 0px;
+  background: transparent;
+  border: none;
+  position: relative;
+  max-width: 80vw;
+  height: 100%;
+  /* overflow: hidden; */
+  margin: auto;
+}
+.article {
   /* box-shadow: 4px -4px 5px -1px rgba(213, 184, 255, 0.76); */
   /* filter: blur(6px); */
   /* text-align: center; */
@@ -77,7 +106,7 @@
   cursor: -webkit-grabbing;
   cursor: grabbing;
 }
-.true {
+.blog-card {
   margin-top: 35px;
   margin-right: 35px;
   margin-bottom: 35px;
@@ -86,13 +115,60 @@
   width: 100%; */
   /* height: 335px; */
   border-radius: 15px;
-  counter-increment: true;
+  counter-increment: blog-card;
   transition: all 0.3s ease;
   opacity: 0.3;
   background: #b9b9b9;
   filter: blur(6px);
+  pointer-events: none;
 }
-.true.is-selected {
+.blog-card.is-selected {
+  filter: blur(0);
+  opacity: 1;
+  background: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.article-card {
+  margin-top: 35px;
+  margin-right: 35px;
+  margin-bottom: 35px;
+  /* float: right; */
+  /* max-width: px;
+  width: 100%; */
+  /* height: 335px; */
+  border-radius: 15px;
+  counter-increment: article-card;
+  transition: all 0.3s ease;
+  opacity: 0.3;
+  background: #b9b9b9;
+  filter: blur(6px);
+  pointer-events: none;
+}
+.article-card.is-selected {
+  filter: blur(0);
+  opacity: 1;
+  background: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.card-sessions {
+  margin-top: 35px;
+  margin-right: 35px;
+  margin-bottom: 35px;
+  /* float: right; */
+  /* max-width: px;
+  width: 100%; */
+  /* height: 335px; */
+  border-radius: 35px;
+  counter-increment: card-sessions;
+  transition: all 0.3s ease;
+  opacity: 0.3;
+  background: #b9b9b9;
+  filter: blur(6px);
+  pointer-events: none;
+}
+.card-sessions.is-selected {
   filter: blur(0);
   opacity: 1;
   background: white;

@@ -1,15 +1,15 @@
 // ArticleCard.js
 import React from "react";
-import Rating from "../components/Commun/Rating";
+import Rating from "../Commun/Rating";
 import { FiEye } from "react-icons/fi";
 import { BsBag } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "react-use-cart";
-import "../assets/styles/card.css";
+import "../../assets/styles/card.css";
 import { purple } from "@mui/material/colors";
-import { showErrorToast, showSuccessToast } from "../utils/toast";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 
-function ArticleCard({ article }) {
+function OneArticle({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ function ArticleCard({ article }) {
   };
 
   return (
-    <div className="position-relative mx-3 mb-2 ">
+    <div className="article-card">
       <div className="position-relative">
         <div className="stock-label">
           <h6 className="m-0">{article.stock} </h6>
@@ -40,7 +40,7 @@ function ArticleCard({ article }) {
       <p>{article.price}TND</p>
 
       <div className="d-flex flex-column justify-content-between align-items-center mt-2">
-        <h6 className="m-0">{article.article.title}</h6>
+        <h6 className="m-0">{article.title}</h6>
 
         <div className="d-flex  mb-2">
           <div
@@ -62,4 +62,4 @@ function ArticleCard({ article }) {
   );
 }
 
-export default ArticleCard;
+export default OneArticle;

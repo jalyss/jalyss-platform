@@ -27,8 +27,8 @@ import { ProvidersModule } from './domains/providers/providers.module';
 import { FunctionalAreasModule } from './domains/functional-areas/functional-areas.module';
 import { JobTitlesModule } from './domains/job-titles/job-titles.module';
 import { EducationLevelsModule } from './domains/education-levels/education-levels.module';
-
-
+// import { SearchController } from './search/search.controller';
+import { SearchEngineModule } from './search-engine/search-engine.module';
 
 @Module({
   imports: [
@@ -50,17 +50,16 @@ import { EducationLevelsModule } from './domains/education-levels/education-leve
     LikesModule,
     TrainingModule,
     QuestionsModule,
-   
+
     ProvidersModule,
-   
+
     FunctionalAreasModule,
-   
+
     JobTitlesModule,
-   
+
     EducationLevelsModule,
-   
-   
-    
+
+    SearchEngineModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],

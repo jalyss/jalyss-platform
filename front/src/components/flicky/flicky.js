@@ -1,6 +1,8 @@
 import img from "../../img/course1.jpg";
 import css from "../../style/carousel.css";
 import Flickity from "react-flickity-component";
+// import ArticleCard from "../ArticleCard";
+// import SessionCard from "./cardSession";
 const Flicky = (props) => {
   const flickityOptions = {
     cellalign: "left",
