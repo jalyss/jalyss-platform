@@ -1,347 +1,521 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { Grid, CardContent, CardMedia, TextField, Box } from "@mui/material";
-import { fetchArticle } from "../../../store/article";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Grid,
+  CardContent,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  TextField,
+  Box,
+  Select,
+  Button,
+  IconButton,
+} from "@mui/material";
+import { updateArticleByBranch, fetchArticle } from "../../../store/article";
+import { fetchAuthors } from "../../../store/author";
+import { fetchArticleTypes } from "../../../store/articleType";
+import { fetchPublishingHouses } from "../../../store/publishingHouse";
+import { fetchCategories } from "../../../store/category";
+import EditIcon from "@mui/icons-material/Edit";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import axios from "axios";
 
 function DetailAritcle() {
   const { articleId } = useParams();
   const dispatch = useDispatch();
+  const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
+  const [articleData, setArticleData] = useState();
   const article = useSelector((state) => state.article.article);
+  const categoryStore = useSelector((state) => state.category);
+  const publishingHouseStore = useSelector((state) => state.publishingHouse);
+  const articleTypeStore = useSelector((state) => state.articleType);
+  const [ediMode, setEditMode] = useState(true);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  useEffect(() => {
+    dispatch(fetchAuthors());
+    dispatch(fetchArticleTypes());
+    dispatch(fetchPublishingHouses());
+    dispatch(fetchCategories());
+  }, [dispatch, articleId]);
 
   useEffect(() => {
     dispatch(fetchArticle(articleId));
   }, [dispatch, articleId]);
-  console.log("=>>>>>",article)
+
+  useEffect(() => {
+    setArticleData({ ...article });
+  }, [articleId, dispatch, article]);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+  
+  
+  const handleSubmit = async () => {
+    const {
+      title,
+      coverId,
+      weight,
+      pageNumber,
+      code,
+      shortDescriptionAr,
+      shortDescriptionEn,
+      longDescriptionAr,
+      longDescriptionEn,
+      categoryId,
+      publishingHouseId,
+      typeId,
+    } = articleData;
+
+    const body = {
+      title,
+      coverId,
+      weight,
+      pageNumber,
+      code,
+      shortDescriptionAr,
+      shortDescriptionEn,
+      longDescriptionAr,
+      longDescriptionEn,
+      categoryId,
+      publishingHouseId,
+      typeId,
+    };
+
+    try {
+      if (selectedFile !== null) {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          formData
+        );
+
+        body.coverId = response.data.id;
+      }
+
+      const editedArticle = { articleId, ...body };
+      dispatch(updateArticleByBranch(editedArticle));
+      showSuccessToast("article edited successfully");
+      navigate(-1);
+    } catch (error) {
+      console.error("Error editing article:", error);
+      showErrorToast(error.message);
+    }
+  };
+
   return (
     <Box sx={{ maxWidth: "100%", height: "100%", margin: "auto" }}>
-    <CardContent>
-      <Grid container spacing={2}>
-    
-      <Grid container justifyContent="center">
-  <Grid item xs={12} sm={6}>
-    <div style={{ display: "flex", justifyContent: "center", margin: "1.5rem" }}>
-    {article?.cover ? (
-      <img
-        style={{ width: "120%", borderRadius: "15px" }}
-        src={article?.cover?.path}
-        alt="cover"
-      />
-      ) : (
-        <img
-          style={{ width: "120%", borderRadius: "15px" }}
-          src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
-          alt="cover"
-        />
-      )}
-    </div>
-  </Grid>
-</Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="title"
-                value={article?.title}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2",
-                  }, 
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                  {
-                    borderColor: "#8a2be2",  
-                  },
-                
-                }}
-              /></Grid>
-              <Grid item xs={12} sm={6}>
-              <TextField
-                label="weight"
-                value={article?.weight}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              /></Grid>
-              <Grid item xs={12} sm={6}>
+      <CardContent>
+        <Grid container spacing={2}>
+          <Grid
+            container
+            className="d-flex justify-content-center align-items-center"
+          >
+            <Grid
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "cenetr",
+                position: "relative",
+              }}
+            >
+              <div className="position-relative">
+                <img
+                  className="img-fluid mt-1"
+                  src={
+                    selectedFile
+                      ? URL.createObjectURL(selectedFile)
+                      : article?.cover?.path ||
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSM4sEG5g9GFcy4SUxbzWNzUTf1jMISTDZrTw&usqp=CAU"
+                  }
+                  alt="Card image cap"
+                  style={{
+                    height: "80%",
+                    width: "300px",
+                    borderRadius: "8px",
+                    filter: "blur(0.5px)",
+                  }}
+                />
 
-              <TextField
-                label="pageNumber"
-                value={article?.pageNumber}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              /></Grid>
-            <Grid item xs={12} sm={6}>
+                <div className="position-absolute top-50 start-50 translate-middle">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                  />
 
-               <TextField
-                label="code"
-                value={article?.code}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="shortDescriptionEn"
-                value={article?.shortDescriptionEn}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-               <TextField
-                label="shortDescriptionAr"
-                value={article?.shortDescriptionAr}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="longDescriptionEn"
-                value={article?.longDescriptionEn}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="longDescriptionAr"
-                value={article?.longDescriptionAr}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Category"
-                value={article?.category?.nameEn}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="PublishingHouse"
-                value={article?.publishingHouse?.name}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Type"
-                value={article?.type?.nameEn}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
-              </Grid>
-            <Grid item xs={12} sm={6}>
-               <TextField
-                label="Author"
-                value={article?.authorIds}
-                disabled
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                InputLabelProps={{
-                  style: {
-                    color: "#4b0082", 
-                  },
-                }}
-                sx={{
-                  color: "#8a2be2", 
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2", 
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",  
-                    },
-                }}
-              />
+                  {!ediMode && (
+                    <IconButton
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "62%",
+                        transform: "translate(-50%, -50%)",
+                        color: "#8a2be2",
+                        backgroundColor: "#fff",
+                        border: "1px solid #8a2be2",
+                        "&:hover": {
+                          backgroundColor: "#8a2be2",
+                          color: "#fff",
+                        },
+                      }}
+                      onClick={handleButtonClick}
+                    >
+                      <EditIcon fontSize="large" />
+                    </IconButton>
+                  )}
+                </div>
+              </div>
             </Grid>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="title"
+              disabled={ediMode}
+              value={articleData?.title || ""}
+              onChange={(e) => {
+                setArticleData({ ...articleData, title: e.target.value });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              disabled={ediMode}
+              label="weight"
+              value={articleData?.weight || ""}
+              onChange={(e) => {
+                setArticleData({ ...articleData, weight: +e.target.value });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="pageNumber"
+              disabled={ediMode}
+              value={articleData?.pageNumber || ""}
+              onChange={(e) => {
+                setArticleData({ ...articleData, pageNumber: +e.target.value });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="code"
+              value={articleData?.code || ""}
+              disabled={ediMode}
+              onChange={(e) => {
+                setArticleData({ ...articleData, code: e.target.value });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="shortDescriptionEn"
+              disabled={ediMode}
+              value={articleData?.shortDescriptionEn || ""}
+              onChange={(e) => {
+                setArticleData({
+                  ...articleData,
+                  shortDescriptionEn: e.target.value,
+                });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="shortDescriptionAr"
+              disabled={ediMode}
+              value={articleData?.shortDescriptionAr || ""}
+              onChange={(e) => {
+                setArticleData({
+                  ...articleData,
+                  shortDescriptionAr: e.target.value,
+                });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="longDescriptionEn"
+              disabled={ediMode}
+              value={articleData?.longDescriptionEn || ""}
+              onChange={(e) => {
+                setArticleData({
+                  ...articleData,
+                  longDescriptionEn: e.target.value,
+                });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="longDescriptionAr"
+              disabled={ediMode}
+              value={articleData?.longDescriptionAr || ""}
+              onChange={(e) => {
+                setArticleData({
+                  ...articleData,
+                  longDescriptionAr: e.target.value,
+                });
+              }}
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              InputLabelProps={{
+                style: {
+                  color: "#4b0082",
+                },
+              }}
+              sx={{
+                color: "#8a2be2",
+                "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#8a2be2",
+                },
+                "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                  {
+                    borderColor: "#8a2be2",
+                  },
+              }}
+            />
+          </Grid>
 
-           
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel id="category">Category</InputLabel>
+              <Select
+                labelId="category"
+                value={articleData?.categoryId || ""}
+                onChange={(e) => {
+                  setArticleData({
+                    ...articleData,
+                    categoryId: e.target.value, // Store the selected category's ID
+                  });
+                }}
+                disabled={ediMode}
+                name="category"
+              >
+                {categoryStore.categories.items.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.nameEn}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel id="publishingHouse">Publishing House</InputLabel>
+              <Select
+                labelId="publishingHouse"
+                disabled={ediMode}
+                name="publishingHouse"
+                value={articleData?.publishingHouseId || ""}
+                onChange={(e) => {
+                  setArticleData({
+                    ...articleData,
+                    publishingHouseId: e.target.value, // Store the selected category's ID
+                  });
+                }}
+              >
+                <MenuItem value="">
+                  {articleData?.publishingHouse?.name}
+                </MenuItem>
+                {publishingHouseStore.publishingHouses.items.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel id="type">Type</InputLabel>
+              <Select
+                labelId="type"
+                disabled={ediMode}
+                name="type"
+                value={articleData?.typeId || ""}
+                onChange={(e) => {
+                  setArticleData({
+                    ...articleData,
+                    typeId: e.target.value, // Store the selected category's ID
+                  });
+                }}
+              >
+                <MenuItem value="">{articleData?.type?.nameEn || ""}</MenuItem>
+                {articleTypeStore.articleTypes.items.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.nameEn}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
       </CardContent>
+      {ediMode ? (
+        <Box display="flex" justifyContent="center">
+          <Button
+            onClick={() => {
+              setEditMode(!ediMode);
+            }}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Update Article
+          </Button>
+        </Box>
+      ) : (
+        <Box display="flex" justifyContent="center">
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Save changes
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }

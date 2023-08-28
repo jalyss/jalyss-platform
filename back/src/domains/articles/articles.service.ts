@@ -259,12 +259,14 @@ export class ArticleService {
         category: true,
         publishingHouse: true,
         type: true,
-        ArticlesByBranch: true,
+        cover: true,
+        ArticleByAuthor: {include:{author:true}}
       },
     });
   }
 
   async update(id: string, dto: UpdateArticleDto) {
+    console.log(dto)
     return await this.prisma.article.update({ where: { id }, data: dto });
   }
 
