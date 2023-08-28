@@ -94,6 +94,7 @@ import Types from "../domains/training/views/sessions/Types";
 import Newsession from "../domains/training/views/sessions/Newsession";
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
 // import Types from "../domains/type/Types";
+import Typess from "../domains/type/Typess"
 import TypesList from "../domains/type/views/TypesList";
 import EditType from "../domains/type/views/EditType";
 import DetailType from "../domains/type/views/DetailType";
@@ -229,7 +230,7 @@ function Router() {
               <Route path="create" element={<CreateAuthor />} />
             </Route>
 
-            <Route path="type" element={<Types />}>
+            <Route path="Typess" element={<Typess />}>
               <Route index element={<TypesList />} />
               <Route path="edit/:typeId" element={<EditType />} />
               <Route path="detail/:typeId" element={<DetailType />} />

@@ -50,7 +50,7 @@ export const sidebarDataBranch = [
       {
         nameEn: "Type",
         nameAr: "نوع",
-        path: "type",
+        path: "typess",
       },
       {
         nameEn: "Publishing house",
