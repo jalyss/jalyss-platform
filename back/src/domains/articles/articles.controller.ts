@@ -40,6 +40,8 @@ export class ArticleController {
     return this.articleService.findAll();
   }
 
+
+
   @Get("/getArticleTitles")
   findArticleTitleAndId() {
     return this.articleService.findArticleTitleAndId();
@@ -57,6 +59,16 @@ export class ArticleController {
   findOne(@Param('id') id: string) {
     return this.articleService.findOne(id);
   }
+  
+  @Get('findByCategory/:id')
+  findByCategory(@Param('id') id: string) {
+    if (id === 'all') { // Assuming 'all' as a special keyword for fetching all articles
+      return this.articleService.findByCategory(); // No categoryId provided, fetch all articles
+    } else {
+      return this.articleService.findByCategory(id); // Fetch articles by categoryId
+    }
+  }
+
   @Get('one-by-branch/:id')
   findOneByBranch(@Param('id') id: string) {
     return this.articleService.findOneByBranch(id);

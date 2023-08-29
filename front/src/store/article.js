@@ -26,18 +26,11 @@ export const fetchArticlesByBranch = createAsyncThunk(
 );
 
 export const fetchArticle = createAsyncThunk("articles/article", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/articles/one/${id}`);
+  const response = await axios.get(
+    `${config.API_ENDPOINT}/articles/one-by-branch/${id}`
+  );
   return response.data;
 });
-export const fetchArticleByBranch = createAsyncThunk(
-  "articles/articleByBranch",
-  async (id) => {
-    const response = await axios.get(
-      `${config.API_ENDPOINT}/articles/one-by-branch/${id}`
-    );
-    return response.data;
-  }
-);
 
 export const createArticleByBranchRating = createAsyncThunk(
   "articles/rating",

@@ -14,7 +14,6 @@ export const fetchArticlesByBranch = createAsyncThunk(
   async (args) => {
     const identifier = args.identifier;
     delete args.identifier;
-    console.log(args);
     const response = await axios.get(
       `${config.API_ENDPOINT}/articles/${identifier}`,
       { params: args }
@@ -39,9 +38,9 @@ export const fetchArticleByBranch = createAsyncThunk(
 );
 
 export const addTransactionStock = createAsyncThunk(
-  "mvt/createMvt",
+  "transaction",
   async (args, { dispatch }) => {
-    const response = await axios.post(`${config.API_ENDPOINT}/mvts`, args);
+    const response = await axios.post(`${config.API_ENDPOINT}/transaction`, args);
     dispatch(fetchArticles());
     return response.data;
   }

@@ -128,9 +128,7 @@ function EditCommand() {
             <>
               {!editCommanLineIndexes.includes(i) ? (
                 <div style={{ marginLeft: "10px" }}>
-                  <FaTrash
-                    style={{ cursor: "pointer" }}
-                  />
+                  <FaTrash style={{ cursor: "pointer" }} />
                   <GrEdit
                     onClick={() =>
                       setEditCommandLineIndexes([...editCommanLineIndexes, i])

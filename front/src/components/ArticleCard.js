@@ -38,13 +38,14 @@ function ArticleCard({ article }) {
         </div>
       </div>
       <p>{article.price}TND</p>
+      <p style={{ color: "black" }}>{article.article.category.nameEn}</p>
 
       <div className="d-flex flex-column justify-content-between align-items-center mt-2">
-        <h6 className="m-0">{article.article.title}</h6>
+        <h6 className="article-title">{article.article?.title}</h6>
 
-        <div className="d-flex  mb-2">
+        <div className="d-flex mb-2">
           <div
-            style={{ backgroundColor: "white", color: "purple " }}
+            style={{ backgroundColor: "white", color: "purple" }}
             className="bg-purple p-1 rounded article-card-icon pointer m-1"
             onClick={() => navigate("/one-article/" + article.id)}
           >
