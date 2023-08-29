@@ -18,24 +18,34 @@ const SpaceBooked = () => {
 
 console.log('heyyy', bookingstore)
 
-  return (
-    <div>
-      {bookingstore.map((el,index)=>{
-      <div className="card" style={{ width: '18rem' }}>
-        <img className="card-img-top" src="https://images.pexels.com/photos/3184669/pexels-photo-3184669.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-        alt="https://images.pexels.com/photos/3184669/pexels-photo-3184669.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" />
-        <div className="card-body">
-          <h5 className="card-title"> companyName:{el.companyName}</h5>
-          <p className="card-text">freeSpace:{el.freeSpace} </p>
+  return(
+    <div className="d-flex flex-wrap justify-content-center align-items-center">
+      {bookingstore.map((booking, i) => (
+        <div className="card" style={{ maxxwidth: '100px'  }} key={i}>
+          <img
+            className="card-img-top"
+            src="https://images.pexels.com/photos/3184669/pexels-photo-3184669.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            alt="Card image"
+          />
+          <div className="card-body">
+            <h5 className="card-title">companyName: {booking.companyName}</h5>
+            <p className="card-text">freeSpace: {booking.freeSpace}</p>
+          </div>
+          <ul className="list-group list-group-flush">
+            
+            <li className="list-group-item">StartTime: {booking.startTime}</li>
+            <li className="list-group-item">EndTime: {booking.endTime}</li>
+            <li className="list-group-item">
+            Paid
+            {booking.paid ? (
+              <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
+            ) : (
+              <i className="fas fa-times-circle" style={{ color: 'red' }}></i>
+            )}
+          </li>
+          </ul>
         </div>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">{el.paid}</li>
-          <li className="list-group-item">StartTime:{el.startTime}</li>
-          <li className="list-group-item">EndTime:{el.endTime}</li>
-        </ul>
-      
-      </div>
-       })} 
+      ))}
     </div>
   );
   
