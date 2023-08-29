@@ -37,4 +37,9 @@ export class ServiceController {
     return this.serviceService.remove(id);
   }
 
+  @Post('images/:id')
+  createImages(@Body() dto: string[], @Param('id') id: string) {
+    return this.serviceService.createImages(id,dto)
+  }
+
 }

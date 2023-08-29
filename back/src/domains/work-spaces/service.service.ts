@@ -90,4 +90,14 @@ export class ServiceService {
   
     await this.prisma.service.delete({ where: { id } });
   }
+
+  async createImages(id: string, dto: string[]) {
+    return await this.prisma.mediaService.createMany({
+      data: dto.map((elem) => ({
+        mediaId: elem,
+        seviceId: id,
+      })),
+    });
+  }
 }  
+
