@@ -46,6 +46,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { me } from "../store/auth";
 import SavedTraining from "../components/Profile/SavedTraining";
 import SpaceBooked from "../components/Profile/SpaceBooked";
+import Spacerserved from "../components/Profile/Spacerserved";
 
 function Router() {
   const dispatch = useDispatch();
@@ -81,6 +82,8 @@ function Router() {
                 <Route path="saved-tarining/:userId" element={<SavedTraining />} />
                 <Route path="orders-history" element={<OrderHistory />} />
                 <Route path="Space-Booked" element={<SpaceBooked/>} />
+                <Route path="Spacerserved" element={<Spacerserved/>} />
+        
 
               </Route>
             )}

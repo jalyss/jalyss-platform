@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import KeyValueStyled from '../Commun/KeyValueStyled';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTrainingBookingByUserId } from '../../store/trainingBooking';
-
 import Card from "../Commun/Card";
 import Pagination from "@mui/material/Pagination";
 import { useParams } from 'react-router-dom';
@@ -29,7 +28,6 @@ const SavedTraining = () => {
 
 
     return (
-
         <div>
             <div className="d-flex flex-wrap justify-content-center align-items-center">
                 <h1>Training List</h1>

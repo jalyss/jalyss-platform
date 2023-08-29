@@ -2,9 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-
-
-
 export const fetchBookings = createAsyncThunk("bookings/bookings", async () => {
   let token = JSON.parse(localStorage.getItem("token")).Authorization;
   let configs = {
@@ -12,8 +9,11 @@ export const fetchBookings = createAsyncThunk("bookings/bookings", async () => {
       Authorization: "Bearer " + token,
     },
   }
-  const response = await axios.get(`${config.API_ENDPOINT}/bookings/by-user`,{...configs});
+  const response = await axios.get(`${config.API_ENDPOINT}/bookings`,{...configs});
+  console.log('respmmmamam',response.data)
   return response.data;
+
+
 });
 
 
@@ -22,7 +22,7 @@ export const fetchBooking = createAsyncThunk("bookings/booking", async (id) => {
   return response.data;
 });
 
-
+ 
 export const removeBooking = createAsyncThunk(
   "bookings/removeBooking",
   async (id,{dispatch}) => {
@@ -56,7 +56,7 @@ export const createBooking = createAsyncThunk(
 
 export const bookingSlice = createSlice({
   name: "booking",
-  initialState: {
+  initialState:{
     booking: null,
     bookings: {
       items: [],
