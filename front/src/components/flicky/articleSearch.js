@@ -34,7 +34,7 @@ const SearchArticle = ({ articles }) => {
           </Flickity>
         </div>
       ) : (
-        <div>hello</div>
+        <div></div>
       )}
     </div>
   );

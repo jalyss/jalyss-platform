@@ -27,13 +27,23 @@ export const searchSlice = createSlice({
     deleteError: null,
     saveError: null,
     createUserError: null,
+    loading: false,
   },
   reducers: {},
   extraReducers(builder) {
+    builder.addCase(filteredSearch.pending, (state) => {
+      state.loading = true;
+      state.error = null; // Reset any previous error
+    });
     builder.addCase(filteredSearch.fulfilled, (state, action) => {
+      state.loading = false;
       state.articles = action.payload.articles;
       state.blogs = action.payload.blogs;
       state.sessions = action.payload.sessions;
+    });
+    builder.addCase(filteredSearch.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
     });
   },
 });

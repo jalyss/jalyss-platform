@@ -23,8 +23,6 @@ const SessionsCard = ({ sessions }) => {
     groupCells: true,
     selectedAttraction: 0.01,
     friction: 0.1,
-    // autoPlay: 1500,
-    // pauseAutoPlayOnHover: false,
   };
   useEffect(() => {});
   return (
@@ -38,54 +36,6 @@ const SessionsCard = ({ sessions }) => {
             options={flickityOptions}
             disableImagesLoaded={false}
           >
-            {/* {sessions.map((elem, i) => (
-              <div className="card-sessions col-md-2.5 mx-1 mb-3">
-                <img
-                  src={elem.cover?.path}
-                  alt={elem.cover?.alt}
-                  className="card-img-top "
-                  style={{
-                    borderRadius: 35,
-                    marginBottom: -50,
-                    height: 250,
-                    width: 300,
-                  }}
-                />
-                <div
-                  className="card  headerspaceitem"
-                  style={{
-                    borderRadius: 25,
-                    width: 250,
-                    left: 26,
-                    transition: "all 1.6s ease-in-out",
-                  }}
-                >
-                  <div className="card-body">
-                    <h5 className="card-title" style={{ marginBottom: 15 }}>
-                      {elem.name}
-                    </h5>
-                    <button
-                      className="btn "
-                      style={{
-                        width: 170,
-
-                        backgroundColor: "rgb(144, 48, 152)",
-                        borderRadius: 30,
-                        color: "black",
-                        borderColor: "white",
-                      }}
-                    >
-                      <Link
-                        to={elem?.identifier}
-                        style={{ textDecoration: "none", color: "white" }}
-                      >
-                        Reserve
-                      </Link>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))} */}
             {sessions.map((blog, i) => (
               <div
                 className="card-sessions blogItemWrapper"
@@ -104,7 +54,7 @@ const SessionsCard = ({ sessions }) => {
                     className="blogItemCover"
                     src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
                     alt="cover"
-                    onClick={() => navigate(`/blogs/${blog.id}`)}
+                    onClick={() => navigate(`/sessions/${blog.id}`)}
                   />
                 )}
                 <div
@@ -130,7 +80,7 @@ const SessionsCard = ({ sessions }) => {
                     {/* {blog.author.avatar ? (
                   <img
                     className="blogItemAuthorAvatar"
-                    src={blog.author.avatar?.path}
+                    src={blog.author.avatar.path}
                     alt="avatar"
                   />
                 ) : ( */}
