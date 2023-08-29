@@ -34,7 +34,7 @@ function ServiceSpace() {
   const { serviceIdentifier } = useParams();
   const serviceStore = useSelector((state) => state.service);
   const { service,services } = serviceStore;
-
+console.log(service,"serrr");
   const dispatch = useDispatch();
   
   useEffect(() => {

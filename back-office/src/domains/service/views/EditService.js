@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { AiFillDelete } from "react-icons/ai";
 import { fetchServiceById, editService } from "../../../store/service";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -15,6 +16,9 @@ export default function EditService() {
   const [filename, setFileName] = useState("");
   const [filenamesplitted, setFileNamesplitted] = useState("");
   const [cover, setCover] = useState("");
+  const [files, setFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const id = serviceId;
   const serviceStore = useSelector((state) => state.service);
 
@@ -35,6 +39,61 @@ export default function EditService() {
       setCover();
     }
   }, [serviceStore.service]);
+
+  const onChange = (e) => {
+    const fileList = Array.from(e.target.files);
+    setFiles(fileList);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    const galleryData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      galleryData.append("files", files[i]);
+    }
+
+    let auxMedia = [];
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_ENDPOINT}/uploads`,
+        galleryData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(progress);
+            setTimeout(()=>{
+
+              setUploadProgress(0)
+            },2000)
+          },
+        }
+      );
+      auxMedia = res.data.map((elem) => elem.id);
+    } catch (err) {
+      console.log(err);
+    }
+
+    await axios
+      .post(
+        `${process.env.REACT_APP_API_ENDPOINT}/work-spaces/images/${spaceId}`,
+        auxMedia
+      )
+      .then((res) => {
+        setRefresh(!refresh);
+        if (!res.error) {
+          showSuccessToast("image added");
+        } else {
+          showErrorToast(res.error.message);
+        }
+      });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
