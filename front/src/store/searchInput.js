@@ -33,7 +33,7 @@ export const searchSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(filteredSearch.pending, (state) => {
       state.loading = true;
-      state.error = null; // Reset any previous error
+      state.error = null;
     });
     builder.addCase(filteredSearch.fulfilled, (state, action) => {
       state.loading = false;

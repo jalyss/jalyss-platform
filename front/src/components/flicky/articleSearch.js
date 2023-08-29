@@ -3,7 +3,7 @@ import css from "../../style/carousel.css";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import OneArticle from "./oneArticle";
-import { useEffect } from "react";
+
 const SearchArticle = ({ articles }) => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
@@ -13,10 +13,8 @@ const SearchArticle = ({ articles }) => {
     groupCells: true,
     selectedAttraction: 0.01,
     friction: 0.1,
-    // autoPlay: 1500,
-    // pauseAutoPlayOnHover: false,
   };
-  // useEffect(() => {}, [updated]);
+
   return (
     <div>
       {articles.length ? (

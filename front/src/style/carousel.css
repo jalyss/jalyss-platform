@@ -32,7 +32,7 @@
 .flickity-button:disabled {
   opacity: 0.3;
   cursor: auto;
-  /* prevent disabled button from capturing pointer up event. #716 */
+
   pointer-events: none;
 }
 .flickity-viewport {
@@ -41,9 +41,6 @@
   height: 100%;
 }
 .sessions {
-  /* box-shadow: 4px -4px 5px -1px rgba(213, 184, 255, 0.76); */
-  /* filter: blur(6px); */
-  /* text-align: center; */
   border: 0px;
   outline: 0px;
   background: transparent;
@@ -51,13 +48,10 @@
   position: relative;
   max-width: 80vw;
   height: 100%;
-  /* overflow: hidden; */
+
   margin: auto;
 }
 .carousel {
-  /* box-shadow: 4px -4px 5px -1px rgba(213, 184, 255, 0.76); */
-  /* filter: blur(6px); */
-  /* text-align: center; */
   border: 0px;
   outline: 0px;
   background: transparent;
@@ -65,13 +59,9 @@
   position: relative;
   max-width: 80vw;
   height: 100%;
-  /* overflow: hidden; */
   margin: auto;
 }
 .article {
-  /* box-shadow: 4px -4px 5px -1px rgba(213, 184, 255, 0.76); */
-  /* filter: blur(6px); */
-  /* text-align: center; */
   padding: 30px;
   border: 0px;
   outline: 0px;
@@ -80,7 +70,7 @@
   position: relative;
   max-width: 80vw;
   height: 100%;
-  /* overflow: hidden; */
+
   margin: auto;
 }
 .flickity-slider {
@@ -111,10 +101,6 @@
   margin-top: 35px;
   margin-right: 35px;
   margin-bottom: 35px;
-  /* float: right; */
-  /* max-width: px;
-  width: 100%; */
-  /* height: 335px; */
   border-radius: 15px;
   counter-increment: blog-card;
   transition: all 0.3s ease;
@@ -133,10 +119,6 @@
   margin-top: 35px;
   margin-right: 35px;
   margin-bottom: 35px;
-  /* float: right; */
-  /* max-width: px;
-  width: 100%; */
-  /* height: 335px; */
   border-radius: 15px;
   counter-increment: article-card;
   transition: all 0.3s ease;
@@ -155,10 +137,6 @@
   margin-top: 35px;
   margin-right: 35px;
   margin-bottom: 35px;
-  /* float: right; */
-  /* max-width: px;
-  width: 100%; */
-  /* height: 335px; */
   border-radius: 35px;
   counter-increment: card-sessions;
   transition: all 0.3s ease;

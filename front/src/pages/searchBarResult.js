@@ -3,10 +3,9 @@ import { useSelector } from "react-redux";
 import SearchBlogs from "../components/flicky/searchBlogs";
 import SearchArticle from "../components/flicky/articleSearch";
 import Sessions from "../components/flicky/sessionsCard";
+import css from "../assets/styles/loading.css";
 
-// import { useEffect, useState } from "react";
 const SearchbarResult = () => {
-  // const location = useLocation();
   const items = useSelector((state) => state.searchInput);
   // const [updated, setUpdated] = useState(true);
   console.log(items.blogs);

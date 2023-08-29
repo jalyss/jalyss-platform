@@ -43,7 +43,6 @@ export class SearchEngineService {
       },
     });
 
-    const orderBy = { createdAt: 'desc' };
     const blogs = await this.prisma.blog.findMany({
       include: {
         MediaBlog: { include: { media: true } },
