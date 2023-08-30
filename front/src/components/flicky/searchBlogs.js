@@ -31,7 +31,7 @@ const SearchBlogs = ({ blogs }) => {
   return (
     <div>
       {blogs.length ? (
-        <div className="row p-3">
+        <div className="row p-3 p-md-2 p-sm-1">
           <h1 className="secondLine">Blogs results</h1>
           <Flickity
             className={"carousel"}
@@ -61,50 +61,51 @@ const SearchBlogs = ({ blogs }) => {
                     onClick={() => navigate(`/blogs/${blog.id}`)}
                   />
                 )}
-                <div
-                  className="chip mt-3"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
-                >
-                  {blog.category.nameEn}
-                </div>
-                <div
-                  className="d-flex flex-column gap-2"
-                  onClick={() => navigate(`/blogs/${blog.id}`)}
-                >
-                  <h5 style={{ margin: "20px", flex: "1" }}>{blog.title}</h5>
+                <div className="d-flex flex-column align-items-start p-3 gap-1">
+                  <div
+                    className="chip"
+                    onClick={() => navigate(`/blogs/${blog.id}`)}
+                  >
+                    {blog.category.nameEn}
+                  </div>
+                  <div
+                    className="d-flex flex-column pt-1"
+                    onClick={() => navigate(`/blogs/${blog.id}`)}
+                  >
+                    <h5>{blog.title}</h5>
 
-                  <p className="blogItemDescription">
-                    {" "}
-                    <p>{extractTextFromHTML(blog.content)}</p>
-                  </p>
-                </div>
+                    <p className="blogItemDescription">
+                      <p>{extractTextFromHTML(blog.content)}</p>
+                    </p>
+                  </div>
 
-                <div className="blogItemFooter d-flex justify-content-between">
-                  <div className="d-flex align-items-center">
-                    {/* {blog.author.avatar ? (
+                  <div className="blogItemFooter d-flex justify-content-between justify-content-sm-start">
+                    <div className="d-flex align-items-center">
+                      {/* {blog.author.avatar ? (
                   <img
                     className="blogItemAuthorAvatar"
                     src={blog.author.avatar?.path}
                     alt="avatar"
                   />
                 ) : ( */}
-                    <img
-                      className="blogItemAuthorAvatar"
-                      src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
-                      alt="avatar"
-                    />
-                    {/* )} */}
-                    <div className="d-flex flex-column">
-                      <h6 className="mt-3">{blog.author.fullNameEn}</h6>
-                      <p
-                        style={{
-                          fontSize: "0.6rem",
-                          color: "#a9a9a9",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {blog.createdAt}
-                      </p>
+                      <img
+                        className="blogItemAuthorAvatar"
+                        src="https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                        alt="avatar"
+                      />
+                      {/* )} */}
+                      <div className="d-flex flex-column">
+                        <h6 className="mt-3">{blog.author.fullNameEn}</h6>
+                        <p
+                          style={{
+                            fontSize: `0.6rem`,
+                            color: "#a9a9a9",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {blog.createdAt}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

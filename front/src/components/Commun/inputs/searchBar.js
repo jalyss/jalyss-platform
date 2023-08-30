@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { filteredSearch } from "./../../../store/searchInput";
 import { useDispatch } from "react-redux";
-
+import img from "../../../assets/images/search.png";
+import css from "../../../assets/styles/search-bar-nav.css";
 const SearchBar = () => {
   const { t, i18n } = useTranslation();
   const [message, setMessage] = useState("");
@@ -24,15 +25,15 @@ const SearchBar = () => {
 
   return (
     <div className="d-flex align-items-center ">
-      <form className="form-inline mt-3 mb-3">
+      <form className="position-relative m-0">
+        <img className="search_bar_icon" src={img} alt="search_img" />
         <input
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          className="form-control form-control-sm ml-4 w-125"
+          className="navbar_search_bar form-control form-control-sm ml-4 w-125"
           type="text"
           placeholder={t("navbar.searchInput")}
           aria-label="Search"
-          style={{ width: 300 }}
         />
       </form>
     </div>

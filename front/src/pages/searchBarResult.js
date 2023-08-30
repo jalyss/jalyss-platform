@@ -17,7 +17,7 @@ const SearchbarResult = () => {
     <div className="search_container container-fluid">
       {!items.loading ? (
         <div>
-          <h6 className="firstLine">Your searach results</h6>{" "}
+          <h6 className="firstLine">Your search results</h6>{" "}
           <SearchBlogs blogs={items.blogs} />
           <SearchArticle articles={items.articles} />
           <Sessions sessions={items.sessions} />
