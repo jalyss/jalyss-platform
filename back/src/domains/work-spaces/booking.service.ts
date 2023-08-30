@@ -22,7 +22,9 @@ export class BookingService {
   }
 
   findAll() {
-    return this.prisma.booking.findMany();
+    return this.prisma.booking.findMany({
+      include:{tarif:true }
+    });
   }
 
   async findOne(id: string) {

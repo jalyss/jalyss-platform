@@ -20,9 +20,7 @@ export class TarifService {
 
   async findAll() {
     return this.prisma.tarif.findMany({
-      include: {
-        bookings: true
-      }
+      include: { bookings: true }
     });
   }
   async findOne(id: string) {
