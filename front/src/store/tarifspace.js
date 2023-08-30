@@ -5,13 +5,13 @@ import config from "../configs";
 
 export const fetchtarifspaces =createAsyncThunk("tarif/tarifs", async (id) => {
     const response = await axios.get(`${config.API_ENDPOINT}/tarifs`)
-    console.log('tttatatatatat',response.data)
+
     return response.data;
   })
 
 export const fetchtarifspace = createAsyncThunk("tarif/tarifs", async (id) => {
     const response = await axios.get(`${config.API_ENDPOINT}/tarifs/one/${id}`);
-    console.log("ya rabiiiii",response.data)
+
     return response.data;
   });
 

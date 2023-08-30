@@ -26,7 +26,6 @@ const SpaceBooked = () => {
   
   },[ dispatch])
 
-console.log('heyyy tariff',tarifstore)
 
   return (
     <div className="d-flex flex-wrap justify-content-center align-items-center" style={{ maxWidth: "700px", maxHeight: "600px" }}>
