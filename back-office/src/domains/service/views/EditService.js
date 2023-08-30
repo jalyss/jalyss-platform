@@ -19,6 +19,7 @@ export default function EditService() {
   const [cover, setCover] = useState("");
   const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [refresh, setRefresh] = useState(false);
 
   const id = serviceId;
   const serviceStore = useSelector((state) => state.service);
@@ -86,7 +87,7 @@ export default function EditService() {
 
     await axios
       .post(
-        `${process.env.REACT_APP_API_ENDPOINT}/service/images/${serviceId}`,
+        `${process.env.REACT_APP_API_ENDPOINT}/services/images/${serviceId}`,
         auxMedia
       )
       .then((res) => {
@@ -105,7 +106,7 @@ export default function EditService() {
 
     await axios
       .delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/service/delete-images/${name}`
+        `${process.env.REACT_APP_API_ENDPOINT}/services/delete-images/${name}`
       )
       .then((res) => {
         if (!res.error) {

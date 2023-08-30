@@ -95,7 +95,7 @@ export class ServiceService {
     return await this.prisma.mediaService.createMany({
       data: dto.map((elem) => ({
         mediaId: elem,
-        seviceId: id,
+        serviceId: id,
       })),
     });
   }
