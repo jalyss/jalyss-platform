@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { showErrorToast, showSuccessToast } from '../../../utils/toast';
-import { createRole, fetchRoles } from '../../../store/role';
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import { createRole, fetchRoles } from "../../../store/role";
 
 function CreateRole() {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
   const [nameAr, setNameAr] = useState();
   const [nameEn, setNameEn] = useState();
+  const [data, setData] = useState([]);
 
   const [role, setRole] = useState({
     permissions: {
@@ -52,13 +53,30 @@ function CreateRole() {
     },
   });
 
-  console.log(Newrole);
-  console.log(role, "role");
-
+  const x = ["create", "update", "delete", "view"];
   const handlePermissionChange = (roleName, permission) => {
     const updatedNewRole = { ...Newrole };
     updatedNewRole.newpermissions[roleName][permission] =
       !updatedNewRole.newpermissions[roleName][permission];
+
+    const newPermissionObject = { domain: roleName, action: x[permission] };
+
+    // Check if the permission already exists in data
+    const existingIndex = data.findIndex(
+      (item) =>
+        item.domain === newPermissionObject.domain &&
+        item.action === newPermissionObject.action
+    );
+
+    if (existingIndex !== -1) {
+      // Remove the existing permission
+      const newData = data.slice();
+      newData.splice(existingIndex, 1);
+      setData(newData);
+    } else {
+      // Add the new permission
+      setData((prevData) => [...prevData, newPermissionObject]);
+    }
     setNewRole(updatedNewRole);
   };
 
@@ -66,17 +84,24 @@ function CreateRole() {
     const body = {
       nameAr: nameAr,
       nameEn: nameEn,
-      permissions: role,
-      newpermissions:Newrole,
+      permissions: data,
     };
     let aux = Object.assign({}, body);
+    dispatch(createRole(aux)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("category created");
+        Navigate(-1);
+      } else {
+        showErrorToast(res.error.message);
+      }
+    });
   };
 
   return (
     <div className="container">
       <div className="card" style={{ borderRadius: 20, border: 5 }}>
         <div className="container">
-          <div className="row">
+          <div className="row mb-5">
             <div className="form-group col-6 mt-3">
               <label>NameAr</label>
               <input
@@ -96,7 +121,7 @@ function CreateRole() {
               />
             </div>
           </div>
-          <div className="row">
+          <div className="row mt-5">
             {Object.entries(Newrole.newpermissions).map(
               ([roleName, permissions]) => (
                 <div className="col-md-4" key={roleName}>
@@ -148,5 +173,4 @@ function CreateRole() {
   );
 }
 
-
-export default CreateRole
+export default CreateRole;

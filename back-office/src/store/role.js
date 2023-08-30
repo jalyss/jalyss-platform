@@ -8,37 +8,37 @@ export const fetchRoles = createAsyncThunk("roles/roles", async (id) => {
 });
 
 export const fetchRole = createAsyncThunk("roles/role", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/roles/one/${id}`);
+  const response = await axios.get(`${config.API_ENDPOINT}/roles/one${id}`);
   return response.data;
 });
 
+export const updateRole = createAsyncThunk("roles/role", async (args) => {
+  const { id, ...body } = args;
+  const response = await axios.patch(
+    `${config.API_ENDPOINT}/roles/${id}`,
+    body
+  );
+  return response.data;
+});
 
-export const createRole = createAsyncThunk(
-  "roles/role",
-  async (dto) => {
-    try {
-      const response = await axios.post(`${config.API_ENDPOINT}/roles/create`,
-        dto
-      );
-      return response.data;
-    } catch (error) {
-      // Handle error
-      console.error('Error creating role:', error);
-      throw error;
-    }
-  }
-);
-
-
-export const deleteRole = createAsyncThunk(
-  "roles/roles",
-  async (id) => {
-    const response = await axios.delete(
-      `${config.API_ENDPOINT}/roles/${id}`
+export const createRole = createAsyncThunk("roles/role", async (dto) => {
+  try {
+    const response = await axios.post(
+      `${config.API_ENDPOINT}/roles/create`,
+      dto
     );
     return response.data;
+  } catch (error) {
+    // Handle error
+    console.error("Error creating role:", error);
+    throw error;
   }
-);
+});
+
+export const deleteRole = createAsyncThunk("roles/roles", async (id) => {
+  const response = await axios.delete(`${config.API_ENDPOINT}/roles/${id}`);
+  return response.data;
+});
 
 export const roleSlice = createSlice({
   name: "role",
