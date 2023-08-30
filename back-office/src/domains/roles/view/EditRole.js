@@ -9,7 +9,7 @@ import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 function EditRole() {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-  const { roleId } = useParams();
+  const { id } = useParams();
   const roledata = useSelector((state) => state.role.role);
   const [data, setData] = useState([]);
   const [dataToSave, setdataToSave] = useState();
@@ -18,12 +18,12 @@ function EditRole() {
   const [basicModalDelete, setBasicModalDelete] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchRole(roleId));
-  }, [roleId]);
+    dispatch(fetchRole(id));
+  }, [id]);
 
   useEffect(() => {
     setdataToSave({ ...roledata });
-  }, [roleId]);
+  }, [id]);
 
   const [role, setRole] = useState({
     permissions: {
@@ -229,7 +229,7 @@ function EditRole() {
                       rowGap: "10px",
                     }}
                   >
-                    {roledata?.permissions.forEach((permission) => {
+                    {roledata?.permissions?.forEach((permission) => {
                       if (!permissionsByDomain[permission.domain]) {
                         permissionsByDomain[permission.domain] = [];
                       }
