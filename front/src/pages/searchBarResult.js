@@ -8,7 +8,7 @@ import css from "../assets/styles/loading.css";
 const SearchbarResult = () => {
   const items = useSelector((state) => state.searchInput);
   // const [updated, setUpdated] = useState(true);
-  console.log(items.blogs);
+  console.log(items.articles);
   // useEffect(() => {
   //   setUpdated(!updated);
   // }, [location.state.message]);

@@ -17,7 +17,7 @@ function OneArticle({ article }) {
     if (handleButtonClick.error) {
       showErrorToast("alredy saved");
     } else {
-      addItem(article);
+      addItem(article.ArticlesByBranch[0]);
       showSuccessToast("Article has been saved");
     }
   };
@@ -26,18 +26,19 @@ function OneArticle({ article }) {
     <div className="article-card">
       <div className="position-relative">
         <div className="stock-label">
-          <h6 className="m-0">{article.stock} </h6>
+          <h6 className="m-0">{article.ArticlesByBranch[0]?.stock} </h6>
         </div>
         <img
-          src={article?.article?.cover.path}
+          src={article?.cover.path}
           className="w-100 object-fit-contain article-image "
           alt=""
         />
         <div className="rating-home">
-          <Rating edit={false} rating={article?.rating} />
+          <Rating edit={false} rating={article?.ArticlesByBranch[0]?.rating} />
         </div>
       </div>
-      <p>{article.price}TND</p>
+      <p>{article.ArticlesByBranch[0].price}TND</p>
+      <p style={{ color: "black" }}>{article.category.nameEn}</p>
 
       <div className="d-flex flex-column justify-content-between align-items-center mt-2">
         <h6 className="m-0">{article.title}</h6>

@@ -18,7 +18,7 @@ const SearchArticle = ({ articles }) => {
   return (
     <div>
       {articles.length ? (
-        <div className="row p-3">
+        <div className="row">
           <h1 className="secondLine">Articles results</h1>
           <Flickity
             className={"article"}

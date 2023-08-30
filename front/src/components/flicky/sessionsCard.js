@@ -28,8 +28,8 @@ const SessionsCard = ({ sessions }) => {
   return (
     <div>
       {sessions.length ? (
-        <div className="row p-3 p-md-2 p-sm-1">
-          <h1 className="secondLine p-5 p-md-2 p-sm-1">Sessions results</h1>
+        <div className="row">
+          <h1 className="secondLine">Sessions results</h1>
           <Flickity
             className={"sessions"}
             elementType={"div"}
