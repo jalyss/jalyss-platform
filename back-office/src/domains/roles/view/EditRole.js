@@ -189,24 +189,26 @@ function EditRole() {
                     sx={{
                       "&:last-child td, &:last-child th": { border: 0 },
                     }}
-                    style={{marginBottom:'60px'}}
+                    style={{ marginBottom: "60px" }}
                   >
                     <TableCell
                       component="th"
-                      style={{ fontWeight: "600",fontSize:"23px" }}
+                      style={{ fontWeight: "600", fontSize: "23px" }}
                       scope="row"
                     >
                       Name (Ar)
                     </TableCell>
-                    <TableCell align="left" style={{fontSize:"20px"}} >{roledata?.nameAr}</TableCell>
+                    <TableCell align="left" style={{ fontSize: "20px" }}>
+                      {roledata?.nameAr}
+                    </TableCell>
                     <TableCell
                       component="th"
-                      style={{ fontWeight: "600",fontSize:"23px" }}
+                      style={{ fontWeight: "600", fontSize: "23px" }}
                       scope="row"
                     >
                       Name (En)
                     </TableCell>
-                    <TableCell align="left">{roledata?.nameEn}</TableCell>
+                    <TableCell align="left"style={{ fontSize: "20px" }}>{roledata?.nameEn}</TableCell>
                   </TableRow>
                   <span
                     style={{
@@ -242,12 +244,12 @@ function EditRole() {
                         >
                           <TableCell
                             component="th"
-                            style={{ fontWeight: "600",fontSize:"23px" }}
+                            style={{ fontWeight: "600", fontSize: "23px" }}
                             scope="row"
                           >
                             {domain}
                           </TableCell>
-                          <TableCell align="left" style={{fontSize:"20px"}} >
+                          <TableCell align="left" style={{ fontSize: "20px" }}>
                             {permissionsByDomain[domain].join(" - ")}
                           </TableCell>
                         </TableRow>

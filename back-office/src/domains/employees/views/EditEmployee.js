@@ -136,7 +136,6 @@ function EditEmployee() {
             <div class="image-upload">
              
             <img src={preview?preview:employee?.avatar?.path} alt="taswira" />
-            console.log("opa",preview)
               { editMode && (
                 <input
                   id="image"
@@ -168,7 +167,7 @@ function EditEmployee() {
                   <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
+                    <TableCell className="fw-bold" align="left">
                       {t('nameAr')}
                     </TableCell>
                     <TableCell align="right">
@@ -190,7 +189,7 @@ function EditEmployee() {
                   <TableRow
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell className="fw-bold" align="right">
+                    <TableCell className="fw-bold" align="left">
                       {t('nameEn')}
                     </TableCell>
                     <TableCell align="right">
