@@ -6,6 +6,14 @@ import { Card, Typography } from "@mui/material";
 import EditModal from "../../../components/Commun/Modal";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+
 function EditRole() {
   const dispatch = useDispatch();
   const Navigate = useNavigate();
@@ -128,7 +136,7 @@ function EditRole() {
           if (!res.error) {
             showSuccessToast("Role updated");
             setData([]);
-            toggleShowDelete()
+            toggleShowDelete();
             setEditMode(!EditMode);
           } else {
             showErrorToast(res.error.message);
@@ -148,56 +156,11 @@ function EditRole() {
     <div className="container">
       {!EditMode ? (
         <>
-          <div className="card">
+          <div className="d-flex justify-content-center">
             <div
               class="row"
               style={{ marginBottom: "10px", marginTop: "30px" }}
             >
-              <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-                <Typography
-                  style={{
-                    fontFamily: "Arial",
-                    color: "#333",
-                    display: "table-row",
-                  }}
-                >
-                  <span
-                    style={{
-                      display: "table-cell",
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                      paddingRight: "20px",
-                    }}
-                  >
-                    Name (Ar) :
-                  </span>
-                  <span style={{ display: "table-cell" }}>
-                    {roledata?.nameAr}
-                  </span>
-                </Typography>
-                <Typography
-                  style={{
-                    fontFamily: "Arial",
-
-                    color: "#333",
-                    display: "table-row",
-                  }}
-                >
-                  <span
-                    style={{
-                      display: "table-cell",
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                      paddingRight: "20px",
-                    }}
-                  >
-                    Name (En):
-                  </span>
-                  <span style={{ display: "table-cell" }}>
-                    {roledata?.nameEn}
-                  </span>
-                </Typography>
-              </div>
               <Typography
                 style={{
                   fontFamily: "Arial",
@@ -214,7 +177,40 @@ function EditRole() {
                 >
                   <span
                     style={{
-                      fontSize: "20px",
+                      fontSize: "30px",
+                      fontWeight: "bold",
+                      marginLeft: "150px",
+                    }}
+                  >
+                    Name :
+                  </span>
+
+                  <TableRow
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                    style={{marginBottom:'60px'}}
+                  >
+                    <TableCell
+                      component="th"
+                      style={{ fontWeight: "600",fontSize:"23px" }}
+                      scope="row"
+                    >
+                      Name (Ar)
+                    </TableCell>
+                    <TableCell align="left" style={{fontSize:"20px"}} >{roledata?.nameAr}</TableCell>
+                    <TableCell
+                      component="th"
+                      style={{ fontWeight: "600",fontSize:"23px" }}
+                      scope="row"
+                    >
+                      Name (En)
+                    </TableCell>
+                    <TableCell align="left">{roledata?.nameEn}</TableCell>
+                  </TableRow>
+                  <span
+                    style={{
+                      fontSize: "30px",
                       fontWeight: "bold",
                       marginLeft: "150px",
                     }}
@@ -239,18 +235,22 @@ function EditRole() {
                     })}
                     <div>
                       {Object.keys(permissionsByDomain).map((domain) => (
-                        <table class="table">
-                          <thead>
-                            <tr>
-                              <th scope="col">{domain}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>{permissionsByDomain[domain].join(" - ")}</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        <TableRow
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell
+                            component="th"
+                            style={{ fontWeight: "600",fontSize:"23px" }}
+                            scope="row"
+                          >
+                            {domain}
+                          </TableCell>
+                          <TableCell align="left" style={{fontSize:"20px"}} >
+                            {permissionsByDomain[domain].join(" - ")}
+                          </TableCell>
+                        </TableRow>
                       ))}
                     </div>
                   </div>
@@ -365,7 +365,7 @@ function EditRole() {
         }
         body={
           <div className="d-flex justify-content-center align-items-center">
-            You want to edit this Branche ?
+            You want to edit this role ?
           </div>
         }
         fn={() => {
