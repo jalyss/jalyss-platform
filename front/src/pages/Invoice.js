@@ -16,7 +16,7 @@ function Invoice() {
   useEffect(() => {
     dispatch(fetchCommand(invoiceId));
   }, []);
-
+  console.log(commandStore.command, 'rfokfpo')
   return (
     <>
       <div class="page-tools">
@@ -119,64 +119,68 @@ function Invoice() {
                     <div class="d-none d-sm-block col-sm-2">Unit Price</div>
                     <div class="col-2">Amount</div>
                   </div>
+                  {commandStore.command?.commandLine.map((item, index) => (
+                    <>
+                      <div class="text-95 text-secondary-d3">
 
-                  <div class="text-95 text-secondary-d3">
-                    {commandStore.command?.commandLine.map((item, index) => (
-                      <div class="row mb-2 mb-sm-0 py-25" key={index}>
-                        <div class="d-none d-sm-block col-1">{index + 1}</div>
-                        <div class="col-9 col-sm-5">
-                          {item?.articleByBranch?.article?.title}
+                        <div class="row mb-2 mb-sm-0 py-25" key={index}>
+                          <div class="d-none d-sm-block col-1">{index + 1}</div>
+                          <div class="col-9 col-sm-5">
+                            {item?.articleByBranch?.article?.title}
+                          </div>
+                          <div class="d-none d-sm-block col-2">
+                            {item?.quantity}
+                          </div>
+                          <div class="d-none d-sm-block col-2 text-95">
+                            {" "}
+                            {item?.articleByBranch?.price}
+                          </div>
+                          <div class="col-2 text-secondary-d2">
+                            {item?.quantity * item?.articleByBranch?.price}
+                          </div>
                         </div>
-                        <div class="d-none d-sm-block col-2">
-                          {item?.quantity}
-                        </div>
-                        <div class="d-none d-sm-block col-2 text-95">
-                          {" "}
-                          {item?.articleByBranch?.price}
-                        </div>
-                        <div class="col-2 text-secondary-d2">
-                          {item?.quantity * item?.articleByBranch?.price}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
 
-                  <div class="row border-b-2 brc-default-l2"></div>
-
-                  <div class="row mt-3">
-                    <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
-                      Extra note such as company or payment information...
-                    </div>
-
-                    <div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
-                      <div class="row my-2">
-                        <div class="col-7 text-right">SubTotal</div>
-                        <div class="col-5">
-                          <span class="text-120 text-secondary-d1">
-                            {commandStore.command?.total} TND
-                          </span>
-                        </div>
                       </div>
 
-                      <div class="row my-2">
-                        <div class="col-7 text-right">Tax (10%)</div>
-                        <div class="col-5">
-                          <span class="text-110 text-secondary-d1">$225</span>
+                      <div class="row border-b-2 brc-default-l2"></div>
+
+                      <div class="row mt-3">
+                        <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
+                          Extra note such as company or payment information...
+                        </div>
+
+                        <div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
+                          <div class="row my-2">
+                            <div class="col-7 text-right">SubTotal</div>
+                            <div class="col-5">
+                              <span class="text-120 text-secondary-d1">
+                              {item?.quantity * item?.articleByBranch?.price} TND
+                                {/* {commandStore.command?.total} TND */}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="row my-2">
+                            <div class="col-7 text-right">Tax (10%)</div>
+                            <div class="col-5">
+                              <span class="text-110 text-secondary-d1">$225</span>
+                            </div>
+                          </div>
+
+                          <div class="row my-2 align-items-center bgc-primary-l3 p-2">
+                            <div class="col-7 text-right">Total Amount</div>
+                            <div class="col-5">
+                              <span class="text-150 text-success-d3 opacity-2">
+                              {(Number(item?.quantity * item?.articleByBranch?.price) * 10) / 100}{" "}
+                                {/* {(Number(commandStore.command?.total) * 10) / 100}{" "} */}
+                                TND
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
-
-                      <div class="row my-2 align-items-center bgc-primary-l3 p-2">
-                        <div class="col-7 text-right">Total Amount</div>
-                        <div class="col-5">
-                          <span class="text-150 text-success-d3 opacity-2">
-                            {(Number(commandStore.command?.total) * 10) / 100}{" "}
-                            TND
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
+                    </>
+                  ))}
                   <hr />
 
                   <div>
