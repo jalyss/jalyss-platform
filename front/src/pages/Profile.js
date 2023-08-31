@@ -301,7 +301,6 @@ export default function ProfilePage() {
           <MDBNavbarNav className=" justify-content-center align-items-center ">
           {navBarDataProfile.map((elem, i) => (
               <>
-    
               <MDBNavbarItem
                 key={i}
                 // className="label-btn pointer"
@@ -353,6 +352,32 @@ export default function ProfilePage() {
                   }}
                 >
                  Session booked
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+              <MDBNavbarItem
+                // className="label-btn pointer"
+                style={{
+                   backgroundColor: "/profile/Space-Booked/" ===  path  ? "rgb(156 39 176 / 34%)" : "",
+                  borderRadius: "10px",
+                  padding: "5px 10px",
+                  margin: "0 5px",
+                  minWidth: 100,
+                  backgroundColor: "rgb(156 39 176 / 34%)"
+                }}
+              >
+                <MDBNavbarLink
+                
+                  onClick={() => {
+                    navigate("/profile/Space-Booked/"+user.id);
+                  }}
+                  // className="label-btn pointer"
+                  style={{
+                    color: "/profile/Space-Booked/"+user.id === path ? "#fff" : "rgb(156 39 176 )",
+                    fontWeight: "bold",
+                    color:"/profile/Space-Booked/"+user.id === path ? "#fff" : "rgb(156 39 176 )",
+                  }}
+                >
+                 Space booked
                 </MDBNavbarLink>
               </MDBNavbarItem>
           </MDBNavbarNav>

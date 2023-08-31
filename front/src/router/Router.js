@@ -81,7 +81,7 @@ function Router() {
                 <Route path="bio" element={<Edit />} />
                 <Route path="saved-tarining/:userId" element={<SavedTraining />} />
                 <Route path="orders-history" element={<OrderHistory />} />
-                <Route path="Space-Booked" element={<SpaceBooked/>} />
+                <Route path="Space-Booked/:userId" element={<SpaceBooked/>} />
                 <Route path="Spacerserved" element={<Spacerserved/>} />
         
 

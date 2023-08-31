@@ -32,6 +32,7 @@ export class BookingService {
       where: {
         id,
       },
+        include:{tarif:true }
     });
   }
 

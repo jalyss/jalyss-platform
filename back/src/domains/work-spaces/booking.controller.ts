@@ -29,9 +29,9 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
       return this.bookingService.findAll();
     }
   
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-      return this.bookingService.findOne(id);
+    @Get(':userId')
+    findOne(@Param(':userId') userId: string) {
+      return this.bookingService.findOne(userId);
     }
   
     @Patch(':id')

@@ -10,15 +10,22 @@ export const fetchBookings = createAsyncThunk("bookings/bookings", async () => {
     },
   }
   const response = await axios.get(`${config.API_ENDPOINT}/bookings`,{...configs});
-  console.log('respmmmamam',response.data)
+ 
   return response.data;
 
 
 });
 
+export const fetchspaceBookingByUserId = createAsyncThunk("bookings/bookings", async (userId) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/bookings/${userId}`);
+  console.log('emshi',response.data)
+  return response.data;
+});
+
 
 export const fetchBooking = createAsyncThunk("bookings/booking", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/bookings/${id}`);
+
   return response.data;
 });
 
@@ -59,7 +66,7 @@ export const bookingSlice = createSlice({
   initialState:{
     booking: null,
     bookings: {
-      items: [],
+      items:[],
       count: 0,
     },
     error: null,
