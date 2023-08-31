@@ -232,9 +232,10 @@ function Router() {
 
             <Route path="type-article" element={<TypeArticle />}>
               <Route index element={<TypesList />} />
+              <Route path="create" element={<CreateType />} />
               <Route path="edit/:typeId" element={<EditType />} />
               <Route path="detail/:typeId" element={<DetailType />} />
-              <Route path="create" element={<CreateType />} />
+             
             </Route> 
              <Route path="Branche" element={<Branches />}>
               <Route index element={<BrancheList />} />
