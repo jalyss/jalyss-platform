@@ -168,9 +168,9 @@ function Invoice() {
                       </div>
 
                       <div class="row my-2">
-                        <div class="col-7 text-right">Tax (10%)</div>
+                        <div class="col-7 text-right">Shipping Cost:</div>
                         <div class="col-5">
-                          <span class="text-110 text-secondary-d1">$225</span>
+                          <span class="text-110 text-secondary-d1">7 TND</span>
                         </div>
                       </div>
 
@@ -178,7 +178,7 @@ function Invoice() {
                         <div class="col-7 text-right">Total Amount</div>
                         <div class="col-5">
                           <span class="text-150 text-success-d3 opacity-2">
-                            {sum() - ((sum() * 10) / 100)}{" "}
+                            {sum() + 7}{" "}
                             TND
                           </span>
                         </div>
