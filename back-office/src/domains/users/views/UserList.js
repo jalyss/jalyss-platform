@@ -1,85 +1,115 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button, Typography, useTheme } from '@mui/material'
-import { DataGrid, GridActionsCellItem, GridToolbarContainer } from '@mui/x-data-grid';
-import { fetchUsers, removeUser } from '../../../store/user';
-import { useDispatch, useSelector } from 'react-redux'
-import isEnglish from '../../../helpers/isEnglish';
-import { useNavigate } from 'react-router-dom';
-import { AiOutlineEye } from 'react-icons/ai';
-import { AiFillDelete } from 'react-icons/ai';
+import React, { useEffect, useState } from "react";
+import { Box, Button, Typography, useTheme } from "@mui/material";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridToolbarContainer,
+} from "@mui/x-data-grid";
+import { fetchUsers, removeUser } from "../../../store/user";
+import { useDispatch, useSelector } from "react-redux";
+import isEnglish from "../../../helpers/isEnglish";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineEye } from "react-icons/ai";
+import { AiFillDelete } from "react-icons/ai";
 import { IoIosPersonAdd } from "react-icons/io";
-import { showErrorToast, showSuccessToast } from '../../../utils/toast';
-import Modal from 'react-bootstrap/Modal';
-import { size } from 'draft-js/lib/DefaultDraftBlockRenderMap';
-
-
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import Modal from "react-bootstrap/Modal";
+import { size } from "draft-js/lib/DefaultDraftBlockRenderMap";
+import { Dialog, DialogContent } from "@mui/material";
 
 function UserList() {
   const [show, setShow] = useState(false);
-  const [elementId, setElementId]= useState(null);
+  const [elementId, setElementId] = useState(null);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [open, setOpen] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
+
+  const handleClick = (avatar) => {
+    setSelectedAvatar(avatar);
+    setOpen(true);
+  };
+
+  const handleClosee = () => {
+    setOpen(false);
+  };
   const columns = [
     {
-    field: 'avatar',
-    headerName: 'Avatar',
-    width: 150,
-    renderCell: (params) => (
-      <img
-        src={params.row.avatar?.path}
-        style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-      />
-    ),
-  },
-   
+      field: "avatar",
+      headerName: "avatar",
+      width: 120,
+      editable: false,
+      renderCell: (params) => (
+        <>
+          <img
+             src={params.row.avatar?.path}
+            alt="avatar"
+            style={{
+              width: "60%",
+              borderRadius: "40px",
+              height: "110%",
+              cursor: "pointer",
+            }}
+            onClick={() => handleClick(params.row.avatar?.path)}
+          />
+          <Dialog
+            open={open}
+            onClose={handleClosee}
+            style={{ borderRadius: "50px" }}
+          >
+            <DialogContent>
+              <img
+                src={selectedAvatar}
+                alt="avatar"
+                style={{ width: "100%", borderRadius: "40px" }}
+              />
+            </DialogContent>
+          </Dialog>
+        </>
+      ),
+    },
+
     {
-      field: 'fullName',
-      headerName: 'Full name',
+      field: "fullName",
+      headerName: "Full name",
       width: 150,
       editable: true,
     },
     {
-      field: 'email',
-      headerName: 'Email ',
+      field: "email",
+      headerName: "Email ",
       width: 150,
       sortable: false,
-      description: 'This column has a value getter and is not sortable.',
-
+      description: "This column has a value getter and is not sortable.",
     },
 
-   
     {
-      field: 'phone',
-      headerName: 'Phone ',
+      field: "isActive",
+      headerName: "isActive ",
       width: 100,
       sortable: false,
-
     },
     {
-      field: 'createdAt',
-      headerName: 'Created At ',
+      field: "isClient",
+      headerName: "isClient",
       width: 100,
-
     },
-  
 
     {
-      field: 'city',
-      headerName: 'City',
+      field: "isCoach",
+      headerName: "isCoach",
       width: 100,
       editable: true,
       sortable: false,
-
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
       width: 100,
-      cellClassName: 'actions',
+      cellClassName: "actions",
 
       getActions: ({ id }) => {
-
         return [
           <GridActionsCellItem
             icon={<AiOutlineEye />}
@@ -87,72 +117,68 @@ function UserList() {
             className="textPrimary"
             onClick={() => handleEditClick(id)}
             color="success"
-
           />,
-            <GridActionsCellItem
+          <GridActionsCellItem
             icon={<AiFillDelete />}
             label="Delete"
-            onClick={() => { setElementId(id), handleShow() }}
+            onClick={() => {
+              setElementId(id), handleShow();
+            }}
             color="error"
           />,
-
         ];
       },
     },
   ];
 
+  const userStore = useSelector((state) => state.user);
+  const userStores = useSelector((state) => state.user);
 
-  const userStore = useSelector((state) => state.user)
-  const dispatch = useDispatch()
-  const isEng = isEnglish()
-  const navigate = useNavigate()
-  const [rows, setRows] = useState([])
-  
+  const dispatch = useDispatch();
+  const isEng = isEnglish();
+  const navigate = useNavigate();
+  const [rows, setRows] = useState([]);
+  console.log(userStores, "userStore");
   useEffect(() => {
-    dispatch(fetchUsers())
-  }, [])
+    dispatch(fetchUsers());
+  }, []);
   useEffect(() => {
     if (userStore.users.items.length) {
-      let aux = userStore.users.items.map(e => {
+      let aux = userStore.users.items.map((e) => {
         return {
           ...e,
           fullName: isEng ? e.fullNameEn : e.fullNameAr,
-          phone: e.tel,
-          city:e.address,
           Avatar: e.avatar,
-          createdAt: e.createdAt.slice(0, 10)
-        }
-      }
-      )
+          isClient: e.isClient,
+          isCoach: e.isCoach,
+          isActive: e.isActive,
+        };
+      });
 
-      console.log('users',aux);
-      setRows(aux)
+      console.log("users", aux);
+      setRows(aux);
     }
-
-  }, [userStore.users.items])
-
+  }, [userStore.users.items]);
 
   const handleDeleteClick = (id) => {
-    dispatch(removeUser(id)).then(res => {
+    dispatch(removeUser(id)).then((res) => {
       if (res.error) {
-        showErrorToast(res.error.message)
+        showErrorToast(res.error.message);
       } else {
-        showSuccessToast('User has been deleted')
+        showSuccessToast("User has been deleted");
       }
-    })
-
+    });
   };
-
 
   const handleEditClick = (id) => {
     console.log(id);
-    navigate(`edit/${id}`)
+    navigate(`edit/${id}`);
   };
 
   return (
     <div>
       <>
-     <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Delete</Modal.Title>
           </Modal.Header>
@@ -161,30 +187,36 @@ function UserList() {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => { handleDeleteClick(elementId), handleClose() }}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                handleDeleteClick(elementId), handleClose();
+              }}
+            >
               Confirm
             </Button>
           </Modal.Footer>
         </Modal>
       </>
-      <div className='top-0 start-0' style={{marginLeft:800}} >
-        <Button type='button' onClick={() => navigate('create')} variant="outlined" endIcon={<IoIosPersonAdd />} >
-          <span className='btn btn-sm '>
-            Add user
-          </span>
+      <div className="top-0 start-0" style={{ marginLeft: 800 }}>
+        <Button
+          type="button"
+          onClick={() => navigate("create")}
+          variant="outlined"
+          endIcon={<IoIosPersonAdd />}
+        >
+          <span className="btn btn-sm ">Add user</span>
         </Button>
       </div>
-      <div className='position-relative' >
-        <h1  style={{paddingLeft:10,paddingTop:10}}>User List</h1>
+      <div className="position-relative">
+        <h1 style={{ paddingLeft: 10, paddingTop: 10 }}>User List</h1>
 
-
-        <Box sx={{ height:600, width:'100%' }}>
+        <Box sx={{ height: 600, width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns}
             initialState={{
               pagination: {
-                
                 paginationModel: {
                   pageSize: 10,
                 },
@@ -195,9 +227,8 @@ function UserList() {
             disableRowSelectionOnClick
           />
         </Box>
-
       </div>
     </div>
-  )
+  );
 }
-export default UserList
+export default UserList;

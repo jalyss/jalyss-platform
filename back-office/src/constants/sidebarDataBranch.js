@@ -142,6 +142,11 @@ export const sidebarDataBranch = [
         nameAr: "الادوار",
         path: "role",
       },
+      {
+        nameEn: "Users",
+        nameAr: "المستخدمين",
+        path: "users",
+      },
     ],
   }
 
