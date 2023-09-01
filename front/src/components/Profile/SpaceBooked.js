@@ -8,55 +8,62 @@ import { fetchtarifspace, fetchtarifspaces } from '../../store/tarifspace';
 
 
 const SpaceBooked = () => {
-  const bookingstore = useSelector((state) => state.booking)
+  const bookingstore = useSelector((state) => state.booking.bookings.items )
   const dispatch = useDispatch();
-  
+  const[data,setdata]=useState([])
 
   const { userId } = useParams();
 
   useEffect(() => {
     dispatch(fetchspaceBookingByUserId(userId));
+   
   }, [userId]);
 
- 
+  useEffect(() => {
+    setdata([bookingstore])
+  },[bookingstore]); 
+
+ console.log('eeeee',data)
 
   console.log('heee',bookingstore)
 
   return (
     <div className="d-flex flex-wrap justify-content-center align-items-center" style={{ maxWidth: "700px", maxHeight: "600px" }}>
- 
-      {bookingstore?.items.map((el,index)=>{
-         <div className="card" key={index}  style={{ height: "600px", maxWidth: "500px", margin: "10px" }}>
+      { data?.map((el) => (
+     
+         <div className="card"   style={{ height: "200px", maxWidth: "300px", margin: "10px" }}>
           <img
             className="card-img-top"
             src="https://images.pexels.com/photos/3184669/pexels-photo-3184669.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             alt="Card image"
-          />
-          <div className="card-body ">
-          <h5 className="card-title" style={{ color: 'purple' }}>Company :</h5>
-            <h6 className="card-title">{el}</h6>
+          /> 
+            <div className="card-body ">
+            <h5 className="card-title" style={{ color: 'purple' }}>Company :</h5>
+            <h6 className="card-title">{el.companyName}</h6>
             <h5 className="card-title" style={{ color: 'purple' }}>Tarif Description :</h5>
-            <h6 className="card-title" >{el.tarif.description}</h6>
+            <h6 className="card-title" >{el?.tarif?.description}</h6>
             <h5 className="card-title" style={{ color: 'purple' }}>Free Space :</h5>
             <h6 className="card-title">{el.freeSpace}</h6>
             <ul className="list-group list-group-flush">
-              <li className="list-group-item">Start Time : {el.startTime}</li>
-              <li className="list-group-item">{el.tarif.status}</li>
+            <li className="list-group-item">Start Time : {el.startTime}</li>
+    
               <li className="list-group-item">End Time : {el.endTime}</li>
               <li className="list-group-item">Price : {el.tarif.price}</li>
               <li className="list-group-item">
-                {booking.paid ? (
+                {el.paid ? (
                   <i className="fas fa-check-circle text-success"></i>
                 ) : (
                   <i className="fas fa-times-circle text-danger"></i>
                 )}
-                {booking.paid ? " Paid" : " Not Paid"}
+                {el.paid ? " Paid" : " Not Paid"}
               </li>
             </ul>
+            
           </div>
-        </div>
+          
       
-                 } )}  
+        </div>
+         ))}
     </div>
   );
                 }
