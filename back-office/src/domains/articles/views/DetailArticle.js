@@ -35,12 +35,14 @@ function DetailAritcle() {
   const articleTypeStore = useSelector((state) => state.articleType);
   const [ediMode, setEditMode] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
+  const authorStore = useSelector((state) => state.author);
 
   useEffect(() => {
     dispatch(fetchAuthors());
     dispatch(fetchArticleTypes());
     dispatch(fetchPublishingHouses());
     dispatch(fetchCategories());
+    dispatch(fetchAuthors());
   }, [dispatch, articleId]);
 
   useEffect(() => {
@@ -57,8 +59,7 @@ function DetailAritcle() {
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-  
-  
+
   const handleSubmit = async () => {
     const {
       title,
@@ -73,6 +74,7 @@ function DetailAritcle() {
       categoryId,
       publishingHouseId,
       typeId,
+      ArticleByAuthor,
     } = articleData;
 
     const body = {
@@ -88,6 +90,7 @@ function DetailAritcle() {
       categoryId,
       publishingHouseId,
       typeId,
+      authorIds: [ArticleByAuthor[0].authorId],
     };
 
     try {
@@ -425,7 +428,7 @@ function DetailAritcle() {
                 onChange={(e) => {
                   setArticleData({
                     ...articleData,
-                    categoryId: e.target.value, // Store the selected category's ID
+                    categoryId: e.target.value,
                   });
                 }}
                 disabled={ediMode}
@@ -450,7 +453,7 @@ function DetailAritcle() {
                 onChange={(e) => {
                   setArticleData({
                     ...articleData,
-                    publishingHouseId: e.target.value, // Store the selected category's ID
+                    publishingHouseId: e.target.value,
                   });
                 }}
               >
@@ -476,12 +479,45 @@ function DetailAritcle() {
                 onChange={(e) => {
                   setArticleData({
                     ...articleData,
-                    typeId: e.target.value, // Store the selected category's ID
+                    typeId: e.target.value,
                   });
                 }}
               >
                 <MenuItem value="">{articleData?.type?.nameEn || ""}</MenuItem>
                 {articleTypeStore.articleTypes.items.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.nameEn}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel id="author">Author</InputLabel>
+              <Select
+                labelId="author"
+                disabled={ediMode}
+                name="author"
+                value={
+                  articleData?.ArticleByAuthor?.map((e, i) => e.authorId) || ""
+                }
+                onChange={(e) => {
+                  setArticleData({
+                    ...articleData,
+                    ArticleByAuthor: [
+                      {
+                        ...articleData?.ArticleByAuthor?.map(
+                          (e, i) => e.authorId
+                        ),
+                        authorId: e.target.value,
+                      },
+                    ],
+                  });
+                }}
+              >
+                <MenuItem value="">Select an Author</MenuItem>
+                {authorStore.authors.items.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
                     {item.nameEn}
                   </MenuItem>

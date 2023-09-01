@@ -51,7 +51,6 @@ function CreateEmployee() {
         showSuccessToast(t("employee.created"));
         Navigate(-1)
       } else {
-        console.log(res);
         showErrorToast(res.error.message);
       }
     });

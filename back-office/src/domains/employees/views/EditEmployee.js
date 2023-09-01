@@ -44,26 +44,15 @@ function EditEmployee() {
   
   
   
-  
-  // const cropperRef = useRef(null);
-  // const onCrop = () => {
-  //   const cropper =cropperRef.current?.cropper;
-  //   console.log(cropper.getCroppedCanvas().toDataURL());
-  // };
-  
+
   useEffect(() => {
     dispatch(fetchBranches())
     dispatch(fetchRoles()) 
     dispatch(fetchMedias())
     dispatch(fetchEmployee(employeeId))
   }, [])
-// useEffect(()=>{
-//   if(preview)
-//   setOpen(true)
 
-// },[preview])
   
- console.log("media",mediaStore);
   useEffect(() => {
     if (employeeStore.employee)
       setEmployee(employeeStore.employee)
@@ -83,7 +72,6 @@ function EditEmployee() {
       event.preventDefault()
       let aux = Object.assign({}, employee)
       if (avatar !== null) {
-        console.log("befor crop",avatar)
         const image = new FormData()
         image.append('file', avatar)
         const response = await axios.post(
@@ -103,15 +91,12 @@ function EditEmployee() {
   const handleImageChange = (e) => {
 
     const file = e.target.files[0]
-    console.log("hetha el file",avatar)
     setOpp(file);
     setPreview(URL.createObjectURL(file))
 
     setOpenCrop(true)
     setAvatar(opp)
   }
-  console.log("emmpp",employee);
-  console.log("employeeStore",employeeStore);
 
   return ( !openCrop? (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">

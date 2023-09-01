@@ -63,7 +63,6 @@ function CreateArticle() {
       const image = new FormData();
       image.append("file", cover);
       const response = await uploadFileAxios(image, setProgress);
-      console.log(response);
       aux.coverId = response.data.id;
     }
     dispatch(createArticle(aux)).then((res) => {
