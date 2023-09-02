@@ -5,6 +5,7 @@ import { editType, fetchArticleType } from '../../../store/articleType';
 import { showErrorToast, showSuccessToast } from '../../../utils/toast';
 import UpdateButton from '../../../components/Commun/buttons/UpdateButton';
 import EditModal from "../../../components/Commun/Modal";
+import { Box } from '@mui/material';
 
 
 function DetailType() {
@@ -40,7 +41,7 @@ function DetailType() {
 
 
   const submitType = async (event) => {
-    
+
     dispatch(editType({ id: typeId, nameAr, nameEn })).then((res) => {
       if (!res.error) {
         showSuccessToast("Type updated successfuly");
@@ -63,119 +64,147 @@ function DetailType() {
   return (
     <div>
       <div class="container" >
-      <div className="d-flex justify-content-center" >
-        <div class="card" style={{ width: '500px' }}>
-          {!renderEditView ? (
-            <>
-              <div class="container" >
-                <div className='row mt-3'>
-                  <div className='col-4 '>
-                    <h6>Name AR :</h6>
-                  </div>
-                  <div className='col-4'>
-                    <p class="card-text"><small class="text-muted">
-                      {articleType?.nameAr}
-                    </small></p>
-                  </div>
-                </div>
-                <div className='row mt-3'>
-                  <div className='col-4 '>
-                    <h6>Name EN :</h6>
-                  </div>
-                  <div className='col-4'>
-                    <p class="card-text"><small class="text-muted">
-                      {articleType?.nameEn}</small></p>
-                  </div>
-                </div>
+      <h2 style={{ display: "flex", justifyContent: "center", marginBottom: "30px" }}>Edit Type</h2>
 
-                <div className='row mt-3 mb-3'>
-                  <div className='col-4 '><h6>Article :</h6></div>
+        <div className="d-flex justify-content-center" >
+          <div class="card" style={{ width: '500px' }}>
+            {!renderEditView ? (
+              <>
+                <div class="container" style={{
+                  width: "100%",
+                  borderRadius: "24px",
+                  background: " #f0f3ff",
+                  border: " 1px solid rgba(192, 194, 204)",
+                  paddingLeft: "50px",
+                 }} >
+                  <div sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
 
-
-                  {articleType?.articles?.map((article, i) =>
-                    <div className='col-4'>
-                      <p class="card-text">
-                        <small class="text-muted"> {article.title}</small>
-                      </p>
+                  }}>
+                    <div className='row'>
+                      <div className='col'>
+                        <div className='row mt-3'>
+                          <div className='col-6 '>
+                            <h6>Name AR:</h6>
+                          </div>
+                          <div className='col-6'>
+                            <p class="card-text"><small class="text-muted">
+                              {articleType?.nameAr}
+                            </small></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='col'>
+                        <div className='row mt-3'>
+                          <div className='col-6 '>
+                            <h6>Name EN:</h6>
+                          </div>
+                          <div className='col-6'>
+                            <p class="card-text"><small class="text-muted">
+                              {articleType?.nameEn}</small></p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  )}
+                    <div className='row mt-3 mb-3'>
+                      <div className='col-6 '><h6>Article :</h6></div>
+
+                      {articleType?.articles?.map((article, i) =>
+                        <div className='col-6'>
+                          <p class="card-text">
+                            <small class="text-muted"> {article.title}</small>
+                          </p>
+                        </div>
+                      )}
 
 
+                    </div>
+                    <div className="w-100 d-flex justify-content-center">
+                      <button
+                        type="submit"
+                        onClick={() => toggleShow()}
+                        className="confirm-button mt-3   mb-3"
+                      >
+                        <span className="label-btn"> Edit Type </span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-100 d-flex justify-content-center">
-                  <button
-                    type="submit"
-                    onClick={() => toggleShow()}
-                    className="confirm-button mt-5   mb-3"
-                  >
-                    <span className="label-btn"> Edit Type </span>
-                  </button>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
+              </>
+            ) : (
+              <>
 
-              <div className='container'>
-                <div className="d-flex justify-content-center" >
-                  <div className='card' style={{ width: '500px' }}>
-                    <div className='container' >
-                      <div>
+                <div className='container'>
+                 
+                  <div className="d-flex justify-content-center" >
+                    <div className='card' style={{ width: '500px' }}>
+                      <div className='container' >
+                      
+                        <div class="container" style={{
+                  width: "100%",
+                  borderRadius: "24px",
+                  background: " #f0f3ff",
+                  border: " 1px solid rgba(192, 194, 204)",
+                  paddingLeft: "50px",
+                  }} >
+                          <div class="form-group  mt-3">
+                            <label >Name AR</label>
+                            <input type="text" class="form-control" placeholder={nameAr}
 
-                        <div class="form-group  mt-3">
-                          <label >Name AR</label>
-                          <input type="text" class="form-control" placeholder={nameAr}
+                              onChange={(e) => { setNameAr(e.target.value) }}
+                              value={nameAr}
+                            />
+                          </div>
+                          <div class="form-group  mt-3 " style={{ marginRight: '30 px' }}>
+                            <label >Name EN</label>
+                            <input type="text" class="form-control" placeholder={nameEn}
 
-                            onChange={(e) => { setNameAr(e.target.value) }}
-                            value={nameAr}
-                          />
+                              onChange={(e) => { setNameEn(e.target.value) }}
+
+                              value={nameEn}
+
+                            />
+                          </div>
+                          <div className="d-flex justify-content-center">
+
+                            <UpdateButton mb={15} mt={20} onClick={() => toggleShowDelete()} />
+                          </div>
+
                         </div>
-                        <div class="form-group  mt-3 " style={{ marginRight: '30 px' }}>
-                          <label >Name EN</label>
-                          <input type="text" class="form-control" placeholder={nameEn}
-
-                            onChange={(e) => { setNameEn(e.target.value) }}
-
-                            value={nameEn}
-
-                          />
-                        </div>
-                        <div className="d-flex justify-content-center">
-
-                          <UpdateButton mb={15} mt={20} onClick={() => toggleShowDelete()} />
-                        </div>
-
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+                  </div>
+                
+              </>
+            )}
+          </div>
 
+        </div>
+        <EditModal
+          toggleShow={onCanceltoggleShowDelete}
+          basicModal={basicModalDelete}
+          setBasicModal={setBasicModalDelete}
+          normal={true}
+          ofDelete={!true}
+          title={
+            <div style={{ width: "200%", marginLeft: "100%" }} className="d-flex justify-content-center align-items-center">
+              Are you sure !
+            </div>
+          }
+          body={
+            <div className="d-flex justify-content-center align-items-center">
+              You want to edit this type ?
+            </div>
+          }
+          fn={() => {
+            submitType();
+          }}
+        />
       </div>
-      <EditModal
-        toggleShow={onCanceltoggleShowDelete}
-        basicModal={basicModalDelete}
-        setBasicModal={setBasicModalDelete}
-        normal={true}
-        ofDelete={!true}
-        title={
-          <div style={{width:"200%",marginLeft:"100%"}} className="d-flex justify-content-center align-items-center">
-            Are you sure !
-          </div>
-        }
-        body={
-          <div className="d-flex justify-content-center align-items-center">
-            You want to edit this type ?
-          </div>
-        }
-        fn={() => {
-          submitType();
-        }}
-      />
-</div>
     </div>
 
 
