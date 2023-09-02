@@ -13,6 +13,6 @@ export class CreateRoleDto {
 }
 
 export type Permission ={
-    domain: string;
-    action: string;
+    domain: string  //article;
+    action: string  // create;
 }
