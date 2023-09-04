@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button} from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
-  GridToolbarContainer,
 } from "@mui/x-data-grid";
 import { fetchUsers, removeUser } from "../../../store/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +13,6 @@ import { AiFillDelete } from "react-icons/ai";
 import { IoIosPersonAdd } from "react-icons/io";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import Modal from "react-bootstrap/Modal";
-import { size } from "draft-js/lib/DefaultDraftBlockRenderMap";
 import { Dialog, DialogContent } from "@mui/material";
 
 function UserList() {

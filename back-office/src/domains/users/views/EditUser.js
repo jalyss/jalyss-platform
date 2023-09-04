@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../../assets/styles/signup.css";
 import { useDispatch, useSelector } from "react-redux";
-import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -24,7 +22,6 @@ function EditUser() {
   const [avatar, setAvatar] = useState(null);
   const [preview, setPreview] = useState(null);
   const [openCrop, setOpenCrop] = useState(false);
-  const [opp, setOpp] = useState(null);
 
   useEffect(() => {
     dispatch(fetchUser(userId));
@@ -37,10 +34,17 @@ function EditUser() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    if (user.isClient) {
+      setUser((prevUser) => ({
+        ...prevUser,
+        isClient: type === "checkbox" ? checked : value,
+      }));
+    } else {
+      setUser((prevUser) => ({
+        ...prevUser,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
   const toggleEditMode = () => {
@@ -80,169 +84,12 @@ function EditUser() {
     </div>
   );
 
-  const renderClientData = (clientData) => {
-    return (
-      <TableContainer className="w-100" component={Paper}>
-        <Table aria-label="simple table">
-          <TableBody>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell className="fw-bold" align="right">
-                {t("tel")}
-              </TableCell>
-              <TableCell align="right">
-                {editMode ? (
-                  <input
-                    className="form-control mt-2"
-                    required
-                    name="tel"
-                    id="tel"
-                    value={clientData?.tel || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{clientData?.tel || ""}</span>
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell className="fw-bold" align="right">
-               adress
-              </TableCell>
-              <TableCell align="right">
-                {editMode ? (
-                  <input
-                    className="form-control mt-2"
-                    required
-                    name="address"
-                    id="address"
-                    value={clientData?.address || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{clientData?.address || ""}</span>
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell className="fw-bold" align="right">
-                {t("accountBalance")}
-              </TableCell>
-              <TableCell align="right">
-                {editMode ? (
-                  <input
-                    className="form-control mt-2"
-                    required
-                    name="accountBalance"
-                    id="accountBalance"
-                    value={clientData?.accountBalance || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{clientData?.accountBalance || ""}</span>
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell className="fw-bold" align="right">
-              educationLevel
-              </TableCell>
-              <TableCell align="right">
-                {editMode ? (
-                  <input
-                    className="form-control mt-2"
-                    required
-                    name="educationLevel"
-                    id="educationLevel"
-                    value={clientData?.educationLevel || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{clientData?.educationLevel || ""}</span>
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell className="fw-bold" align="right">
-              functionalArea
-              </TableCell>
-              <TableCell align="right">
-                {editMode ? (
-                  <input
-                    className="form-control mt-2"
-                    required
-                    name="functionalArea"
-                    id="functionalArea"
-                    value={clientData?.functionalArea || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{clientData?.functionalArea || ""}</span>
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell className="fw-bold" align="right">
-              jobTitle
-              </TableCell>
-              <TableCell align="right">
-                {editMode ? (
-                  <input
-                    className="form-control mt-2"
-                    required
-                    name="jobTitle"
-                    id="jobTitle"
-                    value={clientData?.jobTitle || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{clientData?.jobTitle || ""}</span>
-                )}
-              </TableCell>
-            </TableRow>
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell className="fw-bold" align="right">
-              country
-              </TableCell>
-              <TableCell align="right">
-                {editMode ? (
-                  <input
-                    className="form-control mt-2"
-                    required
-                    name="country"
-                    id="country"
-                    value={clientData?.country || ""}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <span>{clientData?.country || ""}</span>
-                )}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
-  };
-
   const renderUserData = () => {
     const clientData = user?.isClient ? user?.client || {} : {};
+    const employeeData = user?.isClient ? {} : user?.employee || {};
+
     return (
       <div className="d-flex justify-content-center w-100 m-3">
-        {user?.isClient ? renderClientData(clientData) : null}
         <TableContainer className="w-100" component={Paper}>
           <Table aria-label="simple table">
             <TableBody>
@@ -253,18 +100,9 @@ function EditUser() {
                   {t("fullNameAr")}
                 </TableCell>
                 <TableCell align="right">
-                  {editMode ? (
-                    <input
-                      className="form-control mt-2"
-                      required
-                      name="fullNameAr"
-                      id="fullNameAr"
-                      value={user?.fullNameAr || ""}
-                      onChange={handleChange}
-                    />
-                  ) : (
+                
                     <span>{user?.fullNameAr || ""}</span>
-                  )}
+                
                 </TableCell>
               </TableRow>
               <TableRow
@@ -274,18 +112,9 @@ function EditUser() {
                   {t("fullNameEn")}
                 </TableCell>
                 <TableCell align="right">
-                  {editMode ? (
-                    <input
-                      required
-                      className="form-control mt-2"
-                      name="fullNameEn"
-                      id="fullNameEn"
-                      value={user?.fullNameEn || ""}
-                      onChange={handleChange}
-                    />
-                  ) : (
+                 
                     <span>{user?.fullNameEn || ""}</span>
-                  )}
+                 
                 </TableCell>
               </TableRow>
               <TableRow
@@ -319,7 +148,6 @@ function EditUser() {
                   <span>{user?.email || ""}</span>
                 </TableCell>
               </TableRow>
-             
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -327,18 +155,9 @@ function EditUser() {
                   {t("isActive")}
                 </TableCell>
                 <TableCell align="right">
-                  {editMode ? (
-                    <input
-                      type="checkbox"
-                      className="form-check-input mt-2"
-                      id="isActive"
-                      name="isActive"
-                      checked={user?.isActive}
-                      onChange={handleChange}
-                    />
-                  ) : (
+                 
                     <span>{user?.isActive ? "Yes" : "No"}</span>
-                  )}
+                 
                 </TableCell>
               </TableRow>
               <TableRow
@@ -362,6 +181,169 @@ function EditUser() {
                   )}
                 </TableCell>
               </TableRow>
+              {user?.isClient ? (
+                <React.Fragment>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      adress
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                          className="form-control mt-2"
+                          required
+                          name="address"
+                          id="address"
+                          value={clientData?.address || ""}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <span>{clientData?.address || ""}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("tel")}
+                    </TableCell>
+                    <TableCell align="right">
+                    
+                        <span>{clientData?.tel || ""}</span>
+                      
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("accountBalance")}
+                    </TableCell>
+                    <TableCell align="right">
+                    
+                        <span>{clientData?.accountBalance || ""}</span>
+                      
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      educationLevel
+                    </TableCell>
+                    <TableCell align="right">
+                     
+                        <span>{clientData?.educationLevel || ""}</span>
+                     
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      functionalArea
+                    </TableCell>
+                    <TableCell align="right">
+                     
+                        <span>{clientData?.functionalArea || ""}</span>
+                      
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      jobTitle
+                    </TableCell>
+                    <TableCell align="right">
+                      
+                        <span>{clientData?.jobTitle || ""}</span>
+                      
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      country
+                    </TableCell>
+                    <TableCell align="right">
+                   
+                        <span>{clientData?.country || ""}</span>
+                      
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("isAdmin")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                          type="checkbox"
+                          className="form-check-input mt-2"
+                          id="isAdmin"
+                          name="isAdmin"
+                          checked={employeeData?.isAdmin}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <span>{employeeData?.isAdmin ? "Yes" : "No"}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("branch")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                          className="form-control mt-2"
+                        
+                          name="branch"
+                          id="branch"
+                          value={employeeData?.branch || ""}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <span>{employeeData?.branch || ""}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("role")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                          className="form-control mt-2"
+                         
+                          name="role"
+                          id="role"
+                          value={employeeData?.role || ""}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <span>{employeeData?.role || ""}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -372,33 +354,33 @@ function EditUser() {
   return !openCrop ? (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile User</h2>
+  
       <form className="checkout-form" onSubmit={handleChange}>
         <div className="d-flex flex-wrap justify-content-center">
           {renderImageUpload()}
           {renderUserData()}
         </div>
-
-        <div className="w-100 d-flex justify-content-center">
-          <button type="submit" className="confirm-button mt-3">
-            <span className="label-btn">{editMode ? "حفظ" : "تعديل"}</span>
-          </button>
-          {!editMode && (
-            <button
-              type="button"
-              className="edit-button mt-3"
-              onClick={toggleEditMode}
-            >
-              <span className="label-btn">تعديل</span>
-            </button>
-          )}
-        </div>
+  
+      
       </form>
+  
+     
+      <div className="w-100 d-flex justify-content-center mt-3">
+        <button
+          type="button" 
+          className="confirm-button"
+          onClick={toggleEditMode} 
+        >
+          <span className="label-btn">
+            {editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
+          </span>
+        </button>
+      </div>
     </div>
   ) : (
-    <CropEasy
-      {...{ preview, setOpenCrop, setPreview, setAvatar, avatar }}
-    />
+    <CropEasy {...{ preview, setOpenCrop, setPreview, setAvatar, avatar }} />
   );
+  
 }
 
 export default EditUser;
