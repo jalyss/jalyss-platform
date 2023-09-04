@@ -27,10 +27,10 @@ export class BookingService {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(userId:string) {
     return await this.prisma.booking.findFirst({
       where: {
-        id,
+        userId,
       },
         include:{tarif:true }
     });

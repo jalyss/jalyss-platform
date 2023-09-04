@@ -16,16 +16,15 @@ export const fetchBookings = createAsyncThunk("bookings/bookings", async () => {
 
 });
 
-export const fetchspaceBookingByUserId = createAsyncThunk("bookings/bookings", async (userId) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/bookings/${userId}`);
-  console.log('emshi',response.data)
-  return response.data;
-});
+// export const fetchspaceBookingByUserId = createAsyncThunk("bookings/bookings", async (userId) => {
+//   const response = await axios.get(`${config.API_ENDPOINT}/bookings/${id}`);
+//   console.log('emshi',response.data)
+//   return response.data;
+// });
 
 
-export const fetchBooking = createAsyncThunk("bookings/booking", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/bookings/${id}`);
-
+export const fetchBooking = createAsyncThunk("bookings/booking", async (userId) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/bookings/${userId}`)
   return response.data;
 });
 

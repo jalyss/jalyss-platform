@@ -23,9 +23,9 @@ export class ServiceController {
   }
   
 
-  @Get('one/:id')
-  findOne(@Param('id') id: string) {
-    return this.serviceService.findOne(id);
+  @Get(':userId')
+  findOne(@Param('userId') userId: string) {
+    return this.serviceService.findOne(userId);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() UpdateServiceDto: UpdateServiceDto) {

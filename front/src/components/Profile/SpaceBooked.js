@@ -3,35 +3,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchServices } from '../../store/space';
 import { useNavigate, useParams } from 'react-router-dom';
 import Card from '../Commun/Card';
-import { fetchBookings, fetchspaceBookingByUserId } from '../../store/booking';
+import { fetchBooking, fetchBookings, fetchspaceBookingByUserId } from '../../store/booking';
 import { fetchtarifspace, fetchtarifspaces } from '../../store/tarifspace';
 
 
 const SpaceBooked = () => {
-  const bookingstore = useSelector((state) => state.booking.bookings.items )
+  const bookingstore = useSelector((state) => state.booking.booking)
+
   const dispatch = useDispatch();
   const[data,setdata]=useState([])
-
-  const { userId } = useParams();
+  const {userId} = useParams();
 
   useEffect(() => {
-    dispatch(fetchspaceBookingByUserId(userId));
-   
+    dispatch(fetchBooking(userId))
   }, [userId]);
 
+  console.log(userId)
   useEffect(() => {
     setdata([bookingstore])
-  },[bookingstore]); 
+  },[userId]); 
 
  console.log('eeeee',data)
 
   console.log('heee',bookingstore)
 
   return (
-    <div className="d-flex flex-wrap justify-content-center align-items-center" style={{ maxWidth: "700px", maxHeight: "600px" }}>
+    <div className="card" style={{ maxheight: "250px", maxWidth: "300px"}}  >
       { data?.map((el) => (
      
-         <div className="card"   style={{ maxheight: "250px", maxWidth: "300px"}}  >
+         <div className="card-body"  >
           <img
          
             className="card-img-top"
