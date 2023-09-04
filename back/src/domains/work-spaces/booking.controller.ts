@@ -28,11 +28,13 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
     findAll() {
       return this.bookingService.findAll();
     }
+    
   
-    @Get(':userId')
+    @Get('one/:userId')
     findOne(@Param(':userId') userId: string) {
       return this.bookingService.findOne(userId);
     }
+    
   
     @Patch(':id')
     update(@Param('id') id: string, @Body() dto: UpdateBookingDto) {

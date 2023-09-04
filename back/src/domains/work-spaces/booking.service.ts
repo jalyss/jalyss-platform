@@ -37,7 +37,7 @@ export class BookingService {
   }
 
   async update(id: string, dto: UpdateBookingDto) {
-    return await this.prisma.booking.update({ where: { id }, data: dto });
+    return await this.prisma.booking.update({ where:{ id }, data: dto });
   }
 
   async remove(id: string) {

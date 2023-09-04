@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchServices } from '../../store/space';
 import { useNavigate, useParams } from 'react-router-dom';
 import Card from '../Commun/Card';
-import { fetchBooking, fetchBookings, fetchspaceBookingByUserId } from '../../store/booking';
-import { fetchtarifspace, fetchtarifspaces } from '../../store/tarifspace';
+import {fetchspaceBookingByUserId } from '../../store/booking';
+
 
 
 const SpaceBooked = () => {
-  const bookingstore = useSelector((state) => state.booking.booking)
+  const bookingstore = useSelector((state) => state.booking.bookings.items)
 
   const dispatch = useDispatch();
   const[data,setdata]=useState([])
   const {userId} = useParams();
 
   useEffect(() => {
-    dispatch(fetchBooking(userId))
+    dispatch(fetchspaceBookingByUserId(userId))
   }, [userId]);
 
   console.log(userId)
@@ -86,5 +86,5 @@ const SpaceBooked = () => {
          ))}
     </div>
   );
-                }
+              }
 export default SpaceBooked

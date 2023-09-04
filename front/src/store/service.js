@@ -11,6 +11,7 @@ export const fetchServices = createAsyncThunk(
   }
 );
 
+
 // Async thunk for fetching a single service by ID
 export const fetchService = createAsyncThunk(
   "services/fetchService",
@@ -19,7 +20,6 @@ export const fetchService = createAsyncThunk(
       const response = await axios.get(
         `${config.API_ENDPOINT}/services/one/${name}`
       );
-      console.log(response.data, "response.data");
       return response.data;
     } catch (error) {
       // Handle error if needed
@@ -27,6 +27,7 @@ export const fetchService = createAsyncThunk(
     }
   }
 );
+
 
 // Create a slice for managing services
 export const serviceSlice = createSlice({

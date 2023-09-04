@@ -15,7 +15,7 @@ import bookmark from "./bookmarks";
 import session from "./session";
 import chat from "./chat";
 import faq from "./Faq";
-import service from "./space";
+import service from "./service"
 import mentorRequest from "./mentorRequest";
 import sessionFeedback from "./sessionFeedback";
 import trainingBooking from "./trainingBooking";

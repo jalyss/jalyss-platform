@@ -16,15 +16,14 @@ export const fetchBookings = createAsyncThunk("bookings/bookings", async () => {
 
 });
 
-// export const fetchspaceBookingByUserId = createAsyncThunk("bookings/bookings", async (userId) => {
-//   const response = await axios.get(`${config.API_ENDPOINT}/bookings/${id}`);
-//   console.log('emshi',response.data)
-//   return response.data;
-// });
+export const fetchspaceBookingByUserId = createAsyncThunk("bookings/bookings", async (userId) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/bookings/one/${userId}`);
+  return response.data;
+});
 
 
-export const fetchBooking = createAsyncThunk("bookings/booking", async (userId) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/bookings/${userId}`)
+export const fetchBooking = createAsyncThunk("bookings/booking", async (id) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/bookings/${id}`)
   return response.data;
 });
 
@@ -80,6 +79,12 @@ export const bookingSlice = createSlice({
     });
     builder.addCase(fetchBooking.fulfilled, (state, action) => {
       state.booking = action.payload;
+    });
+    builder.addCase(fetchBookings.rejected, (state, action) => {
+      state.error = action.error.message;
+    });
+    builder.addCase(fetchBooking.rejected, (state, action) => {
+      state.error = action.error.message;
     });
   },
 });
