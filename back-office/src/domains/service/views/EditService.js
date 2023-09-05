@@ -24,8 +24,8 @@ export default function EditService() {
   const id = serviceId;
   const serviceStore = useSelector((state) => state.service);
 
-  console.log(serviceStore, "lol");
-  const space = useSelector((state) => state.service);
+  const service = useSelector((state) => state.service.service);
+  console.log(service.MediaService, "mediaa");
 
 
 
@@ -228,7 +228,7 @@ export default function EditService() {
           
           </div>
       </div>
-      {space?.MediaWorkSpace?.map((elem, i) => (
+      {service?.MediaService?.map((elem, i) => (
         <div className="grid" key={i}>
           <img alt="" src={elem.media.path} style={{ height: 100 }} />
           <div className="deleteButton">
