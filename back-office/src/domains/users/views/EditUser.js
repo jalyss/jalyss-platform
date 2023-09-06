@@ -57,7 +57,7 @@ function EditUser() {
     setOpenCrop(true);
     setAvatar(file);
   };
-
+  console.log(userStore.user, "userStore");
   const renderImageUpload = () => (
     <div className="image-upload">
       <img src={preview || user?.avatar?.path} alt="taswira" />
@@ -100,9 +100,7 @@ function EditUser() {
                   {t("fullNameAr")}
                 </TableCell>
                 <TableCell align="right">
-                
-                    <span>{user?.fullNameAr || ""}</span>
-                
+                  <span>{user?.fullNameAr || ""}</span>
                 </TableCell>
               </TableRow>
               <TableRow
@@ -112,9 +110,7 @@ function EditUser() {
                   {t("fullNameEn")}
                 </TableCell>
                 <TableCell align="right">
-                 
-                    <span>{user?.fullNameEn || ""}</span>
-                 
+                  <span>{user?.fullNameEn || ""}</span>
                 </TableCell>
               </TableRow>
               <TableRow
@@ -155,9 +151,7 @@ function EditUser() {
                   {t("isActive")}
                 </TableCell>
                 <TableCell align="right">
-                 
-                    <span>{user?.isActive ? "Yes" : "No"}</span>
-                 
+                  <span>{user?.isActive ? "Yes" : "No"}</span>
                 </TableCell>
               </TableRow>
               <TableRow
@@ -211,9 +205,7 @@ function EditUser() {
                       {t("tel")}
                     </TableCell>
                     <TableCell align="right">
-                    
-                        <span>{clientData?.tel || ""}</span>
-                      
+                      <span>{clientData?.tel || ""}</span>
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -223,9 +215,7 @@ function EditUser() {
                       {t("accountBalance")}
                     </TableCell>
                     <TableCell align="right">
-                    
-                        <span>{clientData?.accountBalance || ""}</span>
-                      
+                      <span>{clientData?.accountBalance || ""}</span>
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -235,9 +225,7 @@ function EditUser() {
                       educationLevel
                     </TableCell>
                     <TableCell align="right">
-                     
-                        <span>{clientData?.educationLevel || ""}</span>
-                     
+                      <span>{clientData?.educationLevel || ""}</span>
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -247,9 +235,7 @@ function EditUser() {
                       functionalArea
                     </TableCell>
                     <TableCell align="right">
-                     
-                        <span>{clientData?.functionalArea || ""}</span>
-                      
+                      <span>{clientData?.functionalArea || ""}</span>
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -259,9 +245,7 @@ function EditUser() {
                       jobTitle
                     </TableCell>
                     <TableCell align="right">
-                      
-                        <span>{clientData?.jobTitle || ""}</span>
-                      
+                      <span>{clientData?.jobTitle || ""}</span>
                     </TableCell>
                   </TableRow>
                   <TableRow
@@ -271,9 +255,7 @@ function EditUser() {
                       country
                     </TableCell>
                     <TableCell align="right">
-                   
-                        <span>{clientData?.country || ""}</span>
-                      
+                      <span>{clientData?.country || ""}</span>
                     </TableCell>
                   </TableRow>
                 </React.Fragment>
@@ -310,14 +292,33 @@ function EditUser() {
                       {editMode ? (
                         <input
                           className="form-control mt-2"
-                        
                           name="branch"
                           id="branch"
-                          value={employeeData?.branch || ""}
+                          value={employeeData?.branch?.name || ""}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{employeeData?.branch || ""}</span>
+                        <span>{employeeData?.branch?.name || ""}</span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell className="fw-bold" align="right">
+                      {t("branch")}
+                    </TableCell>
+                    <TableCell align="right">
+                      {editMode ? (
+                        <input
+                          className="form-control mt-2"
+                          name="branch"
+                          id="branch"
+                          value={employeeData?.branch?.address || ""}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <span>{employeeData?.branch?.address || ""}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -331,14 +332,13 @@ function EditUser() {
                       {editMode ? (
                         <input
                           className="form-control mt-2"
-                         
                           name="role"
                           id="role"
-                          value={employeeData?.role || ""}
+                          value={employeeData?.role?.nameEn || ""}
                           onChange={handleChange}
                         />
                       ) : (
-                        <span>{employeeData?.role || ""}</span>
+                        <span>{employeeData?.role?.nameEn || ""}</span>
                       )}
                     </TableCell>
                   </TableRow>
@@ -354,22 +354,19 @@ function EditUser() {
   return !openCrop ? (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile User</h2>
-  
+
       <form className="checkout-form" onSubmit={handleChange}>
         <div className="d-flex flex-wrap justify-content-center">
           {renderImageUpload()}
           {renderUserData()}
         </div>
-  
-      
       </form>
-  
-     
+
       <div className="w-100 d-flex justify-content-center mt-3">
         <button
-          type="button" 
+          type="button"
           className="confirm-button"
-          onClick={toggleEditMode} 
+          onClick={toggleEditMode}
         >
           <span className="label-btn">
             {editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
@@ -380,7 +377,6 @@ function EditUser() {
   ) : (
     <CropEasy {...{ preview, setOpenCrop, setPreview, setAvatar, avatar }} />
   );
-  
 }
 
 export default EditUser;
