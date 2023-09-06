@@ -20,6 +20,7 @@ import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 function DetailProvider() {
   const provider = useSelector((state) => state.provider.provider);
   const [editProviderData, setEditProviderData] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -58,7 +59,17 @@ function DetailProvider() {
 
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          formData
+          formData,{
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setUploadProgress(progress);
+              setTimeout(() => {
+                setUploadProgress(0);
+              }, 2000);
+            },
+          }
         );
         body.logoId = response.data.id;
       }
@@ -391,6 +402,15 @@ function DetailProvider() {
                   filter: "blur(0.5px)",
                 }}
               />
+                 <div>
+                  {uploadProgress > 0 && (
+                    <progress
+                      value={uploadProgress}
+                      max="100"
+                      style={{ width: "300px" }}
+                    />
+                  )}
+                </div>
               <div className="position-absolute top-50 start-50 translate-middle">
                 <input
                   type="file"
