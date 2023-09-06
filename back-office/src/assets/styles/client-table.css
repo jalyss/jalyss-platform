@@ -1,0 +1,129 @@
+.table_container {
+  margin: 0;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-top: 0;
+  padding-left: 4rem;
+}
+.table_wrapper {
+  padding-top: 2rem;
+}
+.actions-icons {
+  display: flex !important;
+  align-items: center !important;
+  gap: none !important;
+  padding: 0 !important;
+}
+.icon {
+  padding: 0;
+  margin: 0;
+}
+.image_icon:hover {
+  animation: vibrate 0.3s infinite;
+  transform-origin: 50% 50%;
+}
+@keyframes vibrate {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.btn_container {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden; */
+}
+.add_client_btn {
+  background-color: rgb(77, 24, 71);
+  top: -8rem;
+  right: -7rem;
+  width: 17rem;
+  height: 17rem;
+  border-radius: 50%; /* Make it a circle */
+  overflow: hidden;
+  position: relative;
+  transform: scale(1);
+  transition: transform 0.5s ease;
+  box-shadow: 5px 3px 27px 0px rgb(77, 24, 71);
+  -webkit-box-shadow: 5px 3px 27px 0px rgb(77, 24, 71);
+  -moz-box-shadow: 5px 3px 27px 0px rgb(77, 24, 71);
+}
+.add_client_btn:hover {
+  transform: scale(1.5);
+}
+
+.add_client_btn_icon {
+  position: absolute;
+  top: 55%;
+  left: 15%;
+  cursor: pointer;
+}
+.MuiTablePagination-displayedRows {
+  margin: 0;
+  padding: 0;
+}
+.MuiTablePagination-selectLabel {
+  margin: 0;
+}
+.wrapper_client {
+  display: flex;
+  padding-left: 2rem;
+  padding-top: 0;
+}
+.table_nav {
+  /* background-color: #333; */
+  margin: 0;
+}
+.sub_nav_ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+/* li */
+.sub_nav {
+  padding: 1rem;
+  clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+  background-color: rgb(77, 24, 71);
+}
+/* a */
+.sub_nav_element {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  padding: 3rem;
+}
+
+.vertical-line {
+  background-color: rgb(77, 24, 71);
+  height: inherit;
+  width: 10px;
+  border-radius: 3px;
+}

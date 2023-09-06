@@ -1,6 +1,5 @@
 .navbar_search_bar {
   font-size: 1.5rem;
-
   padding: 0.5rem 2.7rem;
   border: rgba(102, 51, 153);
   border: none;
@@ -16,28 +15,23 @@
   z-index: 1;
 }
 .navbar_search_bar:focus {
-  padding: 0.5rem 3rem;
+  padding: 0.5rem 4rem;
 
   transform: scale(1.05);
 }
-/* .navbar_search_bar:focus .search_bar_icon {
-  transform: scale(1.7);
-} */
 @media screen and (max-width: 768px) {
   .navbar_search_bar {
     font-size: 1rem;
-
     padding: 0.1rem 2rem;
   }
   .search_bar_icon {
     position: absolute;
-
     top: 50%;
     left: 2%;
     max-width: 1.5rem;
-    transform: translate(0, -50%);
   }
   .navbar_search_bar:focus {
     transform: scale(1.05);
+    padding: 0.5rem 3rem;
   }
 }
