@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
+// import CarouselImages from "../../components/Commun/Carousel";
 import { Link, useParams } from "react-router-dom";
-import { Grid } from "@mui/material";
+import { Grid, imageListClasses } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Card, CardMedia, Typography } from "@mui/material";
 import { fetchService, fetchServices } from "../../store/space";
 import { useDispatch, useSelector } from "react-redux";
+import Carousel from 'react-bootstrap/Carousel'
+
 import NavLink from "react-bootstrap/esm/NavLink";
 const useStyles = makeStyles((theme) => ({
   imagesGroup: {
@@ -46,6 +49,7 @@ console.log(service,"serrr");
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <div>
       <div>
@@ -56,22 +60,14 @@ console.log(service,"serrr");
         >
           {service?.name}
         </Typography>
-        <Grid container spacing={3} justifyContent="center" item>
-          <Grid item xs={12} sm={12} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <imageGroup className={classes.imagesGroup}>
-              {service?.MediaService.filter((elem, j) => j % 2 === 0).map(
-                (item, i) => (
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.media}
-                      image={item.media.path}
-                    />
-                  </Card>
-                )
-              )}
-            </imageGroup>
-          </Grid>
-        </Grid>
+        <Carousel>
+      {service?.MediaService?.map((image) => (
+        <Carousel.Item>
+          <img src={image.media.path} class="d-block w-100 image-carousel "   alt="Wild Landscape"  />
+        </Carousel.Item>
+      ))}
+    </Carousel>
+
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} sm={12} sx={{ width: { xs: "100%", sm: "50%" } }}>
             <imageGroup className={classes.imagesGroup}>

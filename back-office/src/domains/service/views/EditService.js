@@ -25,7 +25,7 @@ export default function EditService() {
   const serviceStore = useSelector((state) => state.service);
 
   const service = useSelector((state) => state.service.service);
-  console.log(service.MediaService, "mediaa");
+
 
 
 
