@@ -190,7 +190,7 @@ export default function EditService() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="exampleFormControlFile1">Image file input</label>
+            <label htmlFor="exampleFormControlFile1">Image file input for the sevice cover</label>
             <input
               type="file"
               className="form-control-file"
@@ -200,12 +200,11 @@ export default function EditService() {
             />
             {/* {filenamesplitted && <p>Selected file: {filenamesplitted}</p>} */}
           </div>
-          <button type="submit" className="btn btn-primary mb">
-            Add the service
-          </button>
+          <AddButton type="submit" content="Update the service" />
         </form>
         </>
         <>
+        <h3>Add "{name}" service pictures:</h3>
         <form onSubmit={onSubmit}>
           <div>
           <input
