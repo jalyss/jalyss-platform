@@ -11,7 +11,8 @@ import Paper from "@mui/material/Paper";
 import { editUser, fetchUser } from "../../../store/user";
 import { useParams } from "react-router-dom";
 import CropEasy from "../../../components/CropEasy";
-
+import { fetchRoles } from "../../../store/role";
+import { fetchBranches } from "../../../store/branche";
 function EditUser() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -22,9 +23,18 @@ function EditUser() {
   const [avatar, setAvatar] = useState(null);
   const [preview, setPreview] = useState(null);
   const [openCrop, setOpenCrop] = useState(false);
+  const roles = useSelector((state) => state.role);
+  const brancheStore = useSelector((state) => state.branche);
 
+  const [selectedRole, setSelectedRole] = useState(""); 
+  const [selectedBranch, setSelectedBranch] = useState(""); 
+
+
+  console.log(brancheStore, "brancheStore");
   useEffect(() => {
     dispatch(fetchUser(userId));
+    dispatch(fetchRoles());
+    dispatch(fetchBranches());
   }, [dispatch, userId]);
 
   useEffect(() => {
@@ -290,13 +300,20 @@ function EditUser() {
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
-                        <input
+                        <select
                           className="form-control mt-2"
                           name="branch"
                           id="branch"
-                          value={employeeData?.branch?.name || ""}
-                          onChange={handleChange}
-                        />
+                          value={selectedBranch}
+                          onChange={(e) => setSelectedBranch(e.target.value)}
+                        >
+                          <option value="">Select a branch</option>
+                          {brancheStore?.branches?.items.map((branch) => (
+                            <option key={branch.id} value={branch.id}>
+                              {branch.name}
+                            </option>
+                          ))}
+                        </select>
                       ) : (
                         <span>{employeeData?.branch?.name || ""}</span>
                       )}
@@ -306,7 +323,7 @@ function EditUser() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell className="fw-bold" align="right">
-                      {t("branch")}
+                      branch location
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
@@ -330,13 +347,20 @@ function EditUser() {
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
-                        <input
+                        <select
                           className="form-control mt-2"
                           name="role"
                           id="role"
-                          value={employeeData?.role?.nameEn || ""}
-                          onChange={handleChange}
-                        />
+                          value={selectedRole}
+                          onChange={(e) => setSelectedRole(e.target.value)}
+                        >
+                          <option value="">Select a role</option>
+                          {roles?.roles?.items.map((role) => (
+                            <option key={role.id} value={role.id}>
+                              {role.nameEn}
+                            </option>
+                          ))}
+                        </select>
                       ) : (
                         <span>{employeeData?.role?.nameEn || ""}</span>
                       )}
