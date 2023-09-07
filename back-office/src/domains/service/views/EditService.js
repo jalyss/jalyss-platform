@@ -106,7 +106,7 @@ export default function EditService() {
 
     await axios
       .delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/services/delete-images/${name}`
+        `${process.env.REACT_APP_API_ENDPOINT}/work-spaces/delete-images/${name}`
       )
       .then((res) => {
         if (!res.error) {
