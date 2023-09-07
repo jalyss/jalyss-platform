@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import AddButton from "../../../components/buttons/AddButton";
 
-import "../../../assets/styles/ServiceList.css"; // Import your custom CSS file
+import "../../../assets/styles/ServiceList.css"; 
 
 export default function ServiceList() {
   const dispatch = useDispatch();
