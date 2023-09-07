@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import AddButton from "../../../components/buttons/AddButton";
 
+import "../../../assets/styles/ServiceList.css"; // Import your custom CSS file
 
 export default function ServiceList() {
   const dispatch = useDispatch();
@@ -21,28 +22,25 @@ export default function ServiceList() {
       <Link to="create-service">
         <AddButton content={"Create a new service"} />
       </Link>
-      <div class="card mb-3">
+      <div className="service-list-card">
         {servicesStore.items.map((elem, i) => (
-          <div class="row no-gutters" key={i}>
-            <div class="col-md-4">
-              <img
-                src={elem.cover?.path}
-                class="card-img"
-                alt={elem.cover?.alt}
-              />
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">{elem.name}</h5>
-                <p class="card-text">
-                  {elem.description}
-                </p>
-              </div>
-              <Link to={`service/${elem.id}`}>Go to Details</Link>
-              <div>
-                <Link to={`edit-service/${elem.id}`}>Edit this service</Link>
-              </div>
-         
+          <div className="service-list-card-item" key={i}>
+            <img
+              src={elem.cover?.path}
+              className="service-list-card-img-top"
+              alt={elem.cover?.alt}
+            />
+            <div className="service-list-card-body">
+              <h5 className="service-list-card-title">{elem.name}</h5>
+              <p className="service-list-card-text">{elem.description}</p>
+              <Link to={`service/${elem.id}`} >
+                
+                <AddButton content={"Go to Details"} />
+              </Link>
+              <Link to={`edit-service/${elem.id}`}>
+                
+                <AddButton content={"Edit this service"} />
+              </Link>
             </div>
           </div>
         ))}

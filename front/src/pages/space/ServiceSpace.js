@@ -68,22 +68,6 @@ console.log(service,"serrr");
       ))}
     </Carousel>
 
-        <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} sm={12} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <imageGroup className={classes.imagesGroup}>
-              {service?.MediaService.filter((elem, j) => j % 2 !== 0).map(
-                (item, i) => (
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.media}
-                      image={item.media.path}
-                    />
-                  </Card>
-                )
-              )}
-            </imageGroup>
-          </Grid>
-        </Grid>
         <p className="firstLine">PRICING</p>
         <p className="secondLine">Price per unit</p>
         <p className="thirdLine">
