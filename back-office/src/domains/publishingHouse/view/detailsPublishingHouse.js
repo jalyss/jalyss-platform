@@ -24,6 +24,7 @@ function DetailPublishHouse() {
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     dispatch(fetchPublishingHouse(id));
@@ -48,7 +49,18 @@ function DetailPublishHouse() {
         formData.append("file", selectedFile);
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          formData
+          formData,
+          {
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setUploadProgress(progress);
+              setTimeout(() => {
+                setUploadProgress(0);
+              }, 2000);
+            },
+          }
         );
         body.logoId = response.data.id;
       } catch (error) {
@@ -112,6 +124,15 @@ function DetailPublishHouse() {
                       filter: "blur(0.5px)",
                     }}
                   />
+                  <div>
+                    {uploadProgress > 0 && (
+                      <progress
+                        value={uploadProgress}
+                        max="100"
+                        style={{ width: "300px" }}
+                      />
+                    )}
+                  </div>
                   <div className="position-absolute top-50 start-50 translate-middle">
                     <input
                       type="file"
@@ -167,7 +188,7 @@ function DetailPublishHouse() {
                     </div>
                     <div className="row">
                       <div className="col-2 mb-3 ">
-                        <h6 className="fs-5" >Address :</h6>
+                        <h6 className="fs-5">Address :</h6>
                       </div>
                       <div className="col-4">
                         <p class="card-text">
@@ -283,7 +304,10 @@ function DetailPublishHouse() {
         normal={true}
         ofDelete={!true}
         title={
-          <div style={{width:"200%",marginLeft:"100%"}} className="d-flex justify-content-center align-items-center">
+          <div
+            style={{ width: "200%", marginLeft: "100%" }}
+            className="d-flex justify-content-center align-items-center"
+          >
             Are you sure !
           </div>
         }
