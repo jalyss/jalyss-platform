@@ -28,7 +28,6 @@ export class SearchEngineService {
         cover: true,
         publishingHouse: true,
         category: true,
-
         type: true,
       },
       where: {

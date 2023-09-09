@@ -14,6 +14,7 @@ import { countriesModule } from './domains/country/countries.module';
 import { CitesModule } from './domains/cites/cities.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { ClientsModule } from './domains/client/client.module';
 import { MailModule } from './domains/mail/mail.module';
 import { EmployeeModule } from './domains/employee/employee.module';
 import { BlogsModule } from './domains/blogs/blogs.module';
@@ -60,6 +61,7 @@ import { SearchEngineModule } from './search-engine/search-engine.module';
     EducationLevelsModule,
 
     SearchEngineModule,
+    ClientsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],
