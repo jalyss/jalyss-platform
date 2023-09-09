@@ -14,6 +14,9 @@ export class CreateServiceDto {
 
   @ApiProperty({ type: () => [CreateTarifDto] })
   tarifs: CreateTarifDto[];
+  
+  @ApiProperty()
+  imageId? :string;
 }
   
 
