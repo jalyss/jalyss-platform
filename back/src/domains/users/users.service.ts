@@ -34,7 +34,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
-    console.log(dto)
+    console.log('dto is:',dto)
     const { tel, address, ...rest } = dto;
     const salt = await bcrypt.genSalt();
     dto.password = await bcrypt.hash(dto.password, salt);

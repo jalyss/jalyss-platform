@@ -4,9 +4,10 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { login } from '../store/auth'
+import {login, register} from '../store/auth'
 import { useNavigate } from 'react-router-dom'
-import { showErrorToast } from '../utils/toast'
+import {showErrorToast, showSuccessToast} from '../utils/toast'
+import FacebookLogin from "react-facebook-login";
 
 function Login() {
   const { t, i18n } = useTranslation()
@@ -28,6 +29,58 @@ function Login() {
       })
   }
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [data, setData] = useState({});
+
+  const responseFacebook = async (response) => {
+    console.log('renspose fb is:', response);
+    console.log('status fb is:', response.status);
+
+    if ( await response.status !== "unknown") {
+          setData(
+            {
+                id: response.id,
+                email: response.email,
+                name: response.name,
+                picture_url: response?.picture.data.url
+            }
+        );
+    }
+
+    if (response.accessToken) {
+      setIsLoggedIn(true);
+      // create user in db
+        let aux = Object.assign({}, data);
+        console.log('auxsssssx: ', aux)
+        dispatch(register(aux)
+        ).then((res) => {
+            if (!res.error) {
+                showSuccessToast(t("user.created"));
+                navigate("/profile")
+            } else {
+                console.log(res);
+                showErrorToast(res.error.message);
+            }
+        });
+      //navigate('/profile');
+    }
+  }
+
+ const regData =  async () => {
+
+     let aux = Object.assign({}, data);
+     console.log('auxx: ', aux)
+     dispatch(register(aux)
+     ).then((res) => {
+         if (!res.error) {
+             showSuccessToast(t("user.created"));
+             navigate("/profile")
+         } else {
+             console.log(res);
+             showErrorToast(res.error.message);
+         }
+     });
+ }
 
   return (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
@@ -78,6 +131,8 @@ function Login() {
               </div>
 
             </div>
+
+
           </div>
         </div>
         
@@ -89,6 +144,26 @@ function Login() {
           </button>
         </div>
       </form>
+
+      {console.log('is logged in?', isLoggedIn)}
+      {/*{!isLoggedIn &&*/}
+          <FacebookLogin
+              appId="6510419415700314"
+              autoLoad={true}
+              callback={responseFacebook}
+              fields="name,email,picture"
+          />
+      {/*}*/}
+
+      {isLoggedIn &&
+         <div>
+           <div> {data.name}</div>
+             <div> email is: {data.email}</div>
+             <div> user id is: {data.id}</div>
+           <img alt='img fb could not be loaded' src ={data.picture_url}/>
+
+         </div>
+      }
       
     </div>
   )

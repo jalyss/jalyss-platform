@@ -9,7 +9,7 @@ export const me = createAsyncThunk("auth/me", async () => {
       Authorization: "Bearer " + token,
     },
   };
-  console.log(config);
+  console.log('me config is',config);
   const response = await axios.get(`${config.API_ENDPOINT}/auth/me`, {
     ...configs,
   });
@@ -24,11 +24,14 @@ export const login = createAsyncThunk(
       `${config.API_ENDPOINT}/auth/login`,
       body
     );
+    console.log(response)
     let aux = JSON.stringify(response.data);
+    console.log('aux', aux)
     localStorage.setItem("token", aux);
    ;
    dispatch(me(response.data.Authorization));
 
+   console.log('login is: ', response.data)
     return response.data;
   }
 );
