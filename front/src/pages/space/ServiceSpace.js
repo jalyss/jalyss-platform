@@ -1,13 +1,14 @@
-import React, { useEffect } from "react";
-// import CarouselImages from "../../components/Commun/Carousel";
+import React, { useEffect, useState } from "react"; 
+import { Checkbox, FormControlLabel } from "@mui/material"; 
 import { Link, useParams } from "react-router-dom";
 import { Grid, imageListClasses } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Card, CardMedia, Typography } from "@mui/material";
+import { CardMedia, Typography } from "@mui/material";
 import { fetchService, fetchServices } from "../../store/space";
 import { useDispatch, useSelector } from "react-redux";
-import Carousel from 'react-bootstrap/Carousel'
-
+import Carousel from "react-bootstrap/Carousel";
+import Card from "../../components/Commun/Card";
+import cardCover from "../../img/cardCover.jpg";
 import NavLink from "react-bootstrap/esm/NavLink";
 const useStyles = makeStyles((theme) => ({
   imagesGroup: {
@@ -18,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "40%",
-    
   },
   media: {
     height: 0,
@@ -36,10 +36,14 @@ const useStyles = makeStyles((theme) => ({
 function ServiceSpace() {
   const { serviceIdentifier } = useParams();
   const serviceStore = useSelector((state) => state.service);
-  const { service,services } = serviceStore;
-console.log(service,"serrr");
+  const { service, services } = serviceStore;
+  console.log(service, "serrr");
+
+  const [selectedWorkspace, setSelectedWorkspace] = useState("");
+console.log(selectedWorkspace,"spaceid");
+
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(fetchService(serviceIdentifier));
     dispatch(fetchServices());
@@ -61,13 +65,86 @@ console.log(service,"serrr");
           {service?.name}
         </Typography>
         <Carousel>
-      {service?.MediaService?.map((image) => (
-        <Carousel.Item>
-          <img src={image.media.path} class="d-block w-100 image-carousel "   alt="Wild Landscape"  />
-        </Carousel.Item>
-      ))}
-    </Carousel>
+          {service?.MediaService?.map((image) => (
+            <Carousel.Item>
+              {image.media ? (
+                <img
+                  src={image?.media?.path}
+                  class="d-block w-100 image-carousel "
+                  alt={image?.media?.alt}
+                />
+              ) : null}
+              {/* <img src={image?.media?.path} class="d-block w-100 image-carousel "   alt="Wild Landscape"  /> */}
+            </Carousel.Item>
+          ))}
+        </Carousel>
+        <div className="blogListWrapper">
+          {service?.workSpace?.map((space) => (
+            <div key={space.id}>
+              <div className="blogItemWrapper" style={{ cursor: "pointer" }}>
+                {space?.image ? (
+                  <img
+                    className="blogItemCover"
+                    src={space?.image?.path}
+                    alt="cover"
+                    // onClick={onClick}
+                  />
+                ) : (
+                  <img
+                    className="blogItemCover"
+                    src={cardCover}
+                    alt="cover"
+                    // onClick={onClick}
+                  />
+                )}
+                <div className="chip mt-3">{space?.name}</div>
+                <div className="d-flex flex-column gap-2">
+                  <h5
+                    style={{ marginTop: "20px", marginLeft: "20px", flex: "1" }}
+                  >
+                    {space?.name}
+                  </h5>
+                </div>
+                <div className="blogItemFooter d-flex justify-content-between mt-1">
+                  <div className="d-flex align-items-center">
+                    {/* {avatar && (
+            <img className="blogItemAuthorAvatar" src={space?.image?.path} alt="avatar" />
+          )} */}
+                    <div className="d-flex  justify-content-between gap-5 mt-3">
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">
+                        {" "}
+                      </div>
+                      <div className="d-flex flex-column justify-content-center align-items-center gap-2"></div>
+                    </div>
+                  </div>
+                </div>
+                {/* Display additional information */}
+                <div className="additional-info mt-3">
+                  <div>
+                    <strong>Amenities:</strong> {space.amenities}
+                  </div>
+                  <div>
+                    <strong>Capacity:</strong> {space.capacity}
+                  </div>
+                  {/* <div><strong>Created At:</strong> {space.createdAt}</div> */}
+                  <div>
+                      <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={selectedWorkspace === space.id}
+                          onChange={() => setSelectedWorkspace(space.id)}
+                        />
+                      }
+                      label="Select"
+                    />
+            </div>
+                </div>
+              </div>
+            </div>
 
+          ))}
+
+        </div>
         <p className="firstLine">PRICING</p>
         <p className="secondLine">Price per unit</p>
         <p className="thirdLine">
@@ -77,7 +154,7 @@ console.log(service,"serrr");
           can further customize your experience.
         </p>
         <p className="fourthLine">
-         To grow your business in a setting that is both professional and
+          To grow your business in a setting that is both professional and
           social, reserve a spot in one of our coworking spaces.
         </p>
         <div className="d-flex flex-wrap justify-content-between align-items-center">
@@ -92,7 +169,7 @@ console.log(service,"serrr");
               >
                 <div className="card-body service">
                   <h1 className="card-title serviceType">{item.name}</h1>
-                 < div className="price">
+                  <div className="price">
                     Only <a className="priceNumber"> {item.price}</a>DT
                     <p className="soustitle">Capacity: {item.capacity}</p>
                   </div>
@@ -113,11 +190,11 @@ console.log(service,"serrr");
                       backgroundColor: "rgb(144, 48, 152)",
                       borderRadius: 30,
                       color: "black",
-                      borderColor: "white"
+                      borderColor: "white",
                     }}
                   >
                     <Link
-                      to={`/SpaceReservation/${item?.id}`}
+                      to={`/SpaceReservation/${item?.id}/${selectedWorkspace}`}
                       style={{ textDecoration: "none", color: "white" }}
                     >
                       Reserve
@@ -166,7 +243,9 @@ console.log(service,"serrr");
                   }}
                 >
                   <div className="card-body  ">
-                    <h5 className="card-title" style={{marginLeft: 25,}}>{elem.name}</h5>
+                    <h5 className="card-title" style={{ marginLeft: 25 }}>
+                      {elem.name}
+                    </h5>
                     <button
                       className="btn "
                       style={{
@@ -175,11 +254,11 @@ console.log(service,"serrr");
                         backgroundColor: "rgb(144, 48, 152)",
                         borderRadius: 30,
                         color: "black",
-                        borderColor: "white"
+                        borderColor: "white",
                       }}
                     >
                       <Link
-                        href={`/spaceJalyss/${elem?.identifier}`}
+                        href={`/spaceJalyss/${elem?.identifier}/${selectedWorkspace}`}
                         style={{ textDecoration: "none", color: "white" }}
                       >
                         {" "}

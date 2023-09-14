@@ -12,6 +12,7 @@ export default function EditService() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { serviceId } = useParams();
+  const [mediaId, setMediaId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [filename, setFileName] = useState("");
@@ -26,8 +27,8 @@ export default function EditService() {
 
   const service = useSelector((state) => state.service.service);
 
-
-
+console.log(service,"ser")
+console.log(mediaId,"mediaid");
 
   useEffect(() => {
     dispatch(fetchServiceById(serviceId));
@@ -100,23 +101,53 @@ export default function EditService() {
       });
   };
 
-  const deleteImg = async (path) => {
-    const pathElements = path.split("/");
-    const name = pathElements[pathElements.length - 1];
+  const deleteImg = async () => {
+    // const pathElements = path.split("/");
+    // const name = pathElements[pathElements.length - 1];
 
     await axios
       .delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/work-spaces/delete-images/${name}`
+        `${process.env.REACT_APP_API_ENDPOINT}/images/${serviceId}/${mediaId}`
       )
       .then((res) => {
         if (!res.error) {
-          window.location.reload();
+          window.location.reload(); 
           showSuccessToast("image deleted");
         } else {
           showErrorToast(res.error);
         }
-      });
+      }); 
   };
+
+
+  // const deleteImg = async (id) => {
+  //   try {
+  //     // Make an API request to delete the image by its id
+  //     await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/${id}`);
+  
+  //     // Update the state to remove the deleted image
+  //     const updatedMedia = service.MediaService.filter(
+  //       (elem) => elem.media.id !== id
+  //     );
+  
+  //     // Update the service object
+  //     const updatedService = { ...service };
+  //     updatedService.MediaService = updatedMedia;
+  
+  //     // Update the Redux state or local state if needed
+  //     // dispatch(updateService(updatedService)); // You may need to dispatch an action to update the state
+  
+  //     // Show a success toast
+  //     showSuccessToast("Image deleted");
+  
+  //     // Optionally, you can refresh the component or rerender
+  //     // setRefresh(!refresh);
+  //   } catch (error) {
+  //     console.error("Error deleting image:", error);
+  //     // Show an error toast
+  //     showErrorToast("Error deleting image");
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -232,7 +263,7 @@ export default function EditService() {
           <img alt="" src={elem.media.path} style={{ height: 100 }} />
           <div className="deleteButton">
             <AddButton
-              onClick={() => deleteImg(elem.media.path)}
+              onClick={() => {setMediaId(elem.media.id) ; deleteImg()}}
               content={<AiFillDelete />}
               startIcon
               />

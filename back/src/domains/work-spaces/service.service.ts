@@ -99,5 +99,13 @@ export class ServiceService {
       })),
     });
   }
+  async removeImage(serviceId:string ,mediaId: string){
+    return await this.prisma.mediaService.delete({
+      where:{
+        serviceMedia:{mediaId, serviceId}
+      }
+    })
+  }
+
 }  
 

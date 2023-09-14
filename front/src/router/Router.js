@@ -111,7 +111,7 @@ function Router() {
             <Route path="sessions/:sessionId" element={<SessionDetails />} />
 
             <Route path="RegisterForm" element={<RegisterForm />} />
-            <Route path="SpaceReservation/:tarifId" element={<SpaceReservation />} />
+            <Route path="SpaceReservation/:tarifId/workSpaceId" element={<SpaceReservation />} />
           </Route>
         </Routes>
       </BrowserRouter>
