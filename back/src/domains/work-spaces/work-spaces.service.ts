@@ -15,7 +15,15 @@ export class WorkSpacesService {
 
   findAll() {
     return this.prisma.workSpace.findMany({
-      include: { MediaWorkSpace: true },
+      include: { 
+        image: true,
+        MediaWorkSpace:{
+          include:{
+            media:true
+
+          }
+          }
+         },
     });
   }
 

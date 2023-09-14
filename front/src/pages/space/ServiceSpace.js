@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react"; 
-import { Checkbox, FormControlLabel } from "@mui/material"; 
+import React, { useEffect, useState } from "react";
+import { Checkbox, FormControlLabel } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { Grid, imageListClasses } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -40,7 +40,7 @@ function ServiceSpace() {
   console.log(service, "serrr");
 
   const [selectedWorkspace, setSelectedWorkspace] = useState("");
-console.log(selectedWorkspace,"spaceid");
+  console.log(selectedWorkspace, "spaceid");
 
   const dispatch = useDispatch();
 
@@ -74,7 +74,6 @@ console.log(selectedWorkspace,"spaceid");
                   alt={image?.media?.alt}
                 />
               ) : null}
-              {/* <img src={image?.media?.path} class="d-block w-100 image-carousel "   alt="Wild Landscape"  /> */}
             </Carousel.Item>
           ))}
         </Carousel>
@@ -98,37 +97,47 @@ console.log(selectedWorkspace,"spaceid");
                   />
                 )}
                 <div className="chip mt-3">{space?.name}</div>
-                <div className="d-flex flex-column gap-2">
+                {/* <div className="d-flex flex-column gap-2">
                   <h5
                     style={{ marginTop: "20px", marginLeft: "20px", flex: "1" }}
                   >
                     {space?.name}
                   </h5>
-                </div>
+                </div> */}
                 <div className="blogItemFooter d-flex justify-content-between mt-1">
-                  <div className="d-flex align-items-center">
-                    {/* {avatar && (
-            <img className="blogItemAuthorAvatar" src={space?.image?.path} alt="avatar" />
-          )} */}
-                    <div className="d-flex  justify-content-between gap-5 mt-3">
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">
-                        {" "}
-                      </div>
-                      <div className="d-flex flex-column justify-content-center align-items-center gap-2"></div>
+                  <div className="d-flex flex-column">
+                    <div>
+                      <strong>Amenities:</strong> {space?.amenities}
+                    </div>
+                    <div>
+                      <strong>Capacity:</strong> {space?.capacity}
+                    </div>
+                    <div>
+                      <strong>Description:</strong> {space?.description}
+                    </div>
+                  </div>
+
+                  <div className="d-flex  justify-content-between gap-5 mt-3">
+                    <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">
+                      {/* Add your content here */}
+                    </div>
+                    <div className="d-flex flex-column justify-content-center align-items-center gap-2">
+                      {/* Add your content here */}
                     </div>
                   </div>
                 </div>
                 {/* Display additional information */}
-                <div className="additional-info mt-3">
-                  <div>
-                    <strong>Amenities:</strong> {space.amenities}
-                  </div>
-                  <div>
-                    <strong>Capacity:</strong> {space.capacity}
-                  </div>
-                  {/* <div><strong>Created At:</strong> {space.createdAt}</div> */}
-                  <div>
-                      <FormControlLabel
+
+                <div
+                  className="additional-info mt-3"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <div style={{ marginRight: "10px" }}>
+                    <FormControlLabel
                       control={
                         <Checkbox
                           checked={selectedWorkspace === space.id}
@@ -137,14 +146,13 @@ console.log(selectedWorkspace,"spaceid");
                       }
                       label="Select"
                     />
-            </div>
+                  </div>
                 </div>
               </div>
             </div>
-
           ))}
-
         </div>
+
         <p className="firstLine">PRICING</p>
         <p className="secondLine">Price per unit</p>
         <p className="thirdLine">

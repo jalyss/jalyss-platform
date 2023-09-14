@@ -37,7 +37,12 @@ export class ServiceService {
         OR: [{ id }, { identifier: id }],
       },
       include: {
-        workSpace: { include: { image: true } },
+        workSpace: {
+          include: {
+            image: true,
+            MediaWorkSpace: { include: { media: true } },
+          },
+        },
         tarif: true,
         MediaService: { include: { media: true } },
         cover: true,
