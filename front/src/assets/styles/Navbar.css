@@ -3,3 +3,9 @@
     width: 43px;
     height: 43px;
   }
+
+  @media screen and (max-width: 609px) {
+    input.form-control.form-control-sm.ml-4.w-125 {
+      margin-right:190px;
+    }
+  }
