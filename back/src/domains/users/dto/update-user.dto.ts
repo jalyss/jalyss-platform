@@ -29,6 +29,10 @@ export class UpdateUserDto {
     @ApiProperty({ required: false })
     countryId?: string
     @ApiProperty({ required: false })
+    client?: string
+    @ApiProperty({ required: false })
+    employee?: string
+    @ApiProperty({ required: false })
     clientId?: string
     @ApiProperty({ required: false })
     employeeId?: string
@@ -38,7 +42,9 @@ export class UpdateUserDto {
     branchId?: string
     @ApiProperty({ required: false })
     roleId?: string
-}
+    @ApiProperty({ required: false })
+    isClient: boolean;
+}  
 export class UpdateUserStatusDto {
     @ApiProperty({required:true})
     isActive!: boolean

@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import CropEasy from "../../../components/CropEasy";
 import { fetchRoles } from "../../../store/role";
 import { fetchBranches } from "../../../store/branche";
+
 function EditUser() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -26,11 +27,9 @@ function EditUser() {
   const roles = useSelector((state) => state.role);
   const brancheStore = useSelector((state) => state.branche);
 
-  const [selectedRole, setSelectedRole] = useState(""); 
-  const [selectedBranch, setSelectedBranch] = useState(""); 
-
-
-  console.log(brancheStore, "brancheStore");
+  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState("");
+  console.log(selectedBranch, "selectedBranch");
   useEffect(() => {
     dispatch(fetchUser(userId));
     dispatch(fetchRoles());
@@ -44,20 +43,50 @@ function EditUser() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    if (user.isClient) {
-      setUser((prevUser) => ({
-        ...prevUser,
-        isClient: type === "checkbox" ? checked : value,
-      }));
-    } else {
-      setUser((prevUser) => ({
-        ...prevUser,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    }
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
+
+  const submitEditProfile = async (event) => {
+    event.preventDefault();
+
+    if (editMode) {
+      let aux = { ...user };
+
+      if (avatar !== null) {
+        const image = new FormData();
+        image.append("file", avatar);
+
+        try {
+          const response = await fetch(
+            `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+            {
+              method: "POST",
+              body: image,
+            }
+          );
+
+          if (response) {
+            const responseData = await response.json();
+            aux.avatarId = responseData.id;
+          } else {
+            console.error("Error uploading image");
+          }
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
+      }
+
+      dispatch(editUser(aux));
+      console.log(aux, "aux");
+    }
+
     setEditMode(!editMode);
   };
 
@@ -67,10 +96,10 @@ function EditUser() {
     setOpenCrop(true);
     setAvatar(file);
   };
-  console.log(userStore.user, "userStore");
+
   const renderImageUpload = () => (
     <div className="image-upload">
-      <img src={preview || user?.avatar?.path} alt="taswira" />
+      <img src={preview || user?.avatar?.path} alt="avatar" />
       {editMode && (
         <input
           id="image"
@@ -379,24 +408,20 @@ function EditUser() {
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Profile User</h2>
 
-      <form className="checkout-form" onSubmit={handleChange}>
+      <form className="checkout-form" onSubmit={submitEditProfile}>
         <div className="d-flex flex-wrap justify-content-center">
           {renderImageUpload()}
           {renderUserData()}
         </div>
-      </form>
 
-      <div className="w-100 d-flex justify-content-center mt-3">
-        <button
-          type="button"
-          className="confirm-button"
-          onClick={toggleEditMode}
-        >
-          <span className="label-btn">
-            {editMode ? "Exit Edit Mode" : "Enter Edit Mode"}
-          </span>
-        </button>
-      </div>
+        <div className="w-100 d-flex justify-content-center mt-3">
+          <button type="submit" className="confirm-button">
+            <span className="label-btn">
+              {editMode ? "Save Changes" : "Edit Profile"}
+            </span>
+          </button>
+        </div>
+      </form>
     </div>
   ) : (
     <CropEasy {...{ preview, setOpenCrop, setPreview, setAvatar, avatar }} />

@@ -55,15 +55,7 @@ function Invoice() {
           rel="stylesheet"
         />
         <div class="page-content container">
-          <div class="page-header text-blue-d2">
-            <h1 class="page-title text-secondary-d1">
-              Invoice
-              <small class="page-info">
-                <i class="fa fa-angle-double-right text-80"></i>
-                ID: #wassimoo
-              </small>
-            </h1>
-          </div>
+        
           <div class="container px-0">
             <div class="row mt-4">
               <div class="col-12 col-lg-12">
