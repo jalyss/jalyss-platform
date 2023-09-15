@@ -93,7 +93,7 @@ import Types from "../domains/training/views/sessions/Types";
 
 import Newsession from "../domains/training/views/sessions/Newsession";
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
-// import Types from "../domains/type/Types";
+
 import TypesList from "../domains/type/views/TypesList";
 import EditType from "../domains/type/views/EditType";
 import DetailType from "../domains/type/views/DetailType";
@@ -124,6 +124,7 @@ import  Clientlist from "../../src/domains/Client/views/Clientlist"
 import Client from "../domains/Client/Client";
 import Addclient from "../domains/Client/views/Addclient";
 import Profileclient from "../domains/Client/views/Profileclient";
+import TypeArticle from "../domains/type/TypeArticle";
 
 
 function Router() {
@@ -229,11 +230,12 @@ function Router() {
               <Route path="create" element={<CreateAuthor />} />
             </Route>
 
-            <Route path="type" element={<Types />}>
+            <Route path="type-article" element={<TypeArticle />}>
               <Route index element={<TypesList />} />
+              <Route path="create" element={<CreateType />} />
               <Route path="edit/:typeId" element={<EditType />} />
               <Route path="detail/:typeId" element={<DetailType />} />
-              <Route path="create" element={<CreateType />} />
+             
             </Route> 
              <Route path="Branche" element={<Branches />}>
               <Route index element={<BrancheList />} />
@@ -247,8 +249,8 @@ function Router() {
 
             <Route path="role" element={<Role />}>
               <Route index element={<RolesList />} />
-              <Route path="edit/:roleId" element={<EditRole />} />
-              <Route path="detail/:roleId" element={<DetailRole />} />
+              <Route path="edit/:id" element={<EditRole />} />
+              <Route path="detail/:id" element={<DetailRole />} />
               <Route path="create" element={<CreateRole />} />
             </Route>
 

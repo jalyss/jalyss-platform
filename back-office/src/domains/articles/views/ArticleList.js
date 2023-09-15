@@ -6,11 +6,11 @@ import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
 import isEnglish from "../../../helpers/isEnglish";
 import { useNavigate } from "react-router-dom";
-import { AiFillEdit ,AiOutlineEye ,AiFillDelete } from "react-icons/ai";
+import { AiFillEdit, AiOutlineEye, AiFillDelete } from "react-icons/ai";
 import { IoIosPersonAdd } from "react-icons/io";
 import Modal from "../../../components/Commun/Modal";
 
-import { fetchArticles , removeArticle} from "../../../store/article";
+import { fetchArticles, removeArticle } from "../../../store/article";
 
 function ArticleList() {
   const articleStore = useSelector((state) => state.article);
@@ -25,15 +25,14 @@ function ArticleList() {
   };
 
   const handleDeleteArticleClick = () => {
-   
-    dispatch(removeArticle(selectedArticleId)).then(res => {
+    dispatch(removeArticle(selectedArticleId)).then((res) => {
       if (res.error) {
-        showErrorToast(res.error.message)
+        showErrorToast(res.error.message);
       } else {
-        showSuccessToast('Article has been deleted')
-        toggleShow()
+        showSuccessToast("Article has been deleted");
+        toggleShow();
       }
-    }) 
+    });
   };
   useEffect(() => {
     dispatch(fetchArticles());
@@ -46,8 +45,6 @@ function ArticleList() {
           category: e?.category?.nameEn,
           publishingHouse: e?.publishingHouse?.name,
           type: e?.type?.nameEn,
-        
-         
         };
       });
       console.log(aux);
@@ -57,7 +54,6 @@ function ArticleList() {
   console.log(articleStore.articles.items);
 
   const columns = [
-    
     {
       field: "title",
       headerName: "Title",
@@ -103,7 +99,7 @@ function ArticleList() {
       width: 120,
       sortable: false,
     },
-    
+
     {
       field: "category",
       headerName: "category ",
@@ -116,7 +112,7 @@ function ArticleList() {
       width: 120,
       sortable: false,
     },
-    
+
     {
       field: "actions",
       type: "actions",
@@ -125,13 +121,6 @@ function ArticleList() {
       cellClassName: "actions",
       getActions: ({ id }) => {
         return [
-          <GridActionsCellItem
-            icon={<AiFillEdit />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => navigate(`editArticle/${id}`)}
-            color="inherit"
-          />,
           <GridActionsCellItem
             icon={<AiOutlineEye />}
             label="Add"
@@ -184,12 +173,12 @@ function ArticleList() {
           />
         </Box>
         <Modal
-            bodOfDelete="Are you sure you want to delete this article?"
-            basicModal={basicModal}
-            ofDelete={true}
-            toggleShow={toggleShow}
-            confirm={() => handleDeleteArticleClick()}
-          />
+          bodOfDelete="Are you sure you want to delete this article?"
+          basicModal={basicModal}
+          ofDelete={true}
+          toggleShow={toggleShow}
+          confirm={() => handleDeleteArticleClick()}
+        />
       </div>
     </div>
   );

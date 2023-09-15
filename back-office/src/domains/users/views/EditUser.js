@@ -30,6 +30,7 @@ function EditUser() {
   const [preview, setPreview] = useState(null);
   const [openCrop, setOpenCrop] = useState(false);
   const [opp, setOpp] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const userStore = useSelector((state) => state.user);
 
@@ -61,7 +62,17 @@ function EditUser() {
         image.append("file", avatar);
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          image
+          image,{
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setUploadProgress(progress);
+              setTimeout(() => {
+                setUploadProgress(0);
+              }, 2000);
+            },
+          }
         );
 
         console.log("yraje3", response.data);
@@ -98,6 +109,15 @@ function EditUser() {
           {/* <label id="image">{t('image')}</label> */}
           <div className="image-upload">
             <img src={preview ? preview : user?.avatar?.path} alt="taswira" />
+            <div>
+                  {uploadProgress > 0 && (
+                    <progress
+                      value={uploadProgress}
+                      max="100"
+                      style={{ width: "300px" }}
+                    />
+                  )}
+                </div>
             {editMode && (
               <input
                 id="image"
