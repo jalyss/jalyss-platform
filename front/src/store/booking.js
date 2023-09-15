@@ -10,20 +10,19 @@ export const fetchBookings = createAsyncThunk("bookings/bookings", async () => {
     },
   }
   const response = await axios.get(`${config.API_ENDPOINT}/bookings`,{...configs});
- 
   return response.data;
-
-
 });
 
-export const fetchspaceBookingByUserId = createAsyncThunk("bookings/bookings", async (userId) => {
+// export const fetchspaceBookingByUserId = createAsyncThunk("booking/bookings", async (userId) => {
+//   const response = await axios.get(`${config.API_ENDPOINT}/bookings/one/${userId}`);
+//  console.log('response.data',response.data)
+//   return response.data;
+// });
+
+
+export const fetchBooking= createAsyncThunk("bookings/booking", async (userId) => {
   const response = await axios.get(`${config.API_ENDPOINT}/bookings/one/${userId}`);
-  return response.data;
-});
-
-
-export const fetchBooking = createAsyncThunk("bookings/booking", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/bookings/${id}`)
+  console.log('response.data',response.data)
   return response.data;
 });
 

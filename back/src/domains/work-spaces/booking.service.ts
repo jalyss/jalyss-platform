@@ -32,12 +32,20 @@ export class BookingService {
       where: {
         userId,
       },
-        include:{tarif:true }
+        include:{
+          tarif:true,
+          user: {
+            include:
+            {
+              client: true
+            },
+          },
+        }
     });
   }
 
   async update(id: string, dto: UpdateBookingDto) {
-    return await this.prisma.booking.update({ where:{ id }, data: dto });
+    return await this.prisma.booking.update({ where: { id }, data: dto });
   }
 
   async remove(id: string) {

@@ -31,8 +31,8 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
     
   
     @Get('one/:userId')
-    findOne(@Param(':userId') userId: string) {
-      return this.bookingService.findOne(userId);
+    findOne(@Param(':userId') userId: string ){
+      return this.bookingService.findOne(userId ); 
     }
     
   

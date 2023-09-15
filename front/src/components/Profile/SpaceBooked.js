@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchServices } from '../../store/space';
+
 import { useNavigate, useParams } from 'react-router-dom';
 import Card from '../Commun/Card';
-import {fetchspaceBookingByUserId } from '../../store/booking';
+import {fetchBooking} from '../../store/booking';
 
 
 
 const SpaceBooked = () => {
-  const bookingstore = useSelector((state) => state.booking.bookings.items)
+  const bookingstore = useSelector((state) => state.booking.booking)
 
   const dispatch = useDispatch();
   const[data,setdata]=useState([])
   const {userId} = useParams();
 
   useEffect(() => {
-    dispatch(fetchspaceBookingByUserId(userId))
-  }, [userId]);
+    dispatch( fetchBooking(userId))
+  }, [dispatch]);
 
   console.log(userId)
   useEffect(() => {
     setdata([bookingstore])
   },[userId]); 
+  
 
  console.log('eeeee',data)
 
-  console.log('heee',bookingstore)
+  console.log('bookingstore',bookingstore)
 
   return (
     <div className="card" style={{ maxheight: "250px", maxWidth: "300px"}}  >
@@ -42,7 +43,7 @@ const SpaceBooked = () => {
 
   
       <h5 className="card-title" style={{ color: 'purple', marginBottom: 0 }}>Company:</h5>
-      <h6 className="card-title">{el.companyName}</h6>
+      <h6 className="card-title">{el?.companyName}</h6>
     
 
       <h5 className="card-title" style={{ color: 'purple', marginBottom: 0 }}>Tarif Description:</h5>
@@ -51,16 +52,16 @@ const SpaceBooked = () => {
   
   
       <h5 className="card-title" style={{ color: 'purple', marginBottom: 0 }}>Free Space:</h5>
-      <h6 className="card-title">{el.freeSpace}</h6>
+      <h6 className="card-title">{el?.freeSpace}</h6>
   
       </div>
 
   <ul className="list-group list-group-flush">
     <li className="list-group-item">
     <div className="d-flex justify-content-between align-items-center">
-    <span>Start Time: {el.startTime}</span>
+    <span>Start Time: {el?.startTime}</span>
     
-    <span>End Time: {el.endTime}</span> 
+    <span>End Time: {el?.endTime}</span> 
     </div>
     </li>
     <li className="list-group-item">
