@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, FormControlLabel } from "@mui/material";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import { Link, useParams } from "react-router-dom";
-import { Grid, imageListClasses } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { useNavigate } from "react-router-dom";
 import { CardMedia, Typography } from "@mui/material";
-import { fetchService, fetchServices } from "../../store/space";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchService, fetchServices } from "../../store/service";
 import Carousel from "react-bootstrap/Carousel";
-import Card from "../../components/Commun/Card";
 import cardCover from "../../img/cardCover.jpg";
-import NavLink from "react-bootstrap/esm/NavLink";
 const useStyles = makeStyles((theme) => ({
   imagesGroup: {
     display: "flex",
@@ -42,6 +41,7 @@ function ServiceSpace() {
   const [selectedWorkspace, setSelectedWorkspace] = useState("");
   console.log(selectedWorkspace, "spaceid");
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -77,6 +77,9 @@ function ServiceSpace() {
             </Carousel.Item>
           ))}
         </Carousel>
+
+        <p className="secondLine">CHOOSE ONE OF OUR WORKSPACES </p>
+
         <div className="blogListWrapper">
           {service?.workSpace?.map((space) => (
             <div key={space.id}>
@@ -86,26 +89,19 @@ function ServiceSpace() {
                     className="blogItemCover"
                     src={space?.image?.path}
                     alt="cover"
-                    // onClick={onClick}
+                    onClick={() => navigate(`spaceJalyss/${space.id}`)}
                   />
                 ) : (
                   <img
                     className="blogItemCover"
                     src={cardCover}
                     alt="cover"
-                    // onClick={onClick}
+                    onClick={() => navigate(`spaceJalyss/${space.id}`)}
                   />
                 )}
-                <div className="chip mt-3">{space?.name}</div>
-                {/* <div className="d-flex flex-column gap-2">
-                  <h5
-                    style={{ marginTop: "20px", marginLeft: "20px", flex: "1" }}
-                  >
-                    {space?.name}
-                  </h5>
-                </div> */}
-                <div className="blogItemFooter d-flex justify-content-between mt-1">
-                  <div className="d-flex flex-column">
+                <div className="chip mt-3" onClick={() => navigate(`spaceJalyss/${space.id}`)} >{space?.name}</div>
+                <div className="blogItemFooter d-flex justify-content-between mt-1" onClick={() => navigate(`spaceJalyss/${space.id}`)}>
+                  <div className="d-flex flex-column" >
                     <div>
                       <strong>Amenities:</strong> {space?.amenities}
                     </div>
@@ -116,17 +112,7 @@ function ServiceSpace() {
                       <strong>Description:</strong> {space?.description}
                     </div>
                   </div>
-
-                  <div className="d-flex  justify-content-between gap-5 mt-3">
-                    <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">
-                      {/* Add your content here */}
-                    </div>
-                    <div className="d-flex flex-column justify-content-center align-items-center gap-2">
-                      {/* Add your content here */}
-                    </div>
-                  </div>
                 </div>
-                {/* Display additional information */}
 
                 <div
                   className="additional-info mt-3"
@@ -144,7 +130,7 @@ function ServiceSpace() {
                           onChange={() => setSelectedWorkspace(space.id)}
                         />
                       }
-                      label="Select"
+                      label="Choose"
                     />
                   </div>
                 </div>
@@ -185,29 +171,47 @@ function ServiceSpace() {
                     {item.description.split(",").map((desc, i) => (
                       <span key={i}>
                         {desc}
-                        <br /> {/* Add a line break */}
+                        <br />
                       </span>
                     ))}
                   </p>
-
-                  <button
-                    className="btn "
-                    style={{
-                      width: 200,
-                      marginLeft: 25,
-                      backgroundColor: "rgb(144, 48, 152)",
-                      borderRadius: 30,
-                      color: "black",
-                      borderColor: "white",
-                    }}
-                  >
-                    <Link
-                      to={`/SpaceReservation/${item?.id}/${selectedWorkspace}`}
-                      style={{ textDecoration: "none", color: "white" }}
+                  {selectedWorkspace !== "" ? (
+                    <button
+                      className="btn"
+                      style={{
+                        width: 200,
+                        marginLeft: 25,
+                        backgroundColor: "rgb(144, 48, 152)",
+                        borderRadius: 30,
+                        color: "white",
+                        borderColor: "white",
+                      }}
+                    >
+                      <Link
+                        to={`/SpaceReservation/${item?.id}/${selectedWorkspace}`}
+                        style={{ textDecoration: "none", color: "white" }}
+                      >
+                        Reserve
+                      </Link>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn"
+                      style={{
+                        width: 200,
+                        marginLeft: 25,
+                        backgroundColor: "rgb(144, 48, 152)",
+                        borderRadius: 30,
+                        color: "white",
+                        borderColor: "white",
+                      }}
+                      onClick={() => {
+                        showErrorToast("Please select a space.");
+                      }}
                     >
                       Reserve
-                    </Link>
-                  </button>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -226,7 +230,7 @@ function ServiceSpace() {
         </p>
 
         <div className="d-flex flex-wrap justify-content-center align-items-center ">
-          {services.items
+          {services?.items
             .filter((item) => item.identifier !== serviceIdentifier)
             .map((elem, i) => (
               <div className="col-md-2.5 mx-1" key={i}>

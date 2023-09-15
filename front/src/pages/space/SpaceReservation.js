@@ -3,7 +3,7 @@ import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import { useNavigate,useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { fetchService } from "../../store/space";
+import { fetchService } from "../../store/service";
 import { createBooking } from "../../store/booking";
 import { updateFormData } from "../forms/reducers";
 import {
