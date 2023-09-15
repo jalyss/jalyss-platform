@@ -49,7 +49,7 @@ function Blogs() {
   const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
-  console.log(me.client.isCoach, "ttttttt")
+  console.log(me, "ttttttt")
   const take = 6;
 
   const greeting = {
@@ -137,7 +137,7 @@ function Blogs() {
                         Explore &#9654;
                       </div>
                     </button>
-                    {me?.client.isCoach && (
+                    {me?.isCoach && (
                       <button
                         type="button"
                         className="btn btn-outline-danger"
@@ -147,32 +147,13 @@ function Blogs() {
                           marginLeft: "20px",
                         }}
                         onClick={() => {
-                          navigate("/BlogsForm");
+                          if (me) navigate("/BlogsForm");
+                          else navigate("/login");
                         }}
                       >
                         Write yours
                       </button>
                     )}
-
-                    {/* <button
-
-                      type="button"
-                      className="btn btn-outline-danger"
-                      style={{
-                        height: "50px",
-                        width: "172px",
-                        marginLeft: "20px",
-                      }}
-                      onClick={() => {
-                        if (me?.client.isCoach) navigate("/BlogsForm");
-                        else navigate("/login");
-                      }
-                      
-                    }
-                    disabled={!me?.client.isCoach} 
-                    >
-                      Write yours
-                    </button> */}
                   </div>
                 </div>
               </div>
