@@ -112,7 +112,7 @@ function Router() {
 
             <Route path="RegisterForm" element={<RegisterForm />} />
             <Route path="SpaceReservation/:tarifId/:workSpaceId" element={<SpaceReservation />} />
-            <Route path="spaceJalyss/:workSpaceId" element={<WorkSpaceDetail />} />
+            <Route path="/:workspaceId" element={<WorkSpaceDetail />} />
           </Route>
         </Routes>
       </BrowserRouter>

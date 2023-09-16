@@ -89,19 +89,19 @@ function ServiceSpace() {
                     className="blogItemCover"
                     src={space?.image?.path}
                     alt="cover"
-                    onClick={() => navigate(`spaceJalyss/${space.id}`)}
+                    onClick={() => navigate(`/${space.id}`)}
                   />
                 ) : (
                   <img
                     className="blogItemCover"
                     src={cardCover}
                     alt="cover"
-                    onClick={() => navigate(`spaceJalyss/${space.id}`)}
+                    onClick={() => navigate(`/${space.id}`)}
                   />
                 )}
-                <div className="chip mt-3" onClick={() => navigate(`spaceJalyss/${space.id}`)} >{space?.name}</div>
-                <div className="blogItemFooter d-flex justify-content-between mt-1" onClick={() => navigate(`spaceJalyss/${space.id}`)}>
-                  <div className="d-flex flex-column" >
+                <div className="chip mt-3" onClick={() => navigate(`/${space.id}`)} >{space?.name}</div>
+                <div className="blogItemFooter d-flex justify-content-between mt-1" onClick={() => navigate(`/${space.id}`)}>
+                  <div className="d-flex flex-column" onClick={() => navigate(`/${space.id}`)}>
                     <div>
                       <strong>Amenities:</strong> {space?.amenities}
                     </div>

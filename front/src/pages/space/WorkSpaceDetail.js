@@ -7,31 +7,33 @@ import { fetchSpaceById } from "../../store/space";
 
 export default function WorkSpaceDetail() {
   const dispatch = useDispatch();
-  const { workSpaceId } = useParams();
+  const { workspaceId } = useParams();
+
+  console.log(workspaceId,"work");
 
   const space = useSelector((state) => state.space.space);
   const [refresh, setRefresh] = useState(false);
 
-  console.log(space, 'space');
+
 
   useEffect(() => {
-    dispatch(fetchSpaceById(workSpaceId));
-  }, [dispatch, workSpaceId, refresh]);
+    dispatch(fetchSpaceById(workspaceId));
+  }, [dispatch, workspaceId, refresh]);
 
   const navigate = useNavigate();
 
   return (
-    <div className="view">
+    <div className="d-flex flex-column align-items-center">
       <div className="card mb-3">
         {space?.image ? (
           <img
-            className="card-img-top"
+            className="blogItemCover"
             src={space?.image?.path}
             alt={space?.image?.alt}
           />
         ) : (
           <img
-            className="spaceImage"
+            className="blogItemCover"
             src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
             alt="cover"
           />
