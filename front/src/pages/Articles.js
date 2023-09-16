@@ -21,7 +21,9 @@ import { BsFilterSquare } from "react-icons/bs";
 import "rc-tooltip/assets/bootstrap.css";
 import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
 import "rc-slider/assets/index.css";
-import {groupBy, isEmpty, map } from "lodash";
+import { groupBy, isEmpty, map } from "lodash";
+import FormatListBulleted from "@mui/icons-material/FormatListBulleted";
+import { Apps, AppsRounded } from "@mui/icons-material";
 
 function Articles() {
   const dispatch = useDispatch();
@@ -80,6 +82,7 @@ function Articles() {
   console.log(containerRef, "yalaa");
   const Filters = () => {
     return (
+      
       <div className="filters">
         <Accordion
           title={t("filter.category")}
@@ -94,15 +97,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            categories: [...Filter.categories, element.id],
-                          }))
+                          ...Filter,
+                          categories: [...Filter.categories, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            categories: Filter.categories.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          categories: Filter.categories.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.categories.includes(element.id)}
                   />
@@ -127,15 +130,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            articleTypes: [...Filter.articleTypes, element.id],
-                          }))
+                          ...Filter,
+                          articleTypes: [...Filter.articleTypes, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            articleTypes: Filter.articleTypes.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          articleTypes: Filter.articleTypes.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.articleTypes.includes(element.id)}
                   />
@@ -160,18 +163,18 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            publishingHouses: [
-                              ...Filter.publishingHouses,
-                              element.id,
-                            ],
-                          }))
+                          ...Filter,
+                          publishingHouses: [
+                            ...Filter.publishingHouses,
+                            element.id,
+                          ],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            publishingHouses: Filter.publishingHouses.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          publishingHouses: Filter.publishingHouses.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.publishingHouses.includes(element.id)}
                   />
@@ -194,15 +197,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            authors: [...Filter.authors, element.id],
-                          }))
+                          ...Filter,
+                          authors: [...Filter.authors, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            authors: Filter.authors.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          authors: Filter.authors.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.authors.includes(element.id)}
                   />
@@ -234,11 +237,13 @@ function Articles() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
+      
         <div className="filters-button">
-          <BsFilterSquare onClick={() => setShowFilters(true)} />
+          <button className="Bfilter" onClick={() => setShowFilters(true)} >Filter</button>
+
         </div>
       </div>
-
+      
       <Offcanvas
         show={showFilters}
         placement="end"
@@ -301,9 +306,12 @@ function Articles() {
           <Filters />
         </Offcanvas.Body>
       </Offcanvas>
-
+     
       <div className="d-flex p-2 ">
+     
         <div className="responsive-filters">
+         < FormatListBulleted></FormatListBulleted>
+         <Apps></Apps>
           <Fragment>
             <Accordion
               title={t("filter.Price")}
@@ -375,6 +383,7 @@ function Articles() {
           )}
         </div>
       </div>
+      
       <div
         className="d-flex justify-content-center mb-3 "
         style={{ marginLeft: "200px" }}

@@ -49,9 +49,15 @@
 @media all and (min-width: 992px) {
   .filters-button {
     display: none !important;
+      
   }
 }
-
+.Bfilter{
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-left: 10px;
+  background-color: #5d2e60;
+}
 .arrow-icon {
   transition: all 0.5s;
   rotate: 180deg;

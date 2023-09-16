@@ -23,6 +23,7 @@ function ArticleCard({ article }) {
       showSuccessToast("Article has been saved");
     }
   };
+  console.log(article.article, "ddd")
 
   return (
     <div className="article-card position-relative mx-3 mb-2 ">
@@ -39,29 +40,30 @@ function ArticleCard({ article }) {
           <Rating edit={false} rating={article?.rating} />
         </div>
       </div>
-      <p>{article.price}TND</p>
-      <p style={{color:'black'}}>{article.article.category.nameEn}</p>
-    
-  <div className="d-flex flex-column justify-content-between align-items-center mt-2">
-    <h6 className="article-title">{article.article?.title}</h6>
+      <h6 className="article-title">{article.article?.title}</h6>
 
-    <div className="d-flex mb-2">
-      <div
-        style={{ backgroundColor: "white", color: "purple" }}
-        className="bg-purple p-1 rounded article-card-icon pointer m-1"
-        onClick={() => navigate("/one-article/" + article.id)}
-      >
-        <FiEye size={20} />
-      </div>
-      <div
-        className="bg-yellow p-1 rounded pointer m-1"
-        onClick={handleButtonClick}
-      >
-        <BsBag size={20} />
+
+      <div className="d-flex flex-column justify-content-between align-items-center mt-2">
+
+        <p>{article.price}TND</p>
+        <div className="d-flex mb-2">
+          <div
+            style={{ backgroundColor: "white", color: "purple" }}
+            className="bg-purple p-1 rounded article-card-icon pointer m-1"
+            onClick={() => navigate("/one-article/" + article.id)}
+          >
+            <FiEye size={20} />
+          </div>
+          <div
+            className="bg-yellow p-1 rounded pointer m-1"
+            onClick={handleButtonClick}
+          >
+            <BsBag size={20} />
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
 
   );
 }
