@@ -126,6 +126,17 @@ import Addclient from "../domains/Client/views/Addclient";
 import Profileclient from "../domains/Client/views/Profileclient";
 import TypeArticle from "../domains/type/TypeArticle";
 
+import EducationLevel from "../domains/educationLevel/educationLevel";
+import EducationLevelList from "../domains/educationLevel/views/EducationLevelListe";
+import AddLevel from "../domains/educationLevel/views/AddLevel";
+
+import JobTitle from "../domains/jobTitle/jobTitle";
+import JobTitleList from "../domains/jobTitle/views/JobTitleList";
+import AddJob from "../domains/jobTitle/views/AddJob";
+
+import FunctionalArea from "../domains/functionalArea/functionalArea";
+import FunctionalAreaList from "../domains/functionalArea/view/FunctionalAreaList";
+import AddFuctionalArea from "../domains/functionalArea/view/AddFunctionalArea";
 
 function Router() {
   const auth = useSelector((state) => state.auth);
@@ -192,6 +203,21 @@ function Router() {
               <Route path="addclient" element={<Addclient/>}/>
              <Route path="profilclient/:id" element={<Profileclient/>}/>
               </Route>
+
+              <Route path="educationLevel" element={<EducationLevel/>}>
+              <Route index element={<EducationLevelList/>}/>
+              <Route path="addLevel" element={<AddLevel/>}/>
+              </Route>
+
+              <Route path="jobTitle" element={<JobTitle/>}>
+              <Route index element={<JobTitleList/>}/>
+              <Route path="addJob" element={<AddJob/>}/>
+              </Route>
+              <Route path="functionalArea" element={<FunctionalArea/>}>
+              <Route index element={<FunctionalAreaList/>}/>
+              <Route path="addFuctionalArea" element={<AddFuctionalArea/>}/>
+              </Route>
+
 
             <Route path="blogs" element={<Blogs />}>
               <Route index element={<BlogsList />} />
