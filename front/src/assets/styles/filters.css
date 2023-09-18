@@ -96,3 +96,14 @@
 .double-range-slider::-webkit-slider-thumb:active {
   transform: scale(1.2);
 }
+
+.articleicons {
+  cursor: pointer; 
+  transition:  0.3s ease;
+  color: rgb(146, 143, 143);
+
+}
+.articleicons:hover{
+  color: rgb(14, 14, 14);
+  fill: #000;
+}
