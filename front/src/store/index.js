@@ -23,6 +23,7 @@ import trainingBooking from "./trainingBooking";
 import functionalArea from "./functionalArea";
 import jobTitle from "./jobTitle";
 import educationLevel from "./educationLevel";
+import booking from "./booking";
 export const store = configureStore({
   reducer: {
     article,
@@ -47,7 +48,8 @@ export const store = configureStore({
     trainingBooking,
     functionalArea,
     jobTitle,
-    educationLevel
+    educationLevel,
+    booking
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

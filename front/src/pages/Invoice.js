@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ function Invoice() {
   const commandStore = useSelector((state) => state.command);
   const { invoiceId } = useParams();
   const dispatch = useDispatch();
+  const [Total, setTotal] = useState([])
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -17,8 +18,26 @@ function Invoice() {
     dispatch(fetchCommand(invoiceId));
   }, []);
 
+  useEffect(() => {
+    if (commandStore.command) {
+      const newTotal = commandStore.command.commandLine.map(
+        (item) => item?.quantity * item?.articleByBranch?.price
+      );
+      setTotal(newTotal);
+    }
+  }, [commandStore.command]);
+
+  const sum = () => {
+    let res = 0
+    Total.map((e, i) => {
+      res += e
+    })
+    return res
+  }
+
   return (
     <>
+
       <div class="page-tools">
         <div class="action-buttons">
           <button
@@ -54,7 +73,6 @@ function Invoice() {
                       <i>
                         <img src="https://jalyss.com/img/prestashop-logo-1610973135.jpg" />
                       </i>
-                      {/* <span class="text-default-d3">Jalyss.com</span> */}
                     </div>
                   </div>
                 </div>
@@ -119,27 +137,17 @@ function Invoice() {
                     <div class="d-none d-sm-block col-sm-2">Unit Price</div>
                     <div class="col-2">Amount</div>
                   </div>
-
-                  <div class="text-95 text-secondary-d3">
-                    {commandStore.command?.commandLine.map((item, index) => (
-                      <div class="row mb-2 mb-sm-0 py-25" key={index}>
-                        <div class="d-none d-sm-block col-1">{index + 1}</div>
-                        <div class="col-9 col-sm-5">
-                          {item?.articleByBranch?.article?.title}
-                        </div>
-                        <div class="d-none d-sm-block col-2">
-                          {item?.quantity}
-                        </div>
-                        <div class="d-none d-sm-block col-2 text-95">
-                          {" "}
-                          {item?.articleByBranch?.price}
-                        </div>
-                        <div class="col-2 text-secondary-d2">
-                          {item?.quantity * item?.articleByBranch?.price}
-                        </div>
+                  {commandStore.command?.commandLine.map((item, index) => (
+                    <div className="text-95 text-secondary-d3" key={index}>
+                      <div className="row mb-2 mb-sm-0 py-25">
+                        <div className="d-none d-sm-block col-1">{index + 1}</div>
+                        <div className="col-9 col-sm-5">{item?.articleByBranch?.article?.title}</div>
+                        <div className="d-none d-sm-block col-2">{item?.quantity}</div>
+                        <div className="d-none d-sm-block col-2 text-95">{item?.articleByBranch?.price}</div>
+                        <div className="col-2 text-secondary-d2">{item?.quantity * item?.articleByBranch?.price}</div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
 
                   <div class="row border-b-2 brc-default-l2"></div>
 
@@ -153,15 +161,16 @@ function Invoice() {
                         <div class="col-7 text-right">SubTotal</div>
                         <div class="col-5">
                           <span class="text-120 text-secondary-d1">
-                            {commandStore.command?.total} TND
+                            {sum()} TND
+
                           </span>
                         </div>
                       </div>
 
                       <div class="row my-2">
-                        <div class="col-7 text-right">Tax (10%)</div>
+                        <div class="col-7 text-right">Shipping Cost:</div>
                         <div class="col-5">
-                          <span class="text-110 text-secondary-d1">$225</span>
+                          <span class="text-110 text-secondary-d1">7 TND</span>
                         </div>
                       </div>
 
@@ -169,16 +178,14 @@ function Invoice() {
                         <div class="col-7 text-right">Total Amount</div>
                         <div class="col-5">
                           <span class="text-150 text-success-d3 opacity-2">
-                            {(Number(commandStore.command?.total) * 10) / 100}{" "}
+                            {sum() + 7}{" "}
                             TND
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
-
                   <hr />
-
                   <div>
                     <span class="text-secondary-d1 text-105">
                       Jalyss thanks you for your business

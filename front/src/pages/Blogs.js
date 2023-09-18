@@ -25,7 +25,7 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsers } from "../store/user";
 import { createBookmark } from "../store/bookmarks";
-import { fetchBlogs, fetchTrends,removeBlog } from "../store/blog";
+import { fetchBlogs, fetchTrends, removeBlog } from "../store/blog";
 
 
 
@@ -49,7 +49,7 @@ function Blogs() {
   const [basicModal, setBasicModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
-
+  console.log(me, "ttttttt")
   const take = 6;
 
   const greeting = {
@@ -95,8 +95,8 @@ function Blogs() {
     });
   };
 
- 
-  return  (
+
+  return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
         <Fade bottom duration={1000} distance="40px">
@@ -137,22 +137,23 @@ function Blogs() {
                         Explore &#9654;
                       </div>
                     </button>
-
-                    <button
-                      type="button"
-                      className="btn btn-outline-danger"
-                      style={{
-                        height: "50px",
-                        width: "172px",
-                        marginLeft: "20px",
-                      }}
-                      onClick={() => {
-                        if (me) navigate("/BlogsForm");
-                        else navigate("/login");
-                      }}
-                    >
-                      Write yours
-                    </button>
+                    {me?.isCoach && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger"
+                        style={{
+                          height: "50px",
+                          width: "172px",
+                          marginLeft: "20px",
+                        }}
+                        onClick={() => {
+                          if (me) navigate("/BlogsForm");
+                          else navigate("/login");
+                        }}
+                      >
+                        Write yours
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -182,7 +183,7 @@ function Blogs() {
                         className="text-center"
                         style={{ marginBottom: "20px", fontSize: "50px" }}
                       >
-                        Trending on Jalyss <br /> <FaFire />
+                        Best Author Blog <br /> <FaFire />
                       </h1>
                       <div className="d-flex flex-wrap justify-content-center">
                         {trends.map((blog, index) => (
@@ -337,7 +338,7 @@ function Blogs() {
                   </div>
                 </div>
 
-                
+
                 <Dropdown>
                   <Dropdown.Toggle
                     className="ellipsis-btn dropdownToggleBlogCard"
@@ -356,7 +357,7 @@ function Blogs() {
                         >
                           Delete
                         </Dropdown.Item>
-                        <Dropdown.Item  onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
+                        <Dropdown.Item onClick={() => navigate(`/update-blog/${blog.id}`)}>Update</Dropdown.Item>
                       </>
                     ) : (
                       <Dropdown.Item

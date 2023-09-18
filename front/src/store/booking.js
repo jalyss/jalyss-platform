@@ -2,6 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
+
+
+
 export const fetchBookings = createAsyncThunk("bookings/bookings", async () => {
   let token = JSON.parse(localStorage.getItem("token")).Authorization;
   let configs = {

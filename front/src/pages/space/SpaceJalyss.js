@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import DocumentMeta from "react-document-meta";
 import { useTranslation } from "react-i18next";
 import useMeta from "../../hooks/useMeta";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 import {
   FaShieldAlt,
   FaRegHandshake,
@@ -16,6 +18,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchServices } from "../../store/service";
 import "../../assets/styles/spacejalyss.css";
+import { Card } from "antd";
 function SpaceJalyss() {
   const { t, i18n } = useTranslation();
   const meta = useMeta(
@@ -191,7 +194,7 @@ function SpaceJalyss() {
               >
                 <div className="card-body">
                   <h5 className="card-title" style={{marginBottom:15}}>{elem.name}</h5>
-                  <button
+                    <button
                     className="btn "
                     style={{
                       width: 170,
@@ -215,80 +218,64 @@ function SpaceJalyss() {
           ))}
         </div>
 
-        <div
-          className="card-body d-flex flex-column flex-md-row justify-content-around mb-3"
-          style={{ marginTop: 30, padding: "10px" }}
-        >
-          <div
-            className="card p-1 "
-            style={{
-              position: "relative",
-              borderRadius: 23,
-              transition: "all 1.8s ease-in-out",
-            }}
-          >
-            <div className="d-flex flex-wrap justify-content-between align-items-center">
-              <div className="d-flex align-items-center mb-3 mb-md-0">
-                <img
-                  decoding="async"
-                  width="198"
-                  height="471"
-                  src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
-                  className="attachment-full size-full responsive-img"
-                  alt=""
-                  loading="lazy"
-                  srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
-                  sizes="(max-width: 177px) 100vw, 177px"
-                  style={{
-                    borderRadius: 20,
-                  }}
-                />
-                <div className="d-flex flex-column">
-                  <h6
-                    className="my-2 text-start"
-                    style={{ fontSize: "1rem", color: "red" }}
-                  >
-                    Why....?
-                  </h6>
-                  <h3
-                    className="mb-4 fw-bold text-md-center text-lg-start"
-                    style={{ color: "darkred", margin: 0 }}
-                  >
-                    JalyssCom
-                  </h3>
-                </div>
-                <div className="container">
-                  <p className="my-2 text-start" style={{ fontSize: "1.15rem", padding: "10px" }}>
-                    At JalyssCom We value adaptability and initiative in whatever we
-                    do as business owners.
-                    <br />
-                    Our offers can be tailored to your needs and financial situation.
-                    <br />
-                    Our workspaces encourage collaboration, promote performance, and
+      
+   
+      </div>
+<div className="d-flex flex-wrap " style={{ marginBottom: '80px'}}>
+    {/* <div className="responsive-container " style={{ marginBottom: '80px'}}> */}
+          <img
+           decoding="async"
+           width="200px"         
+           height="100px"
+           src="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png"
+           className="attachment-full size-full responsive-img"
+           alt=""
+           loading="lazy"
+           srcSet="https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 177w, https://www.templenode.com/wp-content/uploads/2013/07/TempleNode-Why-US.png 113w"
+           sizes="(max-width: 177px) 100vw, 177px"
+           style={{
+             marginTop:100,
+             borderRadius: 20,
+             maxWidth: '100%',
+             height: '50%',
+             marginLeft: '100px',
+             
+           }}
+          />
+           
+           
+         {/* </div> */}
+         
+         <div class="text-container" style={{marginTop:'80px'}}>
+              <Typography variant="h4" style={{color:'red'}} >
+              Why.....?<br/>
+              JalyssCom
+              </Typography>
+              <div  variant="h6" color="text.secondary">
+                    At JalyssCom We value adaptability and initiative in whatever we<br/>
+                    do as business owners. Our offers can be tailored to your needs and financial situation.<br/>
+                  
+                    Our workspaces encourage collaboration, promote performance, and<br/>
                     inspire creativity.
-                    <br />
-                    They were designed with these goals in mind. Our spaces are
-                    secured <br />
+                   
+                    They were designed with these goals in mind. Our spaces are<br/>
+                    secured <br/>
                     and available around-the-clock,
-                    <br />
+                   
                     include natural light that is good for your staff's wellbeing, and
                     are located in a high-rise building in the middle of a renowned
-                    business district.
-                    <br />
+                    business district.<br/>
+                 
                     JalyssCom is another place for planned events. Whether it's a
                     workshop, seminar, or other type of training, JalyssCom is always
                     active!
-                  </p>
-
-                </div>
-
-              </div>
-            </div>
-
-
-          </div>
+                  </div>
+    
         </div>
       </div>
+     
+    
+
       <div className="card-body">
         <div className="d-flex flex-wrap justify-content-around">
           <div

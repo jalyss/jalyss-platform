@@ -55,10 +55,9 @@ console.log(space,'space');
               (progressEvent.loaded * 100) / progressEvent.total
             );
             setUploadProgress(progress);
-            setTimeout(()=>{
-
-              setUploadProgress(0)
-            },2000)
+            setTimeout(() => {
+              setUploadProgress(0);
+            }, 2000);
           },
         }
       );
