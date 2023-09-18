@@ -14,8 +14,6 @@ export default function WorkSpaceDetail() {
   const space = useSelector((state) => state.space.space);
   const [refresh, setRefresh] = useState(false);
 
-
-
   useEffect(() => {
     dispatch(fetchSpaceById(workspaceId));
   }, [dispatch, workspaceId, refresh]);

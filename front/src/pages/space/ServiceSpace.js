@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchService, fetchServices } from "../../store/service";
 import Carousel from "react-bootstrap/Carousel";
 import cardCover from "../../img/cardCover.jpg";
+import Modal from "../../components/Commun/Modal";
+
+
 const useStyles = makeStyles((theme) => ({
   imagesGroup: {
     display: "flex",
@@ -36,23 +39,26 @@ function ServiceSpace() {
   const { serviceIdentifier } = useParams();
   const serviceStore = useSelector((state) => state.service);
   const { service, services } = serviceStore;
-  console.log(service, "serrr");
 
   const [selectedWorkspace, setSelectedWorkspace] = useState("");
-  console.log(selectedWorkspace, "spaceid");
-
+  const [basicModal, setBasicModal] = useState(false);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchService(serviceIdentifier));
-    dispatch(fetchServices());
-  }, [dispatch]);
+  
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
 
   const classes = useStyles();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchService(serviceIdentifier));
+    dispatch(fetchServices());
+  }, [dispatch]);
 
   return (
     <div>
@@ -206,7 +212,8 @@ function ServiceSpace() {
                         borderColor: "white",
                       }}
                       onClick={() => {
-                        showErrorToast("Please select a space.");
+
+                        toggleShow()
                       }}
                     >
                       Reserve
@@ -283,6 +290,16 @@ function ServiceSpace() {
             ))}
         </div>
       </div>
+      <Modal
+  basicModal={basicModal}
+  normal={true}
+  ofDelete={!true}
+  toggleShow={toggleShow}
+  title={" Alert"}
+  body={" You have to choose a workspace"}
+  withoutSave={true}
+>
+</Modal>
     </div>
   );
 }
