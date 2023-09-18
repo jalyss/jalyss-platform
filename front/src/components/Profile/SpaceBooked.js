@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBookings} from '../../store/booking';
-import { fetchServices } from '../../store/space';
+import { fetchServices } from '../../store/service';
 
 const SpaceBooked = () => {
 const bookingstore = useSelector((state)=>state.booking.bookings.items
@@ -10,8 +10,6 @@ const serviesbook = useSelector((state)=>state.service.services.items)
 // const [bookings,setbooking]=useState({})
 const dispatch = useDispatch();
 
-console.log('hayaa',bookingstore)
-console.log('jajaj',serviesbook)
 
 useEffect(() => {
 dispatch(fetchBookings())
