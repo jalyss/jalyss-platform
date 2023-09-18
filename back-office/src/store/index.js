@@ -29,6 +29,7 @@ import jobTitle from "./jobTitle";
 import functionalArea from "./functionalArea";
 import educationLevel from "./educationLevel";
 import transition from "./transition";
+import city from "./city";
 
 export const store = configureStore({
   reducer: {
@@ -61,7 +62,8 @@ export const store = configureStore({
     jobTitle,
     functionalArea,
     educationLevel,
-    transition
+    transition,
+    city
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
