@@ -67,7 +67,7 @@ export const sidebarDataBranch = [
       {
         nameEn: "country",
         nameAr: "country",
-        path: "country"
+        path: "Countrie"
       },
     ],
   },

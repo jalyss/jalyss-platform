@@ -138,6 +138,10 @@ import FunctionalArea from "../domains/functionalArea/functionalArea";
 import FunctionalAreaList from "../domains/functionalArea/view/FunctionalAreaList";
 import AddFuctionalArea from "../domains/functionalArea/view/AddFunctionalArea";
 
+import Countrie from "../domains/country/county";
+import AddCounty from "../domains/country/view/AddCountry";
+import CountryList from "../domains/country/view/CountyList";
+
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -213,9 +217,14 @@ function Router() {
               <Route index element={<JobTitleList/>}/>
               <Route path="addJob" element={<AddJob/>}/>
               </Route>
+
               <Route path="functionalArea" element={<FunctionalArea/>}>
               <Route index element={<FunctionalAreaList/>}/>
               <Route path="addFuctionalArea" element={<AddFuctionalArea/>}/>
+              </Route>
+              <Route path="Countrie" element={<Countrie/>}>
+              <Route index element={<CountryList/>}/>
+              <Route path="AddCountrie" element={<AddCounty/>}/>
               </Route>
 
 
