@@ -87,9 +87,11 @@ function Articles() {
 
   const handleAppsClick = () => {
     setShowContent(!showContent);
+    setShowContentListe(false);
   };
   const handleFormaListClick = () => {
     setShowContentListe(!showContentListe);
+    setShowContent(false);
   };
 
   const Filters = () => {
@@ -403,12 +405,15 @@ function Articles() {
 
             </div>
           )}
+        
+       
+        
           {showContentListe && (
-            <div className="px-3">
+            <div className="d-flex flex-column  mb-3 px-3 ">
               {!isEmpty(filters.categories) ? (
                 map(groupedArticles, (element) => (
                   <>
-                  
+
                     <p
                       style={{
                         fontSize: "20px",
@@ -421,7 +426,7 @@ function Articles() {
                       {element[0].article.category[lg ? "nameEn" : "nameAr"]}
                     </p>
 
-                    <div className="d-flex flex-wrap px-3 ">
+                    <div className=" d-flex flex-column px-3">
                       {element.map((el, index) => (
                         <ArticleCard article={el} />
                       ))}
@@ -429,7 +434,7 @@ function Articles() {
                   </>
                 ))
               ) : (
-                <div className="d-flex flex-wrap px-3 ">
+                <div className=" d-flex flex-column  px-3 ">
                   {paginate(articleStore.articles.items, currentPage, pageSize).map(
                     (element, index) => (
                       <ArticleCard key={index} article={element} />
@@ -440,8 +445,7 @@ function Articles() {
 
             </div>
           )}
-
-        </div>
+   </div>
       </div>
 
       <div
