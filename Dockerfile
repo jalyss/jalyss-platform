@@ -43,7 +43,7 @@ ARG REACT_APP_API_ENDPOINT
 ENV REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT \
   
 
-WORKDIR /app
+WORKDIR = app
 COPY . .
 COPY --from=deps /workspace-install ./
 
