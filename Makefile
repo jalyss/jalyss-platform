@@ -26,6 +26,9 @@ deploy:
 	@yarn seed
 	@pm2 start "yarn workspace back start:prod" --name api
 
+docker:
+	@docker build -t jalyss .
+
 up:
 	@docker-compose --project-name $(app_name) \
 		--file ./infrastructure/docker-compose.yaml \
