@@ -8,8 +8,8 @@ RUN apk add --no-cache rsync libc6-compat
 WORKDIR /workspace-install
 
 #RUN yarn set version berry
-COPY yarn.lock .yarnrc.yml ./
-COPY .yarn/ ./.yarn/
+# COPY yarn.lock .yarnrc.yml ./
+# COPY .yarn/ ./.yarn/
 
 RUN --mount=type=bind,target=/docker-context \
     rsync -amv --delete \
