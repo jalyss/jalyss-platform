@@ -1,6 +1,6 @@
 app_name := jalyss
 docker_files := --file ./infrastructure/docker-compose.yaml --file ./infrastructure/docker-compose.prod.yaml
-ecr_endpoint := 555811813125.dkr.ecr.me-south-1.amazonaws.com
+# ecr_endpoint := 555811813125.dkr.ecr.me-south-1.amazonaws.com
 
 MAKEFLAGS += --no-print-directory
 
@@ -43,16 +43,16 @@ build:
 	@docker-compose --project-name $(app_name) $(docker_files) build --no-cache
   #--no-cache --progress=plain
 
-ecr-push:
-	@make ecr-login
-	@docker push $(ecr_endpoint)/jalyss-erp-app:latest
+# ecr-push:
+# 	@make ecr-login
+# 	@docker push $(ecr_endpoint)/jalyss-erp-app:latest
 
 pull:
 	@make ecr-login
 	@docker-compose --project-name $(app_name) $(docker_files) pull
 
-ecr-login:
-	@aws ecr get-login-password | docker login --username AWS --password-stdin $(ecr_endpoint)
+# ecr-login:
+# 	@aws ecr get-login-password | docker login --username AWS --password-stdin $(ecr_endpoint)
 
 pg-query:
 	@docker-compose --project-name $(app_name) --file ./infrastructure/docker-compose.yaml exec -T postgres psql -U postgres postgres -c "$(query)"
