@@ -40,7 +40,7 @@ FROM node:${NODE_VERSION}-alpine AS builder
 
 ARG REACT_APP_API_ENDPOINT
 
-ENV REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT \
+ENV REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT 
   
 
 WORKDIR /app
@@ -57,8 +57,8 @@ RUN --mount=type=cache,target=/root/.yarn-cache \
 FROM node:${NODE_VERSION}-alpine AS production
 
 WORKDIR /app
-ENV NODE_ENV=production \
-    # TZ=Asia/Riyadh
+ENV NODE_ENV=production 
+   
 
 # disable npm update warnings
 #RUN echo "update-notifier=false" >> ~/.npmrc
