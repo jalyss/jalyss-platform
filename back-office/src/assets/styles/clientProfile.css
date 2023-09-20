@@ -1,0 +1,33 @@
+.card_info {
+  width: 25vw;
+  height: 80vh;
+  background: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Adjust the alpha value for background opacity */
+  backdrop-filter: blur(0.3rem); /* Adjust the blur amount as needed */
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px black;
+}
+.card_avatar {
+  width: 10vw;
+  height: 25vh;
+}
+.hr_separator {
+  /* border-top: 0.17rem solid rgb(128, 0, 128); */
+  height: 0.2vh;
+  background-color: rgb(128, 0, 128);
+  margin: 0;
+}
+.small {
+  margin: 0;
+  margin-top: 0.7rem;
+  margin-bottom: 0.3rem;
+}
+.card_para_main {
+  font-weight: 500;
+}

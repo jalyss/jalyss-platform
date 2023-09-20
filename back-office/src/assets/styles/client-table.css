@@ -9,6 +9,8 @@
   justify-content: flex-start;
   padding-top: 0;
   padding-left: 4rem;
+  padding-right: 0rem;
+  position: relative;
 }
 .table_wrapper {
   padding-top: 2rem;
@@ -48,28 +50,32 @@
   }
 }
 .btn_container {
-  position: relative;
   margin: 0;
   padding: 0;
+  max-width: 8rem;
+  max-height: 7rem;
   /* overflow: hidden; */
 }
 .add_client_btn {
   background-color: rgb(77, 24, 71);
+  /* top: -9rem;
+  right: -9rem; */
+  right: -8rem;
   top: -8rem;
-  right: -7rem;
-  width: 17rem;
-  height: 17rem;
+  height: 15rem;
+  width: 15rem;
   border-radius: 50%; /* Make it a circle */
-  overflow: hidden;
-  position: relative;
+  /* overflow: hidden; */
+  position: absolute;
   transform: scale(1);
   transition: transform 0.5s ease;
   box-shadow: 5px 3px 27px 0px rgb(77, 24, 71);
   -webkit-box-shadow: 5px 3px 27px 0px rgb(77, 24, 71);
   -moz-box-shadow: 5px 3px 27px 0px rgb(77, 24, 71);
 }
+
 .add_client_btn:hover {
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 
 .add_client_btn_icon {
@@ -78,9 +84,13 @@
   left: 15%;
   cursor: pointer;
 }
+.css-5wly58-MuiDataGrid-root .MuiDataGrid-actionsCell {
+  gap: 0;
+}
 .MuiTablePagination-displayedRows {
   margin: 0;
   padding: 0;
+  /* gap: 0; */
 }
 .MuiTablePagination-selectLabel {
   margin: 0;
@@ -90,8 +100,10 @@
   padding-left: 2rem;
   padding-top: 0;
 }
+
 .table_nav {
   /* background-color: #333; */
+
   margin: 0;
 }
 .sub_nav_ul {

@@ -3,19 +3,39 @@ import { Box } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import isEnglish from "../../../helpers/isEnglish";
+
 import { useNavigate } from "react-router-dom";
 import { IoIosPersonAdd } from "react-icons/io";
-import { fetchClients, removeClients } from "../../../store/client";
+import {
+  fetchClients,
+  removeClients,
+  getOneClient,
+} from "../../../store/client";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import imgAvatar from "../../../assets/images/avatar.jpg";
-import deleteIcon from "../../../assets/images/delete-icon.png";
+import activeIcon from "../../../assets/images/active.png";
+import blockIcon from "../../../assets/images/active.png";
+import EditClient from "./editClient";
 import lookIcon from "../../../assets/images/look-icon.png";
 import addClient from "../../../assets/images/client.png";
 import Icon from "../../../components/icons/icon";
+import editIcon from "../../../assets/images/edit.png";
+
 import AddButton from "../../../components/buttons/AddButton";
 import css from "../../../assets/styles/client-table.css";
 import Addclient from "./Addclient";
 function ClientList() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isEng = isEnglish();
+
+  const clients = useSelector((state) => state.getAllClient.items);
+
+  useEffect(() => {
+    dispatch(fetchClients());
+  }, []);
+  const onClickIconLook = (id, data) => {};
+
   const columns = [
     {
       field: "avatar",
@@ -76,47 +96,53 @@ function ClientList() {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 225,
       cellClassName: "actions-icons",
-      getActions: ({ id }) => {
+      getActions: (row) => {
         return [
           <GridActionsCellItem
-            icon={<Icon img={deleteIcon} />}
-            label="Delete"
+            disableFocusRipple={false}
+            icon={<Icon img={activeIcon} />}
+            label="Block"
             onClick={() => {
               //   handleDeleteClick(id);
             }}
+            size="small"
+            edge="start"
           />,
           <GridActionsCellItem
-            icon={<Icon img={lookIcon} />}
+            // disableFocusRipple={false}
+            icon={
+              <Icon img={editIcon} key={row.id} modalId={"#editClientModal"} />
+            }
             label="Edit"
-
-            // onClick={() => handleEditClick(id)}
+            size="small"
+            edge="start"
+            onClick={() => {
+              dispatch(getOneClient(row.row));
+            }}
+          />,
+          <GridActionsCellItem
+            disableFocusRipple={false}
+            icon={<Icon img={lookIcon} />}
+            label="Look"
+            size="small"
+            edge="start"
+            onClick={() => {
+              navigate(`profileclient/${row.id}`);
+              dispatch(getOneClient(row.row));
+            }}
           />,
         ];
       },
     },
   ];
-
-  const dispatch = useDispatch();
-  const isEng = isEnglish();
-  const navigate = useNavigate();
-
-  const clients = useSelector((state) => state.getAllClient.items);
-  console.log(clients);
-  useEffect(() => {
-    dispatch(fetchClients());
-  }, []);
-
-  const handleDeleteClick = (id) => {
-    dispatch(removeClients(id)).then((res) => {
-      if (res.error) {
-        showErrorToast(res.error.message);
-      } else {
-        showSuccessToast("Employee has been deleted");
-      }
-    });
-  };
+  // const [currentClient, setCurrentClient] = useState({});
+  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // const handleEditClick = (row) => {
+  //   setIsEditModalOpen(true);
+  //   setCurrentClient(row);
+  // };
 
   //   const handleEditClick = (id) => {
   //     console.log("iii", id);
@@ -144,52 +170,56 @@ function ClientList() {
               </a>
             </li>
           </ul>
-        </div>
+          <div className="btn_container">
+            <div
+              className="add_client_btn"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+            >
+              {" "}
+              <div>
+                <img
+                  className="add_client_btn_icon"
+                  style={{ color: "red", width: "25%", height: "25%" }}
+                  src={addClient}
+                />
+              </div>
+            </div>
+          </div>
 
-        <div className="table_wrapper">
-          <h2
-            style={{
-              margin: 0,
-              backgroundColor: "rgb(77, 24, 71)",
-              textAlign: "center",
-              padding: 10,
-              color: "white",
-            }}
-          >
-            Clients List
-          </h2>
-          <Box>
-            <DataGrid
-              rows={clients}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
+          <div className="table_wrapper">
+            <h2
+              style={{
+                margin: 0,
+                backgroundColor: "rgb(77, 24, 71)",
+                textAlign: "center",
+                padding: 10,
+                color: "white",
               }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-            />
-          </Box>
-        </div>
-      </div>
-      <div className="btn_container">
-        <div
-          className="add_client_btn"
-          data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
-        >
-          {" "}
-          <div>
-            <img
-              className="add_client_btn_icon"
-              style={{ color: "red", width: "25%", height: "25%" }}
-              src={addClient}
-            />
+            >
+              Clients List
+            </h2>
+            <Box>
+              <DataGrid
+                rows={clients}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+              />
+            </Box>
           </div>
         </div>
+
+        {/* <EditClient client={currentClient} isEditModalOpen={isEditModalOpen} /> */}
+
+        <Addclient />
       </div>
-      <Addclient />
+      <EditClient />
     </div>
   );
 }

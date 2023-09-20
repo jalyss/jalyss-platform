@@ -4,68 +4,75 @@ import { fetchCountries, findAllCitites } from "../../../store/Country";
 import validate from "../../../utils/form-validation";
 import useForm from "../../../hooks/data-validation";
 // import initialState from "./initialSate";
-const initialState = {
-  nameAr: {
-    value: "",
-    required: true,
-  },
-  nameEn: {
-    value: "",
-    required: true,
-  },
-  number: {
-    value: "",
-    required: false,
-  },
-  email: {
-    value: "",
-    required: true,
-    requiredMessage: "Email address is required!",
-    email: true,
-    emailMessage: "Email address is not valid!",
-  },
-  password: {
-    value: "",
-    required: true,
-    minLength: 6,
-    minLengthMessage: "at least 6 characters long!",
-    maxLength: 16,
-    maxLengthMessage: "Too many characters!",
-  },
-  confirmPassword: {
-    value: "",
-    required: true,
-    matchWith: "password",
-    matchWithMessage: "Passwords must be equal!",
-  },
-  jobEn: {
-    value: "",
-    required: false,
-  },
-  jobAr: {
-    value: "",
-    required: false,
-  },
 
-  country: {
-    value: "",
-    required: false,
-  },
-  cities: {
-    value: "",
-    required: false,
-  },
-};
-
-const Addclient = () => {
+const EditClient = () => {
   const countries = useSelector((state) => state.country.countries.items);
+  const client = useSelector((state) => state.getOneClient.client);
+  const [currentClient, setClient] = useState(client);
+
+  useEffect(() => {
+    setClient(client);
+  }, [client.id]);
+  const dispatch = useDispatch();
+  const initialState = {
+    nameAr: {
+      value: client.fullNameAr || "",
+      required: true,
+    },
+    nameEn: {
+      value: client.fullNameEn || "",
+      required: true,
+    },
+    number: {
+      value: client.tel ? client.tel : "",
+      required: false,
+    },
+    email: {
+      value: client.email || "",
+      required: true,
+      requiredMessage: "Email address is required!",
+      email: true,
+      emailMessage: "Email address is not valid!",
+    },
+    password: {
+      value: "",
+      required: true,
+      minLength: 6,
+      minLengthMessage: "at least 6 characters long!",
+      maxLength: 16,
+      maxLengthMessage: "Too many characters!",
+    },
+    confirmPassword: {
+      value: "",
+      required: true,
+      matchWith: "password",
+      matchWithMessage: "Passwords must be equal!",
+    },
+    jobEn: {
+      value: client.jobTitle?.nameEn || "",
+      required: false,
+    },
+    jobAr: {
+      value: client.jobTitle?.nameEn || "",
+      required: false,
+    },
+
+    country: {
+      value: client.country?.nameEn || "",
+      required: false,
+    },
+    cities: {
+      value: client.city?.nameEn || "",
+      required: false,
+    },
+  };
+  console.log("initialState");
+  console.log(initialState);
+  console.log("====================================");
   const { formData, errors, changeHandler, setErrors } = useForm(
     initialState,
     validate
   );
-
-  const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(fetchCountries());
   }, []);
@@ -97,11 +104,11 @@ const Addclient = () => {
   return (
     <div
       className="modal fade"
-      id="staticBackdrop"
+      id="editClientModal"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
       tabIndex="-1"
-      aria-labelledby="staticBackdropLabel"
+      aria-labelledby="editClientModalLabel"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -116,9 +123,10 @@ const Addclient = () => {
                 style={{ color: "white" }}
                 id="staticBackdropLabel"
               >
-                Add client
+                Edit client
               </h1>
               <button
+                //   onClick={()=>setIsEditModalOpen(false)}
                 //   style={{ : "white" }}
                 type="button"
                 className="btn-close btn-light"
@@ -136,14 +144,15 @@ const Addclient = () => {
                     Full Name arabic
                   </label>
                   <input
+                    defaultValue={currentClient.fullNameAr}
                     type="text"
                     className="form-control rounded"
                     id="nameAr"
                     name="nameAr"
                     onChange={changeHandler}
-                    value={formData.nameAr.value}
+                    // value={client.fullNameAr}
                     placeholder="arabic Name"
-                    error={errors.nameAr}
+                    // error={errors.nameAr}
                   />
                   {errors.nameAr && (
                     <p
@@ -159,7 +168,9 @@ const Addclient = () => {
                     </p>
                   )}
                 </div>
-                <div className="">
+              </div>
+
+              {/* <div className="">
                   <label htmlFor="nameEn" className="form-label">
                     Full Name English
                   </label>
@@ -420,7 +431,7 @@ const Addclient = () => {
                     </p>
                   )}
                 </select>
-              </div>
+              </div> */}
             </div>{" "}
             <div
               // style={{ backgroundColor: "rgb(77,24,71)" }}
@@ -450,4 +461,4 @@ const Addclient = () => {
   );
 };
 
-export default Addclient;
+export default EditClient;
