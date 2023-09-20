@@ -27,20 +27,20 @@ export class MvtController {
         return this.mvtsService.findAll();
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.mvtsService.findOne(id);
-    }
+    // @Get(':id')
+    // findOne(@Param('id') id: string) {
+    //     return this.mvtsService.findOne(id);
+    // }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() dto: UpdateMvtArticleDto) {
-        return this.mvtsService.update(id, dto);
-    }
+    // @Patch(':id')
+    // update(@Param('id') id: string, @Body() dto: UpdateMvtArticleDto) {
+    //     return this.mvtsService.update(id, dto);
+    // }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.mvtsService.remove(id);
-    }
+    // @Delete(':id')
+    // remove(@Param('id') id: string) {
+    //     return this.mvtsService.remove(id);
+    // }
 
 
 }

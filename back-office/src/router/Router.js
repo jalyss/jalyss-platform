@@ -51,6 +51,13 @@ import ChatList from "../domains/chat/view/ChatList";
 import ChatEdit from "../domains/chat/view/ChatEdit";
 import ChatCreation from "../domains/chat/view/ChatCreation";
 
+import Branches from "../domains/branche/branch";
+import BrancheList from "../domains/branche/view/branchesList";
+import BrancheDetails from "../domains/branche/view/branchesDails";
+import BrancheTransiction from "../domains/branche/view/branchTransiction";
+import TransictionList from "../domains/branche/view/transictionList";
+import TransictionDetails from "../domains/branche/view/transitionsDetails";
+
 import Courses from "../domains/training/views/courses/Courses";
 import Tarifs from "../domains/training/views/features/Features";
 import Assesment from "../domains/training/views/assements/Assesment";
@@ -86,7 +93,7 @@ import Types from "../domains/training/views/sessions/Types";
 
 import Newsession from "../domains/training/views/sessions/Newsession";
 import Addnewcours from "../domains/training/views/courses/Addnewcours";
-// import Types from "../domains/type/Types";
+
 import TypesList from "../domains/type/views/TypesList";
 import EditType from "../domains/type/views/EditType";
 import DetailType from "../domains/type/views/DetailType";
@@ -113,11 +120,11 @@ import RolesList from "../domains/roles/view/RolesList";
 import EditRole from "../domains/roles/view/EditRole";
 import DetailRole from "../domains/roles/view/DetailRole";
 import CreateRole from "../domains/roles/view/CreateRole";
-
+import  Clientlist from "../../src/domains/Client/views/Clientlist"
 import Client from "../domains/Client/Client";
-import Clientlist from "../domains/Client/views/Clientlist";
 import Addclient from "../domains/Client/views/Addclient";
 import Profileclient from "../domains/Client/views/Profileclient";
+import TypeArticle from "../domains/type/TypeArticle";
 
 
 function Router() {
@@ -136,6 +143,9 @@ function Router() {
       <Routes>
         {auth.meAdmin ? (
           <Route path="/" element={<Branch />}>
+            
+         
+
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="space" element={<Service />}>
               <Route path="edit-service/:serviceId" element={<EditService />} />
@@ -159,7 +169,7 @@ function Router() {
               </Route>
             </Route>
 
-            <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={<Profile />} /> 
             <Route path="chat-box" element={<ChatBox />}>
             <Route path="user/:userId" element={<Conversation />} />
             <Route path="group/:groupId" element={<Conversation />} />
@@ -220,17 +230,27 @@ function Router() {
               <Route path="create" element={<CreateAuthor />} />
             </Route>
 
-            <Route path="type" element={<Types />}>
+            <Route path="type-article" element={<TypeArticle />}>
               <Route index element={<TypesList />} />
+              <Route path="create" element={<CreateType />} />
               <Route path="edit/:typeId" element={<EditType />} />
               <Route path="detail/:typeId" element={<DetailType />} />
-              <Route path="create" element={<CreateType />} />
+             
+            </Route> 
+             <Route path="Branche" element={<Branches />}>
+              <Route index element={<BrancheList />} />
+              <Route path="transiction/detail/:typeId" element={<BrancheDetails />} />
+              <Route path="transiction" element={<BrancheList />} />
+              <Route path="transactions" element={<TransictionList />} />
+              <Route path="transactions/sent" element={<BrancheTransiction />} />
+              <Route path="transactions/transictionDetails/:id" element={<TransictionDetails />} />
+  
             </Route>
 
             <Route path="role" element={<Role />}>
               <Route index element={<RolesList />} />
-              <Route path="edit/:roleId" element={<EditRole />} />
-              <Route path="detail/:roleId" element={<DetailRole />} />
+              <Route path="edit/:id" element={<EditRole />} />
+              <Route path="detail/:id" element={<DetailRole />} />
               <Route path="create" element={<CreateRole />} />
             </Route>
 
@@ -245,7 +265,6 @@ function Router() {
               <Route path="detail/:articleId" element={<DetailAritcle />} />
 
             </Route>
-            
 
             <Route path="training" element={<Training />}>
               <Route index element={<Sessions />} />
@@ -260,7 +279,6 @@ function Router() {
 
 
               <Route path="subscriber/:id" element={<Subscriber />} />
-
               <Route path="newsession" element={<Newsession />} />
               <Route path="courses" element={<Courses />} />
               <Route path="courses/:lectureId" element={<Coursdetail />} />

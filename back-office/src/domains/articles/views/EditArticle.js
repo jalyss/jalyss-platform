@@ -57,7 +57,6 @@ function EditArticle() {
     dispatch(fetchArticleTypes());
     dispatch(fetchPublishingHouses());
     dispatch(fetchCategories());
-
   }, [dispatch, articleId]);
 
   useEffect(() => {
@@ -95,15 +94,15 @@ function EditArticle() {
     const body = {
       title,
       weight: Number(weight),
-      pageNumber:Number(pageNumber),
+      pageNumber: Number(pageNumber),
       code,
       shortDescriptionEn,
       longDescriptionEn,
       shortDescriptionAr,
       longDescriptionAr,
-      categoryId:nameEn,
-      publishingHouseId:name,
-      typeId:typeNameEn,
+      categoryId: nameEn,
+      publishingHouseId: name,
+      typeId: typeNameEn,
     };
 
     try {
@@ -119,7 +118,7 @@ function EditArticle() {
         body.coverId = response.data.id;
       }
 
-      const editedArticle = {  articleId,...body };
+      const editedArticle = { articleId, ...body };
       dispatch(updateArticleByBranch(editedArticle));
       showSuccessToast("article edited successfully");
       navigate(-1);
@@ -141,8 +140,8 @@ function EditArticle() {
                 variant="outlined"
                 fullWidth
                 name="title"
-                value={title }
-               onChange={(e) => setTitle(e.target.value)}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -154,7 +153,7 @@ function EditArticle() {
                 type="number"
                 name="weight"
                 value={weight}
-               onChange={(e) => setWeight(e.target.value)}
+                onChange={(e) => setWeight(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -164,8 +163,8 @@ function EditArticle() {
                 variant="outlined"
                 fullWidth
                 name="pageNumber"
-                value={pageNumber }
-               onChange={(e) => setPageNumber(e.target.value)}
+                value={pageNumber}
+                onChange={(e) => setPageNumber(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -175,8 +174,8 @@ function EditArticle() {
                 variant="outlined"
                 fullWidth
                 name="code"
-                value={code }
-               onChange={(e) => setCode(e.target.value)}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -187,7 +186,7 @@ function EditArticle() {
                 fullWidth
                 name="shortDescriptionEn"
                 value={shortDescriptionEn}
-               onChange={(e) => setShortDescriptionEn(e.target.value)}
+                onChange={(e) => setShortDescriptionEn(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -198,7 +197,7 @@ function EditArticle() {
                 fullWidth
                 name="shortDescriptionAr"
                 value={shortDescriptionAr}
-               onChange={(e) => setShortDescriptionAr(e.target.value)}
+                onChange={(e) => setShortDescriptionAr(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -209,7 +208,7 @@ function EditArticle() {
                 fullWidth
                 name="longDescriptionEn"
                 value={longDescriptionEn}
-               onChange={(e) => setLongDescriptionEn(e.target.value)}
+                onChange={(e) => setLongDescriptionEn(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -220,7 +219,7 @@ function EditArticle() {
                 fullWidth
                 name="longDescriptionAr"
                 value={longDescriptionAr}
-               onChange={(e) => setLongDescriptionAr(e.target.value)}
+                onChange={(e) => setLongDescriptionAr(e.target.value)}
                 margin="normal"
               />
             </Grid>
@@ -231,7 +230,7 @@ function EditArticle() {
                   labelId="category"
                   name="category"
                   value={nameEn}
-                 onChange={(e) => setNameEn(e.target.value)}
+                  onChange={(e) => setNameEn(e.target.value)}
                 >
                   <MenuItem value="">--select option--</MenuItem>
                   {categoryStore.categories.items.map((item) => (
@@ -248,8 +247,8 @@ function EditArticle() {
                 <Select
                   labelId="publishingHouse"
                   name="publishingHouse"
-                  value={name }
-                 onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 >
                   <MenuItem value="">--select option--</MenuItem>
                   {publishingHouseStore.publishingHouses.items.map((item) => (
@@ -267,7 +266,7 @@ function EditArticle() {
                   labelId="type"
                   name="type"
                   value={typeNameEn}
-                 onChange={(e) => setTypeNameEn(e.target.value)}
+                  onChange={(e) => setTypeNameEn(e.target.value)}
                 >
                   <MenuItem value="">--select option--</MenuItem>
                   {articleTypeStore.articleTypes.items.map((item) => (
@@ -278,8 +277,6 @@ function EditArticle() {
                 </Select>
               </FormControl>
             </Grid>
-           
-           
           </Grid>
         </div>
         <Box my={2}>
@@ -300,7 +297,7 @@ function EditArticle() {
           <Button type="submit" variant="contained" color="primary">
             Update Article
           </Button>
-          </Box>
+        </Box>
       </form>
     </div>
   );

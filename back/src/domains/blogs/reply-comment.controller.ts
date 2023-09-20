@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { RepliesService } from './reply-comment.service';
 import { CreateReplyDto } from './dto/create-reply-comment.dto';
 import { UpdateReplyDto } from './dto/update-reply-comment.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('replies')
 @Controller('replies')
 export class RepliesController {
   constructor(private readonly repliesService: RepliesService) {}
@@ -16,7 +26,6 @@ export class RepliesController {
   findAll() {
     return this.repliesService.findAll();
   }
-  
 
   @Get(':id')
   findOne(@Param('id') id: string) {

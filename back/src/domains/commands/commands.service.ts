@@ -15,7 +15,6 @@ export class CommandsService {
   ) {}
   async create(dto: CreateCommandDto, branchId: string) {
     // validateOrReject(dto);
-    console.log(dto);
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
     );
@@ -30,9 +29,12 @@ export class CommandsService {
         ...dto,
         branchId: branch.id,
         commandLine: { create: dto.commandLine },
+
+       
       },
     });
   }
+    
 
   async findAllByUserId(clientId: string) {
     return await this.prisma.command.findMany({
@@ -43,6 +45,7 @@ export class CommandsService {
       },
     });
   }
+  
 
   async findAll() {
     return this.prisma.command.findMany();

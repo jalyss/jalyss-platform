@@ -97,7 +97,7 @@ const Edit = () => {
   return (
     <form className="checkout-form" onSubmit={submitEditProfile}>
       <div className="d-flex flex-wrap">
-        <div className="d-flex justify-content-center w-100 m-3">
+        <div className="d-flex justify-content-center w-100 m-3 ">
           <TableContainer className="w-100" component={Paper}>
             <Table aria-label="simple table">
               <TableBody>

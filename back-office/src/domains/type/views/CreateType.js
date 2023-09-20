@@ -4,10 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createType } from '../../../store/articleType'
 import { showErrorToast, showSuccessToast } from '../../../utils/toast'
 import { useTranslation } from 'react-i18next'
+import {  useNavigate } from 'react-router-dom'
 
 function CreateType() {
   const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
+  const Navigate = useNavigate();
   const [type, setType] = useState({})
   const articleTypeStore = useSelector((state) => state.articleType)
 
@@ -23,6 +25,7 @@ function CreateType() {
       .then(res => {
         if (!res.error) {
           showSuccessToast(t("type.created"))
+          Navigate(-1);
         } else {
           console.log(res);
           showErrorToast(res.error.message)
@@ -54,7 +57,7 @@ function CreateType() {
                       value={type?.nameEn} />
                   </div>
 
-                  <div className=" d-flex justify-content-center">
+                  <div className=" d-flex justify-content-center mt-3">
                     <SaveButton mb={15} onClick={submitCreate} />
                   </div>
                 </form>

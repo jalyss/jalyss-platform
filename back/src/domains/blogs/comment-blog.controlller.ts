@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CommentBlogService } from './comment-blog.service';
 import { CreateCommentBlogDto } from './dto/create-comment-blog.dto';
 import { UpdateCommentBlogDto } from './dto/update-comment-blog.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('CommentsBlogs')
 @Controller('CommentsBlog')
 export class CommentsBlogController {
   constructor(private readonly commentBlogService: CommentBlogService) {}
@@ -16,7 +26,6 @@ export class CommentsBlogController {
   findAll() {
     return this.commentBlogService.findAll();
   }
-  
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -24,7 +33,10 @@ export class CommentsBlogController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() UpdateCommentBlogDto: UpdateCommentBlogDto) {
+  update(
+    @Param('id') id: string,
+    @Body() UpdateCommentBlogDto: UpdateCommentBlogDto,
+  ) {
     return this.commentBlogService.update(id, UpdateCommentBlogDto);
   }
 

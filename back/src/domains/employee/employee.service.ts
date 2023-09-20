@@ -1,4 +1,3 @@
-
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -6,7 +5,6 @@ import { EmployeeLogin } from '../employee/entities/employee.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { Employee } from '@prisma/client';
-
 
 export interface FormatLoginAdmin extends Partial<Employee> {
   id: string;
@@ -18,24 +16,19 @@ export interface FormatLoginAdmin extends Partial<Employee> {
   isAdmin: boolean;
   branchId: string;
   roleId: string;
-  
-  
 }
 
 @Injectable()
 export class EmployeeService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: CreateEmployeeDto) {
-    const salt = await bcrypt.genSalt();
-    data.password = await bcrypt.hash(data.password, salt);
+    console.log(data)
 
     return this.prisma.employee.create({
       data,
-      include:{avatar:true},
-    
+      include: { avatar: true },
     });
-
   }
 
   // async findByLogin({ email, password }: EmployeeLogin) {
@@ -74,18 +67,24 @@ export class EmployeeService {
   // }
 
   findAll() {
-    return this.prisma.employee.findMany({include:{role:true,branch:true,avatar:true} ,orderBy:{createdAt:"asc"}});
+    return this.prisma.employee.findMany({
+      include: { role: true, branch: true, avatar: true },
+      orderBy: { createdAt: 'asc' },
+    });
   }
 
   findOne(id: string) {
-    return this.prisma.employee.findUniqueOrThrow({ where: { id: id },include:{role:true,branch:true,avatar:true} });
+    return this.prisma.employee.findUniqueOrThrow({
+      where: { id: id },
+      include: { role: true, branch: true, avatar: true },
+    });
   }
 
   update(id: string, data: UpdateEmployeeDto) {
     return this.prisma.employee.update({
       where: { id },
       data,
-      include:{role:true,branch:true,avatar:true} 
+      include: { role: true, branch: true, avatar: true },
     });
   }
 

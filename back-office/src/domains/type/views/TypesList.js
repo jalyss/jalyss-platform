@@ -57,9 +57,9 @@ function TypesList() {
 }, [articleTypeStore.articleTypes.items])
 
 
-    const handleEditClick = (id) => {
-        navigate(`edit/${id}`)
-      };
+    // const handleEditClick = (id) => {
+    //     navigate(`edit/${id}`)
+    //   };
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'nameAr', headerName: 'Name AR', width: 150, editable: false },
@@ -75,14 +75,14 @@ function TypesList() {
           getActions: ({ id }) => {
     
             return [
-              <GridActionsCellItem
-                icon={<AiFillEdit />}
-                label="Edit"
-                className="textPrimary"
-                onClick={() => handleEditClick(id)}
-                color="inherit"
+              // <GridActionsCellItem
+              //   icon={<AiFillEdit />}
+              //   label="Edit"
+              //   className="textPrimary"
+              //   onClick={() => handleEditClick(id)}
+              //   color="inherit"
     
-              />,
+              // />,
               <GridActionsCellItem
                 icon={<AiOutlineEye />}
                 label="Add"
