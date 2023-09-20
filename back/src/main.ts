@@ -22,8 +22,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('Median')
-    .setDescription('The Median API description')
+    .setTitle('Jalyss')
+    .setDescription('The Jalyss API description')
     .addApiKey({ type: 'apiKey', name: 'Authorization', in: 'header' },'apiKey')
     .setVersion('0.1')
     .build();
