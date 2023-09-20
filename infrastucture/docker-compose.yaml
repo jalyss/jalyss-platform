@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:14
+    restart: unless-stopped
+    volumes:
+      - "pg-data:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: "pg_isready --username=postgres && psql --username=postgres --list"
+      timeout: 10s
+      retries: 20
+
+  redis:
+    image: redis:6-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    command: redis-server --save 20 1 --loglevel warning --requirepass OnomBPrOLaNdEATilETecIlthanIDELO
+
+volumes:
+  pg-data:
+    driver: local
+  redis-data:
+    driver: local
