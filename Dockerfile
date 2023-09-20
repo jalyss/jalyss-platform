@@ -41,36 +41,36 @@ FROM node:${NODE_VERSION}-alpine AS builder
 ARG REACT_APP_API_ENDPOINT
 
 ENV REACT_APP_API_ENDPOINT=$REACT_APP_API_ENDPOINT \
-    TZ=Asia/Riyadh
+  
 
 WORKDIR /app
 COPY . .
 COPY --from=deps /workspace-install ./
 
 #RUN yarn rebuild
-RUN yarn workspaces foreach -ptR --from '{@tamakan-erp/api,@tamakan-erp/app}' run build
+RUN yarn workspaces foreach -ptR --from '{back,back-office}' run build
 
 RUN --mount=type=cache,target=/root/.yarn-cache \
     YARN_CACHE_FOLDER=/root/.yarn-cache \
-    yarn workspaces focus @tamakan-erp/api --production
+    yarn workspaces focus back --production
 
 FROM node:${NODE_VERSION}-alpine AS production
 
 WORKDIR /app
 ENV NODE_ENV=production \
-    TZ=Asia/Riyadh
+    # TZ=Asia/Riyadh
 
 # disable npm update warnings
 #RUN echo "update-notifier=false" >> ~/.npmrc
 
-COPY --from=builder /app/apps/app/build ./apps/app/build
-COPY --from=builder /app/libs/prisma ./libs/prisma
-COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
-COPY --from=builder /app/apps/api/dist ./apps/api/dist
-COPY --from=builder /app/apps/api/configs ./apps/api/configs
+COPY --from=builder /app/apps/back-office/build ./apps/back-office/build
+# COPY --from=builder /app/libs/prisma ./libs/prisma
+COPY --from=builder /app/apps/back/package.json ./back/package.json
+COPY --from=builder /app/apps/back/dist ./back/dist
+COPY --from=builder /app/apps/back/configs ./back/configs
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 EXPOSE 3001
 
-CMD ["node", "apps/api/dist/main.js"]
+CMD ["node", "back/dist/main.js"]
