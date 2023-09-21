@@ -87,7 +87,8 @@ COPY package*.json ./
 
 # Install application dependencies
 RUN yarn 
-    yarn build
+   # #RUN yarn rebuild
+RUN yarn workspaces foreach -ptR --from '{back,back-office}' run build
 
 # Copy the rest of the application source code to the working directory
 COPY . .
