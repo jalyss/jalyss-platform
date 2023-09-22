@@ -1613,6 +1613,7 @@ async function main() {
       userId: users[0].id,
       tarifId: tarifPrivateSpace1.id,
       freeSpace: 'hello',
+      workSpaceId: workSpacePrivateSpace.id,
     },
   });
 

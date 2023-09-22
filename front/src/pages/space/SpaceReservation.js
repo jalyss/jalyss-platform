@@ -3,7 +3,7 @@ import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import { useNavigate,useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { fetchService } from "../../store/space";
+import { fetchService } from "../../store/service";
 import { createBooking } from "../../store/booking";
 import { updateFormData } from "../forms/reducers";
 import {
@@ -22,10 +22,14 @@ const SpaceReservation = () => {
   const serviceStore = useSelector((state) => state.service);
   const { service } = serviceStore;
   const { tarifId } = useParams();
+  const { workSpaceId } = useParams();
+
   const name = service?.name;
   const navigate = useNavigate();
 
 console.log(tarifId,'ahla bel tarif');
+console.log(workSpaceId,'workSpaceId');
+
 
   const [firstName, setFirstName ] = useState("");
   const [lastName, setLastName ] = useState("");
@@ -56,6 +60,7 @@ console.log(tarifId,'ahla bel tarif');
       endTime,
       freeSpace,
       tarifId,
+      workSpaceId,
     };
     dispatch(createBooking(body)).then((res) => {
       if (!res.error) {
