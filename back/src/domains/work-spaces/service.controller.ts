@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiSecurity } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 
 
@@ -42,4 +43,10 @@ export class ServiceController {
     return this.serviceService.createImages(id,dto)
   }
 
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
+  @Delete('images/:serviceId/:mediaId')
+  removeImage(@Param('serviceId') serviceId: string , @Param('mediaId') mediaId:string) {
+    return this.serviceService.removeImage(serviceId,mediaId);
+  }
 }

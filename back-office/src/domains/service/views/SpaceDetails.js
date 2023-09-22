@@ -18,6 +18,8 @@ export default function SpaceDetails() {
 
   const space = useSelector((state) => state.space.space);
   const [refresh, setRefresh] = useState(false);
+  
+console.log(space,'space');
 
   useEffect(() => {
     dispatch(fetchSpaceById(spaceId));

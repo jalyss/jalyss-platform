@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Checkbox, FormControlLabel } from "@mui/material";
+import { showErrorToast, showSuccessToast } from "../../utils/toast";
 import { Link, useParams } from "react-router-dom";
-import { Grid } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { Card, CardMedia, Typography } from "@mui/material";
-import { fetchService, fetchServices } from "../../store/space";
+import { useNavigate } from "react-router-dom";
+import { CardMedia, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import NavLink from "react-bootstrap/esm/NavLink";
+import { fetchService, fetchServices } from "../../store/service";
+import Carousel from "react-bootstrap/Carousel";
+import cardCover from "../../img/cardCover.jpg";
+import Modal from "../../components/Commun/Modal";
+
+
 const useStyles = makeStyles((theme) => ({
   imagesGroup: {
     display: "flex",
@@ -15,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "40%",
-    
   },
   media: {
     height: 0,
@@ -33,19 +38,28 @@ const useStyles = makeStyles((theme) => ({
 function ServiceSpace() {
   const { serviceIdentifier } = useParams();
   const serviceStore = useSelector((state) => state.service);
-  const { service,services } = serviceStore;
-console.log(service,"serrr");
+  const { service, services } = serviceStore;
+
+  const [selectedWorkspace, setSelectedWorkspace] = useState("");
+  const [basicModal, setBasicModal] = useState(false);
+  
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   
-  useEffect(() => {
-    dispatch(fetchService(serviceIdentifier));
-    dispatch(fetchServices());
-  }, [dispatch]);
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+  };
 
   const classes = useStyles();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchService(serviceIdentifier));
+    dispatch(fetchServices());
+  }, [dispatch]);
+
   return (
     <div>
       <div>
@@ -56,38 +70,81 @@ console.log(service,"serrr");
         >
           {service?.name}
         </Typography>
-        <Grid container spacing={3} justifyContent="center" item>
-          <Grid item xs={12} sm={12} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <imageGroup className={classes.imagesGroup}>
-              {service?.MediaService.filter((elem, j) => j % 2 === 0).map(
-                (item, i) => (
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.media}
-                      image={item.media.path}
+        <Carousel>
+          {service?.MediaService?.map((image) => (
+            <Carousel.Item>
+              {image.media ? (
+                <img
+                  src={image?.media?.path}
+                  class="d-block w-100 image-carousel "
+                  alt={image?.media?.alt}
+                />
+              ) : null}
+            </Carousel.Item>
+          ))}
+        </Carousel>
+
+        <p className="secondLine">CHOOSE ONE OF OUR WORKSPACES </p>
+
+        <div className="blogListWrapper">
+          {service?.workSpace?.map((space) => (
+            <div key={space.id}>
+              <div className="blogItemWrapper" style={{ cursor: "pointer" }}>
+                {space?.image ? (
+                  <img
+                    className="blogItemCover"
+                    src={space?.image?.path}
+                    alt="cover"
+                    onClick={() => navigate(`/${space.id}`)}
+                  />
+                ) : (
+                  <img
+                    className="blogItemCover"
+                    src={cardCover}
+                    alt="cover"
+                    onClick={() => navigate(`/${space.id}`)}
+                  />
+                )}
+                <div className="chip mt-3" onClick={() => navigate(`/${space.id}`)} >{space?.name}</div>
+                <div className="blogItemFooter d-flex justify-content-between mt-1" onClick={() => navigate(`/${space.id}`)}>
+                  <div className="d-flex flex-column" onClick={() => navigate(`/${space.id}`)}>
+                    <div>
+                      <strong>Amenities:</strong> {space?.amenities}
+                    </div>
+                    <div>
+                      <strong>Capacity:</strong> {space?.capacity}
+                    </div>
+                    <div>
+                      <strong>Description:</strong> {space?.description}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className="additional-info mt-3"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <div style={{ marginRight: "10px" }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={selectedWorkspace === space.id}
+                          onChange={() => setSelectedWorkspace(space.id)}
+                        />
+                      }
+                      label="Choose"
                     />
-                  </Card>
-                )
-              )}
-            </imageGroup>
-          </Grid>
-        </Grid>
-        <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} sm={12} sx={{ width: { xs: "100%", sm: "50%" } }}>
-            <imageGroup className={classes.imagesGroup}>
-              {service?.MediaService.filter((elem, j) => j % 2 !== 0).map(
-                (item, i) => (
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.media}
-                      image={item.media.path}
-                    />
-                  </Card>
-                )
-              )}
-            </imageGroup>
-          </Grid>
-        </Grid>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <p className="firstLine">PRICING</p>
         <p className="secondLine">Price per unit</p>
         <p className="thirdLine">
@@ -97,7 +154,7 @@ console.log(service,"serrr");
           can further customize your experience.
         </p>
         <p className="fourthLine">
-         To grow your business in a setting that is both professional and
+          To grow your business in a setting that is both professional and
           social, reserve a spot in one of our coworking spaces.
         </p>
         <div className="d-flex flex-wrap justify-content-between align-items-center">
@@ -112,7 +169,7 @@ console.log(service,"serrr");
               >
                 <div className="card-body service">
                   <h1 className="card-title serviceType">{item.name}</h1>
-                 < div className="price">
+                  <div className="price">
                     Only <a className="priceNumber"> {item.price}</a>DT
                     <p className="soustitle">Capacity: {item.capacity}</p>
                   </div>
@@ -120,29 +177,48 @@ console.log(service,"serrr");
                     {item.description.split(",").map((desc, i) => (
                       <span key={i}>
                         {desc}
-                        <br /> {/* Add a line break */}
+                        <br />
                       </span>
                     ))}
                   </p>
+                  {selectedWorkspace !== "" ? (
+                    <button
+                      className="btn"
+                      style={{
+                        width: 200,
+                        marginLeft: 25,
+                        backgroundColor: "rgb(144, 48, 152)",
+                        borderRadius: 30,
+                        color: "white",
+                        borderColor: "white",
+                      }}
+                    >
+                      <Link
+                        to={`/SpaceReservation/${item?.id}/${selectedWorkspace}`}
+                        style={{ textDecoration: "none", color: "white" }}
+                      >
+                        Reserve
+                      </Link>
+                    </button>
+                  ) : (
+                    <button
+                      className="btn"
+                      style={{
+                        width: 200,
+                        marginLeft: 25,
+                        backgroundColor: "rgb(144, 48, 152)",
+                        borderRadius: 30,
+                        color: "white",
+                        borderColor: "white",
+                      }}
+                      onClick={() => {
 
-                  <button
-                    className="btn "
-                    style={{
-                      width: 200,
-                      marginLeft: 25,
-                      backgroundColor: "rgb(144, 48, 152)",
-                      borderRadius: 30,
-                      color: "black",
-                      borderColor: "white"
-                    }}
-                  >
-                    <Link
-                      to={`/SpaceReservation/${item?.id}`}
-                      style={{ textDecoration: "none", color: "white" }}
+                        toggleShow()
+                      }}
                     >
                       Reserve
-                    </Link>
-                  </button>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -161,7 +237,7 @@ console.log(service,"serrr");
         </p>
 
         <div className="d-flex flex-wrap justify-content-center align-items-center ">
-          {services.items
+          {services?.items
             .filter((item) => item.identifier !== serviceIdentifier)
             .map((elem, i) => (
               <div className="col-md-2.5 mx-1" key={i}>
@@ -186,7 +262,9 @@ console.log(service,"serrr");
                   }}
                 >
                   <div className="card-body  ">
-                    <h5 className="card-title" style={{marginLeft: 25,}}>{elem.name}</h5>
+                    <h5 className="card-title" style={{ marginLeft: 25 }}>
+                      {elem.name}
+                    </h5>
                     <button
                       className="btn "
                       style={{
@@ -195,11 +273,11 @@ console.log(service,"serrr");
                         backgroundColor: "rgb(144, 48, 152)",
                         borderRadius: 30,
                         color: "black",
-                        borderColor: "white"
+                        borderColor: "white",
                       }}
                     >
                       <Link
-                        href={`/spaceJalyss/${elem?.identifier}`}
+                        href={`/spaceJalyss/${elem?.identifier}/${selectedWorkspace}`}
                         style={{ textDecoration: "none", color: "white" }}
                       >
                         {" "}
@@ -212,6 +290,16 @@ console.log(service,"serrr");
             ))}
         </div>
       </div>
+      <Modal
+  basicModal={basicModal}
+  normal={true}
+  ofDelete={!true}
+  toggleShow={toggleShow}
+  title={" Alert"}
+  body={" You have to choose a workspace"}
+  withoutSave={true}
+>
+</Modal>
     </div>
   );
 }

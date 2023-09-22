@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+  router:
+    image: traefik:v2.9
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    restart: unless-stopped
+    command:
+      - "--log.level=WARN"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.le.acme.tlschallenge=true"
+      #- "--certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.le.acme.email=noreply@jalyss.com"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - proxy
+
+  app:
+    image: 555811813125.dkr.ecr.me-south-1.amazonaws.com/jalyss-app:latest
+    build:
+      context: ../
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_ENDPOINT: "https://app.jalyss.com"
+        SKIP_PREFLIGHT_CHECK: "true"
+    environment:
+      - PORT=3001
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres?schema=public
+
+      # Security
+      - JWT_ACCESS_SECRET=nestjsPrismaAccessSecret
+      - JWT_REFRESH_SECRET=nestjsPrismaRefreshSecret
+
+      # AWS
+      - AWS_ACCESS_KEY=AKIAYVYUV22TKTOLVXX5
+      - AWS_SECRET_KEY=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
+      - AWS_COGNITO_USER_POOL_ID=me-south-1_YF4kQQFVj
+      - AWS_COGNITO_CLIENT_ID=mngsrb5oeui407hemu7r781mq
+      - AWS_S3_BUCKET=jalyss-bucket
+      - AWS_REGION=me-south-1
+
+      # Redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=OnomBPrOLaNdEATilETecIlthanIDELO
+
+      # App
+      - NOREPLY_EMAIL=noreply@jalyss.com
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    restart: unless-stopped
+    stdin_open: true
+    ports:
+      - "3001:3001"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tmkn-app.rule=Host(`app.jalyss.com`)"
+      - "traefik.http.routers.tmkn-app.tls=true"
+      - "traefik.http.routers.tmkn-app.entrypoints=websecure"
+      - "traefik.http.routers.tmkn-app.tls.certresolver=le"
+      - "traefik.http.services.app.loadbalancer.server.port=3001"
+    networks:
+      - proxy
+    command:
+      - /bin/sh
+      - -c
+      - |
+        ls -al node_modules
+        ls -al apps/api
+        node apps/api/dist/main.js
+
+  postgres:
+    networks:
+      - proxy
+
+  redis:
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

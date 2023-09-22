@@ -12,6 +12,7 @@ export default function EditService() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { serviceId } = useParams();
+  const [mediaId, setMediaId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [filename, setFileName] = useState("");
@@ -24,10 +25,10 @@ export default function EditService() {
   const id = serviceId;
   const serviceStore = useSelector((state) => state.service);
 
-  console.log(serviceStore, "lol");
-  const space = useSelector((state) => state.service);
+  const service = useSelector((state) => state.service.service);
 
-
+console.log(service,"ser")
+console.log(mediaId,"mediaid");
 
   useEffect(() => {
     dispatch(fetchServiceById(serviceId));
@@ -100,23 +101,53 @@ export default function EditService() {
       });
   };
 
-  const deleteImg = async (path) => {
-    const pathElements = path.split("/");
-    const name = pathElements[pathElements.length - 1];
+  const deleteImg = async () => {
+    // const pathElements = path.split("/");
+    // const name = pathElements[pathElements.length - 1];
 
     await axios
       .delete(
-        `${process.env.REACT_APP_API_ENDPOINT}/services/delete-images/${name}`
+        `${process.env.REACT_APP_API_ENDPOINT}/images/${serviceId}/${mediaId}`
       )
       .then((res) => {
         if (!res.error) {
-          window.location.reload();
+          window.location.reload(); 
           showSuccessToast("image deleted");
         } else {
           showErrorToast(res.error);
         }
-      });
+      }); 
   };
+
+
+  // const deleteImg = async (id) => {
+  //   try {
+  //     // Make an API request to delete the image by its id
+  //     await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/${id}`);
+  
+  //     // Update the state to remove the deleted image
+  //     const updatedMedia = service.MediaService.filter(
+  //       (elem) => elem.media.id !== id
+  //     );
+  
+  //     // Update the service object
+  //     const updatedService = { ...service };
+  //     updatedService.MediaService = updatedMedia;
+  
+  //     // Update the Redux state or local state if needed
+  //     // dispatch(updateService(updatedService)); // You may need to dispatch an action to update the state
+  
+  //     // Show a success toast
+  //     showSuccessToast("Image deleted");
+  
+  //     // Optionally, you can refresh the component or rerender
+  //     // setRefresh(!refresh);
+  //   } catch (error) {
+  //     console.error("Error deleting image:", error);
+  //     // Show an error toast
+  //     showErrorToast("Error deleting image");
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -190,7 +221,7 @@ export default function EditService() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="exampleFormControlFile1">Image file input</label>
+            <label htmlFor="exampleFormControlFile1">Image file input for the sevice cover</label>
             <input
               type="file"
               className="form-control-file"
@@ -200,12 +231,11 @@ export default function EditService() {
             />
             {/* {filenamesplitted && <p>Selected file: {filenamesplitted}</p>} */}
           </div>
-          <button type="submit" className="btn btn-primary mb">
-            Add the service
-          </button>
+          <AddButton type="submit" content="Update the service" />
         </form>
         </>
         <>
+        <h3>Add "{name}" service pictures:</h3>
         <form onSubmit={onSubmit}>
           <div>
           <input
@@ -228,12 +258,12 @@ export default function EditService() {
           
           </div>
       </div>
-      {space?.MediaWorkSpace?.map((elem, i) => (
+      {service?.MediaService?.map((elem, i) => (
         <div className="grid" key={i}>
           <img alt="" src={elem.media.path} style={{ height: 100 }} />
           <div className="deleteButton">
             <AddButton
-              onClick={() => deleteImg(elem.media.path)}
+              onClick={() => {setMediaId(elem.media.id) ; deleteImg()}}
               content={<AiFillDelete />}
               startIcon
               />
