@@ -15,7 +15,8 @@ import bookmark from "./bookmarks";
 import session from "./session";
 import chat from "./chat";
 import faq from "./Faq";
-import service from "./space";
+import service from "./service";
+import space from "./space";
 import mentorRequest from "./mentorRequest";
 import sessionFeedback from "./sessionFeedback";
 import trainingBooking from "./trainingBooking";
@@ -41,6 +42,7 @@ export const store = configureStore({
     chat,
     faq,
     service,
+    space,
     sessionFeedback,
     mentorRequest,
     trainingBooking,

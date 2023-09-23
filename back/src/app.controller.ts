@@ -40,6 +40,10 @@ export class AppController {
       return { error: 'Failed to delete the file' };
     }
   }
+
+
+
+
   @Get()
   getHello(): string {
     return this.appService.getHello();
