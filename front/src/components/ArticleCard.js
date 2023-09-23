@@ -6,7 +6,6 @@ import { BsBag } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "react-use-cart";
 import "../assets/styles/card.css";
-import { purple } from "@mui/material/colors";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 function ArticleCard({ article }) {
@@ -46,8 +45,8 @@ function ArticleCard({ article }) {
 
 
       <div className="d-flex flex-column justify-content-between align-items-center mt-2">
-
-        <p>{article.price}TND</p>
+        <p >{article.article?.shortDescriptionEn}</p>
+        <p className="prices" >{article.price}TND</p>
         <div className="d-flex mb-2">
           <div
             style={{ backgroundColor: "white", color: "purple" }}

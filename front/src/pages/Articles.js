@@ -24,6 +24,7 @@ import "rc-slider/assets/index.css";
 import { groupBy, isEmpty, map } from "lodash";
 import FormatListBulleted from "@mui/icons-material/FormatListBulleted";
 import { Apps, AppsRounded } from "@mui/icons-material";
+import ArticleCardHorizontal from "../components/ArticleCardHorizontal";
 
 
 
@@ -428,7 +429,7 @@ function Articles() {
 
                     <div className=" d-flex flex-column px-3">
                       {element.map((el, index) => (
-                        <ArticleCard article={el} />
+                        <ArticleCardHorizontal article={el} />
                       ))}
                     </div>
                   </>
@@ -437,7 +438,7 @@ function Articles() {
                 <div className=" d-flex flex-column  px-3 ">
                   {paginate(articleStore.articles.items, currentPage, pageSize).map(
                     (element, index) => (
-                      <ArticleCard key={index} article={element} />
+                      <ArticleCardHorizontal key={index} article={element} />
                     )
                   )}
                 </div>

@@ -133,15 +133,15 @@ function EditRole() {
     let aux = Object.assign({}, body);
     data.length
       ? dispatch(updateRole(aux)).then((res) => {
-          if (!res.error) {
-            showSuccessToast("Role updated");
-            setData([]);
-            toggleShowDelete();
-            setEditMode(!EditMode);
-          } else {
-            showErrorToast(res.error.message);
-          }
-        })
+        if (!res.error) {
+          showSuccessToast("Role updated");
+          setData([]);
+          toggleShowDelete();
+          setEditMode(!EditMode);
+        } else {
+          showErrorToast(res.error.message);
+        }
+      })
       : showErrorToast("There is no data");
   };
   const onCanceltoggleShowDelete = (id) => {
@@ -154,226 +154,245 @@ function EditRole() {
   const permissionsByDomain = {};
   return (
     <div className="container">
-      {!EditMode ? (
-        <>
-          <div className="d-flex justify-content-center">
-            <div
-              class="row"
-              style={{ marginBottom: "10px", marginTop: "30px" }}
-            >
-              <Typography
-                style={{
-                  fontFamily: "Arial",
-                  color: "#333",
-                  marginTop: "100px",
-                }}
-              >
+      <div className="card">
+        <div className="container">
+          {!EditMode ? (
+            <>
+              <div className="d-flex justify-content-center">
                 <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "auto 1fr", // Two columns: one for domain, one for action
-                    columnGap: "20px",
-                  }}
+                  class="row"
+                  style={{ marginBottom: "10px", marginTop: "30px" }}
                 >
-                  <span
-                    style={{
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      marginLeft: "150px",
-                    }}
-                  >
-                    Name :
-                  </span>
+                  <h2 style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>Edit role</h2>
+                  <div style={{
+                    marginLeft: "170px",
+                    marginRight: "122px",
+                    width: "70%",
+                    borderRadius: "24px",
+                    background: " #f0f3ff",
+                    border: " 1px solid rgba(192, 194, 204)",
+                    marginBottom: "1rem"
+                  }}>
+                    <div className=" d-flex justify-content-evenly " style={{ marginTop: "10px" }}>
+                      <Typography
+                        style={{
+                          fontFamily: "Arial",
+                          fontSize: "18px",
 
-                  <TableRow
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                    }}
-                    style={{ marginBottom: "60px" }}
-                  >
-                    <TableCell
-                      component="th"
-                      style={{ fontWeight: "600", fontSize: "23px" }}
-                      scope="row"
-                    >
-                      Name (Ar)
-                    </TableCell>
-                    <TableCell align="left" style={{ fontSize: "20px" }}>
-                      {roledata?.nameAr}
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      style={{ fontWeight: "600", fontSize: "23px" }}
-                      scope="row"
-                    >
-                      Name (En)
-                    </TableCell>
-                    <TableCell align="left"style={{ fontSize: "20px" }}>{roledata?.nameEn}</TableCell>
-                  </TableRow>
-                  <span
-                    style={{
-                      fontSize: "30px",
-                      fontWeight: "bold",
-                      marginLeft: "150px",
-                    }}
-                  >
-                    Permission :
-                  </span>
+                          color: "#333",
+                          display: "table-row",
+                        }}
+                      >
 
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "auto 1fr",
-                      rowGap: "10px",
-                    }}
-                  >
-                    {roledata?.permissions?.forEach((permission) => {
-                      if (!permissionsByDomain[permission.domain]) {
-                        permissionsByDomain[permission.domain] = [];
-                      }
-                      permissionsByDomain[permission.domain].push(
-                        permission.action
-                      );
-                    })}
-                    <div>
-                      {Object.keys(permissionsByDomain).map((domain) => (
-                        <TableRow
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            display: "table-cell",
+                            fontSize: "large",
+                            paddingRight: "40px",
                           }}
                         >
-                          <TableCell
-                            component="th"
-                            style={{ fontWeight: "600", fontSize: "23px" }}
-                            scope="row"
+                          Name (Ar) :
+                        </span>
+                        <span style={{ display: "table-cell" }}>
+                          {roledata?.nameAr}
+                        </span>
+                      </Typography>
+                      <Typography
+                        style={{
+                          fontFamily: "Arial",
+                          fontSize: "16px",
+                          color: "#333",
+                          display: "table-row",
+                        }}>
+                        <span
+                          style={{
+                            display: "table-cell",
+                            fontSize: "large",
+                            paddingRight: "40px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Name (En):
+                        </span>
+                        <span style={{ display: "table-cell" }}>
+                          {roledata?.nameEn}
+                        </span>
+
+                      </Typography>
+                      <br></br>
+                     
+                    </div>
+                     <Typography
+                        style={{
+                          fontFamily: "Arial",
+                          fontSize: "18px",
+
+                          color: "#333",
+                          display: "table-row",
+                        }}
+                       >
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            display: "table-cell",
+                            fontSize: "large",
+                            paddingRight: "40px",
+                          }}
+                        >
+                          Permission :
+                        </span>
+                        
+                          
+                        {roledata?.permissions?.forEach((permission) => {
+                        if (!permissionsByDomain[permission.domain]) {
+                          permissionsByDomain[permission.domain] = [];
+                        }
+                        permissionsByDomain[permission.domain].push(
+                          permission.action
+                        );
+                       })}
+                      
+                        
+                        {Object.keys(permissionsByDomain).map((domain) => (
+                          <TableRow
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
                           >
-                            {domain}
-                          </TableCell>
-                          <TableCell align="left" style={{ fontSize: "20px" }}>
-                            {permissionsByDomain[domain].join(" - ")}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                            <TableCell 
+                              component="th"
+                             style={{ display: "table-cell",fontSize: "18px" }}
+                              scope="row"
+                            >
+                              {domain}
+                            </TableCell>
+                            <TableCell align="left" >
+                              {permissionsByDomain[domain].join(" - ")}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                     
+                      </Typography>
+                   
+                    <div className="w-100 d-flex justify-content-center">
+                      <button
+                        type="submit"
+                        onClick={() => {
+                          setEditMode(!EditMode);
+                        }}
+                        className="confirm-button mt-5   mb-3"
+                      >
+                        <span className="label-btn"> Edit role </span>
+                      </button>
                     </div>
                   </div>
                 </div>
-              </Typography>
-
-              <div className="w-100 d-flex justify-content-center">
-                <button
-                  type="submit"
-                  onClick={() => {
-                    setEditMode(!EditMode);
-                  }}
-                  className="confirm-button mt-5   mb-3"
-                >
-                  <span className="label-btn"> Edit role </span>
-                </button>
               </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="card" style={{ borderRadius: 20, border: 5 }}>
-          <div className="container">
-            <div className="row mb-5">
-              <div className="form-group col-6 mt-3">
-                <label>NameAr</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={dataToSave.nameAr || ""}
-                  onChange={(e) => {
-                    setdataToSave({ ...dataToSave, nameAr: e.target.value });
-                  }}
-                  placeholder="NameAr"
-                />
-              </div>
-              <div className="form-group col-6 mt-3">
-                <label>NameEn</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={dataToSave.nameEn || ""}
-                  onChange={(e) => {
-                    setdataToSave({ ...dataToSave, nameEn: e.target.value });
-                  }}
-                  placeholder="NameEn"
-                />
-              </div>
-            </div>
-            <div className="row mt-5">
-              {Object.entries(Newrole.newpermissions).map(
-                ([roleName, permissions]) => (
-                  <div className="col-md-4" key={roleName}>
-                    <div className="card mb-4">
-                      <div className="card-body">
-                        <h5 className="card-title">{roleName}</h5>
-                        {permissions?.map((permission, index) => (
-                          <div className="d-flex">
-                            <div
-                              className="form-check"
-                              key={`${roleName}-${permission}`}
-                            >
-                              <input
-                                type="checkbox"
-                                className="form-check-input"
-                                id={`${roleName}-${permission}`}
-                                checked={permission}
-                                onChange={() =>
-                                  handlePermissionChange(roleName, index)
-                                }
-                              />
-                            </div>
-                            <label className="form-check-label h6">
-                              {permission} -{" "}
-                              {role.permissions[roleName][index]
-                                ? role.permissions[roleName][index]
-                                : "False"}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+            </>
+          ) : (
+            <div className="card" style={{ borderRadius: 20, border: 5 }}>
+              <div className="container">
+                <div className="row mb-5">
+                  <div className="form-group col-6 mt-3">
+                    <label>NameAr</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={dataToSave.nameAr || ""}
+                      onChange={(e) => {
+                        setdataToSave({ ...dataToSave, nameAr: e.target.value });
+                      }}
+                      placeholder="NameAr"
+                    />
                   </div>
-                )
-              )}
+                  <div className="form-group col-6 mt-3">
+                    <label>NameEn</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={dataToSave.nameEn || ""}
+                      onChange={(e) => {
+                        setdataToSave({ ...dataToSave, nameEn: e.target.value });
+                      }}
+                      placeholder="NameEn"
+                    />
+                  </div>
+                </div>
+                <div className="row mt-5">
+                  {Object.entries(Newrole.newpermissions).map(
+                    ([roleName, permissions]) => (
+                      <div className="col-md-4" key={roleName}>
+                        <div className="card mb-4">
+                          <div className="card-body">
+                            <h5 className="card-title">{roleName}</h5>
+                            {permissions?.map((permission, index) => (
+                              <div className="d-flex">
+                                <div
+                                  className="form-check"
+                                  key={`${roleName}-${permission}`}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    id={`${roleName}-${permission}`}
+                                    checked={permission}
+                                    onChange={() =>
+                                      handlePermissionChange(roleName, index)
+                                    }
+                                  />
+                                </div>
+                                <label className="form-check-label h6">
+                                  {permission} -{" "}
+                                  {role.permissions[roleName][index]
+                                    ? role.permissions[roleName][index]
+                                    : "False"}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+                <div className="w-100 d-flex justify-content-center">
+                  <button
+                    type="submit"
+                    onClick={toggleShowDelete}
+                    className="confirm-button mt-5   mb-3"
+                  >
+                    <span className="label-btn"> Save changes </span>
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="w-100 d-flex justify-content-center">
-              <button
-                type="submit"
-                onClick={toggleShowDelete}
-                className="confirm-button mt-5   mb-3"
+          )}
+          <EditModal
+            toggleShow={onCanceltoggleShowDelete}
+            basicModal={basicModalDelete}
+            setBasicModal={setBasicModalDelete}
+            normal={true}
+            ofDelete={!true}
+            title={
+              <div
+                style={{ width: "200%", marginLeft: "100%" }}
+                className="d-flex justify-content-center align-items-center"
               >
-                <span className="label-btn"> Save changes </span>
-              </button>
-            </div>
-          </div>
+                Are you sure !
+              </div>
+            }
+            body={
+              <div className="d-flex justify-content-center align-items-center">
+                You want to edit this role ?
+              </div>
+            }
+            fn={() => {
+              handleSubmit();
+            }}
+          />
         </div>
-      )}
-      <EditModal
-        toggleShow={onCanceltoggleShowDelete}
-        basicModal={basicModalDelete}
-        setBasicModal={setBasicModalDelete}
-        normal={true}
-        ofDelete={!true}
-        title={
-          <div
-            style={{ width: "200%", marginLeft: "100%" }}
-            className="d-flex justify-content-center align-items-center"
-          >
-            Are you sure !
-          </div>
-        }
-        body={
-          <div className="d-flex justify-content-center align-items-center">
-            You want to edit this role ?
-          </div>
-        }
-        fn={() => {
-          handleSubmit();
-        }}
-      />
+      </div>
     </div>
   );
 }
