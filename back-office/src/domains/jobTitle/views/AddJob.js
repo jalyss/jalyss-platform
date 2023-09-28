@@ -11,7 +11,6 @@ import {
   DialogTitle,
   Grid,
   TextField,
-  Typography,
 } from "@mui/material";
 
 function AddJob() {
@@ -20,7 +19,7 @@ function AddJob() {
 
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-  const [isDialogOpen, setDialogOpen] = useState(true); // Show the dialog by default
+  const [isDialogOpen, setDialogOpen] = useState(true); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +39,7 @@ function AddJob() {
       try {
         await dispatch(createJobTitle(aux));
         showSuccessToast("Job created successfully");
-        setDialogOpen(false); // Close the dialog
+        setDialogOpen(false); 
         navigate(-1);
       } catch (error) {
         console.log(error);

@@ -11,7 +11,7 @@ import {
   DialogTitle,
   Grid,
   TextField,
-  Typography,
+ 
 } from "@mui/material";
 
 function AddCounty() {
@@ -20,7 +20,7 @@ function AddCounty() {
 
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-  const [isDialogOpen, setDialogOpen] = useState(true); // Show the dialog by default
+  const [isDialogOpen, setDialogOpen] = useState(true); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +40,7 @@ function AddCounty() {
       try {
         await dispatch(createCountrie(aux));
         showSuccessToast("New Country created successfully");
-        setDialogOpen(false); // Close the dialog
+        setDialogOpen(false);
         navigate(-1);
       } catch (error) {
         console.log(error);

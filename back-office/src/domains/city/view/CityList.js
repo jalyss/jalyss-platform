@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeCitie, fetchCities } from "../../../store/city"; // Import city-related actions
+import { removeCitie, fetchCities } from "../../../store/city"; 
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
