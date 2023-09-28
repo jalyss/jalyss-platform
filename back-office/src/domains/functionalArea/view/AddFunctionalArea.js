@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-import {
-  createFunctionalArea,
-  fetchFunctionalArea,
-} from "../../../store/functionalArea";
+import { createFunctionalArea } from "../../../store/functionalArea";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 function AddFuctionalArea() {
   const navigate = useNavigate();
@@ -16,10 +20,7 @@ function AddFuctionalArea() {
 
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-
-  useEffect(() => {
-    dispatch(fetchFunctionalArea());
-  }, [dispatch]);
+  const [isDialogOpen, setDialogOpen] = useState(true); // Show the dialog by default
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +39,8 @@ function AddFuctionalArea() {
       let aux = { ...body };
       try {
         await dispatch(createFunctionalArea(aux));
-        showSuccessToast(" Functional Area created successfully");
+        showSuccessToast("Functional Area created successfully");
+        setDialogOpen(false); // Close the dialog
         navigate(-1);
       } catch (error) {
         console.log(error);
@@ -49,16 +51,11 @@ function AddFuctionalArea() {
   };
 
   return (
-    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <form className="checkout-form" onSubmit={handleSubmit}>
-        <div className="d-flex flex-wrap">
-          <div className=" m-3">
-            <Grid item xs={12}>
-              <Typography variant="h4" align="center" gutterBottom>
-                Create Functional Area
-              </Typography>
-            </Grid>
-
+    <div>
+      <Dialog open={isDialogOpen} onClose={() => navigate(-1)}>
+        <DialogTitle>Create Functional Area</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -82,16 +79,18 @@ function AddFuctionalArea() {
                   margin="normal"
                 />
               </Grid>
-
-              <div className="w-100 d-flex justify-content-center">
-                <Button type="submit" variant="contained" color="primary">
-                  Save
-                </Button>
-              </div>
             </Grid>
-          </div>
-        </div>
-      </form>
+            <DialogActions>
+              <Button type="submit" variant="contained" color="primary">
+                Save
+              </Button>
+              <Button onClick={() => navigate(-1)} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

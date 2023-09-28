@@ -52,7 +52,7 @@ export const sidebarDataBranch = [
       {
         nameEn: "city",
         nameAr: "city",
-        path: "city"
+        path: "cities"
       },
       {
         nameEn: "functional Area",

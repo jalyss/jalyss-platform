@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-import { createJobTitle, fetchJobTitle } from "../../../store/jobTitle";
+import { createJobTitle } from "../../../store/jobTitle";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 function AddJob() {
   const navigate = useNavigate();
@@ -13,10 +20,7 @@ function AddJob() {
 
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-
-  useEffect(() => {
-    dispatch(fetchJobTitle());
-  }, [dispatch]);
+  const [isDialogOpen, setDialogOpen] = useState(true); // Show the dialog by default
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +39,8 @@ function AddJob() {
       let aux = { ...body };
       try {
         await dispatch(createJobTitle(aux));
-        showSuccessToast("Job  created successfully");
+        showSuccessToast("Job created successfully");
+        setDialogOpen(false); // Close the dialog
         navigate(-1);
       } catch (error) {
         console.log(error);
@@ -46,16 +51,11 @@ function AddJob() {
   };
 
   return (
-    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <form className="checkout-form" onSubmit={handleSubmit}>
-        <div className="d-flex flex-wrap">
-          <div className=" m-3">
-            <Grid item xs={12}>
-              <Typography variant="h4" align="center" gutterBottom>
-                Create new job
-              </Typography>
-            </Grid>
-
+    <div>
+      <Dialog open={isDialogOpen} onClose={() => navigate(-1)}>
+        <DialogTitle>Create new job</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -79,16 +79,18 @@ function AddJob() {
                   margin="normal"
                 />
               </Grid>
-
-              <div className="w-100 d-flex justify-content-center">
-                <Button type="submit" variant="contained" color="primary">
-                  Save
-                </Button>
-              </div>
             </Grid>
-          </div>
-        </div>
-      </form>
+            <DialogActions>
+              <Button type="submit" variant="contained" color="primary">
+                Save
+              </Button>
+              <Button onClick={() => navigate(-1)} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

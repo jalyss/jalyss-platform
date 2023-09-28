@@ -142,6 +142,10 @@ import Countrie from "../domains/country/county";
 import AddCounty from "../domains/country/view/AddCountry";
 import CountryList from "../domains/country/view/CountyList";
 
+import CityList from "../domains/city/view/CityList";
+import AddCity from "../domains/city/view/AddCity";
+import Cities from "../domains/city/city";
+
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -225,6 +229,10 @@ function Router() {
               <Route path="Countrie" element={<Countrie/>}>
               <Route index element={<CountryList/>}/>
               <Route path="AddCountrie" element={<AddCounty/>}/>
+              </Route>
+              <Route path="cities" element={<Cities/>}>
+              <Route index element={<CityList/>}/>
+              <Route path="AddCity" element={<AddCity/>}/>
               </Route>
 
 
