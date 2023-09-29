@@ -1,4 +1,3 @@
-// ArticleCard.js
 import React from "react";
 import Rating from "../components/Commun/Rating";
 import { FiEye } from "react-icons/fi";
@@ -11,6 +10,8 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 function ArticleCard({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate();
+
+
 
   const handleButtonClick = () => {
     if (handleButtonClick.error) {
