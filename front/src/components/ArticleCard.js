@@ -1,4 +1,3 @@
-// ArticleCard.js
 import React from "react";
 import Rating from "../components/Commun/Rating";
 import { FiEye } from "react-icons/fi";
@@ -11,6 +10,8 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 function ArticleCard({ article }) {
   const { addItem } = useCart();
   const navigate = useNavigate();
+
+
 
   const handleButtonClick = () => {
     if (handleButtonClick.error) {
@@ -26,7 +27,7 @@ function ArticleCard({ article }) {
 
   
    
-    <div className="article-card position-relative mx-3 mb-2 ">
+    <div className="article-card2 position-relative mx-3 mb-2 ">
 
       <div className="position-relative">
         <div className="stock-label">
@@ -41,14 +42,12 @@ function ArticleCard({ article }) {
           <Rating edit={false} rating={article?.rating} />
         </div>
       </div>
-
       <h6 className="article-title">{article.article?.title}</h6>
 
 
       <div className="d-flex flex-column justify-content-between align-items-center mt-2">
         <p >{article.article?.shortDescriptionEn}</p>
         <p className="prices" >{article.price}TND</p>
-
         <div className="d-flex mb-2">
           <div
             style={{ backgroundColor: "white", color: "purple" }}

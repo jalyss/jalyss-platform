@@ -126,6 +126,26 @@ import Client from "../domains/Client/Client";
 import Profileclient from "../domains/Client/views/Profileclient";
 import TypeArticle from "../domains/type/TypeArticle";
 
+import EducationLevel from "../domains/educationLevel/educationLevel";
+import EducationLevelList from "../domains/educationLevel/views/EducationLevelListe";
+import AddLevel from "../domains/educationLevel/views/AddLevel";
+
+import JobTitle from "../domains/jobTitle/jobTitle";
+import JobTitleList from "../domains/jobTitle/views/JobTitleList";
+import AddJob from "../domains/jobTitle/views/AddJob";
+
+import FunctionalArea from "../domains/functionalArea/functionalArea";
+import FunctionalAreaList from "../domains/functionalArea/view/FunctionalAreaList";
+import AddFuctionalArea from "../domains/functionalArea/view/AddFunctionalArea";
+
+import Countrie from "../domains/country/county";
+import AddCounty from "../domains/country/view/AddCountry";
+import CountryList from "../domains/country/view/CountyList";
+
+import CityList from "../domains/city/view/CityList";
+import AddCity from "../domains/city/view/AddCity";
+import Cities from "../domains/city/city";
+
 function Router() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -190,6 +210,30 @@ function Router() {
               />
             </Route>
             {/* <Route path="addclient" element={<Addclient/>}/> */}
+
+              <Route path="educationLevel" element={<EducationLevel/>}>
+              <Route index element={<EducationLevelList/>}/>
+              <Route path="addLevel" element={<AddLevel/>}/>
+              </Route>
+
+              <Route path="jobTitle" element={<JobTitle/>}>
+              <Route index element={<JobTitleList/>}/>
+              <Route path="addJob" element={<AddJob/>}/>
+              </Route>
+
+              <Route path="functionalArea" element={<FunctionalArea/>}>
+              <Route index element={<FunctionalAreaList/>}/>
+              <Route path="addFuctionalArea" element={<AddFuctionalArea/>}/>
+              </Route>
+              <Route path="Countrie" element={<Countrie/>}>
+              <Route index element={<CountryList/>}/>
+              <Route path="AddCountrie" element={<AddCounty/>}/>
+              </Route>
+              <Route path="cities" element={<Cities/>}>
+              <Route index element={<CityList/>}/>
+              <Route path="AddCity" element={<AddCity/>}/>
+              </Route>
+
 
             <Route path="blogs" element={<Blogs />}>
               <Route index element={<BlogsList />} />

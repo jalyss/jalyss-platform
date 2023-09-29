@@ -78,7 +78,7 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true, avatar: true, client: true },
+      include: { Media: true, avatar: true, client: true , employee: true},
     });
   }
 
@@ -110,6 +110,12 @@ export class UsersService {
             educationLevel: true,
           },
         },
+        employee:{
+          include:{
+          branch:true,
+          role:true,
+        }
+        }
       },
     });
     const { confirmkey, password, ...rest } = user;
@@ -123,8 +129,13 @@ export class UsersService {
       countryId,
       cityId,
       clientId,
+      employeeId,
       educationLevelId,
       jobTitleId,
+      isAdmin,
+      branchId,
+      roleId,
+
       ...rest
     } = data;
 
@@ -148,6 +159,16 @@ export class UsersService {
           cityId,
           educationLevelId,
           jobTitleId,
+        },
+      });
+    }
+    if (employeeId) {
+      await this.prisma.employee.update({
+        where: { id: employeeId },
+        data: {
+          ...rest,
+          roleId,
+          branchId,
         },
       });
     }

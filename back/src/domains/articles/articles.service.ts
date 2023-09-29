@@ -244,9 +244,11 @@ export class ArticleService {
         articleByBranchId: articleByBranch.id,
       },
     });
+    console.log(rating);
+    
     return {
       ...articleByBranch,
-      rating: Math.floor(rating[0]._sum.rate / rating[0]._count.rate),
+    rating: rating[0]?Math.floor(rating[0]._sum.rate / rating[0]._count.rate):1,
     };
   }
 
