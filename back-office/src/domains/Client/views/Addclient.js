@@ -1,341 +1,453 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createClient, fetchClients } from "../../../store/client";
-import { fetchEducationLevels } from "../../../store/educationLevel";
-import { fetchFunctionalAreas } from "../../../store/functionalArea";
-import { fetchJobTitles } from "../../../store/jobTitle";
-import { fetchCountries } from "../../../store/Country";
-import { findAllCitites } from "../../../store/Country";
+import { fetchCountries, findAllCitites } from "../../../store/Country";
+import validate from "../../../utils/form-validation";
+import useForm from "../../../hooks/data-validation";
+// import initialState from "./initialSate";
+const initialState = {
+  nameAr: {
+    value: "",
+    required: true,
+  },
+  nameEn: {
+    value: "",
+    required: true,
+  },
+  number: {
+    value: "",
+    required: false,
+  },
+  email: {
+    value: "",
+    required: true,
+    requiredMessage: "Email address is required!",
+    email: true,
+    emailMessage: "Email address is not valid!",
+  },
+  password: {
+    value: "",
+    required: true,
+    minLength: 6,
+    minLengthMessage: "at least 6 characters long!",
+    maxLength: 16,
+    maxLengthMessage: "Too many characters!",
+  },
+  confirmPassword: {
+    value: "",
+    required: true,
+    matchWith: "password",
+    matchWithMessage: "Passwords must be equal!",
+  },
+  jobEn: {
+    value: "",
+    required: false,
+  },
+  jobAr: {
+    value: "",
+    required: false,
+  },
 
-import { showErrorToast, showSuccessToast } from "../../../utils/toast";
-import {
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  FormControlLabel,
-  Checkbox,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { styled } from "@mui/system";
+  country: {
+    value: "",
+    required: false,
+  },
+  cities: {
+    value: "",
+    required: false,
+  },
+};
 
-function AddClient() {
-  const navigate = useNavigate();
+const Addclient = () => {
+  const countries = useSelector((state) => state.country.countries.items);
+  const { formData, errors, changeHandler, setErrors } = useForm(
+    initialState,
+    validate
+  );
+
   const dispatch = useDispatch();
 
-  const [fullNameEn, setFullNameEn] = useState("");
-  const [fullNameAr, setFullNameAr] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [tel, setTel] = useState("");
-  const [isCoach, setIsCoach] = useState(false);
-  const [accountBalance, setAccountBalance] = useState("");
-  const [educationLevelId, setEducationLevelId] = useState("");
-  const [functionalAreaId, setFunctionalAreaId] = useState("");
-  const [jobTitleId, setJobTitleId] = useState("");
-  const [countryId, setCountryId] = useState("");
-  const [cityId, setCityId] = useState("");
-
-  const [avatar, setAvatar] = useState(null);
-
-  const clientStore = useSelector((state) => state.client);
-  const educationLevelStore = useSelector((state) => state.educationLevel);
-  const functionalAreaStore = useSelector((state) => state.functionalArea);
-  const jobTitleStore = useSelector((state) => state.jobTitle);
-  const CountriesStore = useSelector((state) => state.country);
-  const citysStore = useSelector((state) => state.country);
-
   useEffect(() => {
-    dispatch(fetchClients());
-    dispatch(fetchEducationLevels());
-    dispatch(fetchFunctionalAreas());
-    dispatch(fetchJobTitles());
     dispatch(fetchCountries());
-    dispatch(findAllCitites());
-  }, [dispatch]);
-
-  const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
-    marginTop: theme.spacing(3),
-    display: "flex",
-    alignItems: "center",
-  }));
-
-  const handleSubmit = async (e) => {
+  }, []);
+  const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("hi");
+    let newErrors = validate(formData, true);
+    console.log(newErrors);
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) {
+      const data = new FormData();
+      data.append("nameAr", formData.nameAr.value);
+      data.append("nameEn", formData.nameEn.value);
 
-    if (
-      !fullNameEn ||
-      !fullNameAr ||
-      !email ||
-      !address ||
-      !tel ||
-      !accountBalance
-    ) {
-      console.log("Please fill in all required fields");
-      return;
-    }
+      data.append("email", formData.email.value);
+      data.append("password", formData.password.value);
+      data.append("number", formData.number.value);
+      data.append("country", formData.country.value);
+      data.append("cities", formData.cities.value);
+      data.append("jobAr", formData.jobAr.value);
+      data.append("jobEn", formData.jobEn.value);
 
-    var body = {
-      fullNameEn,
-      fullNameAr,
-      email,
-      address,
-      tel,
-      accountBalance,
-      isCoach,
-      cityId,
-      educationLevelId,
-      countryId,
-      functionalAreaId,
-      jobTitleId,
-    };
-
-    const submitCreate = async () => {
-      let aux = { ...body, accountBalance: Number(body.accountBalance) };
-      try {
-        await dispatch(createClient(aux));
-        showSuccessToast("Client created successfully");
-        navigate(-1);
-      } catch (error) {
-        console.log(error);
-        showErrorToast(error.message);
-      }
-    };
-
-    if (avatar !== null) {
-      try {
-        const formData = new FormData();
-        formData.append("file", avatar);
-
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        body.avatarId = response.data.id;
-      } catch (error) {
-        console.error("Error uploading avatar image:", error);
+      console.log("form can be submitted...");
+      for (let pair of data.entries()) {
+        console.log(`${pair[0]}:`, pair[1]);
       }
     }
-
-    submitCreate();
   };
-
   return (
-    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <form className="checkout-form" onSubmit={handleSubmit}>
-        <div className="d-flex flex-wrap">
-          <div className=" m-3">
-            <Grid item xs={12}>
-              <Typography variant="h4" align="center" gutterBottom>
-                Create client
-              </Typography>
-            </Grid>
+    <div
+      className="modal fade"
+      id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabIndex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div className="modal-content">
+          <form onSubmit={(e) => handleSubmit(e)} className="form">
+            <div
+              style={{ backgroundColor: "rgb(77,24,71)" }}
+              className="modal-header"
+            >
+              <h1
+                className="modal-title fs-5"
+                style={{ color: "white" }}
+                id="staticBackdropLabel"
+              >
+                Add client
+              </h1>
+              <button
+                //   style={{ : "white" }}
+                type="button"
+                className="btn-close btn-light"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div
+              // style={{ backgroundColor: "rgb(249,234,250)" }}
+              className="modal-body d-flex justify-content-center align-items-center flex-column"
+            >
+              <div className="d-flex gap-2 mb-3">
+                <div className="">
+                  <label htmlFor="nameAr" className="form-label">
+                    Full Name arabic
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded"
+                    id="nameAr"
+                    name="nameAr"
+                    onChange={changeHandler}
+                    value={formData.nameAr.value}
+                    placeholder="arabic Name"
+                    error={errors.nameAr}
+                  />
+                  {errors.nameAr && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
 
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="fullNameEn"
-                  variant="outlined"
-                  fullWidth
-                  value={fullNameEn}
-                  onChange={(e) => setFullNameEn(e.target.value)}
-                  required
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="fullNameAr"
-                  variant="outlined"
-                  fullWidth
-                  value={fullNameAr}
-                  onChange={(e) => setFullNameAr(e.target.value)}
-                  required
-                  margin="normal"
-                />
-              </Grid>
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.nameAr}
+                    </p>
+                  )}
+                </div>
+                <div className="">
+                  <label htmlFor="nameEn" className="form-label">
+                    Full Name English
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded"
+                    id="nameEn"
+                    name="nameEn"
+                    onChange={changeHandler}
+                    value={formData.nameEn.value}
+                    placeholder="English Name"
+                    error={errors.nameEn}
+                  />
+                  {errors.nameEn && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
 
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Account balance"
-                  variant="outlined"
-                  fullWidth
-                  type="number"
-                  value={accountBalance.toString()}
-                  onChange={(e) => setAccountBalance(e.target.value)}
-                  required
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Email"
-                  variant="outlined"
-                  fullWidth
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  margin="normal"
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Telephone Number"
-                  variant="outlined"
-                  fullWidth
-                  value={tel}
-                  onChange={(e) => setTel(e.target.value)}
-                  required
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Address"
-                  variant="outlined"
-                  fullWidth
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  required
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="functionalArea">functional Area</InputLabel>
-                  <Select
-                    labelId="functionalArea"
-                    name="functionalAreaId"
-                    onChange={(e) => setFunctionalAreaId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {functionalAreaStore.functionalAreas.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="jobTitle">job tilte</InputLabel>
-                  <Select
-                    labelId="jobTitle"
-                    name="jobTitleId"
-                    onChange={(e) => setJobTitleId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {jobTitleStore.jobTitles.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="educationLevel">Education Level</InputLabel>
-                  <Select
-                    labelId="educationLevel"
-                    name="educationLevelId"
-                    onChange={(e) => setEducationLevelId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {educationLevelStore.educationLevels.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="counties">counties</InputLabel>
-                  <Select
-                    labelId="counties"
-                    name="countriesId"
-                    onChange={(e) => setCountryId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {CountriesStore?.countries?.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="citys">city</InputLabel>
-                  <Select
-                    labelId="citys"
-                    name="citysId"
-                    onChange={(e) => setCityId(e.target.value)}
-                  >
-                    <MenuItem value={null}>--select option--</MenuItem>
-                    {citysStore?.cities?.items.map((item) => (
-                      <MenuItem key={item.id} value={item.id}>
-                        {item.nameAr}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <StyledFormControlLabel
-                  control={
-                    <Checkbox
-                      checked={isCoach}
-                      onChange={(e) => setIsCoach(e.target.checked)}
-                      name="isCoach"
-                      color="primary"
-                    />
-                  }
-                  label="Is Coach"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="avatar-file"
-                  style={{ display: "none" }}
-                  onChange={(e) => setAvatar(e.target.files[0])}
-                />
-                <label htmlFor="avatar-file">
-                  <Button variant="outlined" component="span">
-                    Add avatar
-                  </Button>
-                </label>
-              </Grid>
-              <div className="w-100 d-flex justify-content-center">
-                <Button type="submit" variant="contained" color="primary">
-                  Save
-                </Button>
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.nameEn}
+                    </p>
+                  )}
+                </div>
               </div>
-            </Grid>
-          </div>
+              <div className="d-flex gap-2 mb-3">
+                <div className="">
+                  <label htmlFor="email" className="form-label">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control rounded"
+                    style={{ padding: "10px" }}
+                    id="email"
+                    placeholder="name@example.com"
+                    name="email"
+                    value={formData.email.value}
+                    onChange={changeHandler}
+                    error={errors.email}
+                  />
+                  {errors.email && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+                <div className="">
+                  <label htmlFor="number" className="form-label">
+                    Phone number
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control rounded"
+                    id="number"
+                    name="number"
+                    value={formData.number.value}
+                    onChange={changeHandler}
+                    error={errors.number}
+                    placeholder="Phone number"
+                  />
+                  {errors.number && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.number}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="d-flex gap-2 mb-3">
+                <div className="">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    name="password"
+                    value={formData.password.value}
+                    onChange={changeHandler}
+                    error={errors.password}
+                    type="password"
+                    className="form-control rounded"
+                    id="password"
+                    placeholder="Password"
+                  />
+                  {errors.password && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
+                <div className="">
+                  <label htmlFor="confirmPassword" className="form-label">
+                    Repeat password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control rounded"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword.value}
+                    onChange={changeHandler}
+                    error={errors.confirmPassword}
+                    placeholder="Repeat your password"
+                  />
+                  {errors.confirmPassword && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.confirmPassword}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="d-flex gap-2 mb-3">
+                <div className="">
+                  <label htmlFor="jobEn" className="form-label">
+                    English job title
+                  </label>
+                  <input
+                    type="text"
+                    name="jobEn"
+                    value={formData.jobEn.value}
+                    onChange={changeHandler}
+                    error={errors.jobEn}
+                    className="form-control rounded"
+                    id="jobEn"
+                    placeholder="English job title"
+                  />
+                  {errors.jobEn && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.jobEn}
+                    </p>
+                  )}
+                </div>
+                <div className="">
+                  <label htmlFor="jobAr" className="form-label">
+                    Arabic job title
+                  </label>
+                  <input
+                    type="text"
+                    name="jobAr"
+                    value={formData.jobAr.value}
+                    onChange={changeHandler}
+                    error={errors.jobAr}
+                    className="form-control rounded"
+                    id="jobAr"
+                    placeholder="Arabic job title"
+                  />
+                  {errors.jobAr && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.jobAr}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="d-flex gap-2 mb-3" style={{ width: "inherit" }}>
+                <select
+                  name="country"
+                  id="country"
+                  defaultValue="your country"
+                  value={formData.country.value}
+                  onChange={changeHandler}
+                  // style={{ width: "inherit" }}
+                  className="form-select form-select"
+                  aria-label="Small select example"
+                >
+                  {countries.map((country) => (
+                    <option key={country.id} value={country.nameEn}>
+                      {country.nameEn}
+                    </option>
+                  ))}
+                  {errors.country && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.country}
+                    </p>
+                  )}
+                </select>
+                <select
+                  name="cities"
+                  id="cities"
+                  value={formData.cities.value}
+                  onChange={changeHandler}
+                  // style={{ width: "inherit" }}
+                  defaultValue="Your city"
+                  className="form-select form-select"
+                  aria-label="Small select example"
+                >
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                  {errors.country && (
+                    <p
+                      style={{
+                        fontSize: "0.7rem",
+
+                        margin: "0.2rem 0px 0px 0px",
+                        padding: 0,
+                      }}
+                      className="text-sm text-danger"
+                    >
+                      {errors.country}
+                    </p>
+                  )}
+                </select>
+              </div>
+            </div>{" "}
+            <div
+              // style={{ backgroundColor: "rgb(77,24,71)" }}
+              className="modal-footer"
+            >
+              <button
+                style={{ backgroundColor: "rgb(249,234,250)" }}
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                style={{ backgroundColor: "rgb(220,53,69)", border: "none" }}
+                // type="button"
+                className="btn btn-primary"
+                type="submit"
+              >
+                Understood
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
-}
+};
 
-export default AddClient;
+export default Addclient;

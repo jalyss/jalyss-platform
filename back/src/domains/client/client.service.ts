@@ -6,19 +6,29 @@ import { UpdateClientDto } from './dto/update-client.dto';
 @Injectable()
 export class ClientsService {
   constructor(private readonly prisma: PrismaService) {}
-  
   async create(dto: CreateClientDto) {
     return await this.prisma.client.create({
-      data: dto,
+      data: {
+        ...dto,
+      },
     });
   }
 
-  async findAll() {
-    return await this.prisma.client.findMany({
+  findAll() {
+    return this.prisma.client.findMany({
       include: {
         avatar: true,
+        country: true,
+        category: true,
+        city: true,
+        jobTitle: true,
+        functionalArea: true,
       },
+      orderBy: { createdAt: 'asc' },
     });
+  }
+  findAllCitites() {
+    return this.prisma.client.findMany();
   }
 
   async findOne(id: string) {
@@ -28,13 +38,13 @@ export class ClientsService {
       },
       include: {
         avatar: true,
-        country:true,
-        city:true,
-        educationLevel:true,
-        functionalArea:true,
-        jobTitle:true,
-        clientCommands:{include:{commandLine:{include:{articleByBranch:{include:{article:true}}}}}},
+        country: true,
+        category: true,
+        city: true,
+        jobTitle: true,
+        functionalArea: true,
       },
+      orderBy: { createdAt: 'asc' },
     });
   }
 

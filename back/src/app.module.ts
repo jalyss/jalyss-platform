@@ -14,6 +14,7 @@ import { countriesModule } from './domains/country/countries.module';
 import { CitesModule } from './domains/cites/cities.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { ClientsModule } from './domains/client/client.module';
 import { MailModule } from './domains/mail/mail.module';
 import { EmployeeModule } from './domains/employee/employee.module';
 import { BlogsModule } from './domains/blogs/blogs.module';
@@ -27,7 +28,8 @@ import { ProvidersModule } from './domains/providers/providers.module';
 import { FunctionalAreasModule } from './domains/functional-areas/functional-areas.module';
 import { JobTitlesModule } from './domains/job-titles/job-titles.module';
 import { EducationLevelsModule } from './domains/education-levels/education-levels.module';
-import { ClientsModule } from './domains/client/client.module';
+// import { SearchController } from './search/search.controller';
+import { SearchEngineModule } from './search-engine/search-engine.module';
 
 @Module({
   imports: [
@@ -49,18 +51,17 @@ import { ClientsModule } from './domains/client/client.module';
     LikesModule,
     TrainingModule,
     QuestionsModule,
-   
+
     ProvidersModule,
-   
+
     FunctionalAreasModule,
-   
+
     JobTitlesModule,
-   
+
     EducationLevelsModule,
+
+    SearchEngineModule,
     ClientsModule,
-   
-   
-    
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],

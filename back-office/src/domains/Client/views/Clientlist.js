@@ -1,197 +1,227 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchClients, removeClient } from "../../../store/client";
-import { showErrorToast, showSuccessToast } from "../../../utils/toast";
-import { AiFillDelete, AiFillEdit, AiOutlineEye } from "react-icons/ai";
-import isEnglish from "../../../helpers/isEnglish";
-import { useNavigate } from "react-router-dom";
-import AddButton from "../../../components/Commun/buttons/AddButton";
-import Modal from "../../../components/Commun/Modal";
-import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
-
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { useDispatch, useSelector } from "react-redux";
+import isEnglish from "../../../helpers/isEnglish";
 
-function ClientsList() {
-  const [show, setShow] = useState(false);
-  const [basicModal, setBasicModal] = useState(false);
-  const clientStore = useSelector((state) => state.client);
+import { useNavigate } from "react-router-dom";
+import { IoIosPersonAdd } from "react-icons/io";
+import {
+  fetchClients,
+  removeClients,
+  getOneClient,
+} from "../../../store/client";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import imgAvatar from "../../../assets/images/avatar.jpg";
+import activeIcon from "../../../assets/images/active.png";
+import blockIcon from "../../../assets/images/active.png";
+import EditClient from "./editClient";
+import lookIcon from "../../../assets/images/look-icon.png";
+import addClient from "../../../assets/images/client.png";
+import Icon from "../../../components/icons/icon";
+import editIcon from "../../../assets/images/edit.png";
+
+import AddButton from "../../../components/buttons/AddButton";
+import css from "../../../assets/styles/client-table.css";
+import Addclient from "./Addclient";
+function ClientList() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const isEng = isEnglish();
-  const navigate = useNavigate();
-  const [rows, setRows] = useState([]);
-  const [selectedClientId, setSelectedClientId] = useState("");
-  console.log(clientStore, "clientStore");
-  const toggleShow = () => {
-    setBasicModal(!basicModal);
-  };
 
-  const handleDeleteClientClick = () => {
-    dispatch(removeClient(selectedClientId)).then((res) => {
-      if (res.error) {
-        showErrorToast(res.error.message);
-      } else {
-        showSuccessToast("client has been deleted");
-        toggleShow();
-      }
-    });
-  };
+  const clients = useSelector((state) => state.getAllClient.items);
 
   useEffect(() => {
     dispatch(fetchClients());
-  }, [dispatch]);
+  }, []);
+  const onClickIconLook = (id, data) => {};
 
-  useEffect(() => {
-    if (clientStore?.clients.items) {
-      let aux = clientStore.clients.items.map((e) => {
-        return {
-          id: e.id,
-          fullNameEn: e.fullNameEn,
-          avatar: e.avatar?.path,
-          email: e.email,
-          address: e.address,
-          tel: e.tel,
-          accountBalance: e.accountBalance,
-          isCoach: e.isCoach,
-        };
-      });
-      setRows(aux);
-    }
-  }, [clientStore.clients.items]);
-  const [open, setOpen] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
-
-  const handleClick = (avatar) => {
-    setSelectedAvatar(avatar);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const columns = [
     {
       field: "avatar",
-      headerName: "avatar",
-      width: 120,
-      editable: false,
+      headerName: "Avatar",
+      width: 150,
       renderCell: (params) => (
-        <>
-          <img
-            src={params.value}
-            alt="avatar"
-            style={{
-              width: "60%",
-              borderRadius: "40px",
-              height: "110%",
-              cursor: "pointer",
-            }}
-            onClick={() => handleClick(params.value)}
-          />
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            style={{ borderRadius: "50px" }}
-          >
-            <DialogContent>
-              <img
-                src={selectedAvatar}
-                alt="avatar"
-                style={{ width: "100%", borderRadius: "40px" }}
-              />
-            </DialogContent>
-          </Dialog>
-        </>
+        <img
+          src={params.row.avatar?.path ? params.row.avatar?.path : imgAvatar}
+          style={{ width: "40px", height: "40px", borderRadius: "50%" }}
+        />
       ),
     },
+
     {
-      field: "fullNameEn",
-      headerName: "fullNameEn",
-      width: 155,
-      editable: false,
+      field: "fullName",
+      headerName: "Full name",
+      width: 150,
+      editable: true,
+      valueGetter: (params) =>
+        params.row.fullNameEn ? params.row.fullNameEn : params.row.fullNameAr,
+    },
+    {
+      field: "email",
+      headerName: "Email ",
+      width: 150,
+      sortable: false,
+      description: "This column has a value getter and is not sortable.",
     },
 
-    { field: "email", headerName: "Email", width: 155, editable: false },
-    { field: "address", headerName: "Address", width: 155, editable: false },
-    { field: "tel", headerName: "Tel", width: 155, editable: false },
     {
-      field: "accountBalance",
-      headerName: "Account",
-      width: 155,
+      field: "address",
+      headerName: "Address",
+      width: 150,
       editable: false,
+      sortable: false,
+      filterable: false,
     },
     {
-      field: "isCoach",
-      headerName: "isCoach",
-      width: 155,
-      editable: false,
+      field: "tel",
+      headerName: "Phone ",
+      type: "number",
+      width: 150,
+      headerAlign: "left",
+      align: "left",
+      sortable: false,
     },
+    // {
+    //   headerName: "Branch ",
+    //   width: 150,
+    //   valueGetter: (params) => params.row.branch?.name?params.row.branch?.name:"No record",
+    // },
+
+    // {
+    //   field: "role",
+    //   valueGetter: (params) => params.row.role?.nameAr?params.row.role?.nameAr?.name:"No record",
+    // },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 155,
-      cellClassName: "actions",
-      getActions: ({ id }) => {
+      width: 225,
+      cellClassName: "actions-icons",
+      getActions: (row) => {
         return [
           <GridActionsCellItem
-            icon={<AiOutlineEye />}
-            label="Add"
-            className="textPrimary"
-            onClick={() => navigate(`profilclient/${id}`)}
-            color="success"
+            disableFocusRipple={false}
+            icon={<Icon img={activeIcon} />}
+            label="Block"
+            onClick={() => {
+              //   handleDeleteClick(id);
+            }}
+            size="small"
+            edge="start"
           />,
           <GridActionsCellItem
-            icon={<AiFillDelete />}
-            label="Delete"
+            // disableFocusRipple={false}
+            icon={
+              <Icon img={editIcon} key={row.id} modalId={"#editClientModal"} />
+            }
+            label="Edit"
+            size="small"
+            edge="start"
             onClick={() => {
-              toggleShow();
-              setSelectedClientId(id);
+              dispatch(getOneClient(row.row));
             }}
-            color="error"
+          />,
+          <GridActionsCellItem
+            disableFocusRipple={false}
+            icon={<Icon img={lookIcon} />}
+            label="Look"
+            size="small"
+            edge="start"
+            onClick={() => {
+              navigate(`profileclient/${row.id}`);
+              dispatch(getOneClient(row.row));
+            }}
           />,
         ];
       },
     },
   ];
+  // const [currentClient, setCurrentClient] = useState({});
+  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // const handleEditClick = (row) => {
+  //   setIsEditModalOpen(true);
+  //   setCurrentClient(row);
+  // };
 
+  //   const handleEditClick = (id) => {
+  //     console.log("iii", id);
+  //     navigate(`edit/${id}`);
+  //   };
   return (
-    <div>
-      <div>
-        <div className="container">
-          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List clients</h2>
-          <hr />
-          <AddButton
-            title={"Add client"}
-            mb={20}
-            onClick={() => navigate("addclient")}
-          />
-          <Box sx={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 10,
-                  },
-                },
+    <div className="wrapper_client">
+      <div class="vertical-line"></div>
+      <div className="table_container">
+        <div className="table_nav">
+          <ul className="sub_nav_ul">
+            <li className="sub_nav">
+              <a href="#" className="sub_nav_element">
+                Dashboard
+              </a>
+            </li>
+            <li className="sub_nav next_nav">
+              <a href="#" className="sub_nav_element">
+                client
+              </a>
+            </li>
+            <li className="sub_nav next_nav">
+              <a href="#" className="sub_nav_element">
+                Profile
+              </a>
+            </li>
+          </ul>
+          <div className="btn_container">
+            <div
+              className="add_client_btn"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+            >
+              {" "}
+              <div>
+                <img
+                  className="add_client_btn_icon"
+                  style={{ color: "red", width: "25%", height: "25%" }}
+                  src={addClient}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="table_wrapper">
+            <h2
+              style={{
+                margin: 0,
+                backgroundColor: "rgb(77, 24, 71)",
+                textAlign: "center",
+                padding: 10,
+                color: "white",
               }}
-              pageSizeOptions={[10]}
-              disableRowSelectionOnClick
-            />
-          </Box>
-          <Modal
-            bodOfDelete="Are you sure you want to delete this client?"
-            basicModal={basicModal}
-            ofDelete={true}
-            toggleShow={toggleShow}
-            confirm={() => handleDeleteClientClick()}
-          />
+            >
+              Clients List
+            </h2>
+            <Box>
+              <DataGrid
+                rows={clients}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+                checkboxSelection
+              />
+            </Box>
+          </div>
         </div>
+
+        {/* <EditClient client={currentClient} isEditModalOpen={isEditModalOpen} /> */}
+
+        <Addclient />
       </div>
+      <EditClient />
     </div>
   );
 }
 
-export default ClientsList;
+export default ClientList;
