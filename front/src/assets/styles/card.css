@@ -60,11 +60,10 @@
   .article-card-icon:hover {
     background-color: #f39c12;
   }
-  
-  .article-card p {
+ 
+  .prices {
     font-size: 18px;
     font-weight: bold;
     color: #007bff;
     margin-top: 10px;
   }
-  

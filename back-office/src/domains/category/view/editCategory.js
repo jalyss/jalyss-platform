@@ -70,7 +70,7 @@ function EditCategory() {
                 background: " #f0f3ff",
                 border: " 1px solid rgba(192, 194, 204)",
                 marginBottom: "1rem"
-              }}>
+                }}>
                 <div className=" d-flex justify-content-evenly " style={{ marginTop: "10px" }}>
                   <Typography
                     style={{
