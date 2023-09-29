@@ -25,6 +25,7 @@ deploy:
 	@yarn migrate:deploy
 	@yarn seed
 	@pm2 start "yarn workspace back start:prod" --name api
+	@pm2 start "yarn workspace front start:prod" --name front-office
 
 docker:
 	@docker build -t jalyss .
