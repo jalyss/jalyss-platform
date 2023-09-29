@@ -21,7 +21,12 @@ import { BsFilterSquare } from "react-icons/bs";
 import "rc-tooltip/assets/bootstrap.css";
 import { RiArrowRightSLine, RiArrowLeftSLine } from "react-icons/ri";
 import "rc-slider/assets/index.css";
-import {groupBy, isEmpty, map } from "lodash";
+import { groupBy, isEmpty, map } from "lodash";
+import FormatListBulleted from "@mui/icons-material/FormatListBulleted";
+import { Apps, AppsRounded } from "@mui/icons-material";
+import ArticleCardHorizontal from "../components/ArticleCardHorizontal";
+
+
 
 function Articles() {
   const dispatch = useDispatch();
@@ -78,8 +83,21 @@ function Articles() {
     }
   };
   console.log(containerRef, "yalaa");
+  const [showContent, setShowContent] = useState(true);
+  const [showContentListe, setShowContentListe] = useState(false);
+
+  const handleAppsClick = () => {
+    setShowContent(!showContent);
+    setShowContentListe(false);
+  };
+  const handleFormaListClick = () => {
+    setShowContentListe(!showContentListe);
+    setShowContent(false);
+  };
+
   const Filters = () => {
     return (
+
       <div className="filters">
         <Accordion
           title={t("filter.category")}
@@ -94,15 +112,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            categories: [...Filter.categories, element.id],
-                          }))
+                          ...Filter,
+                          categories: [...Filter.categories, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            categories: Filter.categories.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          categories: Filter.categories.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.categories.includes(element.id)}
                   />
@@ -127,15 +145,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            articleTypes: [...Filter.articleTypes, element.id],
-                          }))
+                          ...Filter,
+                          articleTypes: [...Filter.articleTypes, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            articleTypes: Filter.articleTypes.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          articleTypes: Filter.articleTypes.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.articleTypes.includes(element.id)}
                   />
@@ -160,18 +178,18 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            publishingHouses: [
-                              ...Filter.publishingHouses,
-                              element.id,
-                            ],
-                          }))
+                          ...Filter,
+                          publishingHouses: [
+                            ...Filter.publishingHouses,
+                            element.id,
+                          ],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            publishingHouses: Filter.publishingHouses.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          publishingHouses: Filter.publishingHouses.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.publishingHouses.includes(element.id)}
                   />
@@ -194,15 +212,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                            ...Filter,
-                            authors: [...Filter.authors, element.id],
-                          }))
+                          ...Filter,
+                          authors: [...Filter.authors, element.id],
+                        }))
                         : setFilters((Filter) => ({
-                            ...Filter,
-                            authors: Filter.authors.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
+                          ...Filter,
+                          authors: Filter.authors.filter(
+                            (elem, j) => elem !== element.id
+                          ),
+                        }));
                     }}
                     checked={filters.authors.includes(element.id)}
                   />
@@ -234,8 +252,10 @@ function Articles() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
+
         <div className="filters-button">
-          <BsFilterSquare onClick={() => setShowFilters(true)} />
+          <button className="Bfilter" onClick={() => setShowFilters(true)} >Filter</button>
+
         </div>
       </div>
 
@@ -303,7 +323,10 @@ function Articles() {
       </Offcanvas>
 
       <div className="d-flex p-2 ">
+
         <div className="responsive-filters">
+
+
           <Fragment>
             <Accordion
               title={t("filter.Price")}
@@ -341,40 +364,91 @@ function Articles() {
           </Fragment>
           <Filters />
         </div>
-        <div className="px-3">
-          {!isEmpty(filters.categories) ? (
-            map(groupedArticles, (element) => (
-              <>
-                <p
-                  style={{
-                    fontSize: "20px",
-                    color: "#333",
-                    padding: "5px 10px",
-                    backgroundColor: "#f0f0f0",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {element[0].article.category[lg ? "nameEn" : "nameAr"]}
-                </p>
 
+        <div >
+          <div style={{ marginBottom: "10px", display: "flex", justifyContent: "start", marginLeft: "10px" }}>
+            <FormatListBulleted className="articleicons" onClick={handleFormaListClick}></FormatListBulleted>
+            <Apps className="articleicons" onClick={handleAppsClick} style={{ marginLeft: "10px" }}></Apps>
+          </div>
+          {showContent && (
+            <div className="px-3">
+              {!isEmpty(filters.categories) ? (
+                map(groupedArticles, (element) => (
+                  <>
+                    <p
+                      style={{
+                        fontSize: "20px",
+                        color: "#333",
+                        padding: "5px 10px",
+                        backgroundColor: "#f0f0f0",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      {element[0].article.category[lg ? "nameEn" : "nameAr"]}
+                    </p>
+
+                    <div className="d-flex flex-wrap px-3 ">
+                      {element.map((el, index) => (
+                        <ArticleCard article={el} />
+                      ))}
+                    </div>
+                  </>
+                ))
+              ) : (
                 <div className="d-flex flex-wrap px-3 ">
-                  {element.map((el, index) => (
-                    <ArticleCard article={el} />
-                  ))}
+                  {paginate(articleStore.articles.items, currentPage, pageSize).map(
+                    (element, index) => (
+                      <ArticleCard key={index} article={element} />
+                    )
+                  )}
                 </div>
-              </>
-            ))
-          ) : (
-            <div className="d-flex flex-wrap px-3 ">
-              {paginate(articleStore.articles.items, currentPage, pageSize).map(
-                (element, index) => (
-                  <ArticleCard key={index} article={element} />
-                )
               )}
+
             </div>
           )}
-        </div>
+        
+       
+        
+          {showContentListe && (
+            <div className="d-flex flex-column  mb-3 px-3 ">
+              {!isEmpty(filters.categories) ? (
+                map(groupedArticles, (element) => (
+                  <>
+
+                    <p
+                      style={{
+                        fontSize: "20px",
+                        color: "#333",
+                        padding: "5px 10px",
+                        backgroundColor: "#f0f0f0",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      {element[0].article.category[lg ? "nameEn" : "nameAr"]}
+                    </p>
+
+                    <div className=" d-flex flex-column px-3">
+                      {element.map((el, index) => (
+                        <ArticleCardHorizontal article={el} />
+                      ))}
+                    </div>
+                  </>
+                ))
+              ) : (
+                <div className=" d-flex flex-column  px-3 ">
+                  {paginate(articleStore.articles.items, currentPage, pageSize).map(
+                    (element, index) => (
+                      <ArticleCardHorizontal key={index} article={element} />
+                    )
+                  )}
+                </div>
+              )}
+
+            </div>
+          )}
+   </div>
       </div>
+
       <div
         className="d-flex justify-content-center mb-3 "
         style={{ marginLeft: "200px" }}
