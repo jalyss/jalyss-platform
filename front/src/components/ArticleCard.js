@@ -27,7 +27,7 @@ function ArticleCard({ article }) {
 
   
    
-    <div className="article-card position-relative mx-3 mb-2 ">
+    <div className="article-card2 position-relative mx-3 mb-2 ">
 
       <div className="position-relative">
         <div className="stock-label">
