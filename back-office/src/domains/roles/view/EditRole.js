@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchRole, updateRole } from "../../../store/role";
-import { Card, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import EditModal from "../../../components/Commun/Modal";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
@@ -24,6 +24,7 @@ function EditRole() {
   const [EditMode, setEditMode] = useState(false);
   const actions = ["create", "update", "delete", "view"];
   const [basicModalDelete, setBasicModalDelete] = useState(false);
+  const [rows, setRows] = useState(null);
 
   useEffect(() => {
     dispatch(fetchRole(id));
@@ -95,6 +96,8 @@ function EditRole() {
           domain: e.domain,
         };
         setData((prevData) => [...prevData, newPermissionObject]);
+        setRows((prevData) => [...prevData, newPermissionObject]);
+
       });
       setNewRole(updatedNewRole);
     }
@@ -152,6 +155,9 @@ function EditRole() {
     setBasicModalDelete(!basicModalDelete);
   };
   const permissionsByDomain = {};
+  const columns = [
+    { field: "permissions", headerName: "permissions", width: 150, editable: false },
+  ]
   return (
     <div className="container">
       <div className="card">
@@ -221,9 +227,54 @@ function EditRole() {
 
                       </Typography>
                       <br></br>
-                     
+
                     </div>
-                     <Typography
+                    <table class="table">
+                      <thead>
+                        <tr>
+                        <th scope="col"></th>
+                          <th scope="col">domain</th>
+                          <th scope="col">action</th>
+                         
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {roledata?.permissions?.forEach((permission) => {
+                        if (!permissionsByDomain[permission.domain]) {
+                          permissionsByDomain[permission.domain] = [];
+                        }
+                        permissionsByDomain[permission.domain].push(
+                          permission.action
+                        );
+                       })}
+                      {Object.keys(permissionsByDomain).map((domain) => (
+                        <tr>
+                          <th></th>
+                          <td> {domain}</td>
+                          <td>{permissionsByDomain[domain].join(" - ")}</td>
+                        
+                        </tr>
+                       ))}
+                      </tbody>
+                    </table>
+                    {/* <Box sx={{ height: 400, width: "100%" }}>
+                      {rows?.length > 0 ? (
+                        <DataGrid
+                          rows={rows}
+                          columns={columns}
+                          initialState={{
+                            pagination: {
+                              paginationModel: {
+                                pageSize: 5,
+                              },
+                            },
+                          }}
+                          pageSizeOptions={[5]}
+                          disableRowSelectionOnClick
+                        />
+                      ) : null}
+                    </Box> */}
+                    {/* <Typography
                         style={{
                           fontFamily: "Arial",
                           fontSize: "18px",
@@ -273,8 +324,8 @@ function EditRole() {
                           </TableRow>
                         ))}
                      
-                      </Typography>
-                   
+                      </Typography>  */}
+
                     <div className="w-100 d-flex justify-content-center">
                       <button
                         type="submit"
