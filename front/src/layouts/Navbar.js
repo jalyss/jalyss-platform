@@ -16,7 +16,6 @@ import { fetchCategories } from "../store/category";
 import { ChatCircleDots } from "phosphor-react";
 import { IconButton } from "@mui/material";
 
-
 import Container from "react-bootstrap/Container";
 
 function Header() {
@@ -198,11 +197,11 @@ function Header() {
                         onClick={handleShow}
                         className="cart_offcanvas"
                       >
-                        <BiCartDownload size="40px" color="white" />
+                        <BiCartDownload size="35px" color="white" />
                       </button>
 
-                      <div className="position-absolute bottom-50 rounded-circle px-1 bg-yellow">
-                        <p className="m-0">{totalItems}</p>
+                      <div className="position-absolute bottom-50 rounded-circle px-2 bg-yellow">
+                        <p className="m-0" >{totalItems}</p>
                       </div>
                     </div>
                     <div className="text-white mx-2 md-hide">

@@ -18,6 +18,8 @@ export default function SpaceDetails() {
 
   const space = useSelector((state) => state.space.space);
   const [refresh, setRefresh] = useState(false);
+  
+console.log(space,'space');
 
   useEffect(() => {
     dispatch(fetchSpaceById(spaceId));
@@ -53,10 +55,9 @@ export default function SpaceDetails() {
               (progressEvent.loaded * 100) / progressEvent.total
             );
             setUploadProgress(progress);
-            setTimeout(()=>{
-
-              setUploadProgress(0)
-            },2000)
+            setTimeout(() => {
+              setUploadProgress(0);
+            }, 2000);
           },
         }
       );
@@ -128,21 +129,18 @@ export default function SpaceDetails() {
         </div>
         <form onSubmit={onSubmit}>
           <div>
-            <input className="form-input" style={{ display: 'block', visibility: 'visible' }}
+          <input
+              className="form-input"
+              style={{ display: "block", visibility: "visible" }}
               type="file"
               id="file"
-              content="upload Images"
+              accept="image/*"
               multiple
-              onClick={(e)=>onChange(e)}
+              onChange={(e) => onChange(e)}
             />
           </div>
           <AddButton type="submit" content="Upload" />
         </form>
-          <div>
-          {uploadProgress > 0 && (
-            <progress value={uploadProgress} max="100" />
-          )}
-          </div>
           <div>
           {uploadProgress > 0 && (
             <progress value={uploadProgress} max="100" />

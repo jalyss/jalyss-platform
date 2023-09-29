@@ -6,6 +6,7 @@ import { fetchCategory, updateCategory } from "../../../store/category";
 import { useNavigate, useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import EditModal from "../../../components/Commun/Modal";
+import { Card } from "react-bootstrap";
 
 function EditCategory() {
   const [renderEditView, setRenderEditView] = useState(false);
@@ -57,63 +58,76 @@ function EditCategory() {
         <div className="container">
           {!renderEditView ? (
             <div
-              class="row"
-              style={{ marginBottom: "10px", marginTop: "50px" }}
+
+              style={{ marginBottom: "10px", marginTop: "30px" }}
             >
-              <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-                <Typography
-                  style={{
-                    fontFamily: "Arial",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    color: "#333",
-                    display: "table-row",
-                  }}
-                >
-                  <span
+              <h2 style={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}>Edit Category</h2>
+              <div style={{
+                marginLeft: "170px",
+                marginRight: "122px",
+                width: "70%",
+                borderRadius: "24px",
+                background: " #f0f3ff",
+                border: " 1px solid rgba(192, 194, 204)",
+                marginBottom: "1rem"
+                }}>
+                <div className=" d-flex justify-content-evenly " style={{ marginTop: "10px" }}>
+                  <Typography
                     style={{
-                      display: "table-cell",
-                      fontSize: "large",
-                      paddingRight: "40px",
+                      fontFamily: "Arial",
+                      fontSize: "18px",
+                     
+                      color: "#333",
+                      display: "table-row",
                     }}
                   >
-                    Name (Ar) :
-                  </span>
-                  <span style={{ display: "table-cell" }}>
-                    {category?.nameAr}
-                  </span>
-                </Typography>
-                <Typography
-                  style={{
-                    fontFamily: "Arial",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                    color: "#333",
-                    display: "table-row",
-                  }}
-                >
-                  <span
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                      }}
+                    >
+                      Name (Ar) :
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {category?.nameAr}
+                    </span>
+                  </Typography>
+                  <Typography
                     style={{
-                      display: "table-cell",
-                      fontSize: "large",
-                      paddingRight: "40px",
+                      fontFamily: "Arial",
+                      fontSize: "16px",
+                      color: "#333",
+                      display: "table-row",
                     }}
                   >
-                    Name (En):
-                  </span>
-                  <span style={{ display: "table-cell" }}>
-                    {category?.nameEn}
-                  </span>
-                </Typography>
-              </div>
-              <div className="w-100 d-flex justify-content-center">
-                <button
-                  type="submit"
-                  onClick={() => toggleShow()}
-                  className="confirm-button mt-5   mb-3"
-                >
-                  <span className="label-btn"> Edit Category </span>
-                </button>
+                    <span
+                      style={{
+                        display: "table-cell",
+                        fontSize: "large",
+                        paddingRight: "40px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Name (En):
+                    </span>
+                    <span style={{ display: "table-cell" }}>
+                      {category?.nameEn}
+                    </span>
+                  </Typography>
+                </div>
+
+                <div className="w-100 d-flex justify-content-center">
+                  <button
+                    type="submit"
+                    onClick={() => toggleShow()}
+                    className="confirm-button mt-5   mb-3"
+                  >
+                    <span className="label-btn"> Edit Category </span>
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -170,7 +184,7 @@ function EditCategory() {
         normal={true}
         ofDelete={!true}
         title={
-          <div style={{width:"200%",marginLeft:"100%"}} className="d-flex justify-content-center align-items-center">
+          <div style={{ width: "200%", marginLeft: "100%" }} className="d-flex justify-content-center align-items-center">
             Are you sure !
           </div>
         }

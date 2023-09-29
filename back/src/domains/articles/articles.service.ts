@@ -259,14 +259,34 @@ export class ArticleService {
         category: true,
         publishingHouse: true,
         type: true,
-        ArticlesByBranch: true,
+        cover: true,
+        ArticleByAuthor: {include:{author:true}}
       },
     });
   }
 
   async update(id: string, dto: UpdateArticleDto) {
-    return await this.prisma.article.update({ where: { id }, data: dto });
+    const { authorIds, ...rest } = dto;
+    const updatedArticle = await this.prisma.article.update({
+      where: { id },
+      data: {
+        ...rest,
+        ArticleByAuthor: {
+          deleteMany: {}, // Clear existing authors
+          create: authorIds.map((authorId) => ({
+            author: { connect: { id: authorId } }, // Connect the new authors
+          })),
+        },
+      },
+      include: {
+        ArticleByAuthor: true, // Optional: Include the updated authors in the response
+      },
+    });
+  
+    return updatedArticle;
   }
+  
+  
 
   async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
     return await this.prisma.articlesByBranch.update({

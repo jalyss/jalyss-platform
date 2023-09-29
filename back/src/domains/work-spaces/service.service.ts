@@ -37,7 +37,12 @@ export class ServiceService {
         OR: [{ id }, { identifier: id }],
       },
       include: {
-        workSpace: { include: { image: true } },
+        workSpace: {
+          include: {
+            image: true,
+            MediaWorkSpace: { include: { media: true } },
+          },
+        },
         tarif: true,
         MediaService: { include: { media: true } },
         cover: true,
@@ -90,4 +95,22 @@ export class ServiceService {
   
     await this.prisma.service.delete({ where: { id } });
   }
+
+  async createImages(id: string, dto: string[]) {
+    return await this.prisma.mediaService.createMany({
+      data: dto.map((elem) => ({
+        mediaId: elem,
+        serviceId: id,
+      })),
+    });
+  }
+  async removeImage(serviceId:string ,mediaId: string){
+    return await this.prisma.mediaService.delete({
+      where:{
+        serviceMedia:{mediaId, serviceId}
+      }
+    })
+  }
+
 }  
+

@@ -28,6 +28,7 @@ import SpaceJalyss from "../pages/space/SpaceJalyss";
 import RegisterForm from "../pages/space/RegisterForm";
 import ServiceSpace from "../pages/space/ServiceSpace";
 import SpaceReservation from "../pages/space/SpaceReservation";
+import WorkSpaceDetail from "../pages/space/WorkSpaceDetail";
 
 import Profile from "../pages/Profile";
 import MyBlogs from "../components/Profile/MyBlogs";
@@ -107,16 +108,16 @@ function Router() {
             <Route path="blogs/:blogId" element={<UpdateBlog />} />
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="spaceJalyss" element={<SpaceJalyss />} />
-            <Route
-              path="spaceJalyss/:serviceIdentifier"
-              element={<ServiceSpace />}
-            />
+            <Route path="spaceJalyss/:serviceIdentifier" element={<ServiceSpace />} />
+            
+
 
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />} />
 
             <Route path="RegisterForm" element={<RegisterForm />} />
-            <Route path="SpaceReservation/:tarifId" element={<SpaceReservation />} />
+            <Route path="SpaceReservation/:tarifId/:workSpaceId" element={<SpaceReservation />} />
+            <Route path="/:workspaceId" element={<WorkSpaceDetail />} />
           </Route>
         </Routes>
       </BrowserRouter>

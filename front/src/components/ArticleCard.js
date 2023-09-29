@@ -6,7 +6,6 @@ import { BsBag } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "react-use-cart";
 import "../assets/styles/card.css";
-import { purple } from "@mui/material/colors";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 function ArticleCard({ article }) {
@@ -21,9 +20,14 @@ function ArticleCard({ article }) {
       showSuccessToast("Article has been saved");
     }
   };
+  console.log(article.article, "ddd")
 
   return (
-    <div className="position-relative mx-3 mb-2 ">
+
+  
+   
+    <div className="article-card position-relative mx-3 mb-2 ">
+
       <div className="position-relative">
         <div className="stock-label">
           <h6 className="m-0">{article.stock} </h6>
@@ -37,11 +41,13 @@ function ArticleCard({ article }) {
           <Rating edit={false} rating={article?.rating} />
         </div>
       </div>
-      <p>{article.price}TND</p>
-      <p style={{ color: "black" }}>{article.article.category.nameEn}</p>
+
+      <h6 className="article-title">{article.article?.title}</h6>
+
 
       <div className="d-flex flex-column justify-content-between align-items-center mt-2">
-        <h6 className="article-title">{article.article?.title}</h6>
+        <p >{article.article?.shortDescriptionEn}</p>
+        <p className="prices" >{article.price}TND</p>
 
         <div className="d-flex mb-2">
           <div
@@ -60,6 +66,7 @@ function ArticleCard({ article }) {
         </div>
       </div>
     </div>
+
   );
 }
 
