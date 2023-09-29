@@ -16,7 +16,6 @@ import { fetchCategories } from "../store/category";
 import { ChatCircleDots } from "phosphor-react";
 import { IconButton } from "@mui/material";
 
-
 import Container from "react-bootstrap/Container";
 
 function Header() {
