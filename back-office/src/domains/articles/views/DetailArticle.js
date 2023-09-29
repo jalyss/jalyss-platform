@@ -36,6 +36,7 @@ function DetailAritcle() {
   const [ediMode, setEditMode] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   const authorStore = useSelector((state) => state.author);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     dispatch(fetchAuthors());
@@ -100,16 +101,29 @@ function DetailAritcle() {
 
         const response = await axios.post(
           `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          formData
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            onUploadProgress: (progressEvent) => {
+              const progress = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setUploadProgress(progress);
+              setTimeout(() => {
+                setUploadProgress(0);
+              }, 2000);
+            },
+          }
         );
-
         body.coverId = response.data.id;
       }
 
-      const editedArticle = { articleId, ...body };
-      dispatch(updateArticleByBranch(editedArticle));
-      showSuccessToast("article edited successfully");
-      navigate(-1);
+       const editedArticle = { articleId, ...body };
+       dispatch(updateArticleByBranch(editedArticle));
+       showSuccessToast("article edited successfully");
+       navigate(-1);
     } catch (error) {
       console.error("Error editing article:", error);
       showErrorToast(error.message);
@@ -177,6 +191,15 @@ function DetailAritcle() {
                     >
                       <EditIcon fontSize="large" />
                     </IconButton>
+                  )}
+                </div>
+                <div>
+                  {uploadProgress > 0 && (
+                    <progress
+                      value={uploadProgress}
+                      max="100"
+                      style={{ width: "300px" }}
+                    />
                   )}
                 </div>
               </div>

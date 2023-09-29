@@ -46,7 +46,7 @@ const BlogDetail = () => {
 
   useEffect(() => {
     if (blog)
-      
+
       dispatch(fetchBlogs({ take: 5, skip: 0, authorId: blog.authorId }));
   }, [dispatch, blog]);
 
@@ -61,8 +61,8 @@ const BlogDetail = () => {
       } else {
         showErrorToast("alredy saved");
       }
-  });
-};
+    });
+  };
 
   const handleCreateBookmarkOne = (blogId) => {
     let body = {
@@ -126,7 +126,7 @@ const BlogDetail = () => {
                       onClick={() => {
                         setSelectedId(blog.id);
                         setBasicModal(true);
-                      ;
+                        ;
                       }}
                     >
                       Delete
@@ -200,25 +200,34 @@ const BlogDetail = () => {
           </>
         </div>
         <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-          <div className="d-flex flex-column align-items-center">
-            <p
-              style={{
-                fontSize: " 0.8rem",
-                color: "#a9a9a9",
-                fontWeight: " 500",
-              }}
-            >
-              Published {blog?.createdAt}
-            </p>
-
-            <h1 style={{ whiteSpace: "pre-line", textAlign: "center" }}>
-              {blog?.title}
-            </h1>
-
-            <div className="categoryInfo">
-              <span className="categoryLabel">Category:</span>
-              <span className="chip">{blog.category.nameEn}</span>
+          <div className="">
+            {blog.cover ? (
+              <img
+                style={{ width: "100%", borderRadius: "15px" }}
+                src={blog?.cover?.path}
+                alt="cover"
+              />
+            ) : (
+              <img
+                style={{ width: "100%", borderRadius: "15px" }}
+                src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
+                alt="cover"
+              />
+            )}
+            <div style={{marginTop:"20px" , marginBottom:"20px"}}>
+             
+              <div className="chip">{blog.category.nameEn}</div>
             </div>
+
+            <h2 >
+              {blog?.title}
+            </h2>
+
+            <p style={{ padding: "1rem", marginTop: "1.5rem" }}>
+            {" "}
+            <span dangerouslySetInnerHTML={{ __html: blog.content }}></span>
+          </p>
+
             <div
               className="d-flex align-items-center"
               style={{ margin: "0.5rem" }}
@@ -240,24 +249,21 @@ const BlogDetail = () => {
                 {blog?.author?.fullNameEn}
               </h3>
             </div>
-          </div>
-          {blog.cover ? (
-            <img
-              style={{ width: "100%", borderRadius: "15px" }}
-              src={blog?.cover?.path}
-              alt="cover"
-            />
-          ) : (
-            <img
-              style={{ width: "100%", borderRadius: "15px" }}
-              src="https://www.ultimatesource.toys/wp-content/uploads/2013/11/dummy-image-landscape-1-1024x800.jpg"
-              alt="cover"
-            />
-          )}
 
-          <p style={{ padding: "1rem", marginTop: "1.5rem" }}>
-            {" "}
-            <span dangerouslySetInnerHTML={{ __html: blog.content }}></span>
+          </div>
+        
+         
+          <p
+            style={{
+              fontSize: " 0.8rem",
+              color: "#a9a9a9",
+              fontWeight: " 500",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            Published {blog?.createdAt}
           </p>
         </div>
       </div>
@@ -304,7 +310,7 @@ const BlogDetail = () => {
               className="d-flex align-items-center"
               style={{ cursor: "pointer", marginTop: "20px" }}
               key={blog.id}
-              // onClick={() => handleBlogSelection(blog)}
+            // onClick={() => handleBlogSelection(blog)}
             >
               <h6 className="sideBlogTitle">
                 {blog?.title}
@@ -327,7 +333,9 @@ const BlogDetail = () => {
               )}
             </div>
           ))}
+
         </div>
+
       </div>
     </div>
   );

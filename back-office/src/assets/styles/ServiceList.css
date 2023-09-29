@@ -1,0 +1,38 @@
+.service-list-card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+  }
+  
+  .service-list-card-item {
+    width: 18rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 1rem; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.2s; 
+  }
+  
+  .service-list-card-item:hover {
+    transform: translateY(-5px); 
+  }
+  
+  .service-list-card-img-top {
+    max-height: 150px; 
+    width: 100%; 
+    object-fit: cover;
+  }
+  
+  .service-list-card-body {
+    padding: 20px;
+  }
+  
+  .service-list-card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .service-list-card-text {
+    font-size: 1rem;
+  }
+  

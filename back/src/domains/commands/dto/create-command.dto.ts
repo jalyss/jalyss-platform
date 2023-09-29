@@ -3,36 +3,35 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateCommandDto {
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     clientId: string
-    @ApiProperty()
+    @ApiProperty({ required: false })
     intermediateId?: string
-    @ApiProperty()
+    @ApiProperty({ required: true })
     clientName: string
-    @ApiProperty()
+    @ApiProperty({ required: true })
     clientAddress: string
-    @ApiProperty()
+    @ApiProperty({ required: true })
     clientTel: string
-    @ApiProperty()
+    @ApiProperty({ required: true })
     clientEmail: string
-    @ApiProperty()
+    @ApiProperty({ required: true })
     delivered: boolean
-    @ApiProperty()
+    @ApiProperty({ required: true })
     paid: boolean
-    @ApiProperty()
+    @ApiProperty({ required: true })
     hasDelivery: boolean
-    @ApiProperty()
+    @ApiProperty({ required: false })
     countryId?: string
-    @ApiProperty()
+    @ApiProperty({ required: false })
     cityId?: string // ? mean optional
     @IsNotEmpty()
-    @ApiProperty()
+    @ApiProperty({ required: true })
     commandLine!: CreateCommandLineDto[] // ! mean required
-    
+
 }
 class CreateCommandLineDto {
     // commandId: string;
     articleByBranchId: string;
     quantity: number
 }
-
