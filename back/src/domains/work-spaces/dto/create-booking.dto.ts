@@ -34,4 +34,8 @@ export class CreateBookingDto {
 
   @ApiProperty()
   tarifId: string;
+
+  @ApiProperty()
+  workSpaceId: string;
+
 }

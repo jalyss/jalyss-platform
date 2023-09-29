@@ -18,7 +18,8 @@ export const fetchCommands = createAsyncThunk("commands/commands", async () => {
 export const fetchCommand = createAsyncThunk("commands/command", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/commands/one/${id}`);
   return response.data;
-});
+  });
+
 
 export const createCommand = createAsyncThunk(
   "commands/createCommand",

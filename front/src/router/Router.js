@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Client from "../apps/Client";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
-
+import SearchbarResult from "../pages/searchBarResult";
 import ResetPassword from "../pages/ResetPassword";
 import NewPassword from "../pages/NewPassword";
 import Home from "../pages/Home";
@@ -28,6 +28,7 @@ import SpaceJalyss from "../pages/space/SpaceJalyss";
 import RegisterForm from "../pages/space/RegisterForm";
 import ServiceSpace from "../pages/space/ServiceSpace";
 import SpaceReservation from "../pages/space/SpaceReservation";
+import WorkSpaceDetail from "../pages/space/WorkSpaceDetail";
 
 import Profile from "../pages/Profile";
 import MyBlogs from "../components/Profile/MyBlogs";
@@ -69,6 +70,7 @@ function Router() {
           <Route path="/" element={<Client />}>
             <Route index element={<Home />} />
             <Route path="articles" element={<Articles />} />
+            <Route path="search" element={<SearchbarResult />} />
             <Route path="articles/cat/:categoryId" element={<Articles />} />
             <Route path="one-article/:articleId" element={<OneArticle />} />
             <Route path="checkout" element={<Checkout />} />
@@ -78,19 +80,20 @@ function Router() {
                 <Route index element={<MyBlogs />} />
                 <Route path="my-bookmarks" element={<MyBookmarks />} />
                 <Route path="bio" element={<Edit />} />
-                <Route path="saved-tarining/:userId" element={<SavedTraining />} />
+                <Route
+                  path="saved-tarining/:userId"
+                  element={<SavedTraining />}
+                />
                 <Route path="orders-history" element={<OrderHistory />} />
                 <Route path="Space-Booked" element={<SpaceBooked/>} />
 
               </Route>
             )}
 
-            
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Signup />} />
-                <Route path="reset-password" element={<ResetPassword />} />
-                <Route path="new-password" element={<NewPassword />} />
-            
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="new-password" element={<NewPassword />} />
 
             <Route path="*" element={<NoPage />} />
             <Route path="chat-box" element={<Chat />}>
@@ -105,16 +108,16 @@ function Router() {
             <Route path="blogs/:blogId" element={<UpdateBlog />} />
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="spaceJalyss" element={<SpaceJalyss />} />
-            <Route
-              path="spaceJalyss/:serviceIdentifier"
-              element={<ServiceSpace />}
-            />
+            <Route path="spaceJalyss/:serviceIdentifier" element={<ServiceSpace />} />
+            
+
 
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />} />
 
             <Route path="RegisterForm" element={<RegisterForm />} />
-            <Route path="SpaceReservation/:tarifId" element={<SpaceReservation />} />
+            <Route path="SpaceReservation/:tarifId/:workSpaceId" element={<SpaceReservation />} />
+            <Route path="/:workspaceId" element={<WorkSpaceDetail />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,39 +1,73 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Async thunk for fetching services
-export const fetchServices = createAsyncThunk(
-  "services/fetchServices",
+export const fetchSpaces = createAsyncThunk(
+  "work-spaces/work-spaces",
   async () => {
-    const response = await axios.get(`${config.API_ENDPOINT}/services`);
+    const response = await axios.get(`${config.API_ENDPOINT}/work-spaces`);
     return response.data;
   }
 );
 
-// Async thunk for fetching a single service by ID
-export const fetchService = createAsyncThunk(
-  "services/fetchService",
-  async (name, { dispatch }) => {
-    try {
-      const response = await axios.get(
-        `${config.API_ENDPOINT}/services/one/${name}`
-      );
-      console.log(response.data, "response.data");
-      return response.data;
-    } catch (error) {
-      // Handle error if needed
-      throw error;
-    }
+export const fetchSpaceById = createAsyncThunk(
+  "work-spaces/fetchSpacesById",
+  async (serviceId) => {
+    const response = await axios.get(
+      `${config.API_ENDPOINT}/work-spaces/one/${serviceId}`
+    );
+    return response.data;
   }
 );
 
-// Create a slice for managing services
-export const serviceSlice = createSlice({
-  name: "service",
+export const fetchWorkSpaces = createAsyncThunk(
+  "workSpaces/workSpaces",
+  async () => {
+    const response = await axios.get(`${config.API_ENDPOINT}/work-spaces`);
+    return response.data;
+  }
+);
+
+
+
+export const createWorkSpace = createAsyncThunk(
+  "workSpaces/createWorkSpace",
+  async (body, { dispatch }) => {
+    const response = await axios.post(
+      `${config.API_ENDPOINT}/work-spaces`,
+      body
+    );
+    // dispatch(fetchWorkSpaces(response.data));
+    return response.data;
+  }
+);
+
+export const removeSpace = createAsyncThunk(
+  "spaces/deleteSpace",
+  async (id) => {  
+    // const { id } = args;
+    const response = await axios.delete(`${config.API_ENDPOINT}/work-spaces/${id}`);
+    return response.data;
+  }
+);
+
+export const editSpace = createAsyncThunk(
+  "spaces/editSpace",
+  async (args) => {
+    const { id,...body } = args;
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/work-spaces/${id}`,
+      body
+    );
+    return response.data;
+  }
+);
+
+export const spaceSlice = createSlice({
+  name: "space",
   initialState: {
-    service: null,
-    services: {
+    space: null,
+    spaces: {
       items: [],
       count: 0,
     },
@@ -44,19 +78,14 @@ export const serviceSlice = createSlice({
   },
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(fetchServices.fulfilled, (state, action) => {
-      state.services.items = action.payload;
-    });
-    builder.addCase(fetchService.fulfilled, (state, action) => {
-      state.service = action.payload;
-    });
-    builder.addCase(fetchServices.rejected, (state, action) => {
-      state.error = action.error.message;
-    });
-    builder.addCase(fetchService.rejected, (state, action) => {
-      state.error = action.error.message;
-    });
+    builder.addCase(fetchSpaces.fulfilled, (state, action) => {
+        state.spaces.items = action.payload.items;
+        state.spaces.count = action.payload.count;
+      })
+     builder.addCase(fetchSpaceById.fulfilled, (state, action) => {
+        state.space = action.payload;
+      });
   },
 });
 
-export default serviceSlice.reducer;
+export default spaceSlice.reducer;

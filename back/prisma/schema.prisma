@@ -72,7 +72,6 @@ model FunctionalArea {
   JobTitleByFunctioanArea JobTitleByFunctioanArea[]
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
-  
 
   Client Client[]
 }
@@ -744,7 +743,7 @@ model MediaService {
   mediaId   String
   media     Media   @relation(fields: [mediaId], references: [id])
 
-  @@unique([mediaId, serviceId])
+  @@unique(fields: [mediaId, serviceId], name:"serviceMedia")
 }
 
 model MediaWorkSpace {
@@ -876,6 +875,7 @@ model WorkSpace {
   serviceId      String?
   service        Service?         @relation(fields: [serviceId], references: [id])
   MediaWorkSpace MediaWorkSpace[]
+  Booking        Booking[]
 }
 
 model Tarif {
@@ -894,7 +894,7 @@ model Tarif {
 }
 
 model Booking {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   date        DateTime
   startTime   String
   endTime     String
@@ -902,14 +902,16 @@ model Booking {
   firstName   String?
   lastName    String?
   phoneNumber String?
-  status      Status   @default(pending)
-  paid        Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      Status    @default(pending)
+  paid        Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String?
-  tarif       Tarif    @relation(fields: [tarifId], references: [id])
+  tarif       Tarif     @relation(fields: [tarifId], references: [id])
   tarifId     String
+  workSpaceId String
+  workSpace   WorkSpace @relation(fields: [workSpaceId], references: [id])
   companyName String?
   freeSpace   String?
 

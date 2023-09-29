@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useCart } from "react-use-cart";
 import WhiteSelect from "../components/Commun/inputs/WhiteSelect";
-
+import SearchBar from "../components/Commun/inputs/searchBar";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -15,7 +15,6 @@ import { fetchCategories } from "../store/category";
 
 import { ChatCircleDots } from "phosphor-react";
 import { IconButton } from "@mui/material";
-
 
 import Container from "react-bootstrap/Container";
 
@@ -97,7 +96,8 @@ function Header() {
                       src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
                     />
                   </a>
-                  <div className="d-flex align-items-center ">
+                  <SearchBar />
+                  {/* <div className="d-flex align-items-center ">
                     <form className="form-inline mt-3 mb-3">
                       <input
                         className="form-control form-control-sm ml-4 w-125"
@@ -107,7 +107,7 @@ function Header() {
                         style={{ width: 300 }}
                       />
                     </form>
-                  </div>
+                  </div> */}
                   <div className=" d-flex align-items-center justify-content-between">
                     <div className=" d-flex align-items-center">
                       <label style={{ color: "white" }}>
