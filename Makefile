@@ -17,7 +17,7 @@ else
 endif
 
 deploy:
-	@make up
+	# @make up
 	@yarn
 	@yarn build
 	@pm2 kill
