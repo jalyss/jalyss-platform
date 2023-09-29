@@ -123,7 +123,7 @@ import CreateRole from "../domains/roles/view/CreateRole";
 import Clientlist from "../../src/domains/Client/views/Clientlist";
 import Client from "../domains/Client/Client";
 
-// import Profileclient from "../domains/Client/views/Profileclient";
+import Profileclient from "../domains/Client/views/Profileclient";
 import TypeArticle from "../domains/type/TypeArticle";
 
 function Router() {
@@ -184,9 +184,12 @@ function Router() {
 
             <Route path="client" element={<Client />}>
               <Route index element={<Clientlist />} />
+              <Route
+                path="profileclient/:clientId"
+                element={<Profileclient />}
+              />
             </Route>
             {/* <Route path="addclient" element={<Addclient/>}/> */}
-            {/* <Route path="profilclient" element={<Profileclient/>}/> */}
 
             <Route path="blogs" element={<Blogs />}>
               <Route index element={<BlogsList />} />
@@ -233,9 +236,11 @@ function Router() {
               <Route path="create" element={<CreateType />} />
               <Route path="edit/:typeId" element={<EditType />} />
               <Route path="detail/:typeId" element={<DetailType />} />
+
              
             </Route> 
              <Route path="Branche" element={<Branches />}>
+
               <Route index element={<BrancheList />} />
               <Route
                 path="transiction/detail/:typeId"

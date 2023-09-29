@@ -7,9 +7,9 @@ export const fetchClients = createAsyncThunk("clients/clients", async () => {
   return response.data;
 });
 
-export const getOneClient = createAsyncThunk("clients/clients", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/clients/one/${id}`);
-  return response.data;
+export const getOneClient = createAsyncThunk("clients/getOne", (data) => {
+  // const response = await axios.get(`${config.API_ENDPOINT}/clients/one/${id}`);
+  return data;
 });
 
 export const createClient = createAsyncThunk(
@@ -92,7 +92,7 @@ export const clientsGetSlice = createSlice({
     });
   },
 });
-export const clientGetOneSlice = createSlice({
+export const createOneSlice = createSlice({
   name: "clients/createClients",
   initialState: {
     items: null,
@@ -161,9 +161,33 @@ export const clientDeleteOneSlice = createSlice({
     });
   },
 });
+export const getOneClientSlice = createSlice({
+  name: "clients/getOne",
+  initialState: {
+    client: {},
+    error: null,
+    loading: false,
+  },
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(getOneClient.fulfilled, (state, action) => {
+      state.loading = false;
+      state.client = { ...action.payload };
+    });
+    builder.addCase(getOneClient.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(getOneClient.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+  },
+});
 export default {
+  getOneClient: getOneClientSlice.reducer,
   getAllClient: clientsGetSlice.reducer,
-  getOneClient: clientGetOneSlice.reducer,
+  createOne: createOneSlice.reducer,
   deleteClient: clientDeleteOneSlice.reducer,
   updateClient: clientUpdateOneSlice.reducer,
 };

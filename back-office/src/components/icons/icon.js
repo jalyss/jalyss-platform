@@ -1,12 +1,28 @@
 function Icon(props) {
   return (
-    <div>
-      <img
-        style={{ color: "red", width: "45%", height: "40%" }}
-        src={props.img}
-        className="image_icon"
-      />
-    </div>
+    <>
+      {props?.modalId ? (
+        <div
+          data-bs-toggle="modal"
+          data-bs-target={props.modalId}
+          style={{ padding: 0, margin: 0 }}
+        >
+          <img
+            style={{ color: "red", width: "35%", height: "35%" }}
+            src={props.img}
+            className="image_icon"
+          />
+        </div>
+      ) : (
+        <div style={{ padding: 0, margin: 0 }}>
+          <img
+            style={{ color: "red", width: "35%", height: "35%" }}
+            src={props.img}
+            className="image_icon"
+          />
+        </div>
+      )}
+    </>
   );
 }
 

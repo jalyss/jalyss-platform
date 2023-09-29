@@ -24,9 +24,11 @@ function ArticleCard({ article }) {
   console.log(article.article, "ddd")
 
   return (
+
   
    
     <div className="article-card position-relative mx-3 mb-2 ">
+
       <div className="position-relative">
         <div className="stock-label">
           <h6 className="m-0">{article.stock} </h6>
@@ -64,7 +66,6 @@ function ArticleCard({ article }) {
       </div>
     </div>
 
-    
   );
 }
 
