@@ -5,13 +5,13 @@
   height: 500px; /* Adjust the height as needed */
 }
 .card-body {
-    height: auto;
-    width: auto;
-   }
-   
+  height: auto;
+  width: auto;
+}
+
 .firstLine {
   font-size: 1.5rem;
-  margin-bottom: 20px;
+  margin-bottom: calc(0.3rem+2vh);
 }
 
 .secondLine {
@@ -73,7 +73,7 @@
     margin-bottom: 20px;
   }
 
-  .col-md-2.5 {
+  .col-md {
     width: 100%;
     margin-bottom: 20px;
   }
@@ -89,37 +89,36 @@
 }
 
 @media (max-width: 881px) {
-    .carousel-inner .carousel-item {
-      height: 250px; /* Adjust the height as needed */
-    }
-    .carouselside {
-      height: 300px;
-    }
-    .whyUs {
-      width: 100%;
-      max-width: 100%;
-      margin-bottom: 20px;
-    }
-  
-    .secondLine {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-  
-    .col-md-2.5 {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-  
-    .headerspaceitem {
-      width: 100%;
-      left: 0;
-    }
-  
-    .card-icon {
-      font-size: 2rem;
-    }
+  .carousel-inner .carousel-item {
+    height: 250px; /* Adjust the height as needed */
   }
+  .carouselside {
+    height: 300px;
+  }
+  .whyUs {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .secondLine {
+    font-size: calc(0.7rem+1vh);
+  }
+
+  /* .col-md-2.5 {
+    width: 100%;
+    margin-bottom: 20px;
+  } */
+
+  .headerspaceitem {
+    width: 100%;
+    left: 0;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+  }
+}
 
 /* Add responsive styles for even smaller screens */
 @media (max-width: 767px) {

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-
+import searchInput from "./searchInput";
 import article from "./article";
 import publishingHouse from "./publishingHouse";
 import category from "./category";
@@ -49,7 +49,8 @@ export const store = configureStore({
     functionalArea,
     jobTitle,
     educationLevel,
-    booking
+    searchInput,
+    booking,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
