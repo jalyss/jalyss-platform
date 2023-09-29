@@ -26,8 +26,6 @@ import FormatListBulleted from "@mui/icons-material/FormatListBulleted";
 import { Apps, AppsRounded } from "@mui/icons-material";
 import ArticleCardHorizontal from "../components/ArticleCardHorizontal";
 
-
-
 function Articles() {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
@@ -97,7 +95,6 @@ function Articles() {
 
   const Filters = () => {
     return (
-
       <div className="filters">
         <Accordion
           title={t("filter.category")}
@@ -112,15 +109,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          categories: [...Filter.categories, element.id],
-                        }))
+                            ...Filter,
+                            categories: [...Filter.categories, element.id],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          categories: Filter.categories.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }));
+                            ...Filter,
+                            categories: Filter.categories.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }));
                     }}
                     checked={filters.categories.includes(element.id)}
                   />
@@ -145,15 +142,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          articleTypes: [...Filter.articleTypes, element.id],
-                        }))
+                            ...Filter,
+                            articleTypes: [...Filter.articleTypes, element.id],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          articleTypes: Filter.articleTypes.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }));
+                            ...Filter,
+                            articleTypes: Filter.articleTypes.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }));
                     }}
                     checked={filters.articleTypes.includes(element.id)}
                   />
@@ -178,18 +175,18 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          publishingHouses: [
-                            ...Filter.publishingHouses,
-                            element.id,
-                          ],
-                        }))
+                            ...Filter,
+                            publishingHouses: [
+                              ...Filter.publishingHouses,
+                              element.id,
+                            ],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          publishingHouses: Filter.publishingHouses.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }));
+                            ...Filter,
+                            publishingHouses: Filter.publishingHouses.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }));
                     }}
                     checked={filters.publishingHouses.includes(element.id)}
                   />
@@ -212,15 +209,15 @@ function Articles() {
                     onChange={(e) => {
                       e.target.checked === true
                         ? setFilters((Filter) => ({
-                          ...Filter,
-                          authors: [...Filter.authors, element.id],
-                        }))
+                            ...Filter,
+                            authors: [...Filter.authors, element.id],
+                          }))
                         : setFilters((Filter) => ({
-                          ...Filter,
-                          authors: Filter.authors.filter(
-                            (elem, j) => elem !== element.id
-                          ),
-                        }));
+                            ...Filter,
+                            authors: Filter.authors.filter(
+                              (elem, j) => elem !== element.id
+                            ),
+                          }));
                     }}
                     checked={filters.authors.includes(element.id)}
                   />
@@ -252,10 +249,10 @@ function Articles() {
   return (
     <DocumentMeta {...meta} className="container-fluid">
       <div>
-
         <div className="filters-button">
-          <button className="Bfilter" onClick={() => setShowFilters(true)} >Filter</button>
-
+          <button className="Bfilter" onClick={() => setShowFilters(true)}>
+            Filter
+          </button>
         </div>
       </div>
 
@@ -323,10 +320,7 @@ function Articles() {
       </Offcanvas>
 
       <div className="d-flex p-2 ">
-
         <div className="responsive-filters">
-
-
           <Fragment>
             <Accordion
               title={t("filter.Price")}
@@ -365,10 +359,24 @@ function Articles() {
           <Filters />
         </div>
 
-        <div >
-          <div style={{ marginBottom: "10px", display: "flex", justifyContent: "start", marginLeft: "10px" }}>
-            <FormatListBulleted className="articleicons" onClick={handleFormaListClick}></FormatListBulleted>
-            <Apps className="articleicons" onClick={handleAppsClick} style={{ marginLeft: "10px" }}></Apps>
+        <div>
+          <div
+            style={{
+              marginBottom: "10px",
+              display: "flex",
+              justifyContent: "start",
+              marginLeft: "10px",
+            }}
+          >
+            <FormatListBulleted
+              className="articleicons"
+              onClick={handleFormaListClick}
+            ></FormatListBulleted>
+            <Apps
+              className="articleicons"
+              onClick={handleAppsClick}
+              style={{ marginLeft: "10px" }}
+            ></Apps>
           </div>
           {showContent && (
             <div className="px-3">
@@ -396,25 +404,24 @@ function Articles() {
                 ))
               ) : (
                 <div className="d-flex flex-wrap px-3 ">
-                  {paginate(articleStore.articles.items, currentPage, pageSize).map(
-                    (element, index) => (
-                      <ArticleCard key={index} article={element} />
-                    )
-                  )}
+                  {paginate(
+                    articleStore.articles.items,
+                    currentPage,
+                    pageSize
+                  ).map((element, index) => (
+                    
+                    <ArticleCard key={index} article={element} />
+                  ))}
                 </div>
               )}
-
             </div>
           )}
-        
-       
-        
+
           {showContentListe && (
             <div className="d-flex flex-column  mb-3 px-3 ">
               {!isEmpty(filters.categories) ? (
                 map(groupedArticles, (element) => (
                   <>
-
                     <p
                       style={{
                         fontSize: "20px",
@@ -436,17 +443,18 @@ function Articles() {
                 ))
               ) : (
                 <div className=" d-flex flex-column  px-3 ">
-                  {paginate(articleStore.articles.items, currentPage, pageSize).map(
-                    (element, index) => (
-                      <ArticleCardHorizontal key={index} article={element} />
-                    )
-                  )}
+                  {paginate(
+                    articleStore.articles.items,
+                    currentPage,
+                    pageSize
+                  ).map((element, index) => (
+                    <ArticleCardHorizontal key={index} article={element} />
+                  ))}
                 </div>
               )}
-
             </div>
           )}
-   </div>
+        </div>
       </div>
 
       <div
