@@ -44,6 +44,31 @@ export const sidebarDataBranch = [
           nameAr: "المستخدم",
           path: "client"
       },
+      {
+        nameEn: "education Level",
+        nameAr: "education Level",
+        path: "educationLevel"
+      },
+      {
+        nameEn: "city",
+        nameAr: "city",
+        path: "cities"
+      },
+      {
+        nameEn: "functional Area",
+        nameAr: "functional Area",
+        path: "functionalArea"
+      },
+      {
+        nameEn: "job Title",
+        nameAr: "job Title",
+        path: "jobTitle"
+      },
+      {
+        nameEn: "country",
+        nameAr: "country",
+        path: "Countrie"
+      },
     ],
   },
   {
@@ -141,6 +166,11 @@ export const sidebarDataBranch = [
         nameEn: "Roles",
         nameAr: "الادوار",
         path: "role",
+      },
+      {
+        nameEn: "Users",
+        nameAr: "المستخدمين",
+        path: "users",
       },
     ],
   }

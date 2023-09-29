@@ -29,7 +29,7 @@ export class BlogsService {
 
   async findAll(filters: FilterBlog) {
     let errors = [];
-    let where = { }; 
+    let where = {};
     let orderBy = {};
     Object.entries(filters).forEach(([key, value], i) => {
       if (!(key in FilterBlogExample)) {
@@ -41,10 +41,10 @@ export class BlogsService {
         } else {
           where = {
             ...where,
-            confirm:"confirmed",
-            [key]:  value,
+            confirm: 'confirmed',
+            [key]: value,
+          };
         }
-      }
       }
     });
     if (errors.length) {
@@ -67,12 +67,12 @@ export class BlogsService {
           _count: 'desc',
         },
       };
-      let blogs = await this.searchBlogs(this.prisma, {}, 6, 0, orderBy,true);
-     
+      let blogs = await this.searchBlogs(this.prisma, {}, 6, 0, orderBy, true);
+
       return blogs;
     } else {
       orderBy = { createdAt: 'desc' };
-      
+
       return await this.prisma.$transaction(async (prisma) => {
         let items = await this.searchBlogs(
           prisma,
@@ -82,14 +82,13 @@ export class BlogsService {
           orderBy,
         );
         console.log(where);
-        
+
         let count = await prisma.blog.count({ where });
 
         return { items, count };
       });
     }
   }
-  
 
   async findOne(id: string) {
     return await this.prisma.blog.findFirst({
@@ -107,19 +106,19 @@ export class BlogsService {
   async update(id: string, dto: UpdateBlogDto, userId: string) {
     await this.prisma.$transaction(async (prisma) => {
       let blog = await prisma.blog.findFirstOrThrow({ where: { id } });
-      
-       if (blog.authorId !== userId)
+
+      if (blog.authorId !== userId)
         throw new HttpException(
           'this user can not update the blog',
-         HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST,
         );
       // await prisma.mediaBlog.deleteMany({ where: { blogId: id } });
       // let mediaIds = [];
       // if (dto.mediaIds) {
       //   mediaIds = dto.mediaIds;
-        delete dto?.mediaIds;
+      delete dto?.mediaIds;
       // }
-      let data = { ...dto, };
+      let data = { ...dto };
       // if (mediaIds.length > 0) {
       //   data['MediaBlog'] = {
       //     create: mediaIds.map((id) => ({
@@ -127,28 +126,27 @@ export class BlogsService {
       //     })),
       //   };
       // }
-      return await prisma.blog.update({ where: { id }, data:{...data,confirm:'pending',reason: 'updating'} });
+      return await prisma.blog.update({
+        where: { id },
+        data: { ...data, confirm: 'pending', reason: 'updating' },
+      });
     });
   }
-  async blogDecision(id: string, dto: UpdateBlogDecisionDto){
-    return await this.prisma.blog.update({ where: { id }, data:{
-      ...dto
-    } });
+  async blogDecision(id: string, dto: UpdateBlogDecisionDto) {
+    return await this.prisma.blog.update({
+      where: { id },
+      data: {
+        ...dto,
+      },
+    });
   }
 
   async findAllConfirmedBlogs() {
-    const where = { confirm: 'confirmed' }; 
+    const where = { confirm: 'confirmed' };
     const orderBy = { createdAt: 'desc' };
 
-    return await this.searchBlogs(
-      this.prisma, 
-      where, 
-      3,
-      0, 
-      orderBy
-    );
+    return await this.searchBlogs(this.prisma, where, 3, 0, orderBy);
   }
-
 
   async remove(id: string) {
     return await this.prisma.blog.delete({ where: { id } });
@@ -160,10 +158,10 @@ export class BlogsService {
     skip: number,
     orderBy: any,
     confirmedTrends: boolean = false,
-    ) {
-      if (confirmedTrends) {
-        where = { ...where, confirm: 'confirmed' }; 
-      }
+  ) {
+    if (confirmedTrends) {
+      where = { ...where, confirm: 'confirmed' };
+    }
     return await prisma.blog.findMany({
       where,
       include: {

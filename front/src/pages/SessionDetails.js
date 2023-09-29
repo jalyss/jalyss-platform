@@ -275,6 +275,7 @@ function SessionDetails() {
         currentDate > new Date(session?.startDate) && (
           <FeedBack previousSesion={session} subtitle="Session Feedback" />
         )}
+        
     </div>
   );
 }

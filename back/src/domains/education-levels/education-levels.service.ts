@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class EducationLevelsService {
   constructor(private readonly prisma: PrismaService) {}
+
   async create(dto: CreateEducationLevelDto) {
     return await this.prisma.educationLevel.create({
       data: { ...dto },
@@ -13,18 +14,21 @@ export class EducationLevelsService {
   }
 
   async findAll() {
-    return await this.prisma.educationLevel.findMany({});
+    return await this.prisma.educationLevel.findMany();
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} educationLevel`;
-  // }
+  async findOne(id: string) {
+    return await this.prisma.educationLevel.findUnique({ where: { id } });
+  }
 
-  // update(id: number, updateEducationLevelDto: UpdateEducationLevelDto) {
-  //   return `This action updates a #${id} educationLevel`;
-  // }
+  async update(id: string, dto: UpdateEducationLevelDto) {
+    return await this.prisma.educationLevel.update({
+      where: { id },
+      data: { ...dto },
+    });
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} educationLevel`;
-  // }
+  async remove(id: string) {
+    return await this.prisma.educationLevel.delete({ where: { id } });
+  }
 }

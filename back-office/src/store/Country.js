@@ -7,11 +7,53 @@ export const fetchCountries = createAsyncThunk("countries/countries", async () =
   const response = await axios.get(`${config.API_ENDPOINT}/countries`);
   return response.data;
 });
+export const fetchCountrie = createAsyncThunk("countries/countrie", async (id) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/countrie/${id}`);
+  return response.data;
+});
+
+  export const createCountrie = createAsyncThunk("countries/countrie", async (body, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+    const configs = {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    }
+    const response = await axios.post(`${config.API_ENDPOINT}/countrie`, body, configs);
+    dispatch(fetchCountrie())
+    return response.data;
+  });
+  
+  export const removeCountrie = createAsyncThunk("countries/countrie", async (id, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+    const configs = {
+      headers: {
+        Authorization: 'Bearer ' + token.Authorization
+      }
+    }
+    const response = await axios.delete(`${config.API_ENDPOINT}/countrie/${id}`, configs);
+    dispatch(fetchCountries())
+    return response.data;
+  });
+  
+  export const editCountrie = createAsyncThunk("countries/countrie", async (args, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem('tokenAdmin'))
+    const configs = {
+      headers: {
+        Authorization: 'Bearer ' + token.Authorization
+      }
+    }
+    const { id, ...body } = args
+    console.log("args",args);
+    const response = await axios.patch(`${config.API_ENDPOINT}/countrie/${id}`, body, configs);
+    return response.data;
+  });
 
 export const findAllCitites = createAsyncThunk("cities/cities", async () => {
     const response = await axios.get(`${config.API_ENDPOINT}/cities`);
     return response.data;
   });
+  
   export const findAllBranches = createAsyncThunk("branches/branches", async () => {
     const response = await axios.get(`${config.API_ENDPOINT}/branches/all`);
     return response.data;

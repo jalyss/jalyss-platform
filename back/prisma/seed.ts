@@ -6,6 +6,8 @@ import { chatSeed } from './seeds/chatSeed';
 const prisma = new PrismaClient();
 
 async function main() {
+  let users = await prisma.user.findMany();
+  if (users.length) return;
   // let users = [];
   // let articles = [];
   // let usersIds = [];
@@ -1645,6 +1647,17 @@ async function main() {
   //     data: {
   //       contentEn: data[i],
   //       contentAr: data[i],
+  // let bookingTarifPrivateSpace1 = await prisma.booking.create({
+  //   data: {
+  //     date: new Date('01/05/2023'),
+  //     startTime: '8',
+  //     endTime: '10',
+  //     userId: users[0].id,
+  //     tarifId: tarifPrivateSpace1.id,
+  //     freeSpace: 'hello',
+  //     workSpaceId: workSpacePrivateSpace.id,
+  //   },
+  // });
 
   //     },
   //   });
@@ -1663,7 +1676,7 @@ async function main() {
   //     },
   //   });
 
-    // sessionTypeIds.push(sessionType.id);
+  // sessionTypeIds.push(sessionType.id);
   // }
 
   // create cover session
@@ -1703,6 +1716,26 @@ async function main() {
   //     });
   //   }
   // }
+  // for (let i = 0; i < 50; i++) {
+  //   const newBlog = await prisma.blog.create({
+  //     data: {
+  //       content: 'hello from the other side.',
+  //       title: 'My Blog Post ' + i,
+  //       authorId: users[Math.floor(Math.random() * users.length)].id,
+  //       categoryId:
+  //         articleCategoryIds[
+  //           Math.floor(Math.random() * articleCategoryIds.length)
+  //         ],
+  //     },
+  //   });
+  // for (let i = 0; i < Math.floor(Math.random() * 10); i++) {
+  //   await prisma.view.create({
+  //     data: {
+  //       blogId: newBlog.id,
+  //     },
+  //   });
+  // }
+
   //create session
   // let lectures = [];
   // let sessions = [];
@@ -2041,7 +2074,7 @@ async function main() {
 
   //     },
   //   });
-    // featuresIds.push(features.id);
+  // featuresIds.push(features.id);
   // }
   // chatSeed(prisma, usersIds);
   // console.log(users);

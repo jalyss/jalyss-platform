@@ -13,9 +13,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   app.useStaticAssets('upload',{prefix:'/upload'})
-  // app.useStaticAssets(join(__dirname, '../../../front', 'build'),
-  // // {prefix:'/',expect:'/back-office'}
-  // )
   app.useStaticAssets(join(__dirname, '../../../back-office', 'build'))
   
   app.setGlobalPrefix('/api/v1');

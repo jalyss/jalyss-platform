@@ -170,7 +170,7 @@ function SpaceJalyss() {
         <h1 className="secondLine">Our Services</h1>
 
         <div className="d-flex flex-wrap justify-content-around align-items-center  ">
-          {services.items.map((elem, i) => (
+          {services?.items.map((elem, i) => (
             <div className="col-md-2.5 mx-1 mb-3">
               <img
                 src={elem.cover?.path}

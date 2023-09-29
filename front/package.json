@@ -21,6 +21,7 @@
     "@mui/icons-material": "5.1.1",
     "@mui/material": "^5.11.11",
     "@mui/styles": "^5.12.3",
+    "@mui/system": "^5.14.6",
     "@mui/x-date-pickers": "^6.9.1",
     "@mui/x-date-pickers-pro": "^6.10.1",
     "@nestjs/platform-socket.io": "^9.4.0",
@@ -40,6 +41,7 @@
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "emoji-mart": "^5.5.2",
+    "flickity": "^2.3.0",
     "html-react-parser": "^3.0.16",
     "html-to-draftjs": "^1.5.0",
     "i18next": "^22.4.10",
@@ -72,7 +74,7 @@
     "react-easy-crop": "^5.0.0",
     "react-easy-emoji": "^1.8.1",
     "react-elastic-carousel": "^0.11.5",
-   
+    "react-flickity-component": "^4.0.6",
     "react-hook-form": "^7.43.9",
     "react-horizontal-scrolling-menu": "^4.0.4",
     "react-i18next": "^12.2.0",
@@ -104,6 +106,7 @@
   },
   "scripts": {
     "start": "cross-env PORT=4001 react-scripts start",
+    "start:prod": "node build/index.html",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

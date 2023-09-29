@@ -1,0 +1,209 @@
+/* no circle */
+.flickity-button {
+  background: transparent;
+  position: absolute;
+}
+/* .true:hover .flickity-button-icon {
+  background: blue;
+} */
+.next {
+  left: 0;
+  top: 50%;
+
+  transform: translate(0%, -50%) rotate(-180deg);
+}
+.previous {
+  right: 0;
+  top: 50%;
+  transform: translate(0%, -50%) rotate(180deg);
+}
+.flickity-button:hover {
+  background: transparent;
+  color: black;
+}
+
+.flickity-prev-next-button {
+  width: 100px;
+  height: 100px;
+}
+.flickity-button-icon {
+  fill: rgba(102, 51, 153);
+}
+.flickity-button:disabled {
+  opacity: 0.3;
+  cursor: auto;
+}
+.flickity-viewport {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+.sessions {
+  border: 0px;
+  outline: 0px;
+  background: transparent;
+  border: none;
+  position: relative;
+  max-width: 80vw;
+  height: 100%;
+  margin: auto;
+}
+.carousel {
+  border: 0px;
+  outline: 0px;
+  background: transparent;
+  border: none;
+  position: relative;
+ 
+  height: 100%;
+  margin: auto;
+}
+.article {
+  border: 0px;
+  outline: 0px;
+  background: transparent;
+  border: none;
+  position: relative;
+  max-width: 80vw;
+  height: 100%;
+  margin: auto;
+}
+.flickity-slider {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.flickity-enabled.is-draggable {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.flickity-enabled.is-draggable .flickity-viewport {
+  cursor: move;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+.blog-card {
+  margin-top: 35px;
+  margin-right: 35px;
+  margin-bottom: 35px;
+  border-radius: 15px;
+  counter-increment: blog-card;
+  min-height: 30vh;
+  min-width: 30rem;
+  max-width: 30rem;
+  transition: all 0.3s ease;
+  opacity: 0.3;
+  background: #b9b9b9;
+  filter: blur(6px);
+  pointer-events: none;
+}
+.blog-card.is-selected {
+  filter: blur(0);
+  opacity: 1;
+  background: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  pointer-events: stroke;
+}
+.article-card {
+  margin-top: 35px;
+  margin-right: 35px;
+  margin-bottom: 35px;
+  border-radius: 15px;
+  counter-increment: article-card;
+  transition: all 0.3s ease;
+  opacity: 0.3;
+  background: #b9b9b9;
+  filter: blur(6px);
+  pointer-events: none;
+}
+.article-card.is-selected {
+  filter: blur(0);
+  opacity: 1;
+  background: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  pointer-events: stroke;
+}
+.card-sessions {
+  margin-top: 35px;
+  margin-right: 35px;
+  margin-bottom: 35px;
+  border-radius: 35px;
+  counter-increment: card-sessions;
+  min-height: 30vh;
+  min-width: 30rem;
+  max-width: 30rem;
+  transition: all 0.3s ease;
+  opacity: 0.3;
+  background: #b9b9b9;
+  filter: blur(6px);
+  pointer-events: none;
+}
+.card-sessions.is-selected {
+  filter: blur(0);
+  opacity: 1;
+  background: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  pointer-events: stroke;
+}
+.min-height-vh {
+  min-height: 50vh; /* Adjust the value as needed */
+}
+@media screen and (max-width: 672px) {
+  .card-sessions {
+    min-height: 25rem;
+    min-width: 25rem;
+    max-width: 25rem;
+  }
+  .blog-card {
+    min-height: 25rem;
+    min-width: 25rem;
+    max-width: 25rem;
+  }
+  .flickity-prev-next-button {
+    width: 80px;
+    height: 80px;
+  }
+  .flickity-prev-next-button {
+    width: 80px;
+    height: 80px;
+  }
+  .blogItemCover {
+    max-height: 26vh;
+  }
+}
+@media screen and (max-width: 550px) {
+  .card-sessions {
+    min-height: 20rem;
+    min-width: 20vw;
+    max-width: 20rem;
+  }
+  .blog-card {
+    min-height: 20rem;
+    min-width: 20vw;
+    max-width: 20rem;
+  }
+  .blogItemCover {
+    max-height: 25vh;
+  }
+  .flickity-prev-next-button {
+    width: 70px;
+    height: 70px;
+  }
+  .flickity-prev-next-button {
+    width: 70px;
+    height: 70px;
+  }
+}
