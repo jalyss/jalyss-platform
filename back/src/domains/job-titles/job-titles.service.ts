@@ -17,15 +17,18 @@ export class JobTitlesService {
     return await this.prisma.jobTitle.findMany({});
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} jobTitle`;
-  // }
+  async findOne(id: string) {
+    return await this.prisma.jobTitle.findUnique({ where: { id } });
+  }
 
-  // update(id: number, updateJobTitleDto: UpdateJobTitleDto) {
-  //   return `This action updates a #${id} jobTitle`;
-  // }
+  async update(id: string, dto: UpdateJobTitleDto) {
+    return await this.prisma.jobTitle.update({
+      where: { id },
+      data: { ...dto },
+    });
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} jobTitle`;
-  // }
+  async remove(id: string) {
+    return await this.prisma.jobTitle.delete({ where: { id } });
+  }
 }

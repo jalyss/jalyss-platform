@@ -199,8 +199,8 @@ function ClientList() {
             >
               Clients List
             </h2>
-            <Box>
-              <DataGrid
+           
+              <DataGrid sx={{height:300}}
                 rows={clients}
                 columns={columns}
                 initialState={{
@@ -211,7 +211,7 @@ function ClientList() {
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
               />
-            </Box>
+        
           </div>
         </div>
 

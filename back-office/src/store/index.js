@@ -24,7 +24,11 @@ import gain from "./gain";
 import provider from "./provider";
 import trainingBooking from "./trainingBooking";
 import country from "./Country";
+import jobTitle from "./jobTitle";
+import functionalArea from "./functionalArea";
+import educationLevel from "./educationLevel";
 import transition from "./transition";
+import city from "./city";
 import client from "./client";
 
 export const store = configureStore({
@@ -55,7 +59,11 @@ export const store = configureStore({
     chat,
     gain,
     trainingBooking,
+    jobTitle,
+    functionalArea,
+    educationLevel,
     transition,
+    city,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
