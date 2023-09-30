@@ -426,7 +426,7 @@ const AddSession = () => {
                       required
                       type="text"
                       value={addSession?.descriptionEn}
-                      placeholder="Enter description en english"
+                      placeholder="Enter description in english"
                       name="descriptionEn"
                       onChange={handleAddSessionChange}
                       style={{ border: "1px solid #bfbab7", width: 290 }}
@@ -438,7 +438,7 @@ const AddSession = () => {
                       required
                       type="text"
                       value={addSession?.descriptionAr}
-                      placeholder="Enter description en arabe"
+                      placeholder="Enter description in arabe"
                       name="descriptionAr"
                       onChange={handleAddSessionChange}
                       style={{ border: "1px solid #bfbab7", width: 290 }}

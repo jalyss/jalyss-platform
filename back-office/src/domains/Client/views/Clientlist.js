@@ -163,9 +163,8 @@ function ClientList() {
           </ul>
           <div className="btn_container">
             <div
+            onClick={()=>navigate("add")}
               className="add_client_btn"
-              data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop"
             >
               {" "}
               <div>
@@ -192,25 +191,25 @@ function ClientList() {
             </h2>
 
             <DataGrid
-              sx={{ height: 300 }}
+              sx={{ minHeight: 300 }}
               rows={clients}
               columns={columns}
               initialState={{
                 pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
+                  paginationModel: { page: 0, pageSize: 10 },
                 },
               }}
               pageSizeOptions={[5, 10]}
-              checkboxSelection
+          
             />
           </div>
         </div>
 
         {/* <EditClient client={currentClient} isEditModalOpen={isEditModalOpen} /> */}
 
-        <Addclient />
+        {/* <Addclient /> */}
       </div>
-      <EditClient />
+      {/* <EditClient /> */}
     </div>
   );
 }

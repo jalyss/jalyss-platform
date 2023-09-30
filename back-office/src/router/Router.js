@@ -206,8 +206,8 @@ function Router() {
 
             <Route path="client" element={<Client />}>
               <Route index element={<ClientList />} />
-              <Route path="profileclient/:clientId" element={<OneClient />} />
-              <Route path="addclient" element={<AddClient />} />
+              <Route path="one/:clientId" element={<OneClient />} />
+              <Route path="add" element={<AddClient />} />
             </Route>
 
             <Route path="educationLevel" element={<EducationLevel />}>

@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const Client = () => (
   <div className="page">
-    <Outlet />;
+    <Outlet />
   </div>
 );
 
