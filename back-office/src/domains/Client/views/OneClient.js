@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import background from "../../../assets/images/background-profile.png";
 import userImage from "../../../assets/images/user.png";
 import css from "../../../assets/styles/clientProfile.css";
-const Profileclient = () => {
+const OneClient = () => {
   return (
     <div
       style={{
@@ -47,4 +47,4 @@ const Profileclient = () => {
     </div>
   );
 };
-export default Profileclient;
+export default OneClient;

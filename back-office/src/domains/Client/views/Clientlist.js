@@ -15,7 +15,7 @@ import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import imgAvatar from "../../../assets/images/avatar.jpg";
 import activeIcon from "../../../assets/images/active.png";
 import blockIcon from "../../../assets/images/active.png";
-import EditClient from "./editClient";
+import EditClient from "./EditClient";
 import lookIcon from "../../../assets/images/look-icon.png";
 import addClient from "../../../assets/images/client.png";
 import Icon from "../../../components/icons/icon";
@@ -23,7 +23,7 @@ import editIcon from "../../../assets/images/edit.png";
 
 import AddButton from "../../../components/buttons/AddButton";
 import css from "../../../assets/styles/client-table.css";
-import Addclient from "./Addclient";
+import Addclient from "./AddClient";
 function ClientList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

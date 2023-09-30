@@ -57,7 +57,7 @@ const initialState = {
   },
 };
 
-const Addclient = () => {
+const AddClient = () => {
   const countries = useSelector((state) => state.country.countries.items);
   const { formData, errors, changeHandler, setErrors } = useForm(
     initialState,
@@ -450,4 +450,4 @@ const Addclient = () => {
   );
 };
 
-export default Addclient;
+export default AddClient;
