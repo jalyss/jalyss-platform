@@ -7,9 +7,9 @@ export const fetchClients = createAsyncThunk("clients/clients", async () => {
   return response.data;
 });
 
-export const fetchClient = createAsyncThunk("clients/vlient", async (data) => {
+export const fetchClient = createAsyncThunk("clients/client", async (id) => {
   const response = await axios.get(`${config.API_ENDPOINT}/clients/one/${id}`);
-  return data;
+  return response.data;
 });
 
 export const createClient = createAsyncThunk(
@@ -85,7 +85,7 @@ export const clientSlice = createSlice({
       state.clients.items = action.payload;
     });
     builder.addCase(fetchClient.fulfilled, (state, action) => {
-      state.client = action.error.message;
+      state.client = action.payload;
     });
   },
 });
