@@ -34,7 +34,7 @@ import clientCategory from "./clientCategory";
 
 export const store = configureStore({
   reducer: {
-    ...client,
+    client,
     auth,
     user,
     employee,
