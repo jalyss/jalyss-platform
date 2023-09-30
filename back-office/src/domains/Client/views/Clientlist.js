@@ -82,16 +82,7 @@ function ClientList() {
       align: "left",
       sortable: false,
     },
-    // {
-    //   headerName: "Branch ",
-    //   width: 150,
-    //   valueGetter: (params) => params.row.branch?.name?params.row.branch?.name:"No record",
-    // },
 
-    // {
-    //   field: "role",
-    //   valueGetter: (params) => params.row.role?.nameAr?params.row.role?.nameAr?.name:"No record",
-    // },
     {
       field: "actions",
       type: "actions",
@@ -100,28 +91,28 @@ function ClientList() {
       cellClassName: "actions-icons",
       getActions: (row) => {
         return [
-          <GridActionsCellItem
-            disableFocusRipple={false}
-            icon={<Icon img={activeIcon} />}
-            label="Block"
-            onClick={() => {
-              //   handleDeleteClick(id);
-            }}
-            size="small"
-            edge="start"
-          />,
-          <GridActionsCellItem
-            // disableFocusRipple={false}
-            icon={
-              <Icon img={editIcon} key={row.id} modalId={"#editClientModal"} />
-            }
-            label="Edit"
-            size="small"
-            edge="start"
-            onClick={() => {
-              dispatch(getOneClient(row.row));
-            }}
-          />,
+          //   <GridActionsCellItem
+          //     disableFocusRipple={false}
+          //     icon={<Icon img={activeIcon} />}
+          //     label="Block"
+          //     onClick={() => {
+          //       //   handleDeleteClick(id);
+          //     }}
+          //     size="small"
+          //     edge="start"
+          //   />,
+          //   <GridActionsCellItem
+          //     // disableFocusRipple={false}
+          //     icon={
+          //       <Icon img={editIcon} key={row.id} modalId={"#editClientModal"} />
+          //     }
+          //     label="Edit"
+          //     size="small"
+          //     edge="start"
+          //     onClick={() => {
+          //       dispatch(getOneClient(row.row));
+          //     }}
+          //   />,
           <GridActionsCellItem
             disableFocusRipple={false}
             icon={<Icon img={lookIcon} />}
@@ -199,19 +190,19 @@ function ClientList() {
             >
               Clients List
             </h2>
-           
-              <DataGrid sx={{height:300}}
-                rows={clients}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                pageSizeOptions={[5, 10]}
-                checkboxSelection
-              />
-        
+
+            <DataGrid
+              sx={{ height: 300 }}
+              rows={clients}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+            />
           </div>
         </div>
 
