@@ -75,7 +75,7 @@ function Router() {
             <Route path="one-article/:articleId" element={<OneArticle />} />
             <Route path="checkout" element={<Checkout />} />
             <Route path="invoice/:invoiceId" element={<Invoice />} />
-            {user && (
+            {user ? (
               <Route path="profile" element={<Profile />}>
                 <Route index element={<MyBlogs />} />
                 <Route path="my-bookmarks" element={<MyBookmarks />} />
@@ -85,15 +85,16 @@ function Router() {
                   element={<SavedTraining />}
                 />
                 <Route path="orders-history" element={<OrderHistory />} />
-                <Route path="Space-Booked" element={<SpaceBooked/>} />
-
+                <Route path="Space-Booked" element={<SpaceBooked />} />
               </Route>
+            ) : (
+              <>
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<Signup />} />
+                <Route path="reset-password" element={<ResetPassword />} />
+                <Route path="new-password" element={<NewPassword />} />
+              </>
             )}
-
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<Signup />} />
-            <Route path="reset-password" element={<ResetPassword />} />
-            <Route path="new-password" element={<NewPassword />} />
 
             <Route path="*" element={<NoPage />} />
             <Route path="chat-box" element={<Chat />}>
@@ -108,15 +109,19 @@ function Router() {
             <Route path="blogs/:blogId" element={<UpdateBlog />} />
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="spaceJalyss" element={<SpaceJalyss />} />
-            <Route path="spaceJalyss/:serviceIdentifier" element={<ServiceSpace />} />
-            
-
+            <Route
+              path="spaceJalyss/:serviceIdentifier"
+              element={<ServiceSpace />}
+            />
 
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />} />
 
             <Route path="RegisterForm" element={<RegisterForm />} />
-            <Route path="SpaceReservation/:tarifId/:workSpaceId" element={<SpaceReservation />} />
+            <Route
+              path="SpaceReservation/:tarifId/:workSpaceId"
+              element={<SpaceReservation />}
+            />
             <Route path="/:workspaceId" element={<WorkSpaceDetail />} />
           </Route>
         </Routes>

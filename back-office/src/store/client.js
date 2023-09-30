@@ -7,13 +7,13 @@ export const fetchClients = createAsyncThunk("clients/clients", async () => {
   return response.data;
 });
 
-export const getOneClient = createAsyncThunk("clients/getOne", (data) => {
-  // const response = await axios.get(`${config.API_ENDPOINT}/clients/one/${id}`);
-  return data;
+export const fetchClient = createAsyncThunk("clients/client", async (id) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/clients/one/${id}`);
+  return response.data;
 });
 
 export const createClient = createAsyncThunk(
-  "clients/createClients",
+  "clients/createClient",
   async (body, { dispatch }) => {
     let token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
@@ -31,8 +31,8 @@ export const createClient = createAsyncThunk(
   }
 );
 
-export const removeClients = createAsyncThunk(
-  "clients/deleteClients",
+export const removeClient = createAsyncThunk(
+  "clients/deleteClient",
   async (id, { dispatch }) => {
     let token = JSON.parse(localStorage.getItem("tokenAdmin"));
     const configs = {
@@ -48,7 +48,7 @@ export const removeClients = createAsyncThunk(
     return response.data;
   }
 );
-export const editClients = createAsyncThunk(
+export const editClient = createAsyncThunk(
   "clients/editclient",
   async (args, { dispatch }) => {
     let token = JSON.parse(localStorage.getItem("tokenAdmin"));
@@ -57,137 +57,37 @@ export const editClients = createAsyncThunk(
         Authorization: "Bearer " + token.Authorization,
       },
     };
-    const { id, ...body } = args;
+    const { id,...body } = args;
     const response = await axios.patch(
       `${config.API_ENDPOINT}/clients/${id}`,
       body,
       configs
     );
-    dispatch(fetchClients());
+    dispatch(fetchClient(id));
     return response.data;
   }
 );
 
-export const clientsGetSlice = createSlice({
-  name: "clients/clients",
+export const clientSlice = createSlice({
+  name: "client",
   initialState: {
-    items: [],
-    count: 0,
+    client: null,
+    clients: {
+      items: [],
+      count: 0,
+    },
     error: null,
     loading: false,
   },
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchClients.fulfilled, (state, action) => {
-      state.loading = false;
-      state.items = action.payload;
+      state.clients.items = action.payload;
     });
-    builder.addCase(fetchClients.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(fetchClients.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
+    builder.addCase(fetchClient.fulfilled, (state, action) => {
+      state.client = action.payload;
     });
   },
 });
-export const createOneSlice = createSlice({
-  name: "clients/createClients",
-  initialState: {
-    items: null,
-    error: null,
-    loading: false,
-  },
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(createClient.fulfilled, (state, action) => {
-      state.loading = false;
-      state.items = action.payload;
-    });
-    builder.addCase(createClient.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(createClient.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
-  },
-});
-export const clientUpdateOneSlice = createSlice({
-  name: "clients/editclient",
-  initialState: {
-    items: null,
-    error: null,
-    loading: false,
-  },
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(editClients.fulfilled, (state, action) => {
-      state.loading = false;
-      state.items = action.payload;
-    });
-    builder.addCase(editClients.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(editClients.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
-  },
-});
-export const clientDeleteOneSlice = createSlice({
-  name: "clients/deleteClients",
-  initialState: {
-    items: null,
-    error: null,
-    loading: false,
-  },
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(removeClients.fulfilled, (state, action) => {
-      state.loading = false;
-      state.items = action.payload;
-    });
-    builder.addCase(removeClients.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(removeClients.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
-  },
-});
-export const getOneClientSlice = createSlice({
-  name: "clients/getOne",
-  initialState: {
-    client: {},
-    error: null,
-    loading: false,
-  },
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(getOneClient.fulfilled, (state, action) => {
-      state.loading = false;
-      state.client = { ...action.payload };
-    });
-    builder.addCase(getOneClient.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(getOneClient.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-    });
-  },
-});
-export default {
-  getOneClient: getOneClientSlice.reducer,
-  getAllClient: clientsGetSlice.reducer,
-  createOne: createOneSlice.reducer,
-  deleteClient: clientDeleteOneSlice.reducer,
-  updateClient: clientUpdateOneSlice.reducer,
-};
+
+export default clientSlice.reducer;

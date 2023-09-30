@@ -30,6 +30,7 @@ function Articles() {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const meta = useMeta(t("articles.pageName"), t("articles.pageDescription"));
+  const lg = i18n.languages[0] === "en";
   const containerRef = useRef(null);
   const { categoryId } = useParams();
   const articleStore = useSelector((state) => state.article);
@@ -39,9 +40,9 @@ function Articles() {
   const articleTypeStore = useSelector((state) => state.articleType);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setpageSize] = useState(8);
-
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [price, setPrice] = useState([1, 1000]);
+  const [showFilters, setShowFilters] = useState(false);
+  const [showContentList, setShowContentList] = useState(false);
   const [filters, setFilters] = useState({
     categories: [],
     publishingHouses: [],
@@ -51,11 +52,6 @@ function Articles() {
     gte: null,
     skip: 0,
   });
-
-  console.log(publishingHouseStore.publishingHouses.items, "publishingHouse");
-
-  const lg = i18n.languages[0] === "en";
-  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     dispatch(fetchArticlesByBranch({ ...filters, identifier }));
@@ -71,7 +67,7 @@ function Articles() {
   useEffect(() => {
     if (categoryId) {
       setFilters((Filters) => ({ ...Filters, categories: [categoryId] }));
-    }
+    } else setFilters((Filters) => ({ ...Filters,categories: [] }));
   }, [categoryId]);
 
   const onMouseMoveHandler = (event) => {
@@ -80,55 +76,49 @@ function Articles() {
       console.log("Element's bounding rect:", rect);
     }
   };
-  console.log(containerRef, "yalaa");
-  const [showContent, setShowContent] = useState(true);
-  const [showContentListe, setShowContentListe] = useState(false);
 
-  const handleAppsClick = () => {
-    setShowContent(!showContent);
-    setShowContentListe(false);
-  };
-  const handleFormaListClick = () => {
-    setShowContentListe(!showContentListe);
-    setShowContent(false);
+  const handleFormatClick = (show) => {
+    setShowContentList(show);
   };
 
   const Filters = () => {
     return (
       <div className="filters">
-        <Accordion
-          title={t("filter.category")}
-          content={
-            <>
-              {categoryStore.categories.items.map((element, i) => (
-                <div className={`d-flex align-items-center`} key={i}>
-                  <input
-                    className="form-check-input m-2"
-                    type="checkbox"
-                    defaultChecked={categoryId === element.id}
-                    onChange={(e) => {
-                      e.target.checked === true
-                        ? setFilters((Filter) => ({
-                            ...Filter,
-                            categories: [...Filter.categories, element.id],
-                          }))
-                        : setFilters((Filter) => ({
-                            ...Filter,
-                            categories: Filter.categories.filter(
-                              (elem, j) => elem !== element.id
-                            ),
-                          }));
-                    }}
-                    checked={filters.categories.includes(element.id)}
-                  />
-                  <label className="form-check-label">
-                    {lg ? element.nameEn : element.nameAr}
-                  </label>
-                </div>
-              ))}
-            </>
-          }
-        />
+        {!categoryId && (
+          <Accordion
+            title={t("filter.category")}
+            content={
+              <>
+                {categoryStore.categories.items.map((element, i) => (
+                  <div className={`d-flex align-items-center`} key={i}>
+                    <input
+                      className="form-check-input m-2"
+                      type="checkbox"
+                      defaultChecked={categoryId === element.id}
+                      onChange={(e) => {
+                        e.target.checked === true
+                          ? setFilters((Filter) => ({
+                              ...Filter,
+                              categories: [...Filter.categories, element.id],
+                            }))
+                          : setFilters((Filter) => ({
+                              ...Filter,
+                              categories: Filter.categories.filter(
+                                (elem, j) => elem !== element.id
+                              ),
+                            }));
+                      }}
+                      checked={filters.categories.includes(element.id)}
+                    />
+                    <label className="form-check-label">
+                      {lg ? element.nameEn : element.nameAr}
+                    </label>
+                  </div>
+                ))}
+              </>
+            }
+          />
+        )}
 
         <Accordion
           title={t("filter.articleType")}
@@ -238,13 +228,11 @@ function Articles() {
       groupBy(articleStore.articles.items, (item) => item.article.categoryId),
     [articleStore.articles.items]
   );
+
   function paginate(items, pageNumber, pageSize) {
     const startIndex = (pageNumber - 1) * pageSize;
     return items.slice(startIndex, startIndex + pageSize);
   }
-  console.log(filters.categories, "ctaegories");
-  console.log(groupedArticles, "grpdArticles");
-  console.log(articleStore.articles.items, "article store");
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
@@ -290,23 +278,7 @@ function Articles() {
                       }));
                     }}
                   />
-                  {/* <Slider
-                 range
-                 draggableTrack={false}
-                 max={1000}
-                 defaultValue={1000} 
-                 tipFormatter={(value) =>`TND${value}`}
-                 allowCross={false}
-                 value={price}
-                 onChange={(price)=> {
-                   setPrice(price)
-                   setFilters((Filters) => ({
-                    ...Filters,
-                    gte: price[0],
-                    lte: price[1],
-                   }))
-                 }}                        
-      /> */}
+
                   <div className="d-flex justify-content-between mt-1">
                     <p>{price[0]}</p>
                     <p>{price[1]}</p>
@@ -359,7 +331,7 @@ function Articles() {
           <Filters />
         </div>
 
-        <div>
+        <div className="w-100">
           <div
             style={{
               marginBottom: "10px",
@@ -370,15 +342,15 @@ function Articles() {
           >
             <FormatListBulleted
               className="articleicons"
-              onClick={handleFormaListClick}
-            ></FormatListBulleted>
+              onClick={() => handleFormatClick(true)}
+            />
             <Apps
               className="articleicons"
-              onClick={handleAppsClick}
+              onClick={() => handleFormatClick(false)}
               style={{ marginLeft: "10px" }}
-            ></Apps>
+            />
           </div>
-          {showContent && (
+          {!showContentList ? (
             <div className="px-3">
               {!isEmpty(filters.categories) ? (
                 map(groupedArticles, (element) => (
@@ -409,15 +381,12 @@ function Articles() {
                     currentPage,
                     pageSize
                   ).map((element, index) => (
-                    
                     <ArticleCard key={index} article={element} />
                   ))}
                 </div>
               )}
             </div>
-          )}
-
-          {showContentListe && (
+          ) : (
             <div className="d-flex flex-column  mb-3 px-3 ">
               {!isEmpty(filters.categories) ? (
                 map(groupedArticles, (element) => (
