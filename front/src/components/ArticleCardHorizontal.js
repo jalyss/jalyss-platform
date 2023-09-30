@@ -26,7 +26,7 @@ function ArticleCardHorizontal({ article }) {
     return (
         <div>
             <div className="position-relative">
-                <div class="container bcontent">
+                <div class="container ">
 
                     <div className="article-card-h position-relative mx-3 mb-2 ">
                         <div class="row no-gutters">
@@ -36,6 +36,7 @@ function ArticleCardHorizontal({ article }) {
                                 </div>
                                 <img
                                     src={article?.article?.cover.path}
+
                                     className="w-100 object-fit-contain article-image "
                                     alt=""
                                 />
