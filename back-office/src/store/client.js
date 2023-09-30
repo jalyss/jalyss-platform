@@ -1,0 +1,93 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import config from "../configs";
+
+export const fetchClients = createAsyncThunk("clients/clients", async () => {
+  const response = await axios.get(`${config.API_ENDPOINT}/clients`);
+  return response.data;
+});
+
+export const fetchClient = createAsyncThunk("clients/vlient", async (data) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/clients/one/${id}`);
+  return data;
+});
+
+export const createClient = createAsyncThunk(
+  "clients/createClient",
+  async (body, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+    const response = await axios.post(
+      `${config.API_ENDPOINT}/clients`,
+      body,
+      configs
+    );
+    dispatch(fetchClients());
+    return response.data;
+  }
+);
+
+export const removeClient = createAsyncThunk(
+  "clients/deleteClient",
+  async (id, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/clients/${id}`,
+      configs
+    );
+    dispatch(fetchClients());
+    return response.data;
+  }
+);
+export const editClient = createAsyncThunk(
+  "clients/editclient",
+  async (args, { dispatch }) => {
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+    const { id, ...body } = args;
+    const response = await axios.patch(
+      `${config.API_ENDPOINT}/clients/${id}`,
+      body,
+      configs
+    );
+    dispatch(fetchClients());
+    return response.data;
+  }
+);
+
+export const clientSlice = createSlice({
+  name: "client",
+  initialState: {
+    client: null,
+    clients: {
+      items: [],
+      count: 0,
+    },
+    error: null,
+    loading: false,
+  },
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(fetchClients.fulfilled, (state, action) => {
+      state.clients.items = action.payload;
+    });
+    builder.addCase(fetchClient.fulfilled, (state, action) => {
+      state.client = action.error.message;
+    });
+  },
+});
+
+export default clientSlice.reducer;

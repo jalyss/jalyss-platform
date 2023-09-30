@@ -6,12 +6,8 @@ import isEnglish from "../../../helpers/isEnglish";
 
 import { useNavigate } from "react-router-dom";
 import { IoIosPersonAdd } from "react-icons/io";
-import {
-  fetchClients,
-  removeClients,
-  getOneClient,
-} from "../../../store/client";
-import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import { fetchClients } from "../../../store/client";
+
 import imgAvatar from "../../../assets/images/avatar.jpg";
 import activeIcon from "../../../assets/images/active.png";
 import blockIcon from "../../../assets/images/active.png";
@@ -23,13 +19,13 @@ import editIcon from "../../../assets/images/edit.png";
 
 import AddButton from "../../../components/buttons/AddButton";
 import css from "../../../assets/styles/client-table.css";
-import Addclient from "./AddClient";
+
 function ClientList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isEng = isEnglish();
 
-  const clients = useSelector((state) => state.getAllClient.items);
+  const clients = useSelector((state) => state.client.clients.items);
 
   useEffect(() => {
     dispatch(fetchClients());
@@ -91,28 +87,7 @@ function ClientList() {
       cellClassName: "actions-icons",
       getActions: (row) => {
         return [
-          //   <GridActionsCellItem
-          //     disableFocusRipple={false}
-          //     icon={<Icon img={activeIcon} />}
-          //     label="Block"
-          //     onClick={() => {
-          //       //   handleDeleteClick(id);
-          //     }}
-          //     size="small"
-          //     edge="start"
-          //   />,
-          //   <GridActionsCellItem
-          //     // disableFocusRipple={false}
-          //     icon={
-          //       <Icon img={editIcon} key={row.id} modalId={"#editClientModal"} />
-          //     }
-          //     label="Edit"
-          //     size="small"
-          //     edge="start"
-          //     onClick={() => {
-          //       dispatch(getOneClient(row.row));
-          //     }}
-          //   />,
+      
           <GridActionsCellItem
             disableFocusRipple={false}
             icon={<Icon img={lookIcon} />}
@@ -120,25 +95,15 @@ function ClientList() {
             size="small"
             edge="start"
             onClick={() => {
-              navigate(`profileclient/${row.id}`);
-              dispatch(getOneClient(row.row));
+              navigate(`one/${row.id}`);
+             
             }}
           />,
         ];
       },
     },
   ];
-  // const [currentClient, setCurrentClient] = useState({});
-  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  // const handleEditClick = (row) => {
-  //   setIsEditModalOpen(true);
-  //   setCurrentClient(row);
-  // };
 
-  //   const handleEditClick = (id) => {
-  //     console.log("iii", id);
-  //     navigate(`edit/${id}`);
-  //   };
   return (
     <div className="wrapper_client">
       <div class="vertical-line"></div>
@@ -162,10 +127,7 @@ function ClientList() {
             </li>
           </ul>
           <div className="btn_container">
-            <div
-            onClick={()=>navigate("add")}
-              className="add_client_btn"
-            >
+            <div onClick={() => navigate("add")} className="add_client_btn">
               {" "}
               <div>
                 <img
@@ -187,7 +149,7 @@ function ClientList() {
                 color: "white",
               }}
             >
-              Clients List
+              Client List
             </h2>
 
             <DataGrid
@@ -200,16 +162,11 @@ function ClientList() {
                 },
               }}
               pageSizeOptions={[5, 10]}
-          
             />
           </div>
         </div>
-
-        {/* <EditClient client={currentClient} isEditModalOpen={isEditModalOpen} /> */}
-
-        {/* <Addclient /> */}
       </div>
-      {/* <EditClient /> */}
+    
     </div>
   );
 }

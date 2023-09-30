@@ -7,7 +7,8 @@ const OneClient = () => {
   return (
     <div
       style={{
-        backgroundImage: `url(${background})`,
+        // backgroundImage: `url(${background})`,
+        // background
         width: "100%",
         height: "100%",
         padding: "2rem",
