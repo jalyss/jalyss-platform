@@ -14,6 +14,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useParams } from "react-router-dom";
 import { editClient, fetchClient } from "../../../store/client";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import CancelButton from "../../../components/Commun/buttons/CancelButton";
+import SaveButton from "../../../components/Commun/buttons/SaveButton";
 const OneClient = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -48,7 +51,7 @@ const OneClient = () => {
     setEditMode(!editMode);
   };
 
-  const submitEditProfile = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (editMode) {
@@ -74,8 +77,21 @@ const OneClient = () => {
         );
         aux.avatarId = response.data.id;
       }
-      const { fullNameAr, fullNameEn, email, address, tel, ...rest } = aux;
-      dispatch(editClient({fullNameAr,fullNameEn,email,address,tel}));
+      delete aux.country;
+      delete aux.city;
+      delete aux.jobTitle;
+      delete aux.functionalArea;
+      delete aux.educationLevel;
+      delete aux.category;
+      delete aux.avatar;
+      dispatch(editClient(aux)).then((res) => {
+        if (!res.error) {
+          showSuccessToast("Client has been updated");
+        } else {
+          console.log(res);
+          showErrorToast(res.error.message);
+        }
+      });
     }
 
     setEditMode(!editMode);
@@ -92,7 +108,7 @@ const OneClient = () => {
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Client Profile</h2>
 
-      <form className="checkout-form" onSubmit={submitEditProfile}>
+      <form className="checkout-form" onSubmit={handleSubmit}>
         <div className="d-flex flex-wrap justify-content-center">
           <div className="image-upload">
             <img src={preview ? preview : client?.avatar?.path} alt="taswira" />
@@ -315,15 +331,16 @@ const OneClient = () => {
                     </TableCell>
                     <TableCell align="right">
                       {editMode ? (
-                        <input
-                          required
-                          type="text"
-                          class="form-control"
-                          id="educationLevel"
-                          name="educationLevelId"
-                          value={client?.educationLevelId}
-                          onChange={handleChange}
-                        />
+                        <select
+                          class="form-select mt-3"
+                          id="inputGroupSelect04"
+                          aria-label="Default select example"
+                        >
+                          <option selected>Choose...</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
                       ) : (
                         <span>{client?.educationLevelId}</span>
                       )}
@@ -358,12 +375,22 @@ const OneClient = () => {
           </div>
         </div>
 
-        <div className="w-100 d-flex justify-content-center mt-3">
-          <button type="submit" className="confirm-button">
-            <span className="label-btn">
-              {editMode ? "Save Changes" : "Edit Profile"}
-            </span>
-          </button>
+        <div className="w-100 d-flex justify-content-center mt-3 gap-3">
+          {editMode ? (
+            <>
+              <CancelButton
+                onClick={() => {
+                  setEditMode(false);
+                  setClient(clientStore.client);
+                }}
+              />
+              <SaveButton onSubmit={handleSubmit} type={"submit"} />
+            </>
+          ) : (
+            <button type="submit" className="confirm-button">
+              <span className="label-btn">Edit Profile</span>
+            </button>
+          )}
         </div>
       </form>
     </div>

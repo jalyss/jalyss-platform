@@ -37,7 +37,7 @@ const AddClient = () => {
     e.preventDefault();
     dispatch(
       createClient(client)).then((res) => {
-        if (!res.error) {
+        
           if (!res.error) {
             showSuccessToast("Client has been created");
             navigate(-1);
@@ -45,7 +45,7 @@ const AddClient = () => {
             console.log(res);
             showErrorToast(res.error.message);
           }
-        }
+        
       })
     
   };

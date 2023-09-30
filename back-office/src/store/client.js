@@ -57,13 +57,13 @@ export const editClient = createAsyncThunk(
         Authorization: "Bearer " + token.Authorization,
       },
     };
-    const { id, ...body } = args;
+    const { id,...body } = args;
     const response = await axios.patch(
       `${config.API_ENDPOINT}/clients/${id}`,
       body,
       configs
     );
-    dispatch(fetchClients());
+    dispatch(fetchClient(id));
     return response.data;
   }
 );
