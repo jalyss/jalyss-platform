@@ -99,7 +99,7 @@ model Client {
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
   accountBalance       Float?
-  category             UserCategory?   @relation(fields: [categoryId], references: [id])
+  category             ClientCategory?   @relation(fields: [categoryId], references: [id])
   categoryId           String?
   educationLevel       EducationLevel? @relation(fields: [educationLevelId], references: [id])
   educationLevelId     String?
@@ -181,7 +181,7 @@ model User {
   SessionFeedBack      SessionFeedback[]
 }
 
-model UserCategory {
+model ClientCategory {
   id        String   @id @default(uuid())
   nameAr    String
   nameEn    String

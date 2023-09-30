@@ -30,6 +30,7 @@ import educationLevel from "./educationLevel";
 import transition from "./transition";
 import city from "./city";
 import client from "./client";
+import clientCategory from "./clientCategory";
 
 export const store = configureStore({
   reducer: {
@@ -64,6 +65,7 @@ export const store = configureStore({
     educationLevel,
     transition,
     city,
+    clientCategory
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
