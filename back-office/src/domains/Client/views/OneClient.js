@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import background from "../../../assets/images/background-profile.png";
-import userImage from "../../../assets/images/user.png";
-import css from "../../../assets/styles/clientProfile.css";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Table from "@mui/material/Table";
@@ -17,6 +12,10 @@ import { editClient, fetchClient } from "../../../store/client";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
 import SaveButton from "../../../components/Commun/buttons/SaveButton";
+import CropEasy from "../../../components/CropEasy";
+import axios from "axios";
+import { ProgressBar } from "react-bootstrap";
+import { uploadFileAxios } from "../../../helpers/uploadFileAxios";
 const OneClient = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -28,7 +27,7 @@ const OneClient = () => {
   const [preview, setPreview] = useState(null);
   const [openCrop, setOpenCrop] = useState(false);
 
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [progress, setProgress] = useState(null);
 
   useEffect(() => {
     dispatch(fetchClient(clientId));
@@ -60,21 +59,7 @@ const OneClient = () => {
       if (avatar !== null) {
         const image = new FormData();
         image.append("file", avatar);
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          image,
-          {
-            onUploadProgress: (progressEvent) => {
-              const progress = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setUploadProgress(progress);
-              setTimeout(() => {
-                setUploadProgress(0);
-              }, 2000);
-            },
-          }
-        );
+        const response = await uploadFileAxios(image, setProgress);
         aux.avatarId = response.data.id;
       }
       delete aux.country;
@@ -107,20 +92,11 @@ const OneClient = () => {
   return !openCrop ? (
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Client Profile</h2>
-
       <form className="checkout-form" onSubmit={handleSubmit}>
         <div className="d-flex flex-wrap justify-content-center">
           <div className="image-upload">
             <img src={preview ? preview : client?.avatar?.path} alt="taswira" />
-            <div>
-              {uploadProgress > 0 && (
-                <progress
-                  value={uploadProgress}
-                  max="100"
-                  style={{ width: "300px" }}
-                />
-              )}
-            </div>
+
             {editMode && (
               <input
                 id="image"
@@ -374,7 +350,7 @@ const OneClient = () => {
             </TableContainer>
           </div>
         </div>
-
+        {progress && progress!==100 && <ProgressBar now={progress} label={`${progress}%`} />}
         <div className="w-100 d-flex justify-content-center mt-3 gap-3">
           {editMode ? (
             <>
@@ -393,6 +369,10 @@ const OneClient = () => {
           )}
         </div>
       </form>
+      
+        
+      
+      
     </div>
   ) : (
     <CropEasy {...{ preview, setOpenCrop, setPreview, setAvatar, avatar }} />
