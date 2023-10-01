@@ -4,7 +4,7 @@ import { CitiesService } from './cities.service';
 import { CreateCiteDto } from './dto/create-cite.dto';
 import { UpdateCiteDto } from './dto/update-cite.dto';
 @ApiTags('cities')
-@Controller('cities')
+@Controller('cities/')
 export class CitiesController {
   constructor(private readonly citiesService: CitiesService) { }
 

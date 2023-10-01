@@ -43,7 +43,6 @@ export class CommandsService {
       },
     });
   }
-  
 
   async findAll() {
     return this.prisma.command.findMany();
@@ -88,7 +87,21 @@ export class CommandsService {
       },
     });
   }
-
+  async findAllByClientId(id: string) {
+    return await this.prisma.command.findMany({
+      where: { clientId: id },
+      include: {
+        commandLine: {
+          include: { articleByBranch: { include: { article: true } } },
+        },
+        country: true,
+        city: true,
+        branch: {
+          select: { name: true },
+        },
+      },
+    });
+  }
   async findOne(id: string) {
     return await this.prisma.command.findFirstOrThrow({
       where: {

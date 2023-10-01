@@ -32,6 +32,7 @@ import city from "./city";
 import client from "./client";
 import clientCategory from "./clientCategory";
 
+
 export const store = configureStore({
   reducer: {
     client,

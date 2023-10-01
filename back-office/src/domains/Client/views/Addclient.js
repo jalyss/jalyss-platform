@@ -23,6 +23,8 @@ import {
 import Dropdown from "react-bootstrap/Dropdown";
 import CropEasy from "../../../components/CropEasy";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
+import { fetchFunctionalAreas } from "../../../store/functionalArea";
+import { fetchEducationLevels } from "../../../store/educationLevel";
 
 const AddClient = () => {
   const navigate = useNavigate();
@@ -35,17 +37,21 @@ const AddClient = () => {
     (state) => state.clientCategory.categories.items
   );
   const cities = useSelector((state) => state.city.cities.items);
+  const functionalAreas = useSelector((state) => state.functionalArea.functionalAreas.items);
+  const educationLevels = useSelector((state) => state.educationLevel.educationLevels.items);
   const [client, setClient] = useState({});
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCountries());
+    dispatch(fetchFunctionalAreas())
+    dispatch(fetchEducationLevels())
     dispatch(fetchClientCategories());
   }, [dispatch]);
   useEffect(() => {
     if (client.countryId) dispatch(fetchCities(client.countryId));
-  }, [dispatch, client?.countyId]);
+  }, [dispatch, client?.countryId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

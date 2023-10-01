@@ -30,6 +30,7 @@ export class CommandsController {
   ) {
     return this.commandsService.create(createCommandDto, branchId );
   }
+  
 
   @Get()
   findAll() {
@@ -40,7 +41,14 @@ export class CommandsController {
   @UseGuards(JwtAuthGuard)
   @Get('/by-user')
   findAllByUserId(@CurrentUser() user: any) {
-    return this.commandsService.findAllByUserId(user.id);
+    return this.commandsService.findAllByUserId(user.clientId);
+  }
+
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
+  @Get('by-client/:clientId')
+  findAllByclientId(@Param('clientId') id: string) {
+    return this.commandsService.findAllByClientId(id);
   }
 
   @Get(':branchId')
