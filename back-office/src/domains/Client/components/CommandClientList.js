@@ -1,44 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { useDispatch, useSelector } from "react-redux";
-import isEnglish from "../../../helpers/isEnglish";
-import { useNavigate } from "react-router-dom";
-import { GiConfirmed, GiCancel, GiMoneyStack } from "react-icons/gi";
-import { AiFillDelete, AiFillEdit, AiOutlineEye } from "react-icons/ai";
+import React, { useState } from "react";
+import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { FcCancel } from "react-icons/fc";
-import { GrAdd } from "react-icons/gr";
 import { TbTruckDelivery } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 import Modal from "../../../components/Commun/Modal";
-
-import { showErrorToast, showSuccessToast } from "../../../utils/toast";
-
-import { fetchCommands, deleteCommand } from "../../../store/command";
 import CreateButton from "../../../components/Commun/buttons/CreateButton";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
+import { GiMoneyStack } from "react-icons/gi";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import {
+  updateDeliveredCommandStatus,
+  updatePaidCommandStatus,
+} from "../../../store/command";
+import { useDispatch } from "react-redux";
 
-function CommandList() {
+function CommandClientList({ rows }) {
   const dispatch = useDispatch();
-  const isEng = isEnglish();
   const navigate = useNavigate();
-
-  const [selected, setSelected] = useState();
   const [showModalPaid, setShowModalPaid] = useState(false);
   const [showModalDelivered, setShowModalDelivered] = useState(false);
-
+  const [selected, setSelected] = useState(null);
   const columns = [
-    {
-      field: "clientName",
-      headerName: "NAME CLIENT",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "clientTel",
-      headerName: "PHONE CLIENT ",
-      width: 150,
-      sortable: false,
-    },
     {
       field: "createdAt",
       headerName: "DATE",
@@ -115,42 +98,9 @@ function CommandList() {
       },
     },
   ];
-
-  const commandStore = useSelector((state) => state.command);
-
-  useEffect(() => {
-    dispatch(fetchCommands());
-  }, []);
-
   return (
     <div>
-      <div className="p-4 d-flex justify-content-end">
-        <Button
-          type="button"
-          onClick={() => navigate(`create`)}
-          variant="outlined"
-          endIcon={<GrAdd />}
-        >
-          <span className="btn btn-sm ">Add Order</span>
-        </Button>
-      </div>
-      <div className="position-relative p-4">
-       
-        <Box sx={{ height: 700, width: "100%" }}>
-          <DataGrid
-            rows={commandStore.commands.items}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 10,
-                },
-              },
-            }}
-            pageSizeOptions={[5]}
-          />
-        </Box>
-      </div>
+      <DataGrid columns={columns} rows={rows} sx={{ height: 400 }} />
       <Modal
         toggleShow={() => {
           setShowModalPaid(false);
@@ -161,8 +111,7 @@ function CommandList() {
         body={
           ["pending", "refused"].includes(selected?.confirm) ? (
             <div>
-              <p style={{color:"red"}}> You can't update the command becaus it is not confirmed</p>
-             
+              You can't update the command becaus it is not confirmed
               <div className="d-flex justify-content-center gap-3 p-3">
                 <CancelButton
                   onClick={() => {
@@ -172,33 +121,32 @@ function CommandList() {
               </div>
             </div>
           ) : (
-            <div>
-              are you sure to update command status to paid{" "}
-              <div className="d-flex justify-content-center gap-3 p-3">
-                <CancelButton
-                  onClick={() => {
-                    setShowModalPaid(false);
-                  }}
-                />
-                <CreateButton
-                  title="Confirm"
-                  onClick={() => {
-                    dispatch(
-                      updatePaidCommandStatus({ id: selected.id, status: true })
-                    ).then((res) => {
-                      if (!res.error) {
-                        showSuccessToast("Command has been Paid");
-                        setShowModalPaid(false);
-                      } else {
-                        console.log(res);
-                        showErrorToast(res.error.message);
-                      }
-                    });
-                  }}
-                />
-              </div>
+          <div>
+            are you sure to update command status to paid{" "}
+            <div className="d-flex justify-content-center gap-3 p-3">
+              <CancelButton
+                onClick={() => {
+                  setShowModalPaid(false);
+                }}
+              />
+              <CreateButton
+                title="Confirm"
+                onClick={() => {
+                  dispatch(
+                    updatePaidCommandStatus({ id: selected.id, status: true })
+                  ).then((res) => {
+                    if (!res.error) {
+                      showSuccessToast("Command has been Paid");
+                      setShowModalPaid(false);
+                    } else {
+                      console.log(res);
+                      showErrorToast(res.error.message);
+                    }
+                  });
+                }}
+              />
             </div>
-          )
+          </div>)
         }
         normal
         noButtons
@@ -214,8 +162,7 @@ function CommandList() {
         body={
           ["pending", "refused"].includes(selected?.confirm) ? (
             <div>
-              <p style={{color:"red"}}>You can't update the command becaus it is not confirmed</p>
-            
+              You can't update the command becaus it is not confirmed
               <div className="d-flex justify-content-center gap-3 p-3">
                 <CancelButton
                   onClick={() => {
@@ -263,4 +210,5 @@ function CommandList() {
     </div>
   );
 }
-export default CommandList;
+
+export default CommandClientList;

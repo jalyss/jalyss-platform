@@ -24,11 +24,10 @@ import { fetchFunctionalAreas } from "../../../store/functionalArea";
 import { fetchEducationLevels } from "../../../store/educationLevel";
 import { fetchJobTitles } from "../../../store/jobTitle";
 import { fetchClientCategories } from "../../../store/clientCategory";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+
 import { fetchCommandsByClientId } from "../../../store/command";
-import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
-import { FcCancel } from "react-icons/fc";
-import { TbTruckDelivery } from "react-icons/tb";
+
+import CommandClientList from "../components/CommandClientList";
 const OneClient = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -143,7 +142,7 @@ const OneClient = () => {
       </h2>
       <div className="d-flex justify-content-center p-4">
         <div className="image-upload">
-          <img src={preview ? preview : client?.avatar?.path} alt="taswira" />
+          <img src={preview ? preview : client?.avatar?.path} alt="avatar" />
 
           {editMode && (
             <input
@@ -312,7 +311,7 @@ const OneClient = () => {
         </div>
       </form>
       <div className="p-5">
-        <DataGrid columns={columns} rows={commands} sx={{ height: 400 }} />
+        <CommandClientList rows={commands} />
       </div>
     </div>
   ) : (
@@ -320,148 +319,4 @@ const OneClient = () => {
   );
 };
 export default OneClient;
-const columns = [
-  {
-    field: 'id',
-    headerName: '#',
-    width: 150,
-    
 
-  },
-  {
-    field: 'hasDelivery',
-    headerName: 'HAS DELIVERY',
-    width: 130,
-    sortable: true,
-    renderCell: ({ value }) => (value ? 'Yes' : 'No'), // Render 'Yes' or 'No' instead of boolean
-
-  },
- 
-  {
-    field: 'paid',
-    type: 'actions',
-    headerName: 'PAYMENT STATUS',
-    width: 110,
-    cellClassName: 'actions',
-    getActions: ({ id, row }) => {
-      return [
-        row.paid ? (
-          <GridActionsCellItem
-            icon={<GiConfirmed size={20} color='#3cb371' />}
-            label="confirmPaid"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />
-        ) : (
-          <GridActionsCellItem
-            icon={<FcCancel size={15} />}
-            label="confirmPaid"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />
-        ),
-      ];
-    },
-  },
-
-
-  
-
-  {
-    field: 'confirm',
-    type: 'actions',
-    headerName: 'CONFIRM',
-    width: 100,
-    cellClassName: 'actions',
-    getActions: ({ id, row }) => {
-      return [
-        row.confirm ? (
-          <GridActionsCellItem
-            icon={<GiConfirmed size={20} color='#3cb371' />}
-            label="confirm"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />
-        ) : (
-          <GridActionsCellItem
-            icon={<FcCancel size={15} />}
-            label="confirm"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />
-        ),
-      ];
-    },
-  },
-
-  {
-    field: 'delivered',
-    type: 'actions',
-    headerName: 'DELIVERY STATUS',
-    width: 130,
-    cellClassName: 'actions',
-    getActions: ({ id }) => {
-      return [
-        // <GridActionsCellItem
-        //   icon={<GiCancel color='red' size={15} />}
-
-        //   label="confirm"
-        //   className="textPrimary"
-        //   onClick={() => handleEditClick(id)}
-        //   color="inherit"
-        // />,
-        ,
-
-
-      ];
-
-    },
-  },
-  {
-    field: 'createdAt',
-    headerName: 'DATE',
-    width: 100,
-    sortable: true,
-
-
-  },
-  {
-    field: 'actions',
-    type: 'actions',
-    headerName: 'ACTIONS',
-    width: 200,
-    cellClassName: 'actions',
-    getActions: ({ id }) => {
-
-      return [
-        <GridActionsCellItem
-          icon={<AiOutlineEye color='#8b008b' size={15} />}
-          label="Edit"
-          className="textPrimary"
-          onClick={() => handleEditClick(id)}
-          color="inherit"
-        />,
-        <h6 className="pointer btn" onClick={() => {
-          setElementId(id)
-          setBasicModalDelete(!basicModalDelete);
-
-        }}>Confirm</h6>
-        ,
-        <GridActionsCellItem
-          icon={<TbTruckDelivery size={20} />}
-          label="Edit"
-          className="textPrimary"
-          onClick={() => handleEditClick(id)}
-          color="inherit"
-        />
-
-
-      ];
-
-    },
-  },
-];

@@ -6,6 +6,7 @@ import { CreateCommandDto } from './dto/create-command.dto';
 import { UpdateCommandDto } from './dto/update-command.dto';
 import { filterEample } from './entities/command.entity';
 import { FilterCommand } from './types';
+import { Status } from '@prisma/client';
 
 @Injectable()
 export class CommandsService {
@@ -160,6 +161,17 @@ export class CommandsService {
         },
       },
     });
+  }
+  
+  async updateConfirmStatus (id:string,dto:Status){
+   return await this.prisma.command.update({where:{id},data:{confirm:dto}})
+  }
+  async updatePaidStatus (id:string,dto:boolean){
+    
+   return await this.prisma.command.update({where:{id},data:{paid:dto}})
+  }
+  async updateDeliveredStatus (id:string,dto:boolean){
+   return await this.prisma.command.update({where:{id},data:{delivered:dto}})
   }
   remove(id: string) {
     return this.prisma.command.delete({ where: { id } });
