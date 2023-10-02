@@ -13,7 +13,12 @@ import Modal from "../../../components/Commun/Modal";
 
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 
-import { fetchCommands, deleteCommand } from "../../../store/command";
+import {
+  fetchCommands,
+  deleteCommand,
+  updatePaidCommandStatus,
+  updateDeliveredCommandStatus,
+} from "../../../store/command";
 import CreateButton from "../../../components/Commun/buttons/CreateButton";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
 
@@ -92,6 +97,7 @@ function CommandList() {
             color="inherit"
           />,
           <GridActionsCellItem
+            disabled={row.paid ? true : false}
             icon={
               <GiMoneyStack
                 size={25}
@@ -105,6 +111,7 @@ function CommandList() {
           />,
 
           <GridActionsCellItem
+            disabled={row.delivered ? true : false}
             icon={<TbTruckDelivery size={20} color={"coral"} />}
             onClick={() => {
               setSelected(row);
@@ -135,7 +142,6 @@ function CommandList() {
         </Button>
       </div>
       <div className="position-relative p-4">
-       
         <Box sx={{ height: 700, width: "100%" }}>
           <DataGrid
             rows={commandStore.commands.items}
@@ -161,8 +167,11 @@ function CommandList() {
         body={
           ["pending", "refused"].includes(selected?.confirm) ? (
             <div>
-              <p style={{color:"red"}}> You can't update the command becaus it is not confirmed</p>
-             
+              <p style={{ color: "red" }}>
+                {" "}
+                You can't update the command becaus it is not confirmed
+              </p>
+
               <div className="d-flex justify-content-center gap-3 p-3">
                 <CancelButton
                   onClick={() => {
@@ -214,8 +223,10 @@ function CommandList() {
         body={
           ["pending", "refused"].includes(selected?.confirm) ? (
             <div>
-              <p style={{color:"red"}}>You can't update the command becaus it is not confirmed</p>
-            
+              <p style={{ color: "red" }}>
+                You can't update the command becaus it is not confirmed
+              </p>
+
               <div className="d-flex justify-content-center gap-3 p-3">
                 <CancelButton
                   onClick={() => {

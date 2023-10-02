@@ -75,6 +75,7 @@ function CommandClientList({ rows }) {
             color="inherit"
           />,
           <GridActionsCellItem
+            disabled={row.paid ? true : false}
             icon={
               <GiMoneyStack
                 size={25}
@@ -88,6 +89,7 @@ function CommandClientList({ rows }) {
           />,
 
           <GridActionsCellItem
+            disabled={row.delivered ? true : false}
             icon={<TbTruckDelivery size={20} color={"coral"} />}
             onClick={() => {
               setSelected(row);
@@ -121,32 +123,33 @@ function CommandClientList({ rows }) {
               </div>
             </div>
           ) : (
-          <div>
-            are you sure to update command status to paid{" "}
-            <div className="d-flex justify-content-center gap-3 p-3">
-              <CancelButton
-                onClick={() => {
-                  setShowModalPaid(false);
-                }}
-              />
-              <CreateButton
-                title="Confirm"
-                onClick={() => {
-                  dispatch(
-                    updatePaidCommandStatus({ id: selected.id, status: true })
-                  ).then((res) => {
-                    if (!res.error) {
-                      showSuccessToast("Command has been Paid");
-                      setShowModalPaid(false);
-                    } else {
-                      console.log(res);
-                      showErrorToast(res.error.message);
-                    }
-                  });
-                }}
-              />
+            <div>
+              are you sure to update command status to paid{" "}
+              <div className="d-flex justify-content-center gap-3 p-3">
+                <CancelButton
+                  onClick={() => {
+                    setShowModalPaid(false);
+                  }}
+                />
+                <CreateButton
+                  title="Confirm"
+                  onClick={() => {
+                    dispatch(
+                      updatePaidCommandStatus({ id: selected.id, status: true })
+                    ).then((res) => {
+                      if (!res.error) {
+                        showSuccessToast("Command has been Paid");
+                        setShowModalPaid(false);
+                      } else {
+                        console.log(res);
+                        showErrorToast(res.error.message);
+                      }
+                    });
+                  }}
+                />
+              </div>
             </div>
-          </div>)
+          )
         }
         normal
         noButtons

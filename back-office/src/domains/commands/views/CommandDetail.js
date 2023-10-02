@@ -30,6 +30,8 @@ import { BiMessageSquareAdd, BiSave } from "react-icons/bi";
 import { GrEdit } from "react-icons/gr";
 import CreateButton from "../../../components/Commun/buttons/CreateButton";
 import { Button } from "react-bootstrap";
+import CancelButton from "../../../components/Commun/buttons/CancelButton";
+import SaveButton from "../../../components/Commun/buttons/SaveButton";
 function EditCommand() {
   const command = useSelector((state) => state.command.command);
   const { commandId } = useParams();
@@ -77,8 +79,6 @@ function EditCommand() {
     setEditCommand({ ...command });
   }, [command]);
 
-  console.log(editCommand);
-
   const toggleEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
   };
@@ -96,7 +96,7 @@ function EditCommand() {
     });
   };
 
-  console.log(command.confirm);
+  console.log(editCommand);
 
   return (
     <div>
@@ -107,7 +107,7 @@ function EditCommand() {
           </Typography>
           <div className="d-flex gap-3 justify-content-center">
             <Button
-              disabled={command.confirm !== "pending"}
+              disabled={command?.confirm !== "pending"}
               className="full bg-purple hover-bg-black"
               onClick={() => {
                 dispatch(
@@ -118,7 +118,7 @@ function EditCommand() {
               Confirm Command
             </Button>
             <Button
-              disabled={command.confirm !== "pending"}
+              disabled={command?.confirm !== "pending"}
               className="btn-danger full "
               title="refuse Command"
               onClick={() => {
@@ -255,13 +255,15 @@ function EditCommand() {
                 value={editCommand.commandLine[i].articleByBranchId}
                 onChange={(e) => {
                   let aux = [...editCommand.commandLine];
-                  aux[i].articleByBranchId = e.target.value;
+                  let obj = { ...aux[i] };
+                  obj.articleByBranchId = e.target.value;
+                  aux[i] = { ...obj };
                   setEditCommand({ ...editCommand, commandLine: aux });
                 }}
                 style={{ flex: 1, marginRight: "10px" }}
               >
-                {articlesByBranch?.map((elem, i) => (
-                  <option key={i} value={elem.id}>
+                {articlesByBranch?.map((elem, j) => (
+                  <option key={j} value={elem.id}>
                     {elem.article?.title}
                   </option>
                 ))}
@@ -271,11 +273,14 @@ function EditCommand() {
                 <input
                   placeholder={elem}
                   type="number"
+                  min={1}
                   disabled={!editCommanLineIndexes.includes(i)}
                   value={editCommand.commandLine[i].quantity}
                   onChange={(e) => {
                     let aux = [...editCommand.commandLine];
-                    aux[i].quantity = +e.target.value;
+                    let obj = { ...aux[i] };
+                    obj.quantity = +e.target.value;
+                    aux[i] = { ...obj };
                     setEditCommand({ ...editCommand, commandLine: aux });
                   }}
                 />
@@ -283,8 +288,23 @@ function EditCommand() {
               {editMode && (
                 <>
                   {!editCommanLineIndexes.includes(i) ? (
-                    <div style={{ marginLeft: "10px" }}>
-                      <FaTrash style={{ cursor: "pointer" }} />
+                    <div
+                      style={{ width: 60 }}
+                      className="d-flex justify-content-around"
+                    >
+                      <FaTrash
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          let aux = [...editCommand.commandLine];
+                          console.log(aux, "aux");
+                          let result = aux.filter((elem, j) => i !== j);
+                          console.log(result);
+                          setEditCommand({
+                            ...editCommand,
+                            commandLine: result,
+                          });
+                        }}
+                      />
                       <GrEdit
                         onClick={() =>
                           setEditCommandLineIndexes([
@@ -315,7 +335,6 @@ function EditCommand() {
                 disabled={!editMode}
                 value={newCommandLine?.articleByBranchId}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setNewCommandLine({
                     ...newCommandLine,
                     article: {
@@ -336,7 +355,7 @@ function EditCommand() {
 
               <div style={{ marginLeft: "10px", fontSize: "10px" }}>
                 <input
-                  // placeholder={e}
+                  min={1}
                   type="number"
                   // className="w-50"
                   style={
@@ -390,13 +409,14 @@ function EditCommand() {
               style={{
                 flex: 1,
                 display: "flex",
-                justifyContent: "space-between",
-                justifyContent: "flex",
-                alignItems: "flex",
+                gap: 10,
+                alignItems: "center",
               }}
             >
-              <Typography>{"Paid"}</Typography>
-              <Checkbox
+              <Typography>{"Paid :"}</Typography>
+              <input
+                type="checkbox"
+                className="form-check-input"
                 disabled={!editMode}
                 checked={editCommand?.paid}
                 onChange={(e) => {
@@ -410,13 +430,14 @@ function EditCommand() {
               style={{
                 flex: 1,
                 display: "flex",
-                justifyContent: "space-between",
-                justifyContent: "flex",
-                alignItems: "flex",
+                gap: 10,
+                alignItems: "center",
               }}
             >
               <Typography>{"Has Delivery :"}</Typography>
-              <Checkbox
+              <input
+                type="checkbox"
+                className="form-check-input"
                 disabled={!editMode}
                 checked={editCommand?.hasDelivery}
                 onChange={(e) => {
@@ -433,15 +454,15 @@ function EditCommand() {
               style={{
                 flex: 1,
                 display: "flex",
-                justifyContent: "space-between",
-                justifyContent: "flex",
-                alignItems: "flex",
+                gap: 10,
+                alignItems: "center",
               }}
             >
-              <Typography>{"confirmHasDelivery"}</Typography>
-              <Checkbox
+              <Typography>{"Delivered :"}</Typography>
+              <input
+                type="checkbox"
+                className="form-check-input"
                 disabled={!editMode}
-                checked={editCommand?.confirmHasDelivery}
                 onChange={(e) => {
                   setEditCommand({
                     ...editCommand,
@@ -463,24 +484,21 @@ function EditCommand() {
               </button>
             </div>
           ) : (
-            <div className="w-100 d-flex justify-content-center">
-              <button
-                type="button"
+            <div className="w-100 d-flex justify-content-center gap-4 p-4">
+              <CancelButton type="button"
+              width={100}
                 onClick={() => {
                   toggleEditMode();
-                  setEditCommand(command);
-                }}
-                className="confirm-button mt-5 mb-3"
-              >
-                <span className="label-btn">Cancel</span>
-              </button>
-              <button
+                  setEditCommand(command)
+                }}/>
+
+              
+              <SaveButton
+              width={100}
                 type="button"
                 onClick={handleEdit}
-                className="confirm-button mt-5 mb-3"
-              >
-                <span className="label-btn">Save Changes </span>
-              </button>
+              />
+                
             </div>
           )}
         </Box>
