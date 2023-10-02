@@ -2,13 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-export const fetchCities = createAsyncThunk("cities/cities", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/cities`);
+export const fetchCities = createAsyncThunk("cities/cities", async (countryId) => {
+  const response = await axios.get(`${config.API_ENDPOINT}/cities/${countryId}`);
   return response.data;
 });
 
 export const fetchCitie = createAsyncThunk("cities/citie", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/citie/${id}`);
+  const response = await axios.get(`${config.API_ENDPOINT}/citie/one/${id}`);
   return response.data;
 });
 

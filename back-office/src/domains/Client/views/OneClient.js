@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from "react";
-
-import background from "../../../assets/images/background-profile.png";
-import userImage from "../../../assets/images/user.png";
-import css from "../../../assets/styles/clientProfile.css";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Table from "@mui/material/Table";
@@ -17,21 +12,64 @@ import { editClient, fetchClient } from "../../../store/client";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
 import SaveButton from "../../../components/Commun/buttons/SaveButton";
+import CropEasy from "../../../components/CropEasy";
+import axios from "axios";
+import { ProgressBar } from "react-bootstrap";
+import { uploadFileAxios } from "../../../helpers/uploadFileAxios";
+import TextInput from "../../../components/TextInput";
+import Select from "../../../components/Select";
+import { fetchCountries } from "../../../store/Country";
+import { fetchCities } from "../../../store/city";
+import { fetchFunctionalAreas } from "../../../store/functionalArea";
+import { fetchEducationLevels } from "../../../store/educationLevel";
+import { fetchJobTitles } from "../../../store/jobTitle";
+import { fetchClientCategories } from "../../../store/clientCategory";
+
+import { fetchCommandsByClientId } from "../../../store/command";
+
+import CommandClientList from "../components/CommandClientList";
 const OneClient = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { clientId } = useParams();
   const clientStore = useSelector((state) => state.client);
+  const categories = useSelector(
+    (state) => state.clientCategory.categories.items
+  );
+  const countries = useSelector((state) => state.country.countries.items);
+  const cities = useSelector((state) => state.city.cities.items);
+  const functionalAreas = useSelector(
+    (state) => state.functionalArea.functionalAreas.items
+  );
+  const educationLevels = useSelector(
+    (state) => state.educationLevel.educationLevels.items
+  );
+  const jobTitles = useSelector((state) => state.jobTitle.jobTitles.items);
+  const commands = useSelector((state) => state.command.commands.items);
+
   const [client, setClient] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [preview, setPreview] = useState(null);
   const [openCrop, setOpenCrop] = useState(false);
 
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    dispatch(fetchCountries());
+    dispatch(fetchFunctionalAreas());
+    dispatch(fetchEducationLevels());
+    dispatch(fetchJobTitles());
+    dispatch(fetchClientCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (client.countryId) dispatch(fetchCities(client.countryId));
+  }, [dispatch, client?.countryId]);
 
   useEffect(() => {
     dispatch(fetchClient(clientId));
+    dispatch(fetchCommandsByClientId(clientId))
   }, [dispatch, clientId]);
 
   useEffect(() => {
@@ -40,7 +78,7 @@ const OneClient = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
+    console.log(name, value);
     setClient((prevClient) => ({
       ...prevClient,
       [name]: type === "checkbox" ? checked : value,
@@ -60,21 +98,7 @@ const OneClient = () => {
       if (avatar !== null) {
         const image = new FormData();
         image.append("file", avatar);
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-          image,
-          {
-            onUploadProgress: (progressEvent) => {
-              const progress = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setUploadProgress(progress);
-              setTimeout(() => {
-                setUploadProgress(0);
-              }, 2000);
-            },
-          }
-        );
+        const response = await uploadFileAxios(image, setProgress);
         aux.avatarId = response.data.id;
       }
       delete aux.country;
@@ -105,276 +129,169 @@ const OneClient = () => {
   };
 
   return !openCrop ? (
-    <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
-      <h2>Client Profile</h2>
+    <div className="">
+      <h2
+        className=" text-center"
+        style={{
+          color: "white",
+          backgroundColor: "rgb(77,24,71)",
+          margin: 0,
+        }}
+      >
+        Client Profile
+      </h2>
+      <div className="d-flex justify-content-center p-4">
+        <div className="image-upload">
+          <img src={preview ? preview : client?.avatar?.path} alt="avatar" />
 
-      <form className="checkout-form" onSubmit={handleSubmit}>
-        <div className="d-flex flex-wrap justify-content-center">
-          <div className="image-upload">
-            <img src={preview ? preview : client?.avatar?.path} alt="taswira" />
-            <div>
-              {uploadProgress > 0 && (
-                <progress
-                  value={uploadProgress}
-                  max="100"
-                  style={{ width: "300px" }}
-                />
-              )}
-            </div>
-            {editMode && (
-              <input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            )}
-          </div>
-          {preview && editMode && (
-            <button
-              type="button"
-              class="delete-button"
-              onClick={() => {
-                setPreview(null);
-                setAvatar(null);
-              }}
-            >
-              X
-            </button>
+          {editMode && (
+            <input
+              id="image"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
           )}
+        </div>
+        {preview && editMode && (
+          <button
+            type="button"
+            class="delete-button"
+            onClick={() => {
+              setPreview(null);
+              setAvatar(null);
+            }}
+          >
+            X
+          </button>
+        )}
+      </div>
+      <form className="p-5" onSubmit={handleSubmit}>
+        <div className="">
+          <div className="d-flex flex-wrap gap-5 justify-content-center ">
+            <TextInput
+              required
+              label="nameAr"
+              name="fullNameAr"
+              value={client?.fullNameAr}
+              onChange={handleChange}
+              editMode={editMode}
+              placeholder="جليس حريف"
+              width={300}
+            />
 
-          <div className="d-flex justify-content-center w-100 m-3">
-            <TableContainer className="w-100" component={Paper}>
-              <Table aria-label="simple table">
-                <TableBody>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("nameAr")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          class="form-control mt-2"
-                          required
-                          name="fullNameAr"
-                          id="fullNameAr"
-                          value={client?.fullNameAr}
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <span>{client?.fullNameAr}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("nameEn")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          required
-                          class="form-control mt-2"
-                          name="fullNameEn"
-                          id="fullNameEn"
-                          value={client?.fullNameEn}
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <span>{client?.fullNameEn}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("email")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          required
-                          class="form-control mt-2"
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={client?.email}
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <span>{client?.email}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("phone")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          required
-                          type="tel"
-                          class="form-control mt-2"
-                          id="tel"
-                          name="tel"
-                          value={client?.tel}
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <span>{client?.tel}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      العنوان
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <input
-                          required
-                          class="form-control mt-2"
-                          id="address"
-                          name="address"
-                          value={client?.address}
-                          onChange={handleChange}
-                        />
-                      ) : (
-                        <span>{client?.address}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("country")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <select
-                          class="form-select mt-3"
-                          id="inputGroupSelect04"
-                          aria-label="Default select example"
-                        >
-                          <option selected>Choose...</option>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </select>
-                      ) : (
-                        <span>{client?.country?.nameAr}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("city")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <select
-                          class="form-select mt-3"
-                          id="inputGroupSelect04"
-                          aria-label="Default select example"
-                        >
-                          <option selected>Choose...</option>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </select>
-                      ) : (
-                        <span>{client?.cityId}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("functionalArea")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <select
-                          class="form-select mt-3"
-                          id="inputGroupSelect04"
-                          aria-label="Default select example"
-                        >
-                          <option selected>Choose...</option>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </select>
-                      ) : (
-                        <span>{client?.functionalAreaId}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("educationLevel")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <select
-                          class="form-select mt-3"
-                          id="inputGroupSelect04"
-                          aria-label="Default select example"
-                        >
-                          <option selected>Choose...</option>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </select>
-                      ) : (
-                        <span>{client?.educationLevelId}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell className="fw-bold" align="right">
-                      {t("jobTitle")}
-                    </TableCell>
-                    <TableCell align="right">
-                      {editMode ? (
-                        <select
-                          class="form-select mt-3"
-                          id="inputGroupSelect04"
-                          aria-label="Default select example"
-                        >
-                          <option selected>Choose...</option>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </select>
-                      ) : (
-                        <span>{client?.jobTitleId}</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <TextInput
+              required
+              label="nameEn"
+              name="fullNameEn"
+              value={client?.fullNameEn}
+              onChange={handleChange}
+              editMode={editMode}
+              placeholder="Jalyss Client"
+              width={300}
+            />
+            <TextInput
+              required
+              label="email"
+              name="email"
+              type="email"
+              value={client?.email}
+              onChange={handleChange}
+              editMode={editMode}
+              placeholder="example@jalyss.com"
+              width={300}
+            />
+            <TextInput
+              required
+              label="Telephone"
+              editMode={editMode}
+              type="telephone"
+              name="tel"
+              value={client?.tel}
+              onChange={handleChange}
+              placeholder="55 555 555"
+              width={300}
+            />
+            <TextInput
+              required
+              label="Address"
+              editMode={editMode}
+              name="address"
+              value={client?.address}
+              onChange={handleChange}
+              width={300}
+            />
+            <Select
+              data={countries}
+              editMode={editMode}
+              label={"country"}
+              viewLabel={"nameAr"}
+              value={client.countryId}
+              name={"countryId"}
+              onChange={handleChange}
+              valueLabel={"id"}
+              width={300}
+            />
+            <Select
+              data={cities}
+              editMode={editMode && client.countryId}
+              label={"city"}
+              viewLabel={"nameAr"}
+              value={client.cityId}
+              name={"cityId"}
+              onChange={handleChange}
+              valueLabel={"id"}
+              width={300}
+            />
+            <Select
+              data={functionalAreas}
+              editMode={editMode}
+              label={"functionalArea"}
+              viewLabel={"nameAr"}
+              value={client.cityId}
+              name={"functionalAreaId"}
+              onChange={handleChange}
+              valueLabel={"id"}
+              width={300}
+            />
+            <Select
+              data={educationLevels}
+              editMode={editMode}
+              label={"educationLevel"}
+              viewLabel={"nameAr"}
+              value={client.cityId}
+              name={"educationLevelId"}
+              onChange={handleChange}
+              valueLabel={"id"}
+              width={300}
+            />
+            <Select
+              data={jobTitles}
+              editMode={editMode}
+              label={"jobTitle"}
+              viewLabel={"nameAr"}
+              value={client.cityId}
+              name={"jobTitleId"}
+              onChange={handleChange}
+              valueLabel={"id"}
+              width={300}
+            />
+            <Select
+              data={categories}
+              editMode={editMode}
+              label={"Category "}
+              viewLabel={"nameAr"}
+              value={client.categoryId}
+              name={"categoryId "}
+              onChange={handleChange}
+              valueLabel={"id"}
+              width={300}
+            />
           </div>
         </div>
-
+        {progress && progress !== 100 && (
+          <ProgressBar now={progress} label={`${progress}%`} />
+        )}
         <div className="w-100 d-flex justify-content-center mt-3 gap-3">
           {editMode ? (
             <>
@@ -393,9 +310,13 @@ const OneClient = () => {
           )}
         </div>
       </form>
+      <div className="p-5">
+        <CommandClientList rows={commands} />
+      </div>
     </div>
   ) : (
     <CropEasy {...{ preview, setOpenCrop, setPreview, setAvatar, avatar }} />
   );
 };
 export default OneClient;
+

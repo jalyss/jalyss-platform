@@ -99,7 +99,7 @@ model Client {
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
   accountBalance       Float?
-  category             ClientCategory?   @relation(fields: [categoryId], references: [id])
+  category             ClientCategory? @relation(fields: [categoryId], references: [id])
   categoryId           String?
   educationLevel       EducationLevel? @relation(fields: [educationLevelId], references: [id])
   educationLevelId     String?
@@ -353,6 +353,7 @@ model MvtArticle {
   updatedAt     DateTime    @updatedAt
   transactionId String
   transaction   Transaction @relation(fields: [transactionId], references: [id])
+
   @@unique(fields: [articleId, transactionId], name: "mvtArticle")
 }
 
@@ -366,10 +367,9 @@ model Transaction {
   reason           String?
   date             DateTime
   mvtArticle       MvtArticle[]
+
   @@unique(fields: [branchReceiverId, branchSenderId, date], name: "transaction")
 }
-
-
 
 model Rating {
   articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
@@ -392,7 +392,7 @@ model Command {
   clientAddress  String        @map("client_address")
   clientTel      String        @map("client_tel")
   clientEmail    String        @map("client_email")
-  confirm        Boolean       @default(false)
+  confirm        Status        @default(pending)
   delivered      Boolean       @default(false)
   paid           Boolean       @default(false)
   hasDelivery    Boolean       @default(false) @map("has_delivery")
@@ -743,7 +743,7 @@ model MediaService {
   mediaId   String
   media     Media   @relation(fields: [mediaId], references: [id])
 
-  @@unique(fields: [mediaId, serviceId], name:"serviceMedia")
+  @@unique(fields: [mediaId, serviceId], name: "serviceMedia")
 }
 
 model MediaWorkSpace {

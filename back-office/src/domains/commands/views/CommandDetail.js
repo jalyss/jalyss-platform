@@ -11,7 +11,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchCommand, updateCommand } from "../../../store/command";
+import {
+  confirmCommand,
+  fetchCommand,
+  updateCommand,
+} from "../../../store/command";
 import { fetchArticlesByBranch } from "../../../store/article";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import Form from "react-bootstrap/Form";
@@ -24,6 +28,10 @@ import {
 } from "../../../store/Country";
 import { BiMessageSquareAdd, BiSave } from "react-icons/bi";
 import { GrEdit } from "react-icons/gr";
+import CreateButton from "../../../components/Commun/buttons/CreateButton";
+import { Button } from "react-bootstrap";
+import CancelButton from "../../../components/Commun/buttons/CancelButton";
+import SaveButton from "../../../components/Commun/buttons/SaveButton";
 function EditCommand() {
   const command = useSelector((state) => state.command.command);
   const { commandId } = useParams();
@@ -71,8 +79,6 @@ function EditCommand() {
     setEditCommand({ ...command });
   }, [command]);
 
-  console.log(editCommand);
-
   const toggleEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
   };
@@ -90,134 +96,7 @@ function EditCommand() {
     });
   };
 
-  const renderInputs = () => (
-    <>
-      {editCommand?.commandLine?.map((elem, i) => (
-        <Box key={i} mt={3} mb={3} display="flex" alignItems="center">
-          <Form.Select
-            disabled={!editCommanLineIndexes.includes(i)}
-            value={editCommand.commandLine[i].articleByBranchId}
-            onChange={(e) => {
-              let aux = [...editCommand.commandLine];
-              aux[i].articleByBranchId = e.target.value;
-              setEditCommand({ ...editCommand, commandLine: aux });
-            }}
-            style={{ flex: 1, marginRight: "10px" }}
-          >
-            {articlesByBranch?.map((elem, i) => (
-              <option key={i} value={elem.id}>
-                {elem.article?.title}
-              </option>
-            ))}
-          </Form.Select>
-
-          <div style={{ marginLeft: "10px", fontSize: "10px" }}>
-            <input
-              placeholder={elem}
-              type="number"
-              disabled={!editCommanLineIndexes.includes(i)}
-              value={editCommand.commandLine[i].quantity}
-              onChange={(e) => {
-                let aux = [...editCommand.commandLine];
-                aux[i].quantity = +e.target.value;
-                setEditCommand({ ...editCommand, commandLine: aux });
-              }}
-            />
-          </div>
-          {editMode && (
-            <>
-              {!editCommanLineIndexes.includes(i) ? (
-                <div style={{ marginLeft: "10px" }}>
-                  <FaTrash style={{ cursor: "pointer" }} />
-                  <GrEdit
-                    onClick={() =>
-                      setEditCommandLineIndexes([...editCommanLineIndexes, i])
-                    }
-                    style={{ cursor: "pointer" }}
-                  />
-                </div>
-              ) : (
-                <BiSave
-                  onClick={() =>
-                    setEditCommandLineIndexes(
-                      editCommanLineIndexes.filter((elem) => elem !== i)
-                    )
-                  }
-                  style={{ cursor: "pointer" }}
-                />
-              )}
-            </>
-          )}
-        </Box>
-      ))}
-      {editMode && (
-        <Box mt={3} mb={3} display="flex" alignItems="center">
-          <Form.Select
-            disabled={!editMode}
-            value={newCommandLine?.articleByBranchId}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setNewCommandLine({
-                ...newCommandLine,
-                article: {
-                  title: articlesByBranch.filter(
-                    (elem) => elem.id === e.target.value
-                  )[0].article?.title,
-                },
-                articleByBranchId: e.target.value,
-              });
-            }}
-          >
-            {articlesByBranch?.map((elem, i) => (
-              <option key={i} value={elem.id}>
-                {elem.article?.title}
-              </option>
-            ))}
-          </Form.Select>
-
-          <div style={{ marginLeft: "10px", fontSize: "10px" }}>
-            <input
-              // placeholder={e}
-              type="number"
-              // className="w-50"
-              style={
-                errorQuantity ? { outlineColor: "red", borderColor: "red" } : {}
-              }
-              value={newCommandLine.quantity}
-              disabled={!editMode}
-              onChange={(e) => {
-                setNewCommandLine({
-                  ...newCommandLine,
-                  quantity: +e.target.value,
-                });
-                e.target.value.length === 0
-                  ? setErrorQuantity(true)
-                  : setErrorQuantity(false);
-              }}
-            />
-          </div>
-
-          <div style={{ marginLeft: "10px" }}>
-            <BiMessageSquareAdd
-              size={22}
-              onClick={() => {
-                if (newCommandLine.quantity.length === 0)
-                  setErrorQuantity(true);
-                else {
-                  setEditCommand({
-                    ...editCommand,
-                    commandLine: [...editCommand.commandLine, newCommandLine],
-                  });
-                  setNewCommandLine({ quantity: "" });
-                }
-              }}
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-        </Box>
-      )}
-    </>
-  );
+  console.log(editCommand);
 
   return (
     <div>
@@ -226,7 +105,29 @@ function EditCommand() {
           <Typography variant="h4" align="center" gutterBottom>
             Details Command
           </Typography>
-
+          <div className="d-flex gap-3 justify-content-center">
+            <Button
+              disabled={command?.confirm !== "pending"}
+              className="full bg-purple hover-bg-black"
+              onClick={() => {
+                dispatch(
+                  confirmCommand({ id: commandId, status: "confirmed" })
+                );
+              }}
+            >
+              Confirm Command
+            </Button>
+            <Button
+              disabled={command?.confirm !== "pending"}
+              className="btn-danger full "
+              title="refuse Command"
+              onClick={() => {
+                dispatch(confirmCommand({ id: commandId, status: "refused" }));
+              }}
+            >
+              Refuse Command
+            </Button>
+          </div>
           <div className="row">
             <Box mt={2} className="col-6">
               <TextField
@@ -347,7 +248,157 @@ function EditCommand() {
             </Box>
           </div>
 
-          {renderInputs()}
+          {editCommand?.commandLine?.map((elem, i) => (
+            <Box key={i} mt={3} mb={3} display="flex" alignItems="center">
+              <Form.Select
+                disabled={!editCommanLineIndexes.includes(i)}
+                value={editCommand.commandLine[i].articleByBranchId}
+                onChange={(e) => {
+                  let aux = [...editCommand.commandLine];
+                  let obj = { ...aux[i] };
+                  obj.articleByBranchId = e.target.value;
+                  aux[i] = { ...obj };
+                  setEditCommand({ ...editCommand, commandLine: aux });
+                }}
+                style={{ flex: 1, marginRight: "10px" }}
+              >
+                {articlesByBranch?.map((elem, j) => (
+                  <option key={j} value={elem.id}>
+                    {elem.article?.title}
+                  </option>
+                ))}
+              </Form.Select>
+
+              <div style={{ marginLeft: "10px", fontSize: "10px" }}>
+                <input
+                  placeholder={elem}
+                  type="number"
+                  min={1}
+                  disabled={!editCommanLineIndexes.includes(i)}
+                  value={editCommand.commandLine[i].quantity}
+                  onChange={(e) => {
+                    let aux = [...editCommand.commandLine];
+                    let obj = { ...aux[i] };
+                    obj.quantity = +e.target.value;
+                    aux[i] = { ...obj };
+                    setEditCommand({ ...editCommand, commandLine: aux });
+                  }}
+                />
+              </div>
+              {editMode && (
+                <>
+                  {!editCommanLineIndexes.includes(i) ? (
+                    <div
+                      style={{ width: 60 }}
+                      className="d-flex justify-content-around"
+                    >
+                      <FaTrash
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          let aux = [...editCommand.commandLine];
+                          console.log(aux, "aux");
+                          let result = aux.filter((elem, j) => i !== j);
+                          console.log(result);
+                          setEditCommand({
+                            ...editCommand,
+                            commandLine: result,
+                          });
+                        }}
+                      />
+                      <GrEdit
+                        onClick={() =>
+                          setEditCommandLineIndexes([
+                            ...editCommanLineIndexes,
+                            i,
+                          ])
+                        }
+                        style={{ cursor: "pointer" }}
+                      />
+                    </div>
+                  ) : (
+                    <BiSave
+                      onClick={() =>
+                        setEditCommandLineIndexes(
+                          editCommanLineIndexes.filter((elem) => elem !== i)
+                        )
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  )}
+                </>
+              )}
+            </Box>
+          ))}
+          {editMode && (
+            <Box mt={3} mb={3} display="flex" alignItems="center">
+              <Form.Select
+                disabled={!editMode}
+                value={newCommandLine?.articleByBranchId}
+                onChange={(e) => {
+                  setNewCommandLine({
+                    ...newCommandLine,
+                    article: {
+                      title: articlesByBranch.filter(
+                        (elem) => elem.id === e.target.value
+                      )[0].article?.title,
+                    },
+                    articleByBranchId: e.target.value,
+                  });
+                }}
+              >
+                {articlesByBranch?.map((elem, i) => (
+                  <option key={i} value={elem.id}>
+                    {elem.article?.title}
+                  </option>
+                ))}
+              </Form.Select>
+
+              <div style={{ marginLeft: "10px", fontSize: "10px" }}>
+                <input
+                  min={1}
+                  type="number"
+                  // className="w-50"
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red" }
+                      : {}
+                  }
+                  value={newCommandLine.quantity}
+                  disabled={!editMode}
+                  onChange={(e) => {
+                    setNewCommandLine({
+                      ...newCommandLine,
+                      quantity: +e.target.value,
+                    });
+                    e.target.value.length === 0
+                      ? setErrorQuantity(true)
+                      : setErrorQuantity(false);
+                  }}
+                />
+              </div>
+
+              <div style={{ marginLeft: "10px" }}>
+                <BiMessageSquareAdd
+                  size={22}
+                  onClick={() => {
+                    if (newCommandLine.quantity.length === 0)
+                      setErrorQuantity(true);
+                    else {
+                      setEditCommand({
+                        ...editCommand,
+                        commandLine: [
+                          ...editCommand.commandLine,
+                          newCommandLine,
+                        ],
+                      });
+                      setNewCommandLine({ quantity: "" });
+                    }
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+            </Box>
+          )}
 
           <div
             className="row"
@@ -358,13 +409,14 @@ function EditCommand() {
               style={{
                 flex: 1,
                 display: "flex",
-                justifyContent: "space-between",
-                justifyContent: "flex",
-                alignItems: "flex",
+                gap: 10,
+                alignItems: "center",
               }}
             >
-              <Typography>{"Paid"}</Typography>
-              <Checkbox
+              <Typography>{"Paid :"}</Typography>
+              <input
+                type="checkbox"
+                className="form-check-input"
                 disabled={!editMode}
                 checked={editCommand?.paid}
                 onChange={(e) => {
@@ -378,13 +430,14 @@ function EditCommand() {
               style={{
                 flex: 1,
                 display: "flex",
-                justifyContent: "space-between",
-                justifyContent: "flex",
-                alignItems: "flex",
+                gap: 10,
+                alignItems: "center",
               }}
             >
               <Typography>{"Has Delivery :"}</Typography>
-              <Checkbox
+              <input
+                type="checkbox"
+                className="form-check-input"
                 disabled={!editMode}
                 checked={editCommand?.hasDelivery}
                 onChange={(e) => {
@@ -401,15 +454,15 @@ function EditCommand() {
               style={{
                 flex: 1,
                 display: "flex",
-                justifyContent: "space-between",
-                justifyContent: "flex",
-                alignItems: "flex",
+                gap: 10,
+                alignItems: "center",
               }}
             >
-              <Typography>{"confirmHasDelivery"}</Typography>
-              <Checkbox
+              <Typography>{"Delivered :"}</Typography>
+              <input
+                type="checkbox"
+                className="form-check-input"
                 disabled={!editMode}
-                checked={editCommand?.confirmHasDelivery}
                 onChange={(e) => {
                   setEditCommand({
                     ...editCommand,
@@ -431,24 +484,21 @@ function EditCommand() {
               </button>
             </div>
           ) : (
-            <div className="w-100 d-flex justify-content-center">
-              <button
-                type="button"
+            <div className="w-100 d-flex justify-content-center gap-4 p-4">
+              <CancelButton type="button"
+              width={100}
                 onClick={() => {
                   toggleEditMode();
-                  setEditCommand(command);
-                }}
-                className="confirm-button mt-5 mb-3"
-              >
-                <span className="label-btn">Cancel</span>
-              </button>
-              <button
+                  setEditCommand(command)
+                }}/>
+
+              
+              <SaveButton
+              width={100}
                 type="button"
                 onClick={handleEdit}
-                className="confirm-button mt-5 mb-3"
-              >
-                <span className="label-btn">Save Changes </span>
-              </button>
+              />
+                
             </div>
           )}
         </Box>

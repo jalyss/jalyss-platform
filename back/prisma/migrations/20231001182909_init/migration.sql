@@ -334,7 +334,7 @@ CREATE TABLE "Command" (
     "client_address" TEXT NOT NULL,
     "client_tel" TEXT NOT NULL,
     "client_email" TEXT NOT NULL,
-    "confirm" BOOLEAN NOT NULL DEFAULT false,
+    "confirm" "Status" NOT NULL DEFAULT 'pending',
     "delivered" BOOLEAN NOT NULL DEFAULT false,
     "paid" BOOLEAN NOT NULL DEFAULT false,
     "has_delivery" BOOLEAN NOT NULL DEFAULT false,

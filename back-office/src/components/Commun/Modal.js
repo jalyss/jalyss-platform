@@ -12,7 +12,7 @@ import {
 import CloseButton from "./buttons/CloseButton";
 import SaveButton from "./buttons/SaveButton";
 
-export default function App({
+export default function Modal({
   toggleShow,
   basicModal,
   setBasicModal,
