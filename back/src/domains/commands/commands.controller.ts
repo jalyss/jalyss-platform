@@ -38,6 +38,7 @@ export class CommandsController {
     return this.commandsService.findAll();
   }
 
+
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Get('/by-user')
@@ -64,11 +65,13 @@ export class CommandsController {
   findOne(@Param('id') id: string) {
     return this.commandsService.findOne(id);
   }
+
   @Get('commandLine/all')
   findAllCommanLIne() {
     return this.commandsService.findAllCommandLIne();
   }
 
+  
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCommandDto: UpdateCommandDto) {
     return this.commandsService.update(id, updateCommandDto);
@@ -87,6 +90,8 @@ export class CommandsController {
   updatePaidStatus(@Param('id') id: string, @Body() dto: any) {
     return this.commandsService.updatePaidStatus(id, dto.status);
   }
+
+
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Put('delivered/:id')
