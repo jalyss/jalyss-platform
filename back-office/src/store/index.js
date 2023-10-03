@@ -31,6 +31,7 @@ import transition from "./transition";
 import city from "./city";
 import client from "./client";
 import clientCategory from "./clientCategory";
+import paymentChoice from "./paymentChoice";
 
 
 export const store = configureStore({
@@ -66,7 +67,8 @@ export const store = configureStore({
     educationLevel,
     transition,
     city,
-    clientCategory
+    clientCategory,
+    paymentChoice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -23,8 +23,7 @@ import { Status } from '@prisma/client';
 @Controller('commands')
 export class CommandsController {
   constructor(private readonly commandsService: CommandsService) {}
-
-  @UseGuards(JwtAuthGuard)
+ 
   @Post(':branchId')
   create(
     @Body() createCommandDto: CreateCommandDto,
@@ -33,10 +32,13 @@ export class CommandsController {
     return this.commandsService.create(createCommandDto, branchId);
   }
 
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.commandsService.findAll();
   }
+
 
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
@@ -64,11 +66,13 @@ export class CommandsController {
   findOne(@Param('id') id: string) {
     return this.commandsService.findOne(id);
   }
+
   @Get('commandLine/all')
   findAllCommanLIne() {
     return this.commandsService.findAllCommandLIne();
   }
 
+  
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCommandDto: UpdateCommandDto) {
     return this.commandsService.update(id, updateCommandDto);
@@ -87,6 +91,8 @@ export class CommandsController {
   updatePaidStatus(@Param('id') id: string, @Body() dto: any) {
     return this.commandsService.updatePaidStatus(id, dto.status);
   }
+
+
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Put('delivered/:id')

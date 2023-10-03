@@ -1,13 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  InputLabel,
-  Container,
-  MenuItem,
-  RadioGroup,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Container, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -19,7 +10,7 @@ import {
 import { fetchArticlesByBranch } from "../../../store/article";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
+
 import { FaTrash } from "react-icons/fa";
 import {
   fetchCountries,
@@ -28,7 +19,6 @@ import {
 } from "../../../store/Country";
 import { BiMessageSquareAdd, BiSave } from "react-icons/bi";
 import { GrEdit } from "react-icons/gr";
-import CreateButton from "../../../components/Commun/buttons/CreateButton";
 import { Button } from "react-bootstrap";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
 import SaveButton from "../../../components/Commun/buttons/SaveButton";
@@ -36,7 +26,7 @@ function EditCommand() {
   const command = useSelector((state) => state.command.command);
   const { commandId } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const articlesByBranch = useSelector((state) => state.article.articles.items);
   const countries = useSelector((state) => state.country.countries.items);
   const cities = useSelector((state) => state.country.cities.items);
@@ -47,6 +37,8 @@ function EditCommand() {
     quantity: "",
     articleByBranchId: "",
   });
+  const [Total, setTotal] = useState([]);
+
   const [editMode, setEditMode] = useState(false);
   const [editCommanLineIndexes, setEditCommandLineIndexes] = useState([]);
   const [errorQuantity, setErrorQuantity] = useState(false);
@@ -78,6 +70,22 @@ function EditCommand() {
 
     setEditCommand({ ...command });
   }, [command]);
+  useEffect(() => {
+    if (editCommand) {
+      const newTotal = editCommand?.commandLine?.map(
+        (item) => item?.quantity * item?.articleByBranch?.price
+      );
+      setTotal(newTotal);
+    }
+  }, [editCommand]);
+
+  const sum = () => {
+    let res = 0;
+    Total?.map((e, i) => {
+      res += e;
+    });
+    return res;
+  };
 
   const toggleEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
@@ -96,7 +104,8 @@ function EditCommand() {
     });
   };
 
-  console.log(editCommand);
+  console.log(editCommand, "editCommand");
+  console.log(newCommandLine, "newCommandLine");
 
   return (
     <div>
@@ -285,6 +294,13 @@ function EditCommand() {
                   }}
                 />
               </div>
+              <div className=" col-2 text-center">
+                {editCommand.commandLine[i]?.articleByBranch?.price}
+              </div>
+              <div className="col-2 text-center">
+                {editCommand.commandLine[i]?.quantity *
+                  editCommand.commandLine[i]?.articleByBranch?.price}
+              </div>
               {editMode && (
                 <>
                   {!editCommanLineIndexes.includes(i) ? (
@@ -337,11 +353,12 @@ function EditCommand() {
                 onChange={(e) => {
                   setNewCommandLine({
                     ...newCommandLine,
-                    article: {
-                      title: articlesByBranch.filter(
+                    articleByBranch: {
+                      ...articlesByBranch.filter(
                         (elem) => elem.id === e.target.value
-                      )[0].article?.title,
+                      )[0],
                     },
+                    commandId: commandId,
                     articleByBranchId: e.target.value,
                   });
                 }}
@@ -376,8 +393,18 @@ function EditCommand() {
                   }}
                 />
               </div>
+              <div className=" col-2 text-center">
+                {newCommandLine?.articleByBranch?.price}
+              </div>
+              <div className="col-2 text-center">
+                {newCommandLine?.quantity *
+                  newCommandLine?.articleByBranch?.price}
+              </div>
 
-              <div style={{ marginLeft: "10px" }}>
+              <div
+                style={{ width: 60 }}
+                className="d-flex justify-content-center col-2"
+              >
                 <BiMessageSquareAdd
                   size={22}
                   onClick={() => {
@@ -399,32 +426,42 @@ function EditCommand() {
               </div>
             </Box>
           )}
+          <div class="row mt-3">
+            <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
+              Extra note such as company or payment information...
+            </div>
 
+            <div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
+              <div class="row my-2">
+                <div class="col-7 text-right">SubTotal</div>
+                <div class="col-5">
+                  <span class="text-120 text-secondary-d1">{sum()} TND</span>
+                </div>
+              </div>
+
+              <div class="row my-2">
+                <div class="col-7 text-right">Shipping Cost:</div>
+                <div class="col-5">
+                  <span class="text-110 text-secondary-d1">
+                    {editCommand?.hasDelivery ? 7 : 0} TND
+                  </span>
+                </div>
+              </div>
+
+              <div class="row my-2 align-items-center bgc-primary-l3 p-2">
+                <div class="col-7 text-right">Total Amount</div>
+                <div class="col-5">
+                  <span class="text-150 text-success-d3 opacity-2">
+                    {sum() + (editCommand?.hasDelivery ? 7 : 0)} TND
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
           <div
             className="row"
             style={{ display: "flex", justifyContent: "space-between" }}
           >
-            <Box
-              mt={2}
-              style={{
-                flex: 1,
-                display: "flex",
-                gap: 10,
-                alignItems: "center",
-              }}
-            >
-              <Typography>{"Paid :"}</Typography>
-              <input
-                type="checkbox"
-                className="form-check-input"
-                disabled={!editMode}
-                checked={editCommand?.paid}
-                onChange={(e) => {
-                  setEditCommand({ ...editCommand, paid: e.target.checked });
-                }}
-                label="paid"
-              />
-            </Box>
             <Box
               mt={2}
               style={{
@@ -458,15 +495,38 @@ function EditCommand() {
                 alignItems: "center",
               }}
             >
+              <Typography>{"Paid :"}</Typography>
+              <input
+                type="checkbox"
+                className="form-check-input"
+                disabled={!editMode}
+                checked={editCommand?.paid}
+                onChange={(e) => {
+                  setEditCommand({ ...editCommand, paid: e.target.checked });
+                }}
+                label="paid"
+              />
+            </Box>
+
+            <Box
+              mt={2}
+              style={{
+                flex: 1,
+                display: "flex",
+                gap: 10,
+                alignItems: "center",
+              }}
+            >
               <Typography>{"Delivered :"}</Typography>
               <input
                 type="checkbox"
                 className="form-check-input"
                 disabled={!editMode}
+                checked={editCommand?.delivered}
                 onChange={(e) => {
                   setEditCommand({
                     ...editCommand,
-                    confirmHasDelivery: e.target.checked,
+                    delivered: e.target.checked,
                   });
                 }}
                 label={"confirmHasDelivery"}
@@ -485,20 +545,16 @@ function EditCommand() {
             </div>
           ) : (
             <div className="w-100 d-flex justify-content-center gap-4 p-4">
-              <CancelButton type="button"
-              width={100}
+              <CancelButton
+                type="button"
+                width={100}
                 onClick={() => {
                   toggleEditMode();
-                  setEditCommand(command)
-                }}/>
-
-              
-              <SaveButton
-              width={100}
-                type="button"
-                onClick={handleEdit}
+                  setEditCommand(command);
+                }}
               />
-                
+
+              <SaveButton width={100} type="button" onClick={handleEdit} />
             </div>
           )}
         </Box>

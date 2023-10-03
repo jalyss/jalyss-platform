@@ -12,17 +12,16 @@ datasource db {
 }
 
 model Branch {
-  id               String             @id @default(uuid())
-  name             String
-  identifier       String             @unique
-  address          String
-  mainBranch       Boolean            @default(false)
-  articlesByBranch ArticlesByBranch[]
-  commands         Command[]
-  employee         Employee[]
-
-  TransactionReceiver Transaction[] @relation("receiver")
-  TransactionSender   Transaction[] @relation("sender")
+  id                  String             @id @default(uuid())
+  name                String
+  identifier          String             @unique
+  address             String
+  mainBranch          Boolean            @default(false)
+  articlesByBranch    ArticlesByBranch[]
+  commands            Command[]
+  employee            Employee[]
+  TransactionReceiver Transaction[]      @relation("receiver")
+  TransactionSender   Transaction[]      @relation("sender")
 }
 
 model Country {
@@ -87,35 +86,63 @@ model JobTitle {
   Client Client[]
 }
 
+model TypeClient {
+  id     String   @id @default(uuid())
+  nameEn String
+  nameAr String
+  Client Client[]
+}
+
+model CivilStatus {
+  id     String   @id @default(uuid())
+  nameEn String
+  nameAr String
+  Client Client[]
+}
+
+model PaymentChoice {
+  id            String          @id @default(uuid())
+  nameEn        String
+  nameAr        String
+  Commands      Command[]
+  ClientPayment ClientPayment[]
+}
+
 model Client {
-  id                   String          @id @default(uuid())
+  id                   String                @id @default(uuid())
   fullNameEn           String
   fullNameAr           String
-  email                String          @unique
+  email                String                @unique
   address              String
   tel                  String
-  avatar               Media?          @relation(fields: [avatarId], references: [id])
+  dateOfBirth          DateTime?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  type                 TypeClient?           @relation(fields: [typeId], references: [id])
+  typeId               String?
+  avatar               Media?                @relation(fields: [avatarId], references: [id])
   avatarId             String?
-  createdAt            DateTime        @default(now())
-  updatedAt            DateTime        @updatedAt
+  CivilStatus          CivilStatus?          @relation(fields: [civilStatusId], references: [id])
+  civilStatusId        String?
   accountBalance       Float?
-  category             ClientCategory? @relation(fields: [categoryId], references: [id])
+  category             ClientCategory?       @relation(fields: [categoryId], references: [id])
   categoryId           String?
-  educationLevel       EducationLevel? @relation(fields: [educationLevelId], references: [id])
+  educationLevel       EducationLevel?       @relation(fields: [educationLevelId], references: [id])
   educationLevelId     String?
-  functionalArea       FunctionalArea? @relation(fields: [functionalAreaId], references: [id])
+  functionalArea       FunctionalArea?       @relation(fields: [functionalAreaId], references: [id])
   functionalAreaId     String?
-  jobTitle             JobTitle?       @relation(fields: [jobTitleId], references: [id])
+  jobTitle             JobTitle?             @relation(fields: [jobTitleId], references: [id])
   jobTitleId           String?
-  country              Country?        @relation(fields: [countryId], references: [id])
+  country              Country?              @relation(fields: [countryId], references: [id])
   countryId            String?
-  city                 City?           @relation(fields: [cityId], references: [id])
+  city                 City?                 @relation(fields: [cityId], references: [id])
   cityId               String?
-  isCoach              Boolean?        @default(false)
-  IntermediateCommands Command[]       @relation("intermediate")
-  clientCommands       Command[]       @relation("clientCommand")
+  isCoach              Boolean?              @default(false)
+  IntermediateCommands Command[]             @relation("intermediate")
+  clientCommands       Command[]             @relation("clientCommand")
   User                 User[]
   payments             ClientPayment[]
+  FinancialCommitment  FinancialCommitment[]
 }
 
 model Employee {
@@ -383,28 +410,33 @@ model Rating {
 }
 
 model Command {
-  id             String        @id @default(uuid())
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  client         Client?       @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
-  clientId       String?       @map("client_id")
-  clientName     String        @map("client_name")
-  clientAddress  String        @map("client_address")
-  clientTel      String        @map("client_tel")
-  clientEmail    String        @map("client_email")
-  confirm        Status        @default(pending)
-  delivered      Boolean       @default(false)
-  paid           Boolean       @default(false)
-  hasDelivery    Boolean       @default(false) @map("has_delivery")
-  branch         Branch        @relation(fields: [branchId], references: [id])
-  branchId       String        @map("branch_id")
-  intermediate   Client?       @relation(name: "intermediate", fields: [intermediateId], references: [id], onDelete: Cascade)
-  intermediateId String?       @map("intermediate_id")
-  country        Country?      @relation(fields: [countryId], references: [id])
-  countryId      String?
-  city           City?         @relation(fields: [cityId], references: [id])
-  cityId         String?
-  commandLine    CommandLine[]
+  id                  String                @id @default(uuid())
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  client              Client?               @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
+  clientId            String?               @map("client_id")
+  clientName          String                @map("client_name")
+  clientAddress       String                @map("client_address")
+  clientTel           String                @map("client_tel")
+  clientEmail         String                @map("client_email")
+  confirm             Status                @default(pending)
+  contactChannel      Channel               @default(site_web)
+  delivered           Boolean               @default(false)
+  hasDelivery         Boolean               @default(false) @map("has_delivery")
+  branch              Branch                @relation(fields: [branchId], references: [id])
+  branchId            String                @map("branch_id")
+  intermediate        Client?               @relation(name: "intermediate", fields: [intermediateId], references: [id], onDelete: Cascade)
+  intermediateId      String?               @map("intermediate_id")
+  country             Country?              @relation(fields: [countryId], references: [id])
+  countryId           String?
+  city                City?                 @relation(fields: [cityId], references: [id])
+  cityId              String?
+  PaymentChoice       PaymentChoice?        @relation(fields: [paymentChoiceId], references: [id])
+  paymentChoiceId     String?
+  paymentType        PaymentType          @default(contant)
+  commandLine         CommandLine[]
+  ClientPayment       ClientPayment[]
+  FinancialCommitment FinancialCommitment[]
 }
 
 model CommandLine {
@@ -653,11 +685,28 @@ model TrainingBooking {
 }
 
 model ClientPayment {
-  id        String   @id @default(uuid())
-  client    Client   @relation(fields: [clientId], references: [id])
-  clientId  String
-  amount    Float
+  id               String         @id @default(uuid())
+  client           Client         @relation(fields: [clientId], references: [id])
+  clientId         String
+  amount           Float
+  type             AmountType     @default(credit)
+  label            String
+  commandId        String?
+  command          Command?       @relation(fields: [commandId], references: [id])
+  payementChoiseId String?
+  payementChoise   PaymentChoice? @relation(fields: [payementChoiseId], references: [id])
+
   createdAt DateTime @default(now())
+}
+
+model FinancialCommitment {
+  id             String   @id @default(uuid())
+  date           DateTime
+  clientId       String
+  client         Client   @relation(fields: [clientId], references: [id])
+  commandId      String?
+  command        Command?  @relation(fields: [commandId], references: [id])
+  payementStatus Boolean  @default(false)
 }
 
 //media
@@ -836,15 +885,6 @@ model View {
   blogId    String
 }
 
-//JalyssSpace
-
-// model Service {
-//   id           String         @id @default(uuid())
-//   name         String
-//   identifier   String?        @unique()
-
-// }
-
 model Service {
   id          String  @id @default(uuid())
   name        String
@@ -954,4 +994,22 @@ enum StatusMvt {
   in_progress
   on_hold
   delivered
+}
+
+enum Channel {
+  site_web
+  social_media
+  telephone
+  on_site
+}
+
+enum PaymentType {
+  contant
+  credit
+  easy
+}
+
+enum AmountType {
+  debit
+  credit
 }

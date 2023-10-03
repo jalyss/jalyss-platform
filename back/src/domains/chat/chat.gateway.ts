@@ -37,8 +37,6 @@ export class ChatGateway {
     let connectedUser = await this.PrismaService.connectedUser.findFirst({
       where: { userId: payload.userId },
     });
-
-    console.log(payload.userId);
     if (!connectedUser) {
       await this.PrismaService.connectedUser.create({
         data: { userId: payload.userId },
@@ -95,7 +93,7 @@ export class ChatGateway {
     const { userId, chatRoomId, ...rest } = payload;
 
     const response = await this.MessageService.create(rest, userId, chatRoomId);
-    console.log(response);
+    
 
     this.server.emit(`msg-to-client/${chatRoomId}`, response);
     this.server.emit(`no-typing/${chatRoomId}`, { userId });
@@ -109,7 +107,7 @@ export class ChatGateway {
     payload: { chatRoomId: string; userId: string; num: number },
   ) {
     const { chatRoomId, userId, num } = payload;
-    console.log(chatRoomId);
+    
 
     await this.MessageService.MessageSeen(chatRoomId, userId);
     const chatRoom = await this.ChatRoomService.findOne(chatRoomId);
