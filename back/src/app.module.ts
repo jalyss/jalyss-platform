@@ -31,6 +31,7 @@ import { EducationLevelsModule } from './domains/education-levels/education-leve
 // import { SearchController } from './search/search.controller';
 import { SearchEngineModule } from './search-engine/search-engine.module';
 import { ClientCategoryModule } from './domains/client-categories/client-categories.module';
+import { PaymentChoiceModule } from './domains/paymentChoices/paymentChoice.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { ClientCategoryModule } from './domains/client-categories/client-categor
     SearchEngineModule,
     ClientsModule,
     ClientCategoryModule,
+    PaymentChoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],

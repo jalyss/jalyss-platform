@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { chatSeed } from './seeds/chatSeed';
+import { paymentChoiceSeed } from './seeds/paymentChoiceSeed';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -2052,6 +2053,7 @@ async function main() {
     featuresIds.push(features.id);
   }
   chatSeed(prisma, usersIds);
+  paymentChoiceSeed(prisma)
   console.log(users);
   console.log(articles);
 }

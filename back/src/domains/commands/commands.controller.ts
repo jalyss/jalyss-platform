@@ -23,8 +23,7 @@ import { Status } from '@prisma/client';
 @Controller('commands')
 export class CommandsController {
   constructor(private readonly commandsService: CommandsService) {}
-
-  @UseGuards(JwtAuthGuard)
+ 
   @Post(':branchId')
   create(
     @Body() createCommandDto: CreateCommandDto,
@@ -33,6 +32,8 @@ export class CommandsController {
     return this.commandsService.create(createCommandDto, branchId);
   }
 
+  @ApiSecurity('apiKey')
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.commandsService.findAll();

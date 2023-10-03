@@ -6,7 +6,7 @@ import { UpdateCountryDto } from "./dto/update-country.dto";
 
 
 @Injectable()
-export class countriesService {
+export class CountriesService {
     constructor(
         private readonly prisma: PrismaService,
     ) { }

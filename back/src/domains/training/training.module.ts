@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { UserPaymentService } from './userPayment.service';
-import { UserPaymentController } from './userPayment.controller';
+
+
 import { PrismaService } from 'src/prisma/prisma.service';
 import { TrainingBookingController } from './trainingBooking.controller';
 import { SessionTypeController } from './sessionType.controller';
@@ -29,7 +29,7 @@ import { GainService } from './gain.service';
 
 @Module({
   controllers: [
-    UserPaymentController,
+    
     TrainingBookingController,
     SessionTypeController,
     SessionTarifController,
@@ -44,7 +44,7 @@ import { GainService } from './gain.service';
     GainController
   ],
   providers: [
-    UserPaymentService,
+    
     TrainingBookingService,
     SessionTypeService,
     SessionTarifService,

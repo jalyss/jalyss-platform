@@ -1,13 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  InputLabel,
-  Container,
-  MenuItem,
-  RadioGroup,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Container, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -19,7 +10,7 @@ import {
 import { fetchArticlesByBranch } from "../../../store/article";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
+
 import { FaTrash } from "react-icons/fa";
 import {
   fetchCountries,
@@ -28,7 +19,6 @@ import {
 } from "../../../store/Country";
 import { BiMessageSquareAdd, BiSave } from "react-icons/bi";
 import { GrEdit } from "react-icons/gr";
-import CreateButton from "../../../components/Commun/buttons/CreateButton";
 import { Button } from "react-bootstrap";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
 import SaveButton from "../../../components/Commun/buttons/SaveButton";
@@ -36,7 +26,7 @@ function EditCommand() {
   const command = useSelector((state) => state.command.command);
   const { commandId } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const articlesByBranch = useSelector((state) => state.article.articles.items);
   const countries = useSelector((state) => state.country.countries.items);
   const cities = useSelector((state) => state.country.cities.items);
@@ -368,7 +358,7 @@ function EditCommand() {
                         (elem) => elem.id === e.target.value
                       )[0],
                     },
-                    commandId:commandId,
+                    commandId: commandId,
                     articleByBranchId: e.target.value,
                   });
                 }}
