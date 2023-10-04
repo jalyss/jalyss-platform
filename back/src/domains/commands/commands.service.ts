@@ -6,6 +6,7 @@ import { CreateCommandDto } from './dto/create-command.dto';
 import { UpdateCommandDto } from './dto/update-command.dto';
 import { filterEample } from './entities/command.entity';
 import { FilterCommand } from './types';
+import { PaymentType, Status } from '@prisma/client';
 
 @Injectable()
 export class CommandsService {
@@ -43,7 +44,6 @@ export class CommandsService {
       },
     });
   }
-  
 
   async findAll() {
     return this.prisma.command.findMany();
@@ -88,7 +88,21 @@ export class CommandsService {
       },
     });
   }
-
+  async findAllByClientId(id: string) {
+    return await this.prisma.command.findMany({
+      where: { clientId: id },
+      include: {
+        commandLine: {
+          include: { articleByBranch: { include: { article: true } } },
+        },
+        country: true,
+        city: true,
+        branch: {
+          select: { name: true },
+        },
+      },
+    });
+  }
   async findOne(id: string) {
     return await this.prisma.command.findFirstOrThrow({
       where: {
@@ -147,6 +161,17 @@ export class CommandsService {
         },
       },
     });
+  }
+  
+  async updateConfirmStatus (id:string,dto:Status){
+   return await this.prisma.command.update({where:{id},data:{confirm:dto}})
+  }
+  async updatePaidStatus (id:string,dto:PaymentType){
+    
+   return await this.prisma.command.update({where:{id},data:{paymentType:dto}})
+  }
+  async updateDeliveredStatus (id:string,dto:boolean){
+   return await this.prisma.command.update({where:{id},data:{delivered:dto}})
   }
   remove(id: string) {
     return this.prisma.command.delete({ where: { id } });
