@@ -122,9 +122,9 @@ import DetailRole from "../domains/roles/view/DetailRole";
 import CreateRole from "../domains/roles/view/CreateRole";
 
 import Client from "../domains/Client/Client";
-import AddClient from "../domains/Client/views/AddClient";
-import ClientList from "../domains/Client/views/ClientList";
-import OneClient from "../domains/Client/views/OneClient";
+ import AddClient from "../domains/Client/views/AddClient";
+ import ClientList from "../domains/Client/views/ClientList";
+ import OneClient from "../domains/Client/views/OneClient";
 
 import TypeArticle from "../domains/type/TypeArticle";
 
@@ -207,8 +207,8 @@ function Router() {
             <Route path="client" element={<Client />}>
               <Route index element={<ClientList />} />
               <Route path="one/:clientId" element={<OneClient />} />
-              <Route path="add" element={<AddClient />} />
-            </Route>
+              {/* <Route path="add" element={<AddClient />} /> */}
+            </Route> 
 
             <Route path="educationLevel" element={<EducationLevel />}>
               <Route index element={<EducationLevelList />} />
