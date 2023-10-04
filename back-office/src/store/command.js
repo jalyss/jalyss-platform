@@ -32,11 +32,16 @@ export const fetchCommand = createAsyncThunk("commands/command", async (id) => {
 export const createCommand = createAsyncThunk(
   "commands/createCommand",
   async (body, { dispatch }) => {
-    const x = body.branshId;
-    delete body.branshId;
+    const {branchId,...rest}=body
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
     const response = await axios.post(
-      `${config.API_ENDPOINT}/commands/${x}/`,
-      body
+      `${config.API_ENDPOINT}/commands/${branchId}/`,
+      rest,configs
     );
     dispatch(fetchCommand(response.data.id)); // for dispath the result on state.command to see its data in the next page after checkout
     return response.data;

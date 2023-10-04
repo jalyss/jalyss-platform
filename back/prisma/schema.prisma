@@ -433,7 +433,8 @@ model Command {
   cityId              String?
   PaymentChoice       PaymentChoice?        @relation(fields: [paymentChoiceId], references: [id])
   paymentChoiceId     String?
-  paymentType        PaymentType          @default(contant)
+  paid                Boolean               @default(false)
+  paymentType         PaymentType           @default(contant)
   commandLine         CommandLine[]
   ClientPayment       ClientPayment[]
   FinancialCommitment FinancialCommitment[]
@@ -705,7 +706,7 @@ model FinancialCommitment {
   clientId       String
   client         Client   @relation(fields: [clientId], references: [id])
   commandId      String?
-  command        Command?  @relation(fields: [commandId], references: [id])
+  command        Command? @relation(fields: [commandId], references: [id])
   payementStatus Boolean  @default(false)
 }
 
