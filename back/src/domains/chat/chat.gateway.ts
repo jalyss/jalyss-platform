@@ -32,24 +32,24 @@ export class ChatGateway {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('ChatGateway');
 
-  @SubscribeMessage('connection')
-  async connect(client: Socket, payload: CreateConnectedUserDto) {
-    let connectedUser = await this.PrismaService.connectedUser.findFirst({
-      where: { userId: payload.userId },
-    });
-    if (!connectedUser) {
-      await this.PrismaService.connectedUser.create({
-        data: { userId: payload.userId },
-      });
-    }
+  // @SubscribeMessage('connection')
+  // async connect(client: Socket, payload: CreateConnectedUserDto) {
+  //   let connectedUser = await this.PrismaService.connectedUser.findFirst({
+  //     where: { userId: payload.userId },
+  //   });
+  //   if (!connectedUser) {
+  //     await this.PrismaService.connectedUser.create({
+  //       data: { userId: payload.userId },
+  //     });
+  //   }
 
-    await this.connectedUsersList();
+  //   await this.connectedUsersList();
 
-    this.server.emit('typingUsers', { typingUsers: this.typingUsers });
-    setTimeout(() => {
-      this.disconnect(payload.userId);
-    }, 1000 * 60 * 2);
-  }
+  //   this.server.emit('typingUsers', { typingUsers: this.typingUsers });
+  //   setTimeout(() => {
+  //     this.disconnect(payload.userId);
+  //   }, 1000 * 60 * 2);
+  // }
 
   @SubscribeMessage('online-users')
   async onlineUsers(client: Socket, id: string) {

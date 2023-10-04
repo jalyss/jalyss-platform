@@ -26,6 +26,8 @@ export class ClientsService {
       where['fullNameEn'] = {
         contains: filters.fullNameEn,
       };
+
+      
     return this.prisma.client.findMany({
       include: {
         avatar: true,

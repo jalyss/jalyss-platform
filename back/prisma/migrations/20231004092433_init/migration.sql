@@ -382,6 +382,7 @@ CREATE TABLE "Command" (
     "countryId" TEXT,
     "cityId" TEXT,
     "paymentChoiceId" TEXT,
+    "paid" BOOLEAN NOT NULL DEFAULT false,
     "paymentType" "PaymentType" NOT NULL DEFAULT 'contant',
 
     CONSTRAINT "Command_pkey" PRIMARY KEY ("id")

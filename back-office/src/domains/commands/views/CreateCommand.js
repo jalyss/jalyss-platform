@@ -39,7 +39,7 @@ function CreateCommand() {
     (state) => state.paymentChoice.paymentChoices.items
   );
 
-  const [newCommand, setNewCommand] = useState({ channel: "on_site" });
+  const [newCommand, setNewCommand] = useState({ contactChannel: "on_site" });
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: "",
     articleByBranchId: "",
@@ -50,7 +50,7 @@ function CreateCommand() {
   const [editCommandLineIndexes, setEditCommandLineIndexes] = useState([]);
   const [errorQuantity, setErrorQuantity] = useState(false);
   const [loadingClient, setLoadingClients] = useState(false);
-  const [typingFullName, setTypingFullName] = useState('');
+  const [typingFullName, setTypingFullName] = useState("");
 
   useEffect(() => {
     if (newCommand?.branchId) {
@@ -68,8 +68,10 @@ function CreateCommand() {
 
   useEffect(() => {
     setLoadingClients(true);
-    dispatch(fetchClients({fullNameEn:typingFullName ,skip: 0, take: 5 })).then(res=>setLoadingClients(false));
-  }, [dispatch,typingFullName]);
+    dispatch(
+      fetchClients({ fullNameEn: typingFullName, skip: 0, take: 5 })
+    ).then((res) => setLoadingClients(false));
+  }, [dispatch, typingFullName]);
 
   useEffect(() => {
     if (newCommand) {
@@ -89,8 +91,28 @@ function CreateCommand() {
   };
 
   const handleCreate = () => {
-    const { city, country, branch, createdAt, updatedAt, ...rest } = newCommand;
-    dispatch(createCommand(rest)).then((res) => {
+    const {
+      city,
+      country,
+      branch,
+      createdAt,
+      updatedAt,
+      branchId,
+      commandLine,
+      ...rest
+    } = newCommand;
+    let commandLinesArray = commandLine.map(
+      ({ quantity, articleByBranchId }) => {
+        console.log(articleByBranchId);
+        return {
+          quantity,
+          articleByBranchId,
+        };
+      }
+    );
+    let aux = { ...rest, commandLine: commandLinesArray };
+
+    dispatch(createCommand({ ...aux, branchId })).then((res) => {
       if (!res.error) {
         showSuccessToast("command created successfully");
         toggleEditMode();
@@ -147,11 +169,14 @@ function CreateCommand() {
               </Form.Select>
             </Box>
             <Box mt={4} className="col-4">
-              Channel
+              Contact Channel
               <Form.Select
-                value={newCommand?.channel}
+                value={newCommand?.contactChannel}
                 onChange={(e) => {
-                  setNewCommand({ ...newCommand, channel: e.target.value });
+                  setNewCommand({
+                    ...newCommand,
+                    contactChannel: e.target.value,
+                  });
                 }}
                 size="lg"
               >
@@ -164,25 +189,16 @@ function CreateCommand() {
               </Form.Select>
             </Box>
           </div>
-          <div className="row">
-            <Box mt={2} className="col-6">
-              {/* <TextField
-                label="Name"
-                variant="outlined"
-                value={newCommand?.clientName || ""}
-                fullWidth
-                required
-                margin="normal"
-                onChange={(e) => {
-                  setNewCommand({
-                    ...newCommand,
-                    clientName: e.target.value,
-                  });
-                }}
-              /> */}
+          <div className="row align-items-center">
+            <Box mt={2} className="col-6 align-items-center d-flex">
               <Autocomplete
-                id="asynchronous-demo"
-                sx={{ width: 300 ,height:25}}
+                aria-required={true}
+                fullWidth
+                sx={{
+                  ".MuiInputBase-root": {
+                    height: "43px !important",
+                  },
+                }}
                 open={open}
                 onOpen={() => {
                   setOpen(true);
@@ -193,40 +209,43 @@ function CreateCommand() {
                 options={clients}
                 loading={loadingClient}
                 value={newCommand?.clientName}
-                // isOptionEqualToValue={
-                //   (option, value) => {
-                //     // console.log(option, value);
-                //     option.fullNameEn === value.title;
-                //   }
-                //   // option.fullNameEn.includes(value.title)
-                // }
-                onChange={(event, newValue) => {
-                  console.log(newValue);
-                  setNewCommand({ ...newCommand, clientName: newValue.fullNameEn,clientTel:newValue.tel });
+                onChange={(event, v) => {
+                  setNewCommand({
+                    ...newCommand,
+                    clientName: v?.fullNameEn,
+                    clientTel: v?.tel,
+                    clientAddress: v?.address,
+                    clientEmail: v?.email,
+                    clientId: v?.id,
+                  });
                 }}
                 getOptionLabel={(option) => option.fullNameEn}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    onChange={(e)=>{setTypingFullName(e.target.value)}}
-                    label="Asynchronous"
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) => {
+                      setTypingFullName(e.target.value);
+                    }}
+                    label="Name"
                     InputProps={{
                       ...params.InputProps,
-                      endAdornment: (
-                        
-                          loadingClient ? (
-                            <CircularProgress color="inherit" size={20} />
-                          ) : null
-                         
-                        
-                      ),
+                      endAdornment: loadingClient ? (
+                        <CircularProgress color="inherit" size={10} />
+                      ) : null,
                     }}
                   />
                 )}
               />
             </Box>
-            <Box mt={2} className="col-6">
+            <Box
+              mt={2}
+              className="col-6"
+              style={{ alignItems: "center", display: "flex" }}
+            >
               <TextField
+                sx={{ margin: 0 }}
                 label="Tel"
                 variant="outlined"
                 type="number"
@@ -542,41 +561,6 @@ function CreateCommand() {
               />
             </Box>
 
-            <Box mt={4} className="col-4 d-flex">
-              <Typography>{"Payement Type :"}</Typography>
-              <Form.Select
-                value={newCommand?.payementType}
-                onChange={(e) => {
-                  setNewCommand({ ...newCommand, channel: e.target.value });
-                }}
-                size="lg"
-              >
-                <option disabled>Select Payement type</option>
-                {paymentTypes.map((e, i) => (
-                  <option value={e.value} key={i}>
-                    {e.nameEn}
-                  </option>
-                ))}
-              </Form.Select>
-            </Box>
-            <Box mt={4} className="col-4 d-flex">
-              <Typography>{"Payement Choise :"}</Typography>
-              <Form.Select
-                value={newCommand?.payementChoiceId}
-                onChange={(e) => {
-                  setNewCommand({ ...newCommand, channel: e.target.value });
-                }}
-                size="lg"
-              >
-                <option disabled>Select Payement type</option>
-                {paymentChoices.map((e, i) => (
-                  <option value={e.value} key={i}>
-                    {e.nameEn}
-                  </option>
-                ))}
-              </Form.Select>
-            </Box>
-
             <Box
               mt={2}
               style={{
@@ -600,6 +584,45 @@ function CreateCommand() {
                 label={"confirmHasDelivery"}
               />
             </Box>
+            <Box mt={4} className="col-4 d-flex">
+              <Typography>{"Payement Type :"}</Typography>
+              <Form.Select
+                value={newCommand?.paymentType}
+                onChange={(e) => {
+                  setNewCommand({ ...newCommand, paymentType: e.target.value });
+                }}
+                size="lg"
+              >
+                <option disabled>Select Payment type</option>
+                {paymentTypes.map((e, i) => (
+                  <option value={e.value} key={i}>
+                    {e.nameEn}
+                  </option>
+                ))}
+              </Form.Select>
+            </Box>
+            {newCommand?.paymentType === "contant" && (
+              <Box mt={4} className="col-4 d-flex">
+                <Typography>{"Payment Choise :"}</Typography>
+                <Form.Select
+                  value={newCommand?.paymentChoiceId}
+                  onChange={(e) => {
+                    setNewCommand({
+                      ...newCommand,
+                      paymentChoiceId: e.target.value,
+                    });
+                  }}
+                  size="lg"
+                >
+                  <option disabled>Select Payement type</option>
+                  {paymentChoices.map((e, i) => (
+                    <option value={e.value} key={i}>
+                      {e.nameEn}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Box>
+            )}
           </div>
 
           <div className="w-100 d-flex justify-content-center gap-4 p-4">
