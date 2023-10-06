@@ -420,6 +420,7 @@ model Command {
   clientTel           String                @map("client_tel")
   clientEmail         String                @map("client_email")
   confirm             Status                @default(pending)
+  totalAmount         Float
   contactChannel      Channel               @default(site_web)
   delivered           Boolean               @default(false)
   hasDelivery         Boolean               @default(false) @map("has_delivery")
@@ -446,6 +447,7 @@ model CommandLine {
   articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
   articleByBranchId String
   quantity          Int
+  amount            Float
 
   @@unique(fields: [commandId, articleByBranchId], name: "commandArticle")
 }

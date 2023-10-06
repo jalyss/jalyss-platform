@@ -1219,7 +1219,7 @@ async function main() {
   let mainBranch = await prisma.branch.create({
     data: {
       name: 'Main',
-      identifier: 'Main',
+      identifier: 'MAIN',
       address: 'sfax ambra immeuble ',
       mainBranch: true,
     },
@@ -1227,7 +1227,7 @@ async function main() {
   let maBranch = await prisma.branch.create({
     data: {
       name: 'Marroco',
-      identifier: 'Ma',
+      identifier: 'MA',
       address: 'Marrakch ',
       mainBranch: true,
     },
@@ -1439,6 +1439,7 @@ async function main() {
           branchId: branch.id,
           countryId: countryIds[Math.floor(Math.random() * countryIds.length)],
           cityId: cityIds[Math.floor(Math.random() * cityIds.length)],
+          totalAmount:0
         },
       }),
     );

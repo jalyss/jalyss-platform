@@ -3,7 +3,13 @@ import axios from "axios";
 import config from "../configs";
 
 export const fetchCommands = createAsyncThunk("commands/commands", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/commands`);
+  let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+  const configs = {
+    headers: {
+      Authorization: "Bearer " + token.Authorization,
+    },
+  };
+  const response = await axios.get(`${config.API_ENDPOINT}/commands`,configs);
   return response.data;
 });
 
