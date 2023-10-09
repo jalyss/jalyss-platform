@@ -34,7 +34,7 @@ const handleChange = (event, value) => {
 };
 
 
-console.log("count",sessions.count);
+console.log("count",sessions.items.titleAr);
 
   return (
     <>
@@ -56,7 +56,7 @@ console.log("count",sessions.count);
               <Card
                 cover={course?.cover?.path}
                 category={course?.category.nameEn}
-                title={course?.title}
+                title={course?.titleAr}
                 startTime={course?.startDate.slice(0,10)}
                 endTime={course?.endDate.slice(0,10)}
                 onClick={() => navigate(`/sessions/${course.id}`)} 
