@@ -6,7 +6,7 @@ import { CreateCommandDto } from './dto/create-command.dto';
 import { UpdateCommandDto } from './dto/update-command.dto';
 import { filterEample } from './entities/command.entity';
 import { FilterCommand } from './types';
-import { PaymentType, Status } from '@prisma/client';
+import { CommandLine, PaymentType, Status } from '@prisma/client';
 
 @Injectable()
 export class CommandsService {
@@ -21,16 +21,34 @@ export class CommandsService {
       branchId,
     );
     console.log(branchId, branch.id);
-
-    // if(!dto.commandLine){
-    //   throw new HttpException("don't have items", HttpStatus.BAD_REQUEST)
-    // }
+    let commandLines = [];
+    let sum = 0;
+    if (dto.hasDelivery) sum += 7;
+    if (!dto.commandLine) {
+      throw new HttpException("don't have items", HttpStatus.BAD_REQUEST);
+    } else {
+      commandLines = await Promise.all(
+        dto.commandLine.map(async (elem) => {
+          const articleByBranch = await this.prisma.articlesByBranch.findFirst({
+            where: { id: elem.articleByBranchId },
+          });
+          let amount = elem.quantity * articleByBranch.price;
+          sum += amount;
+          return {
+            articleByBranchId: elem.articleByBranchId,
+            quantity: +elem.quantity,
+            amount,
+          };
+        }),
+      );
+    }
 
     return await this.prisma.command.create({
       data: {
+        totalAmount: sum,
         ...dto,
         branchId: branch.id,
-        commandLine: { create: dto.commandLine },
+        commandLine: { create: commandLines.map((elem) => elem) },
       },
     });
   }
@@ -140,10 +158,32 @@ export class CommandsService {
     console.log(branchId);
 
     const command = await this.findOne(id);
+    let commandLines = [];
+    let sum = 0;
+    if (dto.hasDelivery) sum += 7;
+    if (!dto.commandLine) {
+      throw new HttpException("don't have items", HttpStatus.BAD_REQUEST);
+    } else {
+      commandLines = await Promise.all(
+        dto.commandLine.map(async (elem) => {
+          const articleByBranch = await this.prisma.articlesByBranch.findFirst({
+            where: { id: elem.articleByBranchId },
+          });
+          let amount = +elem.quantity * articleByBranch.price;
+          sum += amount;
+          return {
+            articleByBranchId: elem.articleByBranchId,
+            quantity: elem.quantity,
+            amount,
+          };
+        }),
+      );
+    }
 
     return await this.prisma.command.update({
       where: { id },
       data: {
+        totalAmount: sum,
         ...dto,
         branchId,
         // must delete lines befor updated because maybe the quantity changed
@@ -154,26 +194,31 @@ export class CommandsService {
               in: command.commandLine.map((l) => l.articleByBranchId),
             },
           },
-          create: dto.commandLine.map((elem) => ({
-            articleByBranchId: elem.articleByBranchId,
-            quantity: elem.quantity,
-          })),
+          create: commandLines.map((elem) => elem),
         },
       },
     });
   }
-  
-  async updateConfirmStatus (id:string,dto:Status){
-   return await this.prisma.command.update({where:{id},data:{confirm:dto}})
+
+  async updateConfirmStatus(id: string, dto: Status) {
+    return await this.prisma.command.update({
+      where: { id },
+      data: { confirm: dto },
+    });
   }
-  async updatePaidStatus (id:string,dto:PaymentType){
-    
-   return await this.prisma.command.update({where:{id},data:{paymentType:dto}})
+  async updatePaidStatus(id: string, dto: PaymentType) {
+    return await this.prisma.command.update({
+      where: { id },
+      data: { paymentType: dto },
+    });
   }
-  async updateDeliveredStatus (id:string,dto:boolean){
-   return await this.prisma.command.update({where:{id},data:{delivered:dto}})
+  async updateDeliveredStatus(id: string, dto: boolean) {
+    return await this.prisma.command.update({
+      where: { id },
+      data: { delivered: dto },
+    });
   }
-  remove(id: string) {
-    return this.prisma.command.delete({ where: { id } });
+  async remove(id: string) {
+    return await this.prisma.command.delete({ where: { id } });
   }
 }

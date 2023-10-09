@@ -9,4 +9,5 @@ export type FilterArticle = {
   publishingHouses: string[];
   authors: string[];
   skip:number
+  title:string
 };

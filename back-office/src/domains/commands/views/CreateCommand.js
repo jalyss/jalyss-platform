@@ -39,10 +39,13 @@ function CreateCommand() {
     (state) => state.paymentChoice.paymentChoices.items
   );
 
-  const [newCommand, setNewCommand] = useState({ contactChannel: "on_site" });
+  const [newCommand, setNewCommand] = useState({
+    contactChannel: "on_site",
+    paymentType: null,
+  });
   const [newCommandLine, setNewCommandLine] = useState({
-    quantity: "",
-    articleByBranchId: "",
+    quantity: null,
+    articleByBranchId: null,
   });
   const [Total, setTotal] = useState([]);
   const [open, setOpen] = useState(false);
@@ -127,7 +130,7 @@ function CreateCommand() {
       <Container maxWidth="md">
         <Box mt={3}>
           <Typography variant="h4" align="center" gutterBottom>
-            Details Command
+            Create Command
           </Typography>
           <div className="d-flex gap-3 justify-content-center">
             {/* <Button
@@ -154,13 +157,16 @@ function CreateCommand() {
             <Box mt={4} className="col-4">
               Branch
               <Form.Select
+                // className="form-control rounded"
                 value={newCommand?.branchId}
                 onChange={(e) => {
                   setNewCommand({ ...newCommand, branchId: e.target.value });
                 }}
                 size="lg"
               >
-                <option disabled>Select Branch</option>
+                <option disabled selected>
+                  Select Branch
+                </option>
                 {branches.map((e, i) => (
                   <option value={e.id} key={i}>
                     {e.name}
@@ -180,7 +186,7 @@ function CreateCommand() {
                 }}
                 size="lg"
               >
-                <option disabled>Select Channel</option>
+                <option disabled selected >Select Channel</option>
                 {commandChannel.map((e, i) => (
                   <option value={e.value} key={i}>
                     {e.nameEn}
@@ -189,8 +195,8 @@ function CreateCommand() {
               </Form.Select>
             </Box>
           </div>
-          <div className="row align-items-center">
-            <Box mt={2} className="col-6 align-items-center d-flex">
+          <div className="row align-items-center mt-5">
+            <Box className="col-4 align-items-center d-flex">
               <Autocomplete
                 aria-required={true}
                 fullWidth
@@ -199,6 +205,7 @@ function CreateCommand() {
                     height: "43px !important",
                   },
                 }}
+                
                 open={open}
                 onOpen={() => {
                   setOpen(true);
@@ -240,8 +247,7 @@ function CreateCommand() {
               />
             </Box>
             <Box
-              mt={2}
-              className="col-6"
+              className="col-3"
               style={{ alignItems: "center", display: "flex" }}
             >
               <TextField
@@ -258,8 +264,25 @@ function CreateCommand() {
                 }}
               />
             </Box>
+            <Box
+              className="col-5"
+              style={{ alignItems: "center", display: "flex" }}
+            >
+              <TextField
+                sx={{ margin: 0 }}
+                label="Email"
+                variant="outlined"
+                value={newCommand?.clientEmail || ""}
+                fullWidth
+                required
+                margin="normal"
+                onChange={(e) => {
+                  setNewCommand({ ...newCommand, clientEmail: e.target.value });
+                }}
+              />
+            </Box>
           </div>
-          <Box mt={3}>
+          <Box mt={1}>
             <TextField
               label="Address"
               variant="outlined"
@@ -276,28 +299,15 @@ function CreateCommand() {
               }}
             />
           </Box>
-          <Box mt={3}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              value={newCommand?.clientEmail || ""}
-              fullWidth
-              required
-              margin="normal"
-              onChange={(e) => {
-                setNewCommand({ ...newCommand, clientEmail: e.target.value });
-              }}
-            />
-          </Box>
-          <div className="row">
-            <Box mt={4} className="col-4">
+
+          <div className="row justify-content-center">
+            <Box mt={1} className="col-4">
               Country
               <Form.Select
                 value={newCommand?.countryId}
                 onChange={(e) => {
                   setNewCommand({ ...newCommand, countryId: e.target.value });
                 }}
-                size="lg"
               >
                 <option disabled>Select Country</option>
                 {countries.map((e, i) => (
@@ -307,14 +317,13 @@ function CreateCommand() {
                 ))}
               </Form.Select>
             </Box>
-            <Box mt={4} className="col-4">
+            <Box mt={1} className="col-4">
               City
               <Form.Select
                 value={newCommand?.cityId}
                 onChange={(e) => {
                   setNewCommand({ ...newCommand, cityId: e.target.value });
                 }}
-                size="lg"
               >
                 <option disabled>Select City</option>
                 {cities.map((e, i) => (
@@ -325,24 +334,122 @@ function CreateCommand() {
               </Form.Select>
             </Box>
           </div>
+          <div className="mt-5 mb-5">
+            {newCommand?.commandLine?.map((elem, i) => (
+              <Box key={i} mt={5} mb={5} display="flex" alignItems="center">
+                <Form.Select
+                  disabled={!editCommandLineIndexes.includes(i)}
+                  value={newCommand.commandLine[i].articleByBranchId}
+                  onChange={(e) => {
+                    let aux = [...newCommand.commandLine];
+                    let obj = { ...aux[i] };
+                    obj.articleByBranchId = e.target.value;
+                    aux[i] = { ...obj };
+                    setNewCommand({ ...newCommand, commandLine: aux });
+                  }}
+                  style={{ flex: 1, marginRight: "10px" }}
+                >
+                  <option disabled selected>
+                    Select Article
+                  </option>
+                  {articlesByBranch?.map((elem, j) => (
+                    <option key={j} value={elem.id}>
+                      {elem.article?.title}
+                    </option>
+                  ))}
+                </Form.Select>
 
-          {newCommand?.commandLine?.map((elem, i) => (
-            <Box key={i} mt={3} mb={3} display="flex" alignItems="center">
+                <div style={{ marginLeft: "10px", fontSize: "10px" }}>
+                  <input
+                    placeholder={elem}
+                    type="number"
+                    min={1}
+                    disabled={!editCommandLineIndexes.includes(i)}
+                    value={newCommand.commandLine[i].quantity}
+                    onChange={(e) => {
+                      let aux = [...newCommand.commandLine];
+                      let obj = { ...aux[i] };
+                      obj.quantity = +e.target.value;
+                      aux[i] = { ...obj };
+                      setNewCommand({ ...newCommand, commandLine: aux });
+                    }}
+                  />
+                </div>
+                <div className=" col-2 text-center">
+                  {newCommand.commandLine[i]?.articleByBranch?.price}
+                </div>
+                <div className="col-2 text-center">
+                  {newCommand.commandLine[i]?.quantity *
+                    newCommand.commandLine[i]?.articleByBranch?.price}
+                </div>
+
+                <>
+                  {!editCommandLineIndexes.includes(i) ? (
+                    <div
+                      style={{ width: 60 }}
+                      className="d-flex justify-content-around gap-1"
+                    >
+                      <button className="btn btn-light">
+                        <FaTrash
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            let aux = [...newCommand.commandLine];
+                            let result = aux.filter((elem, j) => i !== j);
+                            setNewCommand({
+                              ...newCommand,
+                              commandLine: result,
+                            });
+                          }}
+                        />
+                      </button>
+
+                      <button className="btn btn-light">
+                        <GrEdit
+                          onClick={() =>
+                            setEditCommandLineIndexes([
+                              ...editCommandLineIndexes,
+                              i,
+                            ])
+                          }
+                          style={{ cursor: "pointer" }}
+                        />
+                      </button>
+                    </div>
+                  ) : (
+                    <button className="btn btn-light">
+                      <BiSave
+                        onClick={() =>
+                          setEditCommandLineIndexes(
+                            editCommandLineIndexes.filter((elem) => elem !== i)
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
+                      />
+                    </button>
+                  )}
+                </>
+              </Box>
+            ))}
+
+            <Box mt={3} mb={3} display="flex" alignItems="center">
               <Form.Select
-                disabled={!editCommandLineIndexes.includes(i)}
-                value={newCommand.commandLine[i].articleByBranchId}
+                value={newCommandLine?.articleByBranchId||null}
                 onChange={(e) => {
-                  let aux = [...newCommand.commandLine];
-                  let obj = { ...aux[i] };
-                  obj.articleByBranchId = e.target.value;
-                  aux[i] = { ...obj };
-                  setNewCommand({ ...newCommand, commandLine: aux });
+                  setNewCommandLine({
+                    ...newCommandLine,
+                    quantity:1,
+                    articleByBranch: {
+                      ...articlesByBranch.filter(
+                        (elem) => elem.id === e.target.value
+                      )[0],
+                    },
+                    articleByBranchId: e.target.value,
+                  });
                 }}
-                style={{ flex: 1, marginRight: "10px" }}
               >
-                <option disabled>Select Article</option>
-                {articlesByBranch?.map((elem, j) => (
-                  <option key={j} value={elem.id}>
+                <option disabled selected>Select Article</option>
+                {articlesByBranch?.map((elem, i) => (
+                  <option key={i} value={elem.id}>
                     {elem.article?.title}
                   </option>
                 ))}
@@ -350,156 +457,61 @@ function CreateCommand() {
 
               <div style={{ marginLeft: "10px", fontSize: "10px" }}>
                 <input
-                  placeholder={elem}
-                  type="number"
                   min={1}
-                  disabled={!editCommandLineIndexes.includes(i)}
-                  value={newCommand.commandLine[i].quantity}
+                  type="number"
+                  disabled={!newCommandLine?.quantity}
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red" }
+                      : {}
+                  }
+                  value={newCommandLine.quantity}
                   onChange={(e) => {
-                    let aux = [...newCommand.commandLine];
-                    let obj = { ...aux[i] };
-                    obj.quantity = +e.target.value;
-                    aux[i] = { ...obj };
-                    setNewCommand({ ...newCommand, commandLine: aux });
+                    setNewCommandLine({
+                      ...newCommandLine,
+                      quantity: +e.target.value,
+                    });
+                    e.target.value.length === 0
+                      ? setErrorQuantity(true)
+                      : setErrorQuantity(false);
                   }}
                 />
               </div>
               <div className=" col-2 text-center">
-                {newCommand.commandLine[i]?.articleByBranch?.price}
+                {newCommandLine?.articleByBranch?.price}
               </div>
               <div className="col-2 text-center">
-                {newCommand.commandLine[i]?.quantity *
-                  newCommand.commandLine[i]?.articleByBranch?.price}
+                {newCommandLine?.quantity *
+                  newCommandLine?.articleByBranch?.price}
               </div>
 
-              <>
-                {!editCommandLineIndexes.includes(i) ? (
-                  <div
-                    style={{ width: 60 }}
-                    className="d-flex justify-content-around gap-1"
-                  >
-                    <button className="btn btn-light">
-                      <FaTrash
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          let aux = [...newCommand.commandLine];
-                          let result = aux.filter((elem, j) => i !== j);
-                          setNewCommand({
-                            ...newCommand,
-                            commandLine: result,
-                          });
-                        }}
-                      />
-                    </button>
-
-                    <button className="btn btn-light">
-                      <GrEdit
-                        onClick={() =>
-                          setEditCommandLineIndexes([
-                            ...editCommandLineIndexes,
-                            i,
-                          ])
-                        }
-                        style={{ cursor: "pointer" }}
-                      />
-                    </button>
-                  </div>
-                ) : (
-                  <button className="btn btn-light">
-                    <BiSave
-                      onClick={() =>
-                        setEditCommandLineIndexes(
-                          editCommandLineIndexes.filter((elem) => elem !== i)
-                        )
+              <div
+                style={{ width: 60 }}
+                className="d-flex justify-content-center col-2"
+              >
+                <button className="btn btn-light">
+                  <BiMessageSquareAdd
+                    size={22}
+                    onClick={() => {
+                      if (newCommandLine.quantity.length === 0)
+                        setErrorQuantity(true);
+                      else {
+                        setNewCommand({
+                          ...newCommand,
+                          commandLine: [
+                            ...newCommand.commandLine,
+                            newCommandLine,
+                          ],
+                        });
+                        setNewCommandLine({ quantity: '',articleByBranchId:'' });
                       }
-                      style={{ cursor: "pointer" }}
-                    />
-                  </button>
-                )}
-              </>
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
+                </button>
+              </div>
             </Box>
-          ))}
-
-          <Box mt={3} mb={3} display="flex" alignItems="center">
-            <Form.Select
-              value={newCommandLine?.articleByBranchId}
-              onChange={(e) => {
-                setNewCommandLine({
-                  ...newCommandLine,
-                  articleByBranch: {
-                    ...articlesByBranch.filter(
-                      (elem) => elem.id === e.target.value
-                    )[0],
-                  },
-
-                  articleByBranchId: e.target.value,
-                });
-              }}
-            >
-              <option disabled>Select Article</option>
-              {articlesByBranch?.map((elem, i) => (
-                <option key={i} value={elem.id}>
-                  {elem.article?.title}
-                </option>
-              ))}
-            </Form.Select>
-
-            <div style={{ marginLeft: "10px", fontSize: "10px" }}>
-              <input
-                min={1}
-                type="number"
-                // className="w-50"
-                style={
-                  errorQuantity
-                    ? { outlineColor: "red", borderColor: "red" }
-                    : {}
-                }
-                value={newCommandLine.quantity}
-                onChange={(e) => {
-                  setNewCommandLine({
-                    ...newCommandLine,
-                    quantity: +e.target.value,
-                  });
-                  e.target.value.length === 0
-                    ? setErrorQuantity(true)
-                    : setErrorQuantity(false);
-                }}
-              />
-            </div>
-            <div className=" col-2 text-center">
-              {newCommandLine?.articleByBranch?.price}
-            </div>
-            <div className="col-2 text-center">
-              {newCommandLine?.quantity *
-                newCommandLine?.articleByBranch?.price}
-            </div>
-
-            <div
-              style={{ width: 60 }}
-              className="d-flex justify-content-center col-2"
-            >
-              <button className="btn btn-light">
-                <BiMessageSquareAdd
-                  size={22}
-                  onClick={() => {
-                    if (newCommandLine.quantity.length === 0)
-                      setErrorQuantity(true);
-                    else {
-                      setNewCommand({
-                        ...newCommand,
-                        commandLine: [
-                          ...newCommand.commandLine,
-                          newCommandLine,
-                        ],
-                      });
-                      setNewCommandLine({ quantity: "" });
-                    }
-                  }}
-                  style={{ cursor: "pointer" }}
-                />
-              </button>
-            </div>
-          </Box>
+          </div>
 
           <div class="row mt-3">
             <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
@@ -585,44 +597,49 @@ function CreateCommand() {
               />
             </Box>
             <Box mt={4} className="col-4 d-flex">
-              <Typography>{"Payement Type :"}</Typography>
-              <Form.Select
+              <Typography>{"Payement Type:"}</Typography>
+              <select
+                className="form-control rounded"
                 value={newCommand?.paymentType}
                 onChange={(e) => {
                   setNewCommand({ ...newCommand, paymentType: e.target.value });
                 }}
-                size="lg"
               >
-                <option disabled>Select Payment type</option>
+                <option disabled selected>
+                  Select Payment type
+                </option>
                 {paymentTypes.map((e, i) => (
                   <option value={e.value} key={i}>
                     {e.nameEn}
                   </option>
                 ))}
-              </Form.Select>
+              </select>
             </Box>
-            {newCommand?.paymentType === "contant" && (
-              <Box mt={4} className="col-4 d-flex">
-                <Typography>{"Payment Choise :"}</Typography>
-                <Form.Select
-                  value={newCommand?.paymentChoiceId}
-                  onChange={(e) => {
-                    setNewCommand({
-                      ...newCommand,
-                      paymentChoiceId: e.target.value,
-                    });
-                  }}
-                  size="lg"
-                >
-                  <option disabled>Select Payement type</option>
-                  {paymentChoices.map((e, i) => (
-                    <option value={e.value} key={i}>
-                      {e.nameEn}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Box>
-            )}
+
+            <Box mt={4} className="col-4 d-flex">
+              <Typography>{"Payment Choice :"}</Typography>
+              <select
+                disabled={newCommand?.paymentType !== "contant"}
+                className="form-control rounded"
+                value={newCommand?.paymentChoiceId}
+                onChange={(e) => {
+                  setNewCommand({
+                    ...newCommand,
+                    paymentChoiceId: e.target.value,
+                  });
+                }}
+                size="lg"
+              >
+                <option disabled selected>
+                  Select Payment Choice
+                </option>
+                {paymentChoices.map((e, i) => (
+                  <option value={e.id} key={i}>
+                    {e.nameEn}
+                  </option>
+                ))}
+              </select>
+            </Box>
           </div>
 
           <div className="w-100 d-flex justify-content-center gap-4 p-4">

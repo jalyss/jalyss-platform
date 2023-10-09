@@ -374,6 +374,7 @@ CREATE TABLE "Command" (
     "client_tel" TEXT NOT NULL,
     "client_email" TEXT NOT NULL,
     "confirm" "Status" NOT NULL DEFAULT 'pending',
+    "totalAmount" DOUBLE PRECISION NOT NULL,
     "contactChannel" "Channel" NOT NULL DEFAULT 'site_web',
     "delivered" BOOLEAN NOT NULL DEFAULT false,
     "has_delivery" BOOLEAN NOT NULL DEFAULT false,
@@ -392,7 +393,8 @@ CREATE TABLE "Command" (
 CREATE TABLE "CommandLine" (
     "commandId" TEXT NOT NULL,
     "articleByBranchId" TEXT NOT NULL,
-    "quantity" INTEGER NOT NULL
+    "quantity" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL
 );
 
 -- CreateTable
