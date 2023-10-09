@@ -1,19 +1,19 @@
 import React from "react";
 
-function CreateButton({ onClick, mt, mb ,title}) {
+function CreateButton({ onClick, mt, mb, title, disabled }) {
   return (
     <button
-
+      disabled={disabled}
       className="full"
       style={{
         backgroundColor: "#48184c",
-        color:"#fff",
+        color: "#fff",
         marginTop: mt,
         marginBottom: mb,
       }}
       onClick={onClick}
     >
-     {title}
+      {title}
     </button>
   );
 }

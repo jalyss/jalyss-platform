@@ -2,13 +2,35 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import config from "../configs";
 
-export const fetchClients = createAsyncThunk("clients/clients", async () => {
-  const response = await axios.get(`${config.API_ENDPOINT}/clients`);
-  return response.data;
-});
+export const fetchClients = createAsyncThunk(
+  "clients/clients",
+  async (args) => {
+   
+    let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+    const configs = {
+      headers: {
+        Authorization: "Bearer " + token.Authorization,
+      },
+    };
+    const response = await axios.get(`${config.API_ENDPOINT}/clients`, {
+      ...configs,
+      params:args,
+    });
+    return response.data;
+  }
+);
 
 export const fetchClient = createAsyncThunk("clients/client", async (id) => {
-  const response = await axios.get(`${config.API_ENDPOINT}/clients/one/${id}`);
+  let token = JSON.parse(localStorage.getItem("tokenAdmin"));
+  const configs = {
+    headers: {
+      Authorization: "Bearer " + token.Authorization,
+    },
+  };
+  const response = await axios.get(
+    `${config.API_ENDPOINT}/clients/one/${id}`,
+    configs
+  );
   return response.data;
 });
 
@@ -57,7 +79,7 @@ export const editClient = createAsyncThunk(
         Authorization: "Bearer " + token.Authorization,
       },
     };
-    const { id,...body } = args;
+    const { id, ...body } = args;
     const response = await axios.patch(
       `${config.API_ENDPOINT}/clients/${id}`,
       body,

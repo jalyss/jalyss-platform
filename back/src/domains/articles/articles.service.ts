@@ -92,12 +92,15 @@ export class ArticleService {
         if (!filterExample[key]) {
           errors.push(key);
         }
+
         if (['lte', 'gte'].includes(key)) {
           insideWhere['price'] = {
             ...insideWhere['price'],
             [key]: +value,
           };
         } else {
+          insideWhere['article'] = {};
+
           //array
           if (
             [
@@ -108,7 +111,6 @@ export class ArticleService {
             ].includes(key)
           ) {
             if (Array.isArray(value)) {
-              insideWhere['article'] = {};
               switch (key) {
                 case 'categories':
                   insideWhere['article']['categoryId'] = {
@@ -129,6 +131,7 @@ export class ArticleService {
                     in: value,
                   };
                   break;
+
                 default:
                   insideWhere['article']['typeId'] = {
                     in: value,
@@ -144,7 +147,11 @@ export class ArticleService {
           //skip
           else if (key === 'skip') skip = Number(value);
           //true or false
-          else insideWhere[key] = value;
+          else if (key === 'title') {
+            insideWhere['article']['title'] = {
+              contains: value,
+            };
+          } else insideWhere[key] = value;
         }
       });
       if (errors.length > 0) {
@@ -245,10 +252,12 @@ export class ArticleService {
       },
     });
     console.log(rating);
-    
+
     return {
       ...articleByBranch,
-    rating: rating[0]?Math.floor(rating[0]._sum.rate / rating[0]._count.rate):1,
+      rating: rating[0]
+        ? Math.floor(rating[0]._sum.rate / rating[0]._count.rate)
+        : 1,
     };
   }
 
@@ -262,7 +271,7 @@ export class ArticleService {
         publishingHouse: true,
         type: true,
         cover: true,
-        ArticleByAuthor: {include:{author:true}}
+        ArticleByAuthor: { include: { author: true } },
       },
     });
   }
@@ -284,11 +293,9 @@ export class ArticleService {
         ArticleByAuthor: true, // Optional: Include the updated authors in the response
       },
     });
-  
+
     return updatedArticle;
   }
-  
-  
 
   async updateArticleByBranch(id: string, dto: UpdateArticleByBranchDto) {
     return await this.prisma.articlesByBranch.update({

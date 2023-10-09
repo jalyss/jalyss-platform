@@ -8,14 +8,14 @@ import {
     Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { countriesService } from './countries.service'; 
+import { CountriesService } from './countries.service'; 
 import { CreateCountryDto } from './dto/create-country.dto'; 
 import { UpdateCountryDto } from './dto/update-country.dto'; 
 
 @ApiTags('countries')
 @Controller('countries')
-export class countriesController {
-    constructor(private readonly countryService: countriesService) { }
+export class CountriesController {
+    constructor(private readonly countryService: CountriesService) { }
     @Post()
     create(
         @Body() dto: CreateCountryDto,

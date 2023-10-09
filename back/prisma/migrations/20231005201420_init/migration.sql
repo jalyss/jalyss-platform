@@ -7,6 +7,15 @@ CREATE TYPE "StatusBlog" AS ENUM ('confirmed', 'pending', 'refused');
 -- CreateEnum
 CREATE TYPE "StatusMvt" AS ENUM ('pending', 'in_progress', 'on_hold', 'delivered');
 
+-- CreateEnum
+CREATE TYPE "Channel" AS ENUM ('site_web', 'social_media', 'telephone', 'on_site');
+
+-- CreateEnum
+CREATE TYPE "PaymentType" AS ENUM ('contant', 'credit', 'easy');
+
+-- CreateEnum
+CREATE TYPE "AmountType" AS ENUM ('debit', 'credit');
+
 -- CreateTable
 CREATE TABLE "Branch" (
     "id" TEXT NOT NULL,
@@ -77,6 +86,33 @@ CREATE TABLE "JobTitle" (
 );
 
 -- CreateTable
+CREATE TABLE "TypeClient" (
+    "id" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+
+    CONSTRAINT "TypeClient_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "CivilStatus" (
+    "id" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+
+    CONSTRAINT "CivilStatus_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PaymentChoice" (
+    "id" TEXT NOT NULL,
+    "nameEn" TEXT NOT NULL,
+    "nameAr" TEXT NOT NULL,
+
+    CONSTRAINT "PaymentChoice_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Client" (
     "id" TEXT NOT NULL,
     "fullNameEn" TEXT NOT NULL,
@@ -84,9 +120,12 @@ CREATE TABLE "Client" (
     "email" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "tel" TEXT NOT NULL,
-    "avatarId" TEXT,
+    "dateOfBirth" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "typeId" TEXT,
+    "avatarId" TEXT,
+    "civilStatusId" TEXT,
     "accountBalance" DOUBLE PRECISION,
     "categoryId" TEXT,
     "educationLevelId" TEXT,
@@ -334,14 +373,18 @@ CREATE TABLE "Command" (
     "client_address" TEXT NOT NULL,
     "client_tel" TEXT NOT NULL,
     "client_email" TEXT NOT NULL,
-    "confirm" BOOLEAN NOT NULL DEFAULT false,
+    "confirm" "Status" NOT NULL DEFAULT 'pending',
+    "totalAmount" DOUBLE PRECISION NOT NULL,
+    "contactChannel" "Channel" NOT NULL DEFAULT 'site_web',
     "delivered" BOOLEAN NOT NULL DEFAULT false,
-    "paid" BOOLEAN NOT NULL DEFAULT false,
     "has_delivery" BOOLEAN NOT NULL DEFAULT false,
     "branch_id" TEXT NOT NULL,
     "intermediate_id" TEXT,
     "countryId" TEXT,
     "cityId" TEXT,
+    "paymentChoiceId" TEXT,
+    "paid" BOOLEAN NOT NULL DEFAULT false,
+    "paymentType" "PaymentType" NOT NULL DEFAULT 'contant',
 
     CONSTRAINT "Command_pkey" PRIMARY KEY ("id")
 );
@@ -350,7 +393,8 @@ CREATE TABLE "Command" (
 CREATE TABLE "CommandLine" (
     "commandId" TEXT NOT NULL,
     "articleByBranchId" TEXT NOT NULL,
-    "quantity" INTEGER NOT NULL
+    "quantity" INTEGER NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL
 );
 
 -- CreateTable
@@ -558,9 +602,24 @@ CREATE TABLE "ClientPayment" (
     "id" TEXT NOT NULL,
     "clientId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
+    "type" "AmountType" NOT NULL DEFAULT 'credit',
+    "label" TEXT NOT NULL,
+    "commandId" TEXT,
+    "payementChoiseId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "ClientPayment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FinancialCommitment" (
+    "id" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "clientId" TEXT NOT NULL,
+    "commandId" TEXT,
+    "payementStatus" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "FinancialCommitment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -906,7 +965,13 @@ ALTER TABLE "JobTitleByFunctioanArea" ADD CONSTRAINT "JobTitleByFunctioanArea_fu
 ALTER TABLE "JobTitleByFunctioanArea" ADD CONSTRAINT "JobTitleByFunctioanArea_jobTitleId_fkey" FOREIGN KEY ("jobTitleId") REFERENCES "JobTitle"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Client" ADD CONSTRAINT "Client_typeId_fkey" FOREIGN KEY ("typeId") REFERENCES "TypeClient"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Client" ADD CONSTRAINT "Client_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Media"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Client" ADD CONSTRAINT "Client_civilStatusId_fkey" FOREIGN KEY ("civilStatusId") REFERENCES "CivilStatus"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Client" ADD CONSTRAINT "Client_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "ClientCategory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -1029,6 +1094,9 @@ ALTER TABLE "Command" ADD CONSTRAINT "Command_countryId_fkey" FOREIGN KEY ("coun
 ALTER TABLE "Command" ADD CONSTRAINT "Command_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Command" ADD CONSTRAINT "Command_paymentChoiceId_fkey" FOREIGN KEY ("paymentChoiceId") REFERENCES "PaymentChoice"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "CommandLine" ADD CONSTRAINT "CommandLine_commandId_fkey" FOREIGN KEY ("commandId") REFERENCES "Command"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -1132,6 +1200,18 @@ ALTER TABLE "TrainingBooking" ADD CONSTRAINT "TrainingBooking_sessionTarifId_fke
 
 -- AddForeignKey
 ALTER TABLE "ClientPayment" ADD CONSTRAINT "ClientPayment_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClientPayment" ADD CONSTRAINT "ClientPayment_commandId_fkey" FOREIGN KEY ("commandId") REFERENCES "Command"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ClientPayment" ADD CONSTRAINT "ClientPayment_payementChoiseId_fkey" FOREIGN KEY ("payementChoiseId") REFERENCES "PaymentChoice"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "FinancialCommitment" ADD CONSTRAINT "FinancialCommitment_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "FinancialCommitment" ADD CONSTRAINT "FinancialCommitment_commandId_fkey" FOREIGN KEY ("commandId") REFERENCES "Command"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MediaProvider" ADD CONSTRAINT "MediaProvider_mediaId_fkey" FOREIGN KEY ("mediaId") REFERENCES "Media"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

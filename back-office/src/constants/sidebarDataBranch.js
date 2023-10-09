@@ -40,34 +40,34 @@ export const sidebarDataBranch = [
     path: "CRM",
     children: [
       {
-          nameEn: "Client",
-          nameAr: "المستخدم",
-          path: "client"
+        nameEn: "Client",
+        nameAr: "المستخدم",
+        path: "client",
       },
       {
         nameEn: "education Level",
-        nameAr: "education Level",
-        path: "educationLevel"
-      },
-      {
-        nameEn: "city",
-        nameAr: "city",
-        path: "cities"
+        nameAr: "المستوى التعليمي",
+        path: "educationLevel",
       },
       {
         nameEn: "functional Area",
-        nameAr: "functional Area",
-        path: "functionalArea"
+        nameAr: "المجال مهني",
+        path: "functionalArea",
       },
       {
         nameEn: "job Title",
-        nameAr: "job Title",
-        path: "jobTitle"
+        nameAr: "الوظائف",
+        path: "jobTitle",
       },
       {
         nameEn: "country",
-        nameAr: "country",
-        path: "Countrie"
+        nameAr: "البلدان",
+        path: "Countrie",
+      },
+      {
+        nameEn: "city",
+        nameAr: "المدن",
+        path: "cities",
       },
     ],
   },
@@ -126,7 +126,7 @@ export const sidebarDataBranch = [
       {
         nameEn: "List of users",
         nameAr: "المستخدم",
-        path: "users"
+        path: "users",
       },
       {
         nameEn: "Space",
@@ -134,9 +134,9 @@ export const sidebarDataBranch = [
         path: "space",
       },
       {
-      nameEn: "Trainings",
-      nameAr: "المبيعات ",
-      path: "training",
+        nameEn: "Trainings",
+        nameAr: "المبيعات ",
+        path: "training",
       },
     ],
   },
@@ -173,6 +173,5 @@ export const sidebarDataBranch = [
         path: "users",
       },
     ],
-  }
-
+  },
 ];

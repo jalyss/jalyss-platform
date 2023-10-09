@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { FilterClient } from './types';
+import { skip } from 'rxjs';
 
 @Injectable()
 export class ClientsService {
@@ -14,7 +16,18 @@ export class ClientsService {
     });
   }
 
-  findAll() {
+  findAll(filters: FilterClient) {
+    let where = {};
+    let skip = 0;
+    let take = 10;
+    if (filters.skip) skip = +filters.skip;
+    if (filters.take) take = +filters.take;
+    if (filters.fullNameEn)
+      where['fullNameEn'] = {
+        contains: filters.fullNameEn,
+      };
+
+      
     return this.prisma.client.findMany({
       include: {
         avatar: true,
@@ -25,10 +38,10 @@ export class ClientsService {
         functionalArea: true,
       },
       orderBy: { createdAt: 'asc' },
+      where,
+      skip,
+      take,
     });
-  }
-  findAllCitites() {
-    return this.prisma.client.findMany();
   }
 
   async findOne(id: string) {

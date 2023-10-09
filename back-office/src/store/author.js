@@ -18,7 +18,7 @@ export const createAuthor = createAsyncThunk("authors/createAuthor", async (body
   let token = JSON.parse(localStorage.getItem('tokenAdmin'))
   const configs = {
     headers: {
-      Authorization: 'Bearer ' + token
+      Authorization: 'Bearer ' + token.Authorization
     }
   }
   const response = await axios.post(`${config.API_ENDPOINT}/authors`, body, configs);

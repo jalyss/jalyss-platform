@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { chatSeed } from './seeds/chatSeed';
+import { paymentChoiceSeed } from './seeds/paymentChoiceSeed';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -291,9 +292,9 @@ async function main() {
   });
   let developer1 = await prisma.employee.create({
     data: {
-      fullNameAr: 'وسيم',
-      fullNameEn: 'wassim',
-      email: 'wassim@jalyss.com',
+      fullNameAr: 'شروق دربال',
+      fullNameEn: 'Chourouk Derbel',
+      email: 'chourouk.derbel@jalyss.com',
       address: 'tunis-carthage',
       tel: '45454545',
 
@@ -304,9 +305,9 @@ async function main() {
   });
   let developer1User = await prisma.user.create({
     data: {
-      fullNameAr: 'وسيم',
-      fullNameEn: 'wassim',
-      email: 'wassim@jalyss.com',
+      fullNameAr: 'شروق دربال',
+      fullNameEn: 'Chourouk Derbel',
+      email: 'chourouk.derbel@jalyss.com',
       isClient: false,
       employeeId: developer1.id,
       password: await bcrypt.hash('1234', saltEm),
@@ -1218,7 +1219,7 @@ async function main() {
   let mainBranch = await prisma.branch.create({
     data: {
       name: 'Main',
-      identifier: 'Main',
+      identifier: 'MAIN',
       address: 'sfax ambra immeuble ',
       mainBranch: true,
     },
@@ -1226,7 +1227,7 @@ async function main() {
   let maBranch = await prisma.branch.create({
     data: {
       name: 'Marroco',
-      identifier: 'Ma',
+      identifier: 'MA',
       address: 'Marrakch ',
       mainBranch: true,
     },
@@ -1438,6 +1439,7 @@ async function main() {
           branchId: branch.id,
           countryId: countryIds[Math.floor(Math.random() * countryIds.length)],
           cityId: cityIds[Math.floor(Math.random() * cityIds.length)],
+          totalAmount:0
         },
       }),
     );
@@ -2052,6 +2054,7 @@ async function main() {
     featuresIds.push(features.id);
   }
   chatSeed(prisma, usersIds);
+  paymentChoiceSeed(prisma)
   console.log(users);
   console.log(articles);
 }
