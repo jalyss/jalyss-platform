@@ -12,6 +12,7 @@ import { liquidColorFilters } from 'liquidjs-color-filters';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
+  app.enableCors();
   app.useStaticAssets('upload',{prefix:'/upload'})
   app.useStaticAssets(join(__dirname, '../../../back-office', 'build'))
   
@@ -26,7 +27,6 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  app.enableCors();
   SwaggerModule.setup('api', app, document);
   await app.listen(3001);
 }
