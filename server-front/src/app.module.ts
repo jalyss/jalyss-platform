@@ -1,14 +1,8 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -18,7 +12,7 @@ import { join } from 'path';
         cacheControl: false,
         etag: false,
       },
-      rootPath: join(__dirname, '../../../front', 'build'),
+      rootPath: join(__dirname, '../../front', 'build'),
       // serveRoot: '/back-office',
       // renderPath: '/back-office',
     }),
@@ -26,8 +20,4 @@ import { join } from 'path';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer): void {
-    //   consumer.apply(FrontendMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}
