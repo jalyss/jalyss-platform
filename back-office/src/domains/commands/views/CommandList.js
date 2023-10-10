@@ -1,261 +1,150 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button } from '@mui/material'
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import { useDispatch, useSelector } from 'react-redux'
-import isEnglish from '../../../helpers/isEnglish';
-import { useNavigate } from 'react-router-dom';
-import { GiConfirmed, GiCancel } from 'react-icons/gi';
+import React, { useEffect, useState } from "react";
+import { Box, Button } from "@mui/material";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { useDispatch, useSelector } from "react-redux";
+import isEnglish from "../../../helpers/isEnglish";
+import { useNavigate } from "react-router-dom";
+import { GiConfirmed, GiCancel, GiMoneyStack } from "react-icons/gi";
 import { AiFillDelete, AiFillEdit, AiOutlineEye } from "react-icons/ai";
-import { FcCancel } from 'react-icons/fc';
-import { GrAdd } from 'react-icons/gr';
-import { TbTruckDelivery } from 'react-icons/tb';
-import DeleteModal from "../../../components/Commun/Modal";
+import { FcCancel } from "react-icons/fc";
+import { GrAdd } from "react-icons/gr";
+import { TbTruckDelivery } from "react-icons/tb";
+import Modal from "../../../components/Commun/Modal";
 
-import { showErrorToast, showSuccessToast } from '../../../utils/toast';
-import Modal from 'react-bootstrap/Modal';
-import { fetchCommands, deleteCommand } from '../../../store/command';
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+
+import {
+  fetchCommands,
+  deleteCommand,
+  updatePaidCommandStatus,
+  updateDeliveredCommandStatus,
+} from "../../../store/command";
+import CreateButton from "../../../components/Commun/buttons/CreateButton";
+import CancelButton from "../../../components/Commun/buttons/CancelButton";
 
 function CommandList() {
-  const [show, setShow] = useState(false);
-  const [elementId, setElementId] = useState();
-  const [basicModalDelete, setBasicModalDelete] = useState(false);
+  const dispatch = useDispatch();
+  const isEng = isEnglish();
+  const navigate = useNavigate();
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [selected, setSelected] = useState();
+  const [showModalPaid, setShowModalPaid] = useState(false);
+  const [showModalDelivered, setShowModalDelivered] = useState(false);
+
   const columns = [
-
-    // {
-    //   field: '',
-    //   headerName: 'TOTAL',
-    //   width: 100,
-    //   sortable: true,
-
-    // },
     {
-      field: 'clientName',
-      headerName: 'NAME CLIENT',
+      field: "clientName",
+      headerName: "NAME CLIENT",
       width: 150,
       editable: true,
-
     },
     {
-      field: 'clientTel',
-      headerName: 'PHONE CLIENT ',
+      field: "clientTel",
+      headerName: "PHONE CLIENT ",
       width: 150,
       sortable: false,
-
     },
     {
-      field: 'paid',
-      type: 'actions',
-      headerName: 'PAYMENT STATUS',
-      width: 110,
-      cellClassName: 'actions',
-      getActions: ({ id, row }) => {
-        return [
-          row.paid ? (
-            <GridActionsCellItem
-              icon={<GiConfirmed size={20} color='#3cb371' />}
-              label="confirmPaid"
-              className="textPrimary"
-              onClick={() => handleEditClick(id)}
-              color="inherit"
-            />
-          ) : (
-            <GridActionsCellItem
-              icon={<FcCancel size={15} />}
-              label="confirmPaid"
-              className="textPrimary"
-              onClick={() => handleEditClick(id)}
-              color="inherit"
-            />
-          ),
-        ];
-      },
-    },
-
-
-    {
-      field: 'hasDelivery',
-      headerName: 'HAS DELIVERY',
-      width: 130,
-      sortable: true,
-      renderCell: ({ value }) => (value ? 'Yes' : 'No'), // Render 'Yes' or 'No' instead of boolean
-
-    },
-
-    {
-      field: 'confirm',
-      type: 'actions',
-      headerName: 'CONFIRM',
-      width: 100,
-      cellClassName: 'actions',
-      getActions: ({ id, row }) => {
-        return [
-          row.confirm ? (
-            <GridActionsCellItem
-              icon={<GiConfirmed size={20} color='#3cb371' />}
-              label="confirm"
-              className="textPrimary"
-              onClick={() => handleEditClick(id)}
-              color="inherit"
-            />
-          ) : (
-            <GridActionsCellItem
-              icon={<FcCancel size={15} />}
-              label="confirm"
-              className="textPrimary"
-              onClick={() => handleEditClick(id)}
-              color="inherit"
-            />
-          ),
-        ];
-      },
-    },
-
-    {
-      field: 'delivered',
-      type: 'actions',
-      headerName: 'DELIVERY STATUS',
-      width: 130,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-        return [
-          // <GridActionsCellItem
-          //   icon={<GiCancel color='red' size={15} />}
-
-          //   label="confirm"
-          //   className="textPrimary"
-          //   onClick={() => handleEditClick(id)}
-          //   color="inherit"
-          // />,
-          <GridActionsCellItem
-            icon={<TbTruckDelivery size={20} />}
-            label="Edit"
-            className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-
-
-        ];
-
-      },
-    },
-    {
-      field: 'createdAt',
-      headerName: 'DATE',
+      field: "createdAt",
+      headerName: "DATE",
       width: 100,
       sortable: true,
-
-
+      valueGetter: (params) => {
+        return `${params.row.createdAt.slice(0, 10)}`;
+      },
     },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'ACTIONS',
-      width: 90,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-
+      field: "hasDelivery",
+      headerName: "HAS DELIVERY",
+      width: 130,
+      sortable: true,
+      renderCell: ({ value }) => (value ? "Yes" : "No"), // Render 'Yes' or 'No' instead of boolean
+    },
+    {
+      field: "confirm",
+      headerName: "CONFIRM Status",
+      width: 150,
+      sortable: true,
+    },
+    {
+      field: "paid",
+      headerName: "PAYMENT STATUS",
+      width: 150,
+      sortable: true,
+      renderCell: ({ value }) => (value ? "Yes" : "No"),
+    },
+    {
+      field: "delivered",
+      headerName: "DELIVERY STATUS",
+      width: 130,
+      renderCell: ({ value }) => (value ? "Yes" : "No"),
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "ACTIONS",
+      width: 200,
+      cellClassName: "actions",
+      getActions: ({ id, row }) => {
         return [
           <GridActionsCellItem
-            icon={<AiOutlineEye color='#8b008b' size={15} />}
+            icon={<AiOutlineEye color="#8b008b" size={25} />}
             label="Edit"
             className="textPrimary"
-            onClick={() => handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<AiFillDelete />}
-            label="Delete"
             onClick={() => {
-              setElementId(id)
-              setBasicModalDelete(!basicModalDelete);
-
+              navigate(`/commands/detail/${id}`);
             }}
-            color="error"
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            disabled={row.paid ? true : false}
+            icon={
+              <GiMoneyStack
+                size={25}
+                color="green"
+                onClick={() => {
+                  setSelected(row);
+                  setShowModalPaid(true);
+                }}
+              />
+            }
           />,
 
-
+          <GridActionsCellItem
+            disabled={row.delivered ? true : false}
+            icon={<TbTruckDelivery size={20} color={"coral"} />}
+            onClick={() => {
+              setSelected(row);
+              setShowModalDelivered(true);
+            }}
+          />,
         ];
-
       },
     },
   ];
 
-  const commandStore = useSelector((state) => state.command)
-  console.log(commandStore, "lol")
-  const dispatch = useDispatch()
-  const isEng = isEnglish()
-  const navigate = useNavigate()
-  const [rows, setRows] = useState([])
-  useEffect(() => {
-    dispatch(fetchCommands())
-
-  }, [])
+  const commandStore = useSelector((state) => state.command);
 
   useEffect(() => {
-    if (commandStore.commands.items.length) {
-      let aux = commandStore.commands.items.map(e => {
-        return {
-          ...e, createdAt: e.createdAt.slice(0, 10),
-        }
-      })
-      console.log(aux);
-      setRows(aux)
-    }
-  }, [commandStore.commands.items])
-
-  const handleEditClick = (id) => {
-    console.log(id);
-    navigate(`detail/${id}`)
-
-  };
-
-  const handleDelete = () => {
-    console.log(elementId)
-    dispatch(deleteCommand(elementId)).then((res) => {
-      if (res.error) {
-        showErrorToast(res.error.message);
-      } else {
-        showSuccessToast("Command has been deleted");
-        dispatch(fetchCommands());
-        setBasicModalDelete(false);
-      }
-    });
-  };
+    dispatch(fetchCommands());
+  }, []);
 
   return (
     <div>
-      <DeleteModal
-        toggleShow={() => { setBasicModalDelete(!true) }}
-        basicModal={basicModalDelete}
-        setBasicModal={setBasicModalDelete}
-        normal={!true}
-        ofDelete={true}
-        bodOfDelete={
-          <div className="d-flex justify-content-center align-items-center">
-            You want to Delete this command ?
-          </div>
-        }
-        confirm={() => {
-          handleDelete();
-        }}
-      />
-      <div>
-        <Button type='button' onClick={() => navigate(`create`)} variant="outlined" endIcon={<GrAdd />} >
-          <span className='btn btn-sm '>
-            Add Order
-          </span>
+      <div className="p-4 d-flex justify-content-end">
+        <Button
+          type="button"
+          onClick={() => navigate(`create`)}
+          variant="outlined"
+          endIcon={<GrAdd />}
+        >
+          <span className="btn btn-sm ">Add Order</span>
         </Button>
       </div>
-      <div className='position-relative'>Orders List
-        <Box sx={{ height: 600, width: '100%' }}>
-
+      <div className="position-relative p-4">
+        <Box sx={{ height: 700, width: "100%" }}>
           <DataGrid
-
-            rows={rows}
+            rows={commandStore.commands.items}
             columns={columns}
             initialState={{
               pagination: {
@@ -264,15 +153,125 @@ function CommandList() {
                 },
               },
             }}
-
             pageSizeOptions={[5]}
-            checkboxSelection
-            disableRowSelectionOnClick
           />
         </Box>
-
       </div>
+      <Modal
+        toggleShow={() => {
+          setShowModalPaid(false);
+        }}
+        basicModal={showModalPaid}
+        setBasicModal={setShowModalPaid}
+        title="Paid Command"
+        body={
+          ["pending", "refused"].includes(selected?.confirm) ? (
+            <div>
+              <p style={{ color: "red" }}>
+                {" "}
+                You can't update the command becaus it is not confirmed
+              </p>
+
+              <div className="d-flex justify-content-center gap-3 p-3">
+                <CancelButton
+                  onClick={() => {
+                    setShowModalDelivered(false);
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <div>
+              are you sure to update command status to paid{" "}
+              <div className="d-flex justify-content-center gap-3 p-3">
+                <CancelButton
+                  onClick={() => {
+                    setShowModalPaid(false);
+                  }}
+                />
+                <CreateButton
+                  title="Confirm"
+                  onClick={() => {
+                    dispatch(
+                      updatePaidCommandStatus({ id: selected.id, status: true })
+                    ).then((res) => {
+                      if (!res.error) {
+                        showSuccessToast("Command has been Paid");
+                        setShowModalPaid(false);
+                      } else {
+                        console.log(res);
+                        showErrorToast(res.error.message);
+                      }
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          )
+        }
+        normal
+        noButtons
+        noFooter
+      />
+      <Modal
+        toggleShow={() => {
+          setShowModalDelivered(false);
+        }}
+        basicModal={showModalDelivered}
+        setBasicModal={setShowModalDelivered}
+        title="Paid Command"
+        body={
+          ["pending", "refused"].includes(selected?.confirm) ? (
+            <div>
+              <p style={{ color: "red" }}>
+                You can't update the command becaus it is not confirmed
+              </p>
+
+              <div className="d-flex justify-content-center gap-3 p-3">
+                <CancelButton
+                  onClick={() => {
+                    setShowModalDelivered(false);
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            <div>
+              are you sure to update command status to Delivered{" "}
+              <div className="d-flex justify-content-center gap-3 p-3">
+                <CancelButton
+                  onClick={() => {
+                    setShowModalDelivered(false);
+                  }}
+                />
+                <CreateButton
+                  title="Confirm"
+                  onClick={() => {
+                    dispatch(
+                      updateDeliveredCommandStatus({
+                        id: selected.id,
+                        status: true,
+                      })
+                    ).then((res) => {
+                      if (!res.error) {
+                        showSuccessToast("Command has been Delivered");
+                        setShowModalDelivered(false);
+                      } else {
+                        console.log(res);
+                        showErrorToast(res.error.message);
+                      }
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          )
+        }
+        normal
+        noButtons
+        noFooter
+      />
     </div>
-  )
+  );
 }
-export default CommandList
+export default CommandList;

@@ -88,8 +88,7 @@ function Router() {
                   element={<SavedTraining />}
                 />
                 <Route path="orders-history" element={<OrderHistory />} />
-                <Route path="Space-Booked" element={<SpaceBooked/>} />
-
+                <Route path="Space-Booked" element={<SpaceBooked />} />
               </Route>
             ) : (
               <>
@@ -121,15 +120,19 @@ function Router() {
               element={<ServiceSpace />}
             /> */}
             <Route path="spaceJalyss" element={<SpaceJalyss />} />
-            <Route path="spaceJalyss/:serviceIdentifier" element={<ServiceSpace />} />
-            
-
+            <Route
+              path="spaceJalyss/:serviceIdentifier"
+              element={<ServiceSpace />}
+            />
 
             <Route path="update-blog/:blogId" element={<UpdateBlog />} />
             <Route path="sessions/:sessionId" element={<SessionDetails />} />
 
             <Route path="RegisterForm" element={<RegisterForm />} />
-            <Route path="SpaceReservation/:tarifId/:workSpaceId" element={<SpaceReservation />} />
+            <Route
+              path="SpaceReservation/:tarifId/:workSpaceId"
+              element={<SpaceReservation />}
+            />
             <Route path="/:workspaceId" element={<WorkSpaceDetail />} />
           </Route>
         </Routes>

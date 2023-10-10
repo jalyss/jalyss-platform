@@ -38,6 +38,8 @@ import { JobTitlesModule } from './domains/job-titles/job-titles.module';
 import { EducationLevelsModule } from './domains/education-levels/education-levels.module';
 // import { SearchController } from './search/search.controller';
 import { SearchEngineModule } from './search-engine/search-engine.module';
+import { ClientCategoryModule } from './domains/client-categories/client-categories.module';
+import { PaymentChoiceModule } from './domains/paymentChoices/paymentChoice.module';
 
 @Module({
   imports: [
@@ -72,15 +74,13 @@ import { SearchEngineModule } from './search-engine/search-engine.module';
     
    
     ProvidersModule,
-
     FunctionalAreasModule,
-
     JobTitlesModule,
-
     EducationLevelsModule,
-
     SearchEngineModule,
     ClientsModule,
+    ClientCategoryModule,
+    PaymentChoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, MediasService],

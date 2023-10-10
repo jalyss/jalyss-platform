@@ -1,453 +1,391 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCountries, findAllCitites } from "../../../store/Country";
-import validate from "../../../utils/form-validation";
-import useForm from "../../../hooks/data-validation";
-// import initialState from "./initialSate";
-const initialState = {
-  nameAr: {
-    value: "",
-    required: true,
-  },
-  nameEn: {
-    value: "",
-    required: true,
-  },
-  number: {
-    value: "",
-    required: false,
-  },
-  email: {
-    value: "",
-    required: true,
-    requiredMessage: "Email address is required!",
-    email: true,
-    emailMessage: "Email address is not valid!",
-  },
-  password: {
-    value: "",
-    required: true,
-    minLength: 6,
-    minLengthMessage: "at least 6 characters long!",
-    maxLength: 16,
-    maxLengthMessage: "Too many characters!",
-  },
-  confirmPassword: {
-    value: "",
-    required: true,
-    matchWith: "password",
-    matchWithMessage: "Passwords must be equal!",
-  },
-  jobEn: {
-    value: "",
-    required: false,
-  },
-  jobAr: {
-    value: "",
-    required: false,
-  },
+import { fetchCountries } from "../../../store/Country";
+import SaveButton from "../../../components/Commun/buttons/SaveButton";
+import { fetchCities } from "../../../store/city";
+import { fetchClientCategories } from "../../../store/clientCategory";
+import { createClient } from "../../../store/client";
+import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import { useNavigate } from "react-router-dom";
+import {
+  MDBCol,
+  MDBContainer,
+  MDBRow,
+  MDBCard,
+  MDBCardText,
+  MDBCardBody,
+  MDBCardImage,
+  MDBNavbarNav,
+  MDBNavbarItem,
+  MDBNavbarLink,
+  MDBNavbar,
+} from "mdb-react-ui-kit";
+import Dropdown from "react-bootstrap/Dropdown";
+import CropEasy from "../../../components/CropEasy";
+import CancelButton from "../../../components/Commun/buttons/CancelButton";
+import { fetchFunctionalAreas } from "../../../store/functionalArea";
+import { fetchEducationLevels } from "../../../store/educationLevel";
 
-  country: {
-    value: "",
-    required: false,
-  },
-  cities: {
-    value: "",
-    required: false,
-  },
-};
+const AddClient = () => {
+  const navigate = useNavigate();
+  const [preview, setPreview] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+  const [openCrop, setOpenCrop] = useState(false);
 
-const Addclient = () => {
   const countries = useSelector((state) => state.country.countries.items);
-  const { formData, errors, changeHandler, setErrors } = useForm(
-    initialState,
-    validate
+  const categories = useSelector(
+    (state) => state.clientCategory.categories.items
   );
+  const cities = useSelector((state) => state.city.cities.items);
+  const functionalAreas = useSelector((state) => state.functionalArea.functionalAreas.items);
+  const educationLevels = useSelector((state) => state.educationLevel.educationLevels.items);
+  const [client, setClient] = useState({});
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCountries());
-  }, []);
+    dispatch(fetchFunctionalAreas())
+    dispatch(fetchEducationLevels())
+    dispatch(fetchClientCategories());
+  }, [dispatch]);
+  useEffect(() => {
+    if (client.countryId) dispatch(fetchCities(client.countryId));
+  }, [dispatch, client?.countryId]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setClient((Client) => ({ ...Client, [name]: value }));
+  };
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setPreview(URL.createObjectURL(file));
+    setAvatar(file);
+    setOpenCrop(true);
+  };
+ 
+  const handleRemoveImage = () => {
+    let aux = { id: user.id };
+    setPreview(null);
+    setAvatar(null);
+
+    aux.avatarId = null;
+
+    dispatch(authUpdate(aux)).then((res) => {
+      if (!res.error) {
+        showSuccessToast(t("user.updated"));
+
+        toggleShowDeleteModal();
+      } else {
+        console.log(res);
+        showErrorToast(res.error.message);
+      }
+    });
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("hi");
-    let newErrors = validate(formData, true);
-    console.log(newErrors);
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      const data = new FormData();
-      data.append("nameAr", formData.nameAr.value);
-      data.append("nameEn", formData.nameEn.value);
-
-      data.append("email", formData.email.value);
-      data.append("password", formData.password.value);
-      data.append("number", formData.number.value);
-      data.append("country", formData.country.value);
-      data.append("cities", formData.cities.value);
-      data.append("jobAr", formData.jobAr.value);
-      data.append("jobEn", formData.jobEn.value);
-
-      console.log("form can be submitted...");
-      for (let pair of data.entries()) {
-        console.log(`${pair[0]}:`, pair[1]);
+    dispatch(createClient(client)).then((res) => {
+      if (!res.error) {
+        showSuccessToast("Client has been created");
+        navigate(-1);
+      } else {
+        console.log(res);
+        showErrorToast(res.error.message);
       }
-    }
+    });
   };
   return (
-    <div
-      className="modal fade"
-      id="staticBackdrop"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
-      tabIndex="-1"
-      aria-labelledby="staticBackdropLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div className="modal-content">
-          <form onSubmit={(e) => handleSubmit(e)} className="form">
-            <div
-              style={{ backgroundColor: "rgb(77,24,71)" }}
-              className="modal-header"
-            >
-              <h1
-                className="modal-title fs-5"
-                style={{ color: "white" }}
-                id="staticBackdropLabel"
-              >
-                Add client
-              </h1>
-              <button
-                //   style={{ : "white" }}
-                type="button"
-                className="btn-close btn-light"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div
-              // style={{ backgroundColor: "rgb(249,234,250)" }}
-              className="modal-body d-flex justify-content-center align-items-center flex-column"
-            >
-              <div className="d-flex gap-2 mb-3">
-                <div className="">
-                  <label htmlFor="nameAr" className="form-label">
-                    Full Name arabic
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control rounded"
-                    id="nameAr"
-                    name="nameAr"
-                    onChange={changeHandler}
-                    value={formData.nameAr.value}
-                    placeholder="arabic Name"
-                    error={errors.nameAr}
-                  />
-                  {errors.nameAr && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
+    <div>
+      <h2
+        className=" text-center"
+        style={{
+          color: "white",
+          backgroundColor: "rgb(77,24,71)",
+          margin: 0,
+        }}
+      >
+        Add client
+      </h2>
+      {!openCrop ? (
+        <>
+          <div className="d-flex justify-content-center">
+            <MDBCol lg="4">
+              <MDBCard className="mb-4">
+                <MDBCardBody>
+                  <div
+                    className="text-center d-flex justify-content-center "
+                    style={{ marginleft: 100 }}
+                  >
+                    <div className="position-relative">
+                      <MDBCardImage
+                        src={
+                          preview
+                            ? preview
+                            : client?.avatar?.path ||
+                              "https://static-00.iconduck.com/assets.00/user-avatar-icon-512x512-vufpcmdn.png"
+                        }
+                        alt=" "
+                        style={{
+                          width: "200px",
+                          height: "200px",
+                          objectFit: "cover",
+                        }}
+                        className="rounded-circle"
+                        fluid
+                      />
 
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.nameAr}
-                    </p>
-                  )}
-                </div>
-                <div className="">
-                  <label htmlFor="nameEn" className="form-label">
-                    Full Name English
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control rounded"
-                    id="nameEn"
-                    name="nameEn"
-                    onChange={changeHandler}
-                    value={formData.nameEn.value}
-                    placeholder="English Name"
-                    error={errors.nameEn}
-                  />
-                  {errors.nameEn && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
+                      <Dropdown
+                        className="position-absolute"
+                        style={{ bottom: 15, right: 15 }}
+                      >
+                        <Dropdown.Toggle
+                          className="ellipsis-btn dropdownToggleBlogCard upbtn"
+                          style={{
+                            all: "unset",
+                            // backgroundColor:'purple', borderRadius:30
+                          }}
+                        >
+                          <span style={{ color: "white" }}>&#8942;</span>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu size="sm" title="">
+                          <>
+                            <Dropdown.Item
+                              style={{ position: "relative" }}
+                              onClick={(event) => {
+                                document.getElementById("upload-image").click();
+                              }}
+                            >
+                              Upload new Avatar
+                            </Dropdown.Item>
+                            <input
+                              id="upload-image"
+                              type="file"
+                              accept="image/*"
+                              style={{
+                                display: "none",
+                              }}
+                              onChange={handleImageChange}
+                            />
+                          </>
+                          {client.avatar && (
+                            <Dropdown.Item onClick={toggleShowDeleteModal}>
+                              Delete{" "}
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                className="delete-icon"
+                              />
+                            </Dropdown.Item>
+                          )}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+                  </div>
 
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.nameEn}
-                    </p>
+                  {preview && (
+                    <div className="d-flex gap-3 justify-content-center m-3">
+                      <CancelButton
+                        type="button"
+                        className="cancel-button"
+                        onClick={() => {
+                          setPreview(false);
+                        }}
+                      />
+
+                     
+                    </div>
                   )}
-                </div>
+                </MDBCardBody>
+              </MDBCard>
+            </MDBCol>
+          </div>
+          <form
+            onSubmit={(e) => handleSubmit(e)}
+            className="p-5"
+            // style={{ backgroundColor: "rgb(249,234,250)" }}
+          >
+            <div className="d-flex flex-wrap gap-5 justify-content-center ">
+              <div>
+                <label className="form-label">Full Name arabic</label>
+                <input
+                  required
+                  style={{ width: 300 }}
+                  className="form-control rounded"
+                  name="fullNameAr"
+                  onChange={handleChange}
+                  value={client?.fullNameAr}
+                  placeholder="جليس حريف"
+                />
               </div>
-              <div className="d-flex gap-2 mb-3">
-                <div className="">
-                  <label htmlFor="email" className="form-label">
-                    Email address
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control rounded"
-                    style={{ padding: "10px" }}
-                    id="email"
-                    placeholder="name@example.com"
-                    name="email"
-                    value={formData.email.value}
-                    onChange={changeHandler}
-                    error={errors.email}
-                  />
-                  {errors.email && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
-
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
-                <div className="">
-                  <label htmlFor="number" className="form-label">
-                    Phone number
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control rounded"
-                    id="number"
-                    name="number"
-                    value={formData.number.value}
-                    onChange={changeHandler}
-                    error={errors.number}
-                    placeholder="Phone number"
-                  />
-                  {errors.number && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
-
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.number}
-                    </p>
-                  )}
-                </div>
+              <div>
+                <label className="form-label">Full Name English</label>
+                <input
+                  required
+                  style={{ width: 300 }}
+                  className="form-control rounded"
+                  name="fullNameEn"
+                  onChange={handleChange}
+                  value={client?.fullNameEn}
+                  placeholder="Jalyss Client"
+                />
               </div>
-              <div className="d-flex gap-2 mb-3">
-                <div className="">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    name="password"
-                    value={formData.password.value}
-                    onChange={changeHandler}
-                    error={errors.password}
-                    type="password"
-                    className="form-control rounded"
-                    id="password"
-                    placeholder="Password"
-                  />
-                  {errors.password && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
 
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.password}
-                    </p>
-                  )}
-                </div>
-                <div className="">
-                  <label htmlFor="confirmPassword" className="form-label">
-                    Repeat password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control rounded"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword.value}
-                    onChange={changeHandler}
-                    error={errors.confirmPassword}
-                    placeholder="Repeat your password"
-                  />
-                  {errors.confirmPassword && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
-
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.confirmPassword}
-                    </p>
-                  )}
-                </div>
+              <div>
+                <label className="form-label">Email</label>
+                <input
+                  required
+                  style={{ width: 300 }}
+                  type="email"
+                  className="form-control rounded"
+                  name="email"
+                  onChange={handleChange}
+                  value={client?.email}
+                  placeholder="example@jalyss.com"
+                />
               </div>
-              <div className="d-flex gap-2 mb-3">
-                <div className="">
-                  <label htmlFor="jobEn" className="form-label">
-                    English job title
-                  </label>
-                  <input
-                    type="text"
-                    name="jobEn"
-                    value={formData.jobEn.value}
-                    onChange={changeHandler}
-                    error={errors.jobEn}
-                    className="form-control rounded"
-                    id="jobEn"
-                    placeholder="English job title"
-                  />
-                  {errors.jobEn && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
-
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.jobEn}
-                    </p>
-                  )}
-                </div>
-                <div className="">
-                  <label htmlFor="jobAr" className="form-label">
-                    Arabic job title
-                  </label>
-                  <input
-                    type="text"
-                    name="jobAr"
-                    value={formData.jobAr.value}
-                    onChange={changeHandler}
-                    error={errors.jobAr}
-                    className="form-control rounded"
-                    id="jobAr"
-                    placeholder="Arabic job title"
-                  />
-                  {errors.jobAr && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
-
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.jobAr}
-                    </p>
-                  )}
-                </div>
+              <div>
+                <label className="form-label">telephone</label>
+                <input
+                  required
+                  style={{ width: 300 }}
+                  type="telephone"
+                  className="form-control rounded"
+                  name="tel"
+                  onChange={handleChange}
+                  value={client?.tel}
+                  placeholder="55 555 555"
+                />
               </div>
-              <div className="d-flex gap-2 mb-3" style={{ width: "inherit" }}>
+              <div>
+                <label className="form-label">َAddress</label>
+                <input
+                  required
+                  style={{ width: 300 }}
+                  type="telephone"
+                  className="form-control rounded"
+                  name="address"
+                  onChange={handleChange}
+                  value={client?.address}
+                  placeholder="العنبرة"
+                />
+              </div>
+
+              <div>
+                <label className="form-label">Category Client</label>
                 <select
-                  name="country"
-                  id="country"
-                  defaultValue="your country"
-                  value={formData.country.value}
-                  onChange={changeHandler}
-                  // style={{ width: "inherit" }}
-                  className="form-select form-select"
-                  aria-label="Small select example"
+                  style={{ width: 300 }}
+                  className="form-control rounded"
+                  name="nameAr"
+                  onChange={handleChange}
+                  value={client?.categoryId}
+                  placeholder="Category"
                 >
-                  {countries.map((country) => (
-                    <option key={country.id} value={country.nameEn}>
+                  {categories.map((country) => (
+                    <option key={country.id} value={country.id}>
                       {country.nameEn}
                     </option>
                   ))}
-                  {errors.country && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
-
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.country}
-                    </p>
-                  )}
-                </select>
-                <select
-                  name="cities"
-                  id="cities"
-                  value={formData.cities.value}
-                  onChange={changeHandler}
-                  // style={{ width: "inherit" }}
-                  defaultValue="Your city"
-                  className="form-select form-select"
-                  aria-label="Small select example"
-                >
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                  {errors.country && (
-                    <p
-                      style={{
-                        fontSize: "0.7rem",
-
-                        margin: "0.2rem 0px 0px 0px",
-                        padding: 0,
-                      }}
-                      className="text-sm text-danger"
-                    >
-                      {errors.country}
-                    </p>
-                  )}
                 </select>
               </div>
-            </div>{" "}
-            <div
-              // style={{ backgroundColor: "rgb(77,24,71)" }}
-              className="modal-footer"
-            >
-              <button
-                style={{ backgroundColor: "rgb(249,234,250)" }}
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                style={{ backgroundColor: "rgb(220,53,69)", border: "none" }}
-                // type="button"
-                className="btn btn-primary"
-                type="submit"
-              >
-                Understood
-              </button>
+
+              <div>
+                <label className="form-label">educationLevelId</label>
+                <select
+                  style={{ width: 300 }}
+                  className="form-control rounded"
+                  name="educationLevelId"
+                  onChange={handleChange}
+                  value={client?.educationLevelId}
+                  placeholder="educationLevelId"
+                >
+                  {categories.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.nameEn}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="form-label">functionalAreaId</label>
+                <select
+                  style={{ width: 300 }}
+                  className="form-control rounded"
+                  name="functionalAreaId"
+                  onChange={handleChange}
+                  value={client?.functionalAreaId}
+                  placeholder="functionalAreaId"
+                >
+                  {categories.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.nameEn}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="form-label">jobTitleId</label>
+                <select
+                  style={{ width: 300 }}
+                  className="form-control rounded"
+                  name="jobTitleId"
+                  onChange={handleChange}
+                  value={client?.jobTitleId}
+                  placeholder="jobTitleId"
+                >
+                  {categories.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.nameEn}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="form-label">countryId</label>
+                <select
+                  style={{ width: 300 }}
+                  name="countryId"
+                  defaultValue="your country"
+                  value={client?.countryId}
+                  onChange={handleChange}
+                  className="form-control rounded"
+                >
+                  {countries.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.nameEn}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="form-label">cityId</label>
+                <select
+                  name="cityId"
+                  style={{ width: 300 }}
+                  value={client?.cities}
+                  onChange={handleChange}
+                  defaultValue="Your city"
+                  className="form-control rounded"
+                >
+                  {cities.map((city) => (
+                    <option key={city.id} value={city.id}>
+                      {city.nameEn}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="d-flex justify-content-center p-5">
+              <SaveButton onSubmit={handleSubmit} title={"create"} />
             </div>
           </form>
-        </div>
-      </div>
+        </>
+      ) : (
+        <CropEasy
+          {...{ preview, setPreview, setOpenCrop, avatar, setAvatar }}
+        />
+      )}
     </div>
   );
 };
 
-export default Addclient;
+export default AddClient;

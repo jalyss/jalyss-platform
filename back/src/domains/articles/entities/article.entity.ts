@@ -9,5 +9,8 @@ export const filterExample = {
   articleTypes: ['string'],
   publishingHouses: ['string'],
   authors : ['string'],
-  skip:1
+  title:'string',
+  skip:1,
+  take:5,
+  code:'0004-1'
 };

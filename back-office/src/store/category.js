@@ -45,8 +45,8 @@ export const createCategory = createAsyncThunk(
 );
 
 export const updateCategory = createAsyncThunk("categories/category", async (args, { dispatch }) => {
-  const { ...rest } = args
-  const response = await axios.patch(`${config.API_ENDPOINT}/categories/${rest.id}`, rest);
+  const { id,...rest } = args
+  const response = await axios.patch(`${config.API_ENDPOINT}/categories/${id}`, rest);
   dispatch(fetchCategories())
   return response.data;
 });
