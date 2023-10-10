@@ -16,7 +16,7 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, '../../../front', 'build'))
 
-  await app.listen(3000);
+  await app.listen(4000);
 }
 
 bootstrap();
