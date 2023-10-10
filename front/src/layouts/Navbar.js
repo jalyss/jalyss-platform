@@ -63,7 +63,7 @@ function Header() {
                   src="https://jalyss.com/img/prestashop-logo-1610973135.jpg"
                 />
               </div>
-              <div className="position-relative header-icon-responsive p-4">
+              <div className="position-relative header-icon-responsive p-4" >
                 <button
                   variant="primary"
                   onClick={handleShow}
@@ -72,7 +72,7 @@ function Header() {
                   <BiCartDownload size="40px" color="white" />
                 </button>
 
-                <div className="position-absolute bottom-50 rounded-circle px-1 bg-yellow">
+                <div className="position-absolute bottom-50 rounded-circle px-1 bg-yellow " style={{ width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                   <p className="m-0">{totalItems}</p>
                 </div>
               </div>

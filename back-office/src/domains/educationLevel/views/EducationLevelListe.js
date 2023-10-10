@@ -40,8 +40,8 @@ function EducationLevelList() {
   console.log(educationLevelStore, "educationLevelStore");
 
   useEffect(() => {
-    if (educationLevelStore?.educationLevels?.items) {
-      let aux = educationLevelStore?.educationLevels?.items.map((e) => {
+    if (educationLevelStore?.educationLevels?.items && Array.isArray(educationLevelStore.educationLevels.items)) {
+      let aux = educationLevelStore.educationLevels.items.map((e) => {
         return {
           id: e.id,
           nameAr: e.nameAr,
@@ -51,7 +51,7 @@ function EducationLevelList() {
       });
       setRows(aux);
     }
-  }, [educationLevelStore.educationLevels.items]);
+  }, [educationLevelStore?.educationLevels?.items]);
 
   const columns = [
     {

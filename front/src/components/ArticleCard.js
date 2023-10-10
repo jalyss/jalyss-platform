@@ -18,7 +18,6 @@ function ArticleCard({ article }) {
       showErrorToast("alredy saved");
     } else {
       addItem(article);
-      showSuccessToast("Article has been saved");
     }
   };
   console.log(article.article, "ddd")

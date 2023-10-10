@@ -122,8 +122,8 @@ import DetailRole from "../domains/roles/view/DetailRole";
 import CreateRole from "../domains/roles/view/CreateRole";
 
 import Client from "../domains/Client/Client";
-import AddClient from "../domains/Client/views/AddClient";
-import ClientList from "../domains/Client/views/ClientList";
+import AddClient from "../domains/Client/views/Addclient";
+import ClientList from "../domains/Client/views/Clientlist";
 import OneClient from "../domains/Client/views/OneClient";
 
 import TypeArticle from "../domains/type/TypeArticle";
