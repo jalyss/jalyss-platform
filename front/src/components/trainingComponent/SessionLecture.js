@@ -4,6 +4,7 @@ import TrainingHeading from "../../components/Commun/TrainingHeading";
 import KeyValueStyled from "../../components/Commun/KeyValueStyled";
 import start from "../../img/start.png";
 import end from "../../img/end.png";
+import "../../assets/styles/sessionLec.css";
 
 function SessionLecture({ lectures }) {
   const [showMore, setShowMore] = useState(false);
@@ -35,7 +36,7 @@ function SessionLecture({ lectures }) {
                       label="content"
                       value={element.lectures.contentEn}
                     />
-                    <div className="d-flex gap-3">
+                    <div className="imgcoche ">
                       <div className="d-flex align-items-center fw-bold">
                         Coaches:
                       </div>

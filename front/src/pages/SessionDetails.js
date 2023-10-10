@@ -18,6 +18,7 @@ import SessionLecture from "../components/trainingComponent/SessionLecture";
 import cardCover from "../img/cardCover.jpg";
 import { fetchSession } from "../store/session";
 import { useDispatch, useSelector } from "react-redux";
+import "../assets/styles/sessionLec.css"
 import { useEffect } from "react";
 
 import ButtonWithTransformAndHover from "../components/Commun/buttons/ButtonWithTransformAndHover";
@@ -143,6 +144,7 @@ function SessionDetails() {
               })
             )}
           </div>
+          
           <div className="d-flex  justify-content-between mt-3">
             <div className="d-flex flex-column justify-content-center align-items-center gap-2 ">
               {" "}
@@ -171,7 +173,7 @@ function SessionDetails() {
         </div>
       </div>
       <div className="d-flex flex-wrap justify-content-around gap-3">
-        <div className="d-flex  gap-4" style={{ display: "flex", flex: 1 }}>
+        <div className="tableWhatPrerequis" style={{ display: "flex", flex: 1 }}>
           <MDBCard
             className="text-white mb-3"
             style={{ alignSelf: "start", flex: 1 }}
@@ -222,11 +224,12 @@ function SessionDetails() {
                   </button>
                 </div>
               )}
+             
             </MDBCardBody>
           </MDBCard>
           <MDBCard
             className="text-white mb-3"
-            style={{ width: "40%", alignSelf: "start", flex: 1 }}
+            style={{ width: "100%", alignSelf: "start", flex: 1 }}
           >
             <MDBCardHeader
               style={{ backgroundColor: "#edcc3f", color: "#000" }}
@@ -234,12 +237,16 @@ function SessionDetails() {
               Prérequis
             </MDBCardHeader>
             <MDBCardBody style={{ color: "#000" }}>
+            
               {session?.sessionHasPrerequire.map((info, index) => (
-                <p key={index}>
+               <div key={index} className="d-flex  mt-2">
+                 
                   <span style={{ fontSize: "1.2rem" }}>&#8226;</span>{" "}
-                  {info.prerequire.contentEn}
-                </p>
+                 <div> {info.prerequire.contentEn}</div>
+                  </div>
+               
               ))}
+               
             </MDBCardBody>
           </MDBCard>
         </div>

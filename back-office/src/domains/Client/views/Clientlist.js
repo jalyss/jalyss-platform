@@ -11,7 +11,6 @@ import { fetchClients } from "../../../store/client";
 import imgAvatar from "../../../assets/images/avatar.jpg";
 import activeIcon from "../../../assets/images/active.png";
 import blockIcon from "../../../assets/images/active.png";
-import EditClient from "./EditClient";
 import lookIcon from "../../../assets/images/look-icon.png";
 import addClient from "../../../assets/images/client.png";
 import Icon from "../../../components/icons/icon";
