@@ -84,7 +84,8 @@ export class ArticleService {
     branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
       .id;
     const insideWhere = {};
-    let skip = 0;
+    let params = {};
+
     //controle query=> filters
     if (Object.entries(filters).length > 0) {
       const errors = [];
@@ -145,10 +146,16 @@ export class ArticleService {
             }
           }
           //skip
-          else if (key === 'skip') skip = Number(value);
+          else if (key === 'skip') params['skip'] = Number(value);
+          else if (key === 'take') params['take'] = Number(value);
           //true or false
-          else if (key === 'title') {
-            insideWhere['article']['title'] = {
+          else if (['title'].includes(key)) {
+            insideWhere['article'][key] = {
+              mode: 'insensitive',
+              contains: value,
+            };
+          } else if (key === 'code') {
+            insideWhere['article'][key] = {
               contains: value,
             };
           } else insideWhere[key] = value;
@@ -181,8 +188,8 @@ export class ArticleService {
         },
       });
     }
-
-    const articlesByBranch = await this.prisma.articlesByBranch.findMany({
+    params = {
+      ...params,
       where: {
         ...insideWhere,
         branchId,
@@ -199,8 +206,11 @@ export class ArticleService {
           },
         },
       },
-      skip,
-    });
+    };
+
+    const articlesByBranch = await this.prisma.articlesByBranch.findMany(
+      params,
+    );
     return await Promise.all(
       articlesByBranch.map(async (elem) => {
         const rating = await this.prisma.rating.groupBy({
@@ -259,6 +269,15 @@ export class ArticleService {
         ? Math.floor(rating[0]._sum.rate / rating[0]._count.rate)
         : 1,
     };
+  }
+
+  async findOneArticleByBranchWithCode(branchId: string, code: string) {
+    branchId = (await this.branchService.findBranchByIdOrIdentifier(branchId))!
+      .id;
+    return await this.prisma.articlesByBranch.findFirst({
+      where: { branchId, article: { code } },
+      include:{article:true}
+    });
   }
 
   async findOne(id: string) {

@@ -12,13 +12,23 @@ export const fetchArticles = createAsyncThunk(
 export const fetchArticlesByBranch = createAsyncThunk(
   "articles/articlesbyBranch",
   async (args) => {
-    const identifier = args.identifier;
-    delete args.identifier;
+    const { identifier, ...rest } = args;
     const response = await axios.get(
       `${config.API_ENDPOINT}/articles/${identifier}`,
-      { params: args }
+      { params: rest }
     );
     return response.data;
+  }
+);
+export const fetchArticleByBranchWithCode = createAsyncThunk(
+  "articles/articleByBranchWithCode",
+  async (args) => {
+    const { identifier, code } = args;
+    const response = await axios.get(
+      `${config.API_ENDPOINT}/articles/one-by-branch-with-code/${identifier}/${code}`
+    );
+    if (response.data) return response.data;
+    else return null;
   }
 );
 
@@ -40,7 +50,10 @@ export const fetchArticleByBranch = createAsyncThunk(
 export const addTransactionStock = createAsyncThunk(
   "transaction",
   async (args, { dispatch }) => {
-    const response = await axios.post(`${config.API_ENDPOINT}/transaction`, args);
+    const response = await axios.post(
+      `${config.API_ENDPOINT}/transaction`,
+      args
+    );
     dispatch(fetchArticles());
     return response.data;
   }
@@ -98,12 +111,10 @@ export const updateArticleByBranch = createAsyncThunk(
 export const removeArticle = createAsyncThunk(
   "articles/removeArticle",
   async (id) => {
- 
-      const response = await axios.delete(
-        `${config.API_ENDPOINT}/articles/${id}`
-      );
-      return response.data;
-   
+    const response = await axios.delete(
+      `${config.API_ENDPOINT}/articles/${id}`
+    );
+    return response.data;
   }
 );
 export const articleSlice = createSlice({
@@ -131,6 +142,9 @@ export const articleSlice = createSlice({
       state.article = action.payload;
     });
     builder.addCase(fetchArticleByBranch.fulfilled, (state, action) => {
+      state.article = action.payload;
+    });
+    builder.addCase(fetchArticleByBranchWithCode.fulfilled, (state, action) => {
       state.article = action.payload;
     });
   },

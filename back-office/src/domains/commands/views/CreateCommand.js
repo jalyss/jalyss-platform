@@ -9,7 +9,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createCommand } from "../../../store/command";
-import { fetchArticlesByBranch } from "../../../store/article";
+import {
+  fetchArticleByBranchWithCode,
+  fetchArticlesByBranch,
+} from "../../../store/article";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import Form from "react-bootstrap/Form";
 import { FaTrash } from "react-icons/fa";
@@ -26,11 +29,13 @@ import { GrEdit } from "react-icons/gr";
 import SaveButton from "../../../components/Commun/buttons/SaveButton";
 import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 import { fetchClients } from "../../../store/client";
+import { useNavigate } from "react-router-dom";
 
 function CreateCommand() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const articlesByBranch = useSelector((state) => state.article.articles.items);
+  const articleByBranch = useSelector((state) => state.article.article);
   const clients = useSelector((state) => state.client.clients.items);
   const countries = useSelector((state) => state.country.countries.items);
   const cities = useSelector((state) => state.country.cities.items);
@@ -46,36 +51,72 @@ function CreateCommand() {
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: null,
     articleByBranchId: null,
+    articleByBranch: null,
   });
   const [Total, setTotal] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [openClients, setOpenClients] = useState(false);
+  const [openArticles, setOpenArticles] = useState(false);
 
   const [editCommandLineIndexes, setEditCommandLineIndexes] = useState([]);
   const [errorQuantity, setErrorQuantity] = useState(false);
   const [loadingClient, setLoadingClients] = useState(false);
+  const [loadingArticles, setLoadingArticles] = useState(false);
   const [typingFullName, setTypingFullName] = useState("");
-
+  const [typingCode, setTypingCode] = useState("");
+  const [typingArticleTitle, setTypingArticleTitle] = useState("");
+  //fetch articles of branch by branchId and articleTitle
   useEffect(() => {
     if (newCommand?.branchId) {
-      dispatch(fetchArticlesByBranch({ identifier: newCommand?.branchId }));
+      setLoadingArticles(true);
+      dispatch(
+        fetchArticlesByBranch({
+          identifier: newCommand?.branchId,
+          title: typingArticleTitle,
+        })
+      ).then((res) => setLoadingArticles(false));
       setNewCommand({ ...newCommand, commandLine: [] });
     }
-  }, [newCommand?.branchId]);
-
+  }, [newCommand?.branchId, typingArticleTitle]);
+  // fetch one article of branch by branchId and code
+  useEffect(() => {
+    if (typingCode)
+      dispatch(
+        fetchArticleByBranchWithCode({
+          identifier: newCommand.branchId,
+          code: typingCode,
+        })
+      );
+  }, [typingCode]);
+  useEffect(() => {
+    if (typingCode) {
+      console.log(articleByBranch);
+      if (articleByBranch) {
+        setNewCommandLine({
+          ...newCommandLine,
+          quantity: 1,
+          articleByBranch: articleByBranch,
+          articleByBranchId: articleByBranch.id,
+        });
+      } else {
+        setNewCommandLine({ quantity: "" });
+      }
+    }
+  }, [articleByBranch]);
+  // fetch command options
   useEffect(() => {
     dispatch(findAllCitites());
     dispatch(findAllBranches());
     dispatch(fetchCountries());
     dispatch(fetchPaymentChoices());
   }, [dispatch]);
-
+  // fetch clients by fullName
   useEffect(() => {
     setLoadingClients(true);
     dispatch(
       fetchClients({ fullNameEn: typingFullName, skip: 0, take: 5 })
     ).then((res) => setLoadingClients(false));
   }, [dispatch, typingFullName]);
-
+  // total Amount for each command line
   useEffect(() => {
     if (newCommand) {
       const newTotal = newCommand?.commandLine?.map(
@@ -84,7 +125,7 @@ function CreateCommand() {
       setTotal(newTotal);
     }
   }, [newCommand]);
-
+  // total Amount of command lines
   const sum = () => {
     let res = 0;
     Total?.map((e, i) => {
@@ -118,12 +159,13 @@ function CreateCommand() {
     dispatch(createCommand({ ...aux, branchId })).then((res) => {
       if (!res.error) {
         showSuccessToast("command created successfully");
-        toggleEditMode();
+        navigate(-1);
       } else {
         showErrorToast(res.error.message);
       }
     });
   };
+  console.log(newCommand.commandLine);
 
   return (
     <div>
@@ -133,31 +175,9 @@ function CreateCommand() {
             Create Command
           </Typography>
           <div className="d-flex gap-3 justify-content-center">
-            {/* <Button
-              disabled={newCommand?.confirm !== "pending"}
-              className="full bg-purple hover-bg-black"
-              onClick={() => {
-                dispatch(
-                  confirmCommand({ id: commandId, status: "confirmed" })
-                );
-              }}
-            >
-              Confirm Command
-            </Button>
-            <Button
-              disabled={newCommand?.confirm !== "pending"}
-              className="btn-danger full "
-              title="refuse Command"
-              onClick={() => {
-                dispatch(confirmCommand({ id: commandId, status: "refused" }));
-              }}
-            >
-              Refuse Command
-            </Button> */}
             <Box mt={4} className="col-4">
               Branch
               <Form.Select
-                // className="form-control rounded"
                 value={newCommand?.branchId}
                 onChange={(e) => {
                   setNewCommand({ ...newCommand, branchId: e.target.value });
@@ -186,7 +206,9 @@ function CreateCommand() {
                 }}
                 size="lg"
               >
-                <option disabled selected >Select Channel</option>
+                <option disabled selected>
+                  Select Channel
+                </option>
                 {commandChannel.map((e, i) => (
                   <option value={e.value} key={i}>
                     {e.nameEn}
@@ -205,13 +227,12 @@ function CreateCommand() {
                     height: "43px !important",
                   },
                 }}
-                
-                open={open}
+                open={openClients}
                 onOpen={() => {
-                  setOpen(true);
+                  setOpenClients(true);
                 }}
                 onClose={() => {
-                  setOpen(false);
+                  setOpenClients(false);
                 }}
                 options={clients}
                 loading={loadingClient}
@@ -430,32 +451,82 @@ function CreateCommand() {
                 </>
               </Box>
             ))}
-
-            <Box mt={3} mb={3} display="flex" alignItems="center">
-              <Form.Select
-                value={newCommandLine?.articleByBranchId||null}
-                onChange={(e) => {
+            {!newCommand.branchId && (
+              <p className="text-center" style={{ color: "red" }}>
+                Select branch please
+              </p>
+            )}
+            <Box mt={3} mb={3} display="flex" alignItems="center" gap={2}>
+              <div style={{ fontSize: "10px" }} className="col-2">
+                <input
+                  // min={1}
+                  // type="number"
+                  size="lg"
+                  className="form-control rounded"
+                  disabled={!newCommand.branchId}
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red", height: 43 }
+                      : { height: 43 }
+                  }
+                  value={
+                    newCommandLine?.articleByBranch?.article?.code || typingCode
+                  }
+                  onChange={(e) => {
+                    setTypingCode(e.target.value);
+                  }}
+                />
+              </div>
+              <Autocomplete
+                aria-required={true}
+                disabled={!newCommand.branchId}
+                fullWidth
+                sx={{
+                  ".MuiInputBase-root": {
+                    height: "43px !important",
+                  },
+                }}
+                open={openArticles}
+                onOpen={() => {
+                  setOpenArticles(true);
+                }}
+                onClose={() => {
+                  setOpenArticles(false);
+                }}
+                options={articlesByBranch}
+                loading={loadingArticles}
+                value={newCommandLine?.articleByBranch}
+                onChange={(event, v) => {
                   setNewCommandLine({
                     ...newCommandLine,
-                    quantity:1,
+                    quantity: 1,
                     articleByBranch: {
-                      ...articlesByBranch.filter(
-                        (elem) => elem.id === e.target.value
-                      )[0],
+                      ...v,
                     },
-                    articleByBranchId: e.target.value,
+                    articleByBranchId: v.id,
                   });
                 }}
-              >
-                <option disabled selected>Select Article</option>
-                {articlesByBranch?.map((elem, i) => (
-                  <option key={i} value={elem.id}>
-                    {elem.article?.title}
-                  </option>
-                ))}
-              </Form.Select>
+                getOptionLabel={(option) => option?.article?.title}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) => {
+                      setTypingArticleTitle(e.target.value);
+                    }}
+                    label="Article"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: loadingClient ? (
+                        <CircularProgress color="inherit" size={10} />
+                      ) : null,
+                    }}
+                  />
+                )}
+              />
 
-              <div style={{ marginLeft: "10px", fontSize: "10px" }}>
+              <div style={{ fontSize: "10px" }} className="col-1">
                 <input
                   min={1}
                   type="number"
@@ -482,32 +553,39 @@ function CreateCommand() {
               </div>
               <div className="col-2 text-center">
                 {newCommandLine?.quantity *
-                  newCommandLine?.articleByBranch?.price}
+                  newCommandLine?.articleByBranch?.price||''}
               </div>
 
               <div
                 style={{ width: 60 }}
                 className="d-flex justify-content-center col-2"
               >
-                <button className="btn btn-light">
-                  <BiMessageSquareAdd
-                    size={22}
-                    onClick={() => {
-                      if (newCommandLine.quantity.length === 0)
-                        setErrorQuantity(true);
-                      else {
-                        setNewCommand({
-                          ...newCommand,
-                          commandLine: [
-                            ...newCommand.commandLine,
-                            newCommandLine,
-                          ],
-                        });
-                        setNewCommandLine({ quantity: '',articleByBranchId:'' });
-                      }
-                    }}
-                    style={{ cursor: "pointer" }}
-                  />
+                <button
+                  className="btn btn-light"
+                  disabled={!newCommand.branchId}
+                  onClick={() => {
+                    if (
+                      newCommandLine?.quantity?.length === 0 ||
+                      newCommandLine?.quantity === null
+                    )
+                      setErrorQuantity(true);
+                    else {
+                      setNewCommand({
+                        ...newCommand,
+                        commandLine: [
+                          ...newCommand.commandLine,
+                          newCommandLine,
+                        ],
+                      });
+                      setNewCommandLine({
+                        quantity: "",
+                        articleByBranch: null,
+                      });
+                      setTypingCode("");
+                    }
+                  }}
+                >
+                  <BiMessageSquareAdd size={22} style={{ cursor: "pointer" }} />
                 </button>
               </div>
             </Box>

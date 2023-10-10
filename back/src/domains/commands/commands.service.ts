@@ -64,7 +64,9 @@ export class CommandsService {
   }
 
   async findAll() {
-    return this.prisma.command.findMany();
+    return this.prisma.command.findMany({orderBy:{
+      createdAt:'desc'
+    }});
   }
 
   async findAllByBranchIdentifier(branchId: string, filters: FilterCommand) {
