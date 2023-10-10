@@ -13,7 +13,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
-  app.enableCors({optionsSuccessStatus:200,credentials:true});
+  app.enableCors({optionsSuccessStatus:200,credentials:true,origin:'https://jalyss-prod.netlify.app'});
   app.useStaticAssets('upload',{prefix:'/upload'})
   app.useStaticAssets(join(__dirname, '../../../back-office', 'build'))
   
