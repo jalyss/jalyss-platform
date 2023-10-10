@@ -10,5 +10,7 @@ export const filterExample = {
   publishingHouses: ['string'],
   authors : ['string'],
   title:'string',
-  skip:1
+  skip:1,
+  take:5,
+  code:'0004-1'
 };

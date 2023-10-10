@@ -84,7 +84,7 @@ export const updatePaidCommandStatus = createAsyncThunk(
       configs
     );
     dispatch(fetchCommand(response.data.id));
-    dispatch(fetchCommandsByClientId(response.data.clientId))
+    // dispatch(fetchCommandsByClientId(response.data.clientId))
     return response.data;
   }
 );
@@ -104,7 +104,7 @@ export const confirmCommand = createAsyncThunk(
       configs
     );
     dispatch(fetchCommand(response.data.id));
-    dispatch(fetchCommandsByClientId(response.data.clientId))
+    // dispatch(fetchCommandsByClientId(response.data.clientId))
     return response.data;
   }
 );
@@ -124,7 +124,7 @@ export const updateDeliveredCommandStatus = createAsyncThunk(
       configs
     );
     dispatch(fetchCommand(response.data.id));
-    dispatch(fetchCommandsByClientId(response.data.clientId))
+    // dispatch(fetchCommandsByClientId(response.data.clientId))
     return response.data;
   }
 );

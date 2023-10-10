@@ -962,7 +962,7 @@ async function main() {
 
   let article11 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book11',
       coverId: cover.id,
       weight: 110,
       pageNumber: 230,
@@ -985,7 +985,7 @@ async function main() {
   });
   let article12 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book12',
       coverId: cover1.id,
       weight: 110,
       pageNumber: 230,
@@ -1008,7 +1008,7 @@ async function main() {
   });
   let article13 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book13',
       coverId: cover2.id,
       weight: 110,
       pageNumber: 230,
@@ -1031,7 +1031,7 @@ async function main() {
   });
   let article14 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book14',
       coverId: cover3.id,
       weight: 110,
       pageNumber: 230,
@@ -1054,7 +1054,7 @@ async function main() {
   });
   let article15 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book15',
       coverId: cover4.id,
       weight: 110,
       pageNumber: 230,
@@ -1077,7 +1077,7 @@ async function main() {
   });
   let article16 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book16',
       coverId: cover5.id,
       weight: 110,
       pageNumber: 230,
@@ -1100,7 +1100,7 @@ async function main() {
   });
   let article17 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book17',
       coverId: cover6.id,
       weight: 110,
       pageNumber: 230,
@@ -1123,7 +1123,7 @@ async function main() {
   });
   let article18 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book18',
       coverId: cover7.id,
       weight: 110,
       pageNumber: 230,
@@ -1146,7 +1146,7 @@ async function main() {
   });
   let article19 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book19',
       coverId: cover8.id,
       weight: 110,
       pageNumber: 230,
@@ -1169,7 +1169,7 @@ async function main() {
   });
   let article20 = await prisma.article.create({
     data: {
-      title: 'Book10',
+      title: 'Book20',
       coverId: cover9.id,
       weight: 110,
       pageNumber: 230,

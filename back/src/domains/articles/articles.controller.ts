@@ -74,6 +74,14 @@ export class ArticleController {
     return this.articleService.findOneByBranch(id);
   }
 
+  @Get('one-by-branch-with-code/:branchId/:code')
+  findOneArticleByBranchWithCode(
+    @Param('branchId') branchId: string,
+    @Param('code') code: string
+    ) {
+    return this.articleService.findOneArticleByBranchWithCode(branchId,code);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateArticleDto) {
     return this.articleService.update(id, dto);
