@@ -243,7 +243,6 @@ function SessionDetails() {
                  
                   <span style={{ fontSize: "1.2rem" }}>&#8226;</span>{" "}
                  <div> {info.prerequire.contentEn}</div>
-                 
                   </div>
                
               ))}

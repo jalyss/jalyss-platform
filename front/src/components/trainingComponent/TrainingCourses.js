@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { courses } from "../../dummydata";
 import TrainingHeading from "../Commun/TrainingHeading";
 import AutoCompleteFilter from "../Commun/AutoCompleteFilter";
@@ -19,11 +19,11 @@ const TrainingCourses = () => {
   const categoriesStore = useSelector((state) => state.category);
   const { categories } = categoriesStore;
   const [skip, setSkip] = useState(0);
-  
+  const elRef = useRef(null);
  let take=6;
 
   useEffect (() => {
-    dispatch(fetchSessions({categoryId,take,skip}));
+    dispatch(fetchSessions({categoryId,take,skip})).then(res => elRef.current.scrollIntoView() )
    
   }, [categoryId,skip]);
 
@@ -50,7 +50,7 @@ console.log("count",sessions.items.titleAr);
           />
         </div>
 
-        <div className="blogListWrapper">
+        <div className="blogListWrapper" ref={elRef} >
           {sessions?.items.map((course) => (
             <div key={course.id}>
               <Card
@@ -68,11 +68,14 @@ console.log("count",sessions.items.titleAr);
 
         <div className="d-flex justify-content-center align-items-center mt-5">
         <Pagination
-            count={
-              sessions.count % take === 0
-                ? Math.floor(sessions.count / take)
-                : Math.floor(sessions.count / take) + 1
-            }
+        count={
+          Math.ceil(sessions.count / take) 
+        }
+            // count={
+            //   sessions.count % take === 0
+            //     ? Math.floor(sessions.count / take)
+            //     : Math.floor(sessions.count / take) + 1
+            // }
             color="secondary"
             variant="outlined"
             onChange={handleChange}
