@@ -71,13 +71,13 @@ function Router() {
             <Route index element={<Home />} />
             <Route path="articles" element={<NoPage />} />
 
-            {/* <Route path="articles/cat/:categoryId" element={<Articles />} />
+            <Route path="articles/cat/:categoryId" element={<Articles />} />
             <Route path="articles" element={<Articles />} />
             <Route path="search" element={<SearchbarResult />} />
             <Route path="articles/cat/:categoryId" element={<Articles />} />
             <Route path="one-article/:articleId" element={<OneArticle />} />
             <Route path="checkout" element={<Checkout />} />
-            <Route path="invoice/:invoiceId" element={<Invoice />} /> */}
+            <Route path="invoice/:invoiceId" element={<Invoice />} />
             {user ? (
               <Route path="profile" element={<Profile />}>
                 <Route index element={<MyBlogs />} />
