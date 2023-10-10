@@ -1,18 +1,19 @@
 //@ts-nocheck
-import { DEFAULT_FACTORY_CLASS_METHOD_KEY } from '@nestjs/common/module-utils/constants';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { join } from 'path';
-import { Liquid } from 'liquidjs';
+
 import { ValidationPipe } from '@nestjs/common';
-// import * as express from 'express';
-import { liquidColorFilters } from 'liquidjs-color-filters';
+import { NestExpressApplication } from '@nestjs/platform-express';
+
+
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
-  app.enableCors();
+  app.enableCors({optionsSuccessStatus:200,credentials:true});
   app.useStaticAssets('upload',{prefix:'/upload'})
   app.useStaticAssets(join(__dirname, '../../../back-office', 'build'))
   
