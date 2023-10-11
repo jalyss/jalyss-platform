@@ -194,7 +194,7 @@ const AddSession = () => {
       const image = new FormData();
       image.append("file", cover);
       const response = await axios.post(
-        `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+        `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
         image
       );
       aux.coverId = response.data.id;

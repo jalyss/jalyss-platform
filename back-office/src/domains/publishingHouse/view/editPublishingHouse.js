@@ -52,7 +52,7 @@ function EditPublishingHouse() {
         formData.append("file", selectedFile);
 
         const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
           formData
         );
         body.logoId = response.data.id;

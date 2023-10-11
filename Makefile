@@ -26,6 +26,7 @@ deploy:
 	@yarn seed
 	@pm2 start "yarn workspace back start:prod" --name api
 	@pm2 start "yarn workspace server-front start:prod" --name server-front
+	@pm2 start "yarn workspace server-upload start:prod" --name server-upload
 
 docker:
 	@docker build -t jalyss .

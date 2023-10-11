@@ -44,7 +44,7 @@ console.log(space,'space');
     let auxMedia = [];
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_ENDPOINT}/uploads`,
+        `${process.env.SERVER_UPLOAD_CONFIG}/uploads`,
         galleryData,
         {
           headers: {

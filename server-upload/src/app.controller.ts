@@ -14,8 +14,7 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { existsSync, mkdirSync } from 'fs';
-import { MediasService } from './domains/medias/medias.service';
-import { unlinkSync } from 'fs';
+import { MediasService } from './medias/medias.service';
 
 const multerConfig = {
   dest: 'upload',
@@ -28,26 +27,11 @@ export class AppController {
     private readonly mediaService: MediasService,
   ) {}
 
-  // @Delete('/work-spaces/delete-images/:name')
-  // deleteImage(@Param('name') name: string, cb: any) {
-  //   const filePath = `C:/Users/user/Desktop/Nouveau dossier/jalyss-platform/back/upload/${name}`;
-
-  //   try {
-  //     unlinkSync(filePath);
-  //     return { message: 'File deleted successfully' };
-  //   } catch (error) {
-  //     console.error('Failed to delete the file:', error);
-  //     return { error: 'Failed to delete the file' };
-  //   }
-  // }
-
-
-
-
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
+
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -73,13 +57,13 @@ export class AppController {
     }),
   )
   async upload(@UploadedFile() file: Express.Multer.File, @Body() dto: any) {
-    console.log(file);
+
     let data = {
       description: dto.description,
       alt: dto.alt,
       extension: file.filename.split('.')[1],
       type: file.mimetype,
-      path: process.env.API_CONFIG + 'upload/' + file.filename,
+      path: process.env.SERVER_UPLOAD_CONFIG + 'upload/' + file.filename,
     };
     return this.mediaService.create(data);
   }
@@ -112,13 +96,13 @@ export class AppController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Body() dto: any,
   ) {
-    console.log('filessss', files);
+    
     const mediaData = files.map((file) => ({
       description: dto.description,
       alt: dto.alt,
       extension: file.filename.split('.')[1],
       type: file.mimetype,
-      path: process.env.API_CONFIG + 'upload/' + file.filename,
+      path: process.env.SERVER_UPLOAD_CONFIG + 'upload/' + file.filename,
     }));
     return this.mediaService.createMany(mediaData);
   }
