@@ -48,7 +48,7 @@ function DetailPublishHouse() {
         const formData = new FormData();
         formData.append("file", selectedFile);
         const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
           formData,
           {
             onUploadProgress: (progressEvent) => {
