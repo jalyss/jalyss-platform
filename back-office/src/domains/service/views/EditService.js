@@ -63,7 +63,7 @@ console.log(mediaId,"mediaid");
     let auxMedia = [];
     try {
       const res = await axios.post(
-        `${process.env.SERVER_UPLOAD_CONFIG}/uploads`,
+        `${process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT}/uploads`,
         galleryData,
         {
           headers: {
@@ -168,7 +168,7 @@ console.log(mediaId,"mediaid");
         formData.append("file", cover);
 
         const response = await axios.post(
-          `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
+          `${process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT}/upload`,
           formData
         );
 
