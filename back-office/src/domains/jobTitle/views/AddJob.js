@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createJobTitle } from "../../../store/jobTitle";
@@ -14,39 +14,37 @@ import {
 } from "@mui/material";
 
 function AddJob() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-  const [isDialogOpen, setDialogOpen] = useState(true); 
+  const [isDialogOpen, setDialogOpen] = useState(true);
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!nameAr || !nameEn) {
-      console.log("Please fill in all required fields");
+      showErrorToast("Please fill in all required fields");
       return;
     }
 
-    var body = {
+    const jobData = {
       nameAr,
       nameEn,
     };
 
-    const submitCreate = async () => {
-      let aux = { ...body };
-      try {
-        await dispatch(createJobTitle(aux));
-        showSuccessToast("Job created successfully");
-        setDialogOpen(false); 
-        navigate(-1);
-      } catch (error) {
-        console.log(error);
-        showErrorToast(error.message);
-      }
-    };
-    submitCreate();
+    try {
+      await dispatch(createJobTitle(jobData));
+      showSuccessToast("Job created successfully");
+
+      setDialogOpen(false);
+      navigate(-1);
+    } catch (error) {
+      console.error(error);
+      showErrorToast(error.message);
+    }
   };
 
   return (
@@ -58,7 +56,7 @@ function AddJob() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="nameEn"
+                  label="Name (English)"
                   variant="outlined"
                   fullWidth
                   value={nameEn}
@@ -69,7 +67,7 @@ function AddJob() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="nameAr"
+                  label="Name (Arabic)"
                   variant="outlined"
                   fullWidth
                   value={nameAr}
