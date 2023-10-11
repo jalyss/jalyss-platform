@@ -43,7 +43,7 @@ export default function CreateWorkSpace() {
         formData.append("file", image);
 
         const response = await axios.post(
-          `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+          `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
           formData
         );
 
