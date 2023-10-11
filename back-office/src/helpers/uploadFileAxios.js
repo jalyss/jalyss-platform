@@ -17,7 +17,7 @@ export const uploadFileAxios = async (image, fnProgress, fnError) => {
   }
   try {
     const response = await axios.post(
-      `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
+      `${process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT}/upload`,
       image,
       configs
     );

@@ -66,7 +66,7 @@ function EditUser() {
         const image = new FormData();
         image.append("file", avatar);
         const response = await axios.post(
-          `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
+          `${process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT}/upload`,
           image,
           {
             onUploadProgress: (progressEvent) => {

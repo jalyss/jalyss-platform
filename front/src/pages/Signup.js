@@ -21,6 +21,8 @@ function Signup() {
   const [avatar, setAvatar] = useState(null);
   const [passwordError, setPasswordError] = useState(false);
   useEffect(() => {
+
+    console.log(process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT);
     if (user.password && user.confirmPassword) {
       if (user?.password !== user?.confirmPassword) {
         setPasswordError(true);
@@ -40,23 +42,23 @@ function Signup() {
       showErrorToast(t("errorPassword"));
       return;
     }
-
+    console.log(process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT);
     let aux = Object.assign({}, user);
     if (avatar !== null) {
       const image = new FormData();
       image.append("file", avatar);
       const response = await axios.post(
-        `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
+        `${process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT}/upload`,
         image
       );
       aux.avatarId = response.data.id;
     }
     delete aux.confirmPassword;
-    aux.isClient=true
+    aux.isClient = true;
     dispatch(register(aux)).then((res) => {
       if (!res.error) {
         showSuccessToast(t("user.created"));
-        navigate("/profile")
+        navigate("/profile");
       } else {
         console.log(res);
         showErrorToast(res.error.message);
@@ -85,12 +87,14 @@ function Signup() {
                 }
                 alt=""
               />
-              {!preview && (<input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />)}
+              {!preview && (
+                <input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              )}
               {preview && (
                 <button
                   type="button"

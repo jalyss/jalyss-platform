@@ -289,7 +289,7 @@ const SessionDetails = () => {
       const image = new FormData();
       image.append("file", cover);
       const response = await axios.post(
-        `${process.env.SERVER_UPLOAD_CONFIG}/upload`,
+        `${process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT}/upload`,
         image
       );
       aux.coverId = response.data.id;
@@ -327,7 +327,7 @@ const SessionDetails = () => {
         image.append("files", sessionMedias[i]);
       }
       const response = await axios.post(
-        `${process.env.SERVER_UPLOAD_CONFIG}/uploads`,
+        `${process.env.REACT_APP_SERVER_UPLOAD_ENDPOINT}/uploads`,
         image
       );
       let aux = response.data.map((elem) => elem.id);
