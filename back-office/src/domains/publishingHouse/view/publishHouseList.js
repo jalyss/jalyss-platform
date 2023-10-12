@@ -10,6 +10,7 @@ import { Button } from "react-bootstrap";
 import {fetchPublishingHouses,deletePublishingHouse} from "../../../store/publishingHouse"
 import { useDispatch, useSelector } from "react-redux";
 import DeleteModal from "../../../components/Commun/Modal";
+import AddButton from "../../../components/Commun/buttons/AddButton";
 
 function PublishingHouse() {
   const [show, setShow] = useState(false);
@@ -126,16 +127,12 @@ function PublishingHouse() {
             Publishing House's List
           </h2>
           <hr></hr>
-          <Button
-            type="button"
-            variant="outlined"
-            onClick={() => {
-              Navigate("create");
-            }}
-            endIcon={<IoIosPersonAdd />}
-          >
-            <span className="btn btn-sm ">Add Publishing House</span>
-          </Button>
+         
+          <AddButton
+            title={"Add Publishing House"}
+            mb={20}
+            onClick={() => Navigate("create")}
+          />
           <Box sx={{ height: 400, width: "100%" }}>
           {rows?.length > 0 ? (
               <DataGrid

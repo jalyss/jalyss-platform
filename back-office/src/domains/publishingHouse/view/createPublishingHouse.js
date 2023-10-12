@@ -5,6 +5,7 @@ import { createPublishingHouse } from "../../../store/publishingHouse";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
+import AddButton from "../../../components/Commun/buttons/AddButton";
 
 function CreatePublishingHouse() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -98,13 +99,12 @@ function CreatePublishingHouse() {
               {selectedFile ? (
                 <p>Selected file: {selectedFile.name}</p>
               ) : (
-                <Button
+                <AddButton
                   type="button"
                   variant="outlined"
                   onClick={handleButtonClick}
-                >
-                  Select File
-                </Button>
+                  title={ "Select File"}
+                />
               )}
             </div>
           </div>

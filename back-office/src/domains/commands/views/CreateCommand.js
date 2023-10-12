@@ -30,6 +30,7 @@ import SaveButton from "../../../components/Commun/buttons/SaveButton";
 import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 import { fetchClients } from "../../../store/client";
 import { useNavigate } from "react-router-dom";
+import useScanDetection from 'use-scan-detection';
 
 function CreateCommand() {
   const dispatch = useDispatch();
@@ -65,6 +66,13 @@ function CreateCommand() {
   const [typingCode, setTypingCode] = useState("");
   const [typingArticleTitle, setTypingArticleTitle] = useState("");
   //fetch articles of branch by branchId and articleTitle
+
+
+  useScanDetection({
+    onComplete: setTypingCode,
+    minLength: 13 // EAN13
+});
+
   useEffect(() => {
     if (newCommand?.branchId) {
       setLoadingArticles(true);
@@ -472,9 +480,9 @@ function CreateCommand() {
                   value={
                     newCommandLine?.articleByBranch?.article?.code || typingCode
                   }
-                  onChange={(e) => {
-                    setTypingCode(e.target.value);
-                  }}
+                  // onChange={(e) => {
+                  //   setTypingCode(e.target.value);
+                  // }}
                 />
               </div>
               <Autocomplete
