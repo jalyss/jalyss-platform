@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { chatSeed } from './seeds/chatSeed';
 import { paymentChoiceSeed } from './seeds/paymentChoiceSeed';
+import { countriesSeed } from './seeds/countriesSeed';
+import { citesSeed } from './seeds/citesSeed';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -439,36 +441,36 @@ async function main() {
     },
   });
   //create dummy country
-  let country1 = await prisma.country.create({
-    data: {
-      nameAr: 'تونس ',
-      nameEn: ' Tunisia',
-    },
-  });
+  // let country1 = await prisma.country.create({
+  //   data: {
+  //     nameAr: 'تونس ',
+  //     nameEn: ' Tunisia',
+  //   },
+  // });
 
-  let country2 = await prisma.country.create({
-    data: {
-      nameAr: 'المغرب',
-      nameEn: ' Marroc',
-    },
-  });
-  //
-  let city1 = await prisma.city.create({
-    data: {
-      nameAr: 'تونس',
-      nameEn: 'Tunis',
-      countryId: country1.id,
-    },
-  });
-  let city2 = await prisma.city.create({
-    data: {
-      nameAr: 'صفاقس',
-      nameEn: 'Sfax',
-      countryId: country1.id,
-    },
-  });
-  let countryIds = [country1.id, country2.id];
-  let cityIds = [city1.id, city2.id];
+  // let country2 = await prisma.country.create({
+  //   data: {
+  //     nameAr: 'المغرب',
+  //     nameEn: ' Marroc',
+  //   },
+  // });
+  // //
+  // let city1 = await prisma.city.create({
+  //   data: {
+  //     nameAr: 'تونس',
+  //     nameEn: 'Tunis',
+  //     countryId: country1.id,
+  //   },
+  // });
+  // let city2 = await prisma.city.create({
+  //   data: {
+  //     nameAr: 'صفاقس',
+  //     nameEn: 'Sfax',
+  //     countryId: country1.id,
+  //   },
+  // });
+  let countryIds = await countriesSeed(prisma);
+  let cityIds = await citesSeed(prisma);
 
   //create dummy author
   let author1 = await prisma.author.create({
@@ -479,6 +481,7 @@ async function main() {
       biographyEn: ',',
     },
   });
+
 
   let author2 = await prisma.author.create({
     data: {
@@ -1427,23 +1430,23 @@ async function main() {
   //})
 
   //create dummy orders
-  let commands = [];
-  for (let i = 0; i < 10; i++) {
-    commands.push(
-      await prisma.command.create({
-        data: {
-          clientName: 'client' + i,
-          clientAddress: 'Lac 2 Tunis',
-          clientTel: '22222222',
-          clientEmail: 'client' + i + '@gmail.com',
-          branchId: branch.id,
-          countryId: countryIds[Math.floor(Math.random() * countryIds.length)],
-          cityId: cityIds[Math.floor(Math.random() * cityIds.length)],
-          totalAmount:0
-        },
-      }),
-    );
-  }
+  // let commands = [];
+  // for (let i = 0; i < 10; i++) {
+  //   commands.push(
+  //     await prisma.command.create({
+  //       data: {
+  //         clientName: 'client' + i,
+  //         clientAddress: 'Lac 2 Tunis',
+  //         clientTel: '22222222',
+  //         clientEmail: 'client' + i + '@gmail.com',
+  //         branchId: branch.id,
+  //         countryId: countryIds[Math.floor(Math.random() * countryIds.length)],
+  //         cityId: cityIds[Math.floor(Math.random() * cityIds.length)],
+  //         totalAmount: 0,
+  //       },
+  //     }),
+  //   );
+  // }
 
   // create dummy services
   let serviceIds: string[] = [];
@@ -1619,8 +1622,6 @@ async function main() {
     },
   });
 
-  
-
   let rating = [];
   for (let i = 0; i < articles.length; i += 2) {
     rating.push(
@@ -1650,7 +1651,6 @@ async function main() {
       data: {
         contentEn: data[i],
         contentAr: data[i],
-
       },
     });
     whatYouWillLearnIds.push(whatYouWillLearn.id);
@@ -1664,7 +1664,6 @@ async function main() {
       data: {
         titleEn: titles[Math.floor(Math.random() * titles.length)],
         titleAr: titles[Math.floor(Math.random() * titles.length)],
-
       },
     });
 
@@ -1830,7 +1829,6 @@ async function main() {
         titleAr: 'My Lecture ' + i,
         contentEn: 'Hello, this is a new lecture',
         contentAr: 'Hello, this is a new lecture',
-
       },
     });
     lectures.push(lecture);
@@ -1953,7 +1951,6 @@ async function main() {
       data: {
         contentEn: prerequis[Math.floor(Math.random() * prerequis.length)],
         contentAr: prerequis[Math.floor(Math.random() * prerequis.length)],
-
       },
     });
     preRequireIds.push(sessionPrerequis.id);
@@ -1984,7 +1981,12 @@ async function main() {
       if (search(sesId, lectId)) {
         sHL.push(
           await prisma.sessionHasLecture.create({
-            data: { sessionId: sesId, lectureId: lectId,startAt: new Date().toISOString(),endAt:new Date().toISOString() },
+            data: {
+              sessionId: sesId,
+              lectureId: lectId,
+              startAt: new Date().toISOString(),
+              endAt: new Date().toISOString(),
+            },
           }),
         );
       }
@@ -2048,13 +2050,12 @@ async function main() {
       data: {
         labelEn: label[i],
         labelAr: label[i],
-
       },
     });
     featuresIds.push(features.id);
   }
   chatSeed(prisma, usersIds);
-  paymentChoiceSeed(prisma)
+  paymentChoiceSeed(prisma);
   console.log(users);
   console.log(articles);
 }

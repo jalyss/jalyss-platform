@@ -44,6 +44,10 @@ export class UpdateUserDto {
     roleId?: string
     @ApiProperty({ required: false })
     isClient: boolean;
+    @ApiProperty({ required: false })
+    proposalCountry: string;
+    @ApiProperty({ required: false })
+    proposalCity: string;
 }  
 export class UpdateUserStatusDto {
     @ApiProperty({required:true})
