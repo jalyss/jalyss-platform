@@ -34,7 +34,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
-    console.log(dto)
+    console.log(dto);
     const { tel, address, ...rest } = dto;
     const salt = await bcrypt.genSalt();
     dto.password = await bcrypt.hash(dto.password, salt);
@@ -78,7 +78,7 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true, avatar: true, client: true , employee: true},
+      include: { Media: true, avatar: true, client: true, employee: true },
     });
   }
 
@@ -110,12 +110,12 @@ export class UsersService {
             educationLevel: true,
           },
         },
-        employee:{
-          include:{
-          branch:true,
-          role:true,
-        }
-        }
+        employee: {
+          include: {
+            branch: true,
+            role: true,
+          },
+        },
       },
     });
     const { confirmkey, password, ...rest } = user;
@@ -135,7 +135,8 @@ export class UsersService {
       isAdmin,
       branchId,
       roleId,
-
+      proposalCountry,
+      proposalCity,
       ...rest
     } = data;
 
@@ -149,6 +150,28 @@ export class UsersService {
     });
 
     if (clientId) {
+      let proposal = {};
+      if (proposalCountry) {
+        proposal = {
+          ...proposal,
+          ProposalCountry: {
+            create: {
+              name: proposalCountry,
+            },
+          },
+        };
+      }
+      if (proposalCity && countryId) {
+        proposal = {
+          ...proposal,
+          ProposalCity: {
+            create: {
+              name: proposalCity,
+              countryId,
+            },
+          },
+        };
+      }
       await this.prisma.client.update({
         where: { id: clientId },
         data: {
@@ -159,6 +182,7 @@ export class UsersService {
           cityId,
           educationLevelId,
           jobTitleId,
+          ...proposal,
         },
       });
     }

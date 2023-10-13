@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateCiteDto } from './dto/create-cite.dto';
-import { UpdateCiteDto } from './dto/update-cite.dto';
+import { CreateCityDto } from './dto/create-city.dto';
+import { UpdateCityDto } from './dto/update-city.dto';
 
 @Injectable()
 export class CitiesService {
   constructor(
     private readonly prisma: PrismaService,
 ) { }
-  async create(dto: CreateCiteDto) {
+  async create(dto: CreateCityDto) {
     return await this.prisma.city.create({
       data: {
           ...dto,
@@ -33,7 +33,7 @@ export class CitiesService {
   });
   }
 
-  async update(id: string, dto: UpdateCiteDto) {
+  async update(id: string, dto: UpdateCityDto) {
     return await this.prisma.city.update({ where: { id }, data: dto });
 
   }

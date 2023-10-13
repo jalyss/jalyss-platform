@@ -24,25 +24,44 @@ model Branch {
   TransactionSender   Transaction[]      @relation("sender")
 }
 
-model Country {
-  id      String    @id @default(uuid())
-  nameAr  String
-  nameEn  String
-  City    City[]
-  Command Command[]
+model ProposalCountry {
+  id       String @id @default(uuid())
+  name     String
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+}
 
-  Client Client[]
+model ProposalCity {
+  id        String  @id @default(uuid())
+  name      String
+  countryId String
+  country   Country @relation(fields: [countryId], references: [id])
+  clientId  String
+  client    Client  @relation(fields: [clientId], references: [id])
+}
+
+model Country {
+  id           String         @id @default(uuid())
+  nameAr       String
+  nameEn       String
+  nameFr       String
+  code         String
+  City         City[]
+  Command      Command[]
+  Client       Client[]
+  ProposalCity ProposalCity[]
 }
 
 model City {
   id        String    @id @default(uuid())
   nameAr    String
   nameEn    String
+  nameFr    String
+  code      String
   country   Country   @relation(fields: [countryId], references: [id])
   countryId String
   Command   Command[]
-
-  Client Client[]
+  Client    Client[]
 }
 
 model EducationLevel {
@@ -110,14 +129,15 @@ model PaymentChoice {
 
 model Client {
   id                   String                @id @default(uuid())
-  fullNameEn           String
-  fullNameAr           String
-  email                String                @unique
-  address              String
-  tel                  String
+  fullNameEn           String                @default("NameEn")
+  fullNameAr           String                @default("NameAr")
+  email                String?
+  address              String                @default("Tunisia")
+  tel                  String                @default("00000000")
   dateOfBirth          DateTime?
+  registrationNumber   String?
   createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt
+  updatedAt            DateTime?             @updatedAt
   type                 TypeClient?           @relation(fields: [typeId], references: [id])
   typeId               String?
   avatar               Media?                @relation(fields: [avatarId], references: [id])
@@ -143,6 +163,8 @@ model Client {
   User                 User[]
   payments             ClientPayment[]
   FinancialCommitment  FinancialCommitment[]
+  ProposalCountry      ProposalCountry[]
+  ProposalCity         ProposalCity[]
 }
 
 model Employee {
@@ -416,9 +438,9 @@ model Command {
   client              Client?               @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
   clientId            String?               @map("client_id")
   clientName          String                @map("client_name")
-  clientAddress       String                @map("client_address")
-  clientTel           String                @map("client_tel")
-  clientEmail         String                @map("client_email")
+  clientAddress       String                @default("Tunisia") @map("client_address")
+  clientTel           String                @default("00000000") @map("client_tel")
+  clientEmail         String?               @map("client_email")
   confirm             Status                @default(pending)
   totalAmount         Float
   contactChannel      Channel               @default(site_web)

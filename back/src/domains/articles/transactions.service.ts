@@ -30,6 +30,7 @@ export class TransactionService {
           },
         },
       });
+      
       if (dto.status === 'delivered') {
         await Promise.all(
           dto.articles.map(async (article) => {
