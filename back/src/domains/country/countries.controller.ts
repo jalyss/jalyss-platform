@@ -6,11 +6,13 @@ import {
     Patch,
     Param,
     Delete,
+    Query
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CountriesService } from './countries.service'; 
 import { CreateCountryDto } from './dto/create-country.dto'; 
 import { UpdateCountryDto } from './dto/update-country.dto'; 
+import { CountryFilters } from './entities/country.entity';
 
 @ApiTags('countries')
 @Controller('countries')
@@ -23,8 +25,8 @@ export class CountriesController {
         return this.countryService.create(dto);
     }
     @Get()
-    findAll() {
-        return this.countryService.findAll();
+    findAll(@Query() filters:CountryFilters) {
+        return this.countryService.findAll(filters);
     }
 
     @Get(':id')
