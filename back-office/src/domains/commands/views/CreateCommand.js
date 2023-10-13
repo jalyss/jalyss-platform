@@ -30,7 +30,6 @@ import SaveButton from "../../../components/Commun/buttons/SaveButton";
 import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 import { fetchClients } from "../../../store/client";
 import { useNavigate } from "react-router-dom";
-import useScanDetection from 'use-scan-detection';
 
 function CreateCommand() {
   const dispatch = useDispatch();
@@ -57,22 +56,22 @@ function CreateCommand() {
   const [Total, setTotal] = useState([]);
   const [openClients, setOpenClients] = useState(false);
   const [openArticles, setOpenArticles] = useState(false);
+  const [openCites, setOpenCites] = useState(false);
+  const [openCountries, setOpenCountries] = useState(false);
 
   const [editCommandLineIndexes, setEditCommandLineIndexes] = useState([]);
   const [errorQuantity, setErrorQuantity] = useState(false);
   const [loadingClient, setLoadingClients] = useState(false);
   const [loadingArticles, setLoadingArticles] = useState(false);
+  const [loadingCites, setLoadingCites] = useState(false);
+  const [loadingCountries, setLoadingCountries] = useState(false);
   const [typingFullName, setTypingFullName] = useState("");
   const [typingCode, setTypingCode] = useState("");
   const [typingArticleTitle, setTypingArticleTitle] = useState("");
+  const [typingCountry, setTypingCountry] = useState("");
+  const [typingCity, setTypingCity] = useState("");
+
   //fetch articles of branch by branchId and articleTitle
-
-
-  useScanDetection({
-    onComplete: setTypingCode,
-    minLength: 13 // EAN13
-});
-
   useEffect(() => {
     if (newCommand?.branchId) {
       setLoadingArticles(true);
@@ -85,6 +84,7 @@ function CreateCommand() {
       setNewCommand({ ...newCommand, commandLine: [] });
     }
   }, [newCommand?.branchId, typingArticleTitle]);
+
   // fetch one article of branch by branchId and code
   useEffect(() => {
     if (typingCode)
@@ -95,6 +95,7 @@ function CreateCommand() {
         })
       );
   }, [typingCode]);
+
   useEffect(() => {
     if (typingCode) {
       console.log(articleByBranch);
@@ -112,11 +113,30 @@ function CreateCommand() {
   }, [articleByBranch]);
   // fetch command options
   useEffect(() => {
-    dispatch(findAllCitites());
     dispatch(findAllBranches());
-    dispatch(fetchCountries());
     dispatch(fetchPaymentChoices());
   }, [dispatch]);
+  //fetch countries and cites by name
+  useEffect(() => {
+    setLoadingCountries(true);
+    dispatch(fetchCountries({ name: typingCountry, take: 5 })).then((res) =>
+      setLoadingCountries(false)
+    );
+  }, [typingCountry]);
+  useEffect(() => {
+    if (newCommand.countryId) {
+      setLoadingCites(true);
+      dispatch(
+        findAllCitites({
+          name: typingCity,
+          take: 5,
+          countryId: newCommand.countryId,
+        })
+      ).then((res) =>
+      setLoadingCites(false)
+    );
+    }
+  }, [newCommand.countryId, typingCity]);
   // fetch clients by fullName
   useEffect(() => {
     setLoadingClients(true);
@@ -331,42 +351,142 @@ function CreateCommand() {
 
           <div className="row justify-content-center">
             <Box mt={1} className="col-4">
-              Country
-              <Form.Select
-                value={newCommand?.countryId}
-                onChange={(e) => {
-                  setNewCommand({ ...newCommand, countryId: e.target.value });
+            <Autocomplete
+                aria-required={true}
+                
+                fullWidth
+                sx={{
+                  ".MuiInputBase-root": {
+                    height: "43px !important",
+                  },
                 }}
-              >
-                <option disabled>Select Country</option>
-                {countries.map((e, i) => (
-                  <option value={e.id} key={i}>
-                    {e.nameEn}
-                  </option>
-                ))}
-              </Form.Select>
+                open={openCountries}
+                onOpen={() => {
+                  setOpenCountries(true);
+                }}
+                onClose={() => {
+                  setOpenCountries(false);
+                }}
+                options={countries}
+                loading={loadingCountries}
+                value={newCommand?.countryId}
+                onChange={(event, v) => {
+                  setNewCommand({
+                    ...newCommand,
+                    countryId: v?.id,
+                  });
+                }}
+                getOptionLabel={(option) => option?.nameEn}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) => {
+                      setTypingCountry(e.target.value);
+                    }}
+                    label="Country"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: loadingClient ? (
+                        <CircularProgress color="inherit" size={10} />
+                      ) : null,
+                    }}
+                  />
+                )}
+              />
+              
             </Box>
             <Box mt={1} className="col-4">
-              City
-              <Form.Select
-                value={newCommand?.cityId}
-                onChange={(e) => {
-                  setNewCommand({ ...newCommand, cityId: e.target.value });
+              <Autocomplete
+                aria-required={true}
+                disabled={!newCommand?.countryId}
+                fullWidth
+                sx={{
+                  ".MuiInputBase-root": {
+                    height: "43px !important",
+                  },
                 }}
-              >
-                <option disabled>Select City</option>
-                {cities.map((e, i) => (
-                  <option value={e.id} key={i}>
-                    {e.nameEn}
-                  </option>
-                ))}
-              </Form.Select>
+                open={openCites}
+                onOpen={() => {
+                  setOpenCites(true);
+                }}
+                onClose={() => {
+                  setOpenCites(false);
+                }}
+                options={cities}
+                loading={loadingCites}
+                value={newCommand?.cityId}
+                onChange={(event, v) => {
+                  setNewCommand({
+                    ...newCommand,
+                    cityId: v.id,
+                  });
+                }}
+                getOptionLabel={(option) => option?.nameEn}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) => {
+                      setTypingCity(e.target.value);
+                    }}
+                    label="City"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: loadingClient ? (
+                        <CircularProgress color="inherit" size={10} />
+                      ) : null,
+                    }}
+                  />
+                )}
+              />
+              
             </Box>
           </div>
           <div className="mt-5 mb-5">
+            <div>
+              {" "}
+              <Box mt={3} mb={3} display="flex" alignItems="center" gap={2}>
+                <div className="col-2 text-center">Code</div>
+                <div className="col-3 text-center">Article</div>
+                <div className="col-1 text-center">Qte</div>
+                <div className="col-2 text-center">PU</div>
+                <div className="col-2 text-center">PT</div>
+                <div className="col-1 text-center">Action</div>
+              </Box>
+            </div>
             {newCommand?.commandLine?.map((elem, i) => (
-              <Box key={i} mt={5} mb={5} display="flex" alignItems="center">
+              <Box
+                key={i}
+                mt={3}
+                mb={3}
+                display="flex"
+                alignItems="center"
+                gap={2}
+              >
+                <div style={{ fontSize: "10px" }} className="col-2">
+                  <input
+                    size="lg"
+                    className="form-control rounded"
+                    disabled={!editCommandLineIndexes.includes(i)}
+                    style={
+                      errorQuantity
+                        ? {
+                            outlineColor: "red",
+                            borderColor: "red",
+                            height: 43,
+                          }
+                        : { height: 43 }
+                    }
+                    value={
+                      newCommand.commandLine[i].articleByBranch.article.code
+                    }
+                  />
+                </div>
                 <Form.Select
+                  className="col-2"
                   disabled={!editCommandLineIndexes.includes(i)}
                   value={newCommand.commandLine[i].articleByBranchId}
                   onChange={(e) => {
@@ -388,7 +508,7 @@ function CreateCommand() {
                   ))}
                 </Form.Select>
 
-                <div style={{ marginLeft: "10px", fontSize: "10px" }}>
+                <div style={{ fontSize: "10px" }} className="col-1">
                   <input
                     placeholder={elem}
                     type="number"
@@ -445,16 +565,23 @@ function CreateCommand() {
                       </button>
                     </div>
                   ) : (
-                    <button className="btn btn-light">
-                      <BiSave
-                        onClick={() =>
-                          setEditCommandLineIndexes(
-                            editCommandLineIndexes.filter((elem) => elem !== i)
-                          )
-                        }
-                        style={{ cursor: "pointer" }}
-                      />
-                    </button>
+                    <div
+                      style={{ width: 60 }}
+                      className="d-flex justify-content-around gap-1"
+                    >
+                      <button className="btn btn-light">
+                        <BiSave
+                          onClick={() =>
+                            setEditCommandLineIndexes(
+                              editCommandLineIndexes.filter(
+                                (elem) => elem !== i
+                              )
+                            )
+                          }
+                          style={{ cursor: "pointer" }}
+                        />
+                      </button>
+                    </div>
                   )}
                 </>
               </Box>
@@ -480,9 +607,9 @@ function CreateCommand() {
                   value={
                     newCommandLine?.articleByBranch?.article?.code || typingCode
                   }
-                  // onChange={(e) => {
-                  //   setTypingCode(e.target.value);
-                  // }}
+                  onChange={(e) => {
+                    setTypingCode(e.target.value);
+                  }}
                 />
               </div>
               <Autocomplete
@@ -561,7 +688,7 @@ function CreateCommand() {
               </div>
               <div className="col-2 text-center">
                 {newCommandLine?.quantity *
-                  newCommandLine?.articleByBranch?.price||''}
+                  newCommandLine?.articleByBranch?.price || ""}
               </div>
 
               <div
