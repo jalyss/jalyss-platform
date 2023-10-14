@@ -93,16 +93,15 @@ export class ArticleService {
         if (!filterExample[key]) {
           errors.push(key);
         }
-
+        if (['skip','take'].includes(key)) params[key] = Number(value)
+        else
         if (['lte', 'gte'].includes(key)) {
           insideWhere['price'] = {
             ...insideWhere['price'],
             [key]: +value,
           };
-        } else {
+        } else { //article options
           insideWhere['article'] = {};
-
-          //array
           if (
             [
               'categories',
@@ -145,10 +144,6 @@ export class ArticleService {
               );
             }
           }
-          //skip
-          else if (key === 'skip') params['skip'] = Number(value);
-          else if (key === 'take') params['take'] = Number(value);
-          //true or false
           else if (['title'].includes(key)) {
             insideWhere['article'][key] = {
               mode: 'insensitive',
@@ -207,6 +202,8 @@ export class ArticleService {
         },
       },
     };
+    console.log(params);
+    
 
     const articlesByBranch = await this.prisma.articlesByBranch.findMany(
       params,

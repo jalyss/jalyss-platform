@@ -17,9 +17,8 @@ export class CitiesService {
 
   findAllByCountry(countryId: string, filters: CityFilters) {
     let where = { countryId };
-    let take=10
-    console.log(filters);
-    
+    let take = 10;
+
     if (filters.name) {
       const params = { contains: filters.name, mode: 'insensitive' };
       where['OR'] = [
@@ -28,12 +27,12 @@ export class CitiesService {
         { nameFr: params },
       ];
     }
-    if(filters.take){
-      take=+filters.take
+    if (filters.take) {
+      take = +filters.take;
     }
     return this.prisma.city.findMany({
       where,
-      take
+      take,
     });
   }
   findAll() {

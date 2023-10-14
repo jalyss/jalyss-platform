@@ -56,6 +56,7 @@ function CreateCommand() {
   const [Total, setTotal] = useState([]);
   const [openClients, setOpenClients] = useState(false);
   const [openArticles, setOpenArticles] = useState(false);
+  const [openArticlesEditCommandLines,setOpenArticlesEditCommandLines] = useState([]);
   const [openCites, setOpenCites] = useState(false);
   const [openCountries, setOpenCountries] = useState(false);
 
@@ -79,6 +80,7 @@ function CreateCommand() {
         fetchArticlesByBranch({
           identifier: newCommand?.branchId,
           title: typingArticleTitle,
+          take: 5,
         })
       ).then((res) => setLoadingArticles(false));
       setNewCommand({ ...newCommand, commandLine: [] });
@@ -132,9 +134,7 @@ function CreateCommand() {
           take: 5,
           countryId: newCommand.countryId,
         })
-      ).then((res) =>
-      setLoadingCites(false)
-    );
+      ).then((res) => setLoadingCites(false));
     }
   }, [newCommand.countryId, typingCity]);
   // fetch clients by fullName
@@ -148,7 +148,9 @@ function CreateCommand() {
   useEffect(() => {
     if (newCommand) {
       const newTotal = newCommand?.commandLine?.map(
-        (item) => item?.quantity * item?.articleByBranch?.price
+        (item) =>
+          item?.quantity * item?.articleByBranch?.price -
+          (item.discount * item?.articleByBranch?.price) / 100
       );
       setTotal(newTotal);
     }
@@ -254,6 +256,9 @@ function CreateCommand() {
                   ".MuiInputBase-root": {
                     height: "43px !important",
                   },
+                  ".MuiInputBase-input": {
+                    padding: "0px  !important",
+                  },
                 }}
                 open={openClients}
                 onOpen={() => {
@@ -351,13 +356,15 @@ function CreateCommand() {
 
           <div className="row justify-content-center">
             <Box mt={1} className="col-4">
-            <Autocomplete
+              <Autocomplete
                 aria-required={true}
-                
                 fullWidth
                 sx={{
                   ".MuiInputBase-root": {
                     height: "43px !important",
+                  },
+                  ".MuiInputBase-input": {
+                    padding: "0px  !important",
                   },
                 }}
                 open={openCountries}
@@ -395,7 +402,6 @@ function CreateCommand() {
                   />
                 )}
               />
-              
             </Box>
             <Box mt={1} className="col-4">
               <Autocomplete
@@ -405,6 +411,10 @@ function CreateCommand() {
                 sx={{
                   ".MuiInputBase-root": {
                     height: "43px !important",
+                    alignItems: "center",
+                  },
+                  ".MuiInputBase-input": {
+                    padding: "0px !important",
                   },
                 }}
                 open={openCites}
@@ -442,149 +452,205 @@ function CreateCommand() {
                   />
                 )}
               />
-              
             </Box>
           </div>
+          {/* order items Details */}
           <div className="mt-5 mb-5">
-            <div>
-              {" "}
-              <Box mt={3} mb={3} display="flex" alignItems="center" gap={2}>
-                <div className="col-2 text-center">Code</div>
-                <div className="col-3 text-center">Article</div>
-                <div className="col-1 text-center">Qte</div>
-                <div className="col-2 text-center">PU</div>
-                <div className="col-2 text-center">PT</div>
-                <div className="col-1 text-center">Action</div>
+            <div className="bg-purple rounded p-3 " style={{ color: "white" }}>
+              <Box display="flex" alignItems="center" gap={2}>
+                <div className="col-2 ">Code</div>
+                <div className="col-3 ">Article</div>
+                <div className="col-1 ">Qte</div>
+                <div className="col-1  ">PU</div>
+                <div className="col-1  ">Discount %</div>
+                <div className="col-1 text-center">PT</div>
+                <div className="col-2 " style={{ width: 60 }}>
+                  Action
+                </div>
               </Box>
             </div>
-            {newCommand?.commandLine?.map((elem, i) => (
-              <Box
-                key={i}
-                mt={3}
-                mb={3}
-                display="flex"
-                alignItems="center"
-                gap={2}
-              >
-                <div style={{ fontSize: "10px" }} className="col-2">
-                  <input
-                    size="lg"
-                    className="form-control rounded"
-                    disabled={!editCommandLineIndexes.includes(i)}
-                    style={
-                      errorQuantity
-                        ? {
-                            outlineColor: "red",
-                            borderColor: "red",
-                            height: 43,
-                          }
-                        : { height: 43 }
-                    }
-                    value={
-                      newCommand.commandLine[i].articleByBranch.article.code
-                    }
-                  />
-                </div>
-                <Form.Select
-                  className="col-2"
-                  disabled={!editCommandLineIndexes.includes(i)}
-                  value={newCommand.commandLine[i].articleByBranchId}
-                  onChange={(e) => {
-                    let aux = [...newCommand.commandLine];
-                    let obj = { ...aux[i] };
-                    obj.articleByBranchId = e.target.value;
-                    aux[i] = { ...obj };
-                    setNewCommand({ ...newCommand, commandLine: aux });
-                  }}
-                  style={{ flex: 1, marginRight: "10px" }}
-                >
-                  <option disabled selected>
-                    Select Article
-                  </option>
-                  {articlesByBranch?.map((elem, j) => (
-                    <option key={j} value={elem.id}>
-                      {elem.article?.title}
-                    </option>
-                  ))}
-                </Form.Select>
 
-                <div style={{ fontSize: "10px" }} className="col-1">
-                  <input
-                    placeholder={elem}
-                    type="number"
-                    min={1}
+            {newCommand?.commandLine?.map((elem, i) => (
+              <div>
+                <Box
+                  key={i}
+                  mt={2}
+                  mb={2}
+                  // padding={3}
+                  display="flex"
+                  alignItems="center"
+                  gap={2}
+                >
+                  <div style={{ fontSize: "10px" }} className="col-2">
+                    <input
+                      size="lg"
+                      className="form-control rounded"
+                      disabled={!editCommandLineIndexes.includes(i)}
+                      style={
+                        errorQuantity
+                          ? {
+                              outlineColor: "red",
+                              borderColor: "red",
+                              height: 43,
+                            }
+                          : { height: 43 }
+                      }
+                      value={
+                        newCommand.commandLine[i].articleByBranch.article.code
+                      }
+                    />
+                  </div>
+                  <Autocomplete
+                    aria-required={true}
                     disabled={!editCommandLineIndexes.includes(i)}
-                    value={newCommand.commandLine[i].quantity}
-                    onChange={(e) => {
+                    fullWidth
+                    sx={{
+                      ".MuiInputBase-root": {
+                        height: "43px !important",
+                      },
+                      ".MuiInputBase-input": {
+                        padding: "0px !important",
+                      },
+                    }}
+                    open={openArticlesEditCommandLines.includes(i)}
+                    onOpen={() => {
+                      setOpenArticlesEditCommandLines([...openArticlesEditCommandLines,i]);
+                    }}
+                    onClose={() => {
+                      setOpenArticlesEditCommandLines(openArticlesEditCommandLines.filter((elem,j)=>j!==i))
+                    }}
+                    options={articlesByBranch}
+                    loading={loadingArticles}
+                    value={newCommand.commandLine[i].articleByBranch}
+                    onChange={(event, v) => {
                       let aux = [...newCommand.commandLine];
                       let obj = { ...aux[i] };
-                      obj.quantity = +e.target.value;
+                      obj = {
+                        ...obj,
+                        articleByBranchId: v?.id,
+                        articleByBranch: v,
+                      };
                       aux[i] = { ...obj };
                       setNewCommand({ ...newCommand, commandLine: aux });
                     }}
+                    getOptionLabel={(option) => option?.article?.title}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        variant="outlined"
+                        onChange={(e) => {
+                          setTypingArticleTitle(e.target.value);
+                        }}
+                        // label="Article"
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: loadingClient ? (
+                            <CircularProgress color="inherit" size={10} />
+                          ) : null,
+                        }}
+                      />
+                    )}
                   />
-                </div>
-                <div className=" col-2 text-center">
-                  {newCommand.commandLine[i]?.articleByBranch?.price}
-                </div>
-                <div className="col-2 text-center">
-                  {newCommand.commandLine[i]?.quantity *
-                    newCommand.commandLine[i]?.articleByBranch?.price}
-                </div>
 
-                <>
-                  {!editCommandLineIndexes.includes(i) ? (
-                    <div
-                      style={{ width: 60 }}
-                      className="d-flex justify-content-around gap-1"
-                    >
-                      <button className="btn btn-light">
-                        <FaTrash
-                          style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            let aux = [...newCommand.commandLine];
-                            let result = aux.filter((elem, j) => i !== j);
-                            setNewCommand({
-                              ...newCommand,
-                              commandLine: result,
-                            });
-                          }}
-                        />
-                      </button>
+                  <div style={{ fontSize: "10px" }} className="col-1">
+                    <input
+                      placeholder={elem}
+                      type="number"
+                      min={1}
+                      disabled={!editCommandLineIndexes.includes(i)}
+                      value={newCommand.commandLine[i].quantity}
+                      onChange={(e) => {
+                        let aux = [...newCommand.commandLine];
+                        let obj = { ...aux[i] };
+                        obj.quantity = +e.target.value;
+                        aux[i] = { ...obj };
+                        setNewCommand({ ...newCommand, commandLine: aux });
+                      }}
+                    />
+                  </div>
+                  <div className=" col-1 text-center">
+                    {newCommand.commandLine[i]?.articleByBranch?.price}
+                  </div>
+                  <div style={{ fontSize: "10px" }} className="col-1">
+                    <input
+                      placeholder={elem}
+                      type="number"
+                      min={1}
+                      disabled={!editCommandLineIndexes.includes(i)}
+                      value={newCommand.commandLine[i].discount}
+                      onChange={(e) => {
+                        let aux = [...newCommand.commandLine];
+                        let obj = { ...aux[i] };
+                        obj.discount = +e.target.value;
+                        aux[i] = { ...obj };
+                        setNewCommand({ ...newCommand, commandLine: aux });
+                      }}
+                    />
+                  </div>
+                  <div className="col-1 text-center">
+                    {newCommand.commandLine[i]?.quantity *
+                      newCommand.commandLine[i]?.articleByBranch?.price -
+                      (newCommand.commandLine[i]?.articleByBranch?.price *
+                        newCommand.commandLine[i]?.discount) /
+                        100}
+                  </div>
 
-                      <button className="btn btn-light">
-                        <GrEdit
-                          onClick={() =>
-                            setEditCommandLineIndexes([
-                              ...editCommandLineIndexes,
-                              i,
-                            ])
-                          }
-                          style={{ cursor: "pointer" }}
-                        />
-                      </button>
-                    </div>
-                  ) : (
-                    <div
-                      style={{ width: 60 }}
-                      className="d-flex justify-content-around gap-1"
-                    >
-                      <button className="btn btn-light">
-                        <BiSave
-                          onClick={() =>
-                            setEditCommandLineIndexes(
-                              editCommandLineIndexes.filter(
-                                (elem) => elem !== i
+                  <>
+                    {!editCommandLineIndexes.includes(i) ? (
+                      <div
+                        // style={{ width: 60 }}
+                        className="d-flex justify-content-center gap-1 col-2"
+                      >
+                        <button className="btn btn-light">
+                          <FaTrash
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              let aux = [...newCommand.commandLine];
+                              let result = aux.filter((elem, j) => i !== j);
+                              setNewCommand({
+                                ...newCommand,
+                                commandLine: result,
+                              });
+                            }}
+                          />
+                        </button>
+
+                        <button className="btn btn-light">
+                          <GrEdit
+                            onClick={() =>
+                              setEditCommandLineIndexes([
+                                ...editCommandLineIndexes,
+                                i,
+                              ])
+                            }
+                            style={{ cursor: "pointer" }}
+                          />
+                        </button>
+                      </div>
+                    ) : (
+                      <div
+                        // style={{ width: 60 }}
+                        className="d-flex justify-content-around gap-1 col-2"
+                      >
+                        <button className="btn btn-light">
+                          <BiSave
+                            onClick={() =>
+                              setEditCommandLineIndexes(
+                                editCommandLineIndexes.filter(
+                                  (elem) => elem !== i
+                                )
                               )
-                            )
-                          }
-                          style={{ cursor: "pointer" }}
-                        />
-                      </button>
-                    </div>
-                  )}
-                </>
-              </Box>
+                            }
+                            style={{ cursor: "pointer" }}
+                          />
+                        </button>
+                      </div>
+                    )}
+                  </>
+                </Box>
+                <div className="w-100 bg-purple" style={{ height: 1 }} />
+              </div>
             ))}
             {!newCommand.branchId && (
               <p className="text-center" style={{ color: "red" }}>
@@ -592,10 +658,8 @@ function CreateCommand() {
               </p>
             )}
             <Box mt={3} mb={3} display="flex" alignItems="center" gap={2}>
-              <div style={{ fontSize: "10px" }} className="col-2">
+              <div style={{ fontSize: "12px" }} className="col-2">
                 <input
-                  // min={1}
-                  // type="number"
                   size="lg"
                   className="form-control rounded"
                   disabled={!newCommand.branchId}
@@ -620,6 +684,9 @@ function CreateCommand() {
                   ".MuiInputBase-root": {
                     height: "43px !important",
                   },
+                  ".MuiInputBase-input": {
+                    padding: "0px !important",
+                  },
                 }}
                 open={openArticles}
                 onOpen={() => {
@@ -635,10 +702,9 @@ function CreateCommand() {
                   setNewCommandLine({
                     ...newCommandLine,
                     quantity: 1,
-                    articleByBranch: {
-                      ...v,
-                    },
-                    articleByBranchId: v.id,
+                    discount: 0,
+                    articleByBranch: v,
+                    articleByBranchId: v?.id,
                   });
                 }}
                 getOptionLabel={(option) => option?.article?.title}
@@ -650,7 +716,8 @@ function CreateCommand() {
                     onChange={(e) => {
                       setTypingArticleTitle(e.target.value);
                     }}
-                    label="Article"
+                    // label="Article"
+                    placeholder="Article title"
                     InputProps={{
                       ...params.InputProps,
                       endAdornment: loadingClient ? (
@@ -661,15 +728,16 @@ function CreateCommand() {
                 )}
               />
 
-              <div style={{ fontSize: "10px" }} className="col-1">
+              <div style={{}} className="col-1">
                 <input
                   min={1}
+                  max={newCommandLine?.articleByBranch?.stock}
                   type="number"
                   disabled={!newCommandLine?.quantity}
                   style={
                     errorQuantity
-                      ? { outlineColor: "red", borderColor: "red" }
-                      : {}
+                      ? { outlineColor: "red", borderColor: "red", height: 43 }
+                      : { height: 43 }
                   }
                   value={newCommandLine.quantity}
                   onChange={(e) => {
@@ -683,16 +751,42 @@ function CreateCommand() {
                   }}
                 />
               </div>
-              <div className=" col-2 text-center">
+              <div className=" col-1 text-center">
                 {newCommandLine?.articleByBranch?.price}
               </div>
-              <div className="col-2 text-center">
+              <div style={{}} className="col-1">
+                <input
+                  min={0}
+                  max={99}
+                  type="number"
+                  disabled={!newCommandLine?.quantity}
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red", height: 43 }
+                      : { height: 43 }
+                  }
+                  value={newCommandLine.discount}
+                  onChange={(e) => {
+                    setNewCommandLine({
+                      ...newCommandLine,
+                      discount: +e.target.value,
+                    });
+                    e.target.value.length === 0
+                      ? setErrorQuantity(true)
+                      : setErrorQuantity(false);
+                  }}
+                />
+              </div>
+              <div className="col-1 text-center">
                 {newCommandLine?.quantity *
-                  newCommandLine?.articleByBranch?.price || ""}
+                  newCommandLine?.articleByBranch?.price -
+                  (newCommandLine?.articleByBranch?.price *
+                    newCommandLine.discount) /
+                    100 || ""}
               </div>
 
               <div
-                style={{ width: 60 }}
+                // style={{ width: 60 }}
                 className="d-flex justify-content-center col-2"
               >
                 <button
@@ -713,6 +807,7 @@ function CreateCommand() {
                         ],
                       });
                       setNewCommandLine({
+                        discount: "",
                         quantity: "",
                         articleByBranch: null,
                       });
@@ -725,7 +820,7 @@ function CreateCommand() {
               </div>
             </Box>
           </div>
-
+          <div className="w-100 bg-purple" style={{ height: 2 }} />
           <div class="row mt-3">
             <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
               Extra note such as company or payment information...

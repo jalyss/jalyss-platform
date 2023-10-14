@@ -469,6 +469,7 @@ model CommandLine {
   articleByBranch   ArticlesByBranch @relation(fields: [articleByBranchId], references: [id])
   articleByBranchId String
   quantity          Int
+  discount          Float            @default(0)
   amount            Float
 
   @@unique(fields: [commandId, articleByBranchId], name: "commandArticle")
