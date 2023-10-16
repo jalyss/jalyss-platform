@@ -36,7 +36,7 @@ function CityList() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (cityStore?.cities?.items) {
+    if (cityStore?.cities?.items  && Array.isArray(cityStore.cities.items)) {
       let aux = cityStore?.cities?.items.map((e) => {
         return {
           id: e.id,

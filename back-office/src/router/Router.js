@@ -135,6 +135,7 @@ import AddLevel from "../domains/educationLevel/views/AddLevel";
 import JobTitle from "../domains/jobTitle/jobTitle";
 import JobTitleList from "../domains/jobTitle/views/JobTitleList";
 import AddJob from "../domains/jobTitle/views/AddJob";
+import JobDetails from "../domains/jobTitle/views/JobDetails";
 
 import FunctionalArea from "../domains/functionalArea/functionalArea";
 import FunctionalAreaList from "../domains/functionalArea/view/FunctionalAreaList";
@@ -218,6 +219,8 @@ function Router() {
             <Route path="jobTitle" element={<JobTitle />}>
               <Route index element={<JobTitleList />} />
               <Route path="addJob" element={<AddJob />} />
+              <Route path="JobDetails/:id" element={<JobDetails />} />
+
             </Route>
 
             <Route path="functionalArea" element={<FunctionalArea />}>

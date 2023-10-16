@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchJobTitles, removeJobTitle } from "../../../store/jobTitle";
+import {
+  fetchJobTitles,
+  removeJobTitle,
+  editJobTitle,
+  fetchJobTitle,
+} from "../../../store/jobTitle";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -9,9 +14,24 @@ import Modal from "../../../components/Commun/Modal";
 
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  TextField,
+} from "@mui/material";
+
 function JobTitleList() {
   const [basicModal, setBasicModal] = useState(false);
   const jobTitleStore = useSelector((state) => state.jobTitle);
+  const [currentJob, setCurrentJob] = useState(null);
+const current = jobTitleStore.jobTitles.items
+  useEffect(() => {
+    setCurrentJob(null);
+  }, [jobTitleStore.id]);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
@@ -19,25 +39,41 @@ function JobTitleList() {
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
-
+console.log(jobTitleStore,"choooooooooof")
   const handleDeletejobTitleClick = () => {
     dispatch(removeJobTitle(selectedjobTitleId)).then((res) => {
       if (res.error) {
         showErrorToast(res.error.message);
       } else {
-        showSuccessToast("jobTitle has been deleted");
-        toggleShow();
+        showSuccessToast("Job title has been deleted");
       }
     });
   };
 
-  useEffect(() => {
-    dispatch(fetchJobTitles());
-  }, [dispatch]);
-  console.log(jobTitleStore, "jobTitleStore");
+  const handleEditJobTitle = () => {
+    if (currentJob) {
+      dispatch(editJobTitle(currentJob))
+        .then(() => {
+          showSuccessToast("Job title updated successfully");
+          dispatch(fetchJobTitles());
+          handleJobDetailsClose();
+        })
+        .catch((error) => {
+          showErrorToast(error.message);
+        });
+    }
+  };
 
   useEffect(() => {
-    if (jobTitleStore?.jobTitles?.items) {
+    dispatch(fetchJobTitles());
+    dispatch(fetchJobTitle(selectedjobTitleId))
+  }, [dispatch,selectedjobTitleId]);
+
+  useEffect(() => {
+    if (
+      jobTitleStore?.jobTitles?.items &&
+      Array.isArray(jobTitleStore.jobTitles.items)
+    ) {
       let aux = jobTitleStore?.jobTitles?.items.map((e) => {
         return {
           id: e.id,
@@ -49,7 +85,20 @@ function JobTitleList() {
       setRows(aux);
     }
   }, [jobTitleStore.jobTitles.items]);
- 
+
+  const [jobDetailsOpen, setJobDetailsOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  const handleViewJobDetails = (job) => {
+    setSelectedJob(job);
+    setCurrentJob({ ...job });
+    setJobDetailsOpen(true);
+  };
+
+  const handleJobDetailsClose = () => {
+    setJobDetailsOpen(false);
+  };
+
   const columns = [
     {
       field: "nameAr",
@@ -72,13 +121,16 @@ function JobTitleList() {
       headerName: "Actions",
       width: 155,
       cellClassName: "actions",
-      getActions: ({ id }) => {
+      getActions: ({ id, nameAr, nameEn }) => {
         return [
           <GridActionsCellItem
             icon={<AiOutlineEye />}
-            label="Add"
+            label="View"
             className="textPrimary"
-            onClick={() => navigate(`profiljobTitle/${id}`)}
+            onClick={() =>
+             { setSelectedjobTitleId(id)
+              handleViewJobDetails({  id, nameAr, nameEn })}
+            }
             color="success"
           />,
           <GridActionsCellItem
@@ -94,13 +146,12 @@ function JobTitleList() {
       },
     },
   ];
+
   return (
     <div>
       <div>
         <div className="container">
-          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>
-             Job List
-          </h2>
+          <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>Job List</h2>
           <hr />
           <AddButton
             title={"Add Job"}
@@ -129,6 +180,46 @@ function JobTitleList() {
             toggleShow={toggleShow}
             confirm={() => handleDeletejobTitleClick()}
           />
+          <Dialog open={jobDetailsOpen} onClose={handleJobDetailsClose}>
+            <DialogTitle>Job Details</DialogTitle>
+            <DialogContent>
+              {selectedJob && (
+                <div>
+                  <TextField
+                    label="Name (Arabic)"
+                    variant="outlined"
+                    fullWidth
+                  
+
+                    value={jobTitleStore?.jobTitles.items.nameAr}
+                    onChange={(e) =>
+                      setCurrentJob({ ...currentJob, nameAr: e.target.value })
+                    }
+                    margin="normal"
+                  />
+                  <TextField
+                    label="Name (English)"
+                    variant="outlined"
+                   
+                    fullWidth
+                    value={jobTitleStore?.jobTitles.items.nameEn}
+                    onChange={(e) =>
+                      setCurrentJob({ ...currentJob, nameEn: e.target.value })
+                    }
+                    margin="normal"
+                  />
+                </div>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleJobDetailsClose} color="primary">
+                Close
+              </Button>
+              <Button onClick={handleEditJobTitle} color="primary">
+                Save
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
     </div>

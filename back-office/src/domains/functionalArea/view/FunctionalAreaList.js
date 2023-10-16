@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchFunctionalAreas,
   removeFunctionalArea,
+  editFunctionalArea,
 } from "../../../store/functionalArea";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
@@ -12,9 +13,23 @@ import Modal from "../../../components/Commun/Modal";
 
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  TextField,
+} from "@mui/material";
+
 function FunctionalAreaList() {
   const [basicModal, setBasicModal] = useState(false);
   const functionalAreaStore = useSelector((state) => state.functionalArea);
+  const [currentArea, setCurrentArea] = useState(null);
+
+  useEffect(() => {
+    setCurrentArea(null);
+  }, [functionalAreaStore.id]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
@@ -29,18 +44,30 @@ function FunctionalAreaList() {
         showErrorToast(res.error.message);
       } else {
         showSuccessToast("functionalArea has been deleted");
-        toggleShow();
+       
       }
     });
   };
-
+  const handleEditFunctionalArea = () => {
+    if (currentArea) {
+      dispatch(editFunctionalArea(currentArea))
+        .then(() => {
+          showSuccessToast("Area  updated successfully");
+          dispatch(fetchFunctionalAreas());
+          handleAreaDetailsClose();
+        })
+        .catch((error) => {
+          showErrorToast(error.message);
+        });
+    }
+  };
   useEffect(() => {
     dispatch(fetchFunctionalAreas());
   }, [dispatch]);
   console.log(functionalAreaStore, "functionalAreaStore");
 
   useEffect(() => {
-    if (functionalAreaStore?.functionalAreas?.items) {
+    if (functionalAreaStore?.functionalAreas?.items && Array.isArray(functionalAreaStore.functionalAreas.items)) {
       let aux = functionalAreaStore?.functionalAreas?.items.map((e) => {
         return {
           id: e.id,
@@ -53,6 +80,18 @@ function FunctionalAreaList() {
     }
   }, [functionalAreaStore.functionalAreas.items]);
 
+  const [areaDetailsOpen, setAreaDetailsOpen] = useState(false);
+  const [selectedArea, setSelectedArea] = useState(null);
+
+  const handleViewAreaDetails = (area) => {
+    setSelectedArea(area);
+    setCurrentArea({ ...area });
+    setAreaDetailsOpen(true);
+  };
+
+  const handleAreaDetailsClose = () => {
+    setAreaDetailsOpen(false);
+  };
   const columns = [
     {
       field: "nameAr",
@@ -75,14 +114,16 @@ function FunctionalAreaList() {
       headerName: "Actions",
       width: 155,
       cellClassName: "actions",
-      getActions: ({ id }) => {
+      getActions: ({ id, nameAr, nameEn, createdAt }) => {
         return [
           <GridActionsCellItem
             icon={<AiOutlineEye />}
-            label="Add"
+            label="view"
             className="textPrimary"
-            onClick={() => navigate(`profilfunctionalArea/${id}`)}
-            color="success"
+            onClick={() =>
+              handleViewAreaDetails({ id, nameAr, nameEn, createdAt })
+            }   
+                     color="success"
           />,
           <GridActionsCellItem
             icon={<AiFillDelete />}
@@ -133,6 +174,43 @@ function FunctionalAreaList() {
             toggleShow={toggleShow}
             confirm={() => handleDeletefunctionalAreaClick()}
           />
+             <Dialog open={areaDetailsOpen} onClose={handleAreaDetailsClose}>
+            <DialogTitle>Area Details</DialogTitle>
+            <DialogContent>
+              {selectedArea && (
+                <div>
+                  <TextField
+                    label="Name (Arabic)"
+                    variant="outlined"
+                    fullWidth
+                    value={currentArea?.nameAr}
+                    onChange={(e) =>
+                      setCurrentArea({ ...currentArea, nameAr: e.target.value })
+                    }
+                    margin="normal"
+                  />
+                  <TextField
+                    label="Name (English)"
+                    variant="outlined"
+                    fullWidth
+                    value={currentArea?.nameEn}
+                    onChange={(e) =>
+                      setCurrentArea({ ...currentArea, nameEn: e.target.value })
+                    }
+                    margin="normal"
+                  />
+                </div>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleAreaDetailsClose} color="primary">
+                Close
+              </Button>
+              <Button onClick={handleEditFunctionalArea} color="primary">
+                Save
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </div>
     </div>
