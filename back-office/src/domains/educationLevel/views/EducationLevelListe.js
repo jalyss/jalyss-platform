@@ -3,17 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchEducationLevels,
   removeEducationLevel,
+  fetchEducationLevel,
+  editEducationLevel,
 } from "../../../store/educationLevel";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import AddButton from "../../../components/Commun/buttons/AddButton";
 import Modal from "../../../components/Commun/Modal";
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  TextField,
+} from "@mui/material";
+
 
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
@@ -23,9 +29,17 @@ function EducationLevelList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
-  const [selectededucationLevelId, setSelectededucationLevelId] = useState("");
+  const [selectedEducationLevelId, setSelectededucationLevelId] = useState("");
   const [educationLevelOpen, setEducationLevelOpen] = useState(false);
+  // const [educationLevel, setEducationLevel] = useState({
+  //   nameAr: "",
+  //   nameEn: "",
+  // });
 
+  const [nameAr,setNameAr]=useState("")
+  const [nameEn, setNameEn] = useState("")
+// const id = selectedEducationLevelId
+const level =useSelector((state)=>educationLevelStore?.educationLevels?.items);
   const educationLevelDetailsOpen = () => {
     setEducationLevelOpen(true);
   };
@@ -37,8 +51,38 @@ function EducationLevelList() {
     setBasicModal(!basicModal);
   };
 
+  const handleEditEducationLevel = (e) => {
+    e.preventDefault(e);
+    const UpdatedEducationLevel={
+      nameAr,
+      nameEn,
+    };
+const id = selectedEducationLevelId;
+
+    if (level) {
+      dispatch(editEducationLevel({id,...UpdatedEducationLevel}))
+        .then(() => {
+          showSuccessToast("Education level updated successfully");
+          dispatch(fetchEducationLevels());
+          educationLevelDetailsClose();
+        })
+        .catch((error) => {
+          showErrorToast(error.message);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if(level){
+      setNameAr(level.nameAr);
+      setNameEn(level.nameEn);
+    }else {
+      dispatch(fetchEducationLevel(selectedEducationLevelId));
+    }
+  },[dispatch,selectedEducationLevelId,level]);
+
   const handleDeleteeducationLevelClick = () => {
-    dispatch(removeEducationLevel(selectededucationLevelId)).then((res) => {
+    dispatch(removeEducationLevel(selectedEducationLevelId)).then((res) => {
       if (res.error) {
         showErrorToast(res.error.message);
       } else {
@@ -50,8 +94,13 @@ function EducationLevelList() {
 
   useEffect(() => {
     dispatch(fetchEducationLevels());
-  }, [dispatch]);
+    dispatch(fetchEducationLevel(selectedEducationLevelId));
+    dispatch(editEducationLevel(selectedEducationLevelId));
+  }, [dispatch,selectedEducationLevelId]);
   console.log(educationLevelStore, "educationLevelStore");
+
+
+
 
   useEffect(() => {
     if (educationLevelStore?.educationLevels?.items && Array.isArray(educationLevelStore.educationLevels.items)) {
@@ -159,18 +208,46 @@ function EducationLevelList() {
           <Dialog open={educationLevelOpen} onClose={educationLevelDetailsClose}>
         <DialogTitle>Job Details</DialogTitle>
         <DialogContent>
-          {selectededucationLevelId && (
+          {selectedEducationLevelId && (
             <div>
-              <p>Name (Arabic): {selectededucationLevelId.nameAr}</p>
-              <p>Name (English): {selectededucationLevelId.nameEn}</p>
-              <p>Created At: {selectededucationLevelId.createdAt}</p>
+
+              <TextField
+        label="Name (Arabic)"
+        variant="outlined"
+        fullWidth
+      
+
+        value={educationLevelStore?.educationLevels?.items.nameAr }
+        onChange={(e) =>
+          setNameAr(e.target.value )
+        }
+        margin="normal"
+      />
+
+              <TextField
+        label="Name (English)"
+        variant="outlined"
+       
+        fullWidth
+        value={educationLevelStore?.educationLevels?.items.nameEn }
+        onChange={(e) =>
+          setNameEn(e.target.value )
+        }
+        margin="normal"
+      />
+              <p>Created At: {educationLevelStore?.educationLevels?.items.createdAt}</p>
             </div>
           )}
+
+
         </DialogContent>
         <DialogActions>
           <Button onClick={educationLevelDetailsClose} color="primary">
             Close
           </Button>
+          <Button onClick={handleEditEducationLevel} color="primary">
+                Save
+              </Button>
         </DialogActions>
       </Dialog>
         </div>
@@ -180,3 +257,4 @@ function EducationLevelList() {
 }
 
 export default EducationLevelList;
+
