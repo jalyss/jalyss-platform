@@ -9,6 +9,11 @@ import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import AddButton from "../../../components/Commun/buttons/AddButton";
 import Modal from "../../../components/Commun/Modal";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
@@ -19,6 +24,15 @@ function EducationLevelList() {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [selectededucationLevelId, setSelectededucationLevelId] = useState("");
+  const [educationLevelOpen, setEducationLevelOpen] = useState(false);
+
+  const educationLevelDetailsOpen = () => {
+    setEducationLevelOpen(true);
+  };
+
+  const educationLevelDetailsClose = () => {
+    setEducationLevelOpen(false);
+  };
   const toggleShow = () => {
     setBasicModal(!basicModal);
   };
@@ -81,7 +95,10 @@ function EducationLevelList() {
             icon={<AiOutlineEye />}
             label="Add"
             className="textPrimary"
-            onClick={() => navigate(`profileducationLevel/${id}`)}
+            onClick={() => {setSelectededucationLevelId(id);
+                            educationLevelDetailsOpen();
+                            console.log(setSelectededucationLevelId)
+            }}
             color="success"
           />,
           <GridActionsCellItem
@@ -132,6 +149,30 @@ function EducationLevelList() {
             toggleShow={toggleShow}
             confirm={() => handleDeleteeducationLevelClick()}
           />
+                    <Modal
+            bodOfDelete="Are you sure you want to delete this level?"
+            basicModal={basicModal}
+            ofDelete={true}
+            toggleShow={toggleShow}
+            confirm={() => handleDeleteeducationLevelClick()}
+          />
+          <Dialog open={educationLevelOpen} onClose={educationLevelDetailsClose}>
+        <DialogTitle>Job Details</DialogTitle>
+        <DialogContent>
+          {selectededucationLevelId && (
+            <div>
+              <p>Name (Arabic): {selectededucationLevelId.nameAr}</p>
+              <p>Name (English): {selectededucationLevelId.nameEn}</p>
+              <p>Created At: {selectededucationLevelId.createdAt}</p>
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={educationLevelDetailsClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
         </div>
       </div>
     </div>
