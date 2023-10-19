@@ -278,7 +278,10 @@ const SessionDetails = () => {
     let aux = {
       id: addSession.id,
       titleEn: addSession.titleEn,
+      titleAr: addSession.titleAr,
       descriptionEn: addSession.descriptionEn,
+      descriptionAr: addSession.descriptionAr,
+
       tarifs: addSession.tarifs,
       lectures: addSession.lectures,
     };

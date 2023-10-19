@@ -56,6 +56,7 @@ function SessionDetails() {
   const displayColumn2 = showMore ? column2 : column2?.slice(0, 5);
   const currentDate = new Date();
   const renderedCoaches = new Set();
+  console.log("seeeee",seletedSession);
   
   return (
     <div className="container">
@@ -93,7 +94,7 @@ function SessionDetails() {
               fontWeight: 600,
             }}
           >
-            {seletedSession?.title}
+            {seletedSession?.titleEn}
           </div>
 
           <KeyValueStyled
@@ -270,7 +271,7 @@ function SessionDetails() {
           />
         )}
 
-      {session?.previousSesion &&
+      {
         currentDate < new Date(session?.startDate) && (
           <FeedBack
             previousSesion={session.previousSesion}
@@ -278,7 +279,7 @@ function SessionDetails() {
           />
         )}
 
-      {session?.previousSesion &&
+      {
         currentDate > new Date(session?.startDate) && (
           <FeedBack previousSesion={session} subtitle="Session Feedback" />
         )}

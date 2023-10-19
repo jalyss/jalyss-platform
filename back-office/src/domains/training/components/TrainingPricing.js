@@ -22,7 +22,8 @@ const TrainingPricing = ({ session, fn, header, readOnly }) => {
               <h1 className="h6 text-uppercase font-weight-bold mb-4">
                 {tarif.titleEn}
               </h1>
-              <h2 className="h1 font-wieght-bold">${tarif.price}</h2>
+              <div className="d-flex justify-content-center gap-2"><h2 className="h1 font-wieght-bold">{tarif.price}</h2> <span className="mt-3">TND</span></div> 
+
               <div
                 className="custom-seperator my-4 mx-auto"
                 style={{ backgroundColor: "#48184c" }}
