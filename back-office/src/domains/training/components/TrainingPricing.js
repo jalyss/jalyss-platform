@@ -20,13 +20,14 @@ const TrainingPricing = ({ session, fn, header, readOnly, onDeleteTarif }) => {
           <div className="text-center position-relative" key={i}>
             {!readOnly && (
               <div
-                className="d-flex position-absolute top-0 end-0  p-2"
+                className="d-flex position-absolute top-0 end-0 m-3 p-2 transformScale"
                 style={{
-                  backgroundColor: "rgba(220, 53, 69, 0.5)",
+             
                   borderRadius: "50%",
+                  cursor:"pointer"
                 }}
               >
-                <i className="text-danger" onClick={() => onDeleteTarif(i)}>
+                <i className="text-danger " onClick={() => onDeleteTarif(i)}>
                   <FaTrash />
                 </i>
               </div>
