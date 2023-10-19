@@ -13,7 +13,7 @@ import { CreateCityProposalDto } from './dto/create-cityProposal.dto';
 import { UpdateCityProposalDto } from './dto/update-cityProposal.dto';
 @ApiTags('City Proposals')
 @Controller('city-porposals/')
-export class CitiesController {
+export class CityProposalsController {
   constructor(private readonly cityProposalsService: CityProposalsService) {}
 
   @Post(':countryId')
