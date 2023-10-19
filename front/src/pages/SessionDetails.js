@@ -254,7 +254,7 @@ function SessionDetails() {
 
       <SessionLecture lectures={lec} />
       <TrainingPricing session={session} ref={ref} />
-      {session?.previousSesion &&
+      {
         currentDate < new Date(session?.startDate) && (
           <PreviousSessionGallery
             previousSesion={session.previousSesion}
@@ -262,7 +262,7 @@ function SessionDetails() {
           />
         )}
 
-      {session?.previousSesion &&
+      {
         currentDate > new Date(session?.startDate) && (
           <PreviousSessionGallery
             previousSesion={session}
