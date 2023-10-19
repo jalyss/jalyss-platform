@@ -1,9 +1,9 @@
 import React from "react";
 
 import TrainingHeading from "./TrainingHeading";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { FaCheck, FaTimes, FaTrash } from "react-icons/fa";
 
-const TrainingPricing = ({ session, fn, header, readOnly }) => {
+const TrainingPricing = ({ session, fn, header, readOnly, onDeleteTarif }) => {
   return (
     <div>
       {!header && (
@@ -15,14 +15,31 @@ const TrainingPricing = ({ session, fn, header, readOnly }) => {
         />
       )}
 
-      <div className="d-flex flex-wrap justify-content-center align-items-center gap-3 mb-5">
+      <div className="d-flex flex-wrap justify-content-center align-items-center gap-3 mb-5 ">
         {session.tarifs.map((tarif, i) => (
-          <div className="text-center" key={i}>
+          <div className="text-center position-relative" key={i}>
+            {!readOnly && (
+              <div
+                className="d-flex position-absolute top-0 end-0  p-2"
+                style={{
+                  backgroundColor: "rgba(220, 53, 69, 0.5)",
+                  borderRadius: "50%",
+                }}
+              >
+                <i className="text-danger" onClick={() => onDeleteTarif(i)}>
+                  <FaTrash />
+                </i>
+              </div>
+            )}
+
             <div className="bg-white p-3 rounded-lg shadow">
               <h1 className="h6 text-uppercase font-weight-bold mb-4">
                 {tarif.titleEn}
               </h1>
-              <div className="d-flex justify-content-center gap-2"><h2 className="h1 font-wieght-bold">{tarif.price}</h2> <span className="mt-3">TND</span></div> 
+              <div className="d-flex justify-content-center gap-2">
+                <h2 className="h1 font-wieght-bold">{tarif.price}</h2>{" "}
+                <span className="mt-3">TND</span>
+              </div>
 
               <div
                 className="custom-seperator my-4 mx-auto"
