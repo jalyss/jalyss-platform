@@ -139,65 +139,71 @@ export class UsersService {
       proposalCity,
       ...rest
     } = data;
-
-    const updatedUser = await this.prisma.user.update({
-      where: { id },
-      data: {
-        fullNameAr: data.fullNameAr,
-        fullNameEn: data.fullNameEn,
-        email: data.email,
-      },
-    });
-
-    if (clientId) {
-      let proposal = {};
-      if (proposalCountry) {
-        proposal = {
-          ...proposal,
-          ProposalCountry: {
-            create: {
-              name: proposalCountry,
-            },
-          },
-        };
-      }
-      if (proposalCity && countryId) {
-        proposal = {
-          ...proposal,
-          ProposalCity: {
-            create: {
-              name: proposalCity,
-              countryId,
-            },
-          },
-        };
-      }
-      await this.prisma.client.update({
-        where: { id: clientId },
+    const user = await this.prisma.$transaction(async (prisma) => {
+      const updatedUser = await prisma.user.update({
+        where: { id },
         data: {
-          ...rest,
-          tel,
-          address,
-          countryId,
-          cityId,
-          educationLevelId,
-          jobTitleId,
-          ...proposal,
+          fullNameAr: data.fullNameAr,
+          fullNameEn: data.fullNameEn,
+          email: data.email,
+          avatarId:data.avatarId
         },
+        
       });
-    }
-    if (employeeId) {
-      await this.prisma.employee.update({
-        where: { id: employeeId },
-        data: {
-          ...rest,
-          roleId,
-          branchId,
-        },
-      });
-    }
+  
+      if (clientId) {
+        let proposal = {};
+        if (proposalCountry) {
+          proposal = {
+            ...proposal,
+            ProposalCountry: {
+              create: {
+                name: proposalCountry,
+              },
+            },
+          };
+        }
+        if (proposalCity && countryId) {
+          proposal = {
+            ...proposal,
+            ProposalCity: {
+              create: {
+                name: proposalCity,
+                countryId,
+              },
+            },
+          };
+        }
+        await prisma.client.update({
+          where: { id: clientId },
+          data: {
+            ...rest,
+            tel,
+            address,
+            countryId,
+            cityId,
+            educationLevelId,
+            jobTitleId,
+            ...proposal,
+          },
+        });
+      }
+      if (employeeId) {
+        await prisma.employee.update({
+          where: { id: employeeId },
+          data: {
+            ...rest,
+            roleId,
+            branchId,
+          },
+        });
+      }
+      const {password,confirmkey,...userData}=updatedUser
+      return userData;
+    })
+    return user
+    
 
-    return updatedUser;
   }
 
   updateUserStatus(id: string, data: UpdateUserStatusDto) {
