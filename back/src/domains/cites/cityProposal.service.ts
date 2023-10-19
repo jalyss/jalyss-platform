@@ -6,20 +6,19 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('City Proposal')
 @Injectable()
 export class CityProposalsService {
-  constructor(
-    private readonly prisma: PrismaService,
-) { }
-  async create(dto: CreateCityProposalDto,countryId:string) {
+  constructor(private readonly prisma: PrismaService) {}
+  async create(dto: CreateCityProposalDto, countryId: string) {
     return await this.prisma.proposalCity.create({
       data: {
-          ...dto,countryId
+        ...dto,
+        countryId,
       },
-  });
+    });
   }
 
-  findAll(countryId:string) {
+  findAll(countryId: string) {
     return this.prisma.proposalCity.findMany({
-      where:{countryId}
+      where: { countryId },
     });
   }
   findAllCitites() {
@@ -29,18 +28,16 @@ export class CityProposalsService {
   async findOne(id: string) {
     return await this.prisma.proposalCity.findFirst({
       where: {
-          id,
+        id,
       },
-  });
+    });
   }
 
   async update(id: string, dto: UpdateCityProposalDto) {
     return await this.prisma.proposalCity.update({ where: { id }, data: dto });
-
   }
 
   async remove(id: string) {
     return await this.prisma.city.delete({ where: { id } });
-
   }
 }

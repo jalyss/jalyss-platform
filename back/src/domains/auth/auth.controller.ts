@@ -78,6 +78,8 @@ export class AuthController {
       throw new BadRequestException(e.message);
     }
   }
+
+  
   @ApiSecurity('apiKey')
   @UseGuards(JwtAuthGuard)
   @Get('meAdmin')
