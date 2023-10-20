@@ -73,6 +73,7 @@ const id = selectedEducationLevelId;
   };
 
   useEffect(() => {
+    console.log(nameAr,"aarrr")
     if(level){
       setNameAr(level.nameAr);
       setNameEn(level.nameEn);

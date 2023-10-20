@@ -13,7 +13,8 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import { updateArticleByBranch, fetchArticle } from "../../../store/article";
+import { updateArticleByBranch, fetchArticle,fetchArticleByBranch } from "../../../store/article";
+import { fetchBranches } from "../../../store/branche";
 import { fetchAuthors } from "../../../store/author";
 import { fetchArticleTypes } from "../../../store/articleType";
 import { fetchPublishingHouses } from "../../../store/publishingHouse";
@@ -30,6 +31,9 @@ function DetailAritcle() {
 
   const [articleData, setArticleData] = useState();
   const article = useSelector((state) => state.article.article);
+  const branchStore = useSelector((state) => state.branche);
+  const articleStore = useSelector((state) => state.article);
+
   const categoryStore = useSelector((state) => state.category);
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
   const articleTypeStore = useSelector((state) => state.articleType);
@@ -37,6 +41,9 @@ function DetailAritcle() {
   const [selectedFile, setSelectedFile] = useState(null);
   const authorStore = useSelector((state) => state.author);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [openDialogPrice, setOpenDialogPrice] = useState(false);
+  const [selectedForPrice, setSelectedForPrice] = useState(null);
+  const [aux, setAux] = useState(0);
 
   useEffect(() => {
     dispatch(fetchAuthors());
@@ -44,11 +51,29 @@ function DetailAritcle() {
     dispatch(fetchPublishingHouses());
     dispatch(fetchCategories());
     dispatch(fetchAuthors());
+    dispatch(fetchBranches());
   }, [dispatch, articleId]);
 
   useEffect(() => {
     dispatch(fetchArticle(articleId));
+    console.log(articleData,"data")
   }, [dispatch, articleId]);
+
+  useEffect(() => {
+    if (article?.ArticlesByBranch?.length) {
+      let total = 0;
+      const aux = article.ArticlesByBranch.map((element) => {
+        total += element.stock;
+        return {
+          ...element,
+          total: total,
+        };
+      });
+      console.log(aux);
+      setArticleData((prev) => ({ ...prev, ArticlesByBranch: aux }));
+    }
+  }, [article]);
+  
 
   useEffect(() => {
     setArticleData({ ...article });
@@ -59,6 +84,9 @@ function DetailAritcle() {
   };
   const handleButtonClick = () => {
     fileInputRef.current.click();
+  };
+  const handleCloseDialogPrice = () => {
+    setOpenDialogPrice(false);
   };
 
   const handleSubmit = async () => {
@@ -171,6 +199,49 @@ function DetailAritcle() {
                     ref={fileInputRef}
                     style={{ display: "none" }}
                   />
+                              <div className="d-flex justify-content-center">
+              <div className="">
+                <div className="d-flex">
+                  <div style={{ width: 100 }}>
+                    <h6>Branch</h6>
+                  </div>
+                  <div style={{ width: 50 }}>
+                    <h6>Qte</h6>
+                  </div>
+                  <div style={{ width: 50 }}>
+                    <h6>Price</h6>
+                  </div>
+                </div>
+                {article?.ArticlesByBranch?.map((elem, j) => (
+                  <div className="d-flex py-2">
+                    <div style={{ width: 100 }}>{elem?.branch?.name}</div>
+                    <div style={{ width: 50 }}>{elem?.stock}</div>
+                    <div style={{ width: 50 }}>{elem?.price}</div>
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      style={{
+                        height: 25,
+                        width: 80,
+                        fontSize: 10,
+                        padding: 0,
+                      }}
+                      onClick={() => {
+                        console.log(elem);
+                        setSelectedForPrice(elem);
+                        setOpenDialogPrice(true);
+                      }}
+                    >
+                      Change Price
+                    </Button>
+                  </div>
+                ))}
+                <div className="d-flex">
+                  <div style={{ width: 100 }}>total</div>
+                  <div style={{ width: 100 }}>{aux.total}</div>
+                </div>
+              </div>
+            </div>
 
                   {!ediMode && (
                     <IconButton
