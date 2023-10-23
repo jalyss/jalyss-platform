@@ -189,6 +189,17 @@ model Client {
   ProposalFunctionalArea ProposalFunctionalArea[]
   ProposalJobTitle       ProposalJobTitle[]
   ProposalEducationLevel ProposalEducationLevel[]
+  DiscountCode           DiscountCode[]
+  DebtPayments           DebtPayments[]
+}
+
+model DiscountCode {
+  id       String    @id @default(uuid())
+  clientId String
+  client   Client    @relation(fields: [clientId], references: [id])
+  code     String    @unique
+  discount Float
+  Command  Command[]
 }
 
 model Employee {
@@ -368,13 +379,23 @@ model Provider {
 }
 
 model Supply {
+  id         String       @id @default(uuid())
   providerId String
-  provider   Provider @relation(fields: [providerId], references: [id])
-  articleId  String
-  article    Article  @relation(fields: [articleId], references: [id])
+  provider   Provider     @relation(fields: [providerId], references: [id])
   dateTime   DateTime
+  price      Float
+  SupplyLine SupplyLine[]
+}
 
-  @@unique(fields: [articleId, providerId, dateTime], name: "supplyByTime")
+model SupplyLine {
+  supplyId  String
+  supply    Supply  @relation(fields: [supplyId], references: [id])
+  articleId String
+  article   Article @relation(fields: [articleId], references: [id])
+  price     Float
+  quantity  Int
+
+  @@unique(fields: [articleId, supplyId], name: "supplyByTime")
 }
 
 model Article {
@@ -398,10 +419,11 @@ model Article {
   type               Type               @relation(fields: [typeId], references: [id])
   typeId             String
   ArticlesByBranch   ArticlesByBranch[]
-  Supply             Supply[]
-  media              MediaArticle[]
-  ArticleByAuthor    ArticleByAuthor[]
-  MvtArticle         MvtArticle[]
+
+  media           MediaArticle[]
+  ArticleByAuthor ArticleByAuthor[]
+  MvtArticle      MvtArticle[]
+  SupplyLine      SupplyLine[]
 }
 
 model ArticlesByBranch {
@@ -459,19 +481,21 @@ model Command {
   id                  String                @id @default(uuid())
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
+  branch              Branch                @relation(fields: [branchId], references: [id])
+  branchId            String                @map("branch_id")
   client              Client?               @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
   clientId            String?               @map("client_id")
   clientName          String                @map("client_name")
   clientAddress       String                @default("Tunisia") @map("client_address")
   clientTel           String                @default("00000000") @map("client_tel")
   clientEmail         String?               @map("client_email")
-  confirm             Status                @default(pending)
-  totalAmount         Float
   contactChannel      Channel               @default(site_web)
-  delivered           Boolean               @default(false)
+  discountCodeId      String?
+  discountCode        DiscountCode?         @relation(fields: [discountCodeId], references: [id])
+  totalAmount         Float
   hasDelivery         Boolean               @default(false) @map("has_delivery")
-  branch              Branch                @relation(fields: [branchId], references: [id])
-  branchId            String                @map("branch_id")
+  confirm             Status                @default(pending)
+  delivered           Boolean               @default(false)
   intermediate        Client?               @relation(name: "intermediate", fields: [intermediateId], references: [id], onDelete: Cascade)
   intermediateId      String?               @map("intermediate_id")
   country             Country?              @relation(fields: [countryId], references: [id])
@@ -485,6 +509,17 @@ model Command {
   commandLine         CommandLine[]
   ClientPayment       ClientPayment[]
   FinancialCommitment FinancialCommitment[]
+  DebtPayments        DebtPayments[]
+}
+
+model DebtPayments {
+  id        String   @id @default(uuid())
+  command   Command  @relation(fields: [commandId], references: [id])
+  commandId String
+  date      DateTime
+  amount    Float
+  client    Client?  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId  String?  @map("client_id")
 }
 
 model CommandLine {

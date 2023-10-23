@@ -32,6 +32,7 @@ import city from "./city";
 import client from "./client";
 import clientCategory from "./clientCategory";
 import paymentChoice from "./paymentChoice";
+import discountCode from "./discountCode";
 
 
 export const store = configureStore({
@@ -68,7 +69,8 @@ export const store = configureStore({
     transition,
     city,
     clientCategory,
-    paymentChoice
+    paymentChoice,
+    discountCode
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

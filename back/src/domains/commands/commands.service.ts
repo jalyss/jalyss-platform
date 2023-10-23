@@ -15,15 +15,15 @@ export class CommandsService {
     private readonly branchService: BranchesService,
   ) {}
   async create(dto: CreateCommandDto, branchId: string) {
-    // validateOrReject(dto);
-    console.log(dto);
+    const { discountCode, ...rest } = dto;
     const branch = await this.branchService.findBranchByIdOrIdentifier(
       branchId,
     );
     console.log(branchId, branch.id);
+    let codeDiscount={}
     let commandLines = [];
-    let sum = 0;
-    if (dto.hasDelivery) sum += 7;
+    let totalAmount = 0;
+    if (dto.hasDelivery) totalAmount += 7;
     if (!dto.commandLine) {
       throw new HttpException("don't have items", HttpStatus.BAD_REQUEST);
     } else {
@@ -33,7 +33,7 @@ export class CommandsService {
             where: { id: elem.articleByBranchId },
           });
           let amount = elem.quantity * articleByBranch.price;
-          sum += amount;
+          totalAmount += amount;
           return {
             articleByBranchId: elem.articleByBranchId,
             quantity: +elem.quantity,
@@ -42,11 +42,27 @@ export class CommandsService {
         }),
       );
     }
-
+    if (discountCode) {
+      const code = await this.prisma.discountCode.findUnique({
+        where: {
+          code: discountCode,
+        },
+      });
+      if (code) {
+        code
+        totalAmount = totalAmount - totalAmount*code.discount/100;
+        codeDiscount={
+          discountCodeId:code.id
+        }
+      } else {
+        throw new HttpException('invalid code', HttpStatus.BAD_REQUEST);
+      }
+    }
     return await this.prisma.command.create({
       data: {
-        totalAmount: sum,
-        ...dto,
+        totalAmount,
+        ...rest,
+        ...codeDiscount,
         branchId: branch.id,
         commandLine: { create: commandLines.map((elem) => elem) },
       },
@@ -64,9 +80,11 @@ export class CommandsService {
   }
 
   async findAll() {
-    return this.prisma.command.findMany({orderBy:{
-      createdAt:'desc'
-    }});
+    return this.prisma.command.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
 
   async findAllByBranchIdentifier(branchId: string, filters: FilterCommand) {
@@ -152,17 +170,19 @@ export class CommandsService {
   }
 
   async update(id: string, dto: UpdateCommandDto) {
+    const { discountCode, ...rest } = dto;
     const branchId = (await this.prisma.command.findFirstOrThrow({
       where: {
         id,
       },
     }))!.branchId;
-    console.log(branchId);
+    
 
     const command = await this.findOne(id);
     let commandLines = [];
-    let sum = 0;
-    if (dto.hasDelivery) sum += 7;
+    let totalAmount = 0;
+    let codeDiscount={}
+    if (dto.hasDelivery) totalAmount += 7;
     if (!dto.commandLine) {
       throw new HttpException("don't have items", HttpStatus.BAD_REQUEST);
     } else {
@@ -172,7 +192,7 @@ export class CommandsService {
             where: { id: elem.articleByBranchId },
           });
           let amount = +elem.quantity * articleByBranch.price;
-          sum += amount;
+          totalAmount += amount;
           return {
             articleByBranchId: elem.articleByBranchId,
             quantity: elem.quantity,
@@ -181,12 +201,28 @@ export class CommandsService {
         }),
       );
     }
+    if (discountCode) {
+      const code = await this.prisma.discountCode.findUnique({
+        where: {
+          code: discountCode,
+        },
+      });
+      if (code) {
+        totalAmount = totalAmount - totalAmount*code.discount/100;
+        codeDiscount={
+          discountCodeId:code.id
+        }
+      } else {
+        throw new HttpException('invalid code', HttpStatus.BAD_REQUEST);
+      }
+    }
 
     return await this.prisma.command.update({
       where: { id },
       data: {
-        totalAmount: sum,
-        ...dto,
+        totalAmount,
+        ...rest,
+        ...codeDiscount,
         branchId,
         // must delete lines befor updated because maybe the quantity changed
         commandLine: {
@@ -223,4 +259,5 @@ export class CommandsService {
   async remove(id: string) {
     return await this.prisma.command.delete({ where: { id } });
   }
+  
 }

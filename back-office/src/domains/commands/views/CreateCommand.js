@@ -30,6 +30,8 @@ import SaveButton from "../../../components/Commun/buttons/SaveButton";
 import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 import { fetchClients } from "../../../store/client";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { fetchDiscountCode } from "../../../store/discountCode";
 
 function CreateCommand() {
   const dispatch = useDispatch();
@@ -40,6 +42,7 @@ function CreateCommand() {
   const countries = useSelector((state) => state.country.countries.items);
   const cities = useSelector((state) => state.country.cities.items);
   const branches = useSelector((state) => state.country.branches.items);
+  const discountCode = useSelector((state) => state.discountCode.discountCode);
   const paymentChoices = useSelector(
     (state) => state.paymentChoice.paymentChoices.items
   );
@@ -47,6 +50,7 @@ function CreateCommand() {
   const [newCommand, setNewCommand] = useState({
     contactChannel: "on_site",
     paymentType: null,
+    discountCode: "",
   });
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: null,
@@ -56,7 +60,8 @@ function CreateCommand() {
   const [Total, setTotal] = useState([]);
   const [openClients, setOpenClients] = useState(false);
   const [openArticles, setOpenArticles] = useState(false);
-  const [openArticlesEditCommandLines,setOpenArticlesEditCommandLines] = useState([]);
+  const [openArticlesEditCommandLines, setOpenArticlesEditCommandLines] =
+    useState([]);
   const [openCites, setOpenCites] = useState(false);
   const [openCountries, setOpenCountries] = useState(false);
 
@@ -71,6 +76,7 @@ function CreateCommand() {
   const [typingArticleTitle, setTypingArticleTitle] = useState("");
   const [typingCountry, setTypingCountry] = useState("");
   const [typingCity, setTypingCity] = useState("");
+  const [typingDiscountCode, setTypingDiscountCode] = useState("");
 
   //fetch articles of branch by branchId and articleTitle
   useEffect(() => {
@@ -163,6 +169,23 @@ function CreateCommand() {
     });
     return res;
   };
+  const handleChangeCode = (e) => {
+    const { value } = e.target;
+    setTypingDiscountCode(value);
+    if (value.length > 5) {
+      dispatch(fetchDiscountCode(value))
+        .then((res) => {
+          if (!res.error) {
+            setNewCommand({ ...newCommand, discountCode: value });
+          } else {
+            setNewCommand({ ...newCommand, discountCode: "" });
+          }
+        })
+        .catch((err) => {
+          setNewCommand({ ...newCommand, discountCode: "" });
+        });
+    } else setNewCommand({ ...newCommand, discountCode: "" });
+  };
 
   const handleCreate = () => {
     const {
@@ -195,7 +218,6 @@ function CreateCommand() {
       }
     });
   };
-  console.log(newCommand.commandLine);
 
   return (
     <div>
@@ -484,6 +506,8 @@ function CreateCommand() {
                   <div style={{ fontSize: "10px" }} className="col-2">
                     <input
                       size="lg"
+                      readOnly
+                      aria-disabled
                       className="form-control rounded"
                       disabled={!editCommandLineIndexes.includes(i)}
                       style={
@@ -502,7 +526,7 @@ function CreateCommand() {
                   </div>
                   <Autocomplete
                     aria-required={true}
-                    disabled={!editCommandLineIndexes.includes(i)}
+                    disabled={true}
                     fullWidth
                     sx={{
                       ".MuiInputBase-root": {
@@ -514,10 +538,17 @@ function CreateCommand() {
                     }}
                     open={openArticlesEditCommandLines.includes(i)}
                     onOpen={() => {
-                      setOpenArticlesEditCommandLines([...openArticlesEditCommandLines,i]);
+                      setOpenArticlesEditCommandLines([
+                        ...openArticlesEditCommandLines,
+                        i,
+                      ]);
                     }}
                     onClose={() => {
-                      setOpenArticlesEditCommandLines(openArticlesEditCommandLines.filter((elem,j)=>j!==i))
+                      setOpenArticlesEditCommandLines(
+                        openArticlesEditCommandLines.filter(
+                          (elem, j) => j !== i
+                        )
+                      );
                     }}
                     options={articlesByBranch}
                     loading={loadingArticles}
@@ -842,12 +873,55 @@ function CreateCommand() {
                   </span>
                 </div>
               </div>
+              <div class="row my-2 align-items-center">
+                <div
+                  class="col-7 text-right align-items-center gap-1 "
+                  style={{ display: "flex" }}
+                >
+                  <span>Discount Code: </span>
+                  <input
+                    placeholder="Discount Code"
+                    className="form-control rounded "
+                    style={
+                      newCommand?.discountCode?.length
+                        ? {
+                            height: 43,
+                            width: 70,
+                            outlineColor: "green",
+                            borderColor: "green",
+                          }
+                        : !typingDiscountCode.length
+                        ? {
+                            height: 43,
+                            width: 70,
+                          }
+                        : {
+                            outlineColor: "red",
+                            borderColor: "red",
+                            height: 43,
+                            width: 70,
+                          }
+                    }
+                    onChange={handleChangeCode}
+                  />
+                </div>
+                <div class="col-5">
+                  <span class="text-110 text-secondary-d1">
+                    {newCommand?.discountCode ? discountCode?.discount : 0} %
+                  </span>
+                </div>
+              </div>
 
               <div class="row my-2 align-items-center bgc-primary-l3 p-2">
                 <div class="col-7 text-right">Total Amount</div>
                 <div class="col-5">
                   <span class="text-150 text-success-d3 opacity-2">
-                    {sum() + (newCommand?.hasDelivery ? 7 : 0)} TND
+                    {discountCode?.discount
+                      ? sum() -
+                        (sum() * discountCode?.discount) / 100 +
+                        (newCommand?.hasDelivery ? 7 : 0)
+                      : sum() + (newCommand?.hasDelivery ? 7 : 0)}{" "}
+                    TND
                   </span>
                 </div>
               </div>

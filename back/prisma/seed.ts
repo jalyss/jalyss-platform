@@ -1418,7 +1418,9 @@ async function main() {
     articlesBybranch19.id,
     articlesBybranch20.id,
   ];
-
+await prisma.discountCode.create({
+  data:{code:'KHALIL',clientId:users[0].clientId,discount:20}
+})
   // await prisma.articlesByBranch.create({
   // data: {
   // branchId: mainBranch.id,
