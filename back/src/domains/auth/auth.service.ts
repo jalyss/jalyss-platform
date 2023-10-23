@@ -177,6 +177,9 @@ export class AuthService {
           include: {
             ProposalCountry: true,
             ProposalCity: true,
+            ProposalFunctionalArea: true,
+            ProposalJobTitle: true,
+            ProposalEducationLevel: true,
             country: true,
             city: true,
             functionalArea: true,
