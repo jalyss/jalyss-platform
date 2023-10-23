@@ -56,4 +56,10 @@ export class UpdateAuthDto {
   proposalCountry: string;
   @ApiProperty({ required: false })
   proposalCity: string;
+  @ApiProperty({ required: false })
+  proposalFunctionalArea: string;
+  @ApiProperty({ required: false })
+  proposalJobTitle: string;
+  @ApiProperty({ required: false })
+  proposalEducationLevel: string;
 }

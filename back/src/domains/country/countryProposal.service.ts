@@ -17,9 +17,6 @@ export class CountryProposalsService {
   }
 
   findAll() {
-    return this.prisma.proposalCountry.findMany({});
-  }
-  findAllCitites() {
     return this.prisma.proposalCountry.findMany();
   }
 

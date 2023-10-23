@@ -31,6 +31,27 @@ model ProposalCountry {
   client   Client @relation(fields: [clientId], references: [id])
 }
 
+model ProposalFunctionalArea {
+  id       String @id @default(uuid())
+  name     String
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+}
+
+model ProposalJobTitle {
+  id       String @id @default(uuid())
+  name     String
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+}
+
+model ProposalEducationLevel {
+  id       String @id @default(uuid())
+  name     String
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+}
+
 model ProposalCity {
   id        String  @id @default(uuid())
   name      String
@@ -128,43 +149,46 @@ model PaymentChoice {
 }
 
 model Client {
-  id                   String                @id @default(uuid())
-  fullNameEn           String                @default("NameEn")
-  fullNameAr           String                @default("NameAr")
-  email                String?
-  address              String                @default("Tunisia")
-  tel                  String                @default("00000000")
-  dateOfBirth          DateTime?
-  registrationNumber   String?
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime?             @updatedAt
-  type                 TypeClient?           @relation(fields: [typeId], references: [id])
-  typeId               String?
-  avatar               Media?                @relation(fields: [avatarId], references: [id])
-  avatarId             String?
-  CivilStatus          CivilStatus?          @relation(fields: [civilStatusId], references: [id])
-  civilStatusId        String?
-  accountBalance       Float?
-  category             ClientCategory?       @relation(fields: [categoryId], references: [id])
-  categoryId           String?
-  educationLevel       EducationLevel?       @relation(fields: [educationLevelId], references: [id])
-  educationLevelId     String?
-  functionalArea       FunctionalArea?       @relation(fields: [functionalAreaId], references: [id])
-  functionalAreaId     String?
-  jobTitle             JobTitle?             @relation(fields: [jobTitleId], references: [id])
-  jobTitleId           String?
-  country              Country?              @relation(fields: [countryId], references: [id])
-  countryId            String?
-  city                 City?                 @relation(fields: [cityId], references: [id])
-  cityId               String?
-  isCoach              Boolean?              @default(false)
-  IntermediateCommands Command[]             @relation("intermediate")
-  clientCommands       Command[]             @relation("clientCommand")
-  User                 User[]
-  payments             ClientPayment[]
-  FinancialCommitment  FinancialCommitment[]
-  ProposalCountry      ProposalCountry[]
-  ProposalCity         ProposalCity[]
+  id                     String                   @id @default(uuid())
+  fullNameEn             String                   @default("NameEn")
+  fullNameAr             String                   @default("NameAr")
+  email                  String?
+  address                String                   @default("Tunisia")
+  tel                    String                   @default("00000000")
+  dateOfBirth            DateTime?
+  registrationNumber     String?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime?                @updatedAt
+  type                   TypeClient?              @relation(fields: [typeId], references: [id])
+  typeId                 String?
+  avatar                 Media?                   @relation(fields: [avatarId], references: [id])
+  avatarId               String?
+  CivilStatus            CivilStatus?             @relation(fields: [civilStatusId], references: [id])
+  civilStatusId          String?
+  accountBalance         Float?
+  category               ClientCategory?          @relation(fields: [categoryId], references: [id])
+  categoryId             String?
+  educationLevel         EducationLevel?          @relation(fields: [educationLevelId], references: [id])
+  educationLevelId       String?
+  functionalArea         FunctionalArea?          @relation(fields: [functionalAreaId], references: [id])
+  functionalAreaId       String?
+  jobTitle               JobTitle?                @relation(fields: [jobTitleId], references: [id])
+  jobTitleId             String?
+  country                Country?                 @relation(fields: [countryId], references: [id])
+  countryId              String?
+  city                   City?                    @relation(fields: [cityId], references: [id])
+  cityId                 String?
+  isCoach                Boolean?                 @default(false)
+  IntermediateCommands   Command[]                @relation("intermediate")
+  clientCommands         Command[]                @relation("clientCommand")
+  User                   User[]
+  payments               ClientPayment[]
+  FinancialCommitment    FinancialCommitment[]
+  ProposalCountry        ProposalCountry[]
+  ProposalCity           ProposalCity[]
+  ProposalFunctionalArea ProposalFunctionalArea[]
+  ProposalJobTitle       ProposalJobTitle[]
+  ProposalEducationLevel ProposalEducationLevel[]
 }
 
 model Employee {

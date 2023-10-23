@@ -20,13 +20,13 @@ export class CountryProposalsController {
     private readonly countryProposalsService: CountryProposalsService,
   ) {}
 
-  @Post(':countryId')
+  @Post()
   create(@Body() dto: CreateCountryProposalDto) {
     return this.countryProposalsService.create(dto);
   }
 
-  @Get(':countryId')
-  findAll(@Param('countryId') countryId: string) {
+  @Get()
+  findAll() {
     return this.countryProposalsService.findAll();
   }
 
@@ -35,10 +35,7 @@ export class CountryProposalsController {
     return this.countryProposalsService.findOne(id);
   }
 
-  @Get()
-  findAllCitites() {
-    return this.countryProposalsService.findAllCitites();
-  }
+  
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateCountryProposalDto) {
