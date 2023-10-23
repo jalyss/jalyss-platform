@@ -30,6 +30,8 @@ import SaveButton from "../../../components/Commun/buttons/SaveButton";
 import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
 import { fetchClients } from "../../../store/client";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { fetchDiscountCode } from "../../../store/discountCode";
 
 function CreateCommand() {
   const dispatch = useDispatch();
@@ -47,6 +49,7 @@ function CreateCommand() {
   const [newCommand, setNewCommand] = useState({
     contactChannel: "on_site",
     paymentType: null,
+    discountCode: null,
   });
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: null,
@@ -56,7 +59,8 @@ function CreateCommand() {
   const [Total, setTotal] = useState([]);
   const [openClients, setOpenClients] = useState(false);
   const [openArticles, setOpenArticles] = useState(false);
-  const [openArticlesEditCommandLines,setOpenArticlesEditCommandLines] = useState([]);
+  const [openArticlesEditCommandLines, setOpenArticlesEditCommandLines] =
+    useState([]);
   const [openCites, setOpenCites] = useState(false);
   const [openCountries, setOpenCountries] = useState(false);
 
@@ -163,6 +167,12 @@ function CreateCommand() {
     });
     return res;
   };
+  const handleChangeCode=(e)=>{
+    const {value}=e.target
+    if(value.length>5){
+      dispatch(fetchDiscountCode(id))
+    }
+  }
 
   const handleCreate = () => {
     const {
@@ -514,10 +524,17 @@ function CreateCommand() {
                     }}
                     open={openArticlesEditCommandLines.includes(i)}
                     onOpen={() => {
-                      setOpenArticlesEditCommandLines([...openArticlesEditCommandLines,i]);
+                      setOpenArticlesEditCommandLines([
+                        ...openArticlesEditCommandLines,
+                        i,
+                      ]);
                     }}
                     onClose={() => {
-                      setOpenArticlesEditCommandLines(openArticlesEditCommandLines.filter((elem,j)=>j!==i))
+                      setOpenArticlesEditCommandLines(
+                        openArticlesEditCommandLines.filter(
+                          (elem, j) => j !== i
+                        )
+                      );
                     }}
                     options={articlesByBranch}
                     loading={loadingArticles}
@@ -839,6 +856,17 @@ function CreateCommand() {
                 <div class="col-5">
                   <span class="text-110 text-secondary-d1">
                     {newCommand?.hasDelivery ? 7 : 0} TND
+                  </span>
+                </div>
+              </div>
+              <div class="row my-2 align-items-center">
+                <div class="col-7 text-right align-items-center gap-1 " style={{display:'flex'}}>
+                  <span>Discount Code: </span>
+                  <input placeholder="Discount Code"  className="form-control rounded " style={{width:70}} onChange={handleChangeCode}/>
+                </div>
+                <div class="col-5">
+                  <span class="text-110 text-secondary-d1">
+                    {newCommand?.discountCode ? 10 : 0} %
                   </span>
                 </div>
               </div>

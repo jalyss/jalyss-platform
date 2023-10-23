@@ -14,6 +14,8 @@ import { JobTitlesService } from '../job-titles/job-titles.service';
 import { FunctionalAreasService } from '../functional-areas/functional-areas.service';
 import { ClientPaymentController } from './clientPayment.controller';
 import { ClientPaymentService } from './clientPayment.service';
+import { DiscountCodesService } from './discount-code.service';
+import { DicountCodesController } from './discount-code.controller';
 
 @Module({
   controllers: [
@@ -24,6 +26,7 @@ ClientPaymentController,
     JobTitlesController,
     CitiesController,
     CountriesController,
+    DicountCodesController
   ],
   providers: [
     ClientPaymentService,
@@ -34,6 +37,7 @@ ClientPaymentController,
     FunctionalAreasService,
     CitiesService,
     CountriesService,
+    DiscountCodesService
   ],
 })
 export class ClientsModule {}
