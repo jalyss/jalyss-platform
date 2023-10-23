@@ -50,7 +50,7 @@ export class CommandsService {
       });
       if (code) {
         code
-        totalAmount = totalAmount / code.discount;
+        totalAmount = totalAmount - totalAmount*code.discount/100;
         codeDiscount={
           discountCodeId:code.id
         }
@@ -208,7 +208,7 @@ export class CommandsService {
         },
       });
       if (code) {
-        totalAmount = totalAmount / code.discount;
+        totalAmount = totalAmount - totalAmount*code.discount/100;
         codeDiscount={
           discountCodeId:code.id
         }
