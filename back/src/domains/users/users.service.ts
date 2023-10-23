@@ -132,11 +132,15 @@ export class UsersService {
       employeeId,
       educationLevelId,
       jobTitleId,
+      functionalAreaId,
       isAdmin,
       branchId,
       roleId,
       proposalCountry,
       proposalCity,
+      proposalFunctionalArea,
+      proposalJobTitle,
+      proposalEducationLevel,
       ...rest
     } = data;
     const user = await this.prisma.$transaction(async (prisma) => {
@@ -146,11 +150,10 @@ export class UsersService {
           fullNameAr: data.fullNameAr,
           fullNameEn: data.fullNameEn,
           email: data.email,
-          avatarId:data.avatarId
+          avatarId: data.avatarId,
         },
-        
       });
-  
+
       if (clientId) {
         let proposal = {};
         if (proposalCountry) {
@@ -170,6 +173,36 @@ export class UsersService {
               create: {
                 name: proposalCity,
                 countryId,
+              },
+            },
+          };
+        }
+        if (proposalFunctionalArea && !functionalAreaId) {
+          proposal = {
+            ...proposal,
+            proposalFunctionalArea: {
+              create: {
+                name: proposalFunctionalArea,
+              },
+            },
+          };
+        }
+        if (proposalEducationLevel && !educationLevelId ) {
+          proposal = {
+            ...proposal,
+            proposalEducationLevel: {
+              create: {
+                name: proposalEducationLevel,
+              },
+            },
+          };
+        }
+        if (proposalJobTitle && !jobTitleId ) {
+          proposal = {
+            ...proposal,
+            proposalJobTitle: {
+              create: {
+                name: proposalJobTitle,
               },
             },
           };
@@ -198,12 +231,10 @@ export class UsersService {
           },
         });
       }
-      const {password,confirmkey,...userData}=updatedUser
+      const { password, confirmkey, ...userData } = updatedUser;
       return userData;
-    })
-    return user
-    
-
+    });
+    return user;
   }
 
   updateUserStatus(id: string, data: UpdateUserStatusDto) {
