@@ -106,7 +106,9 @@ const SessionDetails = () => {
       width: 250,
       editable: false,
       valueGetter: (params) => {
-        return params.row?.titleEn ? params.row.titleEn : params.row.lectures.titleEn;
+        return params.row?.titleEn
+          ? params.row.titleEn
+          : params.row.lectures.titleEn;
       },
     },
     {
@@ -180,6 +182,11 @@ const SessionDetails = () => {
   useEffect(() => {
     setAddSession({ ...addSession, tarifs: [] });
   }, [editFeatures]);
+  const onDeleteTarif = (index) => {
+    const updatedTarifs = [...session.tarifs];
+    updatedTarifs.splice(index, 1);
+    setAddSession({ ...session, tarifs: updatedTarifs });
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -278,7 +285,10 @@ const SessionDetails = () => {
     let aux = {
       id: addSession.id,
       titleEn: addSession.titleEn,
+      titleAr: addSession.titleAr,
       descriptionEn: addSession.descriptionEn,
+      descriptionAr: addSession.descriptionAr,
+
       tarifs: addSession.tarifs,
       lectures: addSession.lectures,
     };
@@ -318,7 +328,7 @@ const SessionDetails = () => {
         showErrorToast(res.error.message);
       }
     });
-    console.log("aux",aux);
+    console.log("aux", aux);
   };
   const handleAddSessionMedia = async () => {
     if (sessionMedias !== null) {
@@ -535,7 +545,7 @@ const SessionDetails = () => {
                 <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                   <TableCell className="fw-bold">Category:</TableCell>
+                  <TableCell className="fw-bold">Category:</TableCell>
                   <TableCell>
                     {readOnly ? (
                       <span>{session?.category.nameEn}</span>
@@ -761,7 +771,7 @@ const SessionDetails = () => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell className="fw-bold">Previous Session:</TableCell>
+                  <TableCell className="fw-bold">Previous Session:</TableCell>
                   <TableCell>
                     {readOnly ? (
                       <span>{session?.previousSesion?.titleEn}</span>
@@ -851,6 +861,7 @@ const SessionDetails = () => {
               <TrainingPricing
                 readOnly={readOnly}
                 session={addSession}
+                onDeleteTarif={onDeleteTarif}
                 setSession={setAddSession}
                 fn={(t, i) => {
                   setTarif(t);
@@ -936,7 +947,7 @@ const SessionDetails = () => {
           ))}
         </div>
       </div>
-      <Subscribers/>
+      <Subscribers />
       <Modal
         toggleShow={() => setShowAddTarifModal(false)}
         basicModal={showAddTarifModal}
@@ -961,7 +972,7 @@ const SessionDetails = () => {
                   setTarif((Tarif) => ({ ...Tarif, titleEn: e.target.value }));
                 }}
               />
-                  <StyledInput
+              <StyledInput
                 value={tarif?.titleAr || ""}
                 label="TitleAr"
                 required

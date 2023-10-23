@@ -1,7 +1,7 @@
 import React from "react";
 import TrainingHeading from "../Commun/TrainingHeading";
 import icon from "../../assets/images/profile.png";
-import send from "../../assets/images/send.png"
+import send from "../../assets/images/send.png";
 
 import StyledInput from "../Commun/inputs/StyledInput";
 import { useState } from "react";
@@ -12,11 +12,10 @@ import {
   createFeedBack,
   fetchFeedBacksBySessionId,
 } from "../../store/sessionFeedback";
-import { Box, IconButton, TextareaAutosize, Typography } from "@mui/material";
-import CloseButton from './../Commun/buttons/CloseButton';
-import AddButton from './../Commun/buttons/AddButton'; 
+// import { Box, IconButton, TextareaAutosize, Typography } from "@mui/material";
+// import CloseButton from './../Commun/buttons/CloseButton';
+import AddButton from "./../Commun/buttons/AddButton";
 function FeedBack({ previousSesion, subtitle }) {
- console.log("session",previousSesion);
   const [feedBackk, setFeedBackk] = useState("");
   const sessionFeedBacksStore = useSelector((state) => state.sessionFeedback);
   const { feedbacks } = sessionFeedBacksStore;
@@ -24,37 +23,35 @@ function FeedBack({ previousSesion, subtitle }) {
   const me = useSelector((state) => state.auth.me);
   const dispatch = useDispatch();
 
-  console.log("feed",feedbacks);
+  console.log("previousSesion.tarifs", previousSesion?.tarifs);
 
-  const subscribedIds=[]
-previousSesion.tarifs.forEach(element => {
-  element.bookings.filter(el=>el.paid===true ).map((elem)=>{
-    subscribedIds.push(elem.userId)
-
-  })
-});
-console.log("subscribedIds",subscribedIds);
+  const subscribedIds = [];
+  previousSesion?.tarifs.forEach((element) => {
+    element.bookings
+      .filter((el) => el.paid === true)
+      .map((elem) => {
+        subscribedIds.push(elem.userId);
+      });
+  });
+  console.log("subscribedIds", subscribedIds);
 
   useEffect(() => {
-    dispatch(fetchFeedBacksBySessionId(previousSesion.id));
-  }, [previousSesion.id]);
-
+    dispatch(fetchFeedBacksBySessionId(previousSesion?.id));
+  }, [previousSesion?.id]);
 
   const handleClick = () => {
     if (feedBackk.trim() !== "") {
-    dispatch(
-      createFeedBack({ content: feedBackk, sessionId: previousSesion.id })
-    );
-    setFeedBackk("")
-    }else{
-      return
+      dispatch(
+        createFeedBack({ content: feedBackk, sessionId: previousSesion.id })
+      );
+      setFeedBackk("");
+    } else {
+      return;
     }
   };
-
-
+console.log("subs",subscribedIds);
   return (
     <div className="mb-5">
-      
       <TrainingHeading
         subtitle={subtitle}
         title="Wanna Be one of them!"
@@ -83,39 +80,41 @@ console.log("subscribedIds",subscribedIds);
             </div>
           ))}
         </div>
-        {subscribedIds.includes(me?.id) && subtitle!=="Previous Session Feedback"  ? (
-          
-           <div className="mt-5 d-flex justify-content-center">
-            <div class="d-flex " style={{width:"70%"}}>
-              <img class="rounded-circle shadow-1-strong me-3"
-                src={me.avatar.path} alt="avatar" width="40"
-                height="40" />
+        {subscribedIds.includes(me?.id) &&
+        subtitle !== "Previous Session Feedback" ? (
+          <div className="mt-5 d-flex justify-content-center">
+            <div class="d-flex " style={{ width: "70%" }}>
+              <img
+                class="rounded-circle shadow-1-strong me-3"
+                src={me.avatar.path}
+                alt="avatar"
+                width="40"
+                height="40"
+              />
               <div class="form-outline w-100">
-                <textarea class="form-control" id="textAreaExample" rows="4"
-                 value={feedBackk}
-                  style={{background: "#fff"}}
+                <textarea
+                  class="form-control"
+                  id="textAreaExample"
+                  rows="4"
+                  value={feedBackk}
+                  style={{ background: "#fff" }}
                   onChange={(e) => {
                     setFeedBackk(e.target.value);
                   }}
                   placeholder="Write Your FeedBack !"
-                  ></textarea>
-               
+                ></textarea>
+
                 <div className="d-flex justify-content-end mt-2">
-        <AddButton title="Send"  onClick={handleClick}/>
-      </div>
+                  <AddButton title="Send" onClick={handleClick} />
+                </div>
               </div>
             </div>
-             
-        
-     
+
             {/* <img src={send} style={{width:50,heigh:50,cursor:"pointer"}}  onClick={handleClick}/> */}
-   
-  
-        </div>
-      
-        
-        ):(<></>)}
-      
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

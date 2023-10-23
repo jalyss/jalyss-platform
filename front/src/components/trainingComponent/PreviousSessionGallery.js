@@ -6,8 +6,8 @@ console.log("preGaaal",previousSesion);
 
 
 let gal = [];
-for (let i = 0; i < previousSesion.MediaSession.length; i++) {
-  gal.push(previousSesion.MediaSession[i].media.path);
+for (let i = 0; i < previousSesion?.MediaSession.length; i++) {
+  gal.push(previousSesion?.MediaSession[i].media.path);
 }
 
 console.log(gal,"gall");
