@@ -199,11 +199,12 @@ function CreateCommand() {
       ...rest
     } = newCommand;
     let commandLinesArray = commandLine.map(
-      ({ quantity, articleByBranchId }) => {
+      ({ quantity, articleByBranchId,discount }) => {
         console.log(articleByBranchId);
         return {
           quantity,
           articleByBranchId,
+          discount
         };
       }
     );

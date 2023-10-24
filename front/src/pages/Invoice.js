@@ -160,6 +160,12 @@ function Invoice() {
                       </div>
 
                       <div class="row my-2">
+                        <div class="col-7 text-right">discountCode: <span style={{fontWeight:'bold'}}>{commandStore?.command?.discountCode?.code}</span></div>
+                        <div class="col-5">
+                          <span class="text-110 text-secondary-d1">{commandStore.command?.discountCodeId?commandStore.command?.discountCode?.discount:0} %</span>
+                        </div>
+                      </div>
+                      <div class="row my-2">
                         <div class="col-7 text-right">Shipping Cost:</div>
                         <div class="col-5">
                           <span class="text-110 text-secondary-d1">{commandStore.command?.hasDelivery?7:0}  TND</span>
@@ -170,7 +176,7 @@ function Invoice() {
                         <div class="col-7 text-right">Total Amount</div>
                         <div class="col-5">
                           <span class="text-150 text-success-d3 opacity-2">
-                          {sum() + (commandStore.command?.hasDelivery?7:0)}{" "}
+                          {commandStore.command?.totalAmount }{" "}
                             TND
                           </span>
                         </div>

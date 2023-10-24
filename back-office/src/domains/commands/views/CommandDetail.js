@@ -1,4 +1,10 @@
-import { Box, Container, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Container,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -26,30 +32,80 @@ function EditCommand() {
   const command = useSelector((state) => state.command.command);
   const { commandId } = useParams();
   const dispatch = useDispatch();
-
   const articlesByBranch = useSelector((state) => state.article.articles.items);
+  const articleByBranch = useSelector((state) => state.article.article);
+  const clients = useSelector((state) => state.client.clients.items);
   const countries = useSelector((state) => state.country.countries.items);
   const cities = useSelector((state) => state.country.cities.items);
   const branches = useSelector((state) => state.country.branches.items);
+  const discountCode = useSelector((state) => state.discountCode.discountCode);
+  const paymentChoices = useSelector(
+    (state) => state.paymentChoice.paymentChoices.items
+  );
 
   const [editCommand, setEditCommand] = useState(null);
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: "",
     articleByBranchId: "",
   });
-  const [Total, setTotal] = useState([]);
-
   const [editMode, setEditMode] = useState(false);
-  const [editCommanLineIndexes, setEditCommandLineIndexes] = useState([]);
+  const [Total, setTotal] = useState([]);
+  const [openClients, setOpenClients] = useState(false);
+  const [openArticles, setOpenArticles] = useState(false);
+  const [openArticlesEditCommandLines, setOpenArticlesEditCommandLines] =
+    useState([]);
+  const [editCommandLineIndexes, setEditCommandLineIndexes] = useState([]);
   const [errorQuantity, setErrorQuantity] = useState(false);
+  const [loadingClient, setLoadingClients] = useState(false);
+  const [loadingArticles, setLoadingArticles] = useState(false);
+  const [loadingCites, setLoadingCites] = useState(false);
+  const [loadingCountries, setLoadingCountries] = useState(false);
+  const [typingFullName, setTypingFullName] = useState("");
+  const [typingCode, setTypingCode] = useState("");
+  const [typingArticleTitle, setTypingArticleTitle] = useState("");
+  const [typingCountry, setTypingCountry] = useState("");
+  const [typingCity, setTypingCity] = useState("");
+  const [typingDiscountCode, setTypingDiscountCode] = useState("");
 
   useEffect(() => {
     if (editCommand?.branchId) {
-      dispatch(fetchArticlesByBranch({ identifier: editCommand?.branchId }));
+      setLoadingArticles(true);
+      dispatch(
+        fetchArticlesByBranch({
+          identifier: editCommand?.branchId,
+          title: typingArticleTitle,
+          take: 5,
+        })
+      ).then((res) => setLoadingArticles(false));
       setEditCommand({ ...editCommand, commandLine: [] });
     }
-  }, [editCommand?.branchId]);
+  }, [editCommand?.branchId, typingArticleTitle]);
 
+  // fetch one article of branch by branchId and code
+  useEffect(() => {
+    if (typingCode)
+      dispatch(
+        fetchArticleByBranchWithCode({
+          identifier: editCommand.branchId,
+          code: typingCode,
+        })
+      );
+  }, [typingCode]);
+  useEffect(() => {
+    if (typingCode) {
+      console.log(articleByBranch);
+      if (articleByBranch) {
+        setNewCommandLine({
+          ...newCommandLine,
+          quantity: 1,
+          articleByBranch: articleByBranch,
+          articleByBranchId: articleByBranch.id,
+        });
+      } else {
+        setNewCommandLine({ quantity: "" });
+      }
+    }
+  }, [articleByBranch]);
   useEffect(() => {
     dispatch(fetchCommand(commandId));
     dispatch(findAllCitites());
@@ -256,176 +312,400 @@ function EditCommand() {
               </Form.Select>
             </Box>
           </div>
+          <div className="mt-5 mb-5">
+            <div className="bg-purple rounded p-3 " style={{ color: "white" }}>
+              <Box display="flex" alignItems="center" gap={2}>
+                <div className="col-2 ">Code</div>
+                <div className="col ">Article</div>
+                <div className="col-1 ">Qte</div>
+                <div className="col-1  ">PU</div>
+                <div className="col-1  ">Discount %</div>
+                <div className="col-1 text-center">PT</div>
+                {editMode&&<div className="col-2 " style={{ width: 60 }}>
+                  Action
+                </div>}
+              </Box>
+            </div>
 
-          {editCommand?.commandLine?.map((elem, i) => (
-            <Box key={i} mt={3} mb={3} display="flex" alignItems="center">
-              <Form.Select
-                disabled={!editCommanLineIndexes.includes(i)}
-                value={editCommand.commandLine[i].articleByBranchId}
-                onChange={(e) => {
-                  let aux = [...editCommand.commandLine];
-                  let obj = { ...aux[i] };
-                  obj.articleByBranchId = e.target.value;
-                  aux[i] = { ...obj };
-                  setEditCommand({ ...editCommand, commandLine: aux });
-                }}
-                style={{ flex: 1, marginRight: "10px" }}
-              >
-                {articlesByBranch?.map((elem, j) => (
-                  <option key={j} value={elem.id}>
-                    {elem.article?.title}
-                  </option>
-                ))}
-              </Form.Select>
-
-              <div style={{ marginLeft: "10px", fontSize: "10px" }}>
-                <input
-                  placeholder={elem}
-                  type="number"
-                  min={1}
-                  disabled={!editCommanLineIndexes.includes(i)}
-                  value={editCommand.commandLine[i].quantity}
-                  onChange={(e) => {
-                    let aux = [...editCommand.commandLine];
-                    let obj = { ...aux[i] };
-                    obj.quantity = +e.target.value;
-                    aux[i] = { ...obj };
-                    setEditCommand({ ...editCommand, commandLine: aux });
-                  }}
-                />
-              </div>
-              <div className=" col-2 text-center">
-                {editCommand.commandLine[i]?.articleByBranch?.price}
-              </div>
-              <div className="col-2 text-center">
-                {editCommand.commandLine[i]?.quantity *
-                  editCommand.commandLine[i]?.articleByBranch?.price}
-              </div>
-              {editMode && (
-                <>
-                  {!editCommanLineIndexes.includes(i) ? (
-                    <div
-                      style={{ width: 60 }}
-                      className="d-flex justify-content-around"
-                    >
-                      <FaTrash
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          let aux = [...editCommand.commandLine];
-                          console.log(aux, "aux");
-                          let result = aux.filter((elem, j) => i !== j);
-                          console.log(result);
-                          setEditCommand({
-                            ...editCommand,
-                            commandLine: result,
-                          });
+            {editCommand?.commandLine?.map((elem, i) => (
+              <div>
+                <Box
+                  key={i}
+                  mt={2}
+                  mb={2}
+                  // padding={3}
+                  display="flex"
+                  alignItems="center"
+                  gap={2}
+                >
+                  <div style={{ fontSize: "10px" }} className="col-2">
+                    <input
+                      size="lg"
+                      readOnly
+                      aria-disabled
+                      className="form-control rounded"
+                      // disabled={!editCommandLineIndexes.includes(i)}
+                      style={
+                        errorQuantity
+                          ? {
+                              outlineColor: "red",
+                              borderColor: "red",
+                              height: 43,
+                            }
+                          : { height: 43 }
+                      }
+                      value={
+                        editCommand.commandLine[i].articleByBranch.article.code
+                      }
+                    />
+                  </div>
+                  <Autocomplete
+                    aria-required={true}
+                    disabled={true}
+                    fullWidth
+                    sx={{
+                      ".MuiInputBase-root": {
+                        height: "43px !important",
+                      },
+                      ".MuiInputBase-input": {
+                        padding: "0px !important",
+                      },
+                    }}
+                    open={openArticlesEditCommandLines.includes(i)}
+                    onOpen={() => {
+                      setOpenArticlesEditCommandLines([
+                        ...openArticlesEditCommandLines,
+                        i,
+                      ]);
+                    }}
+                    onClose={() => {
+                      setOpenArticlesEditCommandLines(
+                        openArticlesEditCommandLines.filter(
+                          (elem, j) => j !== i
+                        )
+                      );
+                    }}
+                    options={articlesByBranch}
+                    loading={loadingArticles}
+                    value={editCommand.commandLine[i].articleByBranch}
+                    onChange={(event, v) => {
+                      let aux = [...editCommand.commandLine];
+                      let obj = { ...aux[i] };
+                      obj = {
+                        ...obj,
+                        articleByBranchId: v?.id,
+                        articleByBranch: v,
+                      };
+                      aux[i] = { ...obj };
+                      setEditCommand({ ...editCommand, commandLine: aux });
+                    }}
+                    getOptionLabel={(option) => option?.article?.title}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        variant="outlined"
+                        onChange={(e) => {
+                          setTypingArticleTitle(e.target.value);
+                        }}
+                        // label="Article"
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: loadingClient ? (
+                            <CircularProgress color="inherit" size={10} />
+                          ) : null,
                         }}
                       />
-                      <GrEdit
-                        onClick={() =>
-                          setEditCommandLineIndexes([
-                            ...editCommanLineIndexes,
-                            i,
-                          ])
-                        }
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                  ) : (
-                    <BiSave
-                      onClick={() =>
-                        setEditCommandLineIndexes(
-                          editCommanLineIndexes.filter((elem) => elem !== i)
-                        )
-                      }
-                      style={{ cursor: "pointer" }}
-                    />
-                  )}
-                </>
-              )}
-            </Box>
-          ))}
-          {editMode && (
-            <Box mt={3} mb={3} display="flex" alignItems="center">
-              <Form.Select
-                disabled={!editMode}
-                value={newCommandLine?.articleByBranchId}
-                onChange={(e) => {
-                  setNewCommandLine({
-                    ...newCommandLine,
-                    articleByBranch: {
-                      ...articlesByBranch.filter(
-                        (elem) => elem.id === e.target.value
-                      )[0],
-                    },
-                    commandId: commandId,
-                    articleByBranchId: e.target.value,
-                  });
-                }}
-              >
-                {articlesByBranch?.map((elem, i) => (
-                  <option key={i} value={elem.id}>
-                    {elem.article?.title}
-                  </option>
-                ))}
-              </Form.Select>
+                    )}
+                  />
 
-              <div style={{ marginLeft: "10px", fontSize: "10px" }}>
-                <input
-                  min={1}
-                  type="number"
-                  // className="w-50"
-                  style={
-                    errorQuantity
-                      ? { outlineColor: "red", borderColor: "red" }
-                      : {}
-                  }
-                  value={newCommandLine.quantity}
-                  disabled={!editMode}
-                  onChange={(e) => {
+                  <div style={{ fontSize: "10px" }} className="col-1">
+                    <input
+                      placeholder={elem}
+                      type="number"
+                      min={1}
+                      disabled={!editCommandLineIndexes.includes(i)}
+                      value={editCommand.commandLine[i].quantity}
+                      onChange={(e) => {
+                        let aux = [...editCommand.commandLine];
+                        let obj = { ...aux[i] };
+                        obj.quantity = +e.target.value;
+                        aux[i] = { ...obj };
+                        setEditCommand({ ...editCommand, commandLine: aux });
+                      }}
+                    />
+                  </div>
+                  <div className=" col-1 text-center">
+                    {editCommand.commandLine[i]?.articleByBranch?.price}
+                  </div>
+                  <div style={{ fontSize: "10px" }} className="col-1">
+                    <input
+                      placeholder={elem}
+                      type="number"
+                      min={1}
+                      disabled={!editCommandLineIndexes.includes(i)}
+                      value={editCommand.commandLine[i].discount}
+                      onChange={(e) => {
+                        let aux = [...editCommand.commandLine];
+                        let obj = { ...aux[i] };
+                        obj.discount = +e.target.value;
+                        aux[i] = { ...obj };
+                        setEditCommand({ ...editCommand, commandLine: aux });
+                      }}
+                    />
+                  </div>
+                  <div className="col-1 text-center">
+                    {editCommand.commandLine[i]?.quantity *
+                      editCommand.commandLine[i]?.articleByBranch?.price -
+                      (editCommand.commandLine[i]?.articleByBranch?.price *
+                        editCommand.commandLine[i]?.discount) /
+                        100}
+                  </div>
+                  {editMode && (
+                    <>
+                      {!editCommandLineIndexes.includes(i) ? (
+                        <div
+                          // style={{ width: 60 }}
+                          className="d-flex justify-content-center gap-1 col-2"
+                        >
+                          <button className="btn btn-light">
+                            <FaTrash
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                let aux = [...editCommand.commandLine];
+                                let result = aux.filter((elem, j) => i !== j);
+                                setEditCommand({
+                                  ...editCommand,
+                                  commandLine: result,
+                                });
+                              }}
+                            />
+                          </button>
+
+                          <button className="btn btn-light">
+                            <GrEdit
+                              onClick={() =>
+                                setEditCommandLineIndexes([
+                                  ...editCommandLineIndexes,
+                                  i,
+                                ])
+                              }
+                              style={{ cursor: "pointer" }}
+                            />
+                          </button>
+                        </div>
+                      ) : (
+                        <div
+                          // style={{ width: 60 }}
+                          className="d-flex justify-content-around gap-1 col-2"
+                        >
+                          <button className="btn btn-light">
+                            <BiSave
+                              onClick={() =>
+                                setEditCommandLineIndexes(
+                                  editCommandLineIndexes.filter(
+                                    (elem) => elem !== i
+                                  )
+                                )
+                              }
+                              style={{ cursor: "pointer" }}
+                            />
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </Box>
+                <div className="w-100 bg-purple" style={{ height: 1 }} />
+              </div>
+            ))}
+            {!editCommand?.branchId && (
+              <p className="text-center" style={{ color: "red" }}>
+                Select branch please
+              </p>
+            )}
+            {editMode && (
+              <Box mt={3} mb={3} display="flex" alignItems="center" gap={2}>
+                <div style={{ fontSize: "12px" }} className="col-2">
+                  <input
+                    size="lg"
+                    className="form-control rounded"
+                    disabled={!editCommand?.branchId}
+                    style={
+                      errorQuantity
+                        ? {
+                            outlineColor: "red",
+                            borderColor: "red",
+                            height: 43,
+                          }
+                        : { height: 43 }
+                    }
+                    value={
+                      newCommandLine?.articleByBranch?.article?.code ||
+                      typingCode
+                    }
+                    onChange={(e) => {
+                      setTypingCode(e.target.value);
+                    }}
+                  />
+                </div>
+                <Autocomplete
+                  aria-required={true}
+                  disabled={!editCommand?.branchId}
+                  fullWidth
+                  sx={{
+                    ".MuiInputBase-root": {
+                      height: "43px !important",
+                    },
+                    ".MuiInputBase-input": {
+                      padding: "0px !important",
+                    },
+                  }}
+                  open={openArticles}
+                  onOpen={() => {
+                    setOpenArticles(true);
+                  }}
+                  onClose={() => {
+                    setOpenArticles(false);
+                  }}
+                  options={articlesByBranch}
+                  loading={loadingArticles}
+                  value={newCommandLine?.articleByBranch}
+                  onChange={(event, v) => {
                     setNewCommandLine({
                       ...newCommandLine,
-                      quantity: +e.target.value,
+                      quantity: 1,
+                      discount: 0,
+                      articleByBranch: v,
+                      articleByBranchId: v?.id,
                     });
-                    e.target.value.length === 0
-                      ? setErrorQuantity(true)
-                      : setErrorQuantity(false);
                   }}
+                  getOptionLabel={(option) => option?.article?.title}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      variant="outlined"
+                      onChange={(e) => {
+                        setTypingArticleTitle(e.target.value);
+                      }}
+                      // label="Article"
+                      placeholder="Article title"
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: loadingClient ? (
+                          <CircularProgress color="inherit" size={10} />
+                        ) : null,
+                      }}
+                    />
+                  )}
                 />
-              </div>
-              <div className=" col-2 text-center">
-                {newCommandLine?.articleByBranch?.price}
-              </div>
-              <div className="col-2 text-center">
-                {newCommandLine?.quantity *
-                  newCommandLine?.articleByBranch?.price}
-              </div>
 
-              <div
-                style={{ width: 60 }}
-                className="d-flex justify-content-center col-2"
-              >
-                <BiMessageSquareAdd
-                  size={22}
-                  onClick={() => {
-                    if (newCommandLine.quantity.length === 0)
-                      setErrorQuantity(true);
-                    else {
-                      setEditCommand({
-                        ...editCommand,
-                        commandLine: [
-                          ...editCommand.commandLine,
-                          newCommandLine,
-                        ],
-                      });
-                      setNewCommandLine({ quantity: "" });
+                <div style={{}} className="col-1">
+                  <input
+                    min={1}
+                    max={newCommandLine?.articleByBranch?.stock}
+                    type="number"
+                    disabled={!newCommandLine?.quantity}
+                    style={
+                      errorQuantity
+                        ? {
+                            outlineColor: "red",
+                            borderColor: "red",
+                            height: 43,
+                          }
+                        : { height: 43 }
                     }
-                  }}
-                  style={{ cursor: "pointer" }}
-                />
-              </div>
-            </Box>
-          )}
+                    value={newCommandLine.quantity}
+                    onChange={(e) => {
+                      setNewCommandLine({
+                        ...newCommandLine,
+                        quantity: +e.target.value,
+                      });
+                      e.target.value.length === 0
+                        ? setErrorQuantity(true)
+                        : setErrorQuantity(false);
+                    }}
+                  />
+                </div>
+                <div className=" col-1 text-center">
+                  {newCommandLine?.articleByBranch?.price}
+                </div>
+                <div style={{}} className="col-1">
+                  <input
+                    min={0}
+                    max={99}
+                    type="number"
+                    disabled={!newCommandLine?.quantity}
+                    style={
+                      errorQuantity
+                        ? {
+                            outlineColor: "red",
+                            borderColor: "red",
+                            height: 43,
+                          }
+                        : { height: 43 }
+                    }
+                    value={newCommandLine.discount}
+                    onChange={(e) => {
+                      setNewCommandLine({
+                        ...newCommandLine,
+                        discount: +e.target.value,
+                      });
+                      e.target.value.length === 0
+                        ? setErrorQuantity(true)
+                        : setErrorQuantity(false);
+                    }}
+                  />
+                </div>
+                <div className="col-1 text-center">
+                  {newCommandLine?.quantity *
+                    newCommandLine?.articleByBranch?.price -
+                    (newCommandLine?.articleByBranch?.price *
+                      newCommandLine.discount) /
+                      100 || ""}
+                </div>
+
+                <div
+                  // style={{ width: 60 }}
+                  className="d-flex justify-content-center col-2"
+                >
+                  <button
+                    className="btn btn-light"
+                    disabled={!editCommand?.branchId}
+                    onClick={() => {
+                      if (
+                        newCommandLine?.quantity?.length === 0 ||
+                        newCommandLine?.quantity === null
+                      )
+                        setErrorQuantity(true);
+                      else {
+                        setEditCommand({
+                          ...editCommand,
+                          commandLine: [
+                            ...editCommand.commandLine,
+                            newCommandLine,
+                          ],
+                        });
+                        setNewCommandLine({
+                          discount: "",
+                          quantity: "",
+                          articleByBranch: null,
+                        });
+                        setTypingCode("");
+                      }
+                    }}
+                  >
+                    <BiMessageSquareAdd
+                      size={22}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </button>
+                </div>
+              </Box>
+            )}
+          </div>
+
           <div class="row mt-3">
             <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
               Extra note such as company or payment information...
