@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Box,
+  CircularProgress,
   Container,
   TextField,
   Typography,
@@ -13,7 +14,10 @@ import {
   fetchCommand,
   updateCommand,
 } from "../../../store/command";
-import { fetchArticlesByBranch } from "../../../store/article";
+import {
+  fetchArticleByBranchWithCode,
+  fetchArticlesByBranch,
+} from "../../../store/article";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import Form from "react-bootstrap/Form";
 
@@ -28,6 +32,11 @@ import { GrEdit } from "react-icons/gr";
 import { Button } from "react-bootstrap";
 import CancelButton from "../../../components/Commun/buttons/CancelButton";
 import SaveButton from "../../../components/Commun/buttons/SaveButton";
+import { commandChannel } from "../../../constants/channelsCommandData";
+import { fetchPaymentChoices } from "../../../store/paymentChoice";
+import { fetchClients } from "../../../store/client";
+import { fetchDiscountCode } from "../../../store/discountCode";
+import { paymentTypes } from "../../../constants/paymentTypeData";
 function EditCommand() {
   const command = useSelector((state) => state.command.command);
   const { commandId } = useParams();
@@ -54,6 +63,8 @@ function EditCommand() {
   const [openArticles, setOpenArticles] = useState(false);
   const [openArticlesEditCommandLines, setOpenArticlesEditCommandLines] =
     useState([]);
+  const [openCites, setOpenCites] = useState(false);
+  const [openCountries, setOpenCountries] = useState(false);
   const [editCommandLineIndexes, setEditCommandLineIndexes] = useState([]);
   const [errorQuantity, setErrorQuantity] = useState(false);
   const [loadingClient, setLoadingClients] = useState(false);
@@ -67,6 +78,7 @@ function EditCommand() {
   const [typingCity, setTypingCity] = useState("");
   const [typingDiscountCode, setTypingDiscountCode] = useState("");
 
+  //fetch articles of branch by branchId and articleTitle
   useEffect(() => {
     if (editCommand?.branchId) {
       setLoadingArticles(true);
@@ -91,6 +103,7 @@ function EditCommand() {
         })
       );
   }, [typingCode]);
+
   useEffect(() => {
     if (typingCode) {
       console.log(articleByBranch);
@@ -106,16 +119,37 @@ function EditCommand() {
       }
     }
   }, [articleByBranch]);
+
+  // fetch command options
   useEffect(() => {
     dispatch(fetchCommand(commandId));
-    dispatch(findAllCitites());
+    dispatch(fetchPaymentChoices());
     dispatch(findAllBranches());
-    dispatch(fetchCountries());
   }, [dispatch]);
+
+  //fetch countries and cites by name
+  useEffect(() => {
+    setLoadingCountries(true);
+    dispatch(fetchCountries({ name: typingCountry, take: 5 })).then((res) =>
+      setLoadingCountries(false)
+    );
+  }, [typingCountry]);
+
+  useEffect(() => {
+    if (editCommand?.countryId) {
+      setLoadingCites(true);
+      dispatch(
+        findAllCitites({
+          name: typingCity,
+          take: 5,
+          countryId: editCommand.countryId,
+        })
+      ).then((res) => setLoadingCites(false));
+    }
+  }, [editCommand?.countryId, typingCity]);
 
   useEffect(() => {
     const res = { ...command, commandLine: [] };
-
     command?.commandLine?.map((item, i) => {
       res.commandLine.push({
         title: item.articleByBranch.article?.title,
@@ -125,11 +159,23 @@ function EditCommand() {
     });
 
     setEditCommand({ ...command });
+    setTypingFullName(command?.clientName);
   }, [command]);
+
+  // fetch clients by fullName
+  useEffect(() => {
+    setLoadingClients(true);
+    dispatch(
+      fetchClients({ fullNameEn: typingFullName, skip: 0, take: 5 })
+    ).then((res) => setLoadingClients(false));
+  }, [dispatch, typingFullName]);
+
   useEffect(() => {
     if (editCommand) {
       const newTotal = editCommand?.commandLine?.map(
-        (item) => item?.quantity * item?.articleByBranch?.price
+        (item) =>
+          item?.quantity * item?.articleByBranch?.price -
+          (item.discount * item?.articleByBranch?.price) / 100
       );
       setTotal(newTotal);
     }
@@ -142,7 +188,23 @@ function EditCommand() {
     });
     return res;
   };
-
+  const handleChangeCode = (e) => {
+    const { value } = e.target;
+    setTypingDiscountCode(value);
+    if (value.length > 5) {
+      dispatch(fetchDiscountCode(value))
+        .then((res) => {
+          if (!res.error) {
+            setEditCommand({ ...editCommand, discountCode: value });
+          } else {
+            setEditCommand({ ...editCommand, discountCode: "" });
+          }
+        })
+        .catch((err) => {
+          setEditCommand({ ...editCommand, discountCode: "" });
+        });
+    } else setEditCommand({ ...editCommand, discountCode: "" });
+  };
   const toggleEditMode = () => {
     setEditMode((prevEditMode) => !prevEditMode);
   };
@@ -159,9 +221,6 @@ function EditCommand() {
       }
     });
   };
-
-  console.log(editCommand, "editCommand");
-  console.log(newCommandLine, "newCommandLine");
 
   return (
     <div>
@@ -193,30 +252,136 @@ function EditCommand() {
               Refuse Command
             </Button>
           </div>
-          <div className="row">
-            <Box mt={2} className="col-6">
-              <TextField
-                label="Name"
-                variant="outlined"
+
+          <div className="d-flex gap-3 justify-content-center">
+            <Box mt={4} className="col-4">
+              Branch
+              <Form.Select
+                value={editCommand?.branchId}
                 disabled={!editMode}
-                value={editCommand?.clientName || ""}
-                fullWidth
-                required
-                margin="normal"
+                onChange={(e) => {
+                  setEditCommand({ ...editCommand, branchId: e.target.value });
+                }}
+                size="lg"
+              >
+                <option disabled selected>
+                  Select Branch
+                </option>
+                {branches.map((e, i) => (
+                  <option value={e.id} key={i}>
+                    {e.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Box>
+            <Box mt={4} className="col-4">
+              Contact Channel
+              <Form.Select
+                value={editCommand?.contactChannel}
+                disabled={!editMode}
                 onChange={(e) => {
                   setEditCommand({
                     ...editCommand,
-                    clientName: e.target.value,
+                    contactChannel: e.target.value,
                   });
                 }}
-              />
+                size="lg"
+              >
+                <option disabled selected>
+                  Select Channel
+                </option>
+                {commandChannel?.map((e, i) => (
+                  <option value={e.value} key={i}>
+                    {e.nameEn}
+                  </option>
+                ))}
+              </Form.Select>
             </Box>
-            <Box mt={2} className="col-6">
+          </div>
+          <div className="row align-items-center mt-5">
+            <Box className="col-4 align-items-center d-flex">
+              {!editCommand?.clientId ? (
+                <TextField
+                  sx={{ margin: 0 }}
+                  disabled={!editMode}
+                  label="Name"
+                  variant="outlined"
+                  value={editCommand?.clientName || ""}
+                  fullWidth
+                  required
+                  margin="normal"
+                  onChange={(e) => {
+                    setEditCommand({
+                      ...editCommand,
+                      clientName: e.target.value,
+                    });
+                  }}
+                />
+              ) : (
+                <Autocomplete
+                  disabled={!editMode}
+                  aria-required={true}
+                  fullWidth
+                  sx={{
+                    ".MuiInputBase-root": {
+                      height: "43px !important",
+                    },
+                    ".MuiInputBase-input": {
+                      padding: "0px  !important",
+                    },
+                  }}
+                  open={openClients}
+                  onOpen={() => {
+                    setOpenClients(true);
+                  }}
+                  onClose={() => {
+                    setOpenClients(false);
+                  }}
+                  options={clients}
+                  loading={loadingClient}
+                  value={editCommand?.client || {}}
+                  onChange={(event, v) => {
+                    setEditCommand({
+                      ...editCommand,
+                      clientName: v?.fullNameEn,
+                      clientTel: v?.tel,
+                      clientAddress: v?.address,
+                      clientEmail: v?.email,
+                      clientId: v?.id,
+                    });
+                  }}
+                  getOptionLabel={(option) => option.fullNameEn}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      value={typingFullName}
+                      variant="outlined"
+                      onChange={(e) => {
+                        setTypingFullName(e.target.value);
+                      }}
+                      label="Name"
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: loadingClient ? (
+                          <CircularProgress color="inherit" size={10} />
+                        ) : null,
+                      }}
+                    />
+                  )}
+                />
+              )}
+            </Box>
+            <Box
+              className="col-3"
+              style={{ alignItems: "center", display: "flex" }}
+            >
               <TextField
+                sx={{ margin: 0 }}
+                disabled={!editMode}
                 label="Tel"
                 variant="outlined"
                 type="number"
-                disabled={!editMode}
                 value={editCommand?.clientTel || ""}
                 fullWidth
                 required
@@ -226,12 +391,33 @@ function EditCommand() {
                 }}
               />
             </Box>
+            <Box
+              className="col-5"
+              style={{ alignItems: "center", display: "flex" }}
+            >
+              <TextField
+                sx={{ margin: 0 }}
+                disabled={!editMode}
+                label="Email"
+                variant="outlined"
+                value={editCommand?.clientEmail || ""}
+                fullWidth
+                required
+                margin="normal"
+                onChange={(e) => {
+                  setEditCommand({
+                    ...editCommand,
+                    clientEmail: e.target.value,
+                  });
+                }}
+              />
+            </Box>
           </div>
-          <Box mt={3}>
+          <Box mt={1}>
             <TextField
+              disabled={!editMode}
               label="Address"
               variant="outlined"
-              disabled={!editMode}
               value={editCommand?.clientAddress || ""}
               placeholder={editCommand?.clientAddress}
               fullWidth
@@ -245,71 +431,106 @@ function EditCommand() {
               }}
             />
           </Box>
-          <Box mt={3}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              value={editCommand?.clientEmail || ""}
-              fullWidth
-              required
-              disabled={!editMode}
-              margin="normal"
-              onChange={(e) => {
-                setEditCommand({ ...editCommand, clientEmail: e.target.value });
-              }}
-            />
-          </Box>
-          <div className="row">
-            <Box mt={4} className="col-4">
-              Branch
-              <Form.Select
+
+          <div className="row justify-content-center">
+            <Box mt={1} className="col-4">
+              <Autocomplete
                 disabled={!editMode}
-                value={editCommand?.branchId}
-                onChange={(e) => {
-                  setEditCommand({ ...editCommand, branchId: e.target.value });
+                aria-required={true}
+                fullWidth
+                sx={{
+                  ".MuiInputBase-root": {
+                    height: "43px !important",
+                  },
+                  ".MuiInputBase-input": {
+                    padding: "0px  !important",
+                  },
                 }}
-                size="lg"
-              >
-                {branches.map((e, i) => (
-                  <option value={e.id} key={i}>
-                    {e.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </Box>
-            <Box mt={4} className="col-4">
-              Country
-              <Form.Select
-                disabled={!editMode}
+                open={openCountries}
+                onOpen={() => {
+                  setOpenCountries(true);
+                }}
+                onClose={() => {
+                  setOpenCountries(false);
+                }}
+                options={countries}
+                loading={loadingCountries}
                 value={editCommand?.countryId}
-                onChange={(e) => {
-                  setEditCommand({ ...editCommand, countryId: e.target.value });
+                onChange={(event, v) => {
+                  setEditCommand({
+                    ...editCommand,
+                    countryId: v?.id,
+                  });
                 }}
-                size="lg"
-              >
-                {countries.map((e, i) => (
-                  <option value={e.id} key={i}>
-                    {e.nameEn}
-                  </option>
-                ))}
-              </Form.Select>
+                getOptionLabel={(option) => option?.nameEn}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) => {
+                      setTypingCountry(e.target.value);
+                    }}
+                    label="Country"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: loadingClient ? (
+                        <CircularProgress color="inherit" size={10} />
+                      ) : null,
+                    }}
+                  />
+                )}
+              />
             </Box>
-            <Box mt={4} className="col-4">
-              City
-              <Form.Select
-                disabled={!editMode}
-                value={editCommand?.cityId}
-                onChange={(e) => {
-                  setEditCommand({ ...editCommand, cityId: e.target.value });
+            <Box mt={1} className="col-4">
+              <Autocomplete
+                aria-required={true}
+                disabled={!editCommand?.countryId}
+                fullWidth
+                sx={{
+                  ".MuiInputBase-root": {
+                    height: "43px !important",
+                    alignItems: "center",
+                  },
+                  ".MuiInputBase-input": {
+                    padding: "0px !important",
+                  },
                 }}
-                size="lg"
-              >
-                {cities.map((e, i) => (
-                  <option value={e.id} key={i}>
-                    {e.nameEn}
-                  </option>
-                ))}
-              </Form.Select>
+                open={openCites}
+                onOpen={() => {
+                  setOpenCites(true);
+                }}
+                onClose={() => {
+                  setOpenCites(false);
+                }}
+                options={cities}
+                loading={loadingCites}
+                value={editCommand?.cityId}
+                onChange={(event, v) => {
+                  setEditCommand({
+                    ...editCommand,
+                    cityId: v.id,
+                  });
+                }}
+                getOptionLabel={(option) => option?.nameEn}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) => {
+                      setTypingCity(e.target.value);
+                    }}
+                    label="City"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: loadingClient ? (
+                        <CircularProgress color="inherit" size={10} />
+                      ) : null,
+                    }}
+                  />
+                )}
+              />
             </Box>
           </div>
           <div className="mt-5 mb-5">
@@ -321,9 +542,11 @@ function EditCommand() {
                 <div className="col-1  ">PU</div>
                 <div className="col-1  ">Discount %</div>
                 <div className="col-1 text-center">PT</div>
-                {editMode&&<div className="col-2 " style={{ width: 60 }}>
-                  Action
-                </div>}
+                {editMode && (
+                  <div className="col-2 " style={{ width: 60 }}>
+                    Action
+                  </div>
+                )}
               </Box>
             </div>
 
@@ -705,7 +928,7 @@ function EditCommand() {
               </Box>
             )}
           </div>
-
+          <div className="w-100 bg-purple" style={{ height: 2 }} />
           <div class="row mt-3">
             <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
               Extra note such as company or payment information...
@@ -727,12 +950,55 @@ function EditCommand() {
                   </span>
                 </div>
               </div>
+              <div class="row my-2 align-items-center">
+                <div
+                  class="col-7 text-right align-items-center gap-1 "
+                  style={{ display: "flex" }}
+                >
+                  <span>Discount Code: </span>
+                  <input
+                    placeholder="Discount Code"
+                    className="form-control rounded "
+                    style={
+                      editCommand?.discountCode?.length
+                        ? {
+                            height: 43,
+                            width: 70,
+                            outlineColor: "green",
+                            borderColor: "green",
+                          }
+                        : !typingDiscountCode.length
+                        ? {
+                            height: 43,
+                            width: 70,
+                          }
+                        : {
+                            outlineColor: "red",
+                            borderColor: "red",
+                            height: 43,
+                            width: 70,
+                          }
+                    }
+                    onChange={handleChangeCode}
+                  />
+                </div>
+                <div class="col-5">
+                  <span class="text-110 text-secondary-d1">
+                    {editCommand?.discountCode ? discountCode?.discount : 0} %
+                  </span>
+                </div>
+              </div>
 
               <div class="row my-2 align-items-center bgc-primary-l3 p-2">
                 <div class="col-7 text-right">Total Amount</div>
                 <div class="col-5">
                   <span class="text-150 text-success-d3 opacity-2">
-                    {sum() + (editCommand?.hasDelivery ? 7 : 0)} TND
+                    {discountCode?.discount
+                      ? sum() -
+                        (sum() * discountCode?.discount) / 100 +
+                        (editCommand?.hasDelivery ? 7 : 0)
+                      : sum() + (editCommand?.hasDelivery ? 7 : 0)}{" "}
+                    TND
                   </span>
                 </div>
               </div>
@@ -755,7 +1021,6 @@ function EditCommand() {
               <input
                 type="checkbox"
                 className="form-check-input"
-                disabled={!editMode}
                 checked={editCommand?.hasDelivery}
                 onChange={(e) => {
                   setEditCommand({
@@ -764,27 +1029,6 @@ function EditCommand() {
                   });
                 }}
                 label={"Has Delivery"}
-              />
-            </Box>
-            <Box
-              mt={2}
-              style={{
-                flex: 1,
-                display: "flex",
-                gap: 10,
-                alignItems: "center",
-              }}
-            >
-              <Typography>{"Paid :"}</Typography>
-              <input
-                type="checkbox"
-                className="form-check-input"
-                disabled={!editMode}
-                checked={editCommand?.paid}
-                onChange={(e) => {
-                  setEditCommand({ ...editCommand, paid: e.target.checked });
-                }}
-                label="paid"
               />
             </Box>
 
@@ -801,7 +1045,6 @@ function EditCommand() {
               <input
                 type="checkbox"
                 className="form-check-input"
-                disabled={!editMode}
                 checked={editCommand?.delivered}
                 onChange={(e) => {
                   setEditCommand({
@@ -812,7 +1055,57 @@ function EditCommand() {
                 label={"confirmHasDelivery"}
               />
             </Box>
+            <Box mt={4} className="col-4 d-flex">
+              <Typography>{"Payement Type:"}</Typography>
+              <select
+                className="form-control rounded"
+                value={editCommand?.paymentType}
+                onChange={(e) => {
+                  setEditCommand({ ...editCommand, paymentType: e.target.value });
+                }}
+              >
+                <option disabled selected>
+                  Select Payment type
+                </option>
+                {paymentTypes.map((e, i) => (
+                  <option value={e.value} key={i}>
+                    {e.nameEn}
+                  </option>
+                ))}
+              </select>
+            </Box>
+
+            <Box mt={4} className="col-4 d-flex">
+              <Typography>{"Payment Choice :"}</Typography>
+              <select
+                disabled={editCommand?.paymentType !== "contant"}
+                className="form-control rounded"
+                value={editCommand?.paymentChoiceId}
+                onChange={(e) => {
+                  setEditCommand({
+                    ...editCommand,
+                    paymentChoiceId: e.target.value,
+                  });
+                }}
+                size="lg"
+              >
+                <option disabled selected>
+                  Select Payment Choice
+                </option>
+                {paymentChoices.map((e, i) => (
+                  <option value={e.id} key={i}>
+                    {e.nameEn}
+                  </option>
+                ))}
+              </select>
+            </Box>
           </div>
+          
+            
+           
+
+            
+         
           {!editMode ? (
             <div className="w-100 d-flex justify-content-center">
               <button

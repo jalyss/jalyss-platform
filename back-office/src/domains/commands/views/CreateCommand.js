@@ -27,10 +27,10 @@ import { paymentTypes } from "../../../constants/paymentTypeData";
 import { BiMessageSquareAdd, BiSave } from "react-icons/bi";
 import { GrEdit } from "react-icons/gr";
 import SaveButton from "../../../components/Commun/buttons/SaveButton";
-import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
+
 import { fetchClients } from "../../../store/client";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import { fetchDiscountCode } from "../../../store/discountCode";
 
 function CreateCommand() {
@@ -131,6 +131,7 @@ function CreateCommand() {
       setLoadingCountries(false)
     );
   }, [typingCountry]);
+
   useEffect(() => {
     if (newCommand.countryId) {
       setLoadingCites(true);

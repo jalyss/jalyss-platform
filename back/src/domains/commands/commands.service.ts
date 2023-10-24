@@ -155,6 +155,7 @@ export class CommandsService {
         commandLine: {
           include: { articleByBranch: { include: { article: true } } },
         },
+        client:true,
         country: true,
         city: true,
         branch: {

@@ -202,7 +202,7 @@ export class ArticleService {
         },
       },
     };
-    console.log(params);
+   
     
 
     const articlesByBranch = await this.prisma.articlesByBranch.findMany(
