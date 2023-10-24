@@ -23,20 +23,23 @@ export class CommandsService {
     let codeDiscount={}
     let commandLines = [];
     let totalAmount = 0;
-    if (dto.hasDelivery) totalAmount += 7;
+    
     if (!dto.commandLine) {
       throw new HttpException("don't have items", HttpStatus.BAD_REQUEST);
     } else {
       commandLines = await Promise.all(
         dto.commandLine.map(async (elem) => {
+          console.log(elem);
+          
           const articleByBranch = await this.prisma.articlesByBranch.findFirst({
             where: { id: elem.articleByBranchId },
           });
-          let amount = elem.quantity * articleByBranch.price;
+          let amount = elem.discount>0?elem.quantity * articleByBranch.price-(articleByBranch.price*elem.discount/100):elem.quantity * articleByBranch.price;
           totalAmount += amount;
           return {
             articleByBranchId: elem.articleByBranchId,
             quantity: +elem.quantity,
+            discount:elem.discount,
             amount,
           };
         }),
@@ -48,6 +51,7 @@ export class CommandsService {
           code: discountCode,
         },
       });
+      
       if (code) {
         code
         totalAmount = totalAmount - totalAmount*code.discount/100;
@@ -58,6 +62,7 @@ export class CommandsService {
         throw new HttpException('invalid code', HttpStatus.BAD_REQUEST);
       }
     }
+    if (dto.hasDelivery) totalAmount += 7;
     return await this.prisma.command.create({
       data: {
         totalAmount,
@@ -150,11 +155,14 @@ export class CommandsService {
         commandLine: {
           include: { articleByBranch: { include: { article: true } } },
         },
+        client:true,
         country: true,
         city: true,
         branch: {
           select: { name: true },
         },
+        discountCode:true,
+        PaymentChoice:true
       },
     });
   }
