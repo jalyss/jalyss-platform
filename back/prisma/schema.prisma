@@ -317,10 +317,10 @@ model UserChatRoom {
 
 model ArticleCategory {
   id                String              @id @default(uuid())
-  nameAr            String
+  nameAr            String              @default("NameAr")
   nameEn            String
   createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
+  updatedAt         DateTime?           @updatedAt
   articles          Article[]
   Blog              Blog[]
   Session           Session[]
@@ -339,10 +339,11 @@ model Type {
 model PublishingHouse {
   id                   String                 @id @default(uuid())
   name                 String
-  address              String
+  address              String?
   logoId               String?
   logo                 Media?                 @relation(fields: [logoId], references: [id])
-  updatedAt            DateTime               @updatedAt
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime?              @updatedAt
   articles             Article[]
   MediaPublishingHouse MediaPublishingHouse[]
 }
@@ -350,7 +351,7 @@ model PublishingHouse {
 model Author {
   id              String            @id @default(uuid())
   nameAr          String
-  nameEn          String
+  nameEn          String            @default("NameEn")
   biographyAr     String?
   biographyEn     String?
   ArticleByAuthor ArticleByAuthor[]
@@ -366,16 +367,17 @@ model ArticleByAuthor {
 }
 
 model Provider {
-  id             String          @id @default(uuid())
-  name           String
-  address        String
-  tel            String
-  accountBalance Float?
-  logoId         String?
-  logo           Media?          @relation(fields: [logoId], references: [id])
-  email          String          @unique
-  Supply         Supply[]
-  MediaProvider  MediaProvider[]
+  id                 String          @id @default(uuid())
+  name               String
+  address            String
+  tel                String          @default("00000000")
+  accountBalance     Float?
+  logoId             String?
+  registrationNumber String?
+  logo               Media?          @relation(fields: [logoId], references: [id])
+  email              String?
+  Supply             Supply[]
+  MediaProvider      MediaProvider[]
 }
 
 model Supply {
@@ -403,21 +405,21 @@ model Article {
   title              String
   cover              Media?             @relation(fields: [coverId], references: [id])
   coverId            String?
-  weight             Float
-  pageNumber         Int
+  weight             Float?
+  pageNumber         Int?
   code               String             @unique
   shortDescriptionEn String?            @map("short_desc_en")
   longDescriptionEn  String?            @map("long_desc_en")
   shortDescriptionAr String?            @map("short_desc_ar")
   longDescriptionAr  String?            @map("long_desc_ar")
   createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  category           ArticleCategory    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId         String
-  publishingHouse    PublishingHouse    @relation(fields: [publishingHouseId], references: [id], onDelete: Cascade)
-  publishingHouseId  String
-  type               Type               @relation(fields: [typeId], references: [id])
-  typeId             String
+  updatedAt          DateTime?          @updatedAt
+  category           ArticleCategory?   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId         String?
+  publishingHouse    PublishingHouse?   @relation(fields: [publishingHouseId], references: [id], onDelete: Cascade)
+  publishingHouseId  String?
+  type               Type?              @relation(fields: [typeId], references: [id])
+  typeId             String?
   ArticlesByBranch   ArticlesByBranch[]
 
   media           MediaArticle[]
@@ -480,7 +482,7 @@ model Rating {
 model Command {
   id                  String                @id @default(uuid())
   createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
+  updatedAt           DateTime?              @updatedAt
   branch              Branch                @relation(fields: [branchId], references: [id])
   branchId            String                @map("branch_id")
   client              Client?               @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
@@ -529,6 +531,7 @@ model CommandLine {
   articleByBranchId String
   quantity          Int
   discount          Float            @default(0)
+  unitPrice         Float
   amount            Float
 
   @@unique(fields: [commandId, articleByBranchId], name: "commandArticle")
@@ -1066,6 +1069,7 @@ enum Status {
   confirmed
   pending
   refused
+  return
 }
 
 enum StatusBlog {

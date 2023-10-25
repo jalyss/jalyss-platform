@@ -16,6 +16,7 @@ async function main() {
   // create dummy branch
   let branch = await prisma.branch.create({
     data: {
+      id: 'tun-001',
       name: 'Tunis',
       identifier: 'TUN',
       address: 'sfax ambra immeuble ',
@@ -481,7 +482,6 @@ async function main() {
       biographyEn: ',',
     },
   });
-
 
   let author2 = await prisma.author.create({
     data: {
@@ -1418,9 +1418,9 @@ async function main() {
     articlesBybranch19.id,
     articlesBybranch20.id,
   ];
-await prisma.discountCode.create({
-  data:{code:'KHALIL',clientId:users[0].clientId,discount:20}
-})
+  await prisma.discountCode.create({
+    data: { code: 'KHALIL', clientId: users[0].clientId, discount: 20 },
+  });
   // await prisma.articlesByBranch.create({
   // data: {
   // branchId: mainBranch.id,
