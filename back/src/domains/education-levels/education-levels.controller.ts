@@ -1,13 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { EducationLevelsService } from './education-levels.service';
 import { CreateEducationLevelDto } from './dto/create-education-level.dto';
 import { UpdateEducationLevelDto } from './dto/update-education-level.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { EducationLevelFilters } from './entities/education-level.entity';
 
 @ApiTags('educationLevel')
 @Controller('educationLevel')
 export class EducationLevelsController {
-  constructor(private readonly educationLevelsService: EducationLevelsService) {}
+  constructor(
+    private readonly educationLevelsService: EducationLevelsService,
+  ) {}
 
   @Post()
   create(@Body() dto: CreateEducationLevelDto) {
@@ -15,8 +27,8 @@ export class EducationLevelsController {
   }
 
   @Get()
-  findAll() {
-    return this.educationLevelsService.findAll();
+  findAll(@Query() filters: EducationLevelFilters) {
+    return this.educationLevelsService.findAll(filters);
   }
 
   @Get(':id')
@@ -25,7 +37,10 @@ export class EducationLevelsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEducationLevelDto: UpdateEducationLevelDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateEducationLevelDto: UpdateEducationLevelDto,
+  ) {
     return this.educationLevelsService.update(id, updateEducationLevelDto);
   }
 

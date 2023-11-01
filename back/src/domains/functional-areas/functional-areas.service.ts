@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateFunctionalAreaDto } from './dto/create-functional-area.dto';
 import { UpdateFunctionalAreaDto } from './dto/update-functional-area.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { FunctionalAreaFilters } from './entities/functional-area.entity';
 
 @Injectable()
 export class FunctionalAreasService {
@@ -13,10 +14,24 @@ export class FunctionalAreasService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.functionalArea.findMany();
+  async findAll(filters: FunctionalAreaFilters) {
+    let where = {};
+    let take = 10;
+
+    if (filters.name) {
+      const params = { contains: filters.name, mode: 'insensitive' };
+      where['OR'] = [
+        { nameAr: params },
+        { nameEn: params },
+        { nameFr: params },
+      ];
+    }
+    if (filters.take) {
+      take = +filters.take;
+    }
+    return await this.prisma.functionalArea.findMany({ where, take });
   }
-  
+
   async findOne(id: string) {
     return await this.prisma.functionalArea.findUnique({ where: { id } });
   }

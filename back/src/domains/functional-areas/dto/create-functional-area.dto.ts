@@ -6,4 +6,7 @@ export class CreateFunctionalAreaDto {
     nameAr : string;
     @ApiProperty()
     nameEn: string;
+    @ApiProperty()
+    nameFr: string;
+
 }

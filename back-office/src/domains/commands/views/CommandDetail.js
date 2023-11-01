@@ -172,10 +172,12 @@ function EditCommand() {
 
   useEffect(() => {
     if (editCommand) {
-      const newTotal = editCommand?.commandLine?.map(
-        (item) =>
-          item?.quantity * item?.articleByBranch?.price -
-          (item.discount * item?.articleByBranch?.price) / 100
+      const newTotal = editCommand?.commandLine?.map((item) =>
+        item?.unitPrice
+          ? item?.quantity * item?.unitPrice -
+            (item.discount * item?.unitPrice) / 100
+          : item?.quantity * item?.articleByBranch?.price -
+            (item.discount * item?.articleByBranch?.price) / 100
       );
       setTotal(newTotal);
     }
@@ -659,7 +661,9 @@ function EditCommand() {
                     />
                   </div>
                   <div className=" col-1 text-center">
-                    {editCommand.commandLine[i]?.articleByBranch?.price}
+                    {editCommand.commandLine[i]?.unitPrice
+                      ? editCommand.commandLine[i]?.unitPrice
+                      : editCommand.commandLine[i]?.articleByBranch.price}
                   </div>
                   <div style={{ fontSize: "10px" }} className="col-1">
                     <input
@@ -678,11 +682,17 @@ function EditCommand() {
                     />
                   </div>
                   <div className="col-1 text-center">
-                    {editCommand.commandLine[i]?.quantity *
-                      editCommand.commandLine[i]?.articleByBranch?.price -
-                      (editCommand.commandLine[i]?.articleByBranch?.price *
-                        editCommand.commandLine[i]?.discount) /
-                        100}
+                    {editCommand.commandLine[i]?.unitPrice
+                      ? editCommand.commandLine[i]?.quantity *
+                          editCommand.commandLine[i]?.unitPrice -
+                        (editCommand.commandLine[i]?.unitPrice *
+                          editCommand.commandLine[i]?.discount) /
+                          100
+                      : editCommand.commandLine[i]?.quantity *
+                          editCommand.commandLine[i]?.articleByBranch?.price -
+                        (editCommand.commandLine[i]?.articleByBranch?.price *
+                          editCommand.commandLine[i]?.discount) /
+                          100}
                   </div>
                   {editMode && (
                     <>
@@ -1061,7 +1071,10 @@ function EditCommand() {
                 className="form-control rounded"
                 value={editCommand?.paymentType}
                 onChange={(e) => {
-                  setEditCommand({ ...editCommand, paymentType: e.target.value });
+                  setEditCommand({
+                    ...editCommand,
+                    paymentType: e.target.value,
+                  });
                 }}
               >
                 <option disabled selected>
@@ -1100,12 +1113,7 @@ function EditCommand() {
               </select>
             </Box>
           </div>
-          
-            
-           
 
-            
-         
           {!editMode ? (
             <div className="w-100 d-flex justify-content-center">
               <button
