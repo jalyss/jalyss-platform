@@ -1,11 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { JobTitlesService } from './job-titles.service';
 import { CreateJobTitleDto } from './dto/create-job-title.dto';
 import { UpdateJobTitleDto } from './dto/update-job-title.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { JobTitleFilters } from './entities/job-title.entity';
 
 @ApiTags('jobTitle')
-
 @Controller('jobTitle')
 export class JobTitlesController {
   constructor(private readonly jobTitlesService: JobTitlesService) {}
@@ -13,12 +22,11 @@ export class JobTitlesController {
   @Post()
   create(@Body() dto: CreateJobTitleDto) {
     return this.jobTitlesService.create(dto);
-
   }
 
   @Get()
-  findAll() {
-    return this.jobTitlesService.findAll();
+  findAll(@Query() filters: JobTitleFilters) {
+    return this.jobTitlesService.findAll(filters);
   }
 
   @Get(':id')
@@ -27,7 +35,10 @@ export class JobTitlesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateJobTitleDto: UpdateJobTitleDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateJobTitleDto: UpdateJobTitleDto,
+  ) {
     return this.jobTitlesService.update(id, updateJobTitleDto);
   }
 

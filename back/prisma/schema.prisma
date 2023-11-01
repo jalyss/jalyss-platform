@@ -89,6 +89,7 @@ model EducationLevel {
   id        String   @id @default(uuid())
   nameAr    String
   nameEn    String
+  nameFr    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -108,6 +109,7 @@ model FunctionalArea {
   id                      String                    @id @default(uuid())
   nameAr                  String
   nameEn                  String
+  nameFr                  String
   JobTitleByFunctioanArea JobTitleByFunctioanArea[]
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
@@ -119,6 +121,7 @@ model JobTitle {
   id                      String                    @id @default(uuid())
   nameAr                  String
   nameEn                  String
+  nameFr                  String
   JobTitleByFunctioanArea JobTitleByFunctioanArea[]
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
@@ -482,7 +485,7 @@ model Rating {
 model Command {
   id                  String                @id @default(uuid())
   createdAt           DateTime              @default(now())
-  updatedAt           DateTime?              @updatedAt
+  updatedAt           DateTime?             @updatedAt
   branch              Branch                @relation(fields: [branchId], references: [id])
   branchId            String                @map("branch_id")
   client              Client?               @relation(name: "clientCommand", fields: [clientId], references: [id], onDelete: Cascade)
