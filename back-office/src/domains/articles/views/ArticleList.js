@@ -81,18 +81,7 @@ function ArticleList() {
       width: 120,
       sortable: false,
     },
-    {
-      field: "shortDescriptionEn",
-      headerName: "shortDescriptionEn ",
-      width: 120,
-      sortable: false,
-    },
-    {
-      field: "longDescriptionEn",
-      headerName: "longDescriptionEn",
-      width: 120,
-      sortable: false,
-    },
+   
     {
       field: "type",
       headerName: "type",

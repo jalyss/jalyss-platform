@@ -798,6 +798,7 @@ model FinancialCommitment {
   commandId      String?
   command        Command? @relation(fields: [commandId], references: [id])
   payementStatus Boolean  @default(false)
+  amount         Float
 }
 
 //media
