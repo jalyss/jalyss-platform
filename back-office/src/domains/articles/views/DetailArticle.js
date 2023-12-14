@@ -21,6 +21,8 @@ import { fetchCategories } from "../../../store/category";
 import EditIcon from "@mui/icons-material/Edit";
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import axios from "axios";
+import { DataGrid } from "@mui/x-data-grid";
+import { fetchBranches } from "../../../store/branche";
 
 function DetailAritcle() {
   const { articleId } = useParams();
@@ -30,6 +32,7 @@ function DetailAritcle() {
 
   const [articleData, setArticleData] = useState();
   const article = useSelector((state) => state.article.article);
+  const branches = useSelector((state) => state.branche.branches.items);
   const categoryStore = useSelector((state) => state.category);
   const publishingHouseStore = useSelector((state) => state.publishingHouse);
   const articleTypeStore = useSelector((state) => state.articleType);
@@ -38,12 +41,15 @@ function DetailAritcle() {
   const authorStore = useSelector((state) => state.author);
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  const [columns, setColumns] = useState([]);
+  const [rows,setRows]=useState([])
   useEffect(() => {
     dispatch(fetchAuthors());
     dispatch(fetchArticleTypes());
     dispatch(fetchPublishingHouses());
     dispatch(fetchCategories());
     dispatch(fetchAuthors());
+    dispatch(fetchBranches());
   }, [dispatch, articleId]);
 
   useEffect(() => {
@@ -53,6 +59,17 @@ function DetailAritcle() {
   useEffect(() => {
     setArticleData({ ...article });
   }, [articleId, dispatch, article]);
+  // useEffect(() => {
+  //   if(branches)
+  //   setColumns(
+  //     branches.map((branch) => ({
+  //       field: branch.name,
+  //       headerName: branch.name,
+  //       width: 120,
+  //       sortable: false,
+  //     }))
+  //   );
+  // }, [branches]);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -120,10 +137,10 @@ function DetailAritcle() {
         body.coverId = response.data.id;
       }
 
-       const editedArticle = { articleId, ...body };
-       dispatch(updateArticleByBranch(editedArticle));
-       showSuccessToast("article edited successfully");
-       navigate(-1);
+      const editedArticle = { articleId, ...body };
+      dispatch(updateArticleByBranch(editedArticle));
+      showSuccessToast("article edited successfully");
+      navigate(-1);
     } catch (error) {
       console.error("Error editing article:", error);
       showErrorToast(error.message);
@@ -459,7 +476,7 @@ function DetailAritcle() {
               >
                 {categoryStore.categories.items.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
-                    {item.nameEn}
+                    {item.nameEn}{" "} {item.nameAr}
                   </MenuItem>
                 ))}
               </Select>
@@ -509,7 +526,7 @@ function DetailAritcle() {
                 <MenuItem value="">{articleData?.type?.nameEn || ""}</MenuItem>
                 {articleTypeStore.articleTypes.items.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
-                    {item.nameEn}
+                    {item.nameEn}{" "} {item.nameAr}
                   </MenuItem>
                 ))}
               </Select>
@@ -542,7 +559,7 @@ function DetailAritcle() {
                 <MenuItem value="">Select an Author</MenuItem>
                 {authorStore.authors.items.map((item) => (
                   <MenuItem key={item.id} value={item.id}>
-                    {item.nameEn}
+                   {item.nameEn}{" "} {item.nameAr}
                   </MenuItem>
                 ))}
               </Select>
@@ -575,6 +592,71 @@ function DetailAritcle() {
           </Button>
         </Box>
       )}
+       {/* <Box sx={{ height: 600, width: "100%" }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 10,
+            },
+          },
+        }}
+        pageSizeOptions={[5]}
+        disableRowSelectionOnClick
+      />
+       </Box> */}
+       <div className="p-5">
+            
+            <div className="d-flex justify-content-center">
+              <div className="">
+                <div className="d-flex">
+                  <div style={{ width: 100 }}>
+                    <h6>Branch</h6>
+                  </div>
+                  <div style={{ width: 50 }}>
+                    <h6>Qte</h6>
+                  </div>
+                  <div style={{ width: 50 }}>
+                    <h6>Price</h6>
+                  </div>
+                </div>
+                {branches?.map((branch, j) => (
+                  <div className="d-flex py-2">
+                    <div style={{ width: 100 }}>{branch?.name}</div>
+                    <div style={{ width: 50 }}>{articleData?.ArticlesByBranch?.find(elem=>elem.branchId===branch.id)?.stock||"--"}</div>
+                    <div style={{ width: 50 }}>{articleData?.ArticlesByBranch?.find(elem=>elem.branchId===branch.id)?.price||"--"}</div>
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      style={{
+                        height: 25,
+                        width: 80,
+                        fontSize: 10,
+                        padding: 0,
+                      }}
+                      onClick={() => {
+                        console.log(elem);
+                        setSelectedForPrice(elem);
+                        setOpenDialogPrice(true);
+                      }}
+                    >
+                      Change Price
+                    </Button>
+                  </div>
+                ))}
+                <div className="d-flex">
+                  <div style={{ width: 100 }}>total</div>
+                  <div style={{ width: 100 }}>{articleData?.ArticlesByBranch?.reduce((acc,val)=>acc+val.stock,0)}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="d-flex justify-content-center align-items-end  h-100">
+              
+            </div>
+          </div>
     </Box>
   );
 }

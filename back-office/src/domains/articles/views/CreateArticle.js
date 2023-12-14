@@ -11,6 +11,7 @@ import { fetchPublishingHouses } from "../../../store/publishingHouse";
 import { fetchCategories } from "../../../store/category";
 import { fetchBranches } from "../../../store/branche";
 import { uploadFileAxios } from "../../../helpers/uploadFileAxios";
+import { FcAddImage, FcRemoveImage } from "react-icons/fc";
 
 import {
   Button,
@@ -86,10 +87,11 @@ function CreateArticle() {
     <div className="w-100 d-flex justify-content-center align-items-center flex-column my-3">
       <h2>Add Article</h2>
       <form className="checkout-form" onSubmit={submitCreate}>
-        <div className="d-flex flex-wrap">
-          <div className="position-relative m-3">
-            <InputLabel htmlFor="image">Image</InputLabel>
-            <div className="image-upload">
+          <div className="d-flex justify-content-center ">
+            <div
+              className="position-relative"
+              
+            >
               <img
                 src={
                   preview
@@ -97,27 +99,46 @@ function CreateArticle() {
                     : "http://tsr-industrie.fr/wp-content/uploads/2016/04/ef3-placeholder-image.jpg"
                 }
                 alt=""
+                style={{ height: 300, width: 300 }}
+                className="object-fit-contain border"
               />
-              <Input
-                id="image"
+              <input
+                id="upload-image"
                 type="file"
+                className="opacity-0 position-absolute"
                 accept="image/*"
                 onChange={handleImageChange}
               />
-            </div>
-            {preview && (
-              <Button
-                variant="outlined"
-                className="delete-button"
-                onClick={() => {
-                  setPreview(null);
-                  setCover(null);
+              <div className="d-flex justify-content-end gap-1 position-absolute bottom-0 w-100">
+
+              {preview && (
+                <button
+                  type="button"
+                  className="btn btn-light "
+                  style={{ color: "white" }}
+                  size="lg"
+                  onClick={() => {
+                    setPreview(null);
+                    setCover(null);
+                  }}
+                >
+                  <FcRemoveImage size={25}/>
+                </button>
+              )}
+              <button
+
+             className="btn btn-light"
+               type="button"
+                onClick={(event) => {
+                  document.getElementById("upload-image").click();
                 }}
               >
-                X
-              </Button>
-            )}
+                <FcAddImage  size={25} />
+              </button>
+              </div>
+            </div>
           </div>
+        <div className="d-flex flex-wrap">
           <div className=" m-3">
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -136,6 +157,17 @@ function CreateArticle() {
                   fullWidth
                   required
                   multiline
+                  name="code"
+                  label="Code"
+                  value={article?.code || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                
+                  multiline
                   type="number"
                   name="weight"
                   label="Weight"
@@ -143,10 +175,11 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
+              
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  required
+                 
                   multiline
                   type="number"
                   name="pageNumber"
@@ -155,18 +188,8 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
+              
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  required
-                  multiline
-                  name="code"
-                  label="Code"
-                  value={article?.code || ""}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} sm ={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -178,12 +201,11 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-             
-              <Grid item xs={12} sm ={6}>
+
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   multiline
-                
                   name="shortDescriptionAr"
                   label="Short Description in arabic"
                   rows={4}
@@ -191,7 +213,7 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12} sm ={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   multiline
@@ -203,11 +225,10 @@ function CreateArticle() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12} sm ={6}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   multiline
-                  
                   name="longDescriptionAr"
                   label="Long Description in Arabic "
                   rows={4}
@@ -224,7 +245,6 @@ function CreateArticle() {
                     value={article?.typeId || ""}
                     onChange={handleChange}
                   >
-                    
                     <MenuItem value={null}>--select option--</MenuItem>
                     {articleTypeStore.articleTypes.items.map((item) => (
                       <MenuItem key={item.id} value={item.id}>
@@ -238,7 +258,7 @@ function CreateArticle() {
                 <FormControl fullWidth required>
                   <InputLabel id="category">Category</InputLabel>
                   <Select
-                  variant="outlined"
+                    variant="outlined"
                     labelId="category"
                     name="categoryId"
                     value={article?.categoryId || ""}
@@ -254,7 +274,7 @@ function CreateArticle() {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
+                <FormControl fullWidth >
                   <InputLabel id="publishingHouse">Publishing House</InputLabel>
                   <Select
                     labelId="publishingHouse"

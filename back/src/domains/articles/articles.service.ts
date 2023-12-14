@@ -288,6 +288,9 @@ export class ArticleService {
         type: true,
         cover: true,
         ArticleByAuthor: { include: { author: true } },
+        ArticlesByBranch:{
+          include:{branch:true}
+        }
       },
     });
   }

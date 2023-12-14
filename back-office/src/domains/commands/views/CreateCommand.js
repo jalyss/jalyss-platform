@@ -51,6 +51,7 @@ function CreateCommand() {
     contactChannel: "on_site",
     paymentType: null,
     discountCode: "",
+    financialCommitmentLines: [],
   });
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: null,
@@ -77,6 +78,11 @@ function CreateCommand() {
   const [typingCountry, setTypingCountry] = useState("");
   const [typingCity, setTypingCity] = useState("");
   const [typingDiscountCode, setTypingDiscountCode] = useState("");
+
+  const [financialCommitmentNumber, setFinancialCommitmentNumber] = useState(1);
+  const [financialCommitmentLines, setFinancialCommitmenLines] = useState([
+    { amount: 0, date: "" },
+  ]);
 
   //fetch articles of branch by branchId and articleTitle
   useEffect(() => {
@@ -200,12 +206,12 @@ function CreateCommand() {
       ...rest
     } = newCommand;
     let commandLinesArray = commandLine.map(
-      ({ quantity, articleByBranchId,discount }) => {
+      ({ quantity, articleByBranchId, discount }) => {
         console.log(articleByBranchId);
         return {
           quantity,
           articleByBranchId,
-          discount
+          discount,
         };
       }
     );
@@ -475,6 +481,53 @@ function CreateCommand() {
                     }}
                   />
                 )}
+              />
+            </Box>
+            <Box
+              mt={2}
+              style={{
+                flex: 1,
+                display: "flex",
+                gap: 10,
+                alignItems: "center",
+              }}
+            >
+              <Typography>{"Has Delivery :"}</Typography>
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={newCommand?.hasDelivery}
+                onChange={(e) => {
+                  setNewCommand({
+                    ...newCommand,
+                    hasDelivery: e.target.checked,
+                  });
+                }}
+                label={"Has Delivery"}
+              />
+            </Box>
+
+            <Box
+              mt={2}
+              style={{
+                flex: 1,
+                display: "flex",
+                gap: 10,
+                alignItems: "center",
+              }}
+            >
+              <Typography>{"Delivered :"}</Typography>
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={newCommand?.delivered}
+                onChange={(e) => {
+                  setNewCommand({
+                    ...newCommand,
+                    delivered: e.target.checked,
+                  });
+                }}
+                label={"confirmHasDelivery"}
               />
             </Box>
           </div>
@@ -930,56 +983,9 @@ function CreateCommand() {
             </div>
           </div>
           <div
-            className="row"
+            // className="row"
             style={{ display: "flex", justifyContent: "space-between" }}
           >
-            <Box
-              mt={2}
-              style={{
-                flex: 1,
-                display: "flex",
-                gap: 10,
-                alignItems: "center",
-              }}
-            >
-              <Typography>{"Has Delivery :"}</Typography>
-              <input
-                type="checkbox"
-                className="form-check-input"
-                checked={newCommand?.hasDelivery}
-                onChange={(e) => {
-                  setNewCommand({
-                    ...newCommand,
-                    hasDelivery: e.target.checked,
-                  });
-                }}
-                label={"Has Delivery"}
-              />
-            </Box>
-
-            <Box
-              mt={2}
-              style={{
-                flex: 1,
-                display: "flex",
-                gap: 10,
-                alignItems: "center",
-              }}
-            >
-              <Typography>{"Delivered :"}</Typography>
-              <input
-                type="checkbox"
-                className="form-check-input"
-                checked={newCommand?.delivered}
-                onChange={(e) => {
-                  setNewCommand({
-                    ...newCommand,
-                    delivered: e.target.checked,
-                  });
-                }}
-                label={"confirmHasDelivery"}
-              />
-            </Box>
             <Box mt={4} className="col-4 d-flex">
               <Typography>{"Payement Type:"}</Typography>
               <select
@@ -987,6 +993,10 @@ function CreateCommand() {
                 value={newCommand?.paymentType}
                 onChange={(e) => {
                   setNewCommand({ ...newCommand, paymentType: e.target.value });
+                }}
+                style={{
+                  height: 43,
+                  // width: 70,
                 }}
               >
                 <option disabled selected>
@@ -1000,30 +1010,98 @@ function CreateCommand() {
               </select>
             </Box>
 
-            <Box mt={4} className="col-4 d-flex">
-              <Typography>{"Payment Choice :"}</Typography>
-              <select
-                disabled={newCommand?.paymentType !== "contant"}
-                className="form-control rounded"
-                value={newCommand?.paymentChoiceId}
-                onChange={(e) => {
-                  setNewCommand({
-                    ...newCommand,
-                    paymentChoiceId: e.target.value,
-                  });
-                }}
-                size="lg"
-              >
-                <option disabled selected>
-                  Select Payment Choice
-                </option>
-                {paymentChoices.map((e, i) => (
-                  <option value={e.id} key={i}>
-                    {e.nameEn}
+            {newCommand?.paymentType === "contant" && (
+              <Box mt={4} className="col-4 d-flex">
+                <Typography>{"Payment Choice :"}</Typography>
+                <select
+                  disabled={newCommand?.paymentType !== "contant"}
+                  className="form-control rounded"
+                  value={newCommand?.paymentChoiceId}
+                  onChange={(e) => {
+                    setNewCommand({
+                      ...newCommand,
+                      paymentChoiceId: e.target.value,
+                    });
+                  }}
+                  size="lg"
+                  style={{
+                    height: 43,
+                    // width: 70,
+                  }}
+                >
+                  <option disabled selected>
+                    Select Payment Choice
                   </option>
+                  {paymentChoices.map((e, i) => (
+                    <option value={e.id} key={i}>
+                      {e.nameEn}
+                    </option>
+                  ))}
+                </select>
+              </Box>
+            )}
+            {newCommand?.paymentType === "easy" && (
+              <Box mt={4} className="col-5 ">
+                <div className="d-flex p-2">
+                  <Typography>{"Financial Commitment Number :"}</Typography>
+                  <input
+                    placeholder="Number"
+                    type="number"
+                    min={1}
+                    value={financialCommitmentNumber}
+                    className="form-control rounded "
+                    style={{
+                      height: 43,
+                      width: 70,
+                    }}
+                    onChange={(e) => {
+                      let array = [];
+                      for (let i = 0; i < e.target.value; i++) {
+                        array.push({ date: "", amount: 0 });
+                      }
+                      setFinancialCommitmenLines(array);
+                      setFinancialCommitmentNumber(e.target.value);
+                    }}
+                  />
+                </div>
+                {financialCommitmentLines.map((elem, i) => (
+                  <div class=" d-flex" key={i}>
+                    <input
+                      type="date"
+                      min={1}
+                      value={financialCommitmentLines[i]?.date}
+                      className="form-control rounded "
+                      style={{
+                        height: 43,
+                      }}
+                      onChange={(e) => {
+                        let aux = [...financialCommitmentLines];
+                        aux[i]["date"] = e.target.value;
+                        setFinancialCommitmenLines(aux);
+                      }}
+                    />
+                    <input
+                      type="number"
+                      min={1}
+                      value={financialCommitmentLines[i]?.amount}
+                      className="form-control rounded "
+                      style={{
+                        height: 43,
+                      }}
+                      onChange={(e) => {
+                        let aux = [...financialCommitmentLines];
+                        aux[i]["amount"] = e.target.value;
+                        setFinancialCommitmenLines(aux);
+                      }}
+                    />
+                    {financialCommitmentLines[i]?.date.length &&
+                    new Date(financialCommitmentLines[i]?.date) === new Date() ? (
+                      <span>Paid</span>
+                    ) : null}
+                  </div>
                 ))}
-              </select>
-            </Box>
+              </Box>
+            )}
           </div>
 
           <div className="w-100 d-flex justify-content-center gap-4 p-4">
