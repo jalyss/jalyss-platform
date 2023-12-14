@@ -63,7 +63,6 @@ function ArticleList() {
     {
       field: "weight",
       headerName: "weight ",
-
       width: 100,
       sortable: true,
     },

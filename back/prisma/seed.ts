@@ -4,6 +4,7 @@ import { chatSeed } from './seeds/chatSeed';
 import { paymentChoiceSeed } from './seeds/paymentChoiceSeed';
 import { countriesSeed } from './seeds/countriesSeed';
 import { citesSeed } from './seeds/citesSeed';
+import { articleCoverSeed } from './seeds/articleCoverSeed';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -12,6 +13,10 @@ async function main() {
   let users = [];
   let articles = [];
   let usersIds = [];
+  const findUsers = await prisma.user.findMany();
+  if (findUsers.length) {
+    return;
+  }
 
   // create dummy branch
   let branch = await prisma.branch.create({
@@ -2067,7 +2072,10 @@ main()
     console.error(e);
     process.exit(1);
   })
-  .finally(async () => {
-    // close Prisma Client at the end
-    await prisma.$disconnect();
-  });
+  // .finally(async () => {
+  //   // close Prisma Client at the end
+  //   await prisma.$disconnect();
+  // });
+  
+  articleCoverSeed (prisma)
+

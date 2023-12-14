@@ -51,6 +51,7 @@ function Articles() {
     lte: null,
     gte: null,
     skip: 0,
+    take: 12,
   });
 
   useEffect(() => {
@@ -67,7 +68,7 @@ function Articles() {
   useEffect(() => {
     if (categoryId) {
       setFilters((Filters) => ({ ...Filters, categories: [categoryId] }));
-    } else setFilters((Filters) => ({ ...Filters,categories: [] }));
+    } else setFilters((Filters) => ({ ...Filters, categories: [] }));
   }, [categoryId]);
 
   const onMouseMoveHandler = (event) => {
@@ -187,7 +188,7 @@ function Articles() {
           }
         />
 
-        <Accordion
+        {/* <Accordion
           title={t("filter.author")}
           content={
             <>
@@ -218,21 +219,10 @@ function Articles() {
               ))}
             </>
           }
-        />
+        /> */}
       </div>
     );
   };
-
-  const groupedArticles = useMemo(
-    () =>
-      groupBy(articleStore.articles.items, (item) => item.article.categoryId),
-    [articleStore.articles.items]
-  );
-
-  function paginate(items, pageNumber, pageSize) {
-    const startIndex = (pageNumber - 1) * pageSize;
-    return items.slice(startIndex, startIndex + pageSize);
-  }
 
   return (
     <DocumentMeta {...meta} className="container-fluid">
@@ -351,76 +341,18 @@ function Articles() {
             />
           </div>
           {!showContentList ? (
-            <div className="px-3">
-              {!isEmpty(filters.categories) ? (
-                map(groupedArticles, (element) => (
-                  <>
-                    <p
-                      style={{
-                        fontSize: "20px",
-                        color: "#333",
-                        padding: "5px 10px",
-                        backgroundColor: "#f0f0f0",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      {element[0].article.category[lg ? "nameEn" : "nameAr"]}
-                    </p>
-
-                    <div className="d-flex flex-wrap px-3 ">
-                      {element.map((el, index) => (
-                        <ArticleCard article={el} />
-                      ))}
-                    </div>
-                  </>
-                ))
-              ) : (
-                <div className="d-flex flex-wrap px-3 ">
-                  {paginate(
-                    articleStore.articles.items,
-                    currentPage,
-                    pageSize
-                  ).map((element, index) => (
-                    <ArticleCard key={index} article={element} />
-                  ))}
-                </div>
-              )}
+             <div className="d-flex flex-wrap px-3 ">
+              {articleStore.articles.items.map((element) => (
+               
+                  <ArticleCard article={element} />
+               
+              ))}
             </div>
           ) : (
             <div className="d-flex flex-column  mb-3 px-3 ">
-              {!isEmpty(filters.categories) ? (
-                map(groupedArticles, (element) => (
-                  <>
-                    <p
-                      style={{
-                        fontSize: "20px",
-                        color: "#333",
-                        padding: "5px 10px",
-                        backgroundColor: "#f0f0f0",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      {element[0].article.category[lg ? "nameEn" : "nameAr"]}
-                    </p>
-
-                    <div className=" d-flex flex-column px-3">
-                      {element.map((el, index) => (
-                        <ArticleCardHorizontal article={el} />
-                      ))}
-                    </div>
-                  </>
-                ))
-              ) : (
-                <div className=" d-flex flex-column  px-3 ">
-                  {paginate(
-                    articleStore.articles.items,
-                    currentPage,
-                    pageSize
-                  ).map((element, index) => (
-                    <ArticleCardHorizontal key={index} article={element} />
-                  ))}
-                </div>
-              )}
+              {articleStore.articles.items.map((element) => (
+                <ArticleCardHorizontal article={element} />
+              ))}
             </div>
           )}
         </div>
@@ -437,8 +369,8 @@ function Articles() {
             backgroundColor: "rgba(70, 4, 74, 0.781)",
           }}
           className="bg-yellow px-4 py-2  border-0  mx-2 "
-          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
+          onClick={() => setFilters({ ...filters, skip: filters.skip - 12 })}
+          disabled={filters.skip === 0}
         >
           {lg ? <RiArrowLeftSLine /> : <RiArrowRightSLine />} {t("back")}
         </button>
@@ -449,7 +381,7 @@ function Articles() {
             backgroundColor: "rgba(70, 4, 74, 0.781)",
           }}
           className="bg-yellow px-4 py-2 border-0 mx-2"
-          onClick={() => setCurrentPage(currentPage + 1)}
+          onClick={() => setFilters({ ...filters, skip: filters.skip + 12 })}
           disabled={
             currentPage * pageSize >= articleStore.articles.items.length
           }
