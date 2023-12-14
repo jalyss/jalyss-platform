@@ -166,78 +166,29 @@ export class AuthService {
     }
   }
   async update(id: string, dto: UpdateAuthDto) {
-    const { fullNameEn, fullNameAr, email, client, avatarId } = dto;
-    console.log(client, 'log');
+    await this.usersService.update(id, dto);
 
-    let data = {};
-    const user = await this.prisma.$transaction(async (prisma) => {
-      if (fullNameAr) {
-        data = { ...data, fullNameAr };
-      }
-      if (fullNameEn) {
-        data = { ...data, fullNameEn };
-      }
-      if (email) {
-        data = { ...data, email };
-      }
-      if (avatarId) {
-        data = { ...data, avatarId };
-      }
-
-      const auxUser = await prisma.user.update({
-        where: { id },
-        data,
-        include: { avatar: true, client: true, employee: true },
-      });
-      if (client?.address) {
-        data = { ...data, address: client?.address };
-      }
-      if (client?.tel) {
-        data = { ...data, tel: client?.tel };
-      }
-      if (client?.country) {
-        data = { ...data, countryId: client?.country?.id };
-      }
-      if (client?.city) {
-        data = { ...data, cityId: client?.city?.id };
-      }
-      if (client?.educationLevel) {
-        data = {
-          ...data,
-          educationLevelId: client?.educationLevel?.id,
-        };
-      }
-      if (client?.functionalArea) {
-        data = {
-          ...data,
-          functionalAreaId: client?.functionalArea?.id,
-        };
-      }
-      if (client?.jobTitle) {
-        data = { ...data, jobTitleId: client?.jobTitle?.id };
-      }
-
-      const auxClient = await prisma.client.update({
-        where: { id: auxUser.clientId },
-        data,
-      });
-      return await prisma.user.findFirst({
-        where: { id },
-        include: {
-          Media: true,
-          avatar: true,
-          client: {
-            include: {
-              country: true,
-              city: true,
-              functionalArea: true,
-              jobTitle: true,
-              educationLevel: true,
-            },
+    const user = await this.prisma.user.findFirst({
+      where: { id },
+      include: {
+        Media: true,
+        avatar: true,
+        client: {
+          include: {
+            ProposalCountry: true,
+            ProposalCity: true,
+            ProposalFunctionalArea: true,
+            ProposalJobTitle: true,
+            ProposalEducationLevel: true,
+            country: true,
+            city: true,
+            functionalArea: true,
+            jobTitle: true,
+            educationLevel: true,
           },
-          employee: true,
         },
-      });
+        employee: true,
+      },
     });
 
     return this._createToken(user);

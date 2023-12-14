@@ -24,15 +24,16 @@ export const fetchCommand = createAsyncThunk("commands/command", async (id) => {
 export const createCommand = createAsyncThunk(
   "commands/createCommand",
   async (body, { dispatch }) => {
-    let token = JSON.parse(localStorage.getItem("token")).Authorization;
-    let configs = {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
+    // let token = JSON.parse(localStorage.getItem("token")).Authorization;
+    // let configs = {
+    //   headers: {
+    //     Authorization: "Bearer " + token,
+    //   },
+    // };
     const response = await axios.post(
       `${config.API_ENDPOINT}/commands/TUN/`,
-      body,configs
+      body,
+      // configs
     );
     dispatch(fetchCommand(response.data.id));
     return response.data;

@@ -3,7 +3,7 @@ import '../../assets/styles/filters.css'
 import { IoIosArrowDropdown } from 'react-icons/io'
 
 function Accordion({ title, content }) {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen)

@@ -37,6 +37,7 @@ import {
 } from "@material-ui/core";
 import SaveButton from "../components/Commun/buttons/SaveButton";
 import { red } from "@mui/material/colors";
+import { fetchDiscountCode } from "../store/discountCode";
 
 function Checkout({}) {
   const { t } = useTranslation();
@@ -47,11 +48,14 @@ function Checkout({}) {
   const cityStore = useSelector((state) => state.city);
   const commandStore = useSelector((state) => state.command);
   const authStore = useSelector((state) => state.auth);
+  const discountCode = useSelector((state) => state.discountCode.discountCode);
+
   const { items, cartTotal, updateItemQuantity, emptyCart } = useCart();
 
   const [command, setCommand] = useState({
     hasDelivery: true,
   });
+  const [typingDiscountCode, setTypingDiscountCode] = useState("");
 
   useEffect(() => {
     dispatch(fetchCountries());
@@ -81,6 +85,7 @@ function Checkout({}) {
         clientTel: authStore.me ? authStore.me?.client?.tel : null,
       });
   }, [items, authStore.me]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCommand((Command) => ({ ...Command, [name]: value }));
@@ -88,6 +93,23 @@ function Checkout({}) {
   const handleChecked = (e) => {
     const { checked } = e.target;
     setCommand((Command) => ({ ...Command, hasDelivery: checked }));
+  };
+  const handleChangeCode = (e) => {
+    const { value } = e.target;
+    setTypingDiscountCode(value);
+    if (value.length > 5) {
+      dispatch(fetchDiscountCode(value))
+        .then((res) => {
+          if (!res.error) {
+            setCommand({ ...command, discountCode: value });
+          } else {
+            setCommand({ ...command, discountCode: "" });
+          }
+        })
+        .catch((err) => {
+          setCommand({ ...command, discountCode: "" });
+        });
+    } else setCommand({ ...command, discountCode: "" });
   };
 
   const submitCommand = async (event) => {
@@ -121,12 +143,13 @@ function Checkout({}) {
       },
     },
     cartContainer: {
-      maxHeight: "70%",
+      maxHeight: "90%",
       maxWidth: "90%",
       margin: "7px",
       marginBottom: theme.spacing(2),
+      marginTop: theme.spacing(2),
       [theme.breakpoints.up("md")]: {
-        maxHeight: "83%",
+        maxHeight: "90%",
         maxWidth: "40%",
         marginLeft: theme.spacing(2),
         marginBottom: 0,
@@ -250,9 +273,55 @@ function Checkout({}) {
               </TableBody>
             </Table>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
+
+          <div
+            style={{ display: "flex", justifyContent: "space-between" }}
+            className="px-5"
+          >
+            <div
+              style={{ display: "flex", alignItems: "center" }}
+              className="gap-1"
+            >
+              <Typography variant="h6">{t("Discount Code:")}</Typography>
+              <input
+                placeholder="Promo Code"
+                className="form-control rounded "
+                style={
+                  command?.discountCode?.length
+                    ? {
+                        width: 120,
+                        outlineColor: "green",
+                        borderColor: "green",
+                      }
+                    : !typingDiscountCode.length
+                    ? {
+                        width: 120,
+                      }
+                    : {
+                        outlineColor: "red",
+                        borderColor: "red",
+
+                        width: 120,
+                      }
+                }
+                onChange={handleChangeCode}
+              />
+            </div>
+            <Typography variant="h6">
+              {" "}
+              {command?.discountCode ? discountCode?.discount : 0} %
+            </Typography>
+          </div>
+          <div
+            style={{ display: "flex", justifyContent: "space-between" }}
+            className="px-5"
+          >
             <Typography variant="h6">{t("TOTAL")}</Typography>
-            <Typography variant="h6">{cartTotal}</Typography>
+            <Typography variant="h6">
+              {command?.discountCode
+                ? cartTotal - (cartTotal * discountCode?.discount) / 100
+                : cartTotal}
+            </Typography>
           </div>
         </Card>
         <Grid item xs={12} md={6}>
@@ -356,6 +425,7 @@ function Checkout({}) {
                 </select>
               </div>
             </div>
+
             <div style={{ display: "flex", alignItems: "center" }}>
               <label for="delivery">{t("label.delivery")}</label>
               <input

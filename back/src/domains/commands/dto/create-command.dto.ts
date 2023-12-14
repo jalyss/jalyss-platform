@@ -21,6 +21,8 @@ export class CreateCommandDto {
     paid: boolean
     @ApiProperty({ required: true })
     hasDelivery: boolean
+    @ApiProperty()
+    discountCode:string
     @ApiProperty({ required: false })
     countryId?: string
     @ApiProperty({ required: false })
@@ -34,4 +36,5 @@ class CreateCommandLineDto {
     // commandId: string;
     articleByBranchId: string;
     quantity: number
+    discount: number
 }

@@ -2,6 +2,9 @@ import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { chatSeed } from './seeds/chatSeed';
 import { paymentChoiceSeed } from './seeds/paymentChoiceSeed';
+import { countriesSeed } from './seeds/countriesSeed';
+import { citesSeed } from './seeds/citesSeed';
+import { articleCoverSeed } from './seeds/articleCoverSeed';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
@@ -16,6 +19,7 @@ async function main() {
   // create dummy branch
   let branch = await prisma.branch.create({
     data: {
+      id: 'tun-001',
       name: 'Tunis',
       identifier: 'TUN',
       address: 'sfax ambra immeuble ',
@@ -441,36 +445,36 @@ async function main() {
     },
   });
   //create dummy country
-  let country1 = await prisma.country.create({
-    data: {
-      nameAr: 'تونس ',
-      nameEn: ' Tunisia',
-    },
-  });
+  // let country1 = await prisma.country.create({
+  //   data: {
+  //     nameAr: 'تونس ',
+  //     nameEn: ' Tunisia',
+  //   },
+  // });
 
-  let country2 = await prisma.country.create({
-    data: {
-      nameAr: 'المغرب',
-      nameEn: ' Marroc',
-    },
-  });
-  //
-  let city1 = await prisma.city.create({
-    data: {
-      nameAr: 'تونس',
-      nameEn: 'Tunis',
-      countryId: country1.id,
-    },
-  });
-  let city2 = await prisma.city.create({
-    data: {
-      nameAr: 'صفاقس',
-      nameEn: 'Sfax',
-      countryId: country1.id,
-    },
-  });
-  // let countryIds = [country1.id, country2.id];
-  // let cityIds = [city1.id, city2.id];
+  // let country2 = await prisma.country.create({
+  //   data: {
+  //     nameAr: 'المغرب',
+  //     nameEn: ' Marroc',
+  //   },
+  // });
+  // //
+  // let city1 = await prisma.city.create({
+  //   data: {
+  //     nameAr: 'تونس',
+  //     nameEn: 'Tunis',
+  //     countryId: country1.id,
+  //   },
+  // });
+  // let city2 = await prisma.city.create({
+  //   data: {
+  //     nameAr: 'صفاقس',
+  //     nameEn: 'Sfax',
+  //     countryId: country1.id,
+  //   },
+  // });
+  let countryIds = await countriesSeed(prisma);
+  let cityIds = await citesSeed(prisma);
 
   //create dummy author
   let author1 = await prisma.author.create({
@@ -1417,7 +1421,9 @@ async function main() {
   //   articlesBybranch19.id,
   //   articlesBybranch20.id,
   // ];
-
+  await prisma.discountCode.create({
+    data: { code: 'KHALIL', clientId: users[0].clientId, discount: 20 },
+  });
   // await prisma.articlesByBranch.create({
   // data: {
   // branchId: mainBranch.id,
@@ -1441,6 +1447,7 @@ async function main() {
   //         branchId: branch.id,
   //         countryId: countryIds[Math.floor(Math.random() * countryIds.length)],
   //         cityId: cityIds[Math.floor(Math.random() * cityIds.length)],
+  //         totalAmount: 0,
   //       },
   //     }),
   //   );
@@ -2072,13 +2079,13 @@ async function main() {
   //     data: {
   //       labelEn: label[i],
   //       labelAr: label[i],
-
   //     },
   //   });
-  // featuresIds.push(features.id);
+  //   featuresIds.push(features.id);
   // }
   // chatSeed(prisma, usersIds);
-  // console.log(users);
+  paymentChoiceSeed(prisma);
+  console.log(users);
   // console.log(articles);
 }
 // execute the main function
@@ -2087,7 +2094,10 @@ main()
     console.error(e);
     process.exit(1);
   })
-  .finally(async () => {
-    // close Prisma Client at the end
-    await prisma.$disconnect();
-  });
+  // .finally(async () => {
+  //   // close Prisma Client at the end
+  //   await prisma.$disconnect();
+  // });
+  
+  articleCoverSeed (prisma)
+

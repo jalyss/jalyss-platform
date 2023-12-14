@@ -1,23 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CitiesService } from './cities.service';
-import { CreateCiteDto } from './dto/create-cite.dto';
-import { UpdateCiteDto } from './dto/update-cite.dto';
+import { CreateCityDto } from './dto/create-city.dto';
+import { UpdateCityDto } from './dto/update-city.dto';
+import { CityFilters } from './entities/city.entity';
 @ApiTags('cities')
 @Controller('cities/')
 export class CitiesController {
   constructor(private readonly citiesService: CitiesService) { }
 
   @Post()
-  create(@Body() createCiteDto: CreateCiteDto) {
+  create(@Body() createCiteDto: CreateCityDto) {
     return this.citiesService.create(createCiteDto);
   }
 
   @Get(':countryId')
-  findAll(
-    @Param('countryId') countryId:string
+  findAllByCountry(
+    @Param('countryId') countryId:string,
+    @Query() filters:CityFilters
   ) {
-    return this.citiesService.findAll(countryId);
+    return this.citiesService.findAllByCountry(countryId,filters);
   }
 
   @Get('one/:id')
@@ -26,12 +28,12 @@ export class CitiesController {
   }
 
   @Get()
-  findAllCitites() {
-    return this.citiesService.findAllCitites();
+  findAll() {
+    return this.citiesService.findAll();
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCiteDto: UpdateCiteDto) {
+  update(@Param('id') id: string, @Body() updateCiteDto: UpdateCityDto) {
     return this.citiesService.update(id, updateCiteDto);
   }
 

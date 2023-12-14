@@ -5,4 +5,6 @@ export class CreateJobTitleDto {
     nameAr : string;
     @ApiProperty()
     nameEn: string;
+    @ApiProperty()
+    nameFr: string;
 }

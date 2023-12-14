@@ -34,7 +34,7 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
-    console.log(dto)
+    console.log(dto);
     const { tel, address, ...rest } = dto;
     const salt = await bcrypt.genSalt();
     dto.password = await bcrypt.hash(dto.password, salt);
@@ -78,7 +78,7 @@ export class UsersService {
 
   findAll() {
     return this.prisma.user.findMany({
-      include: { Media: true, avatar: true, client: true , employee: true},
+      include: { Media: true, avatar: true, client: true, employee: true },
     });
   }
 
@@ -110,12 +110,12 @@ export class UsersService {
             educationLevel: true,
           },
         },
-        employee:{
-          include:{
-          branch:true,
-          role:true,
-        }
-        }
+        employee: {
+          include: {
+            branch: true,
+            role: true,
+          },
+        },
       },
     });
     const { confirmkey, password, ...rest } = user;
@@ -132,48 +132,109 @@ export class UsersService {
       employeeId,
       educationLevelId,
       jobTitleId,
+      functionalAreaId,
       isAdmin,
       branchId,
       roleId,
-
+      proposalCountry,
+      proposalCity,
+      proposalFunctionalArea,
+      proposalJobTitle,
+      proposalEducationLevel,
       ...rest
     } = data;
+    const user = await this.prisma.$transaction(async (prisma) => {
+      const updatedUser = await prisma.user.update({
+        where: { id },
+        data: {
+          fullNameAr: data.fullNameAr,
+          fullNameEn: data.fullNameEn,
+          email: data.email,
+          avatarId: data.avatarId,
+        },
+      });
 
-    const updatedUser = await this.prisma.user.update({
-      where: { id },
-      data: {
-        fullNameAr: data.fullNameAr,
-        fullNameEn: data.fullNameEn,
-        email: data.email,
-      },
+      if (clientId) {
+        let proposal = {};
+        if (proposalCountry) {
+          proposal = {
+            ...proposal,
+            ProposalCountry: {
+              create: {
+                name: proposalCountry,
+              },
+            },
+          };
+        }
+        if (proposalCity && countryId) {
+          proposal = {
+            ...proposal,
+            ProposalCity: {
+              create: {
+                name: proposalCity,
+                countryId,
+              },
+            },
+          };
+        }
+        if (proposalFunctionalArea && !functionalAreaId) {
+          proposal = {
+            ...proposal,
+            proposalFunctionalArea: {
+              create: {
+                name: proposalFunctionalArea,
+              },
+            },
+          };
+        }
+        if (proposalEducationLevel && !educationLevelId ) {
+          proposal = {
+            ...proposal,
+            proposalEducationLevel: {
+              create: {
+                name: proposalEducationLevel,
+              },
+            },
+          };
+        }
+        if (proposalJobTitle && !jobTitleId ) {
+          proposal = {
+            ...proposal,
+            proposalJobTitle: {
+              create: {
+                name: proposalJobTitle,
+              },
+            },
+          };
+        }
+        await prisma.client.update({
+          where: { id: clientId },
+          data: {
+            ...rest,
+            tel,
+            address,
+            countryId,
+            cityId,
+            educationLevelId,
+            jobTitleId,
+            ...proposal,
+          },
+        });
+      }
+      if (employeeId) {
+        await prisma.employee.update({
+          where: { id: employeeId },
+          data: {
+            ...rest,
+            roleId,
+            branchId,
+          },
+        });
+      }
+      const { password, confirmkey, ...userData } = updatedUser;
+      return userData;
     });
-
-    if (clientId) {
-      await this.prisma.client.update({
-        where: { id: clientId },
-        data: {
-          ...rest,
-          tel,
-          address,
-          countryId,
-          cityId,
-          educationLevelId,
-          jobTitleId,
-        },
-      });
-    }
-    if (employeeId) {
-      await this.prisma.employee.update({
-        where: { id: employeeId },
-        data: {
-          ...rest,
-          roleId,
-          branchId,
-        },
-      });
-    }
-
-    return updatedUser;
+    return user;
   }
 
   updateUserStatus(id: string, data: UpdateUserStatusDto) {
