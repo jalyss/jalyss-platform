@@ -5,15 +5,27 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { FilterClient } from './types';
 import { skip } from 'rxjs';
 
+class CustomError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
+
 @Injectable()
 export class ClientsService {
   constructor(private readonly prisma: PrismaService) {}
   async create(dto: CreateClientDto) {
-    return await this.prisma.client.create({
-      data: {
-        ...dto,
-      },
-    });
+    try {
+      return await this.prisma.client.create({
+        data: {
+          ...dto,
+        },
+      });
+    } catch(e) {
+      // Adding the service name/function name to easily find the error location while testing or debugging :)
+      throw new CustomError(`ClientsService/create() & error: " + ${e}`);
+    }
   }
 
   findAll(filters: FilterClient) {
@@ -27,45 +39,65 @@ export class ClientsService {
         contains: filters.fullNameEn,
       };
 
-      
-    return this.prisma.client.findMany({
-      include: {
-        avatar: true,
-        country: true,
-        category: true,
-        city: true,
-        jobTitle: true,
-        functionalArea: true,
-      },
-      orderBy: { createdAt: 'asc' },
-      where,
-      skip,
-      take,
-    });
+    try {
+      return this.prisma.client.findMany({
+        include: {
+          avatar: true,
+          country: true,
+          category: true,
+          city: true,
+          jobTitle: true,
+          functionalArea: true,
+        },
+        orderBy: { createdAt: 'asc' },
+        where,
+        skip,
+        take,
+      });
+    } catch(e) {
+      // Adding the service name/function name to easily find the error location while testing or debugging :)
+      throw new CustomError(`ClientsService/create() & error: " + ${e}`);
+    }
+    
   }
 
   async findOne(id: string) {
-    return await this.prisma.client.findFirst({
-      where: {
-        id,
-      },
-      include: {
-        avatar: true,
-        country: true,
-        category: true,
-        city: true,
-        jobTitle: true,
-        functionalArea: true,
-      },
-      orderBy: { createdAt: 'asc' },
-    });
+    try {
+      return await this.prisma.client.findFirst({
+        where: {
+          id,
+        },
+        include: {
+          avatar: true,
+          country: true,
+          category: true,
+          city: true,
+          jobTitle: true,
+          functionalArea: true,
+        },
+        orderBy: { createdAt: 'asc' },
+      });
+    } catch(e) {
+      // Adding the service name/function name to easily find the error location while testing or debugging :)
+      throw new CustomError(`ClientsService/findOne() & error: " + ${e}`);
+    }
   }
 
   async update(id: string, dto: UpdateClientDto) {
-    return await this.prisma.client.update({ where: { id }, data: dto });
+    try {
+      return await this.prisma.client.update({ where: { id }, data: dto });
+    } catch(e) {
+      // Adding the service name/function name to easily find the error location while testing or debugging :)
+      throw new CustomError(`ClientsService/update() & error: " + ${e}`);
+    }
   }
 
   async remove(id: string) {
-    return await this.prisma.client.delete({ where: { id } });
+    try {
+      return await this.prisma.client.delete({ where: { id } });
+    } catch(e) {
+      // Adding the service name/function name to easily find the error location while testing or debugging :)
+      throw new CustomError(`ClientsService/remove() & error: " + ${e}`);
+    }
   }
 }
