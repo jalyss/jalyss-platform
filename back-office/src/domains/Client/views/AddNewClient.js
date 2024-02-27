@@ -26,7 +26,7 @@ import CancelButton from "../../../components/Commun/buttons/CancelButton";
 import { fetchFunctionalAreas } from "../../../store/functionalArea";
 import { fetchEducationLevels } from "../../../store/educationLevel";
 
-const AddClient = () => {
+const AddNewClient = () => {
   const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [avatar, setAvatar] = useState(null);
@@ -388,4 +388,4 @@ const AddClient = () => {
   );
 };
 
-export default AddClient;
+export default AddNewClient;
