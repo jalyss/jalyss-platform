@@ -51,7 +51,7 @@ function CreateCommand() {
     contactChannel: "on_site",
     paymentType: null,
     discountCode: "",
-    financialCommitmentLines: [],
+    // <financialCommitmentLines>: [],
   });
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: null,
