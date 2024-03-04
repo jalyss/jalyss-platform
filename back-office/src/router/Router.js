@@ -122,9 +122,8 @@ import DetailRole from "../domains/roles/view/DetailRole";
 import CreateRole from "../domains/roles/view/CreateRole";
 
 import Client from "../domains/Client/Client";
- import AddClient from "../domains/Client/views/AddClient";
- import ClientList from "../domains/Client/views/Clientlist";
- import OneClient from "../domains/Client/views/OneClient";
+import ClientList from "../domains/Client/views/Clientlist";
+import OneClient from "../domains/Client/views/OneClient";
 
 import TypeArticle from "../domains/type/TypeArticle";
 
@@ -147,215 +146,229 @@ import CountryList from "../domains/country/view/CountyList";
 import CityList from "../domains/city/view/CityList";
 import AddCity from "../domains/city/view/AddCity";
 import Cities from "../domains/city/city";
+import AddNewClient from "../domains/Client/views/AddNewClient";
 
 function Router() {
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    let aux = localStorage.getItem("tokenAdmin");
-    if (aux) {
-      let token = JSON.parse(aux).Authorization;
-      dispatch(meAdmin(token));
-    }
-  }, [dispatch]);
+  useEffect(
+    () => {
+      let aux = localStorage.getItem("tokenAdmin");
+      if (aux) {
+        let token = JSON.parse(aux).Authorization;
+        dispatch(meAdmin(token));
+      }
+    },
+    [dispatch]
+  );
   return (
     <BrowserRouter>
       <Routes>
-        {auth.meAdmin ? (
-          <Route path="/" element={<Branch />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="space" element={<Service />}>
-              <Route path="edit-service/:serviceId" element={<EditService />} />
+        {auth.meAdmin
+          ? <Route path="/" element={<Branch />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="space" element={<Service />}>
+                <Route
+                  path="edit-service/:serviceId"
+                  element={<EditService />}
+                />
 
-              <Route index element={<ServiceList />} />
-              <Route path="create-service" element={<CreateService />} />
-              <Route path="service/:serviceId" element={<OneService />}>
-                <Route index element={<ServiceDetails />} />
-                <Route path="create-workspace" element={<CreateWorkSpace />} />
-                <Route path="create-Tarif" element={<CreateTarif />} />
-                <Route
-                  path="tarif-details/:tarifId"
-                  element={<TarifDetails />}
-                />
-                <Route
-                  path="space-details/:spaceId"
-                  element={<SpaceDetails />}
-                />
-                <Route path="edit-space/:spaceId" element={<EditWorkSpace />} />
-                <Route path="edit-tarif/:tarifId" element={<EditTarif />} />
+                <Route index element={<ServiceList />} />
+                <Route path="create-service" element={<CreateService />} />
+                <Route path="service/:serviceId" element={<OneService />}>
+                  <Route index element={<ServiceDetails />} />
+                  <Route
+                    path="create-workspace"
+                    element={<CreateWorkSpace />}
+                  />
+                  <Route path="create-Tarif" element={<CreateTarif />} />
+                  <Route
+                    path="tarif-details/:tarifId"
+                    element={<TarifDetails />}
+                  />
+                  <Route
+                    path="space-details/:spaceId"
+                    element={<SpaceDetails />}
+                  />
+                  <Route
+                    path="edit-space/:spaceId"
+                    element={<EditWorkSpace />}
+                  />
+                  <Route path="edit-tarif/:tarifId" element={<EditTarif />} />
+                </Route>
               </Route>
-            </Route>
 
-            <Route path="profile" element={<Profile />} />
-            <Route path="chat-box" element={<ChatBox />}>
-              <Route path="user/:userId" element={<Conversation />} />
-              <Route path="group/:groupId" element={<Conversation />} />
-            </Route>
-            <Route path="users" element={<User />}>
-              <Route index element={<UserList />} />
-              <Route path="create" element={<CreateUser />} />
-              <Route path="edit/:userId" element={<EditUser />} />
-            </Route>
+              <Route path="profile" element={<Profile />} />
+              <Route path="chat-box" element={<ChatBox />}>
+                <Route path="user/:userId" element={<Conversation />} />
+                <Route path="group/:groupId" element={<Conversation />} />
+              </Route>
+              <Route path="users" element={<User />}>
+                <Route index element={<UserList />} />
+                <Route path="create" element={<CreateUser />} />
+                <Route path="edit/:userId" element={<EditUser />} />
+              </Route>
 
-            <Route path="employee" element={<Employee />}>
-              <Route index element={<EmployeeList />} />
-              <Route path="create" element={<CreateEmployee />} />
-              <Route path="edit/:employeeId" element={<EditEmployee />} />
-            </Route>
+              <Route path="employee" element={<Employee />}>
+                <Route index element={<EmployeeList />} />
+                <Route path="create" element={<CreateEmployee />} />
+                <Route path="edit/:employeeId" element={<EditEmployee />} />
+              </Route>
 
-            <Route path="client" element={<Client />}>
-              <Route index element={<ClientList />} />
-              <Route path="one/:clientId" element={<OneClient />} />
-               <Route path="add" element={<AddClient />} /> 
-            </Route> 
+              <Route path="client" element={<Client />}>
+                <Route index element={<ClientList />} />
+                <Route path="one/:clientId" element={<OneClient />} />
+                <Route path="add" element={<AddNewClient />} />
+              </Route>
 
-            <Route path="educationLevel" element={<EducationLevel />}>
-              <Route index element={<EducationLevelList />} />
-              <Route path="addLevel" element={<AddLevel />} />
-            </Route>
+              <Route path="educationLevel" element={<EducationLevel />}>
+                <Route index element={<EducationLevelList />} />
+                <Route path="addLevel" element={<AddLevel />} />
+              </Route>
 
-            <Route path="jobTitle" element={<JobTitle />}>
-              <Route index element={<JobTitleList />} />
-              <Route path="addJob" element={<AddJob />} />
-            </Route>
+              <Route path="jobTitle" element={<JobTitle />}>
+                <Route index element={<JobTitleList />} />
+                <Route path="addJob" element={<AddJob />} />
+              </Route>
 
-            <Route path="functionalArea" element={<FunctionalArea />}>
-              <Route index element={<FunctionalAreaList />} />
-              <Route path="addFuctionalArea" element={<AddFuctionalArea />} />
-            </Route>
-            <Route path="Countrie" element={<Countrie />}>
-              <Route index element={<CountryList />} />
-              <Route path="AddCountrie" element={<AddCounty />} />
-            </Route>
-            <Route path="cities" element={<Cities />}>
-              <Route index element={<CityList />} />
-              <Route path="AddCity" element={<AddCity />} />
-            </Route>
+              <Route path="functionalArea" element={<FunctionalArea />}>
+                <Route index element={<FunctionalAreaList />} />
+                <Route path="addFuctionalArea" element={<AddFuctionalArea />} />
+              </Route>
+              <Route path="Countrie" element={<Countrie />}>
+                <Route index element={<CountryList />} />
+                <Route path="AddCountrie" element={<AddCounty />} />
+              </Route>
+              <Route path="cities" element={<Cities />}>
+                <Route index element={<CityList />} />
+                <Route path="AddCity" element={<AddCity />} />
+              </Route>
 
-            <Route path="blogs" element={<Blogs />}>
-              <Route index element={<BlogsList />} />
-              <Route path="detail/:blogId" element={<DetailBlog />} />
-            </Route>
+              <Route path="blogs" element={<Blogs />}>
+                <Route index element={<BlogsList />} />
+                <Route path="detail/:blogId" element={<DetailBlog />} />
+              </Route>
 
-            <Route path="provider" element={<Providers />}>
-              <Route index element={<ProvidersList />} />
-              <Route
-                path="editProvider/:providerId"
-                element={<EditProvider />}
-              />
-              <Route path="detail/:providerId" element={<DetailProvider />} />
-              <Route path="create" element={<CreateProvider />} />
-            </Route>
-            <Route path="category" element={<Category />}>
-              <Route index element={<CategoryList />} />
-              <Route path="createCategory" element={<CreateCategory />} />
-              <Route path="editCategory/:id" element={<EditCategory />} />
-            </Route>
+              <Route path="provider" element={<Providers />}>
+                <Route index element={<ProvidersList />} />
+                <Route
+                  path="editProvider/:providerId"
+                  element={<EditProvider />}
+                />
+                <Route path="detail/:providerId" element={<DetailProvider />} />
+                <Route path="create" element={<CreateProvider />} />
+              </Route>
+              <Route path="category" element={<Category />}>
+                <Route index element={<CategoryList />} />
+                <Route path="createCategory" element={<CreateCategory />} />
+                <Route path="editCategory/:id" element={<EditCategory />} />
+              </Route>
 
-            <Route path="publishing-house" element={<PublishingHouse />}>
-              <Route index element={<PublishHouseList />} />
-              <Route path="edit/:id" element={<EditPublishHouseList />} />
-              <Route path="detail/:id" element={<DetailPublishHouse />} />
-              <Route path="create" element={<CreatePublishingHouse />} />
-            </Route>
+              <Route path="publishing-house" element={<PublishingHouse />}>
+                <Route index element={<PublishHouseList />} />
+                <Route path="edit/:id" element={<EditPublishHouseList />} />
+                <Route path="detail/:id" element={<DetailPublishHouse />} />
+                <Route path="create" element={<CreatePublishingHouse />} />
+              </Route>
 
-            <Route path="Chat" element={<Chat />}>
-              <Route index element={<ChatList />} />
-              <Route path="edit/:id" element={<ChatEdit />} />
-              <Route path="create" element={<ChatCreation />} />
-            </Route>
+              <Route path="Chat" element={<Chat />}>
+                <Route index element={<ChatList />} />
+                <Route path="edit/:id" element={<ChatEdit />} />
+                <Route path="create" element={<ChatCreation />} />
+              </Route>
 
-            <Route path="author" element={<Author />}>
-              <Route index element={<AuthorList />} />
-              <Route path="edit/:authorId" element={<EditAuthor />} />
-              <Route path="detail/:authorId" element={<DetailAuthor />} />
-              <Route path="create" element={<CreateAuthor />} />
-            </Route>
+              <Route path="author" element={<Author />}>
+                <Route index element={<AuthorList />} />
+                <Route path="edit/:authorId" element={<EditAuthor />} />
+                <Route path="detail/:authorId" element={<DetailAuthor />} />
+                <Route path="create" element={<CreateAuthor />} />
+              </Route>
 
-            <Route path="type-article" element={<TypeArticle />}>
-              <Route index element={<TypesList />} />
-              <Route path="create" element={<CreateType />} />
-              <Route path="edit/:typeId" element={<EditType />} />
-              <Route path="detail/:typeId" element={<DetailType />} />
-            </Route>
-            <Route path="Branche" element={<Branches />}>
-              <Route index element={<BrancheList />} />
-              <Route
-                path="transiction/detail/:typeId"
-                element={<BrancheDetails />}
-              />
-              <Route path="transiction" element={<BrancheList />} />
-              <Route path="transactions" element={<TransictionList />} />
-              <Route
-                path="transactions/sent"
-                element={<BrancheTransiction />}
-              />
-              <Route
-                path="transactions/transictionDetails/:id"
-                element={<TransictionDetails />}
-              />
-            </Route>
+              <Route path="type-article" element={<TypeArticle />}>
+                <Route index element={<TypesList />} />
+                <Route path="create" element={<CreateType />} />
+                <Route path="edit/:typeId" element={<EditType />} />
+                <Route path="detail/:typeId" element={<DetailType />} />
+              </Route>
+              <Route path="Branche" element={<Branches />}>
+                <Route index element={<BrancheList />} />
+                <Route
+                  path="transiction/detail/:typeId"
+                  element={<BrancheDetails />}
+                />
+                <Route path="transiction" element={<BrancheList />} />
+                <Route path="transactions" element={<TransictionList />} />
+                <Route
+                  path="transactions/sent"
+                  element={<BrancheTransiction />}
+                />
+                <Route
+                  path="transactions/transictionDetails/:id"
+                  element={<TransictionDetails />}
+                />
+              </Route>
 
-            <Route path="role" element={<Role />}>
-              <Route index element={<RolesList />} />
-              <Route path="edit/:id" element={<EditRole />} />
-              <Route path="detail/:id" element={<DetailRole />} />
-              <Route path="create" element={<CreateRole />} />
-            </Route>
+              <Route path="role" element={<Role />}>
+                <Route index element={<RolesList />} />
+                <Route path="edit/:id" element={<EditRole />} />
+                <Route path="detail/:id" element={<DetailRole />} />
+                <Route path="create" element={<CreateRole />} />
+              </Route>
 
-            <Route path="articles" element={<Article />}>
-              <Route index element={<ArticleList />} />
-              <Route
-                path="articles-by-branch"
-                element={<ArticleByBranchList />}
-              />
-              <Route path="create" element={<CreateArticle />} />
-              <Route path="editArticle/:articleId" element={<EditArticle />} />
-              <Route path="detail/:articleId" element={<DetailAritcle />} />
-            </Route>
+              <Route path="articles" element={<Article />}>
+                <Route index element={<ArticleList />} />
+                <Route
+                  path="articles-by-branch"
+                  element={<ArticleByBranchList />}
+                />
+                <Route path="create" element={<CreateArticle />} />
+                <Route
+                  path="editArticle/:articleId"
+                  element={<EditArticle />}
+                />
+                <Route path="detail/:articleId" element={<DetailAritcle />} />
+              </Route>
 
-            <Route path="training" element={<Training />}>
-              <Route index element={<Sessions />} />
-              <Route
-                path="detail-training/:sessionsId"
-                element={<SessionDetail />}
-              ></Route>
-              <Route path="subscriber/:id" element={<Subscriber />} />
-              <Route path="newsession" element={<Newsession />} />
-              <Route path="courses" element={<Courses />} />
-              <Route path="courses/:lectureId" element={<Coursdetail />} />
-              <Route
-                path="/training/courses/AddNewCours"
-                element={<AddNewCours />}
-              />
-              <Route path="coachs" element={<Coachs />} />
-              <Route path="coachs/:id" element={<CoachDetails />}></Route>{" "}
-              <Route path="features" element={<Features />} />
-              <Route path="requests" element={<Requests />} />
-              <Route path="requests/:id" element={<DetailRequest />} />
-              <Route path="gains" element={<Gains />} />
-              <Route path="prerequires" element={<Prerequires />} />
-              <Route path="types" element={<SessionType />} />
-            </Route>
+              <Route path="training" element={<Training />}>
+                <Route index element={<Sessions />} />
+                <Route
+                  path="detail-training/:sessionsId"
+                  element={<SessionDetail />}
+                />
+                <Route path="subscriber/:id" element={<Subscriber />} />
+                <Route path="newsession" element={<Newsession />} />
+                <Route path="courses" element={<Courses />} />
+                <Route path="courses/:lectureId" element={<Coursdetail />} />
+                <Route
+                  path="/training/courses/AddNewCours"
+                  element={<AddNewCours />}
+                />
+                <Route path="coachs" element={<Coachs />} />
+                <Route path="coachs/:id" element={<CoachDetails />} />{" "}
+                <Route path="features" element={<Features />} />
+                <Route path="requests" element={<Requests />} />
+                <Route path="requests/:id" element={<DetailRequest />} />
+                <Route path="gains" element={<Gains />} />
+                <Route path="prerequires" element={<Prerequires />} />
+                <Route path="types" element={<SessionType />} />
+              </Route>
 
-            {/* <Route path="charts" element={<Charts />} /> */}
+              {/* <Route path="charts" element={<Charts />} /> */}
 
-            <Route path="commands" element={<Command />}>
-              <Route index element={<CommandList />} />
-              <Route path="create" element={<CreateCommand />} />
-              <Route path="detail/:commandId" element={<CommandDetail />} />
-              <Route path="edit/:commandId" element={<EditCommand />} />
+              <Route path="commands" element={<Command />}>
+                <Route index element={<CommandList />} />
+                <Route path="create" element={<CreateCommand />} />
+                <Route path="detail/:commandId" element={<CommandDetail />} />
+                <Route path="edit/:commandId" element={<EditCommand />} />
+              </Route>
+              {/* <Route path="charts" element={<ChartTabs />} /> */}
             </Route>
-            {/* <Route path="charts" element={<ChartTabs />} /> */}
-          </Route>
-        ) : (
-          <Route path="/" element={<AuthAdmin />}>
-            <Route index element={<LoginAdmin />} />
-            <Route path="reset-password" element={<ResetPassword />} />
-            <Route path="new-password" element={<NewPassword />} />
-          </Route>
-        )}
+          : <Route path="/" element={<AuthAdmin />}>
+              <Route index element={<LoginAdmin />} />
+              <Route path="reset-password" element={<ResetPassword />} />
+              <Route path="new-password" element={<NewPassword />} />
+            </Route>}
         <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
