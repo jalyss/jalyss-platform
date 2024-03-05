@@ -41,6 +41,7 @@ export class CommandsService {
             quantity: +elem.quantity,
             discount:elem.discount,
             amount,
+            unitPrice : articleByBranch.price
           };
         }),
       );

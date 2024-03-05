@@ -23,7 +23,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
         },
         template: {
           dir: __dirname + '/templates',
-          adapter: new PugAdapter(),
+          // adapter: new PugAdapter(),
           options: {
             strict: true,
           },
