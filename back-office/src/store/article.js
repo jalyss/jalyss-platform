@@ -50,6 +50,7 @@ export const fetchArticleByBranch = createAsyncThunk(
 export const addTransactionStock = createAsyncThunk(
   "transaction",
   async (args, { dispatch }) => {
+    console.log(args);
     const response = await axios.post(
       `${config.API_ENDPOINT}/transaction`,
       args

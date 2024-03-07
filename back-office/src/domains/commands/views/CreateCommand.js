@@ -83,7 +83,7 @@ function CreateCommand() {
   const [financialCommitmentLines, setFinancialCommitmenLines] = useState([
     { amount: 0, date: "" },
   ]);
-
+console.log(newCommand.commandLine)
   //fetch articles of branch by branchId and articleTitle
   useEffect(() => {
     if (newCommand?.branchId) {
