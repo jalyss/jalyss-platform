@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createCommand } from "../../../store/command";
 import {
@@ -32,6 +32,8 @@ import { fetchClients } from "../../../store/client";
 import { useNavigate } from "react-router-dom";
 
 import { fetchDiscountCode } from "../../../store/discountCode";
+import { useReactToPrint } from "react-to-print";
+import PrintButton from "../../../components/Commun/buttons/PrintButton";
 
 function CreateCommand() {
   const dispatch = useDispatch();
@@ -84,6 +86,17 @@ function CreateCommand() {
     { amount: 0, date: "" },
   ]);
 
+  const [print, setPrint] = useState(false);
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    onAfterPrint: () => {
+      setPrint(false);
+    },
+  });
+
+  //#region //useEffect
   //fetch articles of branch by branchId and articleTitle
   useEffect(() => {
     if (newCommand?.branchId) {
@@ -176,6 +189,8 @@ function CreateCommand() {
     });
     return res;
   };
+  //#endregion
+
   const handleChangeCode = (e) => {
     const { value } = e.target;
     setTypingDiscountCode(value);
@@ -228,11 +243,11 @@ function CreateCommand() {
   };
 
   return (
-    <div>
+    <div ref={componentRef}>
       <Container maxWidth="md">
         <Box mt={3}>
           <Typography variant="h4" align="center" gutterBottom>
-            Create Command
+            {!print ? "Create Command" : "Invoice"}
           </Typography>
           <div className="d-flex gap-3 justify-content-center">
             <Box mt={4} className="col-4">
@@ -1095,7 +1110,8 @@ function CreateCommand() {
                       }}
                     />
                     {financialCommitmentLines[i]?.date.length &&
-                    new Date(financialCommitmentLines[i]?.date) === new Date() ? (
+                    new Date(financialCommitmentLines[i]?.date) ===
+                      new Date() ? (
                       <span>Paid</span>
                     ) : null}
                   </div>
@@ -1104,9 +1120,24 @@ function CreateCommand() {
             )}
           </div>
 
-          <div className="w-100 d-flex justify-content-center gap-4 p-4">
-            <SaveButton width={100} type="button" onClick={handleCreate} />
-          </div>
+          {print ? (
+            <></>
+          ) : (
+            <div className="w-100 d-flex justify-content-center gap-2 p-4">
+              <SaveButton width={100} type="button" onClick={handleCreate} />
+              <PrintButton
+                width={100}
+                type="button"
+                onClick={() => {
+                  setPrint(true);
+
+                  setTimeout(() => {
+                    handlePrint();
+                  }, "(500)");
+                }}
+              />
+            </div>
+          )}
         </Box>
       </Container>
     </div>
