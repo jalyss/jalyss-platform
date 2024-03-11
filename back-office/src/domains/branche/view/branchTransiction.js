@@ -42,7 +42,7 @@ function BrancheList() {
   const [branchSender, setbranchSender] = useState("");
   const [branchReceiver, setbranchReceiver] = useState("");
   const [errorQuantity, setErrorQuantity] = useState(false);
-
+  const [transactionId, setTransactionId] = useState("")
   const [reason, setReason] = useState("");
   const [newCommand, setNewCommand] = useState({
     branchSender: "",
@@ -72,7 +72,6 @@ function BrancheList() {
         })
       );
     }, [typingCode]);
-    console.log(articlesByBranch)
     useEffect(() => {
     if (typingCode) {
       console.log(articleByBranch);
@@ -95,15 +94,15 @@ function BrancheList() {
       
       return quantity >= stock;
     };
-  function handleTransaction() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
-    const { status, reason, commandLine } = newCommand;
+    function handleTransaction() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      const { status, reason, commandLine } = newCommand;
     const data = {
       branchSenderId: newCommand.branchSender,
       branchReceiverId: newCommand.branchReceiver,
@@ -117,9 +116,14 @@ function BrancheList() {
     };
     dispatch(addTransactionStock(data)).then((res) => {
       if (!res.error) {
-        // setBasicModalDelete(!basicModalDelete);
+   
+
         showSuccessToast("Transiction done");
-        navigate(-1);
+       
+          console.log(res.payload.id)
+          navigate(`/Branche/transactions/transictionDetails/${res.payload.id}`);
+          
+        
       } else {
         showErrorToast(res.error.message);
       }
@@ -552,7 +556,7 @@ function BrancheList() {
                       value={newCommand.commandLine[i].quantity}
                   onChange={(e) => {
                         const newQuantity = +e.target.value;
-                        console.log(newQuantity, newCommandLine.stock);
+                       
                         // Check if the new quantity is too low
                         const isQuantityTooLow = isQuantityCloseToStockLimit(
                           newQuantity,
@@ -636,7 +640,7 @@ function BrancheList() {
             ))}
           </div>
           <div className="w-100 d-flex justify-content-center gap-4 p-4">
-            <SaveButton width={100} type="button" onClick={handleTransaction} />
+            <SaveButton width={100} type="button" disabled={!(newCommand.commandLine?.length>0)} onClick={handleTransaction} />
           </div>
         </Box>
       </Container>

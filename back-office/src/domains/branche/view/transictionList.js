@@ -130,7 +130,7 @@ function TransictionList() {
   };
 
   const handleAddClick = (id) => {
-    navigate(`transictionDetails/${id}`);
+    navigate(`/branche/transactions/transictionDetails/${id}`);
   };
 
   return (
@@ -157,7 +157,7 @@ function TransictionList() {
               navigate("sent");
             }}
             className="btn btn-light mt-5 m-3 mb-1"
-          >
+          >                             
             <span className="label-btn">Make transaction</span>
             <BsShare style={{ marginLeft: "10px" }} fontSize={17} />
           </button>
@@ -169,7 +169,7 @@ function TransictionList() {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: params.take,
+                  pageSize: params.take,                             
                 },
               },
             }}

@@ -56,6 +56,7 @@ export const addTransactionStock = createAsyncThunk(
       args
     );
     dispatch(fetchArticles());
+    
     return response.data;
   }
 );
