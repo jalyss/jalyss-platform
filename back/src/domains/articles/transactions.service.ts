@@ -107,6 +107,11 @@ export class TransactionService {
           },
         },
       },
+      orderBy:
+          {
+            date: 'desc',
+          }
+      
     });
   }
 

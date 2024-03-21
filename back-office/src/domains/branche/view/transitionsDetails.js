@@ -68,37 +68,58 @@ function DetailTransition() {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">Transition Details</Typography>
-              <Typography>ID: {transition?.id}</Typography>
-              <Typography>
-                Branch Sender: {transition?.branchSender?.name}
+              <Grid item>
+              <Typography component="span" sx={{ fontWeight: "bold" }}>ID: </Typography>
+              {transition?.id}
+              </Grid>
+              <Grid item>
+              <Typography component="span" sx={{ fontWeight: "bold" }}>
+                Branch Sender: 
               </Typography>
-              <Typography>
-                Branch Receiver: {transition?.branchReceiver?.name}
+              {transition?.branchSender?.name}
+              </Grid>
+              <Grid item>
+              <Typography component="span" sx={{ fontWeight: "bold" }}>
+                Branch Receiver:
               </Typography>
-              <Typography>
+
+              {transition?.branchReceiver?.name}
+              </Grid>
+              <Grid item>
+              <Typography  component="span" sx={{ fontWeight: "bold" }}>
                 Article:{" "}
-                {transition?.mvtArticle
+               
+              </Typography>
+              {transition?.mvtArticle
                   .map((e) => e.article.title)
                   .join(", ")}
-              </Typography>
-              <Typography>
+                    </Grid>
+                       <Grid item>
+              <Typography  component="span" sx={{ fontWeight: "bold" }}>
                 Quantity:{" "}
-                {transition?.mvtArticle.map((e) => e.quantity).join(", ")}
-              </Typography>
-              <Typography>Status: {transition?.status}</Typography>
-              <Typography>Reason: {transition?.reason}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="h6">Images</Typography>
+                
+               </Typography>
+               {transition?.mvtArticle.map((e) => e.quantity).join(", ")}
+               </Grid>
+               <Grid item>
+                <Typography  component="span" sx={{ fontWeight: "bold" }}>Status:</Typography>
+                {transition?.status}
+                </Grid>
+                <Grid item>
+                <Typography  component="span" sx={{ fontWeight: "bold" }}>Reason:</Typography>
+                {transition?.reason}
+                </Grid>
+          </Grid>
+              <Grid item xs={12} sm={6}>
               <Box
-  sx={{
-    display: "flex",
-    flexDirection: "row",
-    // flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-  }}
->
+                sx={{
+                display: "flex",
+                flexDirection: "row",
+                // flexWrap: "wrap",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+                                >
                 {editTransitionData?.mvtArticle?.map((e, i) => (
                   <Box
                   key={i}
@@ -131,7 +152,7 @@ function DetailTransition() {
           <Grid container spacing={2} mt={2}>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6">
-                {renderEditView ? "Update Transition:" : ""}
+                {renderEditView ? "Update Transaction:" : ""}
               </Typography>
               {/* Input fields for updates */}
               {renderEditView && (
@@ -195,17 +216,15 @@ function DetailTransition() {
                   <Button
                     onClick={toggleShowDelete}
                     variant="contained"
-                    color="primary"
-                  >
-                    Save Transition
+                    sx={{ backgroundColor: "#E6C440", color: "#000000" }}                  >
+                    Save Transaction
                   </Button>
                 ) : (
                   <Button
                     onClick={toggleView}
                     variant="contained"
-                    color="primary"
-                  >
-                    Update Transition
+                    sx={{ backgroundColor: "#E6C440", color: "#000000" }}                  >
+                    Update Transaction
                   </Button>
                 )}
               </Box>

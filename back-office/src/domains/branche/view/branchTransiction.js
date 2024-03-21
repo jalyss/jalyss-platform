@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { BiMessageSquareAdd, BiSave } from "react-icons/bi";
 import { GrEdit } from "react-icons/gr";
+import Modal from "../../../components/Commun/Modal";
 
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import isEnglish from "../../../helpers/isEnglish";
@@ -36,13 +37,12 @@ function BrancheList() {
   const navigate = useNavigate();
 
   const [params, setParams] = useState({ skip: 0, take: 10 });
-  // const [basicModalDelete, setBasicModalDelete] = useState(false);
-  // const [transiction, setTransiction] = useState("");
+
   const [loadingArticles, setLoadingArticles] = useState(false);
   const [branchSender, setbranchSender] = useState("");
   const [branchReceiver, setbranchReceiver] = useState("");
   const [errorQuantity, setErrorQuantity] = useState(false);
-  const [transactionId, setTransactionId] = useState("")
+  const [showModal, setShowModal] = useState(false);
   const [reason, setReason] = useState("");
   const [newCommand, setNewCommand] = useState({
     branchSender: "",
@@ -52,6 +52,7 @@ function BrancheList() {
     commandLine: [],
   });
   const [openArticles, setOpenArticles] = useState(false);
+  const [openStock, setOpenStock] = useState(false);
 
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: null,
@@ -129,7 +130,9 @@ function BrancheList() {
       }
     });
   }
- 
+  const toggleShow = () => {
+    setShowModal(!showModal);
+  };
   useEffect(() => {
     dispatch(fetchBranches());
   }, [dispatch]);
@@ -244,29 +247,70 @@ function BrancheList() {
                 Select Sender and Reciever Branch please
               </p>
             )}
-            <Box mt={3} mb={3} display="flex" alignItems="center" gap={2}>
-        
-                <TextField
-                helperText={"Code"}
-                  className="form-control rounded"
-                  disabled={
-                    !(newCommand.branchSender && newCommand.branchReceiver)
-                  }
-                  style={
-                    errorQuantity
-                      ? { outlineColor: "red", borderColor: "red", height: 43 }
-                      : { height: 43 }
-                  }
-                  value={
-                    newCommandLine?.articleByBranch?.article?.code || typingCode
-                  }
-                  onChange={(e) => {
-                    setTypingCode(e.target.value);
-                  }}
-                />
-              
-          
-                <Autocomplete
+            <Box mt={3} mb={3} display="flex" alignItems="center" gap={2} flexDirection="row" width="100%">
+  {/* Your existing TextField and Autocomplete components */}
+  <TextField
+    helperText={"Code"}
+    className="form-control rounded"
+    disabled={!(newCommand.branchSender && newCommand.branchReceiver)}
+    style={
+      errorQuantity
+        ? { outlineColor: "red", borderColor: "red", height: 43 }
+        : { height: 43 }
+    }
+    value={newCommandLine?.articleByBranch?.article?.code || typingCode}
+    onChange={(e) => {
+      setTypingCode(e.target.value);
+    }}
+  />
+
+  <Autocomplete
+    className="pt-4"
+    aria-required={true}
+    disabled={!(newCommand.branchSender && newCommand.branchReceiver)}
+    fullWidth
+    sx={{
+      ".MuiInputBase-root": {
+        height: "43px !important",
+      },
+      ".MuiInputBase-input": {
+        padding: "0px !important",
+      },
+    }}
+    open={openArticles}
+    onOpen={() => {
+      setOpenArticles(true);
+    }}
+    onClose={() => {
+      setOpenArticles(false);
+    }}
+    options={articlesByBranch}
+    loading={loadingArticles}
+    value={newCommandLine?.articleByBranch}
+    onChange={(event, v) => {
+      setNewCommandLine({
+        ...newCommandLine,
+        stock: v?.stock,
+        quantity: 1,
+        articleByBranch: v,
+        articleByBranchId: v?.id,
+      });
+    }}
+    getOptionLabel={(option) => option?.article?.title}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        helperText={"Article"}
+        fullWidth
+        variant="outlined"
+        onChange={(e) => {
+          setTypingArticleTitle(e.target.value);
+        }}
+        placeholder="Article title"
+      />
+    )}
+  />
+         {/* <Autocomplete
               className="pt-4"
                   aria-required={true}
                   disabled={
@@ -281,61 +325,13 @@ function BrancheList() {
                       padding: "0px !important",
                     },
                   }}
-                  open={openArticles}
-                  onOpen={() => {
-                    setOpenArticles(true);
-                  }}
-                  onClose={() => {
-                    setOpenArticles(false);
-                  }}
-                  options={articlesByBranch}
-                  loading={loadingArticles}
-                  value={newCommandLine?.articleByBranch}
-                  onChange={(event, v) => {
-                    setNewCommandLine({
-                      ...newCommandLine,
-                      stock: v?.stock,
-                      quantity: 1,
-                      articleByBranch: v,
-                      articleByBranchId: v?.id,
-                    });
-                  }}
-                  getOptionLabel={(option) => option?.article?.title}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      helperText={"Article"}
-                      fullWidth
-                      variant="outlined"
-                      onChange={(e) => {
-                        setTypingArticleTitle(e.target.value);
-                      }}
-                      placeholder="Article title"
-                    />
-                  )}
-                />
-         <Autocomplete
-              className="pt-4"
-                  aria-required={true}
-                  disabled={
-                    !(newCommand.branchSender && newCommand.branchReceiver)
-                  }
-                  fullWidth
-                  sx={{
-                    ".MuiInputBase-root": {
-                      height: "43px !important",
-                    },
-                    ".MuiInputBase-input": {
-                      padding: "0px !important",
-                    },
-                  }}
-                  open={openArticles}
-                  onOpen={() => {
-                    setOpenArticles(true);
-                  }}
-                  onClose={() => {
-                    setOpenArticles(false);
-                  }}
+                  // open={openStock}
+                  // onOpen={() => {
+                  //   setOpenStock(true);
+                  // }}
+                  // onClose={() => {
+                  //   setOpenStock(false);
+                  // }}
                   options={articlesByBranch}
                   loading={loadingArticles}
                   value={newCommandLine?.articleByBranch}
@@ -352,21 +348,31 @@ function BrancheList() {
                   renderInput={(params) => (
                    
                 <TextField
-                {...params}
+                // {...params}
                 helperText={"Stock"}
                   className="form-control rounded"
-                  disabled
+                  disabled={true}
                   style={
                     errorQuantity
                       ? { outlineColor: "red", borderColor: "red", height: 43 }
                       : { height: 43 }
                   }
-                  // value={newCommandLine?.stock}
+                  value={newCommandLine?.stock}
                 />
                   )}
-                />
-         
-            
+                /> */}
+       <TextField
+       helperText={"Stock"}
+       value= {newCommandLine?.stock} 
+       disabled={
+        !(newCommand.branchSender && newCommand.branchReceiver)
+      }
+       style={
+        errorQuantity
+          ? { outlineColor: "red", borderColor: "red", height: 43 }
+          : { height: 43 }
+      }/>  
+        
             
          
                 <TextField
@@ -640,10 +646,19 @@ function BrancheList() {
             ))}
           </div>
           <div className="w-100 d-flex justify-content-center gap-4 p-4">
-            <SaveButton width={100} type="button" disabled={!(newCommand.commandLine?.length>0)} onClick={handleTransaction} />
+            <SaveButton name={'Send'} width={100} type="button" disabled={!(newCommand.commandLine?.length>0)} onClick={toggleShow} />
           </div>
+          <Modal
+          basicModal={showModal}
+          title={'Confirmation'}
+          toggleShow={toggleShow}
+          body={'Do you want to confirm your Transaction  ? '}
+   normal
+   fn={handleTransaction}
+        />
         </Box>
       </Container>
+
     </div>
   );
 }
