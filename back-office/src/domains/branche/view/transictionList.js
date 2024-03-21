@@ -32,18 +32,17 @@ function TransictionList() {
   const [basicModalDelete, setBasicModalDelete] = useState(false);
   const [basicModal, setBasicModal] = useState(false);
   const [branchId, setBranshId] = useState("");
-
   const columns = [
     {
-      field: "branch Sender",
-      headerName: "branch Sender",
+      field: "Sender",
+      headerName: "Sender",
       width: 150,
       editable: false,
       valueGetter: (params) => `${params.row.branchSender?.name}`,
     },
     {
-      field: "branch reciever",
-      headerName: "branch Reciever",
+      field: "reciever",
+      headerName: "Reciever",
       width: 150,
       editable: false,
       valueGetter: (params) => `${params.row.branchReceiver?.name}`,
@@ -119,6 +118,7 @@ function TransictionList() {
   }, [dispatch]);
 
   const handleDeleteBranch = () => {
+    console.log(branchId)
     dispatch(removeTransition(branchId)).then((res) => {
       if (!res.error) {
         setBasicModalDelete(!basicModalDelete);
@@ -130,7 +130,7 @@ function TransictionList() {
   };
 
   const handleAddClick = (id) => {
-    navigate(`transictionDetails/${id}`);
+    navigate(`/branche/transactions/transictionDetails/${id}`);
   };
 
   return (
@@ -147,7 +147,7 @@ function TransictionList() {
             }))}
             valueOptionName="value"
             labelOptionName="label"
-            label="Filter by branch name"
+            label="Filter by branch "
             placeholder={"select transitcions by branch"}
             onChange={(newValue) => setSelectedBranch(newValue)}
           />
@@ -157,7 +157,7 @@ function TransictionList() {
               navigate("sent");
             }}
             className="btn btn-light mt-5 m-3 mb-1"
-          >
+          >                             
             <span className="label-btn">Make transaction</span>
             <BsShare style={{ marginLeft: "10px" }} fontSize={17} />
           </button>
@@ -169,7 +169,7 @@ function TransictionList() {
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: params.take,
+                  pageSize: params.take,                             
                 },
               },
             }}

@@ -1,342 +1,664 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  Autocomplete,
+  Box,
+  Container,
+  TextField,
+  Typography,
+  typographyClasses,
+} from "@mui/material";
+import { BiMessageSquareAdd, BiSave } from "react-icons/bi";
+import { GrEdit } from "react-icons/gr";
+import Modal from "../../../components/Commun/Modal";
+
 import { showErrorToast, showSuccessToast } from "../../../utils/toast";
 import isEnglish from "../../../helpers/isEnglish";
 import { fetchBranches, DeleteBranche } from "../../../store/branche";
-import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
-import { Typography, TextField } from "@mui/material";
-import {
+import {fetchArticleByBranchWithCode,
   fetchArticlesByBranch,
   addTransactionStock,
 } from "../../../store/article";
-import Modal from "../../../components/Commun/Modal";
-import AutoCompleteFilter from "../../../components/Commun/AutoCompleteFilter";
-import { CiShare1 } from "react-icons/ci";
 import { FaTrash } from "react-icons/fa";
-import Selecto from "react-select";
+import Form from "react-bootstrap/Form";
+import SaveButton from "../../../components/Commun/buttons/SaveButton";
 
 function BrancheList() {
   const dispatch = useDispatch();
+  const articleByBranch = useSelector((state) => state.article.article);
+
   const branshes = useSelector((state) => state.branche.branches.items);
-  const articles = useSelector((state) => state.article.articles.items);
+  const articlesByBranch = useSelector((state) => state.article.articles.items);
+  const [typingArticleTitle, setTypingArticleTitle] = useState("");
+  const [typingCode, setTypingCode] = useState("");
+
   const isEng = isEnglish();
   const navigate = useNavigate();
-  const [selectedBranch, setSelectedBranch] = useState("");
+
   const [params, setParams] = useState({ skip: 0, take: 10 });
-  const [basicModalDelete, setBasicModalDelete] = useState(false);
-  const [basicModal, setBasicModal] = useState(false);
-  const [branchId, setBranshId] = useState("");
-  const [transiction, setTransiction] = useState("");
 
-  const [inputsNumber, setinputsNumber] = useState(1);
-  const [value, setValue] = useState([]);
-  const [commandLine, setcommandLine] = useState([0]);
-  const [dataaa, setdata] = useState({});
-  const [data0, setdata0] = useState([]);
-  const columns = [
-    {
-      field: "id",
-      headerName: "id",
-      width: 150,
-      editable: false,
-    },
-    {
-      field: "articleTitle",
-      headerName: "Article Title",
-      width: 150,
-      editable: false,
-      valueGetter: (params) => params?.row?.article?.title,
-    },
-    {
-      field: "price",
-      headerName: "price",
-      width: 150,
-      editable: false,
-    },
-    {
-      field: "stock",
-      headerName: "stock",
-      width: 150,
-      editable: false,
-    },
-  ];
+  const [loadingArticles, setLoadingArticles] = useState(false);
+  const [branchSender, setbranchSender] = useState("");
+  const [branchReceiver, setbranchReceiver] = useState("");
+  const [errorQuantity, setErrorQuantity] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [reason, setReason] = useState("");
+  const [newCommand, setNewCommand] = useState({
+    branchSender: "",
+    branchReceiver: "",
+    status: "",
+    reason: reason,
+    commandLine: [],
+  });
+  const [openArticles, setOpenArticles] = useState(false);
+  const [openStock, setOpenStock] = useState(false);
 
+  const [newCommandLine, setNewCommandLine] = useState({
+    quantity: null,
+    articleByBranchId: null,
+    articleByBranch: null,
+  });
+
+  const [openArticlesEditCommandLines, setOpenArticlesEditCommandLines] =
+    useState([]);
+  const [editCommandLineIndexes, setEditCommandLineIndexes] = useState([]);
   useEffect(() => {
-    dispatch(fetchBranches());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchArticlesByBranch({ identifier: selectedBranch[0] }));
-  }, [selectedBranch]);
-
-  useEffect(() => {
-    setValue(
-      articles.map((e) => ({
-        value: e?.article?.id,
-        label: e?.article?.title,
-      }))
-    );
-  }, [selectedBranch]);
-
-  const toggleShow = (id) => {
-    setBranshId(id);
-    setBasicModal(!basicModal);
-  };
-
-  const handleDeleteBranch = () => {
-    dispatch(DeleteBranche(branchId)).then((res) => {
+    console.log(typingCode)
+    if (typingCode)
+    dispatch(
+  fetchArticleByBranchWithCode({
+    identifier: newCommand.branchSender,
+          code: typingCode,
+        })
+      );
+    }, [typingCode]);
+    useEffect(() => {
+    if (typingCode) {
+      console.log(articleByBranch);
+      if (articleByBranch) {
+        setNewCommandLine({
+          ...newCommandLine,
+          quantity: 1,
+          articleByBranch: articleByBranch,
+          articleByBranchId: articleByBranch.id,
+        });
+      } else {
+        setNewCommandLine({ quantity: "" });
+      }
+    }
+  }, [articleByBranch]);
+  
+  
+    const isQuantityCloseToStockLimit = (quantity, stock) => {
+    
+      
+      return quantity >= stock;
+    };
+    function handleTransaction() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      const { status, reason, commandLine } = newCommand;
+    const data = {
+      branchSenderId: newCommand.branchSender,
+      branchReceiverId: newCommand.branchReceiver,
+      status,
+      reason,
+      date: formattedDateTime,
+      articles: commandLine.map(({ articleByBranch, quantity }) => ({
+        articleId: articleByBranch.articleId,
+        quantity,
+      })),
+    };
+    dispatch(addTransactionStock(data)).then((res) => {
       if (!res.error) {
-        setBasicModalDelete(!basicModalDelete);
-        showSuccessToast("WorkSpace has been deleted");
+   
+
+        showSuccessToast("Transiction done");
+       
+          console.log(res.payload.id)
+          navigate(`/Branche/transactions/transictionDetails/${res.payload.id}`);
+          
+        
       } else {
         showErrorToast(res.error.message);
       }
     });
-  };
-
-  const addData0Entry = () => {
-    const { articleId, quantity } = dataaa;
-    setdata0((prevData) => [...prevData, { articleId, quantity }]);
-  };
-  console.log(" ")
-  
-  function handleTransiction() {
-    const { articleId, quantity } = dataaa;
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
-    
-      let data = { ...transiction, date: formattedDateTime, articles: data0?.length>1? data0:[{articleId,quantity}] };
-      let aux = Object.assign({}, data);
-
-      dispatch(addTransactionStock(aux)).then((res) => {
-        if (!res.error) {
-          setBasicModalDelete(!basicModalDelete);
-          showSuccessToast("Transiction done");
-          navigate(-1);
-        } else {
-          showErrorToast(res.error.message);
-        }
-      });
   }
-
-  const renderInputs = () => {
-    return Array.from({ length: inputsNumber }).map((e, i) => (
-      <Box key={i} mt={3} mb={3} display="flex" alignItems="center">
-        <div style={{ flex: 2 }}>
-          <Selecto
-            placeholder="Search by article"
-            options={articles.map((e) => ({
-              value: e?.article?.id,
-              label: e?.article?.title,
-            }))}
-            style={{ flex: 1, marginRight: "10px" }}
-            onChange={(e) => {
-              setdata({ ...dataaa, articleId: e.value });
-            }}
-          />
-        </div>
-        <div style={{ marginLeft: "10px", fontSize: "10px" }}>
-          <input
-            type="number"
-            placeholder="Quantity"
-            onChange={(e) => {
-              setdata({ ...dataaa, quantity: +e.target.value });
-            }}
-          />
-        </div>
-        <div style={{ marginLeft: "10px" }}>
-          <FaTrash
-            onClick={() => handleDelete(e.articleId)}
-            style={{ cursor: "pointer" }}
-          />
-        </div>
-      </Box>
-    ));
+  const toggleShow = () => {
+    setShowModal(!showModal);
   };
+  useEffect(() => {
+    dispatch(fetchBranches());
+  }, [dispatch]);
+  useEffect(() => {
+    if (newCommand.branchSender) {
+      setLoadingArticles(true);
+      dispatch(
+        fetchArticlesByBranch({
+          identifier: newCommand.branchSender,
 
-  const handleDelete = (articleByBranchId) => {
-    const updatedCommandLine = commandLine.filter(
-      (item) => item.articleByBranchId !== articleByBranchId
-    );
-    setdata0(updatedCommandLine);
-  };
+          take: 5,
+        })
+      ).then((res) => {
+        setLoadingArticles(false);
+      });
+    }
+  }, [branchReceiver, typingArticleTitle, branchSender]);
 
   return (
     <div>
-      <div className="container">
-        <h2 style={{ paddingLeft: 10, paddingTop: 10 }}>List of branches</h2>
-        <div className="d-flex justify-centent-center align-items-center">
-          <div>
-            <AutoCompleteFilter
-              data={branshes.map((branch) => ({
-                value: branch.identifier,
-                label: branch.identifier,
-              }))}
-              valueOptionName="value"
-              labelOptionName="label"
-              label="Filter by branch name"
-              placeholder={selectedBranch[0]}
-              onChange={(newValue) => setSelectedBranch(newValue)}
-            />
-
-            <Box sx={{ height: 400, width: "100%" }}>
-              <DataGrid
-                rows={articles}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: params.take,
-                    },
-                  },
+      <Container maxWidth="xl">
+        <Box mt={3}>
+          <Typography>Make a Transaction</Typography>
+          <div className="d-flex gap-3 justify-content-center pb-5">
+            <Box mt={4} className="col-4">
+              Sender Branch
+              <Form.Select
+                size="lg"
+                onChange={(e) => {
+                  setbranchSender(e.target.value);
+                  setNewCommand({
+                    ...newCommand,
+                    branchSender: e.target.value,
+                  });
                 }}
-                onPaginationModelChange={(e) => {
-                  setParams({ ...params, take: +e.pageSize * (+e.page + 1) });
+              >
+                <option disabled selected>
+                  Select Sender
+                </option>
+                {branshes.map((e, i) => (
+                  <option value={e.id} key={i}>
+                    {e.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Box>
+            <Box mt={4} className="col-4">
+              Reciever Branch
+              <Form.Select
+                size="lg"
+                onChange={(e) => {
+                  setbranchReceiver(e.target.value);
+                  setNewCommand({
+                    ...newCommand,
+                    branchReceiver: e.target.value,
+                  });
                 }}
-                pageSizeOptions={[10, 20, 50]}
-                disableRowSelectionOnClick
-              />
+              >
+                <option disabled selected>
+                  Select Reciever
+                </option>
+                {branshes.map((e, i) => (
+                  <option value={e.id} key={i}>
+                    {e.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Box>
+            <Box pt={4} className="col-4">
+              Delivery status
+              <Form.Select
+                label="Status"
+                size="lg"
+                onChange={(e) => {
+                  setNewCommand({
+                    ...newCommand,
+                    status: e.target.value,
+                  });
+                }}
+              >
+                <option disabled selected>
+                  Select Status
+                </option>
+                <option value={"pending"}>Pending</option>
+                <option value={"delivered"}>Delivered</option>
+              </Form.Select>
             </Box>
           </div>
-          <div className="m-5" style={{ width: "100%" }}>
-            <div>Send</div>
-            <div className="mt-2 w-100" style={{ width: "100%" }}>
-              {renderInputs()}
-              <div
-                class="button-container"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <AiOutlinePlusCircle
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    addData0Entry(), setinputsNumber(inputsNumber + 1);
+          <div className="w-100 bg-purple" style={{ height: 2 }} />
+
+          <div className="row  justify-content-center align-items-center-mt5">
+            <Box className="col-4 align-items-center d-flex pt-3 pb-4">
+      
+                <TextField
+                helperText={'Reason'}
+                  {...params}
+                  fullWidth
+                  variant="outlined"
+                  label="Reason"
+                  onChange={(e) => {
+                    setReason(e.target.value);
+                    setNewCommand({
+                      ...newCommand,
+                      reason: e.target.value,
+                    });
                   }}
                 />
-                {inputsNumber > 1 ? (
-                  <AiOutlineMinusCircle
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setinputsNumber(inputsNumber - 1)}
-                  />
-                ) : null}
-              </div>
-            </div>
-            <div className="mt-1">from </div>
-            <div className="mt-2">
-              <select
-                onChange={(e) => {
-                  setTransiction({
-                    ...transiction,
-                    branchSenderId: e.target.value,
-                  });
-                }}
-                class="form-select"
-                aria-label="Default select example"
-              >
-                <option selected>Select branch</option>
-                {branshes.map((e, i) => {
-                  return <option value={e.id}>{e.name}</option>;
-                })}
-              </select>
-            </div>
-            <div className="mt-1">to </div>
-            <div className="mt-2">
-              <select
-                onChange={(e) => {
-                  setTransiction({
-                    ...transiction,
-                    branchReceiverId: e.target.value,
-                  });
-                }}
-                class="form-select"
-                aria-label="Default select example"
-              >
-                <option selected>Select branch to recieve</option>
-                {branshes.map((e, i) => {
-                  return <option value={e.id}>{e.name}</option>;
-                })}
-              </select>
-            </div>
-            <div className="mt-1">reason </div>
-            <div className="mt-2">
-              <TextField
-                onChange={(e) => {
-                  setTransiction({
-                    ...transiction,
-                    reason: e.target.value,
-                  });
-                }}
-                fullWidth
-                placeholder="reason"
-                variant="outlined"
-                sx={{
-                  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#8a2be2",
-                  },
-                  "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline":
-                    {
-                      borderColor: "#8a2be2",
+            
+            </Box>
+            {!(newCommand.branchSender && newCommand.branchReceiver) && (
+              <p className="text-center" style={{ color: "red" }}>
+                Select Sender and Reciever Branch please
+              </p>
+            )}
+            <Box mt={3} mb={3} display="flex" alignItems="center" gap={2} flexDirection="row" width="100%">
+  {/* Your existing TextField and Autocomplete components */}
+  <TextField
+    helperText={"Code"}
+    className="form-control rounded"
+    disabled={!(newCommand.branchSender && newCommand.branchReceiver)}
+    style={
+      errorQuantity
+        ? { outlineColor: "red", borderColor: "red", height: 43 }
+        : { height: 43 }
+    }
+    value={newCommandLine?.articleByBranch?.article?.code || typingCode}
+    onChange={(e) => {
+      setTypingCode(e.target.value);
+    }}
+  />
+
+  <Autocomplete
+    className="pt-4"
+    aria-required={true}
+    disabled={!(newCommand.branchSender && newCommand.branchReceiver)}
+    fullWidth
+    sx={{
+      ".MuiInputBase-root": {
+        height: "43px !important",
+      },
+      ".MuiInputBase-input": {
+        padding: "0px !important",
+      },
+    }}
+    open={openArticles}
+    onOpen={() => {
+      setOpenArticles(true);
+    }}
+    onClose={() => {
+      setOpenArticles(false);
+    }}
+    options={articlesByBranch}
+    loading={loadingArticles}
+    value={newCommandLine?.articleByBranch}
+    onChange={(event, v) => {
+      setNewCommandLine({
+        ...newCommandLine,
+        stock: v?.stock,
+        quantity: 1,
+        articleByBranch: v,
+        articleByBranchId: v?.id,
+      });
+    }}
+    getOptionLabel={(option) => option?.article?.title}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        helperText={"Article"}
+        fullWidth
+        variant="outlined"
+        onChange={(e) => {
+          setTypingArticleTitle(e.target.value);
+        }}
+        placeholder="Article title"
+      />
+    )}
+  />
+         {/* <Autocomplete
+              className="pt-4"
+                  aria-required={true}
+                  disabled={
+                    !(newCommand.branchSender && newCommand.branchReceiver)
+                  }
+                  fullWidth
+                  sx={{
+                    ".MuiInputBase-root": {
+                      height: "43px !important",
                     },
-                }}
-              />
-            </div>
-            <div>Status</div>
-            <div className="mt-2 w-100" style={{ width: "100%" }}>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                value={transiction.articleId}
-                onChange={(e) => {
-                  setTransiction({ ...transiction, status: e.target.value });
-                }}
+                    ".MuiInputBase-input": {
+                      padding: "0px !important",
+                    },
+                  }}
+                  // open={openStock}
+                  // onOpen={() => {
+                  //   setOpenStock(true);
+                  // }}
+                  // onClose={() => {
+                  //   setOpenStock(false);
+                  // }}
+                  options={articlesByBranch}
+                  loading={loadingArticles}
+                  value={newCommandLine?.articleByBranch}
+                  onChange={(event, v) => {
+                    setNewCommandLine({
+                      ...newCommandLine,
+                      stock: v?.stock,
+                      quantity: 1,
+                      articleByBranch: v,
+                      articleByBranchId: v?.id,
+                    });
+                  }}
+                  getOptionLabel={(option) => option.stock}
+                  renderInput={(params) => (
+                   
+                <TextField
+                // {...params}
+                helperText={"Stock"}
+                  className="form-control rounded"
+                  disabled={true}
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red", height: 43 }
+                      : { height: 43 }
+                  }
+                  value={newCommandLine?.stock}
+                />
+                  )}
+                /> */}
+       <TextField
+       helperText={"Stock"}
+       value= {newCommandLine?.stock} 
+       disabled={
+        !(newCommand.branchSender && newCommand.branchReceiver)
+      }
+       style={
+        errorQuantity
+          ? { outlineColor: "red", borderColor: "red", height: 43 }
+          : { height: 43 }
+      }/>  
+        
+            
+         
+                <TextField
+              
+                helperText={"Qte"}
+                  min={1}
+                  max={newCommandLine?.stock}
+                  type="number"
+                  disabled={
+                    !(newCommand.branchSender && newCommand.branchReceiver)
+                  }
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red", height: 43 }
+                      : { height: 43 }
+                  }
+                  value={newCommandLine.quantity}
+                  onChange={(e) => {
+                    const newQuantity = +e.target.value;
+                    console.log(newQuantity, newCommandLine.stock);
+                    // Check if the new quantity is too low
+                    const isQuantityTooLow = isQuantityCloseToStockLimit(
+                      newQuantity,
+                      newCommandLine.stock
+                    );
+                    console.log(isQuantityTooLow);
+                    if (isQuantityTooLow) {
+                      showErrorToast(
+                        <div dangerouslySetInnerHTML={{ __html: `
+                          You reached the stock limit, you only have 
+                          <u><strong style="color: red;">${newCommandLine.stock}</strong></u>
+                          of <u><strong style="color: red;">${newCommandLine.articleByBranch.article.title}</strong></u>
+                        ` }} />
+                      )
+                      setErrorQuantity(true);
+                    } else {
+                      setNewCommandLine({
+                        ...newCommandLine,
+                        quantity: +e.target.value,
+                      });
+                      e.target.value.length === 0
+                        ? setErrorQuantity(true)
+                        : setErrorQuantity(false);
+                    }
+                  }}
+                />
+          
+              <div
+                // style={{ width: 60 }}
+                className="d-flex justify-content-center col-2"
               >
-                <option value="">Select status</option>
-                <option key={"1"} value={transiction.status}>
-                  delivered{" "}
-                </option>
-                <option key={"1"} value={transiction.status}>
-                  pending
-                </option>
-                <option key={"1"} value={transiction.status}>
-                  refused
-                </option>
-              </select>
-            </div>
-            <div className="mt-5">
-              <button
-                type="submit"
-                onClick={() => {
-                  handleTransiction();
-                }}
-                className="btn btn-light"
-              >
-                <span className="label-btn"> Make transiction </span>
-                <CiShare1 fontSize={20} />
-              </button>
-            </div>
+                <button
+                  className="btn btn-light"
+                  onClick={() => {
+                    if (
+                      newCommandLine?.quantity?.length === 0 ||
+                      newCommandLine?.quantity === null
+                    )
+                      setErrorQuantity(true);
+                    else {
+                      setNewCommand({
+                        ...newCommand,
+                        commandLine: [
+                          ...newCommand.commandLine,
+                          newCommandLine,
+                        ],
+                      });
+                      setNewCommandLine({
+                        quantity: "",
+                        articleByBranch: null,
+                      });
+                    }
+                  }}
+                >
+                  <BiMessageSquareAdd size={22} style={{ cursor: "pointer" }} />
+                </button>
+              </div>
+            </Box>
+
+            {newCommand.commandLine?.map((elem, i) => (
+              <div>
+                <Box
+                  key={i}
+                  mt={2}
+                  mb={2}
+                  display="flex"
+                  alignItems="center"
+                  gap={2}
+                >
+                  <div className="col-1">
+                Code :
+                <input
+                  className="form-control rounded"
+                  disabled
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red", height: 43 }
+                      : { height: 43 }
+                  }
+                  value={
+                    newCommand?.commandLine[i].articleByBranch?.article?.code
+                  }
+                  onChange={(e) => {
+                    setTypingCode(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="col-5">
+                  Article :
+                  <Autocomplete
+                    aria-required={true}
+                    disabled={true}
+                    fullWidth
+                    sx={{
+                      ".MuiInputBase-root": {
+                        height: "43px !important",
+                      },
+                      ".MuiInputBase-input": {
+                        padding: "0px !important",
+                      },
+                    }}
+                    open={openArticlesEditCommandLines.includes(i)}
+                    onOpen={() => {
+                      setOpenArticlesEditCommandLines([
+                        ...openArticlesEditCommandLines,
+                        i,
+                      ]);
+                    }}
+                    onClose={() => {
+                      setOpenArticlesEditCommandLines(
+                        openArticlesEditCommandLines.filter(
+                          (elem, j) => j !== i
+                        )
+                      );
+                    }}
+                    options={articlesByBranch}
+                    loading={loadingArticles}
+                    value={newCommand.commandLine[i].articleByBranch}
+                    onChange={(event, v) => {
+                      let aux = [...newCommand.commandLine];
+                      let obj = { ...aux[i] };
+                      obj = {
+                        ...obj,
+                        articleByBranchId: v?.id,
+                        articleByBranch: v,
+                      };
+                      aux[i] = { ...obj };
+                      setNewCommand({ ...newCommand, commandLine: aux });
+                    }}
+                    getOptionLabel={(option) => option?.article?.title}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        variant="outlined"
+                        onChange={(e) => {
+                          setTypingArticleTitle(e.target.value);
+                        }}
+                        // label="Article"
+                      />
+                    )}
+                  />
+                            </div>
+                            <div className="col-1">
+                Stock :
+                <input
+                  className="form-control rounded"
+                  disabled
+                  style={
+                    errorQuantity
+                      ? { outlineColor: "red", borderColor: "red", height: 43 }
+                      : { height: 43 }
+                  }
+                  value={newCommand.commandLine[i].stock}
+                />
+              </div>
+              <div  >
+
+                  Quantity :
+                  <div style={{ fontSize: "10px" }} className="col-6">
+
+                    <input
+                      placeholder={elem}
+                      type="number"
+                      min={1}
+                      disabled={!editCommandLineIndexes.includes(i)}
+                      value={newCommand.commandLine[i].quantity}
+                  onChange={(e) => {
+                        const newQuantity = +e.target.value;
+                       
+                        // Check if the new quantity is too low
+                        const isQuantityTooLow = isQuantityCloseToStockLimit(
+                          newQuantity,
+                          newCommand.commandLine[i].stock
+                        );
+                        console.log(isQuantityTooLow);
+                        if (isQuantityTooLow) {
+                          showErrorToast(
+                            <div dangerouslySetInnerHTML={{ __html: `
+                              You reached the stock limit, you only have 
+                              <u><strong style="color: red;">${newCommand.commandLine[i].stock}</strong></u>
+                              of <u><strong style="color: red;">${newCommand.commandLine[i].articleByBranch.article.title}</strong></u>
+                            ` }} />
+                          )
+                          setErrorQuantity(true);
+                        } else  {
+                        let aux = [...newCommand.commandLine];
+                        let obj = { ...aux[i] };
+                        obj.quantity = +e.target.value;
+                        aux[i] = { ...obj };
+                        setNewCommand({ ...newCommand, commandLine: aux });
+                      }}}
+                    />
+                  </div> 
+                  </div>
+                  <>
+                    {!editCommandLineIndexes.includes(i) ? (
+                      <div
+                        // style={{ width: 60 }}
+                        className="pt-4 d-flex justify-content-center gap-1 col-2"
+                      >
+                        <button className="btn btn-light">
+                          <FaTrash
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              let aux = [...newCommand.commandLine];
+                              let result = aux.filter((elem, j) => i !== j);
+                              setNewCommand({
+                                ...newCommand,
+                                commandLine: result,
+                              });
+                            }}
+                          />
+                        </button>
+
+                        <button className="btn btn-light">
+                          <GrEdit
+                            onClick={() =>
+                              setEditCommandLineIndexes([
+                                ...editCommandLineIndexes,
+                                i,
+                              ])
+                            }
+                            style={{ cursor: "pointer" }}
+                          />
+                        </button>
+                      </div>
+                    ) : (
+                      <div
+                        // style={{ width: 60 }}
+                        className="d-flex justify-content-around gap-1 col-2"
+                      >
+                        <button className="btn btn-light">
+                          <BiSave
+                            onClick={() =>
+                              setEditCommandLineIndexes(
+                                editCommandLineIndexes.filter(
+                                  (elem) => elem !== i
+                                )
+                              )
+                            }
+                            style={{ cursor: "pointer" }}
+                          />
+                        </button>
+                      </div>
+                    )}
+                  </>
+                </Box>
+                <div className="w-100 bg-purple" style={{ height: 1 }} />
+              </div>
+            ))}
           </div>
-        </div>
-        <Modal
-          bodOfDelete={"are you sure you want to delete this branche?"}
-          basicModal={basicModal}
+          <div className="w-100 d-flex justify-content-center gap-4 p-4">
+            <SaveButton name={'Send'} width={100} type="button" disabled={!(newCommand.commandLine?.length>0)} onClick={toggleShow} />
+          </div>
+          <Modal
+          basicModal={showModal}
+          title={'Confirmation'}
           toggleShow={toggleShow}
-          ofDelete={true}
-          confirm={() => {
-            handleDeleteBranch();
-          }}
+          body={'Do you want to confirm your Transaction  ? '}
+   normal
+   fn={handleTransaction}
         />
-      </div>
+        </Box>
+      </Container>
+
     </div>
   );
 }
