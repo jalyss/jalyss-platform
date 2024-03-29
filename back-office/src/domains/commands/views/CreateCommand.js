@@ -51,7 +51,7 @@ function CreateCommand() {
     contactChannel: "on_site",
     paymentType: null,
     discountCode: "",
-    financialCommitmentLines: [],
+    // <financialCommitmentLines>: [],
   });
   const [newCommandLine, setNewCommandLine] = useState({
     quantity: null,
@@ -83,7 +83,7 @@ function CreateCommand() {
   const [financialCommitmentLines, setFinancialCommitmenLines] = useState([
     { amount: 0, date: "" },
   ]);
-
+console.log(newCommand.commandLine)
   //fetch articles of branch by branchId and articleTitle
   useEffect(() => {
     if (newCommand?.branchId) {

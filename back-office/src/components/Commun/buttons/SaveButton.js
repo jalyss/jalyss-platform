@@ -1,6 +1,6 @@
 import React from "react";
 
-const SaveButton = ({ onClick, mt, mb,onSubmit,type,width }) => {
+const SaveButton = ({ name ,onClick, mt, mb,onSubmit,type,width,disabled }) => {
   return (
     <div>
       <button
@@ -13,10 +13,11 @@ const SaveButton = ({ onClick, mt, mb,onSubmit,type,width }) => {
           color: "#fff",
           width:width
         }}
+        disabled={disabled}
         onSubmit={onSubmit}
         onClick={onClick}
       >
-       Save
+{ name ? name:'Save'}
       </button>
     </div>
   );

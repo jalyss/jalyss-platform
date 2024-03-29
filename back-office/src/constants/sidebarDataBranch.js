@@ -110,7 +110,7 @@ export const sidebarDataBranch = [
         nameEn: "Author",
         nameAr: "المؤلف",
         path: "author",
-      },
+      }
     ],
   },
   {

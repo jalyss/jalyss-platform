@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MvtArticle, StatusMvt } from '@prisma/client';
-
+import { IsString, IsArray } from 'class-validator';
+class SubSub{
+  @ApiProperty()
+  articleId: string
+  @ApiProperty()
+  quantity: number
+} 
 export class CreateTransactionDto {
+  @IsString()
   @ApiProperty({ required: false })
   branchSenderId: string;
   @ApiProperty({ required: false })
@@ -12,6 +19,8 @@ export class CreateTransactionDto {
   reason: string;
   @ApiProperty()
   status: StatusMvt;
-  @ApiProperty({ required: false })
+  @IsArray()
+  @ApiProperty({ required: false,type:[SubSub]})
   articles: MvtArticle[];
 }
+

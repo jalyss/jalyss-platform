@@ -37,4 +37,6 @@ class CreateCommandLineDto {
     articleByBranchId: string;
     quantity: number
     discount: number
+    unitPrice : number
+    
 }
