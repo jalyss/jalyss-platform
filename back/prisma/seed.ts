@@ -278,7 +278,7 @@ async function main() {
       fullNameEn: 'besma',
       email: 'besma@jalyss.com',
       address: 'tunis-kairouan',
-      tel: '65555550',
+      tel: '',
 
       isAdmin: true,
       roleId: managerRole.id,
@@ -379,7 +379,7 @@ async function main() {
       fullNameEn: 'nedia',
       email: 'nedia@jalyss.com',
       address: 'Tunis-Monastir',
-      tel: '78787878',
+      tel: '(201) 570-7872',
 
       roleId: groutAgentRole.id,
       branchId: branch.id,
