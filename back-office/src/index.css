@@ -13,6 +13,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+
 @import url("./assets/styles/color.css");
 @import url("./assets/styles/standardStyle.css");
 @import url("./assets/styles/pagesAndViewStyles.css");

@@ -132,14 +132,17 @@ function CommandList() {
   return (
     <div>
       <div className="p-4 d-flex justify-content-end">
-        <Button
+        {/* <Button
           type="button"
           onClick={() => navigate(`create`)}
-          variant="outlined"
-          endIcon={<GrAdd />}
+          // variant="outlined"
+          endIcon={<GrAdd  className="text-white"/>}
+          style={{backgroundColor:"#4041a4"}}
+          
         >
-          <span className="btn btn-sm ">Add Order</span>
-        </Button>
+          <span className="btn btn-sm text-white ">Add Order</span>
+        </Button> */}
+        <button className="btn btn-warning" onClick={() => navigate(`create`)}>Add Order &#128214;</button>
       </div>
       <div className="position-relative p-4">
         <Box sx={{ height: 700, width: "100%" }}>

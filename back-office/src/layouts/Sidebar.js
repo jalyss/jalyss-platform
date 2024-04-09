@@ -32,7 +32,7 @@ function Sidebar() {
   return (
     <Box
       className="sidebar"
-      borderRight={isEng ? "1px solid #d9d9d9" : "none"}
+      borderRight={isEng ? "1px solid #4041a4" : "none"}
       borderLeft={!isEng ? "1px solid #d9d9d9" : "none"}
     >
       <div className="sidebarHeader">

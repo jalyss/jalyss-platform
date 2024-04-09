@@ -32,6 +32,8 @@ import { fetchClients } from "../../../store/client";
 import { useNavigate } from "react-router-dom";
 
 import { fetchDiscountCode } from "../../../store/discountCode";
+import { TbTruckDelivery } from "react-icons/tb";
+import { FaRegHandshake } from "react-icons/fa";
 
 function CreateCommand() {
   const dispatch = useDispatch();
@@ -303,11 +305,11 @@ console.log(newCommand.commandLine)
                 onChange={(event, v) => {
                   setNewCommand({
                     ...newCommand,
-                    clientName: v?.fullNameEn,
-                    clientTel: v?.tel,
-                    clientAddress: v?.address,
-                    clientEmail: v?.email,
-                    clientId: v?.id,
+                    clientName: v?.fullNameEn || event.target.value,
+                    clientTel: v?.tel || event.target.value,
+                    clientAddress: v?.address || event.target.value,
+                    clientEmail: v?.email || event.target.value,
+                    clientId: v?.id || null,
                   });
                 }}
                 getOptionLabel={(option) => option.fullNameEn}
@@ -483,16 +485,22 @@ console.log(newCommand.commandLine)
                 )}
               />
             </Box>
-            <Box
+         
+          </div>
+          <div className="d-flex justify-content-center gap-4 align-items-center ">
+          <Box
               mt={2}
               style={{
-                flex: 1,
+                // flex: 1,
                 display: "flex",
-                gap: 10,
-                alignItems: "center",
+                gap: 2,
+                // alignItems: "center",
               }}
             >
-              <Typography>{"Has Delivery :"}</Typography>
+              <Typography>
+                {"Has Delivery"} 
+                <TbTruckDelivery size={24}/>
+                </Typography>
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -501,6 +509,7 @@ console.log(newCommand.commandLine)
                   setNewCommand({
                     ...newCommand,
                     hasDelivery: e.target.checked,
+                    delivered : false
                   });
                 }}
                 label={"Has Delivery"}
@@ -510,13 +519,13 @@ console.log(newCommand.commandLine)
             <Box
               mt={2}
               style={{
-                flex: 1,
+                // flex: 1,
                 display: "flex",
                 gap: 10,
-                alignItems: "center",
+                // alignItems: "center",
               }}
             >
-              <Typography>{"Delivered :"}</Typography>
+              <Typography>{"Delivered :"} <FaRegHandshake size={25} /> </Typography>
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -525,6 +534,8 @@ console.log(newCommand.commandLine)
                   setNewCommand({
                     ...newCommand,
                     delivered: e.target.checked,
+                    hasDelivery :false
+                    
                   });
                 }}
                 label={"confirmHasDelivery"}
@@ -533,7 +544,8 @@ console.log(newCommand.commandLine)
           </div>
           {/* order items Details */}
           <div className="mt-5 mb-5">
-            <div className="bg-purple rounded p-3 " style={{ color: "white" }}>
+            <div className=" rounded p-3 " style={{ color: "white",
+            backgroundColor:"#4041a4" }}>
               <Box display="flex" alignItems="center" gap={2}>
                 <div className="col-2 ">Code</div>
                 <div className="col-3 ">Article</div>
@@ -1105,7 +1117,8 @@ console.log(newCommand.commandLine)
           </div>
 
           <div className="w-100 d-flex justify-content-center gap-4 p-4">
-            <SaveButton width={100} type="button" onClick={handleCreate} />
+            {/* <SaveButton width={100} type="button" onClick={handleCreate} bgColor={"#4041a4"} /> */}
+            <button className="btn  btn-dark" style={{backgroundColor:"#4041a4"}}  onClick={handleCreate} disabled={true}>Save &#128214;</button>
           </div>
         </Box>
       </Container>
