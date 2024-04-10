@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import isEnglish from "../helpers/isEnglish";
 import { sidebarDataBranch } from "../constants/sidebarDataBranch";
 import Logo from "../assets/logo.jpg";
 import { Box, Typography } from "@mui/material";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 
-function Sidebar() {
+function Sidebar({navigation}) {
+  const navigate = useNavigate()
   const isEng = isEnglish();
   const location = useLocation();
 
@@ -36,7 +37,9 @@ function Sidebar() {
       borderLeft={!isEng ? "1px solid #d9d9d9" : "none"}
     >
       <div className="sidebarHeader">
-        <img style={{ height: 100 }} src={Logo} alt="logo" />
+        <img style={{ height: 100 }} src={Logo} alt="logo" className="imageLogo" onClick={()=>{
+      navigate("/")
+        }} />
       </div>
       <div className="sidebarContent">
         {sidebarDataBranch.map((elem, index) => {
